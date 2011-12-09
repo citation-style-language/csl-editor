@@ -51,7 +51,7 @@ do
 CodeMirror.defaults.onChange = function()
 {
 	clearTimeout(timeout);
-	timeout = setTimeout("runCiteproc()", 200);
+	timeout = setTimeout("runCiteproc()", 500);
 };
 
 var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
