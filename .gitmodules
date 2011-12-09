@@ -1,0 +1,3 @@
+[submodule "external/codemirror2"]
+	path = external/codemirror2
+	url = http://marijnhaverbeke.nl/git/codemirror2

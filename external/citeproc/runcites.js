@@ -1,0 +1,142 @@
+/*
+ * Copyright (c) 2009 and 2010 Frank G. Bennett, Jr. All Rights
+ * Reserved.
+ *
+ * The contents of this file are subject to the Common Public
+ * Attribution License Version 1.0 (the “License”); you may not use
+ * this file except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://bitbucket.org/fbennett/citeproc-js/src/tip/LICENSE.
+ *
+ * The License is based on the Mozilla Public License Version 1.1 but
+ * Sections 14 and 15 have been added to cover use of software over a
+ * computer network and provide for limited attribution for the
+ * Original Developer. In addition, Exhibit A has been modified to be
+ * consistent with Exhibit B.
+ *
+ * Software distributed under the License is distributed on an “AS IS”
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+ * the License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * The Original Code is the citation formatting software known as
+ * "citeproc-js" (an implementation of the Citation Style Language
+ * [CSL]), including the original test fixtures and software located
+ * under the ./std subdirectory of the distribution archive.
+ *
+ * The Original Developer is not the Initial Developer and is
+ * __________. If left blank, the Original Developer is the Initial
+ * Developer.
+ *
+ * The Initial Developer of the Original Code is Frank G. Bennett,
+ * Jr. All portions of the code written by Frank G. Bennett, Jr. are
+ * Copyright (c) 2009 and 2010 Frank G. Bennett, Jr. All Rights Reserved.
+ *
+ * Alternatively, the contents of this file may be used under the
+ * terms of the GNU Affero General Public License (the [AGPLv3]
+ * License), in which case the provisions of [AGPLv3] License are
+ * applicable instead of those above. If you wish to allow use of your
+ * version of this file only under the terms of the [AGPLv3] License
+ * and not to allow others to use your version of this file under the
+ * CPAL, indicate your decision by deleting the provisions above and
+ * replace them with the notice and other provisions required by the
+ * [AGPLv3] License. If you do not delete the provisions above, a
+ * recipient may use your version of this file under either the CPAL
+ * or the [AGPLv3] License.”
+ */
+
+CSL.Node["#comment"] = {
+	build: function (state, target) {
+		// Should never reach this point, in QtWebKit it happens.
+	}
+};
+
+// mendeleyOutput == true: changes the citeproc-js HTML formatting to
+// a format more convenient for Mendeley Desktop.
+// If mendeleyOutput == false: it uses the original formatting. It's used
+// to generate citeproc-js tests from Mendeley Desktop unit tests.
+var setMendeleyOutput = function(mendeleyOutput) {
+	if(mendeleyOutput) {
+		// Mendeley changes a bit the HTML output format to be adapted to what Mendeley
+		// expects
+		CSL.Output.Formats["html"]["@bibliography/entry"] = function (state, str) {
+			return str;
+		}
+
+		CSL.Output.Formats["html"]["@display/right-inline"] = function (state, str) {
+			return str;
+		}
+
+		CSL.Output.Formats["html"]["@display/left-margin"] = function (state, str) {
+			return "<second-field-align>" + str + "</second-field-align>";
+		}
+	}
+	else
+	{
+		CSL.Output.Formats["html"]["@bibliography/entry"] = function (state, str) {
+			return "  <div class=\"csl-entry\">" + str + "</div>\n";		}
+		CSL.Output.Formats["html"]["@display/right-inline"] = function (state, str) {
+			return "<div class=\"csl-right-inline\">" + str + "</div>\n  ";
+		}
+		CSL.Output.Formats["html"]["@display/left-margin"] = function (state, str) {
+			return "\n    <div class=\"csl-left-margin\">" + str + "</div>";
+		}
+	}
+	processCitations.style = "";
+}
+
+var processCitations = function(howMuch,enumerateCitations){
+	// Lazy init of processCitations.citeproc because it's a slow
+	// operation, about 70-80ms in carles desktop computer
+	if ("undefined" === typeof processCitations.citeproc || processCitations.style != style)
+	{
+		var sys = new Sys(abbreviations);
+		processCitations.citeproc = new CSL.Engine(sys, style);
+		processCitations.style = style;
+		processCitations.citeproc.setAbbreviations("default");
+	}
+	else
+	{
+		processCitations.citeproc.restoreProcessorState([]);
+	}
+
+	for (var cluster = 0; cluster < howMuch; cluster++)
+	{
+		var citations = processCitations.citeproc.appendCitationCluster(citationsItems[cluster],false);
+
+		for (var i = 0; i < citations.length; i++)
+		{
+		    var pos = citations[i][0];
+			MendeleyDesktop.setCitation(citations[i][0], citations[i][1], citationsItems[pos].citationId);
+		}
+	}
+	
+	var makeBibliographyArgument;
+	if (enumerateCitations == true)
+	{
+		makeBibliographyArgument = undefined;
+	}
+	else
+	{
+		makeBibliographyArgument = "citation-number";
+	}
+	var bibliography = processCitations.citeproc.makeBibliography(makeBibliographyArgument);
+
+	var hangingindent = false;
+	var has_bibliography = (bibliography !== false);
+
+	if (has_bibliography)
+	{
+		hangingindent = (bibliography[0].hangingindent != 0 && "undefined" !== typeof(bibliography[0].hangingindent)); // if hanging indent is not 0 it's indented		//alert(bibliography[0].hangingindent);
+		bibliography = bibliography[1];
+	}
+	else
+	{
+		bibliography = [[(citations[0][1])]];
+	}
+
+	MendeleyDesktop.setBibliography(bibliography, hangingindent, has_bibliography);
+};
+
+setMendeleyOutput(true);
