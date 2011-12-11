@@ -31,7 +31,6 @@
 
 <form name="codeForm">
 	<textarea id="code" name="code">
-<?php include("arp.csl"); ?>
 	</textarea>
 </form>
 
@@ -59,13 +58,7 @@ else
 	alert('The File APIs are not fully supported in this browser.');
 }
 
-// un-escape \? characters which needed escaping to avoid getting parsed as PHP
-do
-{
-	var oldValue = document.codeForm.code.value;
-	document.codeForm.code.value = oldValue.replace("\\?", "?");
-}while(document.codeForm.code.value != oldValue)
-
+document.codeForm.code.value = <?php echo json_encode(file_get_contents("./external/csl-styles/arp.csl")); ?>;
 CodeMirror.defaults.onChange = function()
 {
 	clearTimeout(timeout);

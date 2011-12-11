@@ -3,7 +3,7 @@ var citationEngine = {
 formatCitations: function (style, documents, citationClusters) {
 	jsonDocuments = documents;
 
-	var result = {"statusMessage":"", "formattedCitations":"", "formattedBibliography":""};
+	var result = {"statusMessage":"", "formattedCitations":[], "formattedBibliography":""};
 
 	result.statusMessage = "";
 
@@ -19,6 +19,7 @@ formatCitations: function (style, documents, citationClusters) {
 	}
 	
 	var inLineCitations = "";
+	var inLineCitationArray = new Array();
 	
 	for (var cluster=0; cluster<citationClusters.length; cluster++)
 	{
@@ -42,9 +43,10 @@ formatCitations: function (style, documents, citationClusters) {
 			}
 			
 			inLineCitations += citations[i][1];
+			inLineCitationArray.push(citations[i][1]);
 		}
 	}
-	result.formattedCitations = inLineCitations;
+	result.formattedCitations = inLineCitationArray;
 	
 	var makeBibliographyArgument;
 	
