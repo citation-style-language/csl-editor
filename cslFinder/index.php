@@ -16,22 +16,23 @@ input, textarea
 }
 p#exampleDocument
 {
+	margin-left: 50px;
 /*	font-family: monospace;
  */
 }
 </style>
 </head>
 <body>
-<h1>CSL finder</h1>
-
-<p id=explanation></p>
+<h1>CSL Finder</h1>
 
 <p id=exampleDocument></p>
 
+<p id=explanation></p>
+
 <output id="status"><i>Caluculating example citations...</i></output><p>
 
-In-line citation: <input type="text" id="userCitation" oninput="formChanged()" /><br />
-Bibliography entry: <textarea type="text" id="userBibliography" oninput="formChanged()"></textarea>
+In-line citation: <input type="text" id="userCitation" disabled="disabled" oninput="formChanged()" /><br />
+Bibliography entry: <textarea type="text" id="userBibliography" disabled="disabled" oninput="formChanged()"></textarea>
 
 <h2>Results</h2>
 <output id="result"></output><p>
@@ -63,18 +64,6 @@ foreach($cslFiles as $key => $value)
 	}
 }
 ?>
-
-document.getElementById("explanation").innerHTML = "Please format the following document:";
-document.getElementById("exampleDocument").innerHTML =
-	"<table>" +
-	"<tr><td>Title:</td><td>" + jsonDocuments["ITEM-1"].title + "</td></tr>" +
-	"<tr><td>Authors:</td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "</td></tr>" + 
-	"<tr><td>Year:</td><td>" + jsonDocuments["ITEM-1"].issued["date-parts"][0][0] + "</td></tr>" +
-	"<tr><td>Publication:</td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "</td></tr>" +
-	"<tr><td>Volume:</td><td>" + jsonDocuments["ITEM-1"]["volume"] + "</td></tr>" +
-	"<tr><td>Issue:</td><td>" + jsonDocuments["ITEM-1"]["issue"] + "</td></tr>" +
-	"<tr><td>Publisher:</td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "</td></tr>" +
-	"</table>";
 
 function authorString(authors)
 {
@@ -176,8 +165,9 @@ function formatExampleCitations()
 {
 	if (currentStyleIndex < cslStyles.length)
 	{
-		document.getElementById("status").innerHTML = "<i>Please wait, generating citation " + currentStyleIndex + 
-			"/" + cslStyles.length + "</i>";
+		document.getElementById("status").innerHTML = "<i>Please wait, citating example document in style " + 
+			currentStyleIndex + "/" + cslStyles.length + "</i><br />" +
+			"<i>(This could easily be pre-computed, unless we allow the user to make a custom example document)</i>";
 		formattedCitations.push(
 			citationEngine.formatCitations(cslStyles[currentStyleIndex], jsonDocuments, citationsItems));
 		formattedCitationsFilenames.push(cslStylesFilenames[currentStyleIndex]);
@@ -185,7 +175,7 @@ function formatExampleCitations()
 
 		//if (currentStyleIndex % 10 == 0)
 		//{
-			setTimeout("formatExampleCitations()", 20);
+			setTimeout("formatExampleCitations()", 10);
 		//}
 		//else
 		//{
@@ -194,7 +184,22 @@ function formatExampleCitations()
 	}
 	else
 	{
-		document.getElementById("status").innerHTML = "<i>Finished formatting examples</i>";
+		document.getElementById("status").innerHTML = "";
+		document.getElementById("explanation").innerHTML = "<i>Please cite the above document in the exact format you require<br />" +
+			"(You can use tags for italic, bold, superscript, etc)</i>";
+		document.getElementById("exampleDocument").innerHTML =
+			"<table>" +
+			"<tr><td>Title:</td><td>" + jsonDocuments["ITEM-1"].title + "</td></tr>" +
+			"<tr><td>Authors:</td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "</td></tr>" + 
+			"<tr><td>Year:</td><td>" + jsonDocuments["ITEM-1"].issued["date-parts"][0][0] + "</td></tr>" +
+			"<tr><td>Publication:</td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "</td></tr>" +
+			"<tr><td>Volume:</td><td>" + jsonDocuments["ITEM-1"]["volume"] + "</td></tr>" +
+			"<tr><td>Issue:</td><td>" + jsonDocuments["ITEM-1"]["issue"] + "</td></tr>" +
+			"<tr><td>Publisher:</td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "</td></tr>" +
+			"<tr><td>Document type:</td><td>" + jsonDocuments["ITEM-1"]["type"] + "</td></tr>" +
+			"</table>";
+		document.getElementById("userCitation").disabled = "";
+		document.getElementById("userBibliography").disabled = "";
 	}
 }
 

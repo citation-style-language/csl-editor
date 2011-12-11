@@ -24,7 +24,6 @@
 </head>
 <body>
 <h1>CSL IDE</h1>
-<a href="./cslFinder">CSL Finder</a>
 <input type="file" id="files" name="files[]" />
 <output id="list"></output>
 <!--<button onClick="loadStyle()">Load Style</button>-->
