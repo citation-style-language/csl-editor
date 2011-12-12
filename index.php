@@ -24,9 +24,8 @@
 </head>
 <body>
 <h1>CSL IDE</h1>
-<input type="file" id="files" name="files[]" />
+<!--<input type="file" id="files" name="files[]" />-->
 <output id="list"></output>
-<!--<button onClick="loadStyle()">Load Style</button>-->
 
 <form name="codeForm">
 	<textarea id="code" name="code">
