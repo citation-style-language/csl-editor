@@ -147,19 +147,6 @@ var formattedCitationsFilenames = new Array();
 
 var currentStyleIndex = 0;
 formatExampleCitations();
-/*
-for(var index=0; index<cslStyles.length; index++)
-{
-	document.getElementById("status").innerHTML = index;
-	//alert(cslStyles[cslStyle]);
-	formattedCitations.push(citationEngine.formatCitations(cslStyles[index], jsonDocuments, citationsItems));
-
-	// limit number of styles for testing
-//	if (index > 30)
-//	{
-//		break;
-//	}
-}*/
 
 function formatExampleCitations()
 {
@@ -195,6 +182,8 @@ function formatExampleCitations()
 			"<tr><td>Publication:</td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "</td></tr>" +
 			"<tr><td>Volume:</td><td>" + jsonDocuments["ITEM-1"]["volume"] + "</td></tr>" +
 			"<tr><td>Issue:</td><td>" + jsonDocuments["ITEM-1"]["issue"] + "</td></tr>" +
+			"<tr><td>Chapter:</td><td>" + jsonDocuments["ITEM-1"]["chapter-number"] + "</td></tr>" +
+			"<tr><td>Pages:</td><td>" + jsonDocuments["ITEM-1"]["page"] + "</td></tr>" +
 			"<tr><td>Publisher:</td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "</td></tr>" +
 			"<tr><td>Document type:</td><td>" + jsonDocuments["ITEM-1"]["type"] + "</td></tr>" +
 			"</table>";
