@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+
 	<title>CSL IDE</title>
 	<link rel="stylesheet" href="./codemirror.css">
 	<script src="./external/codemirror2/lib/codemirror.js"></script>
