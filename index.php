@@ -197,7 +197,6 @@ function runCiteproc() {
 		}
 		
 		inLineCitations += citations[i][1];
-		alert("citaiton " + i);
 	}
 
 	document.getElementById("formattedCitations").innerHTML = inLineCitations;
