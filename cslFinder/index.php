@@ -1,5 +1,7 @@
 <html>
 <head>	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+
 	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
 	<script type="text/javascript" src="../external/citeproc/xmldom.js"></script>
 	<script type="text/javascript" src="../external/citeproc/citeproc.js"></script>
@@ -26,7 +28,6 @@ p#exampleDocument
 <h1>CSL Finder</h1>
 
 <p id=exampleDocument></p>
-
 <p id=explanation></p>
 
 <output id="status"><i>Caluculating example citations...</i></output><p>
@@ -36,7 +37,6 @@ Bibliography entry: <textarea type="text" id="userBibliography" disabled="disabl
 
 <h2>Results</h2>
 <output id="result"></output><p>
-
 <script>
 // example document data
 var jsonDocuments =  { "ITEM-1" : { /*"DOI" : "10.1088/0143-0807/27/4/007", "URL" : "http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf",*/ "abstract" : "General description of special relativity", "author" : [ { "family" : "Einstein", "given" : "Albert" } ], "chapter-number" : "3", "container-title" : "Annalen der Physik", "editor" : [  ], "id" : "ITEM-1", "issue" : "4", "issued" : { "date-parts" : [ [ "1905" ] ] }, "page" : "1-26", "publisher" : "Dover Publications", "title" : "On the electrodynamics of moving bodies", "translator" : [  ], "type" : "article-journal", "volume" : "17" }, "ITEM-2" : { /*"DOI" : "10.1038/171737a0", "URL" : "http://www.ncbi.nlm.nih.gov/pubmed/13054692",*/ "abstract" : "We wish to suggest a structure for the salt of deoxyribose nucleic acid (D.N.A.). This structure has novel features which are of considerable biological interest.", "author" : [ { "family" : "Watson", "given" : "J D" }, { "family" : "Crick", "given" : "F H" } ], "container-title" : "Nature", "editor" : [  ], "id" : "ITEM-2", "issue" : "4356", "issued" : { "date-parts" : [ [ "1953" ] ] }, "page" : "737-738", "publisher" : "Am Med Assoc", "title" : "Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid.", "translator" : [  ], "type" : "article-journal", "volume" : "171" } }  ;
@@ -160,14 +160,7 @@ function formatExampleCitations()
 		formattedCitationsFilenames.push(cslStylesFilenames[currentStyleIndex]);
 		currentStyleIndex++;
 
-		//if (currentStyleIndex % 10 == 0)
-		//{
-			setTimeout("formatExampleCitations()", 10);
-		//}
-		//else
-		//{
-		//	formatExampleCitations();
-		//}
+		setTimeout("formatExampleCitations()", 10);
 	}
 	else
 	{
