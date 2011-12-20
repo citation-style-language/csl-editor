@@ -18,8 +18,10 @@
 	<script type="text/javascript" src="./src/citationEngine.js"></script>
 
 	<style type="text/css">
-	  .CodeMirror {
+	  #code {
 		border: 1px solid #eee;
+		overflow: auto;
+		resize: both;
 	  }
 	  .searched {background: yellow;}
 	</style>
@@ -58,7 +60,7 @@ else
 	alert('The File APIs are not fully supported in this browser.');
 }
 
-document.codeForm.code.value = <?php echo json_encode(file_get_contents("./customStyles/wto_style.csl")); ?>;
+document.codeForm.code.value = <?php echo json_encode(file_get_contents("./external/csl-styles/apa.csl")); ?>;
 CodeMirror.defaults.onChange = function()
 {
 	clearTimeout(timeout);
@@ -145,10 +147,10 @@ var jsonDocuments =  {
 }  ;
 	
 	var citationsItems = new Array();
-	//citationsItems[0] =  { "citationId" : "CITATION-0", "citationItems" : [ { "id" : "ITEM-1", "uris" : [ /*"http://www.mendeley.com/documents/?uuid=dd1a39c6-e14a-4c34-8edb-98ef1731e557" */] } ], "mendeley" : { "previouslyFormattedCitation" : "(Brown, 1985)" }, "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" } ;
-//citationsItems[1] =  { "citationId" : "CITATION-1", "citationItems" : [ { "id" : "ITEM-2", "uris" : [ "http://www.mendeley.com/documents/?uuid=a030fc65-aabc-4b12-a454-a917280affc1" ] }, { "id" : "ITEM-3", "uris" : [ "http://www.mendeley.com/documents/?uuid=4d771e0b-52a1-4561-9e39-260877d1db08" ] }, { "id" : "ITEM-4", "uris" : [ "http://www.mendeley.com/documents/?uuid=6bdb385b-a342-454e-a838-4dde5f697f0a" ] } ], "mendeley" : { "previouslyFormattedCitation" : "(Davisson &#38; Germer, 1927; Einstein, 1905; Watson &#38; Crick, 1953)" }, "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" } ;
-	citationsItems[0] =  { "citationId" : "CITATION-0", "citationItems" : [ { "id" : "ITEM-5", "uris" : [ /*"http://www.mendeley.com/documents/?uuid=dd1a39c6-e14a-4c34-8edb-98ef1731e557" */] } ], "mendeley" : { "previouslyFormattedCitation" : "(Brown, 1985)" }, "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" };
-	citationsItems[1] =  { "citationId" : "CITATION-1", "citationItems" : [ { "id" : "ITEM-6", "uris" : [ /*"http://www.mendeley.com/documents/?uuid=dd1a39c6-e14a-4c34-8edb-98ef1731e557" */] } ], "mendeley" : { "previouslyFormattedCitation" : "(Brown, 1985)" }, "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" } ;
+	citationsItems[0] =  { "citationId" : "CITATION-0", "citationItems" : [ { "id" : "ITEM-1", "uris" : [ /*"http://www.mendeley.com/documents/?uuid=dd1a39c6-e14a-4c34-8edb-98ef1731e557" */] } ], "mendeley" : { "previouslyFormattedCitation" : "(Brown, 1985)" }, "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" } ;
+	citationsItems[1] =  { "citationId" : "CITATION-1", "citationItems" : [ { "id" : "ITEM-2", "uris" : [ "http://www.mendeley.com/documents/?uuid=a030fc65-aabc-4b12-a454-a917280affc1" ] }, { "id" : "ITEM-3", "uris" : [ "http://www.mendeley.com/documents/?uuid=4d771e0b-52a1-4561-9e39-260877d1db08" ] }, { "id" : "ITEM-4", "uris" : [ "http://www.mendeley.com/documents/?uuid=6bdb385b-a342-454e-a838-4dde5f697f0a" ] } ], "mendeley" : { "previouslyFormattedCitation" : "(Davisson &#38; Germer, 1927; Einstein, 1905; Watson &#38; Crick, 1953)" }, "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" } ;
+	//citationsItems[0] =  { "citationId" : "CITATION-0", "citationItems" : [ { "id" : "ITEM-5", "uris" : [ /*"http://www.mendeley.com/documents/?uuid=dd1a39c6-e14a-4c34-8edb-98ef1731e557" */] } ], "mendeley" : { "previouslyFormattedCitation" : "(Brown, 1985)" }, "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" };
+	//citationsItems[1] =  { "citationId" : "CITATION-1", "citationItems" : [ { "id" : "ITEM-6", "uris" : [ /*"http://www.mendeley.com/documents/?uuid=dd1a39c6-e14a-4c34-8edb-98ef1731e557" */] } ], "mendeley" : { "previouslyFormattedCitation" : "(Brown, 1985)" }, "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" } ;
 	var availableIds = [];
 	
 	var global_tags = new Object;
@@ -187,19 +189,19 @@ function runCiteproc() {
 			return;
 		}
 		
-	}
-	
-	for (var i = 0; i < citations.length; i++)
-	{
-		var pos = citations[i][0];
-		
-		if (inLineCitations != "")
+		for (var i = 0; i < citations.length; i++)
 		{
-			inLineCitations += "<br>";
-		}
-		
-		inLineCitations += citations[i][1];
+			var pos = citations[i][0];
+			
+			if (inLineCitations != "")
+			{
+				inLineCitations += "<br>";
+			}
+			
+			inLineCitations += citations[i][1];
+		}	
 	}
+
 
 	document.getElementById("formattedCitations").innerHTML = inLineCitations;
 	
