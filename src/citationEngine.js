@@ -1,6 +1,7 @@
 var citationEngine = {
 
 formatCitations: function (style, documents, citationClusters) {
+	// TODO: this shouldn't be a global
 	jsonDocuments = documents;
 
 	var result = {"statusMessage":"", "formattedCitations":[], "formattedBibliography":""};

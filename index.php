@@ -176,90 +176,17 @@ var jsonDocuments =  {
 
 function runCiteproc() {
 	var style = editor.getValue();
-	// should validate that style is valid XML
-	
-	//document.getElementById("formattedCitations").innerHTML = "";
-	//document.getElementById("formattedBibliography").innerHTML = "";
+	var inLineCitations = "";
+	var citations = [];
+	var formattedResult;
 	
 	document.getElementById("statusMessage").innerHTML = "";
-	
-	try
-	{
-		var sys = new Sys(abbreviations);
-		var citeproc = new CSL.Engine(sys, style);
-	}
-	catch(err)
-	{
-		document.getElementById("statusMessage").innerHTML = "Citeproc initialisation exception: " + err;
-		return;
-	}
-	
-	var inLineCitations = "";
 
-	for (var cluster=0; cluster<citationsItems.length; cluster++)
-	{
-		try
-		{
-			var citations = citeproc.appendCitationCluster(citationsItems[cluster],false);
-		}
-		catch(err)
-		{
-			document.getElementById("statusMessage").innerHTML = "Citeproc exception: " + err;
-			return;
-		}
-		
-		for (var i = 0; i < citations.length; i++)
-		{
-			var pos = citations[i][0];
-			
-			if (inLineCitations != "")
-			{
-				inLineCitations += "<br>";
-			}
-			
-			inLineCitations += citations[i][1];
-		}	
-	}
+	formattedResult = citationEngine.formatCitations(style, jsonDocuments, citationsItems);
 
-
-	document.getElementById("formattedCitations").innerHTML = inLineCitations;
-	
-	var makeBibliographyArgument;
-	
-	var enumerateCitations = true;
-	if (enumerateCitations == true)
-	{
-		makeBibliographyArgument = undefined;
-	}
-	else
-	{
-		makeBibliographyArgument = "citation-number";
-	}
-	
-	try
-	{
-		var bibliography = citeproc.makeBibliography(makeBibliographyArgument);
-	}
-	catch(err)
-	{
-		document.getElementById("statusMessage").innerHTML = "Citeproc exception: " + err;
-		return;
-	}
-
-	var hangingindent = false;
-	var has_bibliography = (bibliography !== false);
-
-	if (has_bibliography)
-	{
-		hangingindent = (bibliography[0].hangingindent != 0 && "undefined" !== typeof(bibliography[0].hangingindent));
-		bibliography = bibliography[1];
-	}
-	else
-	{
-		bibliography = [[(citations[0][1])]];
-	}
-
-	document.getElementById("formattedBibliography").innerHTML=bibliography.join("<br>");
+	document.getElementById("formattedCitations").innerHTML = formattedResult.formattedCitations.join("<br />");
+	document.getElementById("formattedBibliography").innerHTML=formattedResult.formattedBibliography;
+	document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
 }
 
 runCiteproc();

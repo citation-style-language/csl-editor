@@ -8,8 +8,9 @@
 	<script type="text/javascript" src="../external/citeproc/loadlocale.js"></script>
 	<script type="text/javascript" src="../external/citeproc/loadsys.js"></script>
 	<script type="text/javascript" src="../external/citeproc/runcites.js"></script>
-
-<script type="text/javascript" src="../src/citationEngine.js"></script>
+	<script type="text/javascript" src="../src/citationEngine.js"></script>
+	<script type="text/javascript" src="../server/config.js"></script>
+	<script type="text/javascript" src="../../csl-editor-data/exampleCitations.js"></script>
 
 <style>
 input, textarea
@@ -38,32 +39,11 @@ Bibliography entry: <textarea type="text" id="userBibliography" disabled="disabl
 <h2>Results</h2>
 <output id="result"></output><p>
 <script>
-// example document data
-var jsonDocuments =  { "ITEM-1" : { /*"DOI" : "10.1088/0143-0807/27/4/007", "URL" : "http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf",*/ "abstract" : "General description of special relativity", "author" : [ { "family" : "Einstein", "given" : "Albert" } ], "chapter-number" : "3", "container-title" : "Annalen der Physik", "editor" : [  ], "id" : "ITEM-1", "issue" : "4", "issued" : { "date-parts" : [ [ "1905" ] ] }, "page" : "1-26", "publisher" : "Dover Publications", "title" : "On the electrodynamics of moving bodies", "translator" : [  ], "type" : "article-journal", "volume" : "17" }, "ITEM-2" : { /*"DOI" : "10.1038/171737a0", "URL" : "http://www.ncbi.nlm.nih.gov/pubmed/13054692",*/ "abstract" : "We wish to suggest a structure for the salt of deoxyribose nucleic acid (D.N.A.). This structure has novel features which are of considerable biological interest.", "author" : [ { "family" : "Watson", "given" : "J D" }, { "family" : "Crick", "given" : "F H" } ], "container-title" : "Nature", "editor" : [  ], "id" : "ITEM-2", "issue" : "4356", "issued" : { "date-parts" : [ [ "1953" ] ] }, "page" : "737-738", "publisher" : "Am Med Assoc", "title" : "Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid.", "translator" : [  ], "type" : "article-journal", "volume" : "171" } }  ;
 
-var citationsItems = new Array();
-citationsItems[0] =  { "citationId" : "CITATION-0", "citationItems" : [ { "id" : "ITEM-1", "uris" : [] } ], "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" } ;
-
-//citationsItems[1] =  { "citationId" : "CITATION-1", "citationItems" : [ { "id" : "ITEM-1", "uris" : [] },  { "id" : "ITEM-2", "uris" : [] } ], "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" } ;
+//load(cslServerConfig.dataPath + '/exampleCitations.js');
 
 var cslStyles = new Array();
 var cslStylesFilenames = new Array();
-<?php
-// get list of all csl files
-$cslFiles = scandir("../external/csl-styles");
-
-$index = 0;
-foreach($cslFiles as $key => $value)
-{
-	if($value != "." && $value != "..")
-	{
-		$fileContents = json_encode(file_get_contents("../external/csl-styles/$value"));
-		echo "cslStyles[$index] = $fileContents;\n";
-		echo "cslStylesFilenames[$index] = \"$value\";\n";
-		$index += 1;
-	}
-}
-?>
 
 function authorString(authors)
 {
@@ -92,11 +72,15 @@ function searchForStyle()
 
 	var editDistances = new Array();
 
-	for (var index in formattedCitations)
+	var index = 0;
+
+	for (var styleId in exampleCitations.exampleCitationsFromMasterId)
 	{
-		if (formattedCitations[index] != null && formattedCitations[index].statusMessage == "")
+		var exampleCitation = exampleCitations.exampleCitationsFromMasterId[styleId];
+
+		if (exampleCitation != null && exampleCitation.statusMessage == "")
 		{
-			formattedCitation = formattedCitations[index].formattedCitations[0];
+			formattedCitation = exampleCitation.formattedCitations[0];
 			var thisEditDistance = 0;
 			
 			if (userCitation != "")
@@ -105,15 +89,15 @@ function searchForStyle()
 			}
 			if (userBibliography != "")
 			{
-				thisEditDistance += levenshtein(userBibliography, formattedCitations[index].formattedBibliography);
+				thisEditDistance += levenshtein(userBibliography, exampleCitation.formattedBibliography);
 			}
 
-			editDistances[index] = {editDistance:thisEditDistance, index:index};
+			editDistances[index++] = {editDistance:thisEditDistance, styleId:styleId};
 
 			if (thisEditDistance < bestEditDistance)
 			{
 				bestEditDistance = thisEditDistance;
-				bestMatchIndex = index;
+				bestMatchId = styleId;
 			}
 		}
 	}
@@ -128,12 +112,13 @@ function searchForStyle()
 	{
 		result.push(
 			"<table>" +
-			"<tr><td>csl filename:</td><td>" + formattedCitationsFilenames[editDistances[index].index] + "</td></tr>" +
+			"<tr><td>style name:</td><td>" + exampleCitations.styleTitleFromId[editDistances[index].styleId] + "</td></tr>" +
+			'<tr><td>style id:</td><td><a href="' + styleId + '">' + styleId + "</a></td></tr>" +
 			"<tr><td>edit distance:</td><td>" + editDistances[index].editDistance + "</td></tr>" +
 			"<tr><td>in-line citation:</td><td>" + 
-				formattedCitations[editDistances[index].index].formattedCitations.join("<br/>") + "</td></tr>" +
+			exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedCitations.join("<br/>") + "</td></tr>" +
 			"<tr><td>bibliography:</td><td>" + 
-				formattedCitations[editDistances[index].index].formattedBibliography + "</td></tr>" +
+				exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedBibliography + "</td></tr>" +
 			"</table>"
 		);
 		result.push("");
@@ -150,7 +135,8 @@ formatExampleCitations();
 
 function formatExampleCitations()
 {
-	if (currentStyleIndex < cslStyles.length)
+	var jsonDocuments = cslServerConfig.jsonDocuments;
+	if (false)//currentStyleIndex < cslStyles.length)
 	{
 		document.getElementById("status").innerHTML = "<i>Please wait, citating example document in style " + 
 			currentStyleIndex + "/" + cslStyles.length + "</i><br />" +
