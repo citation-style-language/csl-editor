@@ -2,6 +2,10 @@
 <head>	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
+	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
+
 	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
 	<script type="text/javascript" src="../external/citeproc/xmldom.js"></script>
 	<script type="text/javascript" src="../external/citeproc/citeproc.js"></script>
@@ -10,40 +14,153 @@
 	<script type="text/javascript" src="../external/citeproc/runcites.js"></script>
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../server/config.js"></script>
-	<script type="text/javascript" src="../../csl-editor-data/exampleCitations.js"></script>
+	<script type="text/javascript" src="../../csl-editor-data/exampleCitationsEnc.js" charset="UTF-8"></script>
 
 <style>
 input, textarea
 {
 	width: 400;
 }
-p#exampleDocument
+h1
 {
-	margin-left: 50px;
-/*	font-family: monospace;
- */
+	font-family: sans-serif;
+}
+#exampleDocument
+{
+	float: left;
+	margin-left: 0px;
+	width: 49%;
+	background-color: #F5F5DC;
+	border-style: solid;
+	border-width: 2px;
+}
+.faint
+{
+	color: grey;
+}
+#styleFormatInputControls
+{
+	float: left;
+	width: 49%;
+	margin-left: 0px;
+}
+.clearDiv
+{
+	clear: both;
 }
 </style>
 </head>
 <body>
 <h1>CSL Finder</h1>
 
-<p id=exampleDocument></p>
-<p id=explanation></p>
+<div id="inputTabs">
+	<ul>
+		<li><a href="#styleNameInput">Search by style name</a></li>
+		<li><a href="#styleFormatInput">Search by style format</a></li>
+	</ul>
+	<div id="styleNameInput">
+<!--		Search by style name... <br />
+		(very slow algorithm at present, but fine for the current style repo) <br />-->
+		<input type="text" id="styleNameQuery" oninput="nameSearch()" placeholder="Type journal title here" />
+	</div>
+	<div id="styleFormatInput">
+		<div id="styleFormatInputControls">
+			<p id=explanation></p>
+			<output id="status"><i>caluculating example citations...</i></output><p>
+			<input type="text" id="userCitation" oninput="formChanged()" placeholder="Type inline citation here" />
+			<br />
+			<textarea type="text" id="userBibliography" oninput="formChanged()" placeholder="Type bibliography entry here" ></textarea>
+		</div>
+		<div id=exampleDocument></div>
+		<div class=clearDiv>
+		</div>
+	</div>
+</div>
 
-<output id="status"><i>Caluculating example citations...</i></output><p>
-
-In-line citation: <input type="text" id="userCitation" disabled="disabled" oninput="formChanged()" /><br />
-Bibliography entry: <textarea type="text" id="userBibliography" disabled="disabled" oninput="formChanged()"></textarea>
-
-<h2>Results</h2>
-<output id="result"></output><p>
+<output id="styleNameResult"></output><p>
+<output id="styleFormatResult"></output><p>
 <script>
 
-//load(cslServerConfig.dataPath + '/exampleCitations.js');
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
 
-var cslStyles = new Array();
-var cslStylesFilenames = new Array();
+// JQuery UI stuff
+$(function() {
+	$( "#inputTabs" ).tabs({
+		show: function(event, ui) {
+			if (ui.panel.id === "styleNameInput")
+			{
+				$("#styleNameResult").show();
+				$("#styleFormatResult").hide();
+			}
+			else
+			{
+				$("#styleNameResult").hide();
+				$("#styleFormatResult").show();
+			}
+		}
+	});
+});
+
+// --- Functions for style name search ---
+
+var nameSearchTimeout;
+function nameSearch()
+{
+	clearTimeout(nameSearchTimeout);
+	nameSearchTimeout = setTimeout("searchForStyleName()", 1000);
+}
+
+searchForStyleName();
+
+function searchForStyleName()
+{
+	var searchQuery = $("#styleNameQuery").val();
+	var searchQueryLower = searchQuery.toLowerCase();
+
+	if (searchQuery.length === 0)
+	{
+		$("#styleNameResult").html("");
+		return;
+	}
+	else if (searchQuery.length < 3)
+	{
+		$("#styleNameResult").html("<p>Query too short</p>");
+		return;
+	}
+
+	var result = [];
+
+	// dumb search, just iterates through all the names
+	for (var styleId in exampleCitations.styleTitleFromId)
+	{
+		var styleName = exampleCitations.styleTitleFromId[styleId];
+
+		//alert("styleName: " + styleName);
+
+		if (styleName.toLowerCase().indexOf(searchQueryLower) > -1)
+		{
+			result.push(
+				'<a href="' + styleId + '">' + styleName + "</a><br />" +
+				'<table>' +
+				'<tr><td><span class="faint">Inline citaiton</span></td><td>' + 
+				exampleCitations.exampleCitationsFromMasterId[styleId].formattedCitations[0] + '</td></tr>' +
+				'<tr><td><span class="faint">Bibliography</span></td><td>' + exampleCitations.exampleCitationsFromMasterId[styleId].formattedBibliography + "</td></tr>" +
+				'</table>'
+			);
+		}
+	}
+	
+	$("#styleNameResult").html(
+		'<p>' + result.length + ' results for query "' + searchQuery + '":</p>' +
+		result.join("<p><p>")
+	);
+
+	// TODO: order results by shortest
+}
+
+// --- Functions for formatted style search ---
 
 function authorString(authors)
 {
@@ -107,6 +224,8 @@ function searchForStyle()
 
 	var result = new Array();
 
+	result.push("<p>Top 5 results:</p>");
+
 	// top results
 	for (var index=0; index < Math.min(5, editDistances.length); index++)
 	{
@@ -121,64 +240,41 @@ function searchForStyle()
 				exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedBibliography + "</td></tr>" +
 			"</table>"
 		);
-		result.push("");
+		//result.push("");
 	}
 
-	document.getElementById("result").innerHTML = result.join("<br />");
+	document.getElementById("styleFormatResult").innerHTML = result.join("<br />");
 }
 
 var formattedCitations = new Array();
 var formattedCitationsFilenames = new Array();
 
 var currentStyleIndex = 0;
-formatExampleCitations();
+initFindByStyle();
 
-function formatExampleCitations()
+function initFindByStyle()
 {
 	var jsonDocuments = cslServerConfig.jsonDocuments;
-	if (false)//currentStyleIndex < cslStyles.length)
-	{
-		document.getElementById("status").innerHTML = "<i>Please wait, citating example document in style " + 
-			currentStyleIndex + "/" + cslStyles.length + "</i><br />" +
-			"<i>(This could easily be pre-computed, unless we allow the user to make a custom example document)</i>";
-		formattedCitations.push(
-			citationEngine.formatCitations(cslStyles[currentStyleIndex], jsonDocuments, citationsItems));
-		formattedCitationsFilenames.push(cslStylesFilenames[currentStyleIndex]);
-		currentStyleIndex++;
 
-		setTimeout("formatExampleCitations()", 10);
-	}
-	else
-	{
-		document.getElementById("status").innerHTML = "";
-		document.getElementById("explanation").innerHTML = "<i>Please cite the above document in the exact format you require<br />" +
-			"(You can use tags for italic, bold, superscript, etc)</i>";
-		document.getElementById("exampleDocument").innerHTML =
-			"<table>" +
-			"<tr><td>Title:</td><td>" + jsonDocuments["ITEM-1"].title + "</td></tr>" +
-			"<tr><td>Authors:</td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "</td></tr>" + 
-			"<tr><td>Year:</td><td>" + jsonDocuments["ITEM-1"].issued["date-parts"][0][0] + "</td></tr>" +
-			"<tr><td>Publication:</td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "</td></tr>" +
-			"<tr><td>Volume:</td><td>" + jsonDocuments["ITEM-1"]["volume"] + "</td></tr>" +
-			"<tr><td>Issue:</td><td>" + jsonDocuments["ITEM-1"]["issue"] + "</td></tr>" +
-			"<tr><td>Chapter:</td><td>" + jsonDocuments["ITEM-1"]["chapter-number"] + "</td></tr>" +
-			"<tr><td>Pages:</td><td>" + jsonDocuments["ITEM-1"]["page"] + "</td></tr>" +
-			"<tr><td>Publisher:</td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "</td></tr>" +
-			"<tr><td>Document type:</td><td>" + jsonDocuments["ITEM-1"]["type"] + "</td></tr>" +
-			"</table>";
-		document.getElementById("userCitation").disabled = "";
-		document.getElementById("userBibliography").disabled = "";
-	}
+	document.getElementById("status").innerHTML = "";
+	document.getElementById("explanation").innerHTML = "<i>Please cite this article in the exact format you require<br />" +
+		"(You can use tags for italic, bold, superscript, etc)</i>";
+	document.getElementById("exampleDocument").innerHTML =
+		"<table>" +
+		"<tr><td>Title:</td><td>" + jsonDocuments["ITEM-1"].title + "</td></tr>" +
+		"<tr><td>Authors:</td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "</td></tr>" + 
+		"<tr><td>Year:</td><td>" + jsonDocuments["ITEM-1"].issued["date-parts"][0][0] + "</td></tr>" +
+		"<tr><td>Publication:</td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "</td></tr>" +
+		"<tr><td>Volume:</td><td>" + jsonDocuments["ITEM-1"]["volume"] + "</td></tr>" +
+		"<tr><td>Issue:</td><td>" + jsonDocuments["ITEM-1"]["issue"] + "</td></tr>" +
+		"<tr><td>Chapter:</td><td>" + jsonDocuments["ITEM-1"]["chapter-number"] + "</td></tr>" +
+		"<tr><td>Pages:</td><td>" + jsonDocuments["ITEM-1"]["page"] + "</td></tr>" +
+		"<tr><td>Publisher:</td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "</td></tr>" +
+		"<tr><td>Document type:</td><td>" + jsonDocuments["ITEM-1"]["type"] + "</td></tr>" +
+		"</table>";
+	//document.getElementById("userCitation").disabled = "";
+	//document.getElementById("userBibliography").disabled = "";
 }
-
-// generate citations and bibliographies for all styles
-//var style = <?php echo json_encode(file_get_contents("../external/csl-styles/arp.csl")); ?>;
-//var formattedCitationsAndBibliography = citationEngine.formatCitations(style, jsonDocuments, citationsItems);
-/*
-document.getElementById("citeprocStatusMessage").innerHTML = formattedCitations[0].statusMessage;
-document.getElementById("formattedCitations").innerHTML = formattedCitations[0].formattedCitations[0];
-document.getElementById("formattedBibliography").innerHTML = formattedCitations[0].formattedBibliography;
- */
 
 // from http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#JavaScript
 function levenshtein(str1, str2) {

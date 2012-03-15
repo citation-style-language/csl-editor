@@ -49,9 +49,11 @@ var outputData = {
 	masterIdFromId : {},
 
 	// list of dependent styles for each master style ID
-	dependentStylesFromMasterId : {},
+	//dependentStylesFromMasterId : {},
 	exampleCitationsFromMasterId : {},
-	styleTitleFromId : {}
+	styleTitleFromId : {},
+
+
 };
 
 var dir = new Directory( cslServerConfig.cslStylesPath );
@@ -86,7 +88,7 @@ for ( var entry; ( entry = dir.Read() ); )
 		if (xmlDoc !== "notSet")
 		{
 			var styleId = xmlParser.getStyleId(xmlDoc);
-			Print( 'parsed ' + styleId + '\n' );
+			//Print( 'parsed ' + styleId + '\n' );
 			masterStyleFromId[styleId] = fileData;
 
 			// TODO: find out why this is needed!
@@ -96,7 +98,7 @@ for ( var entry; ( entry = dir.Read() ); )
 			if (styleTitleNode && styleTitleNode.length())
 			{
 				var styleTitle = styleTitleNode[0].toString();
-				print('title: ' + styleTitle);
+				//print('title: ' + styleTitle);
 
 				outputData.styleTitleFromId[styleId] = styleTitle;
 			}
@@ -104,8 +106,22 @@ for ( var entry; ( entry = dir.Read() ); )
 			var citeprocResult = citationEngine.formatCitations(
 				fileData, cslServerConfig.jsonDocuments, cslServerConfig.citationsItems);
 
+			// clean up citeproc result for display
+			citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.
+				replace(/<second-field-align>/g, "");
+			
+			citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.
+				replace(/<\/second-field-align>/g, " ");
+
 			outputData.exampleCitationsFromMasterId[styleId] = citeprocResult;
 			//Print(citeprocResult.formattedBibliography + '\n');
+
+			if (styleTitle.toLowerCase().indexOf("mechanical") > -1)
+			{
+				Print("mechanical: " + citeprocResult.formattedBibliography);
+			}
+
+			Print(".");
 
 		}
 	}
@@ -116,11 +132,32 @@ Print( "num entries = " + entries);
 // output results to JSON file:
 
 var outputDir = new Directory(cslServerConfig.dataPath);
-var outputFile = new File(outputDir.name + '/exampleCitations.js');
+var outputFile = new File(outputDir.name + '/exampleCitationsEnc.js');
 if (!outputDir.exist)
 {
 	outputDir.Make();
 }
+try
+{
+	outputFile.Delete();
+}
+catch (err){}
+
 outputFile.Open(File.WRONLY | File.CREATE_FILE);
-outputFile.Write("var exampleCitations = " + enc(JSON.stringify(outputData, null, "\t")) + ';');
+var outputString = JSON.stringify(outputData, null, "\t");
+
+// TODO: may not need to escape all non ASCII chars, this
+// was done due to a quotation marks bugs
+outputString = outputString.replace(/[\u007f-\uffff]/g,
+      function(c) { 
+        return '\\u'+('0000'+c.charCodeAt(0).toString(16)).slice(-4);
+      }
+   );
+
+// need to convert quotation marks
+// TODO: investigate why \u201c is converted to 3 characters
+outputString = outputString.replace(/\\u00e2\\u0080\\u009c/g, "\\u201c");
+outputString = outputString.replace(/\\u00e2\\u0080\\u009d/g, "\\u201d");
+
+outputFile.Write(enc("var exampleCitations = " + outputString + ';'));
 
