@@ -257,9 +257,10 @@ function initFindByStyle()
 	var jsonDocuments = cslServerConfig.jsonDocuments;
 
 	document.getElementById("status").innerHTML = "";
-	document.getElementById("explanation").innerHTML = "<i>Please cite this article in the exact format you require<br />" +
+	document.getElementById("explanation").innerHTML = "<i>Please cite this example article in the style you wish your citations to appear.<br />" +
 		"(You can use tags for italic, bold, superscript, etc)</i>";
 	document.getElementById("exampleDocument").innerHTML =
+		"<p align=center><strong>Example Article</stong></p>" +
 		"<table>" +
 		"<tr><td>Title:</td><td>" + jsonDocuments["ITEM-1"].title + "</td></tr>" +
 		"<tr><td>Authors:</td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "</td></tr>" + 
