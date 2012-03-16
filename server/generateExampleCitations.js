@@ -35,10 +35,7 @@ load("../src/citationEngine.js");
 
 // start
 
-load("../external/citeproc/xmle4x.js");
 load("config.js");
-
-// TODO: put following items in a single JSON object for persistent storage
 
 // loop through the parent (unique) csl-styles generating example citations for
 // each one
@@ -51,12 +48,10 @@ var outputData = {
 	// list of dependent styles for each master style ID
 	//dependentStylesFromMasterId : {},
 	exampleCitationsFromMasterId : {},
-	styleTitleFromId : {},
-
-
+	styleTitleFromId : {}
 };
 
-var dir = new Directory( cslServerConfig.cslStylesPath );
+var dir = new Directory( '../' + cslServerConfig.cslStylesPath );
 dir.Open();
 var entries = 0;
 for ( var entry; ( entry = dir.Read() ); )
@@ -107,10 +102,12 @@ for ( var entry; ( entry = dir.Read() ); )
 				fileData, cslServerConfig.jsonDocuments, cslServerConfig.citationsItems);
 
 			// clean up citeproc result for display
-			citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.
+			citeprocResult.formattedBibliography =
+				citeprocResult.formattedBibliography.
 				replace(/<second-field-align>/g, "");
 			
-			citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.
+			citeprocResult.formattedBibliography =
+				citeprocResult.formattedBibliography.
 				replace(/<\/second-field-align>/g, " ");
 
 			outputData.exampleCitationsFromMasterId[styleId] = citeprocResult;
@@ -131,7 +128,7 @@ Print( "num entries = " + entries);
 
 // output results to JSON file:
 
-var outputDir = new Directory(cslServerConfig.dataPath);
+var outputDir = new Directory("../" + cslServerConfig.dataPath);
 var outputFile = new File(outputDir.name + '/exampleCitationsEnc.js');
 if (!outputDir.exist)
 {
