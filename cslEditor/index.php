@@ -5,17 +5,17 @@
 
 	<title>CSL IDE</title>
 	<link rel="stylesheet" href="./codemirror.css">
-	<script src="./external/codemirror2/lib/codemirror.js"></script>
-	<script src="./external/codemirror2/mode/xml/xml.js"></script>
+	<script src="../external/codemirror2/lib/codemirror.js"></script>
+	<script src="../external/codemirror2/mode/xml/xml.js"></script>
 	<link rel="stylesheet" href="./docs.css">
 	
-	<script type="text/javascript" src="./external/citeproc/loadabbrevs.js"></script>
-	<script type="text/javascript" src="./external/citeproc/xmldom.js"></script>
-	<script type="text/javascript" src="./external/citeproc/citeproc.js"></script>
-	<script type="text/javascript" src="./external/citeproc/loadlocale.js"></script>
-	<script type="text/javascript" src="./external/citeproc/loadsys.js"></script>
-	<script type="text/javascript" src="./external/citeproc/runcites.js"></script>
-	<script type="text/javascript" src="./src/citationEngine.js"></script>
+	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
+	<script type="text/javascript" src="../external/citeproc/xmldom.js"></script>
+	<script type="text/javascript" src="../external/citeproc/citeproc.js"></script>
+	<script type="text/javascript" src="../external/citeproc/loadlocale.js"></script>
+	<script type="text/javascript" src="../external/citeproc/loadsys.js"></script>
+	<script type="text/javascript" src="../external/citeproc/runcites.js"></script>
+	<script type="text/javascript" src="../src/citationEngine.js"></script>
 
 	<style type="text/css">
 	  #code {
@@ -60,7 +60,7 @@ else
 	alert('The File APIs are not fully supported in this browser.');
 }
 
-document.codeForm.code.value = <?php echo json_encode(file_get_contents("./external/csl-styles/apa.csl")); ?>;
+document.codeForm.code.value = <?php echo json_encode(file_get_contents("../external/csl-styles/apa.csl")); ?>;
 CodeMirror.defaults.onChange = function()
 {
 	clearTimeout(timeout);
