@@ -23,6 +23,7 @@ input, textarea
 }
 h1
 {
+	text-align: center;
 	font-family: sans-serif;
 }
 #exampleDocument

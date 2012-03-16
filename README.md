@@ -2,7 +2,7 @@
 
 Proof-of-concept hack to edit CSL using the [CodeMirror](http://codemirror.net) web-based code editor with example citations and bibliographies which update in real time as you type.
 
-Play with it here: [CSL Editor](http://steveridout.com/cslEditor)
+Play with it here: [CSL Editor](http://steveridout.com/cslEditor/cslEditor)
 
 #CSL finder
 
