@@ -1,3 +1,6 @@
 [submodule "external/codemirror2"]
 	path = external/codemirror2
 	url = http://marijnhaverbeke.nl/git/codemirror2
+[submodule "external/cleditor"]
+	path = external/cleditor
+	url = https://github.com/cleditor/cleditor.git

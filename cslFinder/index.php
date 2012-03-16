@@ -16,10 +16,13 @@
 	<script type="text/javascript" src="../server/config.js"></script>
 	<script type="text/javascript" src="../../csl-editor-data/exampleCitationsEnc.js" charset="UTF-8"></script>
 
+	<script type="text/javascript" src="../external/cleditor/jquery.cleditor.js"></script>
+	<link rel="stylesheet" type="text/css" href="../external/cleditor/jquery.cleditor.css">
+
 <style>
 input, textarea
 {
-	width: 400;
+	width: 100%;
 }
 h1
 {
@@ -29,30 +32,33 @@ h1
 #exampleDocument
 {
 	float: left;
-	margin-left: 0px;
-	width: 49%;
+	margin-left: 5px;
+	width: 53%;
 	background-color: #F5F5DC;
 	border-style: solid;
 	border-width: 2px;
 }
 .faint
 {
-	color: grey;
+	color: #888888;
 }
 #styleFormatInputControls
 {
 	float: left;
-	width: 49%;
+	width: 45%;
 	margin-left: 0px;
 }
 .clearDiv
 {
 	clear: both;
 }
+#userCitation, #userBibliography
+{
+}
 </style>
 </head>
 <body>
-<h1>CSL Finder</h1>
+<h1>CSL Finder <sup><span class="faint">(prototype)</span></sup></h1>
 
 <div id="inputTabs">
 	<ul>
@@ -68,8 +74,10 @@ h1
 		<div id="styleFormatInputControls">
 			<p id=explanation></p>
 			<output id="status"><i>caluculating example citations...</i></output><p>
-			<input type="text" id="userCitation" oninput="formChanged()" placeholder="Type inline citation here" />
+			Enter in-line citation:
+			<textarea type="text" id="userCitation" oninput="formChanged()" placeholder="Type inline citation here" ></textarea>
 			<br />
+			Enter bibliography entry:
 			<textarea type="text" id="userBibliography" oninput="formChanged()" placeholder="Type bibliography entry here" ></textarea>
 		</div>
 		<div id=exampleDocument></div>
@@ -81,6 +89,11 @@ h1
 <output id="styleNameResult"></output><p>
 <output id="styleFormatResult"></output><p>
 <script>
+
+var escapeHTML = function( string )
+{
+	return jQuery( '<pre>' ).text( string ).html();
+};
 
 String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
@@ -102,6 +115,26 @@ $(function() {
 			}
 		}
 	});
+});
+
+$(document).ready(function() {
+
+	$.cleditor.defaultOptions.width = 300;
+	$.cleditor.defaultOptions.height = 100;
+	$.cleditor.defaultOptions.controls =
+		"bold italic underline strikethrough subscript superscript ";
+//		+ "| undo redo | cut copy paste";
+
+	var userCitationInput = $("#userCitation").cleditor({height: 70})[0];
+	$("#userBibliography").cleditor({height: 100});
+
+	$("#userCitation").cleditor()[0].change(formChanged);
+	$("#userBibliography").cleditor()[0].change(formChanged);
+
+	
+	//alert("doc = " + userCitationInput.doc.body.text);
+
+//	$("#userCitation").showMessage("hello");
 });
 
 // --- Functions for style name search ---
@@ -185,8 +218,27 @@ function searchForStyle()
 {
 	var bestEditDistance = 999;
 	var bestMatchIndex = -1;
-	var userCitation = document.getElementById("userCitation").value;
-	var userBibliography = document.getElementById("userBibliography").value;
+	
+	var userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML;
+	var userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
+
+	var cleanHTML = function(html) {
+		html = html.replace(/<span[^<>]*>/g, "");
+		html = html.replace(/<\/span>/g, "");
+		html = html.replace(/&nbsp;/g, " ");
+
+		// remove any attributes the tags may have
+		html = html.replace(/<(b|i|u|sup|sub)[^<>]*>/g, "<$1>");
+		return html;
+	};
+
+	userCitation = cleanHTML(userCitation);
+	userBibliography = cleanHTML(userBibliography);
+
+	var result = new Array();
+
+	//result.push("<p>searching for " + escapeHTML(userCitation) + "</p>");
+	//result.push("<p>searching for " + escapeHTML(userBibliography) + "</p>");
 
 	var editDistances = new Array();
 
@@ -223,22 +275,25 @@ function searchForStyle()
 
 	document.getElementById("status").innerHTML = "";
 
-	var result = new Array();
-
 	result.push("<p>Top 5 results:</p>");
 
 	// top results
 	for (var index=0; index < Math.min(5, editDistances.length); index++)
 	{
+		var row = function(title, value)
+		{
+			return "<tr><td><span class=faint>" + title + "</span></td><td>" + value + "</td></tr>";
+		};
+		
 		result.push(
 			"<table>" +
-			"<tr><td>style name:</td><td>" + exampleCitations.styleTitleFromId[editDistances[index].styleId] + "</td></tr>" +
-			'<tr><td>style id:</td><td><a href="' + styleId + '">' + styleId + "</a></td></tr>" +
-			"<tr><td>edit distance:</td><td>" + editDistances[index].editDistance + "</td></tr>" +
-			"<tr><td>in-line citation:</td><td>" + 
-			exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedCitations.join("<br/>") + "</td></tr>" +
-			"<tr><td>bibliography:</td><td>" + 
-				exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedBibliography + "</td></tr>" +
+			row("style name", exampleCitations.styleTitleFromId[editDistances[index].styleId]) +
+			row("style id", styleId) +
+			row("edit distance", editDistances[index].editDistance) +
+			row("in-line citation",
+				escapeHTML(exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedCitations.join("<br/>"))) +
+			row("bibliography",
+				escapeHTML(exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedBibliography)) +
 			"</table>"
 		);
 		//result.push("");
@@ -258,8 +313,7 @@ function initFindByStyle()
 	var jsonDocuments = cslServerConfig.jsonDocuments;
 
 	document.getElementById("status").innerHTML = "";
-	document.getElementById("explanation").innerHTML = "<i>Please cite this example article in the style you wish your citations to appear.<br />" +
-		"(You can use tags for italic, bold, superscript, etc)</i>";
+	document.getElementById("explanation").innerHTML = "<i>Please cite this example article in the style you wish your citations to appear.<br />";
 	document.getElementById("exampleDocument").innerHTML =
 		"<p align=center><strong>Example Article</stong></p>" +
 		"<table>" +
