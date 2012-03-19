@@ -1,3 +1,5 @@
+"use strict";
+
 // jslib stuff
 
 LoadModule('jsio');
@@ -51,52 +53,68 @@ var outputData = {
 	styleTitleFromId : {}
 };
 
-var dir = new Directory( '../' + cslServerConfig.cslStylesPath );
-dir.Open();
 var entries = 0;
-for ( var entry; ( entry = dir.Read() ); )
-{
-	var file = new File(dir.name + '/' + entry);
-	if (file.info.type == 1)
+
+var addCslFileToIndex = function (file, entry) {
+	//Print( entry + '\n');
+	entries++;
+
+	// TODO: parse XML to determine citation style URI
+	file.Open(File.RDONLY);
+	var fileData = dec(file.Read());
+	//Print( 'parsing ' + entry + '\n');
+	
+	var xmlParser = new CSL_E4X();
+	var xmlDoc;
+
+	xmlDoc = "notSet";
+	try
 	{
-		//Print( entry + '\n');
-		entries++;
+		xmlDoc = xmlParser.makeXml(fileData);
+	}
+	catch (err)
+	{
+		Print( 'FAILED to parse ' + entry + '\n' );
+	}
 
-		// TODO: parse XML to determine citation style URI
-		file.Open(File.RDONLY);
-		var fileData = dec(file.Read());
-		//Print( 'parsing ' + entry + '\n');
-		
-		var xmlParser = new CSL_E4X();
-		var xmlDoc;
+	if (xmlDoc !== "notSet")
+	{
+		var styleId = xmlParser.getStyleId(xmlDoc);
+		//Print( 'parsed ' + styleId + '\n' );
 
-		xmlDoc = "notSet";
-		try
+		// TODO: find out why this is needed!
+		default xml namespace = "http://purl.org/net/xbiblio/csl";
+		with({});
+		var styleTitleNode = xmlDoc.info.title;
+		var styleTitle = "";
+		if (styleTitleNode && styleTitleNode.length())
 		{
-			xmlDoc = xmlParser.makeXml(fileData);
+			styleTitle = styleTitleNode[0].toString();
+			//print('title: ' + styleTitle);
+
+			outputData.styleTitleFromId[styleId] = styleTitle;
+		} else {
+			//print('no title for ' + entry);
 		}
-		catch (err)
-		{
-			Print( 'FAILED to parse ' + entry + '\n' );
-		}
 
-		if (xmlDoc !== "notSet")
-		{
-			var styleId = xmlParser.getStyleId(xmlDoc);
-			//Print( 'parsed ' + styleId + '\n' );
-			masterStyleFromId[styleId] = fileData;
-
-			// TODO: find out why this is needed!
-		    default xml namespace = "http://purl.org/net/xbiblio/csl";
-			//with({});
-			var styleTitleNode = xmlDoc.info.title;
-			if (styleTitleNode && styleTitleNode.length())
-			{
-				var styleTitle = styleTitleNode[0].toString();
-				//print('title: ' + styleTitle);
-
-				outputData.styleTitleFromId[styleId] = styleTitle;
+		// check if this is a dependent style and find it's parent ID if so
+		var linkNodes = xmlDoc.info.children();
+		var node;
+		var masterId;
+	   	masterId = styleId;
+		for (node in linkNodes) {
+			if (linkNodes[node].localName() === "link") {
+				if (linkNodes[node].attribute("rel") == "independent-parent" &&
+					linkNodes[node].attribute("href") != "") {
+					masterId = linkNodes[node].attribute("href").toString();
+				}
 			}
+		}
+		// TODO: why is this preventing the JSON.stringify() working in jslibs?
+		outputData.masterIdFromId[styleId] = masterId;
+//
+		if (styleId === masterId) {
+			masterStyleFromId[masterId] = fileData;
 
 			var citeprocResult = citationEngine.formatCitations(
 				fileData, cslServerConfig.jsonDocuments, cslServerConfig.citationsItems);
@@ -119,10 +137,25 @@ for ( var entry; ( entry = dir.Read() ); )
 			}
 
 			Print(".");
-
 		}
 	}
-}
+	file.Close();
+};
+
+var processDir = function (dir) {
+	dir.Open();
+	for (var entry; ( entry = dir.Read() );)
+	{
+		var file = new File(dir.name + '/' + entry);
+		if (file.info.type == 1)
+		{
+			addCslFileToIndex(file, entry);
+		}
+	}
+};
+
+processDir(new Directory( '../' + cslServerConfig.cslStylesPath ));
+processDir(new Directory( '../' + cslServerConfig.cslStylesPath + '/dependent'));
 
 Print( "num entries = " + entries);
 
