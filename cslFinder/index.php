@@ -261,9 +261,9 @@ function searchForStyle() {
 			row("style id", styleId) +
 			row("edit distance", editDistances[index].editDistance) +
 			row("in-line citation",
-				escapeHTML(exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedCitations.join("<br/>"))) +
+				exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedCitations.join("<br/>")) +
 			row("bibliography",
-				escapeHTML(exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedBibliography)) +
+				exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedBibliography) +
 			"<\/table>"
 		);
 		//result.push("");
