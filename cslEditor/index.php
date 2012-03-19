@@ -44,8 +44,10 @@
 <h3>Formatted Bibliography</h3>
 <div id="formattedBibliography"></div>
 
-
 <script>
+
+"use strict";
+
 // -- global variables --
 var timeout;
 
