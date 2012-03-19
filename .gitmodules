@@ -4,3 +4,6 @@
 [submodule "external/cleditor"]
 	path = external/cleditor
 	url = https://github.com/cleditor/cleditor.git
+[submodule "external/csl-styles"]
+	path = external/csl-styles
+	url = https://github.com/citation-style-language/styles.git
