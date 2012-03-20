@@ -57,7 +57,7 @@
 // -- global variables --
 
 var timeout,
-	urlParams = <?php echo json_encode($_GET, JSON_HEX_TAG); ?>,
+	urlParams = <?php echo json_encode($_GET)); ?>,
 	editor,
 	lastPos = null, lastQuery = null, marked = [],
 	diffTimeout,
