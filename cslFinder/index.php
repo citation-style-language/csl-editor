@@ -140,6 +140,7 @@ function searchForStyleName() {
 						'<\/td><td>' +
 						exampleCitations.exampleCitationsFromMasterId[masterId].formattedCitations[0] + '<\/td><\/tr>' +
 						'<tr><td><span class="faint">Bibliography<\/span><\/td><td>' + exampleCitations.exampleCitationsFromMasterId[masterId].formattedBibliography + "<\/td><\/tr>" +
+						'<tr><td><\/td><td><a href="../cslEditor/?styleURL=' + styleId + '">Edit style<\/a>' + masterStyleName + "<\/td><\/tr>" +
 						'<\/table>'
 					);
 			}

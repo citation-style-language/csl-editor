@@ -9,6 +9,8 @@
 	<script src="../external/codemirror2/mode/xml/xml.js"></script>
 	<link rel="stylesheet" href="./docs.css">
 	
+	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+
 	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
 	<script type="text/javascript" src="../external/citeproc/xmldom.js"></script>
 	<script type="text/javascript" src="../external/citeproc/citeproc.js"></script>
@@ -49,6 +51,8 @@
 "use strict";
 
 // -- global variables --
+
+
 var timeout;
 
 // -- initialisation stuff --
@@ -62,7 +66,8 @@ else
 	alert('The File APIs are not fully supported in this browser.');
 }
 
-document.codeForm.code.value = <?php echo json_encode(file_get_contents("../external/csl-styles/apa.csl")); ?>;
+var urlParams = <?php echo json_encode($_GET, JSON_HEX_TAG); ?>;
+
 CodeMirror.defaults.onChange = function()
 {
 	clearTimeout(timeout);
@@ -191,9 +196,17 @@ function runCiteproc() {
 	document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
 }
 
-runCiteproc();
+var styleURL = urlParams["styleURL"];
+if (styleURL == "" || typeof styleURL === 'undefined') {
+	styleURL = "http://www.zotero.org/styles/apa";
+}
+
+$.get(
+		"../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL), {}, function(data) { 
+		editor.setValue(data);
+	}
+);
+
 </script>
-
-
   </body>
 </html>
