@@ -85,11 +85,13 @@ editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 
 styleURL = urlParams["styleURL"];
 if (styleURL == "" || typeof styleURL === 'undefined') {
-	styleURL = "http://www.zotero.org/styles/apa";
+	styleURL = "../external/csl-styles/apa.csl";
+} else {
+	styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
 }
 
 $.get(
-		"../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL), {}, function(data) { 
+		styleURL, {}, function(data) { 
 		editor.setValue(data);
 	}
 );
