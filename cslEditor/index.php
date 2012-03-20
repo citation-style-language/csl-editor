@@ -4,12 +4,13 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
 	<title>CSL IDE</title>
+
+	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+
 	<link rel="stylesheet" href="./codemirror.css">
 	<script src="../external/codemirror2/lib/codemirror.js"></script>
 	<script src="../external/codemirror2/mode/xml/xml.js"></script>
 	<link rel="stylesheet" href="./docs.css">
-	
-	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
 	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
 	<script type="text/javascript" src="../external/citeproc/xmldom.js"></script>
@@ -17,7 +18,10 @@
 	<script type="text/javascript" src="../external/citeproc/loadlocale.js"></script>
 	<script type="text/javascript" src="../external/citeproc/loadsys.js"></script>
 	<script type="text/javascript" src="../external/citeproc/runcites.js"></script>
+	<script type="text/javascript" src="../external/diff-match-patch/diff_match_patch.js"></script>
+
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
+	<script type="text/javascript" src="exampleData.js"></script>
 
 	<style type="text/css">
 	  #code {
@@ -52,21 +56,21 @@
 
 // -- global variables --
 
+var timeout,
+	urlParams = <?php echo json_encode($_GET, JSON_HEX_TAG); ?>,
+	editor,
+	lastPos = null, lastQuery = null, marked = [],
+	diffTimeout,
+	availableIds = [],
+	global_tags = new Object,
+	diffMatchPatch = new diff_match_patch(),
+	oldFormattedCitation = "",
+	newFormattedCitation = "",
+	oldFormattedBibliography = "",
+	newFormattedBibliography = "",
+	styleURL;
 
-var timeout;
-
-// -- initialisation stuff --
-// Check for File API support.
-if (window.File && window.FileReader && window.FileList && window.Blob)
-{
-	// Great success! All the File APIs are supported.
-}
-else
-{
-	alert('The File APIs are not fully supported in this browser.');
-}
-
-var urlParams = <?php echo json_encode($_GET, JSON_HEX_TAG); ?>;
+// -- init --
 
 CodeMirror.defaults.onChange = function()
 {
@@ -74,129 +78,12 @@ CodeMirror.defaults.onChange = function()
 	timeout = setTimeout("runCiteproc()", 500);
 };
 
-function handleFileSelect(evt)
-{
-    var files = evt.target.files; // FileList object
-
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-	for (var i = 0, f; f = files[i]; i++)
-	{
-    	output.push('<li><strong>', f.name, '</strong> (', f.type || 'n/a', ') - ',
-                  f.size, ' bytes, last modified: ',
-                  f.lastModifiedDate.toLocaleDateString(), '</li>');
-    }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-}
-
-var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-	mode: { name: "xml", htmlMode: true},
-	lineNumbers: true
+editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+		mode: { name: "xml", htmlMode: true},
+		lineNumbers: true
 });
-var lastPos = null, lastQuery = null, marked = [];
 
-function unmark()
-{
-	for (var i = 0; i < marked.length; ++i)
-	{
-		marked[i]();
-	}
- 	marked.length = 0;
-}
-var jsonDocuments =  { 
-	"ITEM-1" : { "author" : [ { "family" : "Brown", "given" : "Emmett" } ], "container-title" : "The Journal of Applied Relativistic Physics", "editor" : [  ], "id" : "ITEM-1", "issue" : "2", "issued" : { "date-parts" : [ [ "1985" ] ] }, "page" : "88-102", "title" : "The Temporal Effects of the Flux Capacitor", "translator" : [  ], "type" : "article-journal", "volume" : "45" },
-	"ITEM-2" : { "DOI" : "10.1038/119558a0", "URL" : "http://www.nature.com/doifinder/10.1038/119558a0", "accessed" : { "date-parts" : [ [ "2011", "6", "7" ] ] }, "author" : [ { "family" : "Davisson", "given" : "C." }, { "family" : "Germer", "given" : "L. H." } ], "container-title" : "Nature", "editor" : [  ], "id" : "ITEM-2", "issue" : "2998", "issued" : { "date-parts" : [ [ "1927", "4", "16" ] ] }, "page" : "558-560", "title" : "The Scattering of Electrons by a Single Crystal of Nickel", "translator" : [  ], "type" : "article-journal", "volume" : "119" },
-	"ITEM-3" : { "DOI" : "10.1088/0143-0807/27/4/007", "URL" : "http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf", "abstract" : "General description of special relativity", "author" : [ { "family" : "Einstein", "given" : "Albert" } ], "chapter-number" : "3", "container-title" : "Annalen der Physik", "editor" : [  ], "id" : "ITEM-3", "issue" : "4", "issued" : { "date-parts" : [ [ "1905" ] ] }, "page" : "1-26", "publisher" : "Dover Publications", "title" : "On the electrodynamics of moving bodies", "translator" : [  ], "type" : "article-journal", "volume" : "17" },
-	"ITEM-4" : { "DOI" : "10.1038/171737a0", "URL" : "http://www.ncbi.nlm.nih.gov/pubmed/13054692", "abstract" : "We wish to suggest a structure for the salt of deoxyribose nucleic acid (D.N.A.). This structure has novel features which are of considerable biological interest.", "author" : [ { "family" : "Watson", "given" : "J D" }, { "family" : "Crick", "given" : "F H" } ], "container-title" : "Nature", "editor" : [  ], "id" : "ITEM-4", "issue" : "4356", "issued" : { "date-parts" : [ [ "1953" ] ] }, "page" : "737-738", "publisher" : "Am Med Assoc", "title" : "Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid.", "translator" : [  ], "type" : "article-journal", "volume" : "171" },
-	"ITEM-5" : 
-	{
-		"author" : 
-		[ 
-			{ "family" : "Acemoglu", "given" : "D S" },
-			{ "family" : "Johnson", "given" : "S" },
-			{ "family" : "Robinson", "given" : "J A" }
-		], 
-		"container-title" : "NBER Working Papers 8460",
-		"editor" : [  ],
-		"id" : "ITEM-5",
-		"issued" : 
-		{ 
-			"date-parts" : [ [ "2001" ] ]
-		}, 
-		"publisher" : "National Bureau of Economic Research",
-		"publisher-place" : "Washington D.C.",
-		"title" :  "Reversal of Fortune: Geography and Institutions in the Making of the Modern World Income Distribution",
-		"translator" : [  ],
-		"type" : "article-journal"
-	},
-	"ITEM-6" : 
-	{
-		"author" : 
-		[
-			{ "family" : "Acemoglu", "given" : "D S" },
-			{ "family" : "Johnson", "given" : "S" },
-			{ "family" : "Robinson", "given" : "J A" }
-		],
-		"container-title" : "The Quarterly Journal of Economics",
-		"editor" : [  ],
-		"id" : "ITEM-6",
-		"issue" : "4",
-		"issued" :
-		{
-			"date-parts" : [ [ "2002" ] ]
-		},
-		"page" : "1231-1294",
-		"title" :  "Reversal of Fortune: Geography and Institutions in the Making of the Modern World Income Distribution",
-		"translator" : [  ],
-		"type" : "article-journal",
-		"volume" : "117"
-	}
-}  ;
-	
-	var citationsItems = new Array();
-	citationsItems[0] =
-	{
-		"citationId" : "CITATION-0",
-		"citationItems" :
-		[ 
-			{ "id" : "ITEM-1", "uris" : [ /*"http://www.mendeley.com/documents/?uuid=dd1a39c6-e14a-4c34-8edb-98ef1731e557" */] }
-		],
-		"mendeley" : { "previouslyFormattedCitation" : "(Brown, 1985)" }, "properties" : { "noteIndex" : 0 },
-		"schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" 
-	} ;
-	citationsItems[1] = 
-	{
-		"citationId" : "CITATION-1",
-		"citationItems" :
-		[
-   			{ "id" : "ITEM-2", "uris" : [ "http://www.mendeley.com/documents/?uuid=a030fc65-aabc-4b12-a454-a917280affc1" ] },
-			{ "id" : "ITEM-3", "uris" : [ "http://www.mendeley.com/documents/?uuid=4d771e0b-52a1-4561-9e39-260877d1db08" ] },
-		{ "id" : "ITEM-4", "uris" : [ "http://www.mendeley.com/documents/?uuid=6bdb385b-a342-454e-a838-4dde5f697f0a" ] }
-		], 
-		"mendeley" : { "previouslyFormattedCitation" : "(Davisson &#38; Germer, 1927; Einstein, 1905; Watson &#38; Crick, 1953)" },
-		"properties" : { "noteIndex" : 0 },
-		"schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
-	} ;
-	
-	var availableIds = [];
-	var global_tags = new Object;
-
-function runCiteproc() {
-	var style = editor.getValue();
-	var inLineCitations = "";
-	var citations = [];
-	var formattedResult;
-	
-	document.getElementById("statusMessage").innerHTML = "";
-
-	formattedResult = citationEngine.formatCitations(style, jsonDocuments, citationsItems);
-
-	document.getElementById("formattedCitations").innerHTML = formattedResult.formattedCitations.join("<br />");
-	document.getElementById("formattedBibliography").innerHTML=formattedResult.formattedBibliography;
-	document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
-}
-
-var styleURL = urlParams["styleURL"];
+styleURL = urlParams["styleURL"];
 if (styleURL == "" || typeof styleURL === 'undefined') {
 	styleURL = "http://www.zotero.org/styles/apa";
 }
@@ -206,6 +93,80 @@ $.get(
 		editor.setValue(data);
 	}
 );
+
+/**
+ * Modified version of the diff-match-patch function which
+ * doesn't escape the original HTML tags
+ * (There's a risk now of mangling the tags, but it's a risk I'm willing to take)
+ *  
+ * Convert a diff array into a pretty HTML report.
+ * @param {!Array.<!diff_match_patch.Diff>} diffs Array of diff tuples.
+ * @return {string} HTML representation.
+ */
+var diff_myPrettyHtml = function(diffs) {
+  var html = [];
+  var pattern_amp = /&/g;
+  var pattern_lt = /</g;
+  var pattern_gt = />/g;
+  var pattern_para = /\n/g;
+  for (var x = 0; x < diffs.length; x++) {
+    var op = diffs[x][0];    // Operation (insert, delete, equal)
+    var data = diffs[x][1];  // Text of change.
+    var text = data;//.replace(pattern_amp, '&amp;').replace(pattern_lt, '&lt;').replace(pattern_gt, '&gt;').replace(pattern_para, '&para;<br>');
+    switch (op) {
+      case DIFF_INSERT:
+        html[x] = '<ins style="background:#e6ffe6;">' + text + '</ins>';
+        break;
+      case DIFF_DELETE:
+        html[x] = '<del style="background:#ffe6e6;">' + text + '</del>';
+        break;
+      case DIFF_EQUAL:
+        html[x] = '<span>' + text + '</span>';
+        break;
+    }
+  }
+  return html.join('');
+};
+
+function runCiteproc() {
+	var style = editor.getValue();
+	var inLineCitations = "";
+	var citations = [];
+	var formattedResult;
+	
+	document.getElementById("statusMessage").innerHTML = "";
+
+	formattedResult = citationEngine.formatCitations(style, cslEditorExampleData.jsonDocuments, cslEditorExampleData.citationsItems);
+
+	oldFormattedCitation = newFormattedCitation;
+	newFormattedCitation = formattedResult.formattedCitations.join("<br />");
+
+	oldFormattedBibliography = newFormattedBibliography;
+	newFormattedBibliography = formattedResult.formattedBibliography;
+
+	var dmp = diffMatchPatch;
+	var diffs = dmp.diff_main(oldFormattedCitation, newFormattedCitation);
+	dmp.diff_cleanupSemantic(diffs);
+	var diffFormattedCitation = unescape(diff_myPrettyHtml(diffs));
+
+	diffs = dmp.diff_main(oldFormattedBibliography, newFormattedBibliography);
+	dmp.diff_cleanupSemantic(diffs);
+	var diffFormattedBibliography = unescape(diff_myPrettyHtml(diffs));
+
+	// display the diff
+	$("#formattedCitations").html(diffFormattedCitation);
+	$("#formattedBibliography").html(diffFormattedBibliography);
+
+	// display the new version in 1000ms
+	clearTimeout(diffTimeout);
+	diffTimeout = setTimeout(
+		function () {
+		$("#formattedCitations").html(newFormattedCitation);
+		$("#formattedBibliography").html(newFormattedBibliography);}
+	, 1000);
+
+	document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
+}
 
 </script>
   </body>
