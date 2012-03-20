@@ -85,8 +85,8 @@ h1
 	</div>
 </div>
 
-<output id="styleNameResult"></output><p>
-<output id="styleFormatResult"></output><p>
+<output id="styleNameResult"></output><p />
+<output id="styleFormatResult"></output><p />
 <script>
 
 "use strict";
@@ -125,7 +125,8 @@ function searchForStyleName() {
 		if (exampleCitations.styleTitleFromId.hasOwnProperty(styleId)) {
 			styleName = exampleCitations.styleTitleFromId[styleId];
 
-			if (styleName.toLowerCase().indexOf(searchQueryLower) > -1) {
+			if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
+				styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
 				masterId = exampleCitations.masterIdFromId[styleId];
 				if (masterId !== styleId) {
 					masterStyleName = ' (same as <a href="' + masterId + '">' +
