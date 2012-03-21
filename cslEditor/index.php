@@ -22,14 +22,16 @@
 
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="exampleData.js"></script>
+	<script type="text/javascript" src="../src/diff.js"></script>
 
 	<style type="text/css">
-	  #code {
-		border: 1px solid #eee;
-		overflow: auto;
-		resize: both;
-	  }
-	  .searched {background: yellow;}
+		#code {
+			border: 1px solid #eee;
+			overflow: auto;
+		}
+		.searched {
+			background: yellow;
+		}
 	</style>
 </head>
 <body>
@@ -58,11 +60,8 @@ var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.editorPage = (function () {
 	var codeTimeout,
-		urlParams = <?php echo json_encode($_GET); ?>,
 		editor,
-		lastPos = null, lastQuery = null, marked = [],
 		diffTimeout,
-		availableIds = [],
 		diffMatchPatch = new diff_match_patch(),
 		oldFormattedCitation = "",
 		newFormattedCitation = "",
@@ -70,38 +69,10 @@ CSLEDIT.editorPage = (function () {
 		newFormattedBibliography = "",
 		styleURL;
 
-	/**
-	 * Modified version of the diff-match-patch function which
-	 * doesn't escape the original HTML tags
-	 * (There's a risk now of mangling the tags, but it's a risk I'm willing to take)
-	 *  
-	 * Convert a diff array into a pretty HTML report.
-	 * @param {!Array.<!diff_match_patch.Diff>} diffs Array of diff tuples.
-	 * @return {string} HTML representation.
-	 */
-	var diff_myPrettyHtml = function(diffs) {
-	  var html = [];
-	  var pattern_amp = /&/g;
-	  var pattern_lt = /</g;
-	  var pattern_gt = />/g;
-	  var pattern_para = /\n/g;
-	  for (var x = 0; x < diffs.length; x++) {
-		var op = diffs[x][0];    // Operation (insert, delete, equal)
-		var data = diffs[x][1];  // Text of change.
-		var text = data;//.replace(pattern_amp, '&amp;').replace(pattern_lt, '&lt;').replace(pattern_gt, '&gt;').replace(pattern_para, '&para;<br>');
-		switch (op) {
-		  case DIFF_INSERT:
-			html[x] = '<ins style="background:#e6ffe6;">' + text + '</ins>';
-			break;
-		  case DIFF_DELETE:
-			html[x] = '<del style="background:#ffe6e6;">' + text + '</del>';
-			break;
-		  case DIFF_EQUAL:
-			html[x] = '<span>' + text + '</span>';
-			break;
-		}
-	  }
-	  return html.join('');
+	// from https://gist.github.com/1771618
+	var getUrlVar = function (key) {
+		var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+		return result && unescape(result[1]) || "";
 	};
 
 	var runCiteproc = function () {
@@ -124,11 +95,11 @@ CSLEDIT.editorPage = (function () {
 		var dmp = diffMatchPatch;
 		var diffs = dmp.diff_main(oldFormattedCitation, newFormattedCitation);
 		dmp.diff_cleanupSemantic(diffs);
-		var diffFormattedCitation = unescape(diff_myPrettyHtml(diffs));
+		var diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(diffs));
 
 		diffs = dmp.diff_main(oldFormattedBibliography, newFormattedBibliography);
 		dmp.diff_cleanupSemantic(diffs);
-		var diffFormattedBibliography = unescape(diff_myPrettyHtml(diffs));
+		var diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(diffs));
 
 		// display the diff
 		$("#formattedCitations").html(diffFormattedCitation);
@@ -158,7 +129,7 @@ CSLEDIT.editorPage = (function () {
 					lineNumbers: true
 			});
 
-			styleURL = urlParams["styleURL"];
+			styleURL = getUrlVar("styleURL");
 			if (styleURL == "" || typeof styleURL === 'undefined') {
 				styleURL = "../external/csl-styles/apa.csl";
 			} else {

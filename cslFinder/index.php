@@ -19,6 +19,9 @@
 	<script type="text/javascript" src="../external/cleditor/jquery.cleditor.js"></script>
 	<link rel="stylesheet" type="text/css" href="../external/cleditor/jquery.cleditor.css">
 
+	<script type="text/javascript" src="../external/diff-match-patch/diff_match_patch.js"></script>
+	<script type="text/javascript" src="../src/diff.js"></script>
+	
 <style>
 input, textarea
 {
@@ -73,10 +76,10 @@ h1
 	<div id="styleFormatInput">
 		<div id="styleFormatInputControls">
 			<p id=explanation></p>
-			Enter in-line citation:
+			Edit in-line citation:
 			<textarea type="text" id="userCitation" placeholder="Type inline citation here" ></textarea>
 			<br />
-			Enter bibliography entry:
+			Edit bibliography entry:
 			<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
 		</div>
 		<div id=exampleDocument></div>
@@ -91,256 +94,307 @@ h1
 
 "use strict";
 
-var escapeHTML = function (string) {
-	return $('<pre>').text(string).html();
-};
+var CSLEDIT = CSLEDIT || {};
 
-String.prototype.endsWith = function (suffix) {
-    return this.indexOf(suffix, this.length - suffix.length) !== -1;
-};
+CSLEDIT.finderPage = (function () {
+	var nameSearchTimeout;
 
-// --- Functions for style name search ---
+	// used to display HTML tags for debugging
+	var escapeHTML = function (string) {
+		return $('<pre>').text(string).html();
+	};
 
-function searchForStyleName() {
-	var searchQuery = $("#styleNameQuery").val(),
-		searchQueryLower = searchQuery.toLowerCase(),
-		result = [],
-		styleId,
-		styleName,
-		masterId,
-		masterStyleName;
+	// --- Functions for style name search ---
+	var searchForStyleName = function () {
+		var searchQuery = $("#styleNameQuery").val(),
+			searchQueryLower = searchQuery.toLowerCase(),
+			result = [],
+			styleId,
+			styleName,
+			masterId,
+			masterStyleName;
 
-	if (searchQuery.length === 0) {
-		$("#styleNameResult").html("");
-		return;
-	}
-
-	if (searchQuery.length < 3) {
-		$("#styleNameResult").html("<p>Query too short<\/p>");
-		return;
-	}
-
-	// dumb search, just iterates through all the names
-	for (styleId in exampleCitations.styleTitleFromId) {
-		if (exampleCitations.styleTitleFromId.hasOwnProperty(styleId)) {
-			styleName = exampleCitations.styleTitleFromId[styleId];
-
-			if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
-				styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
-				masterId = exampleCitations.masterIdFromId[styleId];
-				if (masterId !== styleId) {
-					masterStyleName = ' (same as <a href="' + masterId + '">' +
-						exampleCitations.styleTitleFromId[masterId] + '<\/a>)';
-				} else {
-					masterStyleName = "";
-				}
-				result.push('<a href="' + styleId + '">' + styleName + "<\/a>" + masterStyleName + "<br \/>" +
-						'<table>' +
-						'<tr><td><span class="faint">Inline citaiton<\/span>' +
-						'<\/td><td>' +
-						exampleCitations.exampleCitationsFromMasterId[masterId].formattedCitations[0] + '<\/td><\/tr>' +
-						'<tr><td><span class="faint">Bibliography<\/span><\/td><td>' + exampleCitations.exampleCitationsFromMasterId[masterId].formattedBibliography + "<\/td><\/tr>" +
-						'<tr><td><\/td><td><a href="../cslEditor/?styleURL=' + styleId + '">Edit style<\/a>' + masterStyleName + "<\/td><\/tr>" +
-						'<\/table>'
-					);
-			}
+		if (searchQuery.length === 0) {
+			$("#styleNameResult").html("");
+			return;
 		}
-	}
 
-	$("#styleNameResult").html(
-		'<p>' + result.length + ' results for query "' + searchQuery + '": <\/p>' +
-			result.join("<p><p>")
-	);
+		if (searchQuery.length < 3) {
+			$("#styleNameResult").html("<p>Query too short<\/p>");
+			return;
+		}
 
-	// TODO: order results by shortest
-}
+		// dumb search, just iterates through all the names
+		for (styleId in exampleCitations.styleTitleFromId) {
+			if (exampleCitations.styleTitleFromId.hasOwnProperty(styleId)) {
+				styleName = exampleCitations.styleTitleFromId[styleId];
 
-var nameSearchTimeout;
-function nameSearch() {
-	clearTimeout(nameSearchTimeout);
-	nameSearchTimeout = setTimeout(searchForStyleName, 1000);
-}
-
-searchForStyleName();
-
-// --- Functions for formatted style search ---
-
-// from http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#JavaScript
-function levenshtein(str1, str2) {
-	var l1 = str1.length, l2 = str2.length,
-		i = 0, j = 0, d = [];
-    if (Math.min(l1, l2) === 0) {
-        return Math.max(l1, l2);
-    }
-    for (i = 0; i <= l1; i++) {
-        d[i] = [];
-        d[i][0] = i;
-    }
-    for (j = 0; j <= l2; j++) {
-        d[0][j] = j;
-    }
-    for (i = 1; i <= l1; i++) {
-        for (j = 1; j <= l2; j++) {
-            d[i][j] = Math.min(
-                d[i - 1][j] + 1,
-                d[i][j - 1] + 1,
-                d[i - 1][j - 1] + (str1.charAt(i - 1) === str2.charAt(j - 1) ? 0 : 1)
-            );
-        }
-    }
-    return d[l1][l2];
-}
-
-function authorString(authors) {
-	var result = [],
-		index = 0;
-	for (index = 0; index < authors.length; index++) {
-		//alert(author);
-		result.push(authors[index].given + " " + authors[index].family);
-	}
-	return result.join(", ");
-}
-
-function searchForStyle() {
-	var bestEditDistance = 999,
-		bestMatchIndex = -1,
-		userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML,
-		userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML,
-		cleanHTML = function (html) {
-			html = html.replace(/<span[^<>]*>/g, "");
-			html = html.replace(/<\/span>/g, "");
-			html = html.replace(/&nbsp;/g, " ");
-
-			// remove any attributes the tags may have
-			html = html.replace(/<(b|i|u|sup|sub)[^<>]*>/g, "<$1>");
-			return html;
-		},
-		result = [],
-		editDistances = [],
-		index = 0,
-		styleId,
-		exampleCitation,
-		formattedCitation,
-		thisEditDistance,
-		row = function (title, value) {
-			return "<tr><td><span class=faint>" + title + "<\/span><\/td><td>" + value + "<\/td><\/tr>";
-		};
-
-	userCitation = cleanHTML(userCitation);
-	userBibliography = cleanHTML(userBibliography);
-
-	//result.push("<p>searching for " + escapeHTML(userCitation) + "<\/p>");
-	//result.push("<p>searching for " + escapeHTML(userBibliography) + "<\/p>");
-
-	for (styleId in exampleCitations.exampleCitationsFromMasterId) {
-		if (exampleCitations.exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
-			exampleCitation = exampleCitations.exampleCitationsFromMasterId[styleId];
-
-			if (exampleCitation !== null && exampleCitation.statusMessage === "") {
-				formattedCitation = exampleCitation.formattedCitations[0];
-				thisEditDistance = 0;
-
-				if (userCitation !== "") {
-					thisEditDistance += levenshtein(userCitation, formattedCitation);
-				}
-				if (userBibliography !== "") {
-					thisEditDistance += levenshtein(userBibliography, exampleCitation.formattedBibliography);
-				}
-
-				editDistances[index++] = {editDistance : thisEditDistance, styleId : styleId};
-
-				if (thisEditDistance < bestEditDistance) {
-					bestEditDistance = thisEditDistance;
+				if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
+					styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
+					masterId = exampleCitations.masterIdFromId[styleId];
+					if (masterId !== styleId) {
+						masterStyleName = ' (same as <a href="' + masterId + '">' +
+							exampleCitations.styleTitleFromId[masterId] + '<\/a>)';
+					} else {
+						masterStyleName = "";
+					}
+					result.push({
+							styleId : styleId,
+							masterId : masterId
+						});
 				}
 			}
 		}
-	}
-	editDistances.sort(function (a, b) {return a.editDistance - b.editDistance});
 
-	result.push("<p>Top 5 results:<\/p>");
+		displaySearchResults(result, $("#styleNameResult"));
 
-	// top results
-	for (index=0; index < Math.min(5, editDistances.length); index++) {		
-		result.push(
-			"<table>" +
-			row("style name", exampleCitations.styleTitleFromId[editDistances[index].styleId]) +
-			row("style id", styleId) +
-			row("edit distance", editDistances[index].editDistance) +
-			row("in-line citation",
-				exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedCitations.join("<br/>")) +
-			row("bibliography",
-				exampleCitations.exampleCitationsFromMasterId[editDistances[index].styleId].formattedBibliography) +
-			"<\/table>"
-		);
+		//$("#styleNameResult").html(
+		//	'<p>' + result.length + ' results for query "' + searchQuery + '": <\/p>' +
+		//		result.join("<p><p>")
+		//);
+
+		// TODO: order results by shortest
 	}
 
-	document.getElementById("styleFormatResult").innerHTML = result.join("<br />");
-}
+	var displaySearchResults = function (styles, outputNode) {
+		var index,
+			outputList = [],
+			masterStyleSuffix = "",
+			style,
+			citation,
+			bibliography;
 
-var formattedCitations = new Array();
-var formattedCitationsFilenames = new Array();
-
-var currentStyleIndex = 0;
-initFindByStyle();
-
-function initFindByStyle() {
-	var jsonDocuments = cslServerConfig.jsonDocuments;
-
-	document.getElementById("explanation").innerHTML = "<i>Please cite this example article in the style you wish your citations to appear.<br />";
-	document.getElementById("exampleDocument").innerHTML =
-		"<p align=center><strong>Example Article<\/stong><\/p>" +
-		"<table>" +
-		"<tr><td>Title:<\/td><td>" + jsonDocuments["ITEM-1"].title + "<\/td><\/tr>" +
-		"<tr><td>Authors:<\/td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "<\/td><\/tr>" + 
-		"<tr><td>Year:<\/td><td>" + jsonDocuments["ITEM-1"].issued["date-parts"][0][0] + "<\/td><\/tr>" +
-		"<tr><td>Publication:<\/td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "<\/td><\/tr>" +
-		"<tr><td>Volume:<\/td><td>" + jsonDocuments["ITEM-1"]["volume"] + "<\/td><\/tr>" +
-		"<tr><td>Issue:<\/td><td>" + jsonDocuments["ITEM-1"]["issue"] + "<\/td><\/tr>" +
-		"<tr><td>Chapter:<\/td><td>" + jsonDocuments["ITEM-1"]["chapter-number"] + "<\/td><\/tr>" +
-		"<tr><td>Pages:<\/td><td>" + jsonDocuments["ITEM-1"]["page"] + "<\/td><\/tr>" +
-		"<tr><td>Publisher:<\/td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "<\/td><\/tr>" +
-		"<tr><td>Document type:<\/td><td>" + jsonDocuments["ITEM-1"]["type"] + "<\/td><\/tr>" +
-		"<\/table>";
-	//document.getElementById("userCitation").disabled = "";
-	//document.getElementById("userBibliography").disabled = "";
-}
-
-var timeout;
-function formChanged() {
-	clearTimeout(timeout);
-	timeout = setTimeout(searchForStyle, 1000);
-}
-
-// JQuery UI stuff
-$(function () {
-	$("#inputTabs").tabs({
-		show: function (event, ui) {
-			if (ui.panel.id === "styleNameInput") {
-				$("#styleNameResult").show();
-				$("#styleFormatResult").hide();
+		for (index = 0; index < Math.min(styles.length, 20); index++)
+		{
+			style = styles[index];
+			if (style.masterId != style.styleId)
+			{
+				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
+							exampleCitations.styleTitleFromId[style.masterId] + '<\/a>)';
 			} else {
-				$("#styleNameResult").hide();
-				$("#styleFormatResult").show();
+				masterStyleSuffix = '';
+			}
+
+			citation = exampleCitations.exampleCitationsFromMasterId[style.masterId].formattedCitations[0];
+			bibliography = exampleCitations.exampleCitationsFromMasterId[style.masterId].formattedBibliography;
+
+			if (typeof style.userCitation !== "undefined" &&
+				style.userCitation !== "" &&
+				citation !== "") {
+				citation = CSLEDIT.diff.prettyHtmlDiff(style.userCitation, citation);
+			}
+
+			if (typeof style.userBibliography !== "undefined" &&
+				style.userBibliography !== "" &&
+				bibliography !== "") {
+				bibliography = CSLEDIT.diff.prettyHtmlDiff(style.userBibliography, bibliography);
+			}
+
+			outputList.push('<a href="' + style.styleId + '">' +
+				exampleCitations.styleTitleFromId[style.styleId] + "<\/a>"
+				+ masterStyleSuffix + "<br \/>" +
+				'<table>' +
+				'<tr><td><span class="faint">Inline citaiton<\/span>' +
+				'<\/td><td>' +
+				citation + '<\/td><\/tr>' +
+				'<tr><td><span class="faint">Bibliography<\/span><\/td><td>' +
+				bibliography + "<\/td><\/tr>" +
+				'<tr><td><\/td><td><a href="../cslEditor/?styleURL=' + style.styleId + '">Edit style<\/a><\/td><\/tr>' +
+				'<\/table>');
+
+		}
+		
+		outputNode.html(
+			'<p>Displaying ' + outputList.length + ' results:<\/p>' +
+				outputList.join("<p><p>")
+		);
+	};
+
+	function nameSearch() {
+		clearTimeout(nameSearchTimeout);
+		nameSearchTimeout = setTimeout(searchForStyleName, 1000);
+	}
+
+	// --- Functions for formatted style search ---
+
+	function authorString(authors) {
+		var result = [],
+			index = 0;
+		for (index = 0; index < authors.length; index++) {
+			//alert(author);
+			result.push(authors[index].given + " " + authors[index].family);
+		}
+		return result.join(", ");
+	}
+
+	var clEditorIsEmpty = function (node) {
+		var text = $(node).cleditor()[0].doc.body.innerText;
+
+		return text === "" || text === "\n";
+	};
+
+	function searchForStyle() {
+		var tolerance = 100,
+			bestEditDistance = 999,
+			bestMatchIndex = -1,
+			userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML,
+			userCitationText = $("#userCitation").cleditor()[0].doc.body.innerText,
+			userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML,
+			userBibliographyText = $("#userBibliography").cleditor()[0].doc.body.innerText,
+			cleanHTML = function (html) {
+				html = html.replace(/<span[^<>]*>/g, "");
+				html = html.replace(/<\/span>/g, "");
+				html = html.replace(/&nbsp;/g, " ");
+
+				// remove any attributes the tags may have
+				html = html.replace(/<(b|i|u|sup|sub)[^<>]*>/g, "<$1>");
+				return html;
+			},
+			result = [],
+			editDistances = [],
+			index = 0,
+			styleId,
+			exampleCitation,
+			formattedCitation,
+			thisEditDistance,
+			row = function (title, value) {
+				return "<tr><td><span class=faint>" + title + "<\/span><\/td><td>" + value + "<\/td><\/tr>";
+			};
+
+		userCitation = cleanHTML(userCitation);
+		userBibliography = cleanHTML(userBibliography);
+
+		if (clEditorIsEmpty("#userCitation")) {
+			userCitation = "";
+		}
+		if (clEditorIsEmpty("#userBibliography")) {
+			userBibliography = "";
+		}
+
+		//result.push("<p>searching for " + escapeHTML(userCitation) + "<\/p>");
+		//result.push("<p>searching for " + escapeHTML(userBibliography) + "<\/p>");
+
+		for (styleId in exampleCitations.exampleCitationsFromMasterId) {
+			if (exampleCitations.exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
+				exampleCitation = exampleCitations.exampleCitationsFromMasterId[styleId];
+
+				if (exampleCitation !== null && exampleCitation.statusMessage === "") {
+					formattedCitation = exampleCitation.formattedCitations[0];
+					thisEditDistance = 0;
+
+					if (userCitation !== "") {
+						thisEditDistance += CSLEDIT.diff.customEditDistance(userCitation, formattedCitation);
+					}
+					if (userBibliography !== "") {
+						thisEditDistance += CSLEDIT.diff.customEditDistance(userBibliography, exampleCitation.formattedBibliography);
+					}
+
+					if (thisEditDistance < tolerance)
+					{
+						editDistances[index++] = {
+							editDistance : thisEditDistance,
+							styleId : styleId
+						};
+					}
+
+					if (thisEditDistance < bestEditDistance) {
+						bestEditDistance = thisEditDistance;
+					}
+				}
 			}
 		}
-	});
-});
+		editDistances.sort(function (a, b) {return a.editDistance - b.editDistance});
+
+		// TODO: only put editDistances < tolerance
+
+		// top results
+		for (index=0; index < Math.min(5, editDistances.length); index++) {		
+			result.push({
+					styleId : editDistances[index].styleId,
+					masterId : editDistances[index].styleId,
+					userCitation : userCitation,
+					userBibliography : userBibliography
+			}
+			);
+		}
+		
+		displaySearchResults(result, $("#styleFormatResult"));
+	}
+
+	initFindByStyle();
+
+	function initFindByStyle() {
+		var jsonDocuments = cslServerConfig.jsonDocuments;
+
+		document.getElementById("explanation").innerHTML = "<i>Please edit this example citation to match the style you are searching for.<br />";
+		document.getElementById("exampleDocument").innerHTML =
+			"<p align=center><strong>Example Article<\/stong><\/p>" +
+			"<table>" +
+			"<tr><td>Title:<\/td><td>" + jsonDocuments["ITEM-1"].title + "<\/td><\/tr>" +
+			"<tr><td>Authors:<\/td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "<\/td><\/tr>" + 
+			"<tr><td>Year:<\/td><td>" + jsonDocuments["ITEM-1"].issued["date-parts"][0][0] + "<\/td><\/tr>" +
+			"<tr><td>Publication:<\/td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "<\/td><\/tr>" +
+			"<tr><td>Volume:<\/td><td>" + jsonDocuments["ITEM-1"]["volume"] + "<\/td><\/tr>" +
+			"<tr><td>Issue:<\/td><td>" + jsonDocuments["ITEM-1"]["issue"] + "<\/td><\/tr>" +
+			"<tr><td>Chapter:<\/td><td>" + jsonDocuments["ITEM-1"]["chapter-number"] + "<\/td><\/tr>" +
+			"<tr><td>Pages:<\/td><td>" + jsonDocuments["ITEM-1"]["page"] + "<\/td><\/tr>" +
+			"<tr><td>Publisher:<\/td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "<\/td><\/tr>" +
+			"<tr><td>Document type:<\/td><td>" + jsonDocuments["ITEM-1"]["type"] + "<\/td><\/tr>" +
+			"<\/table>";
+		//document.getElementById("userCitation").disabled = "";
+		//document.getElementById("userBibliography").disabled = "";
+	}
+
+	var timeout;
+	function formChanged() {
+		clearTimeout(timeout);
+		timeout = setTimeout(searchForStyle, 1000);
+	}
+
+	return {
+		init : function () {
+			$(function () {
+				$("#inputTabs").tabs({
+					show: function (event, ui) {
+						if (ui.panel.id === "styleNameInput") {
+							$("#styleNameResult").show();
+							$("#styleFormatResult").hide();
+						} else {
+							$("#styleNameResult").hide();
+							$("#styleFormatResult").show();
+						}
+					}
+				});
+			});
+			$.cleditor.defaultOptions.width = 300;
+			$.cleditor.defaultOptions.height = 100;
+			$.cleditor.defaultOptions.controls =
+				"bold italic underline strikethrough subscript superscript ";
+			//		+ "| undo redo | cut copy paste";
+
+			var userCitationInput = $("#userCitation").cleditor({height: 70})[0];
+			$("#userBibliography").cleditor({height: 100});
+
+			$("#userCitation").cleditor()[0].change(formChanged);
+			$("#userBibliography").cleditor()[0].change(formChanged);
+
+			$("#styleNameQuery").on("input", function(){nameSearch();});
+		
+			searchForStyleName();
+
+			// prepopulate search by style format with APA example
+			$("#userCitation").cleditor()[0].doc.body.innerHTML =
+				exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].formattedCitations[0];
+			$("#userBibliography").cleditor()[0].doc.body.innerHTML =
+				exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].formattedBibliography;
+
+			formChanged();
+		}
+	};
+}());
 
 $(document).ready(function () {
-	$.cleditor.defaultOptions.width = 300;
-	$.cleditor.defaultOptions.height = 100;
-	$.cleditor.defaultOptions.controls =
-		"bold italic underline strikethrough subscript superscript ";
-//		+ "| undo redo | cut copy paste";
-
-	var userCitationInput = $("#userCitation").cleditor({height: 70})[0];
-	$("#userBibliography").cleditor({height: 100});
-
-	$("#userCitation").cleditor()[0].change(formChanged);
-	$("#userBibliography").cleditor()[0].change(formChanged);
-
-	$("#styleNameQuery").on("input", function(){nameSearch();});
-	
+	CSLEDIT.finderPage.init();		
 });
 
 </script>
