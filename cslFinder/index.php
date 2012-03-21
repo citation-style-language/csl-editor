@@ -98,6 +98,7 @@ var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.finderPage = (function () {
 	var nameSearchTimeout;
+	var styleFormatSearchTimeout;
 
 	// used to display HTML tags for debugging
 	var escapeHTML = function (string) {
@@ -321,11 +322,8 @@ CSLEDIT.finderPage = (function () {
 		displaySearchResults(result, $("#styleFormatResult"));
 	}
 
-	initFindByStyle();
-
-	function initFindByStyle() {
+	function formatFindByStyleExampleDocument() {
 		var jsonDocuments = cslServerConfig.jsonDocuments;
-
 		document.getElementById("explanation").innerHTML = "<i>Please edit this example citation to match the style you are searching for.<br />";
 		document.getElementById("exampleDocument").innerHTML =
 			"<p align=center><strong>Example Article<\/stong><\/p>" +
@@ -341,30 +339,26 @@ CSLEDIT.finderPage = (function () {
 			"<tr><td>Publisher:<\/td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "<\/td><\/tr>" +
 			"<tr><td>Document type:<\/td><td>" + jsonDocuments["ITEM-1"]["type"] + "<\/td><\/tr>" +
 			"<\/table>";
-		//document.getElementById("userCitation").disabled = "";
-		//document.getElementById("userBibliography").disabled = "";
 	}
 
-	var timeout;
 	function formChanged() {
-		clearTimeout(timeout);
-		timeout = setTimeout(searchForStyle, 1000);
+		clearTimeout(styleFormatSearchTimeout);
+		styleFormatSearchTimeout = setTimeout(searchForStyle, 1000);
 	}
 
 	return {
-		init : function () {
-			$(function () {
-				$("#inputTabs").tabs({
-					show: function (event, ui) {
-						if (ui.panel.id === "styleNameInput") {
-							$("#styleNameResult").show();
-							$("#styleFormatResult").hide();
-						} else {
-							$("#styleNameResult").hide();
-							$("#styleFormatResult").show();
-						}
+		init : function () {		
+			formatFindByStyleExampleDocument();
+			$("#inputTabs").tabs({
+				show: function (event, ui) {
+					if (ui.panel.id === "styleNameInput") {
+						$("#styleNameResult").show();
+						$("#styleFormatResult").hide();
+					} else {
+						$("#styleNameResult").hide();
+						$("#styleFormatResult").show();
 					}
-				});
+				}
 			});
 			$.cleditor.defaultOptions.width = 300;
 			$.cleditor.defaultOptions.height = 100;
