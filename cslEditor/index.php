@@ -9,9 +9,6 @@
 	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
 
-	<link rel="stylesheet" href="./codemirror.css" />
-	<script src="../external/codemirror2/lib/codemirror.js"></script>
-	<script src="../external/codemirror2/mode/xml/xml.js"></script>
 	<link rel="stylesheet" href="./docs.css" />
 
 	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
@@ -22,7 +19,7 @@
 	<script type="text/javascript" src="../external/citeproc/runcites.js"></script>
 	<script type="text/javascript" src="../external/diff-match-patch/diff_match_patch.js"></script>
 
-	<!--script type="text/javascript" src="../external/jstree/_lib/jquery.hotkeys.js"></script-->
+	<script type="text/javascript" src="../external/jstree/_lib/jquery.hotkeys.js"></script>
 	<script type="text/javascript" src="../external/jstree/jquery.jstree.js"></script>
 	<link type="text/css" rel="stylesheet" href="../external/jstree/themes/default/style.css"/>
 
@@ -35,27 +32,18 @@
 <style type="text/css">
 html, body {
 	width: 98%;
-	height: 98%;
-}
-#code {
-	border: 1px solid #eee;
-	overflow: auto;
+	height: 90%;
 }
 .searched {
 	background: yellow;
 }
 #treeEditor {
 	font-size: 14px;
-	height: 86%;
-	width: 90%;
+	height: 98%;
+	width: 100%;
 	overflow: auto;
 }
-#codeEditor {
-	height: 86%;
-	width: 90%;
-	/*overflow:auto;*/
-}
-#editorTabs {
+#leftPane {
 	float: left;
 	width: 35%;
 	height: 90%;
@@ -65,10 +53,16 @@ html, body {
 	float: right;
 	width: 63%;
 	height: 95%;
+}
+#exampleOutput {
+	margin-top: 50%:
+	height: 65%;
 	overflow: auto;
 }
 #elementProperties {
 	background-color: #F5F5DC;
+	height: 30%;
+	overflow: auto;
 }
 .propertyInput {
 	width: 50%;
@@ -91,43 +85,28 @@ z-index: 10 !important;
 </style>
 </head>
 <body>
-<!--<h1>CSL IDE</h1>-->
-<!--<input type="file" id="files" name="files[]" />-->
-<output id="list"></output>
-
-<div id="editorTabs">
-	<ul>
-		<li><a href="#treeEditor">Tree editor</a></li>
-		<li><a href="#codeEditor">Code view</a></li>
-	</ul>
-	<div id="treeEditor">
-		<!--div id="innerTreeEdit">
-		</div-->
-	</div>
-	<div id="codeEditor"-->
-		<form name="codeForm">
-			<textarea id="code" name="code">
-			</textarea>
-		</form>
+<div id="leftPane">
+	<output id="list"></output>
+		<div id="treeEditor">
+			<!--div id="innerTreeEdit">
+			</div-->
+		</div>
 	</div>
 </div>
 
 <div id="rightPane">
 	<div id="elementProperties">
-		<label for="nodeAttributes">Attributes</label>
-		<input id="nodeAttributes" class="propertyInput" type="text"></input><br />
-		<label for="nodeText">Text value:</label>
-		<input id="nodeText" class="propertyInput" type="text"></input>
 	</div>
+	<div id="exampleOutput">
+		<button id="testButton">Refresh</button>
+		<div id="statusMessage"></div>
 
-	<button id="testButton">Refresh</button>
-	<div id="statusMessage"></div>
+		<h3>Formatted Citations</h3>	
+		<div id="formattedCitations"></div>
 
-	<h3>Formatted Citations</h3>	
-	<div id="formattedCitations"></div>
-
-	<h3>Formatted Bibliography</h3>
-	<div id="formattedBibliography"></div>
+		<h3>Formatted Bibliography</h3>
+		<div id="formattedBibliography"></div>
+	</div>
 </div>
 
 <script>
@@ -136,8 +115,8 @@ z-index: 10 !important;
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.editorPage = (function () {
-	var codeTimeout,
-		editor,
+	var cslCode,
+		editTimeout,
 		diffTimeout,
 		diffMatchPatch = new diff_match_patch(),
 		oldFormattedCitation = "",
@@ -153,7 +132,7 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var runCiteproc = function () {
-		var style = editor.getValue();
+		var style = cslCode;
 		var inLineCitations = "";
 		var citations = [];
 		var formattedResult;
@@ -193,8 +172,8 @@ CSLEDIT.editorPage = (function () {
 		document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
 	};
 
-	var updateTreeView = function (xmlData) {
-		var jsonData = CSLEDIT.parser.jsonFromCslXml(xmlData);
+	var updateTreeView = function () {
+		var jsonData = CSLEDIT.parser.jsonFromCslXml(cslCode);
 
 		$("#treeEditor").jstree({
 			"json_data" : { data : [ jsonData ] },
@@ -209,19 +188,20 @@ CSLEDIT.editorPage = (function () {
 				}
 			},
 				
-			"plugins" : ["themes","json_data","ui", "crrm", "dnd", "contextmenu", "types"],
+			"plugins" : ["themes","json_data","ui", "crrm", "dnd", "contextmenu", "types", "hotkeys"],
 			// each plugin you have included can have its own config object
 			"core" : { "initially_open" : [ "node1" ] }
 			// it makes sense to configure a plugin only if overriding the defaults
 		});
 
+		runCiteproc();
 	};
 
 	var treeViewChanged = function () {
 		var jsonData = $("#treeEditor").jstree("get_json", -1, [], []);
-		var cslXml = CSLEDIT.parser.cslXmlFromJson(jsonData);
+		cslCode = CSLEDIT.parser.cslXmlFromJson(jsonData);
 
-		editor.setValue(cslXml);
+		runCiteproc();
 	};
 
 	var nodeSelected = function(event, ui) {
@@ -251,7 +231,10 @@ CSLEDIT.editorPage = (function () {
 			$("#" + inputId).val(attribute.value);
 		}
 
-		$("#elementProperties > input").on("change", nodeChanged);
+		$("#elementProperties > input").on("input", function () {
+			clearTimeout(editTimeout);
+			editTimeout = setTimeout(nodeChanged, 500);
+		});
 	};
 
 	var nodeChanged = function () {
@@ -297,17 +280,6 @@ CSLEDIT.editorPage = (function () {
 				jsonData.push(createNode(index));
 			}
 			
-			CodeMirror.defaults.onChange = function()
-			{
-				clearTimeout(codeTimeout);
-				codeTimeout = setTimeout(runCiteproc, 500);
-			};
-
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-					mode: { name: "xml", htmlMode: true},
-					lineNumbers: true
-			});
-
 			styleURL = getUrlVar("styleURL");
 			if (styleURL == "" || typeof styleURL === 'undefined') {
 				styleURL = "../external/csl-styles/apa.csl";
@@ -317,25 +289,16 @@ CSLEDIT.editorPage = (function () {
 
 			$.get(
 					styleURL, {}, function(data) { 
-					editor.setValue(data);
-					updateTreeView(data);
+					cslCode = data;
+					updateTreeView();
 				}
 			);
-
-			$("#editorTabs").tabs({
-				show : function (event, ui) {
-					if (ui.panel.getAttribute("id") === "codeEditor") {
-						editor.refresh();
-					}
-				}
-			});
 
 			$("#testButton").on("click", treeViewChanged);
 			$("#treeEditor").on("move_node.jstree", treeViewChanged);
 			$("#treeEditor").on("select_node.jstree", nodeSelected);
 
 			$(".propertyInput").on("change", nodeChanged);	
-
 		}
 	};
 }());
