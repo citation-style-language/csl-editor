@@ -9,10 +9,10 @@
 	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
 
-	<link rel="stylesheet" href="./codemirror.css">
+	<link rel="stylesheet" href="./codemirror.css" />
 	<script src="../external/codemirror2/lib/codemirror.js"></script>
 	<script src="../external/codemirror2/mode/xml/xml.js"></script>
-	<link rel="stylesheet" href="./docs.css">
+	<link rel="stylesheet" href="./docs.css" />
 
 	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
 	<script type="text/javascript" src="../external/citeproc/xmldom.js"></script>
@@ -29,39 +29,66 @@
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
+	<script type="text/javascript" src="../src/debug.js"></script>
 	<script type="text/javascript" src="../src/cslJSON.js"></script>
 
-	<style type="text/css">
-		html, body {
-			width: 98%;
-			height: 98%;
-		}
-		#code {
-			border: 1px solid #eee;
-			overflow: auto;
-		}
-		.searched {
-			background: yellow;
-		}
-		#treeEditor {
-			font-size: 14px;
-			height: 86%;
-			width: 90%;
-			overflow: auto;
-		}
-		#editorTabs {
-			float: left;
-			width: 35%;
-			height: 90%;
-			/*overflow: auto;*/
-		}
-		#output {
-			float: right;
-			width: 63%;
-			height: 95%;
-			overflow: auto;
-		}
-	</style>
+<style type="text/css">
+html, body {
+	width: 98%;
+	height: 98%;
+}
+#code {
+	border: 1px solid #eee;
+	overflow: auto;
+}
+.searched {
+	background: yellow;
+}
+#treeEditor {
+	font-size: 14px;
+	height: 86%;
+	width: 90%;
+	overflow: auto;
+}
+#codeEditor {
+	height: 86%;
+	width: 90%;
+	/*overflow:auto;*/
+}
+#editorTabs {
+	float: left;
+	width: 35%;
+	height: 90%;
+	/*overflow: auto;*/
+}
+#rightPane {
+	float: right;
+	width: 63%;
+	height: 95%;
+	overflow: auto;
+}
+#elementProperties {
+	background-color: #F5F5DC;
+}
+.propertyInput {
+	width: 50%;
+}
+
+/** Very hacky fix for jstree move between nodes bug:
+ *  https://github.com/vakata/jstree/issues/174
+ *
+ *  TODO: Delve into jstree code and do a better fix
+ */
+.jstree li {
+position: relative;
+z-index: 20 !important;
+}
+
+#jstree-marker-line {
+z-index: 10 !important;
+}
+
+</style>
 </head>
 <body>
 <!--<h1>CSL IDE</h1>-->
@@ -85,7 +112,15 @@
 	</div>
 </div>
 
-<div id="output">
+<div id="rightPane">
+	<div id="elementProperties">
+		<label for="nodeAttributes">Attributes</label>
+		<input id="nodeAttributes" class="propertyInput" type="text"></input><br />
+		<label for="nodeText">Text value:</label>
+		<input id="nodeText" class="propertyInput" type="text"></input>
+	</div>
+
+	<button id="testButton">Refresh</button>
 	<div id="statusMessage"></div>
 
 	<h3>Formatted Citations</h3>	
@@ -158,21 +193,8 @@ CSLEDIT.editorPage = (function () {
 		document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
 	};
 
-	var assertEqual = function (actual, expected, place) {
-		if (actual !== expected) {
-			alert("assert fail at " + place + "\n" +
-				actual + " !== " + expected);
-		}
-	};
-
 	var updateTreeView = function (xmlData) {
-		var parser = new DOMParser();
-		var xmlDoc = parser.parseFromString(xmlData, "application/xml");
-
-		var styleNode = xmlDoc.childNodes[0];
-		assertEqual(styleNode.localName, "style");
-
-		var jsonData = parseNode(styleNode);
+		var jsonData = CSLEDIT.parser.jsonFromCslXml(xmlData);
 
 		$("#treeEditor").jstree({
 			"json_data" : { data : [ jsonData ] },
@@ -195,37 +217,68 @@ CSLEDIT.editorPage = (function () {
 
 	};
 
-	var parseNode = function (node) {
-		var children = [],
-			index,
-			jsonData,
-			childNode;
+	var treeViewChanged = function () {
+		var jsonData = $("#treeEditor").jstree("get_json", -1, [], []);
+		var cslXml = CSLEDIT.parser.cslXmlFromJson(jsonData);
 
-		for (index = 0; index < node.childNodes.length; index++) {
-			childNode = node.childNodes[index];
+		editor.setValue(cslXml);
+	};
 
-			if (childNode.localName !== null) {
-				children.push(parseNode(node.childNodes[index]));
-			}
+	var nodeSelected = function(event, ui) {
+		var jsonData = $("#treeEditor").jstree("get_json", ui.rslt.obj, [], [])[0];
+		var attributes = jsonData.metadata.attributes;
+
+		var propertyPanel = $("#elementProperties");
+		var index;
+		var inputId;
+		var labelId;
+		var attribute;
+
+		// remove child nodes
+		$("#elementProperties > *").remove();
+
+		// create new ones
+		for (index = 0; index < attributes.length; index++)
+		{
+			inputId = 'nodeAttribute' + index;
+			labelId = 'nodeAttributeLabel' + index;
+			attribute = attributes[index];
+
+			$('hello<label for=' + inputId + ' id="' + labelId + '">' + attribute.key + '</label>' + 
+				'<input id="' + inputId + '" class="propertyInput"' +
+				'type="text"><\/input><\/br>').appendTo(propertyPanel);
+
+			$("#" + inputId).val(attribute.value);
 		}
 
-		var attributesString = "";
-		var attributesList = [];
+		$("#elementProperties > input").on("change", nodeChanged);
+	};
 
-		if (node.attributes !== null && node.attributes.length > 0) {
-			for (index = 0; index < node.attributes.length; index++) {
-				attributesList.push(
-					node.attributes.item(index).localName + " = " +
-					node.attributes.item(index).nodeValue);
-			}
-			attributesString = ": " + attributesList.join(", ");
+	var nodeChanged = function () {
+		var selectedNode = $("#treeEditor").jstree("get_selected");
+		
+		var jsonData = $("#treeEditor").jstree("get_json", selectedNode, [], [])[0];
+		var attributes = [];
+
+		// read user data
+		var numAttributes = $('[id^="nodeAttributeLabel"]').length;
+		var index;
+		var key, value;
+
+		//alert("num attrs = " + numAttributes);
+
+		for (index = 0; index < numAttributes; index++) {
+			key = $("#nodeAttributeLabel" + index).html();
+			value = $("#nodeAttribute" + index).val();
+			attributes.push({
+				key : key,
+				value : value
+			});
 		}
+		console.log(JSON.stringify(attributes));
+		jsonData.metadata.attributes = attributes;
 
-		return {
-			"data" : (node.localName + attributesString),
-			"attr" : { "rel" : node.localName },
-			"children" : children
-		};
+		treeViewChanged();
 	};
 
 	return {
@@ -243,26 +296,7 @@ CSLEDIT.editorPage = (function () {
 			for (index = 0; index < 30; index++) {
 				jsonData.push(createNode(index));
 			}
-/*
-			$("#treeEditor").jstree({
-				"json_data" : { data : jsonData },
-				"types" : {
-					"valid_children" : [ "root" ],
-					"types" : {
-						"text" : {
-							"icon" : {
-								"image" : "http://static.jstree.com/v.1.0rc/_docs/_drive.png"
-							}
-						}
-					}
-				},
-					
-				"plugins" : ["themes","json_data","ui", "crrm", "dnd", "contextmenu", "types"],
-				// each plugin you have included can have its own config object
-				"core" : { "initially_open" : [ "node1" ] }
-				// it makes sense to configure a plugin only if overriding the defaults
-			});
- */
+			
 			CodeMirror.defaults.onChange = function()
 			{
 				clearTimeout(codeTimeout);
@@ -288,7 +322,20 @@ CSLEDIT.editorPage = (function () {
 				}
 			);
 
-			$("#editorTabs").tabs();
+			$("#editorTabs").tabs({
+				show : function (event, ui) {
+					if (ui.panel.getAttribute("id") === "codeEditor") {
+						editor.refresh();
+					}
+				}
+			});
+
+			$("#testButton").on("click", treeViewChanged);
+			$("#treeEditor").on("move_node.jstree", treeViewChanged);
+			$("#treeEditor").on("select_node.jstree", nodeSelected);
+
+			$(".propertyInput").on("change", nodeChanged);	
+
 		}
 	};
 }());
