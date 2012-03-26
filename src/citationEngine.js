@@ -8,15 +8,15 @@ formatCitations: function (style, documents, citationClusters) {
 
 	result.statusMessage = "";
 
-	try
+	//try
 	{
 		var sys = new Sys(abbreviations);
 		var citeproc = new CSL.Engine(sys, style);
 	}
-	catch(err)
+	//catch(err)
 	{
-		result.statusMessage = "Citeproc initialisation exception: " + err;
-		return result;
+	//	result.statusMessage = "Citeproc initialisation exception: " + err;
+	//	return result;
 	}
 	
 	var inLineCitations = "";

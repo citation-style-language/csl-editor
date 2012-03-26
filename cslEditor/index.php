@@ -31,14 +31,14 @@
 
 <style type="text/css">
 html, body {
-	width: 98%;
-	height: 90%;
+	height: 98%;
 }
 .searched {
 	background: yellow;
 }
 #treeEditor {
 	font-size: 14px;
+
 	height: 98%;
 	width: 100%;
 	overflow: auto;
@@ -47,7 +47,6 @@ html, body {
 	float: left;
 	width: 35%;
 	height: 90%;
-	/*overflow: auto;*/
 }
 #rightPane {
 	float: right;
@@ -68,6 +67,7 @@ html, body {
 	width: 50%;
 }
 
+
 /** Very hacky fix for jstree move between nodes bug:
  *  https://github.com/vakata/jstree/issues/174
  *
@@ -85,12 +85,9 @@ z-index: 10 !important;
 </style>
 </head>
 <body>
+<div class="mainContainer">
 <div id="leftPane">
-	<output id="list"></output>
-		<div id="treeEditor">
-			<!--div id="innerTreeEdit">
-			</div-->
-		</div>
+	<div id="treeEditor">
 	</div>
 </div>
 
@@ -108,6 +105,9 @@ z-index: 10 !important;
 		<div id="formattedBibliography"></div>
 	</div>
 </div>
+<div class="push"></div>
+</div>
+</div>
 
 <script>
 "use strict";
@@ -123,7 +123,31 @@ CSLEDIT.editorPage = (function () {
 		newFormattedCitation = "",
 		oldFormattedBibliography = "",
 		newFormattedBibliography = "",
-		styleURL;
+		styleURL,
+		oldSelectedNode,
+		numCslNodes,
+		hoveredNodeStack = [],
+		highlightedCss,
+		selectedCss,
+		unHighlightedCss,
+		highlightedTreeNodes = [];
+
+	var normalisedColor = function (color) {
+		return $('<pre>').css({"color" : color}).css("color");
+	};
+
+	highlightedCss = {
+			"color" : normalisedColor("black"),
+			"background-color" : normalisedColor("#bbffbb")
+		};
+	selectedCss = {
+			"color" : normalisedColor("white"),
+			"background-color" : normalisedColor("#009900")
+		};
+	unHighlightedCss = {
+			"color" : "",
+			"background-color" : ""
+		};
 
 	// from https://gist.github.com/1771618
 	var getUrlVar = function (key) {
@@ -165,15 +189,173 @@ CSLEDIT.editorPage = (function () {
 		clearTimeout(diffTimeout);
 		diffTimeout = setTimeout(
 			function () {
-			$("#formattedCitations").html(newFormattedCitation);
-			$("#formattedBibliography").html(newFormattedBibliography);}
+				$("#formattedCitations").html(newFormattedCitation);
+				$("#formattedBibliography").html(newFormattedBibliography);
+				doSyntaxHighlighting();	
+			}
 		, 1000);
 
 		document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
 	};
 
+	var addToHoveredNodeStack = function (target) {
+		// build stack 'backwards' from the inner node outwards
+		var parentNode;
+		
+		if (typeof target.attr("cslid") !== "undefined") {
+			hoveredNodeStack.unshift(target.attr("cslid"));
+		}
+
+		parentNode = target.parent();
+		if (parentNode.length > 0) {
+			addToHoveredNodeStack(parentNode);
+		}
+	}
+
+	var removeFromHoveredNodeStack = function (nodeIndex) {
+		// pop all nodes up to and including the target node
+		var poppedNode;
+
+		if (hoveredNodeStack.length > 0) {
+			poppedNode = hoveredNodeStack.pop();
+			unHighlightNode(poppedNode);
+
+			if (poppedNode == nodeIndex) {
+				return;
+			}
+			removeFromHoveredNodeStack (nodeIndex);
+		}
+	}
+
+	var highlightNode = function (nodeIndex) {
+		var node;
+
+		// expand jstree
+		//$('#treeEditor').jstree("open_node", 'li[cslid="' + nodeIndex + '"]');
+		
+		node = $('span[cslid="' + nodeIndex + '"]');
+
+		if (node.css("background-color") == selectedCss["background-color"])
+		{
+			console.log("ignoring selected");
+			// leave alone - selection takes precedence
+		} else {
+			console.log("highlighting " + nodeIndex + " over " + node.css("background-color"));
+			node.css(highlightedCss);
+		}
+
+		// undo previous highlighting
+		unHighlightTree();
+		highlightTree($('li[cslid="' + nodeIndex + '"]'), 0);
+
+		// TODO: scroll to correct element
+	};
+
+	var reverseSelectNode = function () {
+		assert(hoveredNodeStack.length > 0);
+
+		var cslid = hoveredNodeStack[hoveredNodeStack.length - 1];
+
+		console.log("clicked " + cslid);
+
+		// expand jstree
+		$('#treeEditor').jstree("open_node", 'li[cslid="' + cslid + '"]');
+		$('li[cslid="' + cslid + '"] > a').click();
+	};
+
+	var unHighlightTree = function () {
+		var node;
+		while (highlightedTreeNodes.length > 0) {
+			node = highlightedTreeNodes.pop();
+			node.css(unHighlightedCss);
+		}
+	};
+
+	// highlight node and all parents, stopping at the "style" node
+	var highlightTree = function (node, depth) {
+		var node, parentNode, parentIndex, highlightedNode;
+
+		depth++;
+		assert(depth < 20, "stack overflow!");
+
+		if (node.is('li')) {
+			highlightedNode = node.children('a');
+			highlightedTreeNodes.push(highlightedNode);
+			highlightedNode.css(highlightedCss);
+		}
+
+		parentNode = node.parent();
+		assert(parentNode != false, "no parent node");
+
+		parentIndex = parentNode.attr("cslid");
+
+		if (parentIndex != "0") {
+			highlightTree(parentNode, depth);
+		}
+	};
+
+	var unHighlightNode = function (nodeIndex) {
+		var	node = $('span[cslid="' + nodeIndex + '"]');
+
+		console.log("selectedCss back = " + selectedCss["background-color"]);
+		if (node.css("background-color") == selectedCss["background-color"])
+		{
+			console.log("ignoring selected");
+			// leave alone - selection takes precedence
+		} else {
+			console.log("unHighlighting " + nodeIndex + " over " + node.css("background-color"));
+			node.css(unHighlightedCss);
+		}
+//		$('[cslid="' + nodeIndex + '"]').css(unHighlightedCss);
+	};
+
+	var setupSyntaxHighlightForNode = function (nodeIndex) {
+		$('span[cslid="' + nodeIndex + '"]').hover(
+			function (event) {
+				var target = $(event.target);
+				
+				// remove all
+				removeFromHoveredNodeStack(-1);
+
+				// populate hovered node stack
+				addToHoveredNodeStack(target);
+
+				var lastNode = hoveredNodeStack[hoveredNodeStack.length - 1];
+				assertEqual(lastNode, target.attr("cslid"), "applySyntax");
+
+				if (hoveredNodeStack.length > 0) {
+					highlightNode(lastNode);
+				}
+			},
+			function () {
+				removeFromHoveredNodeStack(nodeIndex);
+				
+				if (hoveredNodeStack.length > 0) {
+					highlightNode(hoveredNodeStack[hoveredNodeStack.length - 1]);
+				} else {
+					unHighlightTree();
+				}
+			}
+		);
+
+		// set up click handling
+		$('span[cslid="' + nodeIndex + '"]').click( function () {
+			reverseSelectNode(nodeIndex);
+		});
+	};
+
+	var doSyntaxHighlighting = function () {
+		// syntax highlighting
+		for (var index = 0; index < numCslNodes; index++) {
+			setupSyntaxHighlightForNode(index);
+		}
+	};
+
 	var updateTreeView = function () {
-		var jsonData = CSLEDIT.parser.jsonFromCslXml(cslCode);
+		var nodeIndex = { index : 0 };
+		var jsonData = CSLEDIT.parser.jsonFromCslXml(cslCode, nodeIndex);
+
+		numCslNodes = nodeIndex.index + 1;
 
 		$("#treeEditor").jstree({
 			"json_data" : { data : [ jsonData ] },
@@ -207,6 +389,7 @@ CSLEDIT.editorPage = (function () {
 	var nodeSelected = function(event, ui) {
 		var jsonData = $("#treeEditor").jstree("get_json", ui.rslt.obj, [], [])[0];
 		var attributes = jsonData.metadata.attributes;
+		var cslId = jsonData.metadata.cslId;
 
 		var propertyPanel = $("#elementProperties");
 		var index;
@@ -235,6 +418,20 @@ CSLEDIT.editorPage = (function () {
 			clearTimeout(editTimeout);
 			editTimeout = setTimeout(nodeChanged, 500);
 		});
+
+		// Highlight the diff
+		//var outputSpan = $('[cslid="' + cslId + '"]');
+		//if (outputSpan.length > 0)
+		//{
+		//	outputSpan.
+		//}
+		//
+
+		$('span[cslid="' + oldSelectedNode + '"]').css(unHighlightedCss);
+		oldSelectedNode = cslId;
+
+		$('span[cslid="' + cslId + '"]').css(selectedCss);
+		console.log("selected : " + $('span[cslid="' + cslId + '"]').css("background-color"));
 	};
 
 	var nodeChanged = function () {
@@ -258,7 +455,6 @@ CSLEDIT.editorPage = (function () {
 				value : value
 			});
 		}
-		console.log(JSON.stringify(attributes));
 		jsonData.metadata.attributes = attributes;
 
 		treeViewChanged();
@@ -282,13 +478,13 @@ CSLEDIT.editorPage = (function () {
 			
 			styleURL = getUrlVar("styleURL");
 			if (styleURL == "" || typeof styleURL === 'undefined') {
-				styleURL = "../external/csl-styles/apa.csl";
+				styleURL = "../external/custom-styles/apa.csl";
 			} else {
 				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
 			}
 
 			$.get(
-					styleURL, {}, function(data) { 
+					styleURL, {}, function(data) {
 					cslCode = data;
 					updateTreeView();
 				}

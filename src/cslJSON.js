@@ -4,13 +4,14 @@ var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.parser = (function() {
 	// Private functions:
-	var parseNode = function (node) {
+	var parseNode = function (node, nodeIndex) {
 		var children = [],
 			index,
 			jsonData,
 			childNode,
 			textValue,
-			TEXT_NODE;
+			TEXT_NODE,
+			thisNodeIndex = nodeIndex.index;
 
 		TEXT_NODE = 3;
 		
@@ -18,7 +19,8 @@ CSLEDIT.parser = (function() {
 			childNode = node.childNodes[index];
 
 			if (childNode.localName !== null) {
-				children.push(parseNode(node.childNodes[index]));
+				nodeIndex.index++;
+				children.push(parseNode(node.childNodes[index], nodeIndex));
 			} else {
 				if (childNode.nodeType === TEXT_NODE && childNode.data.trim() != "") {
 					textValue = childNode.data;
@@ -48,11 +50,12 @@ CSLEDIT.parser = (function() {
 
 		return {
 			"data" : (node.localName + attributesString),
-			"attr" : { "rel" : node.localName },
+			"attr" : { "rel" : node.localName, "cslid" : thisNodeIndex },
 			"metadata" : {
 				"name" : node.localName,
 				"attributes" : attributesList,
-				"textValue" : textValue
+				"textValue" : textValue,
+				"cslId" : thisNodeIndex
 			},
 			"children" : children
 		};
@@ -89,14 +92,16 @@ CSLEDIT.parser = (function() {
 	};
 
 	return {
-		jsonFromCslXml : function (xmlData) {
+		// nodeIndex.index is the depth-first traversal position of CSL node
+		// it must start at 0, and it will be returned with nodeIndex.index = number of nodes - 1
+		jsonFromCslXml : function (xmlData, nodeIndex) {
 			var parser = new DOMParser();
 			var xmlDoc = parser.parseFromString(xmlData, "application/xml");
 
 			var styleNode = xmlDoc.childNodes[0];
 			assertEqual(styleNode.localName, "style");
 
-			var jsonData = parseNode(styleNode);
+			var jsonData = parseNode(styleNode, nodeIndex);
 
 			// make root node open
 			jsonData["state"] = "open";
