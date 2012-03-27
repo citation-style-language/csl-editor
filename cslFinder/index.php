@@ -55,9 +55,6 @@ h1
 {
 	clear: both;
 }
-#userCitation, #userBibliography
-{
-}
 </style>
 </head>
 <body>
@@ -77,10 +74,10 @@ h1
 		<div id="styleFormatInputControls">
 			<p id=explanation></p>
 			Edit in-line citation:
-			<textarea type="text" id="userCitation" placeholder="Type inline citation here" ></textarea>
+			<textarea id="userCitation" name="userCitation" >test</textarea>
 			<br />
 			Edit bibliography entry:
-			<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
+			<textarea id="userBibliography" name="userBibliography" >test</textarea>
 		</div>
 		<div id=exampleDocument></div>
 		<div class=clearDiv>
@@ -97,8 +94,9 @@ h1
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.finderPage = (function () {
-	var nameSearchTimeout;
-	var styleFormatSearchTimeout;
+	var nameSearchTimeout,
+		styleFormatSearchTimeout,
+		styleFormatInitialised = false;
 
 	// used to display HTML tags for debugging
 	var escapeHTML = function (string) {
@@ -235,7 +233,7 @@ CSLEDIT.finderPage = (function () {
 	};
 
 	function searchForStyle() {
-		var tolerance = 100,
+		var tolerance = 200,
 			bestEditDistance = 999,
 			bestMatchIndex = -1,
 			userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML,
@@ -261,6 +259,8 @@ CSLEDIT.finderPage = (function () {
 			row = function (title, value) {
 				return "<tr><td><span class=faint>" + title + "<\/span><\/td><td>" + value + "<\/td><\/tr>";
 			};
+
+		console.log("search");
 
 		userCitation = cleanHTML(userCitation);
 		userBibliography = cleanHTML(userBibliography);
@@ -357,32 +357,38 @@ CSLEDIT.finderPage = (function () {
 					} else {
 						$("#styleNameResult").hide();
 						$("#styleFormatResult").show();
+
+						if (!styleFormatInitialised) {
+							$.cleditor.defaultOptions.width = 300;
+							$.cleditor.defaultOptions.height = 100;
+							$.cleditor.defaultOptions.controls =
+								"bold italic underline strikethrough subscript superscript ";
+
+							var userCitationInput =
+								$("#userCitation").cleditor({height: 70})[0];
+							var userBibliographyInput =
+								$("#userBibliography").cleditor({height: 100})[0];
+
+							$("#userCitation").cleditor()[0].change(formChanged);
+							$("#userBibliography").cleditor()[0].change(formChanged);
+
+							// prepopulate search by style format with APA example
+							$("#userCitation").cleditor()[0].doc.body.innerHTML =
+								exampleCitations.exampleCitationsFromMasterId[
+								"http://www.zotero.org/styles/apa"].formattedCitations[0];
+							$("#userBibliography").cleditor()[0].doc.body.innerHTML =
+								exampleCitations.exampleCitationsFromMasterId[
+								"http://www.zotero.org/styles/apa"].formattedBibliography;
+
+							formChanged();
+						}
 					}
 				}
 			});
-			$.cleditor.defaultOptions.width = 300;
-			$.cleditor.defaultOptions.height = 100;
-			$.cleditor.defaultOptions.controls =
-				"bold italic underline strikethrough subscript superscript ";
-			//		+ "| undo redo | cut copy paste";
-
-			var userCitationInput = $("#userCitation").cleditor({height: 70})[0];
-			$("#userBibliography").cleditor({height: 100});
-
-			$("#userCitation").cleditor()[0].change(formChanged);
-			$("#userBibliography").cleditor()[0].change(formChanged);
-
 			$("#styleNameQuery").on("input", function(){nameSearch();});
 		
 			searchForStyleName();
 
-			// prepopulate search by style format with APA example
-			$("#userCitation").cleditor()[0].doc.body.innerHTML =
-				exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].formattedCitations[0];
-			$("#userBibliography").cleditor()[0].doc.body.innerHTML =
-				exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].formattedBibliography;
-
-			formChanged();
 		}
 	};
 }());
