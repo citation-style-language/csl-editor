@@ -29,9 +29,20 @@
 	<script type="text/javascript" src="../src/debug.js"></script>
 	<script type="text/javascript" src="../src/cslJSON.js"></script>
 
+	<link type="text/css" rel="stylesheet" href="../external/SimplejQueryDropdowns/css/style.css"/>
+
 <style type="text/css">
+
+* {
+	margin: 0;
+	padding: 0;
+}
 html, body {
-	height: 98%;
+	height: 100%;
+	overflow: hidden;
+}
+#mainContainer {
+	height: 100%;
 }
 .searched {
 	background: yellow;
@@ -39,34 +50,60 @@ html, body {
 #treeEditor {
 	font-size: 14px;
 
-	height: 98%;
+	height: 100%;
 	width: 100%;
 	overflow: auto;
 }
 #leftPane {
 	float: left;
 	width: 35%;
-	height: 90%;
+	height: 100%;
+	background-color: #F5F5DC;
+}
+ul.dropdown {
+	float: right;
+}
+#treeEditorTitle {
+	float: left;
 }
 #rightPane {
 	float: right;
 	width: 63%;
-	height: 95%;
+	height: 100%;
 }
 #exampleOutput {
-	margin-top: 50%:
+/*	margin-top: 50%:*/
 	height: 65%;
 	overflow: auto;
 }
 #elementProperties {
+	font-size: 14px;
 	background-color: #F5F5DC;
+	width: 100%;
 	height: 30%;
 	overflow: auto;
 }
-.propertyInput {
-	width: 50%;
+table {
+	width: 100%;
+	margin: 10px, 0;
 }
-
+#elementProperties > table,
+#elementProperties > table > tr,
+#elementProperties > table > tr > td
+{
+	width: 100%;
+}
+label.> tr
+{
+	width: 800px;
+}
+input.propertyInput {
+	min-width: 250px;
+}
+label.propertyLabel {
+	min-width: 150px;
+	display: block;
+}
 
 /** Very hacky fix for jstree move between nodes bug:
  *  https://github.com/vakata/jstree/issues/174
@@ -82,11 +119,47 @@ z-index: 20 !important;
 z-index: 10 !important;
 }
 
+ul.dropdown {
+z-index: 30 !important;
+}
+
 </style>
 </head>
+
 <body>
-<div class="mainContainer">
+
+<div id="dialog-confirm-delete" title="Delete?">
+	<p>
+	<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+	Are you sure you want to delete this attribute?
+	</p>
+</div>
+
+<div id="mainContainer">
 <div id="leftPane">
+	<h3 id="treeEditorTitle">CSL Structure</h3>
+		<ul class="dropdown">
+        	<li><a href="#">Add node</a>
+        		<ul class="sub_menu">
+        			 <li><a href="#">info</a></li>
+        			 <li><a href="#">macro</a></li>
+        			 <li><a href="#">locale</a></li>
+        			 <li><a href="#">citation</a></li>
+        			 <li><a href="#">bibliography</a></li>
+        			 <li><a href="#">text</a></li>
+        			 <li><a href="#">sort</a></li>
+        			 <li><a href="#">layout</a></li>
+        			 <li><a href="#">group</a></li>
+        			 <li><a href="#">choose</a></li>
+        			 <li><a href="#">if</a></li>
+        			 <li><a href="#">else</a></li>
+        			 <li><a href="#">names</a></li>
+        			 <li><a href="#">name</a></li>
+        			 <li><a href="#">substitute</a></li>
+        			 <li><a href="#">label</a></li>
+        		</ul>
+			</li>
+		</ul>
 	<div id="treeEditor">
 	</div>
 </div>
@@ -95,7 +168,6 @@ z-index: 10 !important;
 	<div id="elementProperties">
 	</div>
 	<div id="exampleOutput">
-		<button id="testButton">Refresh</button>
 		<div id="statusMessage"></div>
 
 		<h3>Formatted Citations</h3>	
@@ -105,7 +177,6 @@ z-index: 10 !important;
 		<div id="formattedBibliography"></div>
 	</div>
 </div>
-<div class="push"></div>
 </div>
 </div>
 
@@ -148,6 +219,12 @@ CSLEDIT.editorPage = (function () {
 			"color" : "",
 			"background-color" : ""
 		};
+
+	// resizing that can't be done with CSS
+	var setSizes = function () {
+		var treeEditor = $('#treeEditor');
+		treeEditor.height(treeEditor.parent().height() - $('#treeEditorTitle').outerHeight() - 32);
+	};
 
 	// from https://gist.github.com/1771618
 	var getUrlVar = function (key) {
@@ -237,10 +314,8 @@ CSLEDIT.editorPage = (function () {
 
 		if (node.css("background-color") == selectedCss["background-color"])
 		{
-			console.log("ignoring selected");
 			// leave alone - selection takes precedence
 		} else {
-			console.log("highlighting " + nodeIndex + " over " + node.css("background-color"));
 			node.css(highlightedCss);
 		}
 
@@ -297,13 +372,10 @@ CSLEDIT.editorPage = (function () {
 	var unHighlightNode = function (nodeIndex) {
 		var	node = $('span[cslid="' + nodeIndex + '"]');
 
-		console.log("selectedCss back = " + selectedCss["background-color"]);
 		if (node.css("background-color") == selectedCss["background-color"])
 		{
-			console.log("ignoring selected");
 			// leave alone - selection takes precedence
 		} else {
-			console.log("unHighlighting " + nodeIndex + " over " + node.css("background-color"));
 			node.css(unHighlightedCss);
 		}
 //		$('[cslid="' + nodeIndex + '"]').css(unHighlightedCss);
@@ -376,6 +448,8 @@ CSLEDIT.editorPage = (function () {
 			// it makes sense to configure a plugin only if overriding the defaults
 		});
 
+		//$("#leftPane").resizable({handles : 'e'});
+
 		runCiteproc();
 	};
 
@@ -399,39 +473,90 @@ CSLEDIT.editorPage = (function () {
 
 		// remove child nodes
 		$("#elementProperties > *").remove();
-
+		
 		// create new ones
+		$('<h3>' + jsonData.metadata.name + ' properites</h3>').appendTo(propertyPanel);
+		$('<table>').appendTo(propertyPanel);
+
+		// title editor (if a text element)
+		if (typeof jsonData.metadata.textValue !== "undefined" || attributes.length === 0) {
+			$('<tr><td><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">text value<\/label><\/td>' + 
+				'<td><input id="textNodeInput" class="propertyInput"' + 'type="text"><\/input><\/td><\/tr>').
+				appendTo(propertyPanel);
+			
+			$("#textNodeInput").val(jsonData.metadata.textValue);
+		}
+
+		// attribute editors
 		for (index = 0; index < attributes.length; index++)
 		{
 			inputId = 'nodeAttribute' + index;
 			labelId = 'nodeAttributeLabel' + index;
 			attribute = attributes[index];
 
-			$('hello<label for=' + inputId + ' id="' + labelId + '">' + attribute.key + '</label>' + 
-				'<input id="' + inputId + '" class="propertyInput"' +
-				'type="text"><\/input><\/br>').appendTo(propertyPanel);
+			$('<tr><td><label for=' + inputId + ' id="' + labelId + '" class="propertyLabel">' +
+				attribute.key + '<\/label><\/td>' + 
+				'<td><input id="' + inputId + '" class="propertyInput" attr="' + index + '"' +
+				'type="text"><\/input><\/td>' +
+				'<td><button class="deleteAttrButton" attrIndex="' + index + '">Delete</button><\/td>' +
+				'<\/tr>').appendTo(propertyPanel);
 
 			$("#" + inputId).val(attribute.value);
 		}
 
-		$("#elementProperties > input").on("input", function () {
+		$('<\/table>').appendTo(propertyPanel);
+	
+		// Add attribute button
+		$('<br \/><input id="newAttributeKey" placeholder="New attribute name"></input>' +
+			'<button id="addAttributeButton">Add attribute<\/button>'
+			).appendTo(propertyPanel);
+
+		$('#addAttributeButton').click( function () {
+			var newAttribute = $('#newAttributeKey').val();
+			jsonData.metadata.attributes.push({
+				key : newAttribute,
+				value : ""
+			});
+			nodeSelected(event, ui);
+		});
+
+		$(".propertyInput").on("input", function () {
 			clearTimeout(editTimeout);
 			editTimeout = setTimeout(nodeChanged, 500);
 		});
 
-		// Highlight the diff
-		//var outputSpan = $('[cslid="' + cslId + '"]');
-		//if (outputSpan.length > 0)
-		//{
-		//	outputSpan.
-		//}
-		//
+		$('.deleteAttrButton').click( function (buttonEvent) {
+			index = $(buttonEvent.target).attr("attrIndex");
+
+			$( "#dialog-confirm-delete" ).dialog({
+				resizable: false,
+				modal: true,
+				buttons: {
+					"Delete attribute": function() {
+						$( this ).dialog( "close" );
+						jsonData.metadata.attributes.splice(index, 1);
+						$("#treeEditor").jstree("rename_node", ui.rslt.obj,
+							CSLEDIT.parser.displayNameFromMetadata(jsonData.metadata));
+						nodeSelected(event, ui);
+						treeViewChanged();
+					},
+					Cancel: function() {
+						$( this ).dialog( "close" );
+					}
+				},
+				autoOpen:true
+			});
+			
+
+//			$('[class=propertyInput][attr="' + index + '"]').val("");
+//			console.log("delete attr " + index);
+//			treeViewChanged();
+		});
 
 		$('span[cslid="' + oldSelectedNode + '"]').css(unHighlightedCss);
 		oldSelectedNode = cslId;
 
 		$('span[cslid="' + cslId + '"]').css(selectedCss);
-		console.log("selected : " + $('span[cslid="' + cslId + '"]').css("background-color"));
 	};
 
 	var nodeChanged = function () {
@@ -460,6 +585,11 @@ CSLEDIT.editorPage = (function () {
 		treeViewChanged();
 	};
 
+	var updateCslIds = function () {
+		var jsonData = $("#treeEditor").jstree("get_json", -1, [], [])[0];
+		CSLEDIT.parser.updateCslIds(jsonData, {index:0});
+	};
+
 	return {
 		init : function () {
 			// parse CSL file
@@ -471,6 +601,24 @@ CSLEDIT.editorPage = (function () {
 					};
 				},
 				index;
+
+			$("#dialog-confirm-delete").dialog({autoOpen : false});
+
+			$(function(){
+				$("ul.dropdown li").hover(function(){
+				
+					$(this).addClass("hover");
+					$('ul:first',this).css('visibility', 'visible');
+				
+				}, function(){
+				
+					$(this).removeClass("hover");
+					$('ul:first',this).css('visibility', 'hidden');
+				
+				});
+				
+				$("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
+			});
 
 			for (index = 0; index < 30; index++) {
 				jsonData.push(createNode(index));
@@ -490,11 +638,41 @@ CSLEDIT.editorPage = (function () {
 				}
 			);
 
-			$("#testButton").on("click", treeViewChanged);
-			$("#treeEditor").on("move_node.jstree", treeViewChanged);
+			$("#treeEditor").on("move_node.jstree", function () {
+				updateCslIds();
+				treeViewChanged();
+			});
 			$("#treeEditor").on("select_node.jstree", nodeSelected);
 
-			$(".propertyInput").on("change", nodeChanged);	
+			$(".propertyInput").on("change", nodeChanged);
+
+			$(".dropdown a").click(function (event) {
+				var clickedName = $(event.target).text();
+				console.log("clicked " + clickedName);
+				if ($(event.target).parent().parent().attr("class") === "sub_menu") {
+					$(event.target).parent().parent().css('visibility', 'hidden');
+					
+					// create new node after the selected one
+					var selectedNode = $('#treeEditor').jstree('get_selected');
+
+					$('#treeEditor').jstree('create_node', selectedNode, "after",
+					{
+						"data" : clickedName,
+						"attr" : { "rel" : clickedName, "cslid" : 0 },
+						"metadata" : {
+							"name" : clickedName,
+							"attributes" : [],
+							"textValue" : undefined,
+							"cslId" : 0
+						},
+						"children" : []
+					});
+					updateCslIds();
+				}
+			});
+
+			setSizes();
+			$(window).resize(setSizes);
 		}
 	};
 }());

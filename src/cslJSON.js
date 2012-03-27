@@ -33,7 +33,8 @@ CSLEDIT.parser = (function() {
 		var attributesString = "";
 		var attributesStringList = [];
 		var attributesList = [];
-
+		var metadata;
+		
 		if (node.attributes !== null && node.attributes.length > 0) {
 			for (index = 0; index < node.attributes.length; index++) {
 				attributesList.push(
@@ -48,17 +49,36 @@ CSLEDIT.parser = (function() {
 			attributesString = ": " + attributesStringList.join(", ");
 		}
 
-		return {
-			"data" : (node.localName + attributesString),
-			"attr" : { "rel" : node.localName, "cslid" : thisNodeIndex },
-			"metadata" : {
+		metadata = {
 				"name" : node.localName,
 				"attributes" : attributesList,
 				"textValue" : textValue,
 				"cslId" : thisNodeIndex
-			},
+			};
+
+		return {
+			"data" : displayNameFromMetadata(metadata),
+			"attr" : { "rel" : node.localName, "cslid" : thisNodeIndex },
+			"metadata" : metadata,
 			"children" : children
 		};
+	};
+
+	var displayNameFromMetadata = function (metadata) {
+		var index,
+			attributesString = "",
+			attributesStringList = [];
+
+		if (metadata.attributes.length > 0) {
+			for (index = 0; index < metadata.attributes.length; index++) {
+				attributesStringList.push(
+					metadata.attributes[index].key + '="' +
+					metadata.attributes[index].value + '"');
+			}
+			attributesString = ": " + attributesStringList.join(", ");
+		}
+
+		return metadata.name + attributesString;
 	};
 
 	var xmlNodeFromJson = function (jsonData) {
@@ -90,6 +110,20 @@ CSLEDIT.parser = (function() {
 
 		return xmlString;
 	};
+	
+	var updateCslIds = function (jsonData, cslId) {
+			var childIndex;
+
+			jsonData.metadata["cslId"] = cslId.index;
+			console.log("cslid = " + cslId.index);
+			cslId.index++;
+			if (jsonData.children) {
+				for (childIndex = 0; childIndex < jsonData.children.length; childIndex++)
+				{
+					updateCslIds(jsonData.children[childIndex], cslId);
+				}
+			}
+		};
 
 	return {
 		// nodeIndex.index is the depth-first traversal position of CSL node
@@ -113,6 +147,10 @@ CSLEDIT.parser = (function() {
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
 			cslXml += xmlNodeFromJson(jsonData[0]);
 			return cslXml;
-		}
+		},
+
+		displayNameFromMetadata : displayNameFromMetadata,
+
+		updateCslIds : updateCslIds
 	};
 }());
