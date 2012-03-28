@@ -83,7 +83,7 @@ ul.dropdown {
 	font-size: 14px;
 	background-color: #F5F5DC;
 	width: 100%;
-	height: 30%;
+	height: 40%;
 	overflow: auto;
 }
 table {
@@ -421,7 +421,7 @@ CSLEDIT.editorPage = (function () {
 	var setupSyntaxHighlightForNode = function (nodeIndex) {
 		$('span[cslid="' + nodeIndex + '"]').hover(
 			function (event) {
-				var target = $(event.target);
+				var target = $(event.target).closest("span");
 				
 				// remove all
 				removeFromHoveredNodeStack(-1);
@@ -466,6 +466,8 @@ CSLEDIT.editorPage = (function () {
 
 		numCslNodes = nodeIndex.index + 1;
 
+		console.log("updateTreeView");
+
 		$("#treeEditor").jstree({
 			"json_data" : { data : [ jsonData ] },
 			"types" : {
@@ -482,22 +484,32 @@ CSLEDIT.editorPage = (function () {
 			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
 				"types", "hotkeys"],
 			// each plugin you have included can have its own config object
-			"core" : { "initially_open" : [ "node1" ] }
-			// it makes sense to configure a plugin only if overriding the defaults
+			"core" : { "initially_open" : [ "node1" ] },
+			"ui" : { "initially_select" : [ "cslTreeNode0" ] }
 		});
 
 		$("#treeEditor").on("move_node.jstree", function () {
 			treeViewChanged();
 		});
 		$("#treeEditor").on("select_node.jstree", nodeSelected);
+		$("#treeEditor").on("delete_node.jstree", function () {
+			if (confirm("Are you sure you want to delete this node?")) {
+				treeViewChanged();
+			} else {
+				updateCslData(localStorage.getItem(storage_cslCode));
+			}
+		});
 
 		runCiteproc();
 	};
 
 	var treeViewChanged = function () {
 		var jsonData = $("#treeEditor").jstree("get_json", -1, [], []);
+		console.log("treeViewChanged");
 		updateCslIds();
-		localStorage.setItem(storage_cslCode, CSLEDIT.parser.cslXmlFromJson(jsonData));
+		console.log("updating local stored style");
+		localStorage.setItem(storage_cslCode, 
+			CSLEDIT.parser.cslXmlFromJson(jsonData));
 
 		runCiteproc();
 	};
@@ -625,12 +637,16 @@ CSLEDIT.editorPage = (function () {
 
 	var loadStyleFromUrl = function () {
 		$.get(styleURL, {}, function(data) {
-			// strip comments from style
-			data = data.replace(/<!--.*-->/, "");
-
-			localStorage.setItem(storage_cslCode, data);
-			updateTreeView();
+			updateCslData(data);
 		});
+	};
+
+	var updateCslData = function (data) {
+		// strip comments from style
+		data = data.replace(/<!--.*?-->/g, "");
+
+		localStorage.setItem(storage_cslCode, data);
+		updateTreeView();
 	};
 
 	return {
@@ -669,6 +685,11 @@ CSLEDIT.editorPage = (function () {
 			
 			var cslCode;
 			cslCode = localStorage.getItem(storage_cslCode);
+			if (cslCode !== null && cslCode !== "" && !CSLEDIT.parser.isCslValid(cslCode)) {
+				alert("Warning: couldn't recover CSL from previous session");
+				cslCode = "";
+				localStorage.setItem(storage_cslCode, cslCode);
+			}
 			styleURL = getUrlVar("styleURL");
 			console.log("url from url: " + styleURL);
 
@@ -702,10 +723,7 @@ CSLEDIT.editorPage = (function () {
 
 					if (/^Edit/.test(parentNodeName)) {
 						if (clickedName === "Delete node") {
-							if (confirm("Are you sure you want to delete this node?")) {
-								$('#treeEditor').jstree('remove', selectedNode);
-								treeViewChanged();
-							}
+							$('#treeEditor').jstree('remove', selectedNode);
 						}
 					} else if ((/^Add node/).test(parentNodeName)) {
 						console.log("parent node = " + parentNode.siblings('a').text());

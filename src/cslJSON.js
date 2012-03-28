@@ -22,7 +22,8 @@ CSLEDIT.parser = (function() {
 				nodeIndex.index++;
 				children.push(parseNode(node.childNodes[index], nodeIndex));
 			} else {
-				if (childNode.nodeType === TEXT_NODE && childNode.data.trim() != "") {
+				if (childNode.nodeType === TEXT_NODE && typeof childNode.data !== "undefined" && 
+						childNode.data.trim() != "") {
 					textValue = childNode.data;
 				}
 			}
@@ -52,13 +53,16 @@ CSLEDIT.parser = (function() {
 		metadata = {
 				"name" : node.localName,
 				"attributes" : attributesList,
-				"textValue" : textValue,
 				"cslId" : thisNodeIndex
 			};
 
+		if (typeof textValue !== "undefined") {
+			metadata["textValue"] = textValue;
+		}
+
 		return {
 			"data" : displayNameFromMetadata(metadata),
-			"attr" : { "rel" : node.localName, "cslid" : thisNodeIndex },
+			"attr" : { "rel" : node.localName, "cslid" : thisNodeIndex, "id" : "cslTreeNode" + thisNodeIndex },
 			"metadata" : metadata,
 			"children" : children
 		};
@@ -81,6 +85,17 @@ CSLEDIT.parser = (function() {
 		return metadata.name + attributesString;
 	};
 
+	var htmlEscape = function (text) {
+		var escaped = text;
+
+		escaped = escaped.replace("<", "&lt;");
+		escaped = escaped.replace(">", "&gt;");
+		escaped = escaped.replace("&", "&amp;");
+		escaped = escaped.replace('"', "&quot;");
+
+		return escaped;
+	};
+
 	var xmlNodeFromJson = function (jsonData) {
 		var attributesString = "",
 			xmlString,
@@ -91,8 +106,10 @@ CSLEDIT.parser = (function() {
 
 		if (metadata.attributes.length > 0) {
 		  	for (index = 0; index < metadata.attributes.length; index++) {
+				// TODO: the key probably shouldn't have characters needing escaping anyway,
+				//       should not allow to input them in the first place
 				attributesString += " " + 
-					metadata.attributes[index].key + '="' + metadata.attributes[index].value + '"';
+					htmlEscape(metadata.attributes[index].key) + '="' + htmlEscape(metadata.attributes[index].value) + '"';
 			}
 		}
 		xmlString = 
@@ -102,11 +119,11 @@ CSLEDIT.parser = (function() {
 			for (index = 0; index < jsonData.children.length; index++) {
 				xmlString += xmlNodeFromJson(jsonData.children[index]);
 			}
-		} else {
-			xmlString += metadata.textValue;
+		} else if (typeof metadata.textValue !== "undefined") {
+			xmlString += htmlEscape(metadata.textValue);
 		}
 
-		xmlString += "</" + metadata.name + ">\n";
+		xmlString += "</" + htmlEscape(metadata.name) + ">\n";
 
 		return xmlString;
 	};
@@ -126,6 +143,14 @@ CSLEDIT.parser = (function() {
 		};
 
 	return {
+		isCslValid : function(xmlData) {
+			var parser = new DOMParser();
+			var xmlDoc = parser.parseFromString(xmlData, "application/xml");
+
+			var styleNode = xmlDoc.childNodes[0];
+			return styleNode.localName === "style";
+		},
+
 		// nodeIndex.index is the depth-first traversal position of CSL node
 		// it must start at 0, and it will be returned with nodeIndex.index = number of nodes - 1
 		jsonFromCslXml : function (xmlData, nodeIndex) {
@@ -133,7 +158,7 @@ CSLEDIT.parser = (function() {
 			var xmlDoc = parser.parseFromString(xmlData, "application/xml");
 
 			var styleNode = xmlDoc.childNodes[0];
-			assertEqual(styleNode.localName, "style");
+			assertEqual(styleNode.localName, "style", "Invalid style - no style node");
 
 			var jsonData = parseNode(styleNode, nodeIndex);
 
