@@ -189,7 +189,7 @@ z-index: 30 !important;
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.editorPage = (function () {
-	var cslCode,
+	var storage_cslCode = "CSLEDIT.cslCode",
 		editTimeout,
 		diffTimeout,
 		diffMatchPatch = new diff_match_patch(),
@@ -244,11 +244,13 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var runCiteproc = function () {
-		var style = cslCode;
+		var style = localStorage.getItem(storage_cslCode);
 		var inLineCitations = "";
 		var citations = [];
 		var formattedResult;
-		
+
+		console.log("retrieved style of length " + style.length);
+
 		document.getElementById("statusMessage").innerHTML = "";
 
 		formattedResult = citationEngine.formatCitations(
@@ -432,7 +434,7 @@ CSLEDIT.editorPage = (function () {
 
 	var updateTreeView = function () {
 		var nodeIndex = { index : 0 };
-		var jsonData = CSLEDIT.parser.jsonFromCslXml(cslCode, nodeIndex);
+		var jsonData = CSLEDIT.parser.jsonFromCslXml(localStorage.getItem(storage_cslCode), nodeIndex);
 
 		numCslNodes = nodeIndex.index + 1;
 
@@ -464,7 +466,7 @@ CSLEDIT.editorPage = (function () {
 	var treeViewChanged = function () {
 		var jsonData = $("#treeEditor").jstree("get_json", -1, [], []);
 		updateCslIds();
-		cslCode = CSLEDIT.parser.cslXmlFromJson(jsonData);
+		localStorage.setItem(storage_cslCode, CSLEDIT.parser.cslXmlFromJson(jsonData));
 
 		runCiteproc();
 	};
@@ -636,12 +638,19 @@ CSLEDIT.editorPage = (function () {
 				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
 			}
 
-			$.get(
-					styleURL, {}, function(data) {
-					cslCode = data;
-					updateTreeView();
-				}
-			);
+			var cslCode;
+			cslCode = localStorage.getItem(storage_cslCode);
+			if (cslCode !== null && cslCode !== "") {
+				updateTreeView();
+				console.log("using code from local storage: " + cslCode);
+			} else {
+				$.get(
+						styleURL, {}, function(data) {
+						localStorage.setItem(storage_cslCode, data);
+						updateTreeView();
+					}
+				);
+			}
 
 			$("#treeEditor").on("move_node.jstree", function () {
 				treeViewChanged();
