@@ -3,13 +3,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
-	<title>CSL IDE</title>
+	<title>Citation Style Editor</title>
 
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
 
-	<link rel="stylesheet" href="./docs.css" />
+	<!--link rel="stylesheet" href="./docs.css" /-->
 
 	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
 	<script type="text/javascript" src="../external/citeproc/xmldom.js"></script>
@@ -21,7 +21,7 @@
 
 	<script type="text/javascript" src="../external/jstree/_lib/jquery.hotkeys.js"></script>
 	<script type="text/javascript" src="../external/jstree/jquery.jstree.js"></script>
-	<link type="text/css" rel="stylesheet" href="../external/jstree/themes/default/style.css"/>
+	<link type="text/css" rel="stylesheet" href="../external/jstree/themes/default/style.css" />
 
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="exampleData.js"></script>
@@ -29,7 +29,7 @@
 	<script type="text/javascript" src="../src/debug.js"></script>
 	<script type="text/javascript" src="../src/cslJSON.js"></script>
 
-	<link type="text/css" rel="stylesheet" href="../external/SimplejQueryDropdowns/css/style.css"/>
+	<link type="text/css" rel="stylesheet" href="../css/dropdown.css" />
 
 <style type="text/css">
 
@@ -43,6 +43,8 @@ html, body {
 }
 #mainContainer {
 	height: 100%;
+	margin: 10px;
+	clear: both;
 }
 .searched {
 	background: yellow;
@@ -53,15 +55,15 @@ html, body {
 	height: 100%;
 	width: 100%;
 	overflow: auto;
+	padding-top: 5px;
 }
 #leftPane {
 	float: left;
 	width: 35%;
 	height: 100%;
-	background-color: #F5F5DC;
 }
 ul.dropdown {
-	float: left;
+/*	float: left;*/
 }
 #treeEditorTitle {
 	float: left;
@@ -75,6 +77,7 @@ ul.dropdown {
 /*	margin-top: 50%:*/
 	height: 65%;
 	overflow: auto;
+	cursor: default;
 }
 #elementProperties {
 	font-size: 14px;
@@ -103,6 +106,13 @@ input.propertyInput {
 label.propertyLabel {
 	min-width: 150px;
 	display: block;
+}
+button {
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 0;
+	padding-bottom: 0;
+	margin: 0;
 }
 
 /** Very hacky fix for jstree move between nodes bug:
@@ -135,34 +145,46 @@ z-index: 30 !important;
 	</p>
 </div>
 
-<div id="mainContainer">
-<div id="leftPane">
-	<!--h3 id="treeEditorTitle">CSL Structure</h3-->
-		<ul class="dropdown">
+<ul class="dropdown">
+	<li>
+		<a href="#">Style</a>
+		<ul class="sub_menu">
+			<li><a href="#">Load from URL</a></li>
+			<li><a href="#">Revert (undo all changes)</a></li>
+			<li><a href="#">Export CSL</a></li>
+		</ul>
+	</li>
+	<li>
+		<a href="#">Edit</a>
+		<ul class="sub_menu">
+			<li><a href="#">Add node</a>
+				<ul class="sub_menu">
+					 <li><a href="#">info</a></li>
+					 <li><a href="#">macro</a></li>
+					 <li><a href="#">locale</a></li>
+					 <li><a href="#">citation</a></li>
+					 <li><a href="#">bibliography</a></li>
+					 <li><a href="#">text</a></li>
+					 <li><a href="#">sort</a></li>
+					 <li><a href="#">layout</a></li>
+					 <li><a href="#">group</a></li>
+					 <li><a href="#">choose</a></li>
+					 <li><a href="#">if</a></li>
+					 <li><a href="#">else</a></li>
+					 <li><a href="#">names</a></li>
+					 <li><a href="#">name</a></li>
+					 <li><a href="#">substitute</a></li>
+					 <li><a href="#">label</a></li>
+				</ul>
+			</li>
 			<li>
 				<a href="#">Delete node</a>
 			</li>
-        	<li><a href="#">Add node</a>
-        		<ul class="sub_menu">
-        			 <li><a href="#">info</a></li>
-        			 <li><a href="#">macro</a></li>
-        			 <li><a href="#">locale</a></li>
-        			 <li><a href="#">citation</a></li>
-        			 <li><a href="#">bibliography</a></li>
-        			 <li><a href="#">text</a></li>
-        			 <li><a href="#">sort</a></li>
-        			 <li><a href="#">layout</a></li>
-        			 <li><a href="#">group</a></li>
-        			 <li><a href="#">choose</a></li>
-        			 <li><a href="#">if</a></li>
-        			 <li><a href="#">else</a></li>
-        			 <li><a href="#">names</a></li>
-        			 <li><a href="#">name</a></li>
-        			 <li><a href="#">substitute</a></li>
-        			 <li><a href="#">label</a></li>
-        		</ul>
-			</li>
 		</ul>
+	</li>
+</ul>
+<div id="mainContainer">
+<div id="leftPane">
 	<div id="treeEditor">
 	</div>
 </div>
@@ -212,21 +234,27 @@ CSLEDIT.editorPage = (function () {
 
 	highlightedCss = {
 			"color" : normalisedColor("black"),
-			"background-color" : normalisedColor("#bbffbb")
+			"background-color" : normalisedColor("#bbffbb"),
+			"cursor" : "pointer"
 		};
 	selectedCss = {
 			"color" : normalisedColor("white"),
-			"background-color" : normalisedColor("#009900")
+			"background-color" : normalisedColor("#009900"),
+			"cursor" : "default"
 		};
 	unHighlightedCss = {
 			"color" : "",
-			"background-color" : ""
+			"background-color" : "",
+			"cursor" : "default"
 		};
 
 	// resizing that can't be done with CSS
 	var setSizes = function () {
+		var mainContent = $('#mainContainer');
 		var treeEditor = $('#treeEditor');
-		treeEditor.height(treeEditor.parent().height() - $('#treeEditorTitle').outerHeight() - 32);
+
+		mainContent.height(mainContent.parent().height() - 20);
+		treeEditor.height(treeEditor.parent().height() - $('ul.dropdown').outerHeight() - 16);
 	};
 
 	// from https://gist.github.com/1771618
@@ -239,7 +267,6 @@ CSLEDIT.editorPage = (function () {
 		var stripRegExp = new RegExp("<" + tag + ".*?>|<\/\s*" + tag + "\s*?\>", "g");
 		var stripped = html;
 		stripped = stripped.replace(stripRegExp, "");
-		console.log("stripped of " + tag + ": " + stripped);
 		return stripped;
 	};
 
@@ -248,8 +275,6 @@ CSLEDIT.editorPage = (function () {
 		var inLineCitations = "";
 		var citations = [];
 		var formattedResult;
-
-		console.log("retrieved style of length " + style.length);
 
 		document.getElementById("statusMessage").innerHTML = "";
 
@@ -349,9 +374,11 @@ CSLEDIT.editorPage = (function () {
 
 	var unHighlightTree = function () {
 		var node;
+
 		while (highlightedTreeNodes.length > 0) {
 			node = highlightedTreeNodes.pop();
 			node.css(unHighlightedCss);
+			node.css("cursor", "");
 		}
 	};
 
@@ -366,6 +393,7 @@ CSLEDIT.editorPage = (function () {
 			highlightedNode = node.children('a');
 			highlightedTreeNodes.push(highlightedNode);
 			highlightedNode.css(highlightedCss);
+			highlightedNode.css("cursor", "");
 		}
 
 		parentNode = node.parent();
@@ -458,7 +486,10 @@ CSLEDIT.editorPage = (function () {
 			// it makes sense to configure a plugin only if overriding the defaults
 		});
 
-		//$("#leftPane").resizable({handles : 'e'});
+		$("#treeEditor").on("move_node.jstree", function () {
+			treeViewChanged();
+		});
+		$("#treeEditor").on("select_node.jstree", nodeSelected);
 
 		runCiteproc();
 	};
@@ -486,7 +517,7 @@ CSLEDIT.editorPage = (function () {
 		$("#elementProperties > *").remove();
 		
 		// create new ones
-		$('<h3>' + jsonData.metadata.name + ' properites</h3>').appendTo(propertyPanel);
+		$('<h3>' + jsonData.metadata.name + ' properites</h3><br \/>').appendTo(propertyPanel);
 		$('<table>').appendTo(propertyPanel);
 
 		// title editor (if a text element)
@@ -524,12 +555,17 @@ CSLEDIT.editorPage = (function () {
 
 		$('#addAttributeButton').click( function () {
 			var newAttribute = $('#newAttributeKey').val();
-			jsonData.metadata.attributes.push({
-				key : newAttribute,
-				value : ""
-			});
-			nodeSelected(event, ui);
-			treeViewChanged();
+			if (newAttribute === "")
+			{
+				alert('Please enter the attribute name first\ne.g. "text", "variable", "et-al-min"');
+			} else {
+				jsonData.metadata.attributes.push({
+					key : newAttribute,
+					value : ""
+				});
+				nodeSelected(event, ui);
+				treeViewChanged();
+			}
 		});
 
 		$(".propertyInput").on("input", function () {
@@ -538,31 +574,21 @@ CSLEDIT.editorPage = (function () {
 		});
 
 		$('.deleteAttrButton').click( function (buttonEvent) {
-			index = $(buttonEvent.target).attr("attrIndex");
+			if (confirm("Are you sure you want to delete this attribute?")) {
+				index = $(buttonEvent.target).attr("attrIndex");
 
-			$( "#dialog-confirm-delete" ).dialog({
-				resizable: false,
-				modal: true,
-				buttons: {
-					"Delete attribute": function() {
-						$( this ).dialog( "close" );
-						jsonData.metadata.attributes.splice(index, 1);
-						$("#treeEditor").jstree("rename_node", ui.rslt.obj,
-							CSLEDIT.parser.displayNameFromMetadata(jsonData.metadata));
-						nodeSelected(event, ui);
-						treeViewChanged();
-					},
-					Cancel: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				autoOpen:true
-			});
+				jsonData.metadata.attributes.splice(index, 1);
+				$("#treeEditor").jstree("rename_node", ui.rslt.obj,
+					CSLEDIT.parser.displayNameFromMetadata(jsonData.metadata));
+				nodeSelected(event, ui);
+				treeViewChanged();
+			}
 		});
 
 		$('span[cslid="' + oldSelectedNode + '"]').css(unHighlightedCss);
 		oldSelectedNode = cslId;
 
+		console.log("selecting node " + cslId);
 		$('span[cslid="' + cslId + '"]').css(selectedCss);
 	};
 
@@ -595,6 +621,16 @@ CSLEDIT.editorPage = (function () {
 	var updateCslIds = function () {
 		var jsonData = $("#treeEditor").jstree("get_json", -1, [], [])[0];
 		CSLEDIT.parser.updateCslIds(jsonData, {index:0});
+	};
+
+	var loadStyleFromUrl = function () {
+		$.get(styleURL, {}, function(data) {
+			// strip comments from style
+			data = data.replace(/<!--.*-->/, "");
+
+			localStorage.setItem(storage_cslCode, data);
+			updateTreeView();
+		});
 	};
 
 	return {
@@ -631,31 +667,23 @@ CSLEDIT.editorPage = (function () {
 				jsonData.push(createNode(index));
 			}
 			
-			styleURL = getUrlVar("styleURL");
-			if (styleURL == "" || typeof styleURL === 'undefined') {
-				styleURL = "../external/custom-styles/apa.csl";
-			} else {
-				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-			}
-
 			var cslCode;
 			cslCode = localStorage.getItem(storage_cslCode);
-			if (cslCode !== null && cslCode !== "") {
-				updateTreeView();
-				console.log("using code from local storage: " + cslCode);
-			} else {
-				$.get(
-						styleURL, {}, function(data) {
-						localStorage.setItem(storage_cslCode, data);
-						updateTreeView();
-					}
-				);
-			}
+			styleURL = getUrlVar("styleURL");
+			console.log("url from url: " + styleURL);
 
-			$("#treeEditor").on("move_node.jstree", function () {
-				treeViewChanged();
-			});
-			$("#treeEditor").on("select_node.jstree", nodeSelected);
+			if (styleURL != "" && typeof styleURL !== 'undefined') {
+				console.log("loading given URL");
+				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
+				loadStyleFromUrl(styleURL);
+			} else if (cslCode !== null && cslCode !== "") {
+				console.log("loading previous style");
+				updateTreeView();
+			} else {
+				console.log("loading default style - apa.csl");
+				styleURL = "../external/custom-styles/apa.csl";
+				loadStyleFromUrl(styleURL);
+			}
 
 			$(".propertyInput").on("change", nodeChanged);
 
@@ -663,27 +691,58 @@ CSLEDIT.editorPage = (function () {
 				var clickedName = $(event.target).text();
 				var selectedNode = $('#treeEditor').jstree('get_selected');
 
-				if ($(event.target).parent().parent().attr("class") === "sub_menu") {
-					$(event.target).parent().parent().css('visibility', 'hidden');
-					
-					// create new node after the selected one
-					$('#treeEditor').jstree('create_node', selectedNode, "after",
-					{
-						"data" : clickedName,
-						"attr" : { "rel" : clickedName, "cslid" : 0 },
-						"metadata" : {
-							"name" : clickedName,
-							"attributes" : [],
-							"textValue" : undefined,
-							"cslId" : 0
-						},
-						"children" : []
-					});
-					treeViewChanged();
-				} else if (clickedName === "Delete node") {
-					console.log("Node deleted");
-					$('#treeEditor').jstree('remove', selectedNode);
-					treeViewChanged();
+				var parentNode = $(event.target).parent().parent();
+				var parentNodeName;
+
+				console.log("clicked node = " + clickedName);
+
+				if (parentNode.attr("class") === "sub_menu")
+				{
+					parentNodeName = parentNode.siblings('a').text();
+
+					if (/^Edit/.test(parentNodeName)) {
+						if (clickedName === "Delete node") {
+							if (confirm("Are you sure you want to delete this node?")) {
+								$('#treeEditor').jstree('remove', selectedNode);
+								treeViewChanged();
+							}
+						}
+					} else if ((/^Add node/).test(parentNodeName)) {
+						console.log("parent node = " + parentNode.siblings('a').text());
+						$(event.target).parent().parent().css('visibility', 'hidden');
+						
+						// create new node after the selected one
+						$('#treeEditor').jstree('create_node', selectedNode, "after",
+						{
+							"data" : clickedName,
+							"attr" : { "rel" : clickedName, "cslid" : 0 },
+							"metadata" : {
+								"name" : clickedName,
+								"attributes" : [],
+								"textValue" : undefined,
+								"cslId" : 0
+							},
+							"children" : []
+						});
+						treeViewChanged();
+					} else if ((/^Style/).test(parentNodeName)) {
+						if (clickedName === "Revert (undo all changes)") {
+							loadStyleFromUrl(styleURL);
+						} else if (clickedName === "Export CSL") {
+							window.location.href =
+								"data:application/xml;charset=utf-8," +
+								encodeURIComponent(localStorage.getItem(storage_cslCode));
+						} else if (clickedName === "Load from URL") {
+							var URL = prompt("Please enter the URL of the style you wish to load");
+							// have to reload the page to use the trick of downloading the URL
+							// server side
+							var reloadURL = window.location.href;
+							reloadURL = reloadURL.replace(/#/, "");
+							reloadURL = reloadURL.replace(/\?.*$/, "");
+							console.log(reloadURL);
+							window.location.href = reloadURL + "?styleURL=" + URL;
+						}
+					}
 				}
 			});
 
