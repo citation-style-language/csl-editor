@@ -702,7 +702,7 @@ CSLEDIT.editorPage = (function () {
 				updateTreeView();
 			} else {
 				console.log("loading default style - apa.csl");
-				styleURL = "../external/custom-styles/apa.csl";
+				styleURL = "../external/csl-styles/apa.csl";
 				loadStyleFromUrl(styleURL);
 			}
 
