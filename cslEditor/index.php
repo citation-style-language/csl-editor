@@ -235,6 +235,14 @@ CSLEDIT.editorPage = (function () {
 		return result && unescape(result[1]) || "";
 	};
 
+	var stripTags = function (html, tag) {
+		var stripRegExp = new RegExp("<" + tag + ".*?>|<\/\s*" + tag + "\s*?\>", "g");
+		var stripped = html;
+		stripped = stripped.replace(stripRegExp, "");
+		console.log("stripped of " + tag + ": " + stripped);
+		return stripped;
+	};
+
 	var runCiteproc = function () {
 		var style = cslCode;
 		var inLineCitations = "";
@@ -253,11 +261,11 @@ CSLEDIT.editorPage = (function () {
 		newFormattedBibliography = formattedResult.formattedBibliography;
 
 		var dmp = diffMatchPatch;
-		var diffs = dmp.diff_main(oldFormattedCitation, newFormattedCitation);
+		var diffs = dmp.diff_main(stripTags(oldFormattedCitation, "span"), stripTags(newFormattedCitation, "span"));
 		dmp.diff_cleanupSemantic(diffs);
 		var diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(diffs));
 
-		diffs = dmp.diff_main(oldFormattedBibliography, newFormattedBibliography);
+		diffs = dmp.diff_main(stripTags(oldFormattedBibliography, "span"), stripTags(newFormattedBibliography, "span"));
 		dmp.diff_cleanupSemantic(diffs);
 		var diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(diffs));
 
