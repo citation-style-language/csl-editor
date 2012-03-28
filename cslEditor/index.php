@@ -61,7 +61,7 @@ html, body {
 	background-color: #F5F5DC;
 }
 ul.dropdown {
-	float: right;
+	float: left;
 }
 #treeEditorTitle {
 	float: left;
@@ -137,8 +137,11 @@ z-index: 30 !important;
 
 <div id="mainContainer">
 <div id="leftPane">
-	<h3 id="treeEditorTitle">CSL Structure</h3>
+	<!--h3 id="treeEditorTitle">CSL Structure</h3-->
 		<ul class="dropdown">
+			<li>
+				<a href="#">Delete node</a>
+			</li>
         	<li><a href="#">Add node</a>
         		<ul class="sub_menu">
         			 <li><a href="#">info</a></li>
@@ -269,8 +272,8 @@ CSLEDIT.editorPage = (function () {
 				$("#formattedCitations").html(newFormattedCitation);
 				$("#formattedBibliography").html(newFormattedBibliography);
 				doSyntaxHighlighting();	
-			}
-		, 1000);
+			},
+		1000);
 
 		document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
 	};
@@ -322,16 +325,12 @@ CSLEDIT.editorPage = (function () {
 		// undo previous highlighting
 		unHighlightTree();
 		highlightTree($('li[cslid="' + nodeIndex + '"]'), 0);
-
-		// TODO: scroll to correct element
 	};
 
 	var reverseSelectNode = function () {
 		assert(hoveredNodeStack.length > 0);
 
 		var cslid = hoveredNodeStack[hoveredNodeStack.length - 1];
-
-		console.log("clicked " + cslid);
 
 		// expand jstree
 		$('#treeEditor').jstree("open_node", 'li[cslid="' + cslid + '"]');
@@ -442,7 +441,8 @@ CSLEDIT.editorPage = (function () {
 				}
 			},
 				
-			"plugins" : ["themes","json_data","ui", "crrm", "dnd", "contextmenu", "types", "hotkeys"],
+			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
+				"types", "hotkeys"],
 			// each plugin you have included can have its own config object
 			"core" : { "initially_open" : [ "node1" ] }
 			// it makes sense to configure a plugin only if overriding the defaults
@@ -455,6 +455,7 @@ CSLEDIT.editorPage = (function () {
 
 	var treeViewChanged = function () {
 		var jsonData = $("#treeEditor").jstree("get_json", -1, [], []);
+		updateCslIds();
 		cslCode = CSLEDIT.parser.cslXmlFromJson(jsonData);
 
 		runCiteproc();
@@ -518,6 +519,7 @@ CSLEDIT.editorPage = (function () {
 				value : ""
 			});
 			nodeSelected(event, ui);
+			treeViewChanged();
 		});
 
 		$(".propertyInput").on("input", function () {
@@ -546,11 +548,6 @@ CSLEDIT.editorPage = (function () {
 				},
 				autoOpen:true
 			});
-			
-
-//			$('[class=propertyInput][attr="' + index + '"]').val("");
-//			console.log("delete attr " + index);
-//			treeViewChanged();
 		});
 
 		$('span[cslid="' + oldSelectedNode + '"]').css(unHighlightedCss);
@@ -570,8 +567,6 @@ CSLEDIT.editorPage = (function () {
 		var index;
 		var key, value;
 
-		//alert("num attrs = " + numAttributes);
-
 		for (index = 0; index < numAttributes; index++) {
 			key = $("#nodeAttributeLabel" + index).html();
 			value = $("#nodeAttribute" + index).val();
@@ -582,6 +577,8 @@ CSLEDIT.editorPage = (function () {
 		}
 		jsonData.metadata.attributes = attributes;
 
+		$("#treeEditor").jstree("rename_node", selectedNode,
+			CSLEDIT.parser.displayNameFromMetadata(jsonData.metadata));
 		treeViewChanged();
 	};
 
@@ -639,7 +636,6 @@ CSLEDIT.editorPage = (function () {
 			);
 
 			$("#treeEditor").on("move_node.jstree", function () {
-				updateCslIds();
 				treeViewChanged();
 			});
 			$("#treeEditor").on("select_node.jstree", nodeSelected);
@@ -648,13 +644,12 @@ CSLEDIT.editorPage = (function () {
 
 			$(".dropdown a").click(function (event) {
 				var clickedName = $(event.target).text();
-				console.log("clicked " + clickedName);
+				var selectedNode = $('#treeEditor').jstree('get_selected');
+
 				if ($(event.target).parent().parent().attr("class") === "sub_menu") {
 					$(event.target).parent().parent().css('visibility', 'hidden');
 					
 					// create new node after the selected one
-					var selectedNode = $('#treeEditor').jstree('get_selected');
-
 					$('#treeEditor').jstree('create_node', selectedNode, "after",
 					{
 						"data" : clickedName,
@@ -667,7 +662,11 @@ CSLEDIT.editorPage = (function () {
 						},
 						"children" : []
 					});
-					updateCslIds();
+					treeViewChanged();
+				} else if (clickedName === "Delete node") {
+					console.log("Node deleted");
+					$('#treeEditor').jstree('remove', selectedNode);
+					treeViewChanged();
 				}
 			});
 
