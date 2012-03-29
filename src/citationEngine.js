@@ -84,7 +84,10 @@ formatCitations: function (style, documents, citationClusters) {
 		bibliography = [[(citations[0][1])]];
 	}
 
-	result.formattedBibliography = bibliography.join("<br>");
+
+	result.formattedBibliography = "<p>";
+	result.formattedBibliography += bibliography.join("<\/p><p>");
+	result.formattedBibliography += "<\/p>";
 
 	return result;
 }

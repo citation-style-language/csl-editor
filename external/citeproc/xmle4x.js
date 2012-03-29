@@ -45,15 +45,7 @@
  * recipient may use your version of this file under either the CPAL
  * or the [AGPLv3] License.”
  */
-
-/**
- * Functions for parsing an XML object using E4X.
- */
 var CSL_E4X = function () {};
-
-/**
- * E4X can't handle XML declarations, so we lose them here.
- */
 CSL_E4X.prototype.clean = function (xml) {
     xml = xml.replace(/<\?[^?]+\?>/g, "");
     xml = xml.replace(/<![^>]+>/g, "");
@@ -61,11 +53,6 @@ CSL_E4X.prototype.clean = function (xml) {
     xml = xml.replace(/\s+$/g, "");
     return xml;
 };
-
-
-/**
- * Methods to call on a node.
- */
 CSL_E4X.prototype.getStyleId = function (myxml) {
     var text = "";
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
@@ -75,16 +62,14 @@ CSL_E4X.prototype.getStyleId = function (myxml) {
     }
     return text;
 };
-
 CSL_E4X.prototype.children = function (myxml) {
+    default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
     return myxml.children();
 };
-
 CSL_E4X.prototype.nodename = function (myxml) {
     var ret = myxml.localName();
     return ret;
 };
-
 CSL_E4X.prototype.attributes = function (myxml) {
     var ret, attrs, attr, key, xml;
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
@@ -92,45 +77,29 @@ CSL_E4X.prototype.attributes = function (myxml) {
     attrs = myxml.attributes();
     for each (attr in attrs) {
         key = "@" + attr.localName();
-        //
-        // Needed in rhino
-        //
         if (key.slice(0,5) == "@e4x_") {
             continue;
         }
-        //var value = attr;
         ret[key] = attr.toString();
     }
     return ret;
 };
-
-
 CSL_E4X.prototype.content = function (myxml) {
     return myxml.toString();
 };
-
-
 CSL_E4X.prototype.namespace = {
     "xml":"http://www.w3.org/XML/1998/namespace"
 }
-
 CSL_E4X.prototype.numberofnodes = function (myxml) {
     return myxml.length();
 };
-
 CSL_E4X.prototype.getAttributeName = function (attr) {
     var ret = attr.localName();
     return ret;
 }
-
 CSL_E4X.prototype.getAttributeValue = function (myxml,name,namespace) {
     var xml;
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
-    //
-    // Oh, okay, I get it.  The syntax does not lend itself to parameterization,
-    // but one of the elements is a variable, so it can be set before
-    // the call.  Jeez but this feels ugly.  Does work, though.
-    //
     if (namespace) {
         var ns = new Namespace(this.namespace[namespace]);
         var ret = myxml.@ns::[name].toString();
@@ -143,7 +112,6 @@ CSL_E4X.prototype.getAttributeValue = function (myxml,name,namespace) {
     }
     return ret;
 }
-
 CSL_E4X.prototype.getNodeValue = function (myxml,name) {
     var xml;
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
@@ -153,7 +121,6 @@ CSL_E4X.prototype.getNodeValue = function (myxml,name) {
         return myxml.toString();
     }
 }
-
 CSL_E4X.prototype.setAttributeOnNodeIdentifiedByNameAttribute = function (myxml,nodename,attrname,attr,val) {
     var xml;
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
@@ -162,23 +129,19 @@ CSL_E4X.prototype.setAttributeOnNodeIdentifiedByNameAttribute = function (myxml,
     }
     myxml[nodename].(@name == attrname)[0][attr] = val;
 }
-
 CSL_E4X.prototype.deleteNodeByNameAttribute = function (myxml,val) {
     delete myxml.*.(@name==val)[0];
 }
-
 CSL_E4X.prototype.deleteAttribute = function (myxml,attr) {
     delete myxml["@"+attr];
 }
-
 CSL_E4X.prototype.setAttribute = function (myxml,attr,val) {
+    default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
     myxml['@'+attr] = val;
 }
-
 CSL_E4X.prototype.nodeCopy = function (myxml) {
     return myxml.copy();
 }
-
 CSL_E4X.prototype.getNodesByName = function (myxml,name,nameattrval) {
     var xml, ret;
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
@@ -188,7 +151,6 @@ CSL_E4X.prototype.getNodesByName = function (myxml,name,nameattrval) {
     }
     return ret;
 }
-
 CSL_E4X.prototype.nodeNameIs = function (myxml,name) {
     var xml;
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
@@ -197,34 +159,26 @@ CSL_E4X.prototype.nodeNameIs = function (myxml,name) {
     }
     return false;
 }
-
 CSL_E4X.prototype.makeXml = function (myxml) {
     var xml;
-    // Reset to XML defaults before plunging into E4X.
-    // Per https://www.zotero.org/trac/ticket/1780
     XML.ignoreComments = true;
     XML.ignoreProcessingInstructions = true;
      XML.ignoreWhitespace = true;
     XML.prettyPrinting = true;
     XML.prettyIndent = 2;
-    
     if ("xml" == typeof myxml){
-        // print("forcing serialization of xml to fix up namespacing");
         myxml = myxml.toXMLString();
     };
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
     xml = new Namespace("http://www.w3.org/XML/1998/namespace");
     if (myxml){
-        // print("deserializing xml");
         myxml = myxml.replace(/\s*<\?[^>]*\?>\s*\n*/g, "");
         myxml = new XML(myxml);
     } else {
-        // print("no xml");
         myxml = new XML();
     }
     return myxml;
 };
-
 CSL_E4X.prototype.insertChildNodeAfter = function (parent,node,pos,datexml) {
     var myxml, xml;
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
@@ -233,7 +187,6 @@ CSL_E4X.prototype.insertChildNodeAfter = function (parent,node,pos,datexml) {
     delete parent.*[pos];
     return parent;
 };
-
 CSL_E4X.prototype.insertPublisherAndPlace = function(myxml) {
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
     for each (var node in myxml..group) {
@@ -245,11 +198,9 @@ CSL_E4X.prototype.insertPublisherAndPlace = function(myxml) {
                             twovars.push(child.@variable.toString());
                             if (child.@suffix.toString()
                                 || child.@prefix.toString()) {
-                                
                                 twovars = [];
                                 break;
                             }
-
                         }
                     }
                 if (twovars.indexOf("publisher") > -1 && twovars.indexOf("publisher-place") > -1) {
@@ -258,7 +209,6 @@ CSL_E4X.prototype.insertPublisherAndPlace = function(myxml) {
             }
         }
 };
-
 CSL_E4X.prototype.addMissingNameNodes = function(myxml) {
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
     for each (node in myxml..names) {
@@ -268,31 +218,23 @@ CSL_E4X.prototype.addMissingNameNodes = function(myxml) {
         }
     }
 };
-
 CSL_E4X.prototype.addInstitutionNodes = function(myxml) {
     var institution_long, institution_short, name_part, children, node, xml;
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
-    //institution_short = <institution
-    //    institution-parts="long"
-    //    delimiter=", "
-    //    substitute-use-first="1"
-    //    use-last="1"/>;
     for each (node in myxml..names) {
-        //print("names");
         if ("xml" == typeof node && node.elements("name").length() > 0) {
+            var name = node.name[0];
             if (node.institution.length() === 0) {
-                //print("adding node");
                 institution_long = <institution
                     institution-parts="long"
                     substitute-use-first="1"
                     use-last="1"/>
                 institution_part = <institution-part name="long"/>;
-                node.name += institution_long;
+                node.insertChildAfter(name,institution_long);
                 node.institution.@delimiter = node.name.@delimiter.toString();
                 if (node.name.@and.toString()) {
                     node.institution.@and = "text";
                 }
-
                 node.institution[0].appendChild(institution_part);
                 for each (var attr in CSL.INSTITUTION_KEYS) {
                     if (node.name.@[attr].toString()) {
@@ -312,7 +254,6 @@ CSL_E4X.prototype.addInstitutionNodes = function(myxml) {
         }
     }
 };
-
 CSL_E4X.prototype.flagDateMacros = function(myxml) {
     default xml namespace = "http://purl.org/net/xbiblio/csl"; with({});
     for each (node in myxml..macro) {

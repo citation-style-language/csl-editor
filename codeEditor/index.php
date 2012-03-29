@@ -21,23 +21,26 @@
 	<script type="text/javascript" src="../external/diff-match-patch/diff_match_patch.js"></script>
 
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
-	<script type="text/javascript" src="exampleData.js"></script>
+	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
+	<script type="text/javascript" src="../src/cslJSON.js"></script>
+	<script type="text/javascript" src="../src/cslCode.js"></script>
 
-	<style type="text/css">
-		#code {
-			border: 1px solid #eee;
-			overflow: auto;
-		}
-		.searched {
-			background: yellow;
-		}
-	</style>
+	<link rel="stylesheet" href="../css/base.css" />
+
+<style type="text/css">
+#code {
+	border: 1px solid #eee;
+	overflow: auto;
+}
+.searched {
+	background: yellow;
+}
+</style>
 </head>
-<body>
-<h1>CSL IDE</h1>
-<!--<input type="file" id="files" name="files[]" />-->
-<output id="list"></output>
+<body id="codeEditor">
+
+<?php include '../html/navigation.html'; ?>
 
 <form name="codeForm">
 	<textarea id="code" name="code">
@@ -76,7 +79,7 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var runCiteproc = function () {
-		var style = editor.getValue();
+		var style = CSLEDIT.code.get();
 		var inLineCitations = "";
 		var citations = [];
 		var formattedResult;
@@ -121,7 +124,10 @@ CSLEDIT.editorPage = (function () {
 			CodeMirror.defaults.onChange = function()
 			{
 				clearTimeout(codeTimeout);
-				codeTimeout = setTimeout(runCiteproc, 500);
+				codeTimeout = setTimeout( function () {
+					CSLEDIT.code.set(editor.getValue());
+					runCiteproc();
+				}, 500);
 			};
 
 			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -129,18 +135,9 @@ CSLEDIT.editorPage = (function () {
 					lineNumbers: true
 			});
 
-			styleURL = getUrlVar("styleURL");
-			if (styleURL == "" || typeof styleURL === 'undefined') {
-				styleURL = "../external/csl-styles/apa.csl";
-			} else {
-				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-			}
-
-			$.get(
-					styleURL, {}, function(data) { 
-					editor.setValue(data);
-				}
-			);
+			CSLEDIT.code.initPageStyle( function () {
+				editor.setValue(CSLEDIT.code.get());
+			});
 		}
 	};
 }());

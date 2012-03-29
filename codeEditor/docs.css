@@ -2,8 +2,8 @@ body {
   font-family: Droid Sans, Arial, sans-serif;
   line-height: 1.5;
   max-width: 64.3em;
-  margin: 3em auto;
-  margin-top: 1em;
+  margin: 0;
+  margin-top: 0;
   padding: 0 1em;
 }
 
@@ -57,7 +57,7 @@ img.logo {
   right: -25px;
   bottom: 4px;
 }
-
+/*
 a:link, a:visited, .quasilink {
   color: #df0019;
   cursor: pointer;
@@ -71,7 +71,7 @@ a:hover, .quasilink:hover {
 h1 a:link, h1 a:visited, h1 a:hover {
   color: black;
 }
-
+*/
 ul {
   margin: 0;
   padding-left: 1.2em;
