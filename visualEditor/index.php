@@ -9,8 +9,6 @@
 	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
 
-	<!--link rel="stylesheet" href="./docs.css" /-->
-
 	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
 	<script type="text/javascript" src="../external/citeproc/xmldom.js"></script>
 	<script type="text/javascript" src="../external/citeproc/citeproc.js"></script>
@@ -31,14 +29,9 @@
 
 	<link type="text/css" rel="stylesheet" href="../css/dropdown.css" />
 
+	<link rel="stylesheet" href="../css/base.css" />
 <style type="text/css">
-
-* {
-	margin: 0;
-	padding: 0;
-}
 html, body {
-	height: 100%;
 	overflow: hidden;
 }
 #mainContainer {
@@ -75,9 +68,19 @@ ul.dropdown {
 }
 #exampleOutput {
 /*	margin-top: 50%:*/
-	height: 65%;
+	height: 60%;
 	overflow: auto;
 	cursor: default;
+	font-family:Verdana,Geneva,'DejaVu Sans',sans-serif;
+	line-height: 1.3;
+}
+#exampleOutput p {
+	margin-top: 0;
+	margin-bottom: 0.2em;
+}
+#exampleOutput h3 {
+	margin-top: 0.5em;
+	margin-bottom: 0.1em;
 }
 #elementProperties {
 	font-size: 14px;
@@ -85,10 +88,6 @@ ul.dropdown {
 	width: 100%;
 	height: 40%;
 	overflow: auto;
-}
-table {
-	width: 100%;
-	margin: 10px, 0;
 }
 #elementProperties > table,
 #elementProperties > table > tr,
@@ -136,7 +135,9 @@ z-index: 30 !important;
 </style>
 </head>
 
-<body>
+<body id="visualEditor">
+
+<?php include '../html/navigation.html'; ?>
 
 <div id="dialog-confirm-delete" title="Delete?">
 	<p>
@@ -253,8 +254,8 @@ CSLEDIT.editorPage = (function () {
 		var mainContent = $('#mainContainer');
 		var treeEditor = $('#treeEditor');
 
-		mainContent.height(mainContent.parent().height() - 20);
-		treeEditor.height(treeEditor.parent().height() - $('ul.dropdown').outerHeight() - 16);
+		mainContent.height(mainContent.parent().height() - 60);
+		treeEditor.height(treeEditor.parent().height());
 	};
 
 	// from https://gist.github.com/1771618
@@ -282,10 +283,24 @@ CSLEDIT.editorPage = (function () {
 			style, cslEditorExampleData.jsonDocuments, cslEditorExampleData.citationsItems);
 
 		oldFormattedCitation = newFormattedCitation;
-		newFormattedCitation = formattedResult.formattedCitations.join("<br />");
+		newFormattedCitation = "<p>";
+		newFormattedCitation += formattedResult.formattedCitations.join("<\/p><p>");
+		newFormattedCitation += "<\/p>";
 
 		oldFormattedBibliography = newFormattedBibliography;
 		newFormattedBibliography = formattedResult.formattedBibliography;
+
+		if (newFormattedBibliography.indexOf("<second-field-align>") > -1) {
+			$("#exampleOutput").css({
+				"padding-left" : "2em",
+				"text-indent" : "-2em"
+			});
+		} else {
+			$("#exampleOutput").css({
+				"padding-left" : "0",
+				"text-indent" : "0"
+			});
+		}
 
 		var dmp = diffMatchPatch;
 		var diffs = dmp.diff_main(stripTags(oldFormattedCitation, "span"), stripTags(newFormattedCitation, "span"));
