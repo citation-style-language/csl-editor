@@ -21,8 +21,9 @@
 	<script type="text/javascript" src="../external/diff-match-patch/diff_match_patch.js"></script>
 
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
-	<script type="text/javascript" src="exampleData.js"></script>
+	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
+	<script type="text/javascript" src="../src/cslCode.js"></script>
 
 	<link rel="stylesheet" href="../css/base.css" />
 
@@ -77,7 +78,7 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var runCiteproc = function () {
-		var style = editor.getValue();
+		var style = CSLEDIT.code.get();
 		var inLineCitations = "";
 		var citations = [];
 		var formattedResult;
@@ -122,7 +123,10 @@ CSLEDIT.editorPage = (function () {
 			CodeMirror.defaults.onChange = function()
 			{
 				clearTimeout(codeTimeout);
-				codeTimeout = setTimeout(runCiteproc, 500);
+				codeTimeout = setTimeout( function () {
+					CSLEDIT.code.set(editor.getValue());
+					runCiteproc();
+				}, 500);
 			};
 
 			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -139,7 +143,9 @@ CSLEDIT.editorPage = (function () {
 
 			$.get(
 					styleURL, {}, function(data) { 
-					editor.setValue(data);
+						data = data.replace(/<!--.*?-->/g, "");
+						CSLEDIT.code.set(data);
+						editor.setValue(data);
 				}
 			);
 		}

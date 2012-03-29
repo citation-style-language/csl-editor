@@ -21,9 +21,15 @@
 
 	<script type="text/javascript" src="../external/diff-match-patch/diff_match_patch.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
+	<script type="text/javascript" src="../src/cslCode.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="../src/searchResults.js" charset="UTF-8"></script>
 	
 	<link rel="stylesheet" href="../css/base.css" />
 <style>
+#mainContent {
+	padding: 8px;
+	width: 800px;
+}
 input, textarea
 {
 	width: 100%;
@@ -35,9 +41,9 @@ h1
 }
 #exampleDocument
 {
-	float: left;
+	float: right;
 	margin-left: 5px;
-	width: 53%;
+	width: 48%;
 	background-color: #F5F5DC;
 	border-style: solid;
 	border-width: 2px;
@@ -49,47 +55,37 @@ h1
 #styleFormatInputControls
 {
 	float: left;
-	width: 45%;
+	width: 50%;
 	margin-left: 0px;
 }
 .clearDiv
 {
 	clear: both;
 }
-#userCitation, #userBibliography
-{
+div#styleFormatResult {
+	padding: 0 22px 0;
+	width: 600px;
 }
 </style>
 </head>
 <body id="searchByExample">
 <?php include '../html/navigation.html'; ?>
-<div id="inputTabs">
-	<ul>
-		<li><a href="#styleNameInput">Search by style name</a></li>
-		<li><a href="#styleFormatInput">Search by style format</a></li>
-	</ul>
-	<div id="styleNameInput">
-<!--		Search by style name... <br />
-		(very slow algorithm at present, but fine for the current style repo) <br />-->
-		<input type="text" id="styleNameQuery" placeholder="Type journal title here" />
+<div id="mainContent">
+<div id="styleFormatInput">
+	<div id="styleFormatInputControls">
+		<p id=explanation></p>
+		Edit in-line citation:
+		<textarea type="text" id="userCitation" placeholder="Type inline citation here" ></textarea>
+		<br />
+		Edit bibliography entry:
+		<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
 	</div>
-	<div id="styleFormatInput">
-		<div id="styleFormatInputControls">
-			<p id=explanation></p>
-			Edit in-line citation:
-			<textarea type="text" id="userCitation" placeholder="Type inline citation here" ></textarea>
-			<br />
-			Edit bibliography entry:
-			<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
-		</div>
-		<div id=exampleDocument></div>
-		<div class=clearDiv>
-		</div>
+	<div id=exampleDocument></div>
+	<div class=clearDiv>
 	</div>
 </div>
-
-<output id="styleNameResult"></output><p />
-<output id="styleFormatResult"></output><p />
+<div id="styleFormatResult"></div>
+</div>
 <script>
 
 "use strict";
@@ -104,58 +100,6 @@ CSLEDIT.finderPage = (function () {
 	var escapeHTML = function (string) {
 		return $('<pre>').text(string).html();
 	};
-
-	// --- Functions for style name search ---
-	var searchForStyleName = function () {
-		var searchQuery = $("#styleNameQuery").val(),
-			searchQueryLower = searchQuery.toLowerCase(),
-			result = [],
-			styleId,
-			styleName,
-			masterId,
-			masterStyleName;
-
-		if (searchQuery.length === 0) {
-			$("#styleNameResult").html("");
-			return;
-		}
-
-		if (searchQuery.length < 3) {
-			$("#styleNameResult").html("<p>Query too short<\/p>");
-			return;
-		}
-
-		// dumb search, just iterates through all the names
-		for (styleId in exampleCitations.styleTitleFromId) {
-			if (exampleCitations.styleTitleFromId.hasOwnProperty(styleId)) {
-				styleName = exampleCitations.styleTitleFromId[styleId];
-
-				if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
-					styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
-					masterId = exampleCitations.masterIdFromId[styleId];
-					if (masterId !== styleId) {
-						masterStyleName = ' (same as <a href="' + masterId + '">' +
-							exampleCitations.styleTitleFromId[masterId] + '<\/a>)';
-					} else {
-						masterStyleName = "";
-					}
-					result.push({
-							styleId : styleId,
-							masterId : masterId
-						});
-				}
-			}
-		}
-
-		displaySearchResults(result, $("#styleNameResult"));
-
-		//$("#styleNameResult").html(
-		//	'<p>' + result.length + ' results for query "' + searchQuery + '": <\/p>' +
-		//		result.join("<p><p>")
-		//);
-
-		// TODO: order results by shortest
-	}
 
 	var displaySearchResults = function (styles, outputNode) {
 		var index,
@@ -210,11 +154,6 @@ CSLEDIT.finderPage = (function () {
 				outputList.join("<p><p>")
 		);
 	};
-
-	function nameSearch() {
-		clearTimeout(nameSearchTimeout);
-		nameSearchTimeout = setTimeout(searchForStyleName, 1000);
-	}
 
 	// --- Functions for formatted style search ---
 
@@ -319,7 +258,7 @@ CSLEDIT.finderPage = (function () {
 			);
 		}
 		
-		displaySearchResults(result, $("#styleFormatResult"));
+		CSLEDIT.searchResults.displaySearchResults(result, $("#styleFormatResult"));
 	}
 
 	function formatFindByStyleExampleDocument() {
@@ -360,22 +299,18 @@ CSLEDIT.finderPage = (function () {
 					}
 				}
 			});
-			$.cleditor.defaultOptions.width = 300;
+			$.cleditor.defaultOptions.width = 390;
 			$.cleditor.defaultOptions.height = 100;
 			$.cleditor.defaultOptions.controls =
 				"bold italic underline strikethrough subscript superscript ";
 			//		+ "| undo redo | cut copy paste";
 
-			var userCitationInput = $("#userCitation").cleditor({height: 70})[0];
-			$("#userBibliography").cleditor({height: 100});
+			var userCitationInput = $("#userCitation").cleditor({height: 55})[0];
+			$("#userBibliography").cleditor({height: 85});
 
 			$("#userCitation").cleditor()[0].change(formChanged);
 			$("#userBibliography").cleditor()[0].change(formChanged);
-
-			$("#styleNameQuery").on("input", function(){nameSearch();});
 		
-			searchForStyleName();
-
 			// prepopulate search by style format with APA example
 			$("#userCitation").cleditor()[0].doc.body.innerHTML =
 				exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].formattedCitations[0];

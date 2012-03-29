@@ -22,10 +22,11 @@
 	<link type="text/css" rel="stylesheet" href="../external/jstree/themes/default/style.css" />
 
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
-	<script type="text/javascript" src="exampleData.js"></script>
+	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
 	<script type="text/javascript" src="../src/debug.js"></script>
 	<script type="text/javascript" src="../src/cslJSON.js"></script>
+	<script type="text/javascript" src="../src/cslCode.js"></script>
 
 	<link type="text/css" rel="stylesheet" href="../css/dropdown.css" />
 
@@ -150,6 +151,7 @@ z-index: 30 !important;
 	<li>
 		<a href="#">Style</a>
 		<ul class="sub_menu">
+			<li><a href="#">New style</a></li>
 			<li><a href="#">Load from URL</a></li>
 			<li><a href="#">Revert (undo all changes)</a></li>
 			<li><a href="#">Export CSL</a></li>
@@ -212,8 +214,7 @@ z-index: 30 !important;
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.editorPage = (function () {
-	var storage_cslCode = "CSLEDIT.cslCode",
-		editTimeout,
+	var editTimeout,
 		diffTimeout,
 		diffMatchPatch = new diff_match_patch(),
 		oldFormattedCitation = "",
@@ -258,12 +259,6 @@ CSLEDIT.editorPage = (function () {
 		treeEditor.height(treeEditor.parent().height());
 	};
 
-	// from https://gist.github.com/1771618
-	var getUrlVar = function (key) {
-		var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
-		return result && unescape(result[1]) || "";
-	};
-
 	var stripTags = function (html, tag) {
 		var stripRegExp = new RegExp("<" + tag + ".*?>|<\/\s*" + tag + "\s*?\>", "g");
 		var stripped = html;
@@ -272,7 +267,7 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var runCiteproc = function () {
-		var style = localStorage.getItem(storage_cslCode);
+		var style = CSLEDIT.code.get();
 		var inLineCitations = "";
 		var citations = [];
 		var formattedResult;
@@ -477,7 +472,7 @@ CSLEDIT.editorPage = (function () {
 
 	var updateTreeView = function () {
 		var nodeIndex = { index : 0 };
-		var jsonData = CSLEDIT.parser.jsonFromCslXml(localStorage.getItem(storage_cslCode), nodeIndex);
+		var jsonData = CSLEDIT.parser.jsonFromCslXml(CSLEDIT.code.get(), nodeIndex);
 
 		numCslNodes = nodeIndex.index + 1;
 
@@ -511,7 +506,7 @@ CSLEDIT.editorPage = (function () {
 			if (confirm("Are you sure you want to delete this node?")) {
 				treeViewChanged();
 			} else {
-				updateCslData(localStorage.getItem(storage_cslCode));
+				updateCslData(CSLEDIT.code.get());
 			}
 		});
 
@@ -523,8 +518,7 @@ CSLEDIT.editorPage = (function () {
 		console.log("treeViewChanged");
 		updateCslIds();
 		console.log("updating local stored style");
-		localStorage.setItem(storage_cslCode, 
-			CSLEDIT.parser.cslXmlFromJson(jsonData));
+		CSLEDIT.code.set(CSLEDIT.parser.cslXmlFromJson(jsonData));
 
 		runCiteproc();
 	};
@@ -650,17 +644,18 @@ CSLEDIT.editorPage = (function () {
 		CSLEDIT.parser.updateCslIds(jsonData, {index:0});
 	};
 
-	var loadStyleFromUrl = function () {
-		$.get(styleURL, {}, function(data) {
-			updateCslData(data);
-		});
+	var reloadPageWithNewStyle = function (newURL) {
+		var reloadURL = window.location.href;
+		reloadURL = reloadURL.replace(/#/, "");
+		reloadURL = reloadURL.replace(/\?.*$/, "");
+		window.location.href = reloadURL + "?styleURL=" + newURL;
 	};
 
 	var updateCslData = function (data) {
 		// strip comments from style
 		data = data.replace(/<!--.*?-->/g, "");
 
-		localStorage.setItem(storage_cslCode, data);
+		CSLEDIT.code.set(data);
 		updateTreeView();
 	};
 
@@ -697,38 +692,19 @@ CSLEDIT.editorPage = (function () {
 			for (index = 0; index < 30; index++) {
 				jsonData.push(createNode(index));
 			}
-			
-			var cslCode;
-			cslCode = localStorage.getItem(storage_cslCode);
-			if (cslCode !== null && cslCode !== "" && !CSLEDIT.parser.isCslValid(cslCode)) {
-				alert("Warning: couldn't recover CSL from previous session");
-				cslCode = "";
-				localStorage.setItem(storage_cslCode, cslCode);
-			}
-			styleURL = getUrlVar("styleURL");
-			console.log("url from url: " + styleURL);
 
-			if (styleURL != "" && typeof styleURL !== 'undefined') {
-				console.log("loading given URL");
-				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-				loadStyleFromUrl(styleURL);
-			} else if (cslCode !== null && cslCode !== "") {
-				console.log("loading previous style");
-				updateTreeView();
-			} else {
-				console.log("loading default style - apa.csl");
-				styleURL = "../external/csl-styles/apa.csl";
-				loadStyleFromUrl(styleURL);
-			}
+			CSLEDIT.code.initPageStyle();
+			updateTreeView();
 
 			$(".propertyInput").on("change", nodeChanged);
 
 			$(".dropdown a").click(function (event) {
-				var clickedName = $(event.target).text();
-				var selectedNode = $('#treeEditor').jstree('get_selected');
-
-				var parentNode = $(event.target).parent().parent();
-				var parentNodeName;
+				var clickedName = $(event.target).text(),
+					selectedNode = $('#treeEditor').jstree('get_selected'),
+					parentNode = $(event.target).parent().parent(),
+					parentNodeName,
+					jsonData,
+					position;
 
 				console.log("clicked node = " + clickedName);
 
@@ -743,9 +719,17 @@ CSLEDIT.editorPage = (function () {
 					} else if ((/^Add node/).test(parentNodeName)) {
 						console.log("parent node = " + parentNode.siblings('a').text());
 						$(event.target).parent().parent().css('visibility', 'hidden');
-						
+
+						jsonData = $("#treeEditor").jstree("get_json", selectedNode, [], [])[0];
+						// if current node is the root "style" node, create within instead of after
+						if (jsonData.metadata.name === "style") {
+							position = "inside";
+						} else {
+							position = "after";
+						}
+
 						// create new node after the selected one
-						$('#treeEditor').jstree('create_node', selectedNode, "after",
+						$('#treeEditor').jstree('create_node', selectedNode, position,
 						{
 							"data" : clickedName,
 							"attr" : { "rel" : clickedName, "cslid" : 0 },
@@ -760,20 +744,18 @@ CSLEDIT.editorPage = (function () {
 						treeViewChanged();
 					} else if ((/^Style/).test(parentNodeName)) {
 						if (clickedName === "Revert (undo all changes)") {
-							loadStyleFromUrl(styleURL);
+							reloadPageWithNewStyle(styleURL);
 						} else if (clickedName === "Export CSL") {
 							window.location.href =
 								"data:application/xml;charset=utf-8," +
-								encodeURIComponent(localStorage.getItem(storage_cslCode));
+								encodeURIComponent(CSLEDIT.code.get());
 						} else if (clickedName === "Load from URL") {
-							var URL = prompt("Please enter the URL of the style you wish to load");
-							// have to reload the page to use the trick of downloading the URL
-							// server side
-							var reloadURL = window.location.href;
-							reloadURL = reloadURL.replace(/#/, "");
-							reloadURL = reloadURL.replace(/\?.*$/, "");
-							console.log(reloadURL);
-							window.location.href = reloadURL + "?styleURL=" + URL;
+							reloadPageWithNewStyle(
+								prompt("Please enter the URL of the style you wish to load")
+							);
+						} else if (clickedName === "New style") {
+							reloadPageWithNewStyle(
+								window.location.protocol + "//" + window.location.hostname + "/csl/content/newStyle.csl");
 						}
 					}
 				}
