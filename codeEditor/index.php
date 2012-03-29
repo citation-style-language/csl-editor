@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
-	<title>CSL IDE</title>
+	<title>Code Editor</title>
 
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 

@@ -2,6 +2,8 @@
 <head>	
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
+<title>Search by Name</title>
+
 <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="../../csl-editor-data/exampleCitationsEnc.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../src/cslCode.js" charset="UTF-8"></script>

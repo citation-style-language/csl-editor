@@ -1,5 +1,10 @@
 <html>
 <head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+
+<title>About</title>
+
 <link rel="stylesheet" href="../css/base.css" />
 <style>
 #mainContent {
