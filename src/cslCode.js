@@ -33,7 +33,8 @@ CSLEDIT.code = (function () {
 			return localStorage.getItem(storage_cslCode);
 		},
 		loadStyleFromURL : loadStyleFromURL,
-		initPageStyle : function () {
+
+		initPageStyle : function (callback) {
 			var cslCode;
 			cslCode = CSLEDIT.code.get(); 
 			if (cslCode !== null && cslCode !== "" && !CSLEDIT.parser.isCslValid(cslCode)) {
@@ -47,13 +48,14 @@ CSLEDIT.code = (function () {
 			if (styleURL != "" && typeof styleURL !== 'undefined') {
 				console.log("loading given URL");
 				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-				loadStyleFromURL(styleURL);
+				loadStyleFromURL(styleURL, callback);
 			} else if (cslCode !== null && cslCode !== "") {
 				console.log("loading previous style");
+				callback();
 			} else {
 				console.log("loading default style - apa.csl");
 				styleURL = "../external/csl-styles/apa.csl";
-				loadStyleFromURL(styleURL);
+				loadStyleFromURL(styleURL, callback);
 			}
 		}
 	};	

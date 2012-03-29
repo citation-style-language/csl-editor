@@ -23,6 +23,7 @@
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
+	<script type="text/javascript" src="../src/cslJSON.js"></script>
 	<script type="text/javascript" src="../src/cslCode.js"></script>
 
 	<link rel="stylesheet" href="../css/base.css" />
@@ -134,20 +135,9 @@ CSLEDIT.editorPage = (function () {
 					lineNumbers: true
 			});
 
-			styleURL = getUrlVar("styleURL");
-			if (styleURL == "" || typeof styleURL === 'undefined') {
-				styleURL = "../external/csl-styles/apa.csl";
-			} else {
-				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-			}
-
-			$.get(
-					styleURL, {}, function(data) { 
-						data = data.replace(/<!--.*?-->/g, "");
-						CSLEDIT.code.set(data);
-						editor.setValue(data);
-				}
-			);
+			CSLEDIT.code.initPageStyle( function () {
+				editor.setValue(CSLEDIT.code.get());
+			});
 		}
 	};
 }());

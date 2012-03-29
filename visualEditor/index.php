@@ -153,7 +153,7 @@ z-index: 30 !important;
 		<ul class="sub_menu">
 			<li><a href="#">New style</a></li>
 			<li><a href="#">Load from URL</a></li>
-			<li><a href="#">Revert (undo all changes)</a></li>
+			<!--li><a href="#">Revert (undo all changes)</a></li-->
 			<li><a href="#">Export CSL</a></li>
 		</ul>
 	</li>
@@ -693,8 +693,7 @@ CSLEDIT.editorPage = (function () {
 				jsonData.push(createNode(index));
 			}
 
-			CSLEDIT.code.initPageStyle();
-			updateTreeView();
+			CSLEDIT.code.initPageStyle( updateTreeView );
 
 			$(".propertyInput").on("change", nodeChanged);
 
