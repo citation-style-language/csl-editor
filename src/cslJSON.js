@@ -57,7 +57,8 @@ CSLEDIT.parser = (function() {
 			};
 
 		if (typeof textValue !== "undefined") {
-			metadata["textValue"] = textValue;
+			// trim whitespace from start and end
+			metadata["textValue"] = textValue.replace(/^\s+|\s+$/g,"");
 		}
 
 		return {
@@ -96,7 +97,16 @@ CSLEDIT.parser = (function() {
 		return escaped;
 	};
 
-	var xmlNodeFromJson = function (jsonData) {
+	var generateIndent = function (indentAmount) {
+		var index,
+			result = "";
+		for (index = 0; index < indentAmount; index++) {
+			result += "\t";
+		}
+		return result;
+	};
+
+	var xmlNodeFromJson = function (jsonData, indent) {
 		var attributesString = "",
 			xmlString,
 			index,
@@ -112,18 +122,17 @@ CSLEDIT.parser = (function() {
 					htmlEscape(metadata.attributes[index].key) + '="' + htmlEscape(metadata.attributes[index].value) + '"';
 			}
 		}
-		xmlString = 
-			"<" + metadata.name + attributesString + ">\n";
+		xmlString = generateIndent(indent) + "<" + metadata.name + attributesString + ">\n";
 
 		if (typeof jsonData.children !== "undefined" && jsonData.children.length > 0) {
 			for (index = 0; index < jsonData.children.length; index++) {
-				xmlString += xmlNodeFromJson(jsonData.children[index]);
+				xmlString += xmlNodeFromJson(jsonData.children[index], indent + 1);
 			}
 		} else if (typeof metadata.textValue !== "undefined") {
-			xmlString += htmlEscape(metadata.textValue);
+			xmlString += generateIndent(indent+1) + htmlEscape(metadata.textValue) + "\n";
 		}
 
-		xmlString += "</" + htmlEscape(metadata.name) + ">\n";
+		xmlString += generateIndent(indent) + "</" + htmlEscape(metadata.name) + ">\n";
 
 		return xmlString;
 	};
@@ -170,7 +179,7 @@ CSLEDIT.parser = (function() {
 
 		cslXmlFromJson : function (jsonData) {
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
-			cslXml += xmlNodeFromJson(jsonData[0]);
+			cslXml += xmlNodeFromJson(jsonData[0], 0);
 			return cslXml;
 		},
 

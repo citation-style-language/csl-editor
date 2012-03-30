@@ -36,6 +36,23 @@
 .searched {
 	background: yellow;
 }
+#exampleOutput {
+	margin-left: 20px;
+	margin-right: 20px;
+	height: 60%;
+	overflow: auto;
+	cursor: default;
+	font-family:Verdana,Geneva,'DejaVu Sans',sans-serif;
+	line-height: 1.3;
+}
+#exampleOutput p {
+	margin-top: 0;
+	margin-bottom: 0.2em;
+}
+#exampleOutput h3 {
+	margin-top: 0.5em;
+	margin-bottom: 0.1em;
+}
 </style>
 </head>
 <body id="codeEditor">
@@ -47,13 +64,15 @@
 	</textarea>
 </form>
 
-<div id="statusMessage"></div>
+<div id="exampleOutput">
+	<div id="statusMessage"></div>
 
-<h3>Formatted Citations</h3>	
-<div id="formattedCitations"></div>
+	<h3>Formatted Citations</h3>	
+	<div id="formattedCitations"></div>
 
-<h3>Formatted Bibliography</h3>
-<div id="formattedBibliography"></div>
+	<h3>Formatted Bibliography</h3>
+	<div id="formattedBibliography"></div>
+</div>
 
 <script>
 
@@ -78,47 +97,6 @@ CSLEDIT.editorPage = (function () {
 		return result && unescape(result[1]) || "";
 	};
 
-	var runCiteproc = function () {
-		var style = CSLEDIT.code.get();
-		var inLineCitations = "";
-		var citations = [];
-		var formattedResult;
-		
-		document.getElementById("statusMessage").innerHTML = "";
-
-		formattedResult = citationEngine.formatCitations(
-			style, cslEditorExampleData.jsonDocuments, cslEditorExampleData.citationsItems);
-
-		oldFormattedCitation = newFormattedCitation;
-		newFormattedCitation = formattedResult.formattedCitations.join("<br />");
-
-		oldFormattedBibliography = newFormattedBibliography;
-		newFormattedBibliography = formattedResult.formattedBibliography;
-
-		var dmp = diffMatchPatch;
-		var diffs = dmp.diff_main(oldFormattedCitation, newFormattedCitation);
-		dmp.diff_cleanupSemantic(diffs);
-		var diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(diffs));
-
-		diffs = dmp.diff_main(oldFormattedBibliography, newFormattedBibliography);
-		dmp.diff_cleanupSemantic(diffs);
-		var diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(diffs));
-
-		// display the diff
-		$("#formattedCitations").html(diffFormattedCitation);
-		$("#formattedBibliography").html(diffFormattedBibliography);
-
-		// display the new version in 1000ms
-		clearTimeout(diffTimeout);
-		diffTimeout = setTimeout(
-			function () {
-			$("#formattedCitations").html(newFormattedCitation);
-			$("#formattedBibliography").html(newFormattedBibliography);}
-		, 1000);
-
-		document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
-	};
-
 	return {
 		init : function () {
 			CodeMirror.defaults.onChange = function()
@@ -126,7 +104,9 @@ CSLEDIT.editorPage = (function () {
 				clearTimeout(codeTimeout);
 				codeTimeout = setTimeout( function () {
 					CSLEDIT.code.set(editor.getValue());
-					runCiteproc();
+					CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
+						$("#statusMessage"), $("#exampleOutput"),
+						$("#formattedCitations"), $("#formattedBibliography"));
 				}, 500);
 			};
 

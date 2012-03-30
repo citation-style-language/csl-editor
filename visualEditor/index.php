@@ -215,12 +215,6 @@ var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.editorPage = (function () {
 	var editTimeout,
-		diffTimeout,
-		diffMatchPatch = new diff_match_patch(),
-		oldFormattedCitation = "",
-		newFormattedCitation = "",
-		oldFormattedBibliography = "",
-		newFormattedBibliography = "",
 		styleURL,
 		oldSelectedNode,
 		numCslNodes,
@@ -257,70 +251,6 @@ CSLEDIT.editorPage = (function () {
 
 		mainContent.height(mainContent.parent().height() - 60);
 		treeEditor.height(treeEditor.parent().height());
-	};
-
-	var stripTags = function (html, tag) {
-		var stripRegExp = new RegExp("<" + tag + ".*?>|<\/\s*" + tag + "\s*?\>", "g");
-		var stripped = html;
-		stripped = stripped.replace(stripRegExp, "");
-		return stripped;
-	};
-
-	var runCiteproc = function () {
-		var style = CSLEDIT.code.get();
-		var inLineCitations = "";
-		var citations = [];
-		var formattedResult;
-
-		document.getElementById("statusMessage").innerHTML = "";
-
-		formattedResult = citationEngine.formatCitations(
-			style, cslEditorExampleData.jsonDocuments, cslEditorExampleData.citationsItems);
-
-		oldFormattedCitation = newFormattedCitation;
-		newFormattedCitation = "<p>";
-		newFormattedCitation += formattedResult.formattedCitations.join("<\/p><p>");
-		newFormattedCitation += "<\/p>";
-
-		oldFormattedBibliography = newFormattedBibliography;
-		newFormattedBibliography = formattedResult.formattedBibliography;
-
-		if (newFormattedBibliography.indexOf("<second-field-align>") > -1) {
-			$("#exampleOutput").css({
-				"padding-left" : "2em",
-				"text-indent" : "-2em"
-			});
-		} else {
-			$("#exampleOutput").css({
-				"padding-left" : "0",
-				"text-indent" : "0"
-			});
-		}
-
-		var dmp = diffMatchPatch;
-		var diffs = dmp.diff_main(stripTags(oldFormattedCitation, "span"), stripTags(newFormattedCitation, "span"));
-		dmp.diff_cleanupSemantic(diffs);
-		var diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(diffs));
-
-		diffs = dmp.diff_main(stripTags(oldFormattedBibliography, "span"), stripTags(newFormattedBibliography, "span"));
-		dmp.diff_cleanupSemantic(diffs);
-		var diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(diffs));
-
-		// display the diff
-		$("#formattedCitations").html(diffFormattedCitation);
-		$("#formattedBibliography").html(diffFormattedBibliography);
-
-		// display the new version in 1000ms
-		clearTimeout(diffTimeout);
-		diffTimeout = setTimeout(
-			function () {
-				$("#formattedCitations").html(newFormattedCitation);
-				$("#formattedBibliography").html(newFormattedBibliography);
-				doSyntaxHighlighting();	
-			},
-		1000);
-
-		document.getElementById("statusMessage").innerHTML = formattedResult.statusMessage;
 	};
 
 	var addToHoveredNodeStack = function (target) {
@@ -510,7 +440,10 @@ CSLEDIT.editorPage = (function () {
 			}
 		});
 
-		runCiteproc();
+		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
+			$("#statusMessage"), $("#exampleOutput"),
+			$("#formattedCitations"), $("#formattedBibliography"),
+			doSyntaxHighlighting);
 	};
 
 	var treeViewChanged = function () {
@@ -520,7 +453,10 @@ CSLEDIT.editorPage = (function () {
 		console.log("updating local stored style");
 		CSLEDIT.code.set(CSLEDIT.parser.cslXmlFromJson(jsonData));
 
-		runCiteproc();
+		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
+			$("#statusMessage"), $("#exampleOutput"),
+			$("#formattedCitations"), $("#formattedBibliography"),
+			doSyntaxHighlighting);
 	};
 
 	var nodeSelected = function(event, ui) {
