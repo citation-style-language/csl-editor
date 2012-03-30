@@ -151,6 +151,27 @@ CSLEDIT.parser = (function() {
 			}
 		};
 
+	var getFirstCslId = function (jsonData, nodeName) {
+		var index,
+			result;
+
+		if (jsonData.metadata.name === nodeName) {
+			console.log("found " + nodeName + " at " + jsonData.metadata.cslId);
+			return jsonData.metadata.cslId;
+		} else {
+			if (typeof jsonData.children !== "undefined") {
+				for (index = 0; index < jsonData.children.length; index++) {
+					result = getFirstCslId(jsonData.children[index], nodeName);
+					if (result > -1) {
+						return result;
+					}
+				}
+			}
+		}
+		// couldn't find it
+		return -1;
+	};
+
 	return {
 		isCslValid : function(xmlData) {
 			var parser = new DOMParser();
@@ -185,6 +206,8 @@ CSLEDIT.parser = (function() {
 
 		displayNameFromMetadata : displayNameFromMetadata,
 
-		updateCslIds : updateCslIds
+		updateCslIds : updateCslIds,
+
+		getFirstCslId : getFirstCslId
 	};
 }());

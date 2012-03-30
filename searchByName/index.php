@@ -81,7 +81,7 @@ CSLEDIT.findByNamePage = (function () {
 	var nameSearchTimeout;
 
 	// --- Functions for style name search ---
-		
+	
 	var searchForStyleName = function () {
 		var searchQuery = $("#styleNameQuery").val(),
 			searchQueryLower = searchQuery.toLowerCase(),

@@ -99,32 +99,49 @@ CSLEDIT.citationEngine = (function () {
 			bibliography = [[(citations[0][1])]];
 		}
 
-
-		result.formattedBibliography = "<p>";
-		result.formattedBibliography += bibliography.join("<\/p><p>");
-		result.formattedBibliography += "<\/p>";
+		result.formattedBibliography = bibliography;
 
 		return result;
 	};
 
-	var runCiteprocAndDisplayOutput = function (statusOut, exampleOut, citationsOut, bibliographyOut, callback) {
-		var style = CSLEDIT.code.get();
-		var inLineCitations = "";
-		var citations = [];
-		var formattedResult;
+	var runCiteprocAndDisplayOutput = function (
+			statusOut, exampleOut, citationsOut, bibliographyOut, callback,
+			citationNodeCslId, bibliographyNodeCslId) {
+		var style = CSLEDIT.code.get(),
+			inLineCitations = "",
+			citations = [],
+			formattedResult,
+			citationTagStart = "<p>",
+			citationTagEnd = "<\/p>",
+			bibliographyTagStart = "<p>",
+			bibliographyTagEnd = "<\/p>";
 
 		statusOut.html("");
 
 		formattedResult = formatCitations(
 			style, cslEditorExampleData.jsonDocuments, cslEditorExampleData.citationsItems);
 
+		// add syntax highlighting at highest level
+		if (typeof citationNodeCslId !== "undefined") {
+			citationTagStart = '<p><span cslid="' + citationNodeCslId + '">';
+		    citationTagEnd = '<\/span><\/p>';
+		}
+		if (typeof bibliographyNodeCslId !== "undefined") {
+			bibliographyTagStart = '<p><span cslid="' + bibliographyNodeCslId + '">';
+			bibliographyTagEnd = '<\/span><\/p>';
+		}
+
 		oldFormattedCitation = newFormattedCitation;
-		newFormattedCitation = "<p>";
-		newFormattedCitation += formattedResult.formattedCitations.join("<\/p><p>");
-		newFormattedCitation += "<\/p>";
+		newFormattedCitation = citationTagStart;
+		newFormattedCitation += formattedResult.formattedCitations.join(
+			citationTagEnd + citationTagStart);
+		newFormattedCitation += citationTagEnd;
 
 		oldFormattedBibliography = newFormattedBibliography;
-		newFormattedBibliography = formattedResult.formattedBibliography;
+		newFormattedBibliography = bibliographyTagStart;
+		newFormattedBibliography += formattedResult.formattedBibliography.join(
+			bibliographyTagEnd + bibliographyTagStart);
+		newFormattedBibliography += bibliographyTagEnd;
 
 		if (newFormattedBibliography.indexOf("<second-field-align>") > -1) {
 			exampleOut.css({

@@ -455,7 +455,9 @@ CSLEDIT.editorPage = (function () {
 		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
 			$("#statusMessage"), $("#exampleOutput"),
 			$("#formattedCitations"), $("#formattedBibliography"),
-			doSyntaxHighlighting);
+			doSyntaxHighlighting,
+			CSLEDIT.parser.getFirstCslId(jsonData, "citation"),
+			CSLEDIT.parser.getFirstCslId(jsonData, "bibliography"));
 	};
 
 	var treeViewChanged = function () {
@@ -468,7 +470,9 @@ CSLEDIT.editorPage = (function () {
 		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
 			$("#statusMessage"), $("#exampleOutput"),
 			$("#formattedCitations"), $("#formattedBibliography"),
-			doSyntaxHighlighting);
+			doSyntaxHighlighting,
+			CSLEDIT.parser.getFirstCslId(jsonData[0], "citation"),
+			CSLEDIT.parser.getFirstCslId(jsonData[0], "bibliography"));
 	};
 
 	var nodeSelected = function(event, ui) {
