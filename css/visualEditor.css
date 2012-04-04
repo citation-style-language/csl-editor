@@ -1,0 +1,101 @@
+html, body {
+	overflow: hidden;
+}
+#mainContainer {
+	height: 100%;
+	margin: 10px;
+	clear: both;
+}
+.searched {
+	background: yellow;
+}
+#treeEditor {
+	font-size: 14px;
+
+	height: 100%;
+	width: 100%;
+	overflow: auto;
+	padding-top: 5px;
+}
+#leftPane {
+	float: left;
+	width: 35%;
+	height: 100%;
+}
+ul.dropdown {
+/*	float: left;*/
+}
+#treeEditorTitle {
+	float: left;
+}
+#rightPane {
+	float: right;
+	width: 63%;
+	height: 100%;
+}
+#exampleOutput {
+/*	margin-top: 50%:*/
+	height: 60%;
+	overflow: auto;
+	cursor: default;
+	font-family:Verdana,Geneva,'DejaVu Sans',sans-serif;
+	line-height: 1.3;
+}
+#exampleOutput p {
+	margin-top: 0;
+	margin-bottom: 0.2em;
+}
+#exampleOutput h3 {
+	margin-top: 0.5em;
+	margin-bottom: 0.1em;
+}
+#elementProperties {
+	font-size: 14px;
+	background-color: #F5F5DC;
+	width: 100%;
+	height: 40%;
+	overflow: auto;
+}
+#elementProperties > table,
+#elementProperties > table > tr,
+#elementProperties > table > tr > td
+{
+	width: 100%;
+}
+label.> tr
+{
+	width: 800px;
+}
+input.propertyInput {
+	min-width: 250px;
+}
+label.propertyLabel {
+	min-width: 150px;
+	display: block;
+}
+button {
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 0;
+	padding-bottom: 0;
+	margin: 0;
+	line-height: 1;
+}
+
+/** Very hacky fix for jstree move between nodes bug:
+ *  https://github.com/vakata/jstree/issues/174
+ *
+ *  TODO: Delve into jstree code and do a better fix
+ */
+.jstree li {
+position: relative;
+z-index: 20 !important;
+}
+
+#jstree-marker-line {
+z-index: 10 !important;
+}
+
+ul.dropdown {
+z-index: 30 !important;
+}

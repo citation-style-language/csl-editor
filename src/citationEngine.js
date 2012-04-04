@@ -19,10 +19,8 @@ CSLEDIT.citationEngine = (function () {
 		// TODO: this shouldn't be a global
 		jsonDocuments = documents;
 
-		var result = {"statusMessage":"", "formattedCitations":[], "formattedBibliography":""};
-
+		var result = { "statusMessage":"", "formattedCitations":[], "formattedBibliography": [] };
 		result.statusMessage = "";
-
 		try
 		{
 			var sys = new Sys(abbreviations);
@@ -107,6 +105,9 @@ CSLEDIT.citationEngine = (function () {
 	var runCiteprocAndDisplayOutput = function (
 			statusOut, exampleOut, citationsOut, bibliographyOut, callback,
 			citationNodeCslId, bibliographyNodeCslId) {
+
+		console.time("runCiteprocAndDisplayOutput");
+
 		var style = CSLEDIT.code.get(),
 			inLineCitations = "",
 			citations = [],
@@ -114,12 +115,19 @@ CSLEDIT.citationEngine = (function () {
 			citationTagStart = "<p>",
 			citationTagEnd = "<\/p>",
 			bibliographyTagStart = "<p>",
-			bibliographyTagEnd = "<\/p>";
+			bibliographyTagEnd = "<\/p>",
+			startTime;
 
-		statusOut.html("");
+		statusOut.html("<i>Re-formatting citations...</i>");
+	
+		console.time("formatCitations");
 
 		formattedResult = formatCitations(
 			style, cslEditorExampleData.jsonDocuments, cslEditorExampleData.citationsItems);
+		
+		console.timeEnd("formatCitations");
+
+		statusOut.html(formattedResult.statusMessage);
 
 		// add syntax highlighting at highest level
 		if (typeof citationNodeCslId !== "undefined") {
@@ -155,32 +163,43 @@ CSLEDIT.citationEngine = (function () {
 			});
 		}
 
+		console.time("citeproc diffs");
+
 		var dmp = diffMatchPatch;
-		var diffs = dmp.diff_main(stripTags(oldFormattedCitation, "span"), stripTags(newFormattedCitation, "span"));
-		dmp.diff_cleanupSemantic(diffs);
-		var diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(diffs));
+		var citationDiffs =
+			dmp.diff_main(stripTags(oldFormattedCitation, "span"), stripTags(newFormattedCitation, "span"));
+		dmp.diff_cleanupSemantic(citationDiffs);
+		var diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(citationDiffs));
 
-		diffs = dmp.diff_main(stripTags(oldFormattedBibliography, "span"), stripTags(newFormattedBibliography, "span"));
-		dmp.diff_cleanupSemantic(diffs);
-		var diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(diffs));
+		bibliographyDiffs =
+			dmp.diff_main(stripTags(oldFormattedBibliography, "span"), stripTags(newFormattedBibliography, "span"));
+		dmp.diff_cleanupSemantic(bibliographyDiffs);
+		var diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(bibliographyDiffs));
 
-		// display the diff
-		citationsOut.html(diffFormattedCitation);
-		bibliographyOut.html(diffFormattedBibliography);
+		console.timeEnd("citeproc diffs");
 
-		// display the new version in 1000ms
-		clearTimeout(diffTimeout);
-		diffTimeout = setTimeout(
-			function () {
-				citationsOut.html(newFormattedCitation);
-				bibliographyOut.html(newFormattedBibliography);
-				if (typeof callback !== "undefined") {
-					callback();
-				}
-			},
-		1000);
+		if (dmp.diff_levenshtein(citationDiffs) === 0 && dmp.diff_levenshtein(bibliographyDiffs) === 0) {
+			console.log("no change");
+		} else {
+			console.log("output changed");
+			// display the diff
+			citationsOut.html(diffFormattedCitation);
+			bibliographyOut.html(diffFormattedBibliography);
 
-		statusOut.html(formattedResult.statusMessage);
+			// display the new version in 1000ms
+			clearTimeout(diffTimeout);
+			diffTimeout = setTimeout(
+				function () {
+					citationsOut.html(newFormattedCitation);
+					bibliographyOut.html(newFormattedBibliography);
+					if (typeof callback !== "undefined") {
+						callback();
+					}
+				},
+			1000);
+		}
+		
+		console.timeEnd("runCiteprocAndDisplayOutput");
 	}
 
 	// Return public members:

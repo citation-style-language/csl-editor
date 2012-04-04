@@ -188,7 +188,7 @@ CSLEDIT.finderPage = (function () {
 	};
 
 	function searchForStyle() {
-		var tolerance = 100,
+		var tolerance = 500,
 			bestEditDistance = 999,
 			bestMatchIndex = -1,
 			userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML,

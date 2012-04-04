@@ -4,7 +4,7 @@ var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.parser = (function() {
 	// Private functions:
-	var parseNode = function (node, nodeIndex) {
+	var jsonNodeFromXml = function (node, nodeIndex) {
 		var children = [],
 			index,
 			jsonData,
@@ -20,7 +20,7 @@ CSLEDIT.parser = (function() {
 
 			if (childNode.localName !== null) {
 				nodeIndex.index++;
-				children.push(parseNode(node.childNodes[index], nodeIndex));
+				children.push(jsonNodeFromXml(node.childNodes[index], nodeIndex));
 			} else {
 				if (childNode.nodeType === TEXT_NODE && typeof childNode.data !== "undefined" && 
 						childNode.data.trim() != "") {
@@ -41,7 +41,8 @@ CSLEDIT.parser = (function() {
 				attributesList.push(
 					{
 						key : node.attributes.item(index).localName,
-						value : node.attributes.item(index).nodeValue
+						value : node.attributes.item(index).nodeValue,
+						enabled : true
 					});
 				attributesStringList.push(
 					node.attributes.item(index).localName + '="' +
@@ -76,9 +77,11 @@ CSLEDIT.parser = (function() {
 
 		if (metadata.attributes.length > 0) {
 			for (index = 0; index < metadata.attributes.length; index++) {
-				attributesStringList.push(
-					metadata.attributes[index].key + '="' +
-					metadata.attributes[index].value + '"');
+				if (metadata.attributes[index].enabled) {
+					attributesStringList.push(
+						metadata.attributes[index].key + '="' +
+						metadata.attributes[index].value + '"');
+				}
 			}
 			attributesString = ": " + attributesStringList.join(", ");
 		}
@@ -116,10 +119,13 @@ CSLEDIT.parser = (function() {
 
 		if (metadata.attributes.length > 0) {
 		  	for (index = 0; index < metadata.attributes.length; index++) {
-				// TODO: the key probably shouldn't have characters needing escaping anyway,
-				//       should not allow to input them in the first place
-				attributesString += " " + 
-					htmlEscape(metadata.attributes[index].key) + '="' + htmlEscape(metadata.attributes[index].value) + '"';
+				if (metadata.attributes[index].enabled && metadata.attributes[index].value !== "") {
+					// TODO: the key probably shouldn't have characters needing escaping anyway,
+					//       should not allow to input them in the first place
+					attributesString += " " + 
+						htmlEscape(metadata.attributes[index].key) + '="' + 
+						htmlEscape(metadata.attributes[index].value) + '"';
+				}
 			}
 		}
 		xmlString = generateIndent(indent) + "<" + metadata.name + attributesString + ">\n";
@@ -184,23 +190,27 @@ CSLEDIT.parser = (function() {
 		// nodeIndex.index is the depth-first traversal position of CSL node
 		// it must start at 0, and it will be returned with nodeIndex.index = number of nodes - 1
 		jsonFromCslXml : function (xmlData, nodeIndex) {
+			console.time("jsonFromCslXml");
 			var parser = new DOMParser();
 			var xmlDoc = parser.parseFromString(xmlData, "application/xml");
 
 			var styleNode = xmlDoc.childNodes[0];
 			assertEqual(styleNode.localName, "style", "Invalid style - no style node");
 
-			var jsonData = parseNode(styleNode, nodeIndex);
+			var jsonData = jsonNodeFromXml(styleNode, nodeIndex);
 
 			// make root node open
 			jsonData["state"] = "open";
-
+		
+			console.timeEnd("jsonFromCslXml");
 			return jsonData;
 		},
 
 		cslXmlFromJson : function (jsonData) {
+ 			console.time("cslXmlFromJson");
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
 			cslXml += xmlNodeFromJson(jsonData[0], 0);
+ 			console.timeEnd("cslXmlFromJson");
 			return cslXml;
 		},
 
