@@ -16,14 +16,20 @@
 </head>
 <body id="about">
 <?php include '../html/navigation.html'; ?>
+
 <div id="mainContent">
+
 <h1>Citation Style Editor</h1>
 
 <p>This site allows you to search and edit citation styles. It's still a prototype.</p>
 
+<p>Blog: <a href="http://csleditor.wordpress.com/">http://csleditor.wordpress.com/</a></p>
+
 <p>Source code: <a href="https://github.com/citation-style-editor">https://github.com/citation-style-editor</a></p>
 
-<p>Blog: <a href="http://csleditor.wordpress.com/">http://csleditor.wordpress.com/</a></p>
+<div id="gitCommit">
+<strong>Current site version: </strong> <a href="https://github.com/citation-style-editor/csl-editor/commit/<?php include '../generated/commit.txt'; ?>"><?php include '../generated/commit.txt'; ?></a>
+</div>
 
 <h2>Attributions</h2>
 
