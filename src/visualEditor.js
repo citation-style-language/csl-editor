@@ -353,8 +353,8 @@ CSLEDIT.editorPage = (function () {
 		CSLEDIT.parser.updateCslIds(jsonData, {index:0});
 
 		// update the html attributes to be in sync
-		treeEditor.children("[cslid]").each(function (index) {
-			var metadata = this.data();
+		treeEditor.find("[cslid]").each(function (index) {
+			var metadata = $(this).data();
 			$(this).attr("cslid", metadata.cslId);
 		});
 	};

@@ -195,6 +195,12 @@ CSLEDIT.citationEngine = (function () {
 
 		if (dmp.diff_levenshtein(citationDiffs) === 0 && dmp.diff_levenshtein(bibliographyDiffs) === 0) {
 			console.log("no change");
+			citationsOut.html(newFormattedCitation);
+			bibliographyOut.html(newFormattedBibliography);
+			if (typeof callback !== "undefined") {
+				callback();
+			}
+
 		} else {
 			console.log("output changed");
 			// display the diff

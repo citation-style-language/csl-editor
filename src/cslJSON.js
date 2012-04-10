@@ -147,7 +147,6 @@ CSLEDIT.parser = (function() {
 			var childIndex;
 
 			jsonData.metadata["cslId"] = cslId.index;
-			//console.log("cslid = " + cslId.index);
 			cslId.index++;
 			if (jsonData.children) {
 				for (childIndex = 0; childIndex < jsonData.children.length; childIndex++)
