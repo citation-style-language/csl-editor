@@ -103,8 +103,12 @@ var addCslFileToIndex = function (file, entry) {
 			if (styleId === masterId) {
 				masterStyleFromId[masterId] = fileData;
 
-				var citeprocResult = citationEngine.formatCitations(
-				fileData, cslServerConfig.jsonDocuments, cslServerConfig.citationsItems);
+				var citeprocResult = CSLEDIT.citationEngine.formatCitations(
+					fileData, cslServerConfig.jsonDocuments, cslServerConfig.citationsItems);
+
+				// merge bibliography to one string
+				citeprocResult.formattedBibliography =
+					citeprocResult.formattedBibliography.join("<br \/>"); 
 
 				// clean up citeproc result for display
 				citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.

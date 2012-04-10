@@ -27,6 +27,9 @@
 	<script type="text/javascript" src="../src/cslCode.js"></script>
 
 	<link rel="stylesheet" href="../css/base.css" />
+	<script type="text/javascript" src="../src/codeEditor.js"></script>
+
+	<script type="text/javascript" src="../src/analytics.js"></script>
 
 <style type="text/css">
 #code {
@@ -54,18 +57,6 @@
 	margin-bottom: 0.1em;
 }
 </style>
-<!-- google analytics -->
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-4601387-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
 </head>
 <body id="codeEditor">
 
@@ -85,57 +76,5 @@
 	<h3>Formatted Bibliography</h3>
 	<div id="formattedBibliography"></div>
 </div>
-
-<script>
-
-"use strict";
-
-var CSLEDIT = CSLEDIT || {};
-
-CSLEDIT.editorPage = (function () {
-	var codeTimeout,
-		editor,
-		diffTimeout,
-		diffMatchPatch = new diff_match_patch(),
-		oldFormattedCitation = "",
-		newFormattedCitation = "",
-		oldFormattedBibliography = "",
-		newFormattedBibliography = "",
-		styleURL;
-
-	// from https://gist.github.com/1771618
-	var getUrlVar = function (key) {
-		var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
-		return result && unescape(result[1]) || "";
-	};
-
-	return {
-		init : function () {
-			CodeMirror.defaults.onChange = function()
-			{
-				clearTimeout(codeTimeout);
-				codeTimeout = setTimeout( function () {
-					CSLEDIT.code.set(editor.getValue());
-					CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
-						$("#statusMessage"), $("#exampleOutput"),
-						$("#formattedCitations"), $("#formattedBibliography"));
-				}, 500);
-			};
-
-			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-					mode: { name: "xml", htmlMode: true},
-					lineNumbers: true
-			});
-
-			CSLEDIT.code.initPageStyle( function () {
-				editor.setValue(CSLEDIT.code.get());
-			});
-		}
-	};
-}());
-
-CSLEDIT.editorPage.init();
-
-</script>
-  </body>
+</body>
 </html>

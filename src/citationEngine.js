@@ -6,16 +6,19 @@ CSLEDIT.citationEngine = (function () {
 		oldFormattedBibliography = "",
 		newFormattedBibliography = "",
 		diffTimeout,
-		diffMatchPatch = new diff_match_patch();
+		dmp = null; // for diff_match_patch object
 
 	var stripTags = function (html, tag) {
 		var stripRegExp = new RegExp("<" + tag + ".*?>|<\/\s*" + tag + "\s*?\>", "g");
-		var stripped = html;
+
+		// creating new string because of bug where some html from generateExampleCitations.js
+		// was type object instead of string and didn't have the replace() function
+		var stripped = new String(html);
 		stripped = stripped.replace(stripRegExp, "");
 		return stripped;
 	};
 
-	var formatCitations = function (style, documents, citationClusters) {
+	var formatCitations = function (style, documents, citationClusters, taggedOutput) {
 		// TODO: this shouldn't be a global
 		jsonDocuments = documents;
 
@@ -56,6 +59,10 @@ CSLEDIT.citationEngine = (function () {
 					inLineCitations += "<br>";
 				}
 				
+				if (taggedOutput !== true) {
+					citations[i][1] = stripTags(citations[i][1], "span");
+				}
+
 				inLineCitations += citations[i][1];
 				inLineCitationArray.push(citations[i][1]);
 			}
@@ -65,12 +72,10 @@ CSLEDIT.citationEngine = (function () {
 		var makeBibliographyArgument;
 		
 		var enumerateCitations = true;
-		if (enumerateCitations == true)
-		{
+		if (enumerateCitations == true) {
 			makeBibliographyArgument = undefined;
 		}
-		else
-		{
+		else {
 			makeBibliographyArgument = "citation-number";
 		}
 		
@@ -97,8 +102,14 @@ CSLEDIT.citationEngine = (function () {
 			bibliography = [[(citations[0][1])]];
 		}
 
-		result.formattedBibliography = bibliography;
+		if (taggedOutput !== true) {
+			var index;
+			for (index = 0; index < bibliography.length; index++) {
+				bibliography[index] = stripTags(bibliography[index], "span");
+			}
+		}
 
+		result.formattedBibliography = bibliography;
 		return result;
 	};
 
@@ -165,7 +176,11 @@ CSLEDIT.citationEngine = (function () {
 
 		console.time("citeproc diffs");
 
-		var dmp = diffMatchPatch;
+		// lazy instantiation of diff_match_patch
+		if (dmp === null) {
+			dmp = new diff_match_patch();
+		}
+
 		var citationDiffs =
 			dmp.diff_main(stripTags(oldFormattedCitation, "span"), stripTags(newFormattedCitation, "span"));
 		dmp.diff_cleanupSemantic(citationDiffs);
@@ -204,6 +219,7 @@ CSLEDIT.citationEngine = (function () {
 
 	// Return public members:
 	return {
+		formatCitations : formatCitations,
 		runCiteprocAndDisplayOutput : runCiteprocAndDisplayOutput
 	};
 
