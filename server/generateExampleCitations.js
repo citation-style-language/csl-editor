@@ -1,37 +1,18 @@
 "use strict";
 
-// jslib stuff
-LoadModule('jsio');
-LoadModule('jsstd');
-LoadModule('jsiconv');
-
-var dec = new Iconv('UCS-2-INTERNAL', 'UTF-8', true, false);
-var enc = new Iconv('UTF-8', 'UCS-2-INTERNAL', false, true);
-
-var load = Exec;
-
-var print = function (txt) {
-		Print(enc(txt) + '\n');
-	}
-
-var readFile = function (filename) {
-		var file = new File(filename);
-		file.Open(File.RDONLY);
-		var ret = dec(file.Read());
-		file.Close();
-		return ret;
-	};
+importPackage(java.io);
 
 // citeproc includes
 load("../external/citeproc/loadabbrevs.js");
 load("../external/citeproc/xmle4x.js");
 load("../external/citeproc/xmldom.js");
-//load("../external/citeproc/load.js");
 load("../external/citeproc/citeproc.js");
 load("../external/citeproc/loadlocale.js");
 load("../external/citeproc/loadsys.js");
 load("../external/citeproc/runcites.js");
 load("../src/citationEngine.js");
+
+load("../external/json/json2.js");
 
 // start
 load("config.js");
@@ -51,14 +32,12 @@ var outputData = {
 
 var entries = 0;
 
-var addCslFileToIndex = function (file, entry) {
+var addCslFileToIndex = function (file) {
 		//Print( entry + '\n');
 		entries++;
 
-		// TODO: parse XML to determine citation style URI
-		file.Open(File.RDONLY);
-		var fileData = dec(file.Read());
-		//Print( 'parsing ' + entry + '\n');
+		var fileData = readFile(file.getPath());
+		print( 'parsing ' + file.getName() );
 		var xmlParser = new CSL_E4X();
 		var xmlDoc;
 
@@ -66,12 +45,11 @@ var addCslFileToIndex = function (file, entry) {
 		try {
 			xmlDoc = xmlParser.makeXml(fileData);
 		} catch (err) {
-			Print('FAILED to parse ' + entry + '\n');
+			print('FAILED to parse ' + file.getName());
 		}
 
 		if (xmlDoc !== "notSet") {
 			var styleId = xmlParser.getStyleId(xmlDoc);
-			//Print( 'parsed ' + styleId + '\n' );
 			// TODO: find out why this is needed!
 		default xml namespace = "http://purl.org/net/xbiblio/csl";
 			with({});
@@ -79,10 +57,9 @@ var addCslFileToIndex = function (file, entry) {
 			var styleTitle = "";
 			if (styleTitleNode && styleTitleNode.length()) {
 				styleTitle = styleTitleNode[0].toString();
-				//print('title: ' + styleTitle);
 				outputData.styleTitleFromId[styleId] = styleTitle;
 			} else {
-				//print('no title for ' + entry);
+				//print('no title for ' + file.getName());
 			}
 
 			// check if this is a dependent style and find it's parent ID if so
@@ -99,7 +76,7 @@ var addCslFileToIndex = function (file, entry) {
 			}
 			// TODO: why is this preventing the JSON.stringify() working in jslibs?
 			outputData.masterIdFromId[styleId] = masterId;
-			//
+			
 			if (styleId === masterId) {
 				masterStyleFromId[masterId] = fileData;
 
@@ -118,44 +95,39 @@ var addCslFileToIndex = function (file, entry) {
 				replace(/<\/second-field-align>/g, " ");
 
 				outputData.exampleCitationsFromMasterId[styleId] = citeprocResult;
-				//Print(citeprocResult.formattedBibliography + '\n');
-				if (styleTitle.toLowerCase().indexOf("mechanical") > -1) {
-					Print("mechanical: " + citeprocResult.formattedBibliography);
-				}
+				
+				//if (styleTitle.toLowerCase().indexOf("mechanical") > -1) {
+				//	print("mechanical: " + citeprocResult.formattedBibliography);
+				//}
 
-				Print(".");
-			}
-		}
-		file.Close();
-	};
-
-var processDir = function (dir) {
-		dir.Open();
-		for (var entry;
-		(entry = dir.Read());) {
-			var file = new File(dir.name + '/' + entry);
-			if (file.info.type == 1) {
-				addCslFileToIndex(file, entry);
+				//print(".");
 			}
 		}
 	};
 
-processDir(new Directory('../' + cslServerConfig.cslStylesPath));
-processDir(new Directory('../' + cslServerConfig.cslStylesPath + '/dependent'));
+var processDir = function (dirPath) {
+	var dirContents = new File(dirPath).listFiles(),
+		index;
 
-Print("num entries = " + entries);
+	for (var index = 0; index < dirContents.length; index++) {
+		var file = dirContents[index];
+		if (!file.isDirectory() && /.csl$/.test(file.getName())) {
+			addCslFileToIndex(file);
+		}
+	}
+};
+
+processDir('../' + cslServerConfig.cslStylesPath);
+processDir('../' + cslServerConfig.cslStylesPath + '/dependent');
+
+print("num entries = " + entries);
 
 // output results to JSON file:
-var outputDir = new Directory("../" + cslServerConfig.dataPath);
-var outputFile = new File(outputDir.name + '/exampleCitationsEnc.js');
-if (!outputDir.exist) {
-	outputDir.Make();
-}
-try {
-	outputFile.Delete();
-} catch (err) {}
+var outputDir = new File("../" + cslServerConfig.dataPath);
+outputDir.mkdir();
 
-outputFile.Open(File.WRONLY | File.CREATE_FILE);
+var fileWriter = new FileWriter(outputDir.getPath() + '/exampleCitationsEnc.js');
+
 var outputString = JSON.stringify(outputData, null, "\t");
 
 // TODO: may not need to escape all non ASCII chars, this
@@ -169,5 +141,5 @@ outputString = outputString.replace(/[\u007f-\uffff]/g, function (c) {
 outputString = outputString.replace(/\\u00e2\\u0080\\u009c/g, "\\u201c");
 outputString = outputString.replace(/\\u00e2\\u0080\\u009d/g, "\\u201d");
 
-outputFile.Write(enc("var exampleCitations = " + outputString + ';'));
-
+fileWriter.write("var exampleCitations = " + outputString + ';');
+fileWriter.close();

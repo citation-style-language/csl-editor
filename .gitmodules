@@ -7,3 +7,6 @@
 [submodule "external/csl-styles"]
 	path = external/csl-styles
 	url = https://github.com/citation-style-language/styles.git
+[submodule "external/csl-schema"]
+	path = external/csl-schema
+	url = https://github.com/citation-style-language/schema.git
