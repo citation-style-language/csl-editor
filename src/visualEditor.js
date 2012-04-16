@@ -74,21 +74,24 @@ CSLEDIT.editorPage = (function () {
 	}
 
 	var highlightNode = function (nodeStack) {
-		var node, nodeIndex;
-
 		nodeIndex = nodeStack[nodeStack.length - 1];
 
-		node = $('span[cslid="' + nodeIndex + '"]');
+		highlightOutput(cslId);
+
+		// undo previous highlighting
+		unHighlightTree();
+		highlightTree(nodeStack, null, 0);
+	};
+
+	var highlightOutput = function (cslId)
+	{
+		var node = $('span[cslid="' + cslId + '"]');
 		if (node.css("background-color") == selectedCss["background-color"])
 		{
 			// leave alone - selection takes precedence
 		} else {
 			node.css(highlightedCss);
 		}
-
-		// undo previous highlighting
-		unHighlightTree();
-		highlightTree(nodeStack, null, 0);
 	};
 
 	var reverseSelectNode = function () {
@@ -201,6 +204,17 @@ CSLEDIT.editorPage = (function () {
 		$('span[cslid="' + cslId + '"]').click( function () {
 			reverseSelectNode(cslId);
 		});
+
+		// set up hovering over tree nodes
+		$('li[cslid="' + cslId + '"] > a').unbind('mouseenter mouseleave');
+		$('li[cslid="' + cslId + '"] > a').hover(
+			function () {
+				highlightOutput(cslId);
+			},
+			function () {
+				unHighlightNode(cslId);
+			}
+		);
 	};
 
 	var doSyntaxHighlighting = function () {
