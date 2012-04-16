@@ -73,11 +73,12 @@ CSLEDIT.editorPage = (function () {
 		}
 	}
 
-	var highlightNode = function (nodeIndex) {
-		var node;
+	var highlightNode = function (nodeStack) {
+		var node, nodeIndex;
+
+		nodeIndex = nodeStack[nodeStack.length - 1];
 
 		node = $('span[cslid="' + nodeIndex + '"]');
-
 		if (node.css("background-color") == selectedCss["background-color"])
 		{
 			// leave alone - selection takes precedence
@@ -87,7 +88,7 @@ CSLEDIT.editorPage = (function () {
 
 		// undo previous highlighting
 		unHighlightTree();
-		highlightTree($('li[cslid="' + nodeIndex + '"]'), 0);
+		highlightTree(nodeStack, null, 0);
 	};
 
 	var reverseSelectNode = function () {
@@ -115,11 +116,19 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	// highlight node and all parents, stopping at the "style" node
-	var highlightTree = function (node, depth) {
-		var node, parentNode, parentIndex, highlightedNode;
+	var highlightTree = function (nodeStack, node, depth) {
+		var nodeIndex, node, parentNode, parentIndex, highlightedNode;
+
+		if (node === null) {
+			nodeIndex = nodeStack.pop();
+			if (typeof nodeIndex === "undefined") {
+				return;
+			}
+			node = $('li[cslid="' + nodeIndex + '"]');
+		}
 
 		depth++;
-		assert(depth < 20, "stack overflow!");
+		assert(depth < 50, "stack overflow!");
 
 		if (node.is('li')) {
 			highlightedNode = node.children('a');
@@ -134,7 +143,14 @@ CSLEDIT.editorPage = (function () {
 		parentIndex = parentNode.attr("cslid");
 
 		if (parentIndex != "0") {
-			highlightTree(parentNode, depth);
+			if (nodeStack[nodeStack.length - 1] === parentIndex) {
+				nodeStack.pop();
+			}
+			highlightTree(nodeStack, parentNode, depth);
+		} else {
+			// highlight any remaining nodes in the call stack
+			// (e.g. if a macro was called)
+			highlightTree(nodeStack, null, depth);
 		}
 	};
 
@@ -149,8 +165,8 @@ CSLEDIT.editorPage = (function () {
 		}
 	};
 
-	var setupSyntaxHighlightForNode = function (nodeIndex) {
-		$('span[cslid="' + nodeIndex + '"]').hover(
+	var setupSyntaxHighlightForNode = function (cslId) {
+		$('span[cslid="' + cslId + '"]').hover(
 			function (event) {
 				var target = $(event.target).closest("span[cslid]");
 				
@@ -164,14 +180,14 @@ CSLEDIT.editorPage = (function () {
 				assertEqual(lastNode, target.attr("cslid"), "applySyntax");
 
 				if (hoveredNodeStack.length > 0) {
-					highlightNode(lastNode);
+					highlightNode(hoveredNodeStack.slice());
 				}
 			},
 			function () {
-				removeFromHoveredNodeStack(nodeIndex);
+				removeFromHoveredNodeStack(cslId);
 				
 				if (hoveredNodeStack.length > 0) {
-					highlightNode(hoveredNodeStack[hoveredNodeStack.length - 1]);
+					highlightNode(hoveredNodeStack.slice());
 				} else {
 					unHighlightTree();
 				}
@@ -179,8 +195,8 @@ CSLEDIT.editorPage = (function () {
 		);
 
 		// set up click handling
-		$('span[cslid="' + nodeIndex + '"]').click( function () {
-			reverseSelectNode(nodeIndex);
+		$('span[cslid="' + cslId + '"]').click( function () {
+			reverseSelectNode(cslId);
 		});
 	};
 
