@@ -231,7 +231,36 @@ CSLEDIT.editorPage = (function () {
 				"types", "hotkeys"],
 			// each plugin you have included can have its own config object
 			"core" : { "initially_open" : [ "node1" ] },
-			"ui" : { "initially_select" : [ "cslTreeNode0" ], "select_limit" : 1 }
+			"ui" : { "initially_select" : [ "cslTreeNode0" ], "select_limit" : 1 },
+			"dnd" : {
+				"drop_target" : false,
+				"drag_target" : false
+			},
+			"crrm" : {
+				"move" : {
+					// only allow re-ordering, not moving to different nodes
+					"check_move" : function (move) {
+						var	newGrandParent = this._get_parent(move.np),
+							newGrandParentName,
+							nodePath,
+							thisNodeName = move.o.data().name;
+
+						if (typeof newGrandParent.data !== "function") {
+							newGrandParentName = "root";
+						} else {
+							newGrandParentName = newGrandParent.data().name;
+						}
+						nodePath =
+							newGrandParentName + "/" + move.np.data().name;
+
+						if (thisNodeName in CSLEDIT.schema.childElements(nodePath)) {
+							return true;
+						}
+						return false;
+					}
+				}
+			}
+			
 		});
 
 		treeEditor.on("move_node.jstree", function () {
