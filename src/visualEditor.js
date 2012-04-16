@@ -92,15 +92,18 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var reverseSelectNode = function () {
+		var index,
+			cslId = hoveredNodeStack[hoveredNodeStack.length - 1];
+
 		assert(hoveredNodeStack.length > 0);
 
-		var cslId = hoveredNodeStack[hoveredNodeStack.length - 1];
+		for (index = 0; index < hoveredNodeStack.length; index++) {
+			$('#treeEditor').jstree("open_node", 'li[cslid="' + hoveredNodeStack[index] + '"]');
+		}
 
 		if (selectedCslId !== cslId) {
 			selectedCslId = cslId;
 
-			// expand jstree
-			$('#treeEditor').jstree("open_node", 'li[cslid="' + cslId + '"]');
 			$('li[cslid="' + cslId + '"] > a').click();
 		}
 	};
