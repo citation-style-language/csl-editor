@@ -74,7 +74,7 @@ CSLEDIT.editorPage = (function () {
 	}
 
 	var highlightNode = function (nodeStack) {
-		nodeIndex = nodeStack[nodeStack.length - 1];
+		var cslId = nodeStack[nodeStack.length - 1];
 
 		highlightOutput(cslId);
 
