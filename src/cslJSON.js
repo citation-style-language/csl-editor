@@ -73,8 +73,11 @@ CSLEDIT.parser = (function() {
 	var displayNameFromMetadata = function (metadata) {
 		var index,
 			attributesString = "",
-			attributesStringList = [];
+			attributesStringList = [],
+			displayName,
+			macro;
 
+		/* don't add metadata - too messy
 		if (metadata.attributes.length > 0) {
 			for (index = 0; index < metadata.attributes.length; index++) {
 				if (metadata.attributes[index].enabled) {
@@ -85,8 +88,43 @@ CSLEDIT.parser = (function() {
 			}
 			attributesString = ": " + attributesStringList.join(", ");
 		}
+		*/
 
-		return metadata.name + attributesString;
+		switch (metadata.name) {
+			case "macro":
+				displayName = "Macro: " + getAttr("name", metadata.attributes);
+				break;
+			case "text":
+				macro = getAttr("macro", metadata.attributes);
+				if (macro !== "") {
+					displayName = "Text (macro): " + macro;
+				} else {
+					displayName = "Text";
+				}
+				break;
+			case "citation":
+				displayName = "Inline Citations";
+				break;
+			case "bibliography":
+				displayName = "Bibliography";
+				break;
+			default:
+				displayName = metadata.name;
+		}
+
+		return displayName;
+	};
+
+	var getAttr = function (attribute, attributes) {
+		var index;
+
+		for (index = 0; index < attributes.length; index++) {
+			if (attributes[index].enabled && attributes[index].key === attribute) {
+				return attributes[index].value;
+			}
+		}
+
+		return "";
 	};
 
 	var htmlEscape = function (text) {

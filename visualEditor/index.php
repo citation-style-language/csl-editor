@@ -97,7 +97,7 @@
 		<div id="exampleOutput">
 			<div id="statusMessage"></div>
 
-			<h3>Formatted Citations</h3>	
+			<h3>Formatted Inline Citations</h3>	
 			<div id="formattedCitations"></div>
 
 			<h3>Formatted Bibliography</h3>
