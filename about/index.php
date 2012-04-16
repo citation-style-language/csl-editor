@@ -43,6 +43,8 @@
 <li><a href="http://code.google.com/p/google-diff-match-patch/">diff_match_patch</a> (for showing highlighted differences in formatted output)</li>
 <li><a href="http://www.mozilla.org/rhino/">Rhino</a> js interpreter (for pre-calculating example citations on server)</li>
 <li><a href="http://www.thaiopensource.com/relaxng/trang.html">Trang</a> (for converting schema files from .rnc to .rng)</li>
+<li><a href="http://www.famfamfam.com/lab/icons/silk/">FamFamFam Silk icons</a></li>
+<li><a href="http://p.yusukekamiyamane.com/">Fugue icons</a></li>
 </ul>
 
 </div>

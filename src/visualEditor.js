@@ -254,7 +254,62 @@ CSLEDIT.editorPage = (function () {
 				"types" : {
 					"text" : {
 						"icon" : {
-							"image" : "http://static.jstree.com/v.1.0rc/_docs/_drive.png"
+							"image" : "../external/famfamfam-icons/style.png"
+						}
+					},
+					"macro" : {
+						"icon" : {
+							"image" : "../external/famfamfam-icons/brick.png"
+						}
+					},
+					"info" : {
+						"icon" : {
+							"image" : "../external/famfamfam-icons/information.png"
+						}
+					},
+					"choose" : {
+						"icon" : {
+							"image" : "../external/fugue-icons/question-white.png"
+						}
+					},
+					"date" : {
+						"icon" : {
+							"image" : "../external/famfamfam-icons/date.png"
+						}
+					},
+					"style" : {
+						"icon" : {
+							"image" : "../external/famfamfam-icons/cog.png"
+						}
+					},
+					"citation" : {
+						"icon" : {
+							"image" : "../external/famfamfam-icons/page_white_edit.png"
+						}
+					},
+					"bibliography" : {
+						"icon" : {
+							"image" : "../external/famfamfam-icons/text_list_numbers.png"
+						}
+					},
+					"sort" : {
+						"icon" : {
+							"image" : "../external/fugue-icons/sort-alphabet.png"
+						}
+					},
+					"number" : {
+						"icon" : {
+							"image" : "../external/fugue-icons/edit-number.png"
+						}
+					},
+					"layout" : {
+						"icon" : {
+							"image" : "../external/famfamfam-icons/page_white_stack.png"
+						}
+					},
+					"group" : {
+						"icon" : {
+							"image" : "../external/famfamfam-icons/page_white_stack.png"
 						}
 					}
 				}

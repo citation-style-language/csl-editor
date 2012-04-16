@@ -104,3 +104,11 @@ z-index: 10 !important;
 ul.dropdown {
 z-index: 30 !important;
 }
+
+/* Icons */
+.jstree-default li[rel] > a > ins {
+	background-image:url("../external/famfamfam-icons/bullet_black.png");
+	background-repeat:no-repeat;
+	background-color:transparent;
+	background-position: 0px, 0px;
+}
