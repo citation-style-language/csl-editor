@@ -40,12 +40,6 @@
 </head>
 <body id="visualEditor">
 <?php include '../html/navigation.html'; ?>
-<div id="dialog-confirm-delete" title="Delete?">
-	<p>
-	<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-	Are you sure you want to delete this attribute?
-	</p>
-</div>
 <ul class="dropdown">
 	<li>
 		<a href="#">Style</a>
