@@ -18,8 +18,6 @@ CSLEDIT.schema.callWhenReady( function () {
 		var styleAttributes = CSLEDIT.schema.attributes("root/style"),
 			index;
 
-		console.log("attrs: " + JSON.stringify(styleAttributes));
-
 		ok("default-locale" in styleAttributes);
 		equal(styleAttributes["default-locale"].values.length, 1);
 		equal(styleAttributes["default-locale"].values[0].type, "data");

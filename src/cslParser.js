@@ -2,7 +2,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.parser = (function() {
+CSLEDIT.cslParser = (function() {
 	// Private functions:
 	var jsonNodeFromXml = function (node, nodeIndex) {
 		var children = [],
@@ -34,7 +34,7 @@ CSLEDIT.parser = (function() {
 		var attributesString = "";
 		var attributesStringList = [];
 		var attributesList = [];
-		var metadata;
+		var thisNodeData;
 		
 		if (node.attributes !== null && node.attributes.length > 0) {
 			for (index = 0; index < node.attributes.length; index++) {
@@ -51,23 +51,56 @@ CSLEDIT.parser = (function() {
 			attributesString = ": " + attributesStringList.join(", ");
 		}
 
-		metadata = {
-				"name" : node.localName,
-				"attributes" : attributesList,
-				"cslId" : thisNodeIndex
+		thisNodeData = {
+				name : node.localName,
+				attributes : attributesList,
+				cslId : thisNodeIndex,
+				children : children
 			};
 
 		if (typeof textValue !== "undefined") {
 			// trim whitespace from start and end
-			metadata["textValue"] = textValue.replace(/^\s+|\s+$/g,"");
+			thisNodeData.textValue = textValue.replace(/^\s+|\s+$/g,"");
 		}
 
-		return {
-			"data" : displayNameFromMetadata(metadata),
-			"attr" : { "rel" : node.localName, "cslid" : thisNodeIndex, "id" : "cslTreeNode" + thisNodeIndex },
-			"metadata" : metadata,
-			"children" : children
+		return thisNodeData;
+	};
+
+	var jsTreeDataFromCslData = function (cslData) {
+		var jsTreeData = jsTreeDataFromCslData_inner(cslData);
+
+		// make root node open
+		jsTreeData["state"] = "open";
+
+		return jsTreeData;
+	};
+
+	var jsTreeDataFromCslData_inner = function (cslData) {
+		var index;
+		var children = [];
+
+		for (index = 0; index < cslData.children.length; index++) {
+			children.push(jsTreeDataFromCslData_inner(cslData.children[index]));
+		}
+
+		var jsTreeData = {
+			data : displayNameFromMetadata(cslData),
+			attr : {
+				rel : cslData.name,
+				cslid : cslData.cslId,
+				id : "cslTreeNode" + cslData.cslId
+			},
+			// TODO: remove this
+			metadata : {
+				name : cslData.name,
+				attributes: cslData.attributes,
+				cslId : cslData.cslId,
+				textValue : cslData.textValue
+			},
+			children : children
 		};
+
+		return jsTreeData;
 	};
 
 	var displayNameFromMetadata = function (metadata) {
@@ -150,33 +183,30 @@ CSLEDIT.parser = (function() {
 	var xmlNodeFromJson = function (jsonData, indent) {
 		var attributesString = "",
 			xmlString,
-			index,
-			metadata;
+			index;
 
-		metadata = jsonData.metadata;
-
-		if (metadata.attributes.length > 0) {
-		  	for (index = 0; index < metadata.attributes.length; index++) {
-				if (metadata.attributes[index].enabled && metadata.attributes[index].value !== "") {
+		if (jsonData.attributes.length > 0) {
+		  	for (index = 0; index < jsonData.attributes.length; index++) {
+				if (jsonData.attributes[index].enabled && jsonData.attributes[index].value !== "") {
 					// TODO: the key probably shouldn't have characters needing escaping anyway,
 					//       should not allow to input them in the first place
 					attributesString += " " + 
-						htmlEscape(metadata.attributes[index].key) + '="' + 
-						htmlEscape(metadata.attributes[index].value) + '"';
+						htmlEscape(jsonData.attributes[index].key) + '="' + 
+						htmlEscape(jsonData.attributes[index].value) + '"';
 				}
 			}
 		}
-		xmlString = generateIndent(indent) + "<" + metadata.name + attributesString + ">\n";
+		xmlString = generateIndent(indent) + "<" + jsonData.name + attributesString + ">\n";
 
 		if (typeof jsonData.children !== "undefined" && jsonData.children.length > 0) {
 			for (index = 0; index < jsonData.children.length; index++) {
 				xmlString += xmlNodeFromJson(jsonData.children[index], indent + 1);
 			}
-		} else if (typeof metadata.textValue !== "undefined") {
-			xmlString += generateIndent(indent+1) + htmlEscape(metadata.textValue) + "\n";
+		} else if (typeof jsonData.textValue !== "undefined") {
+			xmlString += generateIndent(indent+1) + htmlEscape(jsonData.textValue) + "\n";
 		}
 
-		xmlString += generateIndent(indent) + "</" + htmlEscape(metadata.name) + ">\n";
+		xmlString += generateIndent(indent) + "</" + htmlEscape(jsonData.name) + ">\n";
 
 		return xmlString;
 	};
@@ -199,7 +229,6 @@ CSLEDIT.parser = (function() {
 			result;
 
 		if (jsonData.metadata.name === nodeName) {
-			console.log("found " + nodeName + " at " + jsonData.metadata.cslId);
 			return jsonData.metadata.cslId;
 		} else {
 			if (typeof jsonData.children !== "undefined") {
@@ -226,24 +255,24 @@ CSLEDIT.parser = (function() {
 
 		// nodeIndex.index is the depth-first traversal position of CSL node
 		// it must start at 0, and it will be returned with nodeIndex.index = number of nodes - 1
-		jsonFromCslXml : function (xmlData, nodeIndex) {
+		cslDataFromCslCode : function (xmlData) {
 			console.time("jsonFromCslXml");
 			var parser = new DOMParser();
 			var xmlDoc = parser.parseFromString(xmlData, "application/xml");
+			assert(xmlDoc.documentElement.nodeName !== "parsererror", "xml parser error");
 
 			var styleNode = xmlDoc.childNodes[0];
 			assertEqual(styleNode.localName, "style", "Invalid style - no style node");
 
-			var jsonData = jsonNodeFromXml(styleNode, nodeIndex);
-
-			// make root node open
-			jsonData["state"] = "open";
+			var jsonData = jsonNodeFromXml(styleNode, { index: 0 } );
 		
 			console.timeEnd("jsonFromCslXml");
 			return jsonData;
 		},
 
-		cslXmlFromJson : function (jsonData) {
+		jsTreeDataFromCslData : jsTreeDataFromCslData,
+
+		cslCodeFromCslData : function (jsonData) {
  			console.time("cslXmlFromJson");
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
 			cslXml += xmlNodeFromJson(jsonData[0], 0);

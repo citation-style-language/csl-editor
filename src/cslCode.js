@@ -1,6 +1,6 @@
 var CSLEDIT = CSLEDIT || {};
 
-/* Uses localStorage to maintain permenant cslCode */
+/* Reads and writes style code to semi-permenant storage using CSLEDIT.data */
 CSLEDIT.code = (function () {
 	var storage_cslCode = "CSLEDIT.cslCode";
 
