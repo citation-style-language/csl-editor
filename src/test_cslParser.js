@@ -229,8 +229,4 @@ test("parse CSL fragment", function () {
 	// remove whitespace after closing tags
 	cslXml = cslXml.replace(/>[\n\r\s]*/g, ">");
 	equal(cslXml, CSLEDIT.test_cslJSON.cslFragment);
-
-	// check the jsTree json_data representaion
-	jsTreeData = CSLEDIT.cslParser.jsTreeDataFromCslData(cslData);
-	equal(JSON.stringify(jsTreeData), JSON.stringify(CSLEDIT.test_cslJSON.jsTreeData));
 });

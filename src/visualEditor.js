@@ -6,15 +6,13 @@ CSLEDIT.editorPage = (function () {
 	var editTimeout,
 		styleURL,
 		oldSelectedNode,
-		numCslNodes,
 		hoveredNodeStack = [],
 		highlightedCss,
 		selectedCss,
 		unHighlightedCss,
 		highlightedTreeNodes = [],
 		selectedCslId = -1,
-		treeEditor,
-		jsonData;
+		cslTreeView;
 
 	var normalisedColor = function (color) {
 		return $('<pre>').css({"color" : color}).css("color");
@@ -41,7 +39,7 @@ CSLEDIT.editorPage = (function () {
 		var mainContent = $('#mainContainer');
 
 		mainContent.height(mainContent.parent().height() - 60);
-		treeEditor.height(treeEditor.parent().height());
+		cslTreeView.jQueryElement.height(cslTreeView.jQueryElement.parent().height());
 	};
 
 	var addToHoveredNodeStack = function (target) {
@@ -101,13 +99,12 @@ CSLEDIT.editorPage = (function () {
 		assert(hoveredNodeStack.length > 0);
 
 		for (index = 0; index < hoveredNodeStack.length; index++) {
-			$('#treeEditor').jstree("open_node", 'li[cslid="' + hoveredNodeStack[index] + '"]');
+			cslTreeView.expandNode(hoveredNodeStack[index]);
 		}
 
 		if (selectedCslId !== cslId) {
 			selectedCslId = cslId;
-
-			$('li[cslid="' + cslId + '"] > a').click();
+			cslTreeView.selectNode(cslId);
 		}
 	};
 
@@ -230,132 +227,25 @@ CSLEDIT.editorPage = (function () {
 		console.timeEnd("syntaxHighlighting");
 	};
 
-	var updateTreeView = function () {
+	var createTreeView = function () {
 		var nodeIndex = { index : 0 };
-		jsonData = CSLEDIT.parser.jsonFromCslXml(CSLEDIT.code.get(), nodeIndex);
+		var cslData = CSLEDIT.cslParser.cslDataFromCslCode(CSLEDIT.code.get(), nodeIndex);
 
-		numCslNodes = nodeIndex.index + 1;
+		cslTreeView.createFromJsonData(cslData,
+		{
+			"loaded.jstree" : function (event, data) {
+				//jsonData = treeEditor.jstree("get_json", -1, [], [])[0];
 
-		treeEditor.bind("loaded.jstree", function (event, data) {
-			jsonData = treeEditor.jstree("get_json", -1, [], [])[0];
-
-			CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
-				$("#statusMessage"), $("#exampleOutput"),
-				$("#formattedCitations"), $("#formattedBibliography"),
-				doSyntaxHighlighting,
-				CSLEDIT.parser.getFirstCslId(jsonData, "citation"),
-				CSLEDIT.parser.getFirstCslId(jsonData, "bibliography"));
-		});
-		
-		treeEditor.jstree({
-			"json_data" : { data : [ jsonData ] },
-			"types" : {
-				"valid_children" : [ "root" ],
-				"types" : {
-					"text" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/style.png"
-						}
-					},
-					"macro" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/brick.png"
-						}
-					},
-					"info" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/information.png"
-						}
-					},
-					"choose" : {
-						"icon" : {
-							"image" : "../external/fugue-icons/question-white.png"
-						}
-					},
-					"date" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/date.png"
-						}
-					},
-					"style" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/cog.png"
-						}
-					},
-					"citation" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/page_white_edit.png"
-						}
-					},
-					"bibliography" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/text_list_numbers.png"
-						}
-					},
-					"sort" : {
-						"icon" : {
-							"image" : "../external/fugue-icons/sort-alphabet.png"
-						}
-					},
-					"number" : {
-						"icon" : {
-							"image" : "../external/fugue-icons/edit-number.png"
-						}
-					},
-					"layout" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/page_white_stack.png"
-						}
-					},
-					"group" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/page_white_stack.png"
-						}
-					}
-				}
+				CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
+					$("#statusMessage"), $("#exampleOutput"),
+					$("#formattedCitations"), $("#formattedBibliography"),
+					doSyntaxHighlighting,
+					CSLEDIT.cslParser.getFirstCslId(cslData, "citation"),
+					CSLEDIT.cslParser.getFirstCslId(cslData, "bibliography"));
 			},
-				
-			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
-				"types", "hotkeys"],
-			// each plugin you have included can have its own config object
-			"core" : { "initially_open" : [ "node1" ] },
-			"ui" : { "initially_select" : [ "cslTreeNode0" ], "select_limit" : 1 },
-			"dnd" : {
-				"drop_target" : false,
-				"drag_target" : false
-			},
-			"crrm" : {
-				"move" : {
-					// only allow re-ordering, not moving to different nodes
-					"check_move" : function (move) {
-						var	newGrandParent = this._get_parent(move.np),
-							newGrandParentName,
-							nodePath,
-							thisNodeName = move.o.data().name;
-
-						if (typeof newGrandParent.data !== "function") {
-							newGrandParentName = "root";
-						} else {
-							newGrandParentName = newGrandParent.data().name;
-						}
-						nodePath =
-							newGrandParentName + "/" + move.np.data().name;
-
-						if (thisNodeName in CSLEDIT.schema.childElements(nodePath)) {
-							return true;
-						}
-						return false;
-					}
-				}
-			}
-			
-		});
-
-		treeEditor.on("move_node.jstree", function () {
-			treeViewChanged();
-		});
-		treeEditor.on("select_node.jstree", nodeSelected);
-		treeEditor.on("delete_node.jstree", function () {
+			"move_node.jstree" : treeViewChanged,
+			"select_node.jstree" : nodeSelected,
+			"delete_node.jstree" : function () {
 			if (confirm("Are you sure you want to delete this node?")) {
 				treeViewChanged();
 			} else {
@@ -371,13 +261,15 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var formatExampleCitations = function () {
-		CSLEDIT.code.set(CSLEDIT.parser.cslXmlFromJson([jsonData]));
+		// TODO: remove, no longer reading data from the view
+		//CSLEDIT.code.set(CSLEDIT.cslParser.cslXmlFromJson([jsonData]));
+
 		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
 			$("#statusMessage"), $("#exampleOutput"),
 			$("#formattedCitations"), $("#formattedBibliography"),
 			doSyntaxHighlighting,
-			CSLEDIT.parser.getFirstCslId(jsonData, "citation"),
-			CSLEDIT.parser.getFirstCslId(jsonData, "bibliography"));
+			CSLEDIT.cslParser.getFirstCslId(jsonData, "citation"),
+			CSLEDIT.cslParser.getFirstCslId(jsonData, "bibliography"));
 	};
 
 	var nodeSelected = function(event, ui) {
@@ -437,11 +329,13 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var nodeChanged = function () {
-		var selectedNode = treeEditor.jstree("get_selected"),
-			metadata,
+		var selectedNodeId = cslTreeView.selectedNode,
 			attributes = [];
 
-		metadata = selectedNode.data();
+		node = CSLEDIT.data.getNode(selectedNodeId);
+
+		// TODO: assert check that persistent data wasn't changed in another tab, making
+		//       this form data possibly refer to a different node
 
 		// read user data
 		var numAttributes = $('[id^="nodeAttributeLabel"]').length,
@@ -462,12 +356,12 @@ CSLEDIT.editorPage = (function () {
 		metadata.attributes = attributes;
 
 		treeEditor.jstree("rename_node", selectedNode,
-			CSLEDIT.parser.displayNameFromMetadata(metadata));
+			CSLEDIT.cslParser.displayNameFromMetadata(metadata));
 		formatExampleCitations();
 	};
 
 	var updateCslIds = function () {
-		CSLEDIT.parser.updateCslIds(jsonData, {index:0});
+		CSLEDIT.cslParser.updateCslIds(jsonData, {index:0});
 
 		// update the html attributes to be in sync
 		treeEditor.find("[cslid]").each(function (index) {
@@ -488,13 +382,13 @@ CSLEDIT.editorPage = (function () {
 		data = data.replace(/<!--.*?-->/g, "");
 
 		CSLEDIT.code.set(data);
-		updateTreeView();
+		createTreeView();
 	};
 
 	var setupDropdownMenuHandler = function (selector) {
 		$(selector).click(function (event) {
 			var clickedName = $(event.target).text(),
-				selectedNode = $('#treeEditor').jstree('get_selected'),
+				selectedNodeId = $('#treeEditor').jstree('get_selected'),
 				parentNode = $(event.target).parent().parent(),
 				parentNodeName,
 				position;
@@ -566,7 +460,7 @@ CSLEDIT.editorPage = (function () {
 				},
 				index;
 	
-			treeEditor = $("#treeEditor");
+			cslTreeView = CSLEDIT.CslTreeView($("#treeEditor"));
 
 			$("#dialog-confirm-delete").dialog({autoOpen : false});
 
@@ -586,7 +480,7 @@ CSLEDIT.editorPage = (function () {
 				$("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
 			});
 
-			CSLEDIT.code.initPageStyle( updateTreeView );
+			CSLEDIT.code.initPageStyle( createTreeView );
 			setupDropdownMenuHandler(".dropdown a");
 
 			$(".propertyInput").on("change", nodeChanged);

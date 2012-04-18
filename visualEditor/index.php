@@ -25,7 +25,7 @@
 	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
 	<script type="text/javascript" src="../src/debug.js"></script>
-	<script type="text/javascript" src="../src/cslJSON.js"></script>
+	<script type="text/javascript" src="../src/cslParser.js"></script>
 	<script type="text/javascript" src="../src/cslCode.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 	<script type="text/javascript" src="../src/propertyPanel.js"></script>

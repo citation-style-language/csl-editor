@@ -66,87 +66,6 @@ CSLEDIT.cslParser = (function() {
 		return thisNodeData;
 	};
 
-	var jsTreeDataFromCslData = function (cslData) {
-		var jsTreeData = jsTreeDataFromCslData_inner(cslData);
-
-		// make root node open
-		jsTreeData["state"] = "open";
-
-		return jsTreeData;
-	};
-
-	var jsTreeDataFromCslData_inner = function (cslData) {
-		var index;
-		var children = [];
-
-		for (index = 0; index < cslData.children.length; index++) {
-			children.push(jsTreeDataFromCslData_inner(cslData.children[index]));
-		}
-
-		var jsTreeData = {
-			data : displayNameFromMetadata(cslData),
-			attr : {
-				rel : cslData.name,
-				cslid : cslData.cslId,
-				id : "cslTreeNode" + cslData.cslId
-			},
-			// TODO: remove this
-			metadata : {
-				name : cslData.name,
-				attributes: cslData.attributes,
-				cslId : cslData.cslId,
-				textValue : cslData.textValue
-			},
-			children : children
-		};
-
-		return jsTreeData;
-	};
-
-	var displayNameFromMetadata = function (metadata) {
-		var index,
-			attributesString = "",
-			attributesStringList = [],
-			displayName,
-			macro;
-
-		/* don't add metadata - too messy
-		if (metadata.attributes.length > 0) {
-			for (index = 0; index < metadata.attributes.length; index++) {
-				if (metadata.attributes[index].enabled) {
-					attributesStringList.push(
-						metadata.attributes[index].key + '="' +
-						metadata.attributes[index].value + '"');
-				}
-			}
-			attributesString = ": " + attributesStringList.join(", ");
-		}
-		*/
-
-		switch (metadata.name) {
-			case "macro":
-				displayName = "Macro: " + getAttr("name", metadata.attributes);
-				break;
-			case "text":
-				macro = getAttr("macro", metadata.attributes);
-				if (macro !== "") {
-					displayName = "Text (macro): " + macro;
-				} else {
-					displayName = "Text";
-				}
-				break;
-			case "citation":
-				displayName = "Inline Citations";
-				break;
-			case "bibliography":
-				displayName = "Bibliography";
-				break;
-			default:
-				displayName = metadata.name;
-		}
-
-		return displayName;
-	};
 
 	var getAttr = function (attribute, attributes) {
 		var index;
@@ -212,38 +131,20 @@ CSLEDIT.cslParser = (function() {
 	};
 	
 	var updateCslIds = function (jsonData, cslId) {
-			var childIndex;
+		var childIndex;
 
-			jsonData.metadata["cslId"] = cslId.index;
-			cslId.index++;
-			if (jsonData.children) {
-				for (childIndex = 0; childIndex < jsonData.children.length; childIndex++)
-				{
-					updateCslIds(jsonData.children[childIndex], cslId);
-				}
-			}
-		};
-
-	var getFirstCslId = function (jsonData, nodeName) {
-		var index,
-			result;
-
-		if (jsonData.metadata.name === nodeName) {
-			return jsonData.metadata.cslId;
-		} else {
-			if (typeof jsonData.children !== "undefined") {
-				for (index = 0; index < jsonData.children.length; index++) {
-					result = getFirstCslId(jsonData.children[index], nodeName);
-					if (result > -1) {
-						return result;
-					}
-				}
+		jsonData.metadata["cslId"] = cslId.index;
+		cslId.index++;
+		if (jsonData.children) {
+			for (childIndex = 0; childIndex < jsonData.children.length; childIndex++)
+			{
+				updateCslIds(jsonData.children[childIndex], cslId);
 			}
 		}
-		// couldn't find it
-		return -1;
 	};
 
+
+	// public:
 	return {
 		isCslValid : function(xmlData) {
 			var parser = new DOMParser();
@@ -270,8 +171,6 @@ CSLEDIT.cslParser = (function() {
 			return jsonData;
 		},
 
-		jsTreeDataFromCslData : jsTreeDataFromCslData,
-
 		cslCodeFromCslData : function (jsonData) {
  			console.time("cslXmlFromJson");
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
@@ -280,10 +179,6 @@ CSLEDIT.cslParser = (function() {
 			return cslXml;
 		},
 
-		displayNameFromMetadata : displayNameFromMetadata,
-
-		updateCslIds : updateCslIds,
-
-		getFirstCslId : getFirstCslId
+		updateCslIds : updateCslIds
 	};
 }());
