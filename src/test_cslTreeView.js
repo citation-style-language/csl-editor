@@ -14,16 +14,15 @@ asyncTest("create tree view", function () {
 	treeView = CSLEDIT.CslTreeView($("<div><\/div>"));
 	treeView.createFromCslData(cslData, {
 		"loaded.jstree" : function () {
-			console.log("treeview loaded: " + treeView.jQueryElement.html());
-			equal(treeView.jQueryElement.find('li[cslid="0"]').attr("rel"), "style");
-			equal(treeView.jQueryElement.find('li[cslid="1"]').attr("rel"), "info");
-			equal(treeView.jQueryElement.find('li[cslid="2"]').attr("rel"), "author");
-			equal(treeView.jQueryElement.find('li[cslid="3"]').attr("rel"), "citation");
+			equal(treeView.jQueryElement.find('li[cslid=0]').attr("rel"), "style");
+			equal(treeView.jQueryElement.find('li[cslid=1]').attr("rel"), "info");
+			equal(treeView.jQueryElement.find('li[cslid=2]').attr("rel"), "author");
+			equal(treeView.jQueryElement.find('li[cslid=3]').attr("rel"), "citation");
 			start();
 		}
 	});
 });
-/*
+
 asyncTest("add/delete/ammend nodes", function () {
 	var cslData,
 		treeView;
@@ -33,18 +32,35 @@ asyncTest("add/delete/ammend nodes", function () {
 
 	treeView = CSLEDIT.CslTreeView($("<div><\/div>"));
 	
-	treeView.addNode(0, 0, {name : "info"} );
-	treeView.addNode(1, 0, {name : "author"} );
-	treeView.addNode(0, 1, {name : "citation"} );
-
 	treeView.createFromCslData(cslData, {
 		"loaded.jstree" : function () {
-			console.log("treeview loaded: " + treeView.jQueryElement.html());
-			equal(treeView.jQueryElement.find('li[cslid="0"]').attr("rel"), "style");
-			equal(treeView.jQueryElement.find('li[cslid="1"]').attr("rel"), "info");
-			equal(treeView.jQueryElement.find('li[cslid="2"]').attr("rel"), "author");
-			equal(treeView.jQueryElement.find('li[cslid="3"]').attr("rel"), "citation");
+			treeView.addNode(0, 0, {name : "info"} );
+			treeView.addNode(0, 1, {name : "citation"} );
+			treeView.addNode(1, 0, {name : "author"} );
+
+			equal(treeView.jQueryElement.find('li[cslid=0]').attr("rel"), "style");
+			equal(treeView.jQueryElement.find('li[cslid=1]').attr("rel"), "info");
+			equal(treeView.jQueryElement.find('li[cslid=2]').attr("rel"), "author");
+			equal(treeView.jQueryElement.find('li[cslid=3]').attr("rel"), "citation");
+
+			treeView.deleteNode(1);
+			equal(treeView.jQueryElement.find('li[cslid=0]').attr("rel"), "style");
+			equal(treeView.jQueryElement.find('li[cslid=1]').attr("rel"), "citation");
+
+			// Can't delete the root node
+			raises(function () {treeView.deleteNode(0);} );
+			equal(treeView.jQueryElement.find('li[cslid=1]').attr("rel"), "citation");
+
+			// test ammending
+			equal(
+				treeView.jQueryElement.jstree('get_text',treeView.jQueryElement.find('li[cslid=1]')),
+				"Inline Citations");
+			treeView.ammendNode(1, { name : "bibliography" } );
+			equal(
+				treeView.jQueryElement.jstree('get_text',treeView.jQueryElement.find('li[cslid=1]')),
+				"Bibliography");
+
 			start();
 		}
 	});
-});*/
+});

@@ -88,8 +88,8 @@ CSLEDIT.CslTreeView = function (treeView) {
 			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
 				"types", "hotkeys"],
 			// each plugin you have included can have its own config object
-			"core" : { "initially_open" : [ "node1" ] },
-			"ui" : { "initially_select" : [ "cslTreeNode0" ], "select_limit" : 1 },
+			//"core" : { "initially_open" : [ "node1" ] },
+			"ui" : { /*"initially_select" : [ "cslTreeNode0" ],*/ "select_limit" : 1 },
 			"dnd" : {
 				"drop_target" : false,
 				"drag_target" : false
@@ -123,17 +123,63 @@ CSLEDIT.CslTreeView = function (treeView) {
 	};
 
 	var addNode = function (id, position, newNode) {
-		
+		var parentNode;
+		console.log("adding to node " + id);
+		parentNode = treeView.find('li[cslid="' + id + '"]');
+		assertEqual(parentNode.length, 1);
+
+		treeView.jstree('create_node', parentNode, position,
+		{
+			"data" : displayNameFromMetadata(newNode),
+			"attr" : { "rel" : newNode.name, "cslid" : -1 },
+			"children" : []
+		});
+
+		// sort the cslids
+		var allNodes;
+		allNodes = treeView.find('li[cslid]');
+
+		assert(allNodes.length > 1);
+
+		allNodes.each(function (index) {
+			var oldId = parseInt($(this).attr('cslid'));
+
+			if (oldId === -1) {
+				$(this).attr('cslid', id + position + 1);
+			} else if (oldId > id + position) {
+				$(this).attr('cslid', oldId + 1);
+			}
+
+			// TODO: remove when confident that this always holds,
+			//       if it doesn't, need to alter deleteNode
+			assertEqual(parseInt($(this).attr('cslid')), index);
+		});
 	};
 
-	var deleteNode = function (id, position) {
+	var deleteNode = function (id) {
+		var node = treeView.find('li[cslid="' + id + '"]');
+		assertEqual(node.length, 1);
+		assert(id !== 0);
+
+		treeView.jstree("remove", node);
+
+		// sort the cslids
+		var allNodes;
+		allNodes = treeView.find('li[cslid]');
+		assert(allNodes.length > 0);
+		allNodes.each(function (index) {
+			$(this).attr('cslid', index);
+		});
 	};
 
 	var ammendNode = function (id, ammendedNode) {
+		var node = treeView.find('li[cslid="' + id + '"]');
+		
+		treeView.jstree('rename_node', node, displayNameFromMetadata(ammendedNode));
 	};
 
 	var selectNode = function (id) {
-		treeView.find('li[cslid="' + id + '"] > a').click();
+		treeView.find('li[cslid=' + id + '] > a').click();
 	};
 
 	var selectedNode = function (id) {
@@ -147,7 +193,7 @@ CSLEDIT.CslTreeView = function (treeView) {
 	};
 
 	var expandNode = function (id) {
-		treeView.jstree("open_node", 'li[cslid="' + id + '"]');
+		treeView.jstree("open_node", 'li[cslid=' + id + ']');
 	};
 
 	var jsTreeDataFromCslData = function (cslData) {
@@ -171,8 +217,8 @@ CSLEDIT.CslTreeView = function (treeView) {
 			data : displayNameFromMetadata(cslData),
 			attr : {
 				rel : cslData.name,
-				cslid : cslData.cslId,
-				id : "cslTreeNode" + cslData.cslId
+				cslid : cslData.cslId //,
+				//id : "cslTreeNode" + cslData.cslId
 			},
 			// TODO: remove this
 			/*metadata : {
