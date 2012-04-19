@@ -26,9 +26,12 @@
 	<script type="text/javascript" src="../src/diff.js"></script>
 	<script type="text/javascript" src="../src/debug.js"></script>
 	<script type="text/javascript" src="../src/cslParser.js"></script>
-	<script type="text/javascript" src="../src/cslCode.js"></script>
+	<script type="text/javascript" src="../src/Iterator.js"></script>
+	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 	<script type="text/javascript" src="../src/propertyPanel.js"></script>
+	<script type="text/javascript" src="../src/cslTreeView.js"></script>
+	<script type="text/javascript" src="../src/controller.js"></script>
 	<script type="text/javascript" src="../src/visualEditor.js"></script>
 
 	<link type="text/css" rel="stylesheet" href="../css/dropdown.css" />

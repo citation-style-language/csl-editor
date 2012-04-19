@@ -25,7 +25,7 @@ CSLEDIT.editorPage = (function () {
 			{
 				clearTimeout(codeTimeout);
 				codeTimeout = setTimeout( function () {
-					CSLEDIT.code.set(editor.getValue());
+					CSLEDIT.data.setCslCode(editor.getValue());
 					CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
 						$("#statusMessage"), $("#exampleOutput"),
 						$("#formattedCitations"), $("#formattedBibliography"));
@@ -37,8 +37,8 @@ CSLEDIT.editorPage = (function () {
 					lineNumbers: true
 			});
 
-			CSLEDIT.code.initPageStyle( function () {
-				editor.setValue(CSLEDIT.code.get());
+			CSLEDIT.data.initPageStyle( function () {
+				editor.setValue(CSLEDIT.data.getCslCode());
 			});
 		}
 	};

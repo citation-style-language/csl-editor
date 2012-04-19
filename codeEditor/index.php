@@ -20,11 +20,12 @@
 	<script type="text/javascript" src="../external/citeproc/runcites.js"></script>
 	<script type="text/javascript" src="../external/diff-match-patch/diff_match_patch.js"></script>
 
+	<script type="text/javascript" src="../src/debug.js"></script>
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
-	<script type="text/javascript" src="../src/cslJSON.js"></script>
-	<script type="text/javascript" src="../src/cslCode.js"></script>
+	<script type="text/javascript" src="../src/cslParser.js"></script>
+	<script type="text/javascript" src="../src/cslData.js"></script>
 
 	<link rel="stylesheet" href="../css/base.css" />
 	<script type="text/javascript" src="../src/codeEditor.js"></script>

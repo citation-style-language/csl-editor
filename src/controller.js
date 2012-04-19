@@ -40,13 +40,3 @@ CSLEDIT.Controller = function () {
 	};
 };
 
-if (typeof CSLEDIT.cslData !== "undefined") {
-	CSLEDIT.controller = CSLEDIT.Controller();
-
-	CSLEDIT.controller.addSubscriber("addNode", CSLEDIT.cslData.addNode);
-	CSLEDIT.controller.addSubscriber("deleteNode", CSLEDIT.cslData.deleteNode);
-	CSLEDIT.controller.addSubscriber("ammendNode", CSLEDIT.cslData.ammendNode);
-	CSLEDIT.controller.addSubscriber("setCslCode", CSLEDIT.cslData.setCslCode);
-
-	// TODO: add the views
-}

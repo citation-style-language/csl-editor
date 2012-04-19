@@ -195,10 +195,10 @@ CSLEDIT.propertyPanel = (function () {
 	
 		$(".propertyInput").on("input", function () {
 			clearTimeout(onChangeTimeout);
-			onChangeTimeout = setTimeout(onChange, 500);
+			onChangeTimeout = setTimeout(function () { onChange(nodeData); }, 500);
 		});
 
-		$(".propertySelect").on("change", onChange);
+		$(".propertySelect").on("change", function () { onChange(nodeData); });
 
 		$('.toggleAttrButton').click( function (buttonEvent) {
 			index = $(buttonEvent.target).attr("attrIndex");
@@ -210,9 +210,9 @@ CSLEDIT.propertyPanel = (function () {
 				nodeData.attributes[index].enabled = true;
 				$("#nodeAttribute" + index).removeAttr("disabled");
 			}
-			setupPanel(panel, nodeData, dataType, schemaAttributes, onChange);
+			setupPanel(panel, nodeData, dataType, schemaAttributes, function () { onChange(nodeData); });
 			clearTimeout(onChangeTimeout);
-			onChangeTimeout = setTimeout(onChange, 10);
+			onChangeTimeout = setTimeout(function () { onChange(nodeData); }, 10);
 		});
 		
 		console.timeEnd("setupPanel");

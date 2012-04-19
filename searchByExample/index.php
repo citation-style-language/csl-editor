@@ -23,8 +23,10 @@
 	<script type="text/javascript" src="../external/cleditor/jquery.cleditor.js"></script>
 	<link rel="stylesheet" type="text/css" href="../external/cleditor/jquery.cleditor.css">
 
+	<script type="text/javascript" src="../src/debug.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
-	<script type="text/javascript" src="../src/cslCode.js"></script>
+	<script type="text/javascript" src="../src/cslParser.js"></script>
+	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/searchResults.js"></script>
 	<script type="text/javascript" src="../src/searchByExample.js"></script>
 	<script type="text/javascript" src="../src/analytics.js"></script>

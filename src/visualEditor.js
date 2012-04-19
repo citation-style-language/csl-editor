@@ -12,7 +12,8 @@ CSLEDIT.editorPage = (function () {
 		unHighlightedCss,
 		highlightedTreeNodes = [],
 		selectedCslId = -1,
-		cslTreeView;
+		cslTreeView,
+		controller;
 
 	var normalisedColor = function (color) {
 		return $('<pre>').css({"color" : color}).css("color");
@@ -39,7 +40,7 @@ CSLEDIT.editorPage = (function () {
 		var mainContent = $('#mainContainer');
 
 		mainContent.height(mainContent.parent().height() - 60);
-		cslTreeView.jQueryElement.height(cslTreeView.jQueryElement.parent().height());
+		$("#treeEditor").height($("#treeEditor").parent().height());
 	};
 
 	var addToHoveredNodeStack = function (target) {
@@ -215,6 +216,8 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var doSyntaxHighlighting = function () {
+		var numCslNodes = CSLEDIT.data.numCslNodes();
+			
 		console.time("syntaxHighlighting");
 		// clear the hovered node stack
 		hoveredNodeStack.length = 0;
@@ -229,53 +232,54 @@ CSLEDIT.editorPage = (function () {
 
 	var createTreeView = function () {
 		var nodeIndex = { index : 0 };
-		var cslData = CSLEDIT.cslParser.cslDataFromCslCode(CSLEDIT.code.get(), nodeIndex);
+		var cslData = CSLEDIT.data.get(); 
 
-		cslTreeView.createFromJsonData(cslData,
+		cslTreeView.createFromCslData(cslData,
 		{
-			"loaded.jstree" : function (event, data) {
-				//jsonData = treeEditor.jstree("get_json", -1, [], [])[0];
+			loaded : function (event, data) {
+				console.log("tree loaded");
+
+				var cslData = CSLEDIT.data.get();
 
 				CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
 					$("#statusMessage"), $("#exampleOutput"),
 					$("#formattedCitations"), $("#formattedBibliography"),
 					doSyntaxHighlighting,
-					CSLEDIT.cslParser.getFirstCslId(cslData, "citation"),
-					CSLEDIT.cslParser.getFirstCslId(cslData, "bibliography"));
+					CSLEDIT.data.getFirstCslId(cslData, "citation"),
+					CSLEDIT.data.getFirstCslId(cslData, "bibliography"));
 			},
-			"move_node.jstree" : treeViewChanged,
-			"select_node.jstree" : nodeSelected,
-			"delete_node.jstree" : function () {
-			if (confirm("Are you sure you want to delete this node?")) {
-				treeViewChanged();
-			} else {
-				updateCslData(CSLEDIT.code.get());
+			selectNode : nodeSelected,
+			deleteNode : function () {
+				controller.exec("deleteNode", [cslTreeView.selectedNode()]);
 			}
 		});
 	};
-
+/*
 	var treeViewChanged = function () {
 		jsonData = treeEditor.jstree("get_json", -1, [], [])[0];
 		updateCslIds();
 		formatExampleCitations();
 	};
-
+*/
 	var formatExampleCitations = function () {
 		// TODO: remove, no longer reading data from the view
 		//CSLEDIT.code.set(CSLEDIT.cslParser.cslXmlFromJson([jsonData]));
+
+		var cslData = CSLEDIT.data.get();
 
 		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
 			$("#statusMessage"), $("#exampleOutput"),
 			$("#formattedCitations"), $("#formattedBibliography"),
 			doSyntaxHighlighting,
-			CSLEDIT.cslParser.getFirstCslId(jsonData, "citation"),
-			CSLEDIT.cslParser.getFirstCslId(jsonData, "bibliography"));
+			CSLEDIT.data.getFirstCslId(cslData, "citation"),
+			CSLEDIT.data.getFirstCslId(cslData, "bibliography"));
 	};
 
 	var nodeSelected = function(event, ui) {
-		var nodeData = ui.rslt.obj.data();
-
-		var propertyPanel = $("#elementProperties"),
+		var nodeAndParent,
+			node,
+			parentNode,
+			propertyPanel = $("#elementProperties"),
 			possibleElements,
 			element,
 			possibleChildNodesDropdown,
@@ -288,15 +292,19 @@ CSLEDIT.editorPage = (function () {
 			parentNodeName,
 			dataType;
 
-		// parent node
-		parentNode = ui.inst._get_parent(ui.rslt.obj);
+		nodeAndParent = CSLEDIT.data.getNodeAndParent(cslTreeView.selectedNode());
+		node = nodeAndParent.node;
+		parentNode = nodeAndParent.parent;
+
+		console.log("selected node : " + node.name);
+		console.log("parent node : " + parent.name);
 
 		// hack to stop parent of style being style
-		if (nodeData.name === "style") {
+		if (node.name === "style") {
 			parentNodeName = "root";
 		} else if (parentNode !== false) {
 			console.time("get parent");
-			parentNodeName = parentNode.data().name;
+			parentNodeName = parentNode.name;
 			console.timeEnd("get parent");
 		} else {
 			parentNodeName = "root";
@@ -304,7 +312,7 @@ CSLEDIT.editorPage = (function () {
 
 		// update possible child elements based on schema
 		if (typeof CSLEDIT.schema !== "undefined") {
-			possibleElements = CSLEDIT.schema.childElements(parentNodeName + "/" + nodeData.name);
+			possibleElements = CSLEDIT.schema.childElements(parentNodeName + "/" + node.name);
 
 			possibleChildNodesDropdown = $("#possibleChildNodes").html("");
 
@@ -316,23 +324,23 @@ CSLEDIT.editorPage = (function () {
 		// reregister dropdown handler after changes
 		setupDropdownMenuHandler("#possibleChildNodes a");
 
-		dataType = CSLEDIT.schema.elementDataType(parentNodeName + "/" + nodeData.name);
-		schemaAttributes = CSLEDIT.schema.attributes(parentNodeName + "/" + nodeData.name);
+		dataType = CSLEDIT.schema.elementDataType(parentNodeName + "/" + node.name);
+		schemaAttributes = CSLEDIT.schema.attributes(parentNodeName + "/" + node.name);
 
 		CSLEDIT.propertyPanel.setupPanel(
-			$("#elementProperties"), nodeData, dataType, schemaAttributes, nodeChanged);
+			$("#elementProperties"), node, dataType, schemaAttributes, nodeChanged);
 
 		$('span[cslid="' + oldSelectedNode + '"]').css(unHighlightedCss);
-		oldSelectedNode = nodeData.cslId;
+		oldSelectedNode = node.cslId;
 
-		$('span[cslid="' + nodeData.cslId + '"]').css(selectedCss);
+		$('span[cslid="' + node.cslId + '"]').css(selectedCss);
 	};
 
-	var nodeChanged = function () {
-		var selectedNodeId = cslTreeView.selectedNode,
+	var nodeChanged = function (node) {
+		var selectedNodeId = cslTreeView.selectedNode(),
 			attributes = [];
 
-		node = CSLEDIT.data.getNode(selectedNodeId);
+		//node = CSLEDIT.data.getNode(selectedNodeId);
 
 		// TODO: assert check that persistent data wasn't changed in another tab, making
 		//       this form data possibly refer to a different node
@@ -349,17 +357,18 @@ CSLEDIT.editorPage = (function () {
 			attributes.push({
 				key : key,
 				value : value,
-				enabled : metadata.attributes[index].enabled
+				enabled : node.attributes[index].enabled
 			});
 		}
 		console.timeEnd("readingUserInput");
-		metadata.attributes = attributes;
+		node.attributes = attributes;
 
-		treeEditor.jstree("rename_node", selectedNode,
-			CSLEDIT.cslParser.displayNameFromMetadata(metadata));
-		formatExampleCitations();
+		controller.exec("ammendNode", [selectedNodeId, node]);
+		//treeEditor.jstree("rename_node", selectedNode,
+		//	CSLEDIT.cslParser.displayNameFromMetadata(metadata));
+		//formatExampleCitations();
 	};
-
+/*
 	var updateCslIds = function () {
 		CSLEDIT.cslParser.updateCslIds(jsonData, {index:0});
 
@@ -369,7 +378,7 @@ CSLEDIT.editorPage = (function () {
 			$(this).attr("cslid", metadata.cslId);
 		});
 	};
-
+*/
 	var reloadPageWithNewStyle = function (newURL) {
 		var reloadURL = window.location.href;
 		reloadURL = reloadURL.replace(/#/, "");
@@ -377,11 +386,11 @@ CSLEDIT.editorPage = (function () {
 		window.location.href = reloadURL + "?styleURL=" + newURL;
 	};
 
-	var updateCslData = function (data) {
+	var updateCslData = function (cslCode) {
 		// strip comments from style
 		data = data.replace(/<!--.*?-->/g, "");
 
-		CSLEDIT.code.set(data);
+		CSLEDIT.data.setCslCode(cslCode);
 		createTreeView();
 	};
 
@@ -399,44 +408,21 @@ CSLEDIT.editorPage = (function () {
 
 				if (/^Edit/.test(parentNodeName)) {
 					if (clickedName === "Delete node") {
-						treeEditor.jstree('remove', selectedNode);
+						controller.exec("deleteNode", [cslTreeView.selectedNode()]);
 					}
 				} else if ((/^Add node/).test(parentNodeName)) {
 					$(event.target).parent().parent().css('visibility', 'hidden');
 
-					// if current node is the root "style" node, create within instead of after
-					if (selectedNode.data().name === "style") {
-						position = "inside";
-					} else {
-						position = "inside";
-					}
-					
-					// create new node after the selected one
-					treeEditor.jstree('create_node', selectedNode, position,
-					{
-						"data" : clickedName,
-						"attr" : { "rel" : clickedName, "cslid" : -1 },
-						"metadata" : {
-							"name" : clickedName,
-							"attributes" : [],
-							"textValue" : undefined,
-							"cslId" : 0
-						},
-						"children" : []
-					});
-
-					treeEditor.jstree("open_node", 'li[cslid="-1"]');
-					treeEditor.jstree("deselect_all");
-					treeEditor.jstree("select_node", 'li[cslid="-1"]');
-					treeViewChanged();
-
+					controller.exec("addNode", [
+						cslTreeView.selectedNode(), 0, { name : clickedName, attributes : []}
+					]);
 				} else if ((/^Style/).test(parentNodeName)) {
 					if (clickedName === "Revert (undo all changes)") {
 						reloadPageWithNewStyle(styleURL);
 					} else if (clickedName === "Export CSL") {
 						window.location.href =
 							"data:application/xml;charset=utf-8," +
-							encodeURIComponent(CSLEDIT.code.get());
+							encodeURIComponent(CSLEDIT.data.getCslCode());
 					} else if (clickedName === "Load from URL") {
 						reloadPageWithNewStyle(
 							prompt("Please enter the URL of the style you wish to load")
@@ -452,16 +438,6 @@ CSLEDIT.editorPage = (function () {
 
 	return {
 		init : function () {
-			var createNode = function (id) {
-					return {
-						"data" : "node " + id,
-						"attr" : {"rel" : "generic"}
-					};
-				},
-				index;
-	
-			cslTreeView = CSLEDIT.CslTreeView($("#treeEditor"));
-
 			$("#dialog-confirm-delete").dialog({autoOpen : false});
 
 			$(function(){
@@ -480,7 +456,25 @@ CSLEDIT.editorPage = (function () {
 				$("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
 			});
 
-			CSLEDIT.code.initPageStyle( createTreeView );
+			CSLEDIT.data.initPageStyle( function () {
+				cslTreeView = CSLEDIT.CslTreeView($("#treeEditor"))
+				controller = CSLEDIT.Controller();
+
+				controller.addSubscriber("addNode", CSLEDIT.data.addNode);
+				controller.addSubscriber("deleteNode", CSLEDIT.data.deleteNode);
+				controller.addSubscriber("ammendNode", CSLEDIT.data.ammendNode);
+				controller.addSubscriber("setCslCode", CSLEDIT.data.setCslCode);	
+				
+				controller.addSubscriber("addNode", cslTreeView.addNode);
+				controller.addSubscriber("deleteNode", cslTreeView.deleteNode);
+				controller.addSubscriber("ammendNode", cslTreeView.ammendNode);
+				controller.addSubscriber("setCslCode", cslTreeView.setCslCode);
+
+				CSLEDIT.data.onChanged(formatExampleCitations);
+
+				createTreeView();
+			});
+
 			setupDropdownMenuHandler(".dropdown a");
 
 			$(".propertyInput").on("change", nodeChanged);

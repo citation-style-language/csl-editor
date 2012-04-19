@@ -66,19 +66,6 @@ CSLEDIT.cslParser = (function() {
 		return thisNodeData;
 	};
 
-
-	var getAttr = function (attribute, attributes) {
-		var index;
-
-		for (index = 0; index < attributes.length; index++) {
-			if (attributes[index].enabled && attributes[index].key === attribute) {
-				return attributes[index].value;
-			}
-		}
-
-		return "";
-	};
-
 	var htmlEscape = function (text) {
 		var escaped = text;
 
@@ -174,7 +161,7 @@ CSLEDIT.cslParser = (function() {
 		cslCodeFromCslData : function (jsonData) {
  			console.time("cslXmlFromJson");
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
-			cslXml += xmlNodeFromJson(jsonData[0], 0);
+			cslXml += xmlNodeFromJson(jsonData, 0);
  			console.timeEnd("cslXmlFromJson");
 			return cslXml;
 		},

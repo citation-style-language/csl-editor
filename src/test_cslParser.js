@@ -224,7 +224,7 @@ test("parse CSL fragment", function () {
 	equal(cslData.children[0].attributes[0].enabled, true);
 
 	// check that it converts back to CSL XML without changes
-	cslXml = CSLEDIT.cslParser.cslCodeFromCslData([cslData]);
+	cslXml = CSLEDIT.cslParser.cslCodeFromCslData(cslData);
 
 	// remove whitespace after closing tags
 	cslXml = cslXml.replace(/>[\n\r\s]*/g, ">");

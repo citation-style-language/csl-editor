@@ -9,13 +9,11 @@ CSLEDIT.CslTreeView = function (treeView) {
 
 		jsTreeData = jsTreeDataFromCslData(cslData);
 
-		console.log("jstree data: " + JSON.stringify(jsTreeData));
+		treeView.on("loaded.jstree", callbacks.loaded);
+		treeView.on("select_node.jstree", callbacks.selectNode);
 
-		for (eventName in callbacks) {
-			if (callbacks.hasOwnProperty) {
-				treeView.on(eventName, callbacks[eventName]);
-			}
-		}
+		// override drag_stop function
+		//$.vakata.dnd.drag_stop = function () {alert("drag stop");};
 
 		treeView.jstree({
 			"json_data" : { data : [ jsTreeData ] },
@@ -85,19 +83,26 @@ CSLEDIT.CslTreeView = function (treeView) {
 				}
 			},
 				
-			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
-				"types", "hotkeys"],
 			// each plugin you have included can have its own config object
 			//"core" : { "initially_open" : [ "node1" ] },
 			"ui" : { /*"initially_select" : [ "cslTreeNode0" ],*/ "select_limit" : 1 },
 			"dnd" : {
+				/*
 				"drop_target" : false,
-				"drag_target" : false
+				"drag_target" : function () {alert("drag!");},
+				"drop_finish" : function () {alert("drop!");},
+				"drag_finish" : function () {alert("drop!");},*/
+				"open_timeout" : 800
 			},
+			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
+				"types", "hotkeys"],
 			"crrm" : {
 				"move" : {
 					// only allow re-ordering, not moving to different nodes
 					"check_move" : function (move) {
+
+						return true;
+
 						var	newGrandParent = this._get_parent(move.np),
 							newGrandParentName,
 							nodePath,
@@ -117,6 +122,10 @@ CSLEDIT.CslTreeView = function (treeView) {
 						return false;
 					}
 				}
+			},
+			"hotkeys" : {
+				"del" : callbacks.deleteNode,
+				"f2" : false
 			}
 			
 		});
@@ -182,12 +191,12 @@ CSLEDIT.CslTreeView = function (treeView) {
 		treeView.find('li[cslid=' + id + '] > a').click();
 	};
 
-	var selectedNode = function (id) {
+	var selectedNode = function () {
 		var selected,
 			cslid;
 		
 		selected = treeView.jstree('get_selected'),
-		cslid = selected.attr("cslid");
+		cslid = parseInt(selected.attr("cslid"));
 		console.log("selected cslid = " + cslid);
 		return cslid;
 	};
@@ -233,6 +242,17 @@ CSLEDIT.CslTreeView = function (treeView) {
 		return jsTreeData;
 	};
 
+	var getAttr = function (attribute, attributes) {
+		var index;
+
+		for (index = 0; index < attributes.length; index++) {
+			if (attributes[index].enabled && attributes[index].key === attribute) {
+				return attributes[index].value;
+			}
+		}
+		return "";
+	};
+
 	var displayNameFromMetadata = function (metadata) {
 		var index,
 			attributesString = "",
@@ -274,8 +294,9 @@ CSLEDIT.CslTreeView = function (treeView) {
 		ammendNode : ammendNode,
 
 		selectNode : selectNode,
+		selectedNode : selectedNode,
 
-		seletedNode : selectedNode,
+		expandNode : expandNode,
 
 		jQueryElement : treeView
 	}

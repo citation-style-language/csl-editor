@@ -5,8 +5,11 @@
 	<title>Search by Name</title>
 
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+
+	<script type="text/javascript" src="../src/debug.js"></script>
 	<script type="text/javascript" src="../generated/exampleCitationsEnc.js"></script>
-	<script type="text/javascript" src="../src/cslCode.js"></script>
+	<script type="text/javascript" src="../src/cslParser.js"></script>
+	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/searchResults.js"></script>
 	<link rel="stylesheet" href="../css/base.css" />
 

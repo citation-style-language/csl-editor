@@ -50,7 +50,7 @@ test("add/delete/ammed nodes", function () {
 	equal(CSLEDIT.data.get().children[0].cslId, 1, "deleteNode");
 
 	// ammend
-	CSLEDIT.data.ammendNode(0, {
+	CSLEDIT.data.ammendNode(1, {
 		name : "ammendedName",
 		attributes : ["attr1"],
 		textValue : "textVal",
@@ -58,11 +58,11 @@ test("add/delete/ammed nodes", function () {
 		arbitraryKey : "newValue"
 	});
 	cslData = CSLEDIT.data.get();
-	equal(cslData.name, "ammendedName");
-	equal(cslData.attributes[0], "attr1");
-	equal(cslData.textValue, "textVal");
-	equal(cslData.cslId, 0); // this should remain consitent with position in the tree
-	equal(typeof cslData.arbitraryKey, "undefined"); // not allowed to add arbitrary keys
+	equal(cslData.children[0].name, "ammendedName");
+	equal(cslData.children[0].attributes[0], "attr1");
+	equal(cslData.children[0].textValue, "textVal");
+	equal(cslData.children[0].cslId, 1); // this should remain consitent with position in the tree
+	equal(typeof cslData.children[0].arbitraryKey, "undefined"); // not allowed to add arbitrary keys
 });
 
 test("find nodes", function () {
@@ -75,4 +75,35 @@ test("find nodes", function () {
 
 	equal(CSLEDIT.data.getFirstCslId(cslData, "citation"), 3);
 	equal(CSLEDIT.data.getFirstCslId(cslData, "layout"), 4);
+	equal(CSLEDIT.data.getFirstCslId(cslData, "noSuchNode"), -1);
 });
+
+test("get node", function () {
+	CSLEDIT.data.setCslCode(
+		"<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><\/style>");
+
+	equal(CSLEDIT.data.getNode(0).name, "style");
+	equal(CSLEDIT.data.getNode(4).name, "layout");
+	equal(CSLEDIT.data.getNodeAndParent(4).node.name, "layout");
+	equal(CSLEDIT.data.getNodeAndParent(4).parent.name, "citation");
+});
+
+test("on change", function () {
+	var numCalls;
+
+	CSLEDIT.data.setCslCode("<style><\/style>");
+	CSLEDIT.data.onChanged(function () {numCalls++;});
+
+	numCalls = 0;
+	CSLEDIT.data.addNode(0, 0, {});
+	equal(numCalls, 1);
+
+	// add another callback
+	CSLEDIT.data.onChanged(function () {numCalls++;});
+
+	numCalls = 0;
+	CSLEDIT.data.addNode(0, 0, {});
+	CSLEDIT.data.addNode(0, 0, {});
+	equal(numCalls, 4);
+});
+

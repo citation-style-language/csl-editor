@@ -59,7 +59,7 @@ CSLEDIT.searchResults = {
 
 			styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
 
-			CSLEDIT.code.loadStyleFromURL(styleURL, function () {
+			CSLEDIT.data.loadStyleFromURL(styleURL, function () {
 				console.log("callback");
 				window.location.href =
 					window.location.protocol + "//" + 

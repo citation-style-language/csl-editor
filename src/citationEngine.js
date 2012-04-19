@@ -119,7 +119,7 @@ CSLEDIT.citationEngine = (function () {
 
 		console.time("runCiteprocAndDisplayOutput");
 
-		var style = CSLEDIT.code.get(),
+		var style = CSLEDIT.data.getCslCode(),
 			inLineCitations = "",
 			citations = [],
 			formattedResult,
