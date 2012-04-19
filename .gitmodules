@@ -10,3 +10,6 @@
 [submodule "external/csl-schema"]
 	path = external/csl-schema
 	url = https://github.com/citation-style-language/schema.git
+[submodule "external/jstree"]
+	path = external/jstree
+	url = https://github.com/citation-style-editor/jstree.git
