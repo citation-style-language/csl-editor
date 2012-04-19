@@ -93,32 +93,15 @@ CSLEDIT.CslTreeView = function (treeView) {
 				"drag_target" : function () {alert("drag!");},
 				"drop_finish" : function () {alert("drop!");},
 				"drag_finish" : function () {alert("drop!");},*/
-				"open_timeout" : 800
+				"open_timeout" : 800,
+				"move_requested" : callbacks.moveNode
 			},
 			"crrm" : {
 				"move" : {
 					// only allow re-ordering, not moving to different nodes
 					"check_move" : function (move) {
 
-						return true;
-
-						var	newGrandParent = this._get_parent(move.np),
-							newGrandParentName,
-							nodePath,
-							thisNodeName = move.o.data().name;
-
-						if (typeof newGrandParent.data !== "function") {
-							newGrandParentName = "root";
-						} else {
-							newGrandParentName = newGrandParent.data().name;
-						}
-						nodePath =
-							newGrandParentName + "/" + move.np.data().name;
-
-						if (thisNodeName in CSLEDIT.schema.childElements(nodePath)) {
-							return true;
-						}
-						return false;
+						return callbacks.checkMove(parseInt(move.o.attr("cslid")), parseInt(move.r.attr("cslid")), move.p);
 					}
 				}
 			},
@@ -182,8 +165,27 @@ CSLEDIT.CslTreeView = function (treeView) {
 
 	var ammendNode = function (id, ammendedNode) {
 		var node = treeView.find('li[cslid="' + id + '"]');
-		
 		treeView.jstree('rename_node', node, displayNameFromMetadata(ammendedNode));
+	};
+
+	var moveNode = function (fromId, toId, position) {
+		var fromNode = treeView.find('li[cslid="' + fromId + '"]'),
+			toNode = treeView.find('li[cslid="' + toId + '"]');
+
+		assertEqual(fromNode.length, 1);
+		assertEqual(toNode.length, 1);
+
+		console.log("CslTreeView.moveNode: " + fromId + " to " + toId + ", position: " + position);
+		console.log("CslTreeView.moveNode: " + treeView.jstree("get_text", fromNode) + " to " + treeView.jstree("get_text", toNode));
+		treeView.jstree('move_node', fromNode, toNode, position, false, false, true);
+		
+		// sort the cslids
+		var allNodes;
+		allNodes = treeView.find('li[cslid]');
+		assert(allNodes.length > 0);
+		allNodes.each(function (index) {
+			$(this).attr('cslid', index);
+		});
 	};
 
 	var selectNode = function (id) {
@@ -290,6 +292,7 @@ CSLEDIT.CslTreeView = function (treeView) {
 
 		addNode : addNode,
 		deleteNode : deleteNode,
+		moveNode : moveNode,
 		ammendNode : ammendNode,
 
 		selectNode : selectNode,

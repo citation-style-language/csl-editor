@@ -11,14 +11,17 @@ var CSLEDIT = CSLEDIT || {};
  */
 
 CSLEDIT.Data = function (CSL_DATA) {
-	var onChangedCallbacks = [];
+	var onChangedCallbacks = [],
+		callbacksEnabled = true;
 
 	var get = function () {
 		return JSON.parse(localStorage.getItem(CSL_DATA));
 	};
 	var set = function (cslData) {
 		localStorage.setItem(CSL_DATA, JSON.stringify(cslData));
-		changed();
+		if (callbacksEnabled) {
+			changed();
+		}
 		return cslData;
 	};
 	var setCslCode = function (cslCode) {
@@ -129,8 +132,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return result && unescape(result[1]) || "";
 	};
 
-	var numCslNodes = function () {
-		var iter = CSLEDIT.Iterator(get()),
+	var numNodes = function (tree) {
+		var iter = CSLEDIT.Iterator(tree),
 			index = 0;
 
 		while (iter.hasNext()) {
@@ -146,40 +149,83 @@ CSLEDIT.Data = function (CSL_DATA) {
 			callback();
 		});
 	};
+	
+	var indexOfChild = function (childNode, parentNode) {
+		var index;
+		for (index = 0; index < parentNode.children.length; index++) {
+			if (childNode.cslId === parentNode.children[index].cslId) {
+				return index;
+			}
+		}
+		return -1;
+	};
+
+	var addNode = function (id, position, newNode) {
+		var nodeInfo,
+			positionIndex;
+		newNode.cslId = -1;
+		newNode.children = newNode.children || [];
+
+		if (typeof position === "number") {
+			spliceNode(id, position, 0, newNode);
+		} else {
+			switch (position) {
+				case "first":
+					return addNode(id, 0, newNode);
+					break;
+				case "inside":
+				case "last":
+					return addNode(id, getNode(id).children.length, newNode);
+					break;
+				case "before":
+				case "after":
+					assert(id !== 0);
+					nodeInfo = getNodeAndParent(id);
+					positionIndex = indexOfChild(nodeInfo.node, nodeInfo.parent);
+					if (position === "after") {
+						positionIndex++;
+					}
+					return addNode(nodeInfo.parent.cslId, positionIndex, newNode);
+					break;
+				case "default":
+					assert(false, "position: " + position + " not recognised");
+			}
+		}
+	};
+
+	var deleteNode = function (id) {
+		var iter = CSLEDIT.Iterator(get()),
+			index,
+			node,
+			parentNode;
+
+		assert(id !== 0); // can't delete the style node
+
+		index = 0;
+		while (iter.hasNext()) {
+			node = iter.next();
+
+			if (index === id) {
+				parentNode = iter.parent();
+				break;
+			}
+			index++;
+		}
+
+		assert(typeof parentNode !== "undefined");
+		spliceNode(parentNode.cslId, indexOfChild(node, parentNode), 1);
+
+		assertEqual(node.cslId, id);
+		return node;
+	};
 
 	return {
 		setCslCode : setCslCode,
 		getCslCode : getCslCode,
 		get : get,
-		addNode : function (id, position, newNode) {
-			newNode.cslId = -1;
-			newNode.children = newNode.children || [];
+		addNode : addNode,
+		deleteNode : deleteNode,
 
-			spliceNode(id, position, 0, newNode);
-		},
-		deleteNode : function (id) {
-			var iter = CSLEDIT.Iterator(get()),
-				index,
-				node,
-				parentId;
-
-			assert(id !== 0); // can't delete the style node
-
-			index = 0;
-			while (iter.hasNext()) {
-				node = iter.next();
-
-				if (index === id) {
-					parentId = iter.parent().cslId;
-					break;
-				}
-				index++;
-			}
-
-			assert(typeof parentId !== "undefined");
-
-			spliceNode(parentId, id - parentId - 1, 1);
-		},
 		ammendNode : function (id, ammendedNode) {
 			// replace everything of the original node except the children and the cslId
 			var cslData = get(),
@@ -204,6 +250,22 @@ CSLEDIT.Data = function (CSL_DATA) {
 				index++;
 			}
 			set(cslData);
+		},
+		moveNode : function (fromId, toId, position) {
+			var deletedNode;
+			callbacksEnabled = false;
+
+			assert(typeof position !== "number");
+
+			deletedNode = deleteNode(fromId);
+
+			if (toId > fromId) {
+				toId -= numNodes(deletedNode);
+			}
+
+			addNode(toId, position, deletedNode);
+			callbacksEnabled = true;
+			changed();
 		},
 		getNode : getNode,
 		getNodeAndParent : getNodeAndParent,
@@ -236,7 +298,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 				loadStyleFromURL(styleURL, callback);
 			}
 		},
-		numCslNodes : numCslNodes,
+		numCslNodes : function () { return numNodes(get()); },
 		onChanged : function (callback) {
 			onChangedCallbacks.push(callback);
 		}

@@ -10,6 +10,7 @@ CSLEDIT.Controller = function () {
 	var commandSubscribers = {
 			"addNode" : [],
 			"deleteNode" : [],
+			"moveNode" : [],
 			"ammendNode" : [],
 			"setCslCode" : []
 		},

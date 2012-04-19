@@ -65,6 +65,47 @@ test("add/delete/ammed nodes", function () {
 	equal(typeof cslData.children[0].arbitraryKey, "undefined"); // not allowed to add arbitrary keys
 });
 
+test("move nodes", function () {
+	var testCsl = "<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><\/style>";
+
+	// move info inside citation
+	CSLEDIT.data.setCslCode(testCsl);
+	CSLEDIT.data.moveNode(1, 3, "inside");
+	equal(CSLEDIT.data.get().children[0].name, "citation");
+	equal(CSLEDIT.data.get().children[0].children[1].name, "info");
+
+	// move info before citation (should stay where it is)
+	CSLEDIT.data.setCslCode(testCsl);
+	CSLEDIT.data.moveNode(1, 3, "before");
+	equal(CSLEDIT.data.get().children[1].name, "citation");
+	equal(CSLEDIT.data.get().children[0].name, "info");
+	
+	// move info after citation
+	CSLEDIT.data.setCslCode(testCsl);
+	CSLEDIT.data.moveNode(1, 3, "after");
+	equal(CSLEDIT.data.get().children[0].name, "citation");
+	equal(CSLEDIT.data.get().children[1].name, "info");
+	
+	// move info to first child of citation
+	CSLEDIT.data.setCslCode(testCsl);
+	CSLEDIT.data.moveNode(1, 3, "first");
+	equal(CSLEDIT.data.get().children[0].name, "citation");
+	equal(CSLEDIT.data.get().children[0].children[0].name, "info");
+	
+	// move info to last child of citation
+	CSLEDIT.data.setCslCode(testCsl);
+	CSLEDIT.data.moveNode(1, 3, "last");
+	equal(CSLEDIT.data.get().children[0].name, "citation");
+	equal(CSLEDIT.data.get().children[0].children[1].name, "info");
+
+	// move citation to before info 
+	CSLEDIT.data.setCslCode(testCsl);
+	CSLEDIT.data.moveNode(3, 1, "before");
+	equal(CSLEDIT.data.get().children[0].name, "citation");
+	equal(CSLEDIT.data.get().children[1].name, "info");
+
+});
+
 test("find nodes", function () {
 	var cslData;
 

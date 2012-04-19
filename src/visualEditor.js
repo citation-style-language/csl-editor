@@ -218,6 +218,7 @@ CSLEDIT.editorPage = (function () {
 	var doSyntaxHighlighting = function () {
 		var numCslNodes = CSLEDIT.data.numCslNodes();
 			
+		console.log("syntax Higlight! " + numCslNodes);
 		console.time("syntaxHighlighting");
 		// clear the hovered node stack
 		hoveredNodeStack.length = 0;
@@ -251,20 +252,50 @@ CSLEDIT.editorPage = (function () {
 			selectNode : nodeSelected,
 			deleteNode : function () {
 				controller.exec("deleteNode", [cslTreeView.selectedNode()]);
+			},
+			moveNode : function (move) {
+				var temp,
+					fromId,
+					toId,
+					toParentNode,
+					index;
+
+				fromId = parseInt(move.o.attr("cslid"));
+				toId = parseInt(move.r.attr("cslid"));
+				toParentNode = CSLEDIT.data.getNodeAndParent(toId).parent;
+
+				if (move.last_pos !== false) {
+					controller.exec("moveNode", [fromId, toId, move.last_pos]);
+				}
+			},
+			checkMove : function (fromId, toId, position) {
+				var fromNode = CSLEDIT.data.getNode(fromId),
+					toNodeInfo = CSLEDIT.data.getNodeAndParent(toId),
+					parentNodeName,
+					result;
+
+				if (position === "before" || position === "after") {
+					if (toNodeInfo.parent === null) {
+						return false;
+					}
+					// go up a level
+					toNodeInfo = CSLEDIT.data.getNodeAndParent(toNodeInfo.parent.cslId);
+				}
+
+				if (toNodeInfo.parent === null) {
+					parentNodeName = "root";
+				} else {
+					parentNodeName = toNodeInfo.parent.name;
+				}
+				console.log("check if " + fromNode.name + " in " + parentNodeName + "/" + toNodeInfo.node.name);
+				result = (fromNode.name in CSLEDIT.schema.childElements(parentNodeName + "/" + toNodeInfo.node.name));
+				console.log("result = " + result);
+				return result;
 			}
 		});
 	};
-/*
-	var treeViewChanged = function () {
-		jsonData = treeEditor.jstree("get_json", -1, [], [])[0];
-		updateCslIds();
-		formatExampleCitations();
-	};
-*/
-	var formatExampleCitations = function () {
-		// TODO: remove, no longer reading data from the view
-		//CSLEDIT.code.set(CSLEDIT.cslParser.cslXmlFromJson([jsonData]));
 
+	var formatExampleCitations = function () {
 		var cslData = CSLEDIT.data.get();
 
 		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
@@ -279,17 +310,12 @@ CSLEDIT.editorPage = (function () {
 		var nodeAndParent,
 			node,
 			parentNode,
+			parentNodeName,
 			propertyPanel = $("#elementProperties"),
 			possibleElements,
 			element,
 			possibleChildNodesDropdown,
 			schemaAttributes,
-			schemaAttribute,
-			valueIndex,
-			schemaValues,
-			parentNode,
-			parentJsonData,
-			parentNodeName,
 			dataType;
 
 		nodeAndParent = CSLEDIT.data.getNodeAndParent(cslTreeView.selectedNode());
@@ -364,21 +390,8 @@ CSLEDIT.editorPage = (function () {
 		node.attributes = attributes;
 
 		controller.exec("ammendNode", [selectedNodeId, node]);
-		//treeEditor.jstree("rename_node", selectedNode,
-		//	CSLEDIT.cslParser.displayNameFromMetadata(metadata));
-		//formatExampleCitations();
 	};
-/*
-	var updateCslIds = function () {
-		CSLEDIT.cslParser.updateCslIds(jsonData, {index:0});
 
-		// update the html attributes to be in sync
-		treeEditor.find("[cslid]").each(function (index) {
-			var metadata = $(this).data();
-			$(this).attr("cslid", metadata.cslId);
-		});
-	};
-*/
 	var reloadPageWithNewStyle = function (newURL) {
 		var reloadURL = window.location.href;
 		reloadURL = reloadURL.replace(/#/, "");
@@ -462,11 +475,13 @@ CSLEDIT.editorPage = (function () {
 
 				controller.addSubscriber("addNode", CSLEDIT.data.addNode);
 				controller.addSubscriber("deleteNode", CSLEDIT.data.deleteNode);
+				controller.addSubscriber("moveNode", CSLEDIT.data.moveNode);
 				controller.addSubscriber("ammendNode", CSLEDIT.data.ammendNode);
 				controller.addSubscriber("setCslCode", CSLEDIT.data.setCslCode);	
 				
 				controller.addSubscriber("addNode", cslTreeView.addNode);
 				controller.addSubscriber("deleteNode", cslTreeView.deleteNode);
+				controller.addSubscriber("moveNode", cslTreeView.moveNode);
 				controller.addSubscriber("ammendNode", cslTreeView.ammendNode);
 				controller.addSubscriber("setCslCode", cslTreeView.setCslCode);
 
