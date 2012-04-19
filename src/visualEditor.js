@@ -485,7 +485,9 @@ CSLEDIT.editorPage = (function () {
 				controller.addSubscriber("ammendNode", cslTreeView.ammendNode);
 				controller.addSubscriber("setCslCode", cslTreeView.setCslCode);
 
-				CSLEDIT.data.onChanged(formatExampleCitations);
+				controller.setRefreshCitationsCallback(formatExampleCitations);
+
+				CSLEDIT.data.onChanged(controller.refreshWhenReady);
 
 				createTreeView();
 			});
