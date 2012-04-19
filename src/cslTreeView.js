@@ -82,7 +82,8 @@ CSLEDIT.CslTreeView = function (treeView) {
 					}
 				}
 			},
-				
+			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
+				"types", "hotkeys"],
 			// each plugin you have included can have its own config object
 			//"core" : { "initially_open" : [ "node1" ] },
 			"ui" : { /*"initially_select" : [ "cslTreeNode0" ],*/ "select_limit" : 1 },
@@ -94,8 +95,6 @@ CSLEDIT.CslTreeView = function (treeView) {
 				"drag_finish" : function () {alert("drop!");},*/
 				"open_timeout" : 800
 			},
-			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
-				"types", "hotkeys"],
 			"crrm" : {
 				"move" : {
 					// only allow re-ordering, not moving to different nodes

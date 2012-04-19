@@ -13,7 +13,7 @@ asyncTest("create tree view", function () {
 
 	treeView = CSLEDIT.CslTreeView($("<div><\/div>"));
 	treeView.createFromCslData(cslData, {
-		"loaded.jstree" : function () {
+		loaded : function () {
 			equal(treeView.jQueryElement.find('li[cslid=0]').attr("rel"), "style");
 			equal(treeView.jQueryElement.find('li[cslid=1]').attr("rel"), "info");
 			equal(treeView.jQueryElement.find('li[cslid=2]').attr("rel"), "author");
@@ -33,7 +33,7 @@ asyncTest("add/delete/ammend nodes", function () {
 	treeView = CSLEDIT.CslTreeView($("<div><\/div>"));
 	
 	treeView.createFromCslData(cslData, {
-		"loaded.jstree" : function () {
+		loaded : function () {
 			treeView.addNode(0, 0, {name : "info"} );
 			treeView.addNode(0, 1, {name : "citation"} );
 			treeView.addNode(1, 0, {name : "author"} );
