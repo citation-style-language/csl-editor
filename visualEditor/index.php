@@ -30,7 +30,7 @@
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 	<script type="text/javascript" src="../src/propertyPanel.js"></script>
-	<script type="text/javascript" src="../src/cslTreeView.js"></script>
+	<script type="text/javascript" src="../src/simpleTreeView.js"></script>
 	<script type="text/javascript" src="../src/controller.js"></script>
 	<script type="text/javascript" src="../src/visualEditor.js"></script>
 

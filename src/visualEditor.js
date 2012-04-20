@@ -470,7 +470,8 @@ CSLEDIT.editorPage = (function () {
 			});
 
 			CSLEDIT.data.initPageStyle( function () {
-				cslTreeView = CSLEDIT.CslTreeView($("#treeEditor"))
+				cslTreeView = CSLEDIT.SimpleTreeView($("#treeEditor"));
+				//cslTreeView = CSLEDIT.CslTreeView($("#treeEditor"))
 				controller = CSLEDIT.Controller();
 
 				controller.addSubscriber("addNode", CSLEDIT.data.addNode);
