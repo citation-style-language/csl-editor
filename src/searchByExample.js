@@ -71,7 +71,6 @@ CSLEDIT.finderPage = (function () {
 		var result = [],
 			index = 0;
 		for (index = 0; index < authors.length; index++) {
-			//alert(author);
 			result.push(authors[index].given + " " + authors[index].family);
 		}
 		return result.join(", ");
@@ -83,7 +82,21 @@ CSLEDIT.finderPage = (function () {
 		return text === "" || text === "\n";
 	};
 
-	function searchForStyle() {
+	var cleanInput = function (input) {
+		var supportedTags = [ 'b', 'i', 'u', 'sup', 'sub' ],
+			invisibleTags = [ 'p', 'span', 'div', 'second-field-align' ]; // we want the contents of these but not the actual tags
+
+		input = CSLEDIT.xmlUtility.stripComments(input);
+		input = CSLEDIT.xmlUtility.stripUnsupportedTagsAndContents(input, supportedTags.concat(invisibleTags));
+		input = CSLEDIT.xmlUtility.stripUnsupportedTags(input, supportedTags);
+		input = CSLEDIT.xmlUtility.stripAttributesFromTags(input, supportedTags);
+		input = input.replace(/&nbsp;/g, " ");
+		input = input.replace("\n", "");
+
+		return input;
+	};
+
+	var searchForStyle = function () {
 		var tolerance = 500,
 			bestEditDistance = 999,
 			bestMatchIndex = -1,
@@ -91,15 +104,6 @@ CSLEDIT.finderPage = (function () {
 			userCitationText = $("#userCitation").cleditor()[0].doc.body.innerText,
 			userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML,
 			userBibliographyText = $("#userBibliography").cleditor()[0].doc.body.innerText,
-			cleanHTML = function (html) {
-				html = html.replace(/<span[^<>]*>/g, "");
-				html = html.replace(/<\/span>/g, "");
-				html = html.replace(/&nbsp;/g, " ");
-
-				// remove any attributes the tags may have
-				html = html.replace(/<(b|i|u|sup|sub)[^<>]*>/g, "<$1>");
-				return html;
-			},
 			result = [],
 			editDistances = [],
 			index = 0,
@@ -111,8 +115,7 @@ CSLEDIT.finderPage = (function () {
 				return "<tr><td><span class=faint>" + title + "<\/span><\/td><td>" + value + "<\/td><\/tr>";
 			};
 
-		userCitation = cleanHTML(userCitation);
-		userBibliography = cleanHTML(userBibliography);
+		console.time("searchForStyle");
 
 		if (clEditorIsEmpty("#userCitation")) {
 			userCitation = "";
@@ -120,9 +123,6 @@ CSLEDIT.finderPage = (function () {
 		if (clEditorIsEmpty("#userBibliography")) {
 			userBibliography = "";
 		}
-
-		//result.push("<p>searching for " + escapeHTML(userCitation) + "<\/p>");
-		//result.push("<p>searching for " + escapeHTML(userBibliography) + "<\/p>");
 
 		for (styleId in exampleCitations.exampleCitationsFromMasterId) {
 			if (exampleCitations.exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
@@ -158,7 +158,8 @@ CSLEDIT.finderPage = (function () {
 		// TODO: only put editDistances < tolerance
 
 		// top results
-		for (index=0; index < Math.min(5, editDistances.length); index++) {		
+		for (index=0; index < Math.min(5, editDistances.length); index++) {
+				
 			result.push({
 					styleId : editDistances[index].styleId,
 					masterId : editDistances[index].styleId,
@@ -169,7 +170,9 @@ CSLEDIT.finderPage = (function () {
 		}
 		
 		CSLEDIT.searchResults.displaySearchResults(result, $("#styleFormatResult"));
-	}
+
+		console.timeEnd("searchForStyle");
+	};
 
 	function formatFindByStyleExampleDocument() {
 		var jsonDocuments = cslServerConfig.jsonDocuments;
@@ -191,7 +194,18 @@ CSLEDIT.finderPage = (function () {
 	}
 
 	function formChanged() {
+		var userCitation,
+			userBibliography;
+
 		clearTimeout(styleFormatSearchTimeout);
+
+		// clean the input in the editors
+		userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML;
+		userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
+
+		$("#userCitation").cleditor()[0].doc.body.innerHTML = cleanInput(userCitation);
+		$("#userBibliography").cleditor()[0].doc.body.innerHTML = cleanInput(userBibliography);
+
 		styleFormatSearchTimeout = setTimeout(searchForStyle, 1000);
 	}
 
@@ -218,8 +232,14 @@ CSLEDIT.finderPage = (function () {
 			var userCitationInput = $("#userCitation").cleditor({height: 55})[0];
 			$("#userBibliography").cleditor({height: 85});
 
-			$("#userCitation").cleditor()[0].change(formChanged);
-			$("#userBibliography").cleditor()[0].change(formChanged);
+			var realTimeSearch = false;
+			if (realTimeSearch) {
+				$("#userCitation").cleditor()[0].change(formChanged);
+				$("#userBibliography").cleditor()[0].change(formChanged);
+				$('#searchButton').hide();
+			} else {
+				$('#searchButton').on("click", formChanged);
+			}
 		
 			// prepopulate search by style format with APA example
 			$("#userCitation").cleditor()[0].doc.body.innerHTML =

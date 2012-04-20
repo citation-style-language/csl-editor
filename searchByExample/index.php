@@ -16,6 +16,8 @@
 	<script type="text/javascript" src="../external/citeproc/loadlocale.js"></script>
 	<script type="text/javascript" src="../external/citeproc/loadsys.js"></script>
 	<script type="text/javascript" src="../external/citeproc/runcites.js"></script>
+
+	<script type="text/javascript" src="../src/xmlUtility.js"></script>
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../server/config.js"></script>
 	<script type="text/javascript" src="../generated/exampleCitationsEnc.js"></script>
@@ -86,6 +88,7 @@ div#styleFormatResult {
 		<br />
 		Edit bibliography entry:
 		<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
+		<button id="searchButton">Search</button>
 	</div>
 	<div id=exampleDocument></div>
 	<div class=clearDiv>

@@ -130,7 +130,6 @@ CSLEDIT.cslParser = (function() {
 		}
 	};
 
-
 	// public:
 	return {
 		isCslValid : function(xmlData) {

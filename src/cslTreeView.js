@@ -12,9 +12,6 @@ CSLEDIT.CslTreeView = function (treeView) {
 		treeView.on("loaded.jstree", callbacks.loaded);
 		treeView.on("select_node.jstree", callbacks.selectNode);
 
-		// override drag_stop function
-		//$.vakata.dnd.drag_stop = function () {alert("drag stop");};
-
 		treeView.jstree({
 			"json_data" : { data : [ jsTreeData ] },
 			"types" : {
