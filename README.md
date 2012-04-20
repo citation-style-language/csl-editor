@@ -8,11 +8,9 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 ### Prerequisites
 
-1. Apache2 server
+1. Basic LAMP stack
 
-2. PHP with extension: pecl\_http
-
-3. Java runtime
+2. Java runtime (doesn't have to be on server, just for pre-processing)
 
 ### Instructions
 
