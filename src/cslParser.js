@@ -144,9 +144,11 @@ CSLEDIT.cslParser = (function() {
 		// it must start at 0, and it will be returned with nodeIndex.index = number of nodes - 1
 		cslDataFromCslCode : function (xmlData) {
 			console.time("jsonFromCslXml");
-			var parser = new DOMParser();
-			var xmlDoc = parser.parseFromString(xmlData, "application/xml");
-			assert(xmlDoc.documentElement.nodeName !== "parsererror", "xml parser error");
+			var parser = new DOMParser(),
+				xmlDoc = parser.parseFromString(xmlData, "application/xml"),
+				errors;
+			errors = xmlDoc.getElementsByTagName( 'parsererror' );
+			assertEqual(errors.length, 0, "xml parser error");
 
 			var styleNode = xmlDoc.childNodes[0];
 			assertEqual(styleNode.localName, "style", "Invalid style - no style node");
