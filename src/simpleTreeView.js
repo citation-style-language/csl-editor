@@ -3,227 +3,150 @@
 CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.SimpleTreeView = function (treeView) {
-	var thisElement,
-		nodeTypes = {
-				"valid_children" : [ "root" ],
-				"types" : {
-					"text" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/style.png"
-						}
-					},
-					"macro" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/brick.png"
-						}
-					},
-					"info" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/information.png"
-						}
-					},
-					"choose" : {
-						"icon" : {
-							"image" : "../external/fugue-icons/question-white.png"
-						}
-					},
-					"date" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/date.png"
-						}
-					},
-					"style" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/cog.png"
-						}
-					},
-					"citation" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/page_white_edit.png"
-						}
-					},
-					"bibliography" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/text_list_numbers.png"
-						}
-					},
-					"sort" : {
-						"icon" : {
-							"image" : "../external/fugue-icons/sort-alphabet.png"
-						}
-					},
-					"number" : {
-						"icon" : {
-							"image" : "../external/fugue-icons/edit-number.png"
-						}
-					},
-					"layout" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/page_white_stack.png"
-						}
-					},
-					"group" : {
-						"icon" : {
-							"image" : "../external/famfamfam-icons/page_white_stack.png"
-						}
-					}
-				}
-			};
+	var	// smartTrees display a subset of the proper CSL tree
+		// and allow transformations of the data
+		//
+		// name : visible name
+		// nodeData : displayed in property panel
+		// children : displayed in tree view as children
+		smartTreeSchema = [
+			{
+				id : "citations",
+				name : "Inline Citations",
+				nodePaths : ["style/citation/layout"]
+			},
+			{
+				id : "bibliography",
+				name : "Bibliography",
+				nodePaths : ["style/bibliography/layout"]
+			},
+			{
+				id : "macro",
+				name : "Macros",
+				nodePaths : ["style/macro"]
+			}
+		],
+		smartTrees = [],
+		treesLoaded = 0,
+		treesToLoad = 0,
+		callbacks,
+		selectedTree = null;
 
-	var createFromCslData = function (cslData, callbacks) {
+	var treeLoaded = function () {
+		treesLoaded++;
+
+		if (treesLoaded === treesToLoad) {
+			callbacks.loaded();
+		};
+	};
+
+	var createFromCslData = function (cslData, _callbacks) {
 		var eventName,
 			jsTreeData,
 			citationNodeId,
 			citationNodeData,
-			citationTree;
+			citationTree,
+			html = "";
 
-		treeView.html(
-				'<h3>Style Info<\/h3>' +
-				'<div id="simpleTreeView"><\/div>' +
-				'<div id="styleSettings"><\/div>' +
-				'<div id="styleInfoTree"><\/div>' +
-				'<h3>Inline Citations<\/h3>' +
-				'<div id="citationTree"><\/div>' +
-				'<h3>Bibliography<\/h3>' +
-				'<div id="bibliographyTree"><\/div>');
+		callbacks = _callbacks;
 
-		thisElement = treeView.children("#simpleTreeView");
-		citationTree = treeView.children("#citationTree");
-
-		assertEqual(thisElement.length, 1);
-		assertEqual(citationTree.length, 1);
-
-		jsTreeData = jsTreeDataFromCslData(cslData);
-		citationNodeId = CSLEDIT.data.getFirstCslId(cslData, "citation");
-		citationNodeData = CSLEDIT.data.getNode(citationNodeId);
-		console.log("citation node id = " + citationNodeId);
-
-		thisElement.on("loaded.jstree", callbacks.loaded);
-		thisElement.on("select_node.jstree", callbacks.selectNode);
-
-		thisElement.jstree({
-			"json_data" : { data : [ jsTreeData ] },
-			"types" : nodeTypes,
-			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
-				"types", "hotkeys"],
-			// each plugin you have included can have its own config object
-			//"core" : { "initially_open" : [ "node1" ] },
-			"ui" : { /*"initially_select" : [ "cslTreeNode0" ],*/ "select_limit" : 1 },
-			"dnd" : {
-				/*
-				"drop_target" : false,
-				"drag_target" : function () {alert("drag!");},
-				"drop_finish" : function () {alert("drop!");},
-				"drag_finish" : function () {alert("drop!");},*/
-				"open_timeout" : 800,
-				"move_requested" : callbacks.moveNode
-			},
-			"crrm" : {
-				"move" : {
-					// only allow re-ordering, not moving to different nodes
-					"check_move" : function (move) {
-
-						return callbacks.checkMove(parseInt(move.o.attr("cslid")), parseInt(move.r.attr("cslid")), move.p);
-					}
-				}
-			},
-			"hotkeys" : {
-				"del" : callbacks.deleteNode,
-				"f2" : false
-			}
-			
+		$.each(smartTreeSchema, function (index, value) {
+			html += '<h3>%1<\/h3>'.replace('%1', value.name) +
+					'<div id="%1"><\/div>'.replace('%1', value.id);
 		});
-		console.log("creating citation tree");
-		citationTree.jstree({
-			"json_data" : { data : [ jsTreeDataFromCslData(citationNodeData) ] },
-			"types" : nodeTypes,
-			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
-				"types", "hotkeys"],
-			// each plugin you have included can have its own config object
-			//"core" : { "initially_open" : [ "node1" ] },
-			"ui" : { /*"initially_select" : [ "cslTreeNode0" ],*/ "select_limit" : 1 },
-			"dnd" : {
-				/*
-				"drop_target" : false,
-				"drag_target" : function () {alert("drag!");},
-				"drop_finish" : function () {alert("drop!");},
-				"drag_finish" : function () {alert("drop!");},*/
-				"open_timeout" : 800,
-				"move_requested" : callbacks.moveNode
-			},
-			"crrm" : {
-				"move" : {
-					// only allow re-ordering, not moving to different nodes
-					"check_move" : function (move) {
 
-						return callbacks.checkMove(parseInt(move.o.attr("cslid")), parseInt(move.r.attr("cslid")), move.p);
-					}
-				}
-			},
-			"hotkeys" : {
-				"del" : callbacks.deleteNode,
-				"f2" : false
-			}
-			
+		// create html nodes
+		treeView.html(html);
+
+		console.log("creating citation tree");
+
+		$.each(smartTreeSchema, function (index, value) {
+			var tree;
+			treesToLoad++;
+			tree = CSLEDIT.SmartTree(treeView.children("#" + value.id));
+			tree.createTree(value.nodePaths, {
+				loaded : treeLoaded,
+				selectNode : selectNodeInTree(tree),
+				moveNode : callbacks.moveNode,
+				deleteNode : function () {},
+				checkMove : callbacks.checkMove
+			});
+			smartTrees.push(tree);
 		});
 	};
 
-	var addNode = function (id, position, newNode) {
-		var parentNode;
-		console.log("adding to node " + id);
-		parentNode = thisElement.find('li[cslid="' + id + '"]');
-		assertEqual(parentNode.length, 1);
+	var selectNodeInTree = function (tree) {
+		return function (event, ui) {
+			// deselect nodes in other trees
+			$.each(smartTrees, function (i, thisTree) {
+				if (thisTree !== tree) {
+					thisTree.deselectAll();
+				}
+			});
 
-		thisElement.jstree('create_node', parentNode, position,
-		{
-			"data" : displayNameFromMetadata(newNode),
-			"attr" : { "rel" : newNode.name, "cslid" : -1 },
-			"children" : []
+			selectedTree = tree;
+	
+			return callbacks.selectNode(event, ui);
+		};
+	};
+
+	var addNode = function (id, position, newNode) {
+		var shift = null;
+
+		$.each(smartTrees, function (i, smartTree) {
+			shift = smartTree.addNode(id, position, newNode);
+			if (shift !== null) {
+				return false;
+			}
 		});
 
-		// sort the cslids
-		var allNodes;
-		allNodes = thisElement.find('li[cslid]');
+		assert(shift !== null, "node added, but no view");
 
-		assert(allNodes.length > 1);
-
-		allNodes.each(function (index) {
-			var oldId = parseInt($(this).attr('cslid'));
-
-			if (oldId === -1) {
-				$(this).attr('cslid', id + position + 1);
-			} else if (oldId > id + position) {
-				$(this).attr('cslid', oldId + 1);
-			}
-
-			// TODO: remove when confident that this always holds,
-			//       if it doesn't, need to alter deleteNode
-			assertEqual(parseInt($(this).attr('cslid')), index);
+		$.each(smartTrees, function (i, smartTree) {
+			smartTree.shiftCslIds(shift.fromId, shift.amount);
 		});
 	};
 
 	var deleteNode = function (id) {
-		var node = thisElement.find('li[cslid="' + id + '"]');
-		assertEqual(node.length, 1);
-		assert(id !== 0);
+		var shift = null;
 
-		thisElement.jstree("remove", node);
+		$.each(smartTrees, function (i, smartTree) {
+			shift = smartTree.deleteNode(id);
+			if (shift !== null) {
+				return false;
+			}
+		});
 
-		// sort the cslids
-		var allNodes;
-		allNodes = thisElement.find('li[cslid]');
-		assert(allNodes.length > 0);
-		allNodes.each(function (index) {
-			$(this).attr('cslid', index);
+		assert(shift !== null, "node deleted, but no view");
+
+		$.each(smartTrees, function (i, smartTree) {
+			smartTree.shiftCslIds(shift.fromId, shift.amount);
 		});
 	};
 
 	var ammendNode = function (id, ammendedNode) {
+		/*
 		var node = thisElement.find('li[cslid="' + id + '"]');
 		thisElement.jstree('rename_node', node, displayNameFromMetadata(ammendedNode));
+		*/
 	};
 
 	var moveNode = function (fromId, toId, position) {
+		var fromNode = treeView.find('li[cslid="' + fromId + '"]'),
+			toNode = treeView.find('li[cslid="' + toId + '"]');
+
+		console.log("move from " + fromId + " to " + toId);
+	
+		smartTrees[0].moveNode(fromNode, toNode, position);
+
+		/*
+		if (fromId < toId) {
+			// do add first
+		} else {
+			// do delete first
+		}
+*/
+		/*
 		var fromNode = thisElement.find('li[cslid="' + fromId + '"]'),
 			toNode = thisElement.find('li[cslid="' + toId + '"]');
 
@@ -241,104 +164,26 @@ CSLEDIT.SimpleTreeView = function (treeView) {
 		allNodes.each(function (index) {
 			$(this).attr('cslid', index);
 		});
+		*/
 	};
 
 	var selectNode = function (id) {
-		thisElement.find('li[cslid=' + id + '] > a').click();
+		treeView.find('li[cslid=' + id + '] > a').click();
 	};
 
 	var selectedNode = function () {
 		var selected,
 			cslid;
 		
-		selected = thisElement.jstree('get_selected'),
-		cslid = parseInt(selected.attr("cslid"));
-		console.log("selected cslid = " + cslid);
-		return cslid;
+		assert(selectedTree !== null);
+
+		return selectedTree.selectedNode();
 	};
 
 	var expandNode = function (id) {
-		thisElement.jstree("open_node", 'li[cslid=' + id + ']');
-	};
-
-	var jsTreeDataFromCslData = function (cslData) {
-		var jsTreeData = jsTreeDataFromCslData_inner(cslData);
-
-		// make root node open
-		jsTreeData["state"] = "open";
-
-		return jsTreeData;
-	};
-
-	var jsTreeDataFromCslData_inner = function (cslData) {
-		var index;
-		var children = [];
-
-		for (index = 0; index < cslData.children.length; index++) {
-			children.push(jsTreeDataFromCslData_inner(cslData.children[index]));
-		}
-
-		var jsTreeData = {
-			data : displayNameFromMetadata(cslData),
-			attr : {
-				rel : cslData.name,
-				cslid : cslData.cslId //,
-				//id : "cslTreeNode" + cslData.cslId
-			},
-			// TODO: remove this
-			/*metadata : {
-				name : cslData.name,
-				attributes: cslData.attributes,
-				cslId : cslData.cslId,
-				textValue : cslData.textValue
-			},*/
-			children : children
-		};
-
-		return jsTreeData;
-	};
-
-	var getAttr = function (attribute, attributes) {
-		var index;
-
-		for (index = 0; index < attributes.length; index++) {
-			if (attributes[index].enabled && attributes[index].key === attribute) {
-				return attributes[index].value;
-			}
-		}
-		return "";
-	};
-
-	var displayNameFromMetadata = function (metadata) {
-		var index,
-			attributesString = "",
-			attributesStringList = [],
-			displayName,
-			macro;
-
-		switch (metadata.name) {
-			case "macro":
-				displayName = "Macro: " + getAttr("name", metadata.attributes);
-				break;
-			case "text":
-				macro = getAttr("macro", metadata.attributes);
-				if (macro !== "") {
-					displayName = "Text (macro): " + macro;
-				} else {
-					displayName = "Text";
-				}
-				break;
-			case "citation":
-				displayName = "Inline Citations";
-				break;
-			case "bibliography":
-				displayName = "Bibliography";
-				break;
-			default:
-				displayName = metadata.name;
-		}
-
-		return displayName;
+		$.each(smartTrees, function (i, tree) {
+			tree.expandNode(id);
+		});
 	};
 
 	// public:
@@ -354,7 +199,6 @@ CSLEDIT.SimpleTreeView = function (treeView) {
 		selectedNode : selectedNode,
 
 		expandNode : expandNode
-		//,jQueryElement : treeView
 	}
 };
 

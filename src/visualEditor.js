@@ -141,12 +141,11 @@ CSLEDIT.editorPage = (function () {
 			highlightedNode.css("cursor", "");
 		}
 
-		parentNode = node.parent();
+		parentNode = node.parent().closest("li[cslid]");
 		assert(parentNode != false, "no parent node");
 
-		parentIndex = parentNode.attr("cslid");
-
-		if (parentIndex != "0") {
+		if (parentNode.length !== 0) {
+        		parentIndex = parentNode.attr("cslid");
 			if (nodeStack[nodeStack.length - 1] === parentIndex) {
 				nodeStack.pop();
 			}

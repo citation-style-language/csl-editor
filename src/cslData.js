@@ -95,6 +95,46 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return getNodeAndParent(id).node;
 	};
 
+	// Returns the first matching node in a depth first search or
+	// null if it couldn't find a match
+	var getNodesFromPath = function (path) {
+		var splitPath = path.split("/"),
+			rootNode,
+			result = [];
+
+		rootNode = splitPath.splice(0,1);
+
+		if (rootNode[0] !== "style") {
+			return result;
+		}
+
+		getNodesFromPath_inner(splitPath, get(), result);
+		return result;
+	};
+
+	var getNodesFromPath_inner = function (path, nodeData, result) {
+		var index,
+			rootNode,
+			regExp;
+
+		if (path.length === 0) {
+			result.push(nodeData);
+			return;
+		}
+
+		rootNode = path.splice(0, 1);
+		assertEqual(rootNode.length, 1);
+
+		// convert '*' wildcard to regexp equivalent
+		regExp = new RegExp(rootNode[0].replace("*", ".*"));
+
+		for (index = 0; index < nodeData.children.length; index++) {
+			if (regExp.test(nodeData.children[index].name)) {
+				getNodesFromPath_inner(path, nodeData.children[index], result);
+			}
+		}
+	};
+
 	var getFirstCslId = function (cslData, nodeName) {
 		var index,
 			result;
@@ -301,7 +341,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 		numCslNodes : function () { return numNodes(get()); },
 		onChanged : function (callback) {
 			onChangedCallbacks.push(callback);
-		}
+		},
+		getNodesFromPath : getNodesFromPath
 	};
 };
 
