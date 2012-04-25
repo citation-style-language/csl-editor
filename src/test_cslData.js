@@ -128,7 +128,7 @@ test("get node", function () {
 	equal(CSLEDIT.data.getNodeAndParent(4).node.name, "layout");
 	equal(CSLEDIT.data.getNodeAndParent(4).parent.name, "citation");
 });
-
+/*
 test("on change", function () {
 	var numCalls;
 
@@ -147,7 +147,7 @@ test("on change", function () {
 	CSLEDIT.data.addNode(0, 0, {});
 	equal(numCalls, 4);
 });
-
+*/
 test("find by path", function () {
 	var testCsl = "<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><macro><\/macro><macro><\/macro><\/style>";
 	CSLEDIT.data.setCslCode(testCsl);

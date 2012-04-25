@@ -12,7 +12,7 @@ CSLEDIT.editorPage = (function () {
 		unHighlightedCss,
 		highlightedTreeNodes = [],
 		selectedCslId = -1,
-		cslTreeView,
+		viewController,
 		controller;
 
 	var normalisedColor = function (color) {
@@ -100,12 +100,12 @@ CSLEDIT.editorPage = (function () {
 		assert(hoveredNodeStack.length > 0);
 
 		for (index = 0; index < hoveredNodeStack.length; index++) {
-			cslTreeView.expandNode(hoveredNodeStack[index]);
+			viewController.expandNode(hoveredNodeStack[index]);
 		}
 
 		if (selectedCslId !== cslId) {
 			selectedCslId = cslId;
-			cslTreeView.selectNode(cslId);
+			viewController.selectNode(cslId);
 		}
 	};
 
@@ -234,7 +234,7 @@ CSLEDIT.editorPage = (function () {
 		var nodeIndex = { index : 0 };
 		var cslData = CSLEDIT.data.get(); 
 
-		cslTreeView.createFromCslData(cslData,
+		viewController.createTree(cslData,
 		{
 			loaded : function (event, data) {
 				console.log("tree loaded");
@@ -250,7 +250,7 @@ CSLEDIT.editorPage = (function () {
 			},
 			selectNode : nodeSelected,
 			deleteNode : function () {
-				controller.exec("deleteNode", [cslTreeView.selectedNode()]);
+				controller.exec("deleteNode", [viewController.selectedNode()]);
 			},
 			moveNode : function (move) {
 				var temp,
@@ -317,7 +317,7 @@ CSLEDIT.editorPage = (function () {
 			schemaAttributes,
 			dataType;
 
-		nodeAndParent = CSLEDIT.data.getNodeAndParent(cslTreeView.selectedNode());
+		nodeAndParent = CSLEDIT.data.getNodeAndParent(viewController.selectedNode());
 		node = nodeAndParent.node;
 		parentNode = nodeAndParent.parent;
 
@@ -362,7 +362,7 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var nodeChanged = function (node) {
-		var selectedNodeId = cslTreeView.selectedNode(),
+		var selectedNodeId = viewController.selectedNode(),
 			attributes = [];
 
 		//node = CSLEDIT.data.getNode(selectedNodeId);
@@ -420,13 +420,13 @@ CSLEDIT.editorPage = (function () {
 
 				if (/^Edit/.test(parentNodeName)) {
 					if (clickedName === "Delete node") {
-						controller.exec("deleteNode", [cslTreeView.selectedNode()]);
+						controller.exec("deleteNode", [viewController.selectedNode()]);
 					}
 				} else if ((/^Add node/).test(parentNodeName)) {
 					$(event.target).parent().parent().css('visibility', 'hidden');
 
 					controller.exec("addNode", [
-						cslTreeView.selectedNode(), 0, { name : clickedName, attributes : []}
+						viewController.selectedNode(), 0, { name : clickedName, attributes : []}
 					]);
 				} else if ((/^Style/).test(parentNodeName)) {
 					if (clickedName === "Revert (undo all changes)") {
@@ -469,25 +469,28 @@ CSLEDIT.editorPage = (function () {
 			});
 
 			CSLEDIT.data.initPageStyle( function () {
-				cslTreeView = CSLEDIT.SimpleTreeView($("#treeEditor"));
-				//cslTreeView = CSLEDIT.CslTreeView($("#treeEditor"))
+
+				//viewController = CSLEDIT.CslTreeView($("#treeEditor"))
 				controller = CSLEDIT.Controller();
+
+				// TODO: rename SimpleTreeView to viewController or viewFactory
+				viewController = CSLEDIT.SimpleTreeView($("#treeEditor"));
 
 				controller.addSubscriber("addNode", CSLEDIT.data.addNode);
 				controller.addSubscriber("deleteNode", CSLEDIT.data.deleteNode);
 				controller.addSubscriber("moveNode", CSLEDIT.data.moveNode);
 				controller.addSubscriber("ammendNode", CSLEDIT.data.ammendNode);
 				controller.addSubscriber("setCslCode", CSLEDIT.data.setCslCode);	
-				
-				controller.addSubscriber("addNode", cslTreeView.addNode);
-				controller.addSubscriber("deleteNode", cslTreeView.deleteNode);
-				controller.addSubscriber("moveNode", cslTreeView.moveNode);
-				controller.addSubscriber("ammendNode", cslTreeView.ammendNode);
-				controller.addSubscriber("setCslCode", cslTreeView.setCslCode);
+				/*
+				controller.addSubscriber("addNode", viewController.addNode);
+				controller.addSubscriber("deleteNode", viewController.deleteNode);
+				controller.addSubscriber("moveNode", viewController.moveNode);
+				controller.addSubscriber("ammendNode", viewController.ammendNode);
+				controller.addSubscriber("setCslCode", viewController.setCslCode);
+*/
+				viewController.setFormatCitationsCallback(formatExampleCitations);
 
-				controller.setRefreshCitationsCallback(formatExampleCitations);
-
-				CSLEDIT.data.onChanged(controller.refreshWhenReady);
+				CSLEDIT.data.setViewController(viewController);
 
 				createTreeView();
 			});

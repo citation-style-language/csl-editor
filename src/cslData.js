@@ -11,7 +11,7 @@ var CSLEDIT = CSLEDIT || {};
  */
 
 CSLEDIT.Data = function (CSL_DATA) {
-	var onChangedCallbacks = [],
+	var viewControllers = [],
 		callbacksEnabled = true;
 
 	var get = function () {
@@ -19,13 +19,13 @@ CSLEDIT.Data = function (CSL_DATA) {
 	};
 	var set = function (cslData) {
 		localStorage.setItem(CSL_DATA, JSON.stringify(cslData));
-		if (callbacksEnabled) {
-			changed();
-		}
 		return cslData;
 	};
 	var setCslCode = function (cslCode) {
 		return set(CSLEDIT.cslParser.cslDataFromCslCode(cslCode));
+		if (callbacksEnabled) {
+			emit("createTree", []);
+		}
 	};
 	var getCslCode = function () {
 		return CSLEDIT.cslParser.cslCodeFromCslData(get());
@@ -35,9 +35,12 @@ CSLEDIT.Data = function (CSL_DATA) {
 		var iter,
 			cslData,
 			index,
-			node;
+			node,
+			nodesBefore;
 
 		cslData = get();
+
+		nodesBefore = numNodes(cslData);
 
 		// Find the id of the node to add
 		iter = CSLEDIT.Iterator(cslData);
@@ -55,7 +58,6 @@ CSLEDIT.Data = function (CSL_DATA) {
 				} else {
 					node.children.splice(position, nodesToDelete, newNode);
 				}
-				break;
 			}
 			index++;
 		}
@@ -70,6 +72,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 		}
 
 		set(cslData);
+
+		return index - nodesBefore; // difference in number of nodes
 	};
 
 	var getNodeAndParent = function (id) {
@@ -184,9 +188,9 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return index;
 	};
 
-	var changed = function () {
-		$.each(onChangedCallbacks, function(index, callback) {
-			callback();
+	var emit = function (event, args) {
+		$.each(viewControllers, function(index, controller) {
+			controller.exec(event, args);
 		});
 	};
 	
@@ -202,12 +206,14 @@ CSLEDIT.Data = function (CSL_DATA) {
 
 	var addNode = function (id, position, newNode) {
 		var nodeInfo,
-			positionIndex;
+			positionIndex,
+			nodesAdded;
 		newNode.cslId = -1;
 		newNode.children = newNode.children || [];
 
 		if (typeof position === "number") {
-			spliceNode(id, position, 0, newNode);
+			nodesAdded = spliceNode(id, position, 0, newNode);
+			emit("addNode", [id, position, newNode, nodesAdded]);
 		} else {
 			switch (position) {
 				case "first":
@@ -237,7 +243,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 		var iter = CSLEDIT.Iterator(get()),
 			index,
 			node,
-			parentNode;
+			parentNode,
+			nodesDeleted;
 
 		assert(id !== 0); // can't delete the style node
 
@@ -253,9 +260,11 @@ CSLEDIT.Data = function (CSL_DATA) {
 		}
 
 		assert(typeof parentNode !== "undefined");
-		spliceNode(parentNode.cslId, indexOfChild(node, parentNode), 1);
-
+		nodesDeleted = -spliceNode(parentNode.cslId, indexOfChild(node, parentNode), 1);
 		assertEqual(node.cslId, id);
+		
+		emit("deleteNode", [id, nodesDeleted]);
+		
 		return node;
 	};
 
@@ -263,8 +272,14 @@ CSLEDIT.Data = function (CSL_DATA) {
 		setCslCode : setCslCode,
 		getCslCode : getCslCode,
 		get : get,
-		addNode : addNode,
-		deleteNode : deleteNode,
+		addNode : function (id, position, newNode) {
+			addNode(id, position, newNode);
+			emit("formatCitations");
+		},
+		deleteNode : function (id) {
+			deleteNode(id);
+			emit("formatCitations");
+		},
 
 		ammendNode : function (id, ammendedNode) {
 			// replace everything of the original node except the children and the cslId
@@ -290,6 +305,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 				index++;
 			}
 			set(cslData);
+			emit("formatCitations");
 		},
 		moveNode : function (fromId, toId, position) {
 			var deletedNode;
@@ -305,7 +321,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 
 			addNode(toId, position, deletedNode);
 			callbacksEnabled = true;
-			changed();
+
+			emit("formatCitations");
 		},
 		getNode : getNode,
 		getNodeAndParent : getNodeAndParent,
@@ -339,8 +356,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 			}
 		},
 		numCslNodes : function () { return numNodes(get()); },
-		onChanged : function (callback) {
-			onChangedCallbacks.push(callback);
+		setViewController : function (_viewController) {
+			viewControllers.push(_viewController);
 		},
 		getNodesFromPath : getNodesFromPath
 	};

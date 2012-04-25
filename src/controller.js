@@ -14,10 +14,7 @@ CSLEDIT.Controller = function () {
 			"ammendNode" : [],
 			"setCslCode" : []
 		},
-		commandHistory = [],
-		execStackDepth = 0,
-		refreshCitationsCallback,
-		refreshQueued = false;
+		commandHistory = [];
 
 	var addSubscriber = function (command, callback) {
 		assert(command in commandSubscribers, "command doesn't exist");
@@ -26,10 +23,18 @@ CSLEDIT.Controller = function () {
 		commandSubscribers[command].push(callback);
 	};
 
+	var subscribeToAllCommands = function (object) {
+		$.each(commandSubscribers, function (k, v) {
+			assert(typeof object[k] === "function", "function " + k + " doesn't exist in subscriber");
+		});
+
+		$.each(commandSubscribers, function (k, v) {
+			v.push(object[k]);
+		});
+	};
+
 	var exec = function (command, args) {
 		var index;
-
-		execStackDepth++;
 
 		assert(command in commandSubscribers, "command doesn't exist");
 		console.log("executing command " + command + "(" + JSON.stringify(args) + ")");
@@ -38,32 +43,12 @@ CSLEDIT.Controller = function () {
 		for (index = 0; index < commandSubscribers[command].length; index++) {
 			commandSubscribers[command][index].apply(null, args);
 		}
-
-		execStackDepth--;
-
-		if (execStackDepth === 0 && refreshQueued) {
-			refreshQueued = false;
-			refreshCitationsCallback();
-		}
 	};
 
 	return {
 		addSubscriber : addSubscriber,
-		exec : exec,
-
-		// This callback is used to avoid re-calculating the example citations
-		// until all subscribers have been informed of the recent change
-		setRefreshCitationsCallback : function (callback) {
-			refreshCitationsCallback = callback;
-		},
-		refreshWhenReady : function () {
-			console.log("refresh when ready. stack depth = " + execStackDepth);
-			if (execStackDepth > 0) {
-				refreshQueued = true;
-			} else {
-				refreshCitationsCallback();
-			}
-		}
+		subscribeToAllCommands : subscribeToAllCommands,
+		exec : exec
 	};
 };
 

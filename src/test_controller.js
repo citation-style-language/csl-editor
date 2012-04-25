@@ -42,3 +42,30 @@ test("test subscribe to controller", function () {
 	equal(temp, 17, "multiple subscribers");
 	equal(temp2, 8, "multiple subscribers");	
 });
+
+test("test subscribe to all", function () {
+	var testController = CSLEDIT.Controller(),
+		invalidSubscriber,
+		subscriber,
+		temp = 0;
+
+	subscriber = {
+		addNode : function () {},
+		deleteNode : function () {},
+		moveNode : function () {},
+		ammendNode : function () {},
+		shiftCslIds : function () {},
+		setCslCode : 5
+	};
+
+	// setCslCode isn't a function, so throw error
+	raises( function () {
+		testController.subscribeToAllCommands(subscriber);
+	});
+
+	// test simple dummy command 
+	subscriber.setCslCode = function () { temp++; };
+	testController.subscribeToAllCommands(subscriber);
+	testController.exec("setCslCode", []);
+	equal(temp, 1);
+});

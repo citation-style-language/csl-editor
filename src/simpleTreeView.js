@@ -2,7 +2,7 @@
 
 CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.SimpleTreeView = function (treeView) {
+CSLEDIT.SimpleTreeView = function (treeView, controller) {
 	var	// smartTrees display a subset of the proper CSL tree
 		// and allow transformations of the data
 		//
@@ -30,7 +30,8 @@ CSLEDIT.SimpleTreeView = function (treeView) {
 		treesLoaded = 0,
 		treesToLoad = 0,
 		callbacks,
-		selectedTree = null;
+		selectedTree = null,
+		formatCitationsCallback;
 
 	var treeLoaded = function () {
 		treesLoaded++;
@@ -40,7 +41,7 @@ CSLEDIT.SimpleTreeView = function (treeView) {
 		};
 	};
 
-	var createFromCslData = function (cslData, _callbacks) {
+	var createTree = function (cslData, _callbacks) {
 		var eventName,
 			jsTreeData,
 			citationNodeId,
@@ -63,14 +64,15 @@ CSLEDIT.SimpleTreeView = function (treeView) {
 		$.each(smartTreeSchema, function (index, value) {
 			var tree;
 			treesToLoad++;
-			tree = CSLEDIT.SmartTree(treeView.children("#" + value.id));
-			tree.createTree(value.nodePaths, {
+			tree = CSLEDIT.SmartTree(treeView.children("#" + value.id), value.nodePaths);
+			tree.setCallbacks({
 				loaded : treeLoaded,
 				selectNode : selectNodeInTree(tree),
 				moveNode : callbacks.moveNode,
 				deleteNode : function () {},
 				checkMove : callbacks.checkMove
 			});
+			tree.createTree();
 			smartTrees.push(tree);
 		});
 	};
@@ -90,37 +92,15 @@ CSLEDIT.SimpleTreeView = function (treeView) {
 		};
 	};
 
-	var addNode = function (id, position, newNode) {
-		var shift = null;
-
+	var addNode = function (id, position, newNode, nodesAdded) {
 		$.each(smartTrees, function (i, smartTree) {
-			shift = smartTree.addNode(id, position, newNode);
-			if (shift !== null) {
-				return false;
-			}
-		});
-
-		assert(shift !== null, "node added, but no view");
-
-		$.each(smartTrees, function (i, smartTree) {
-			smartTree.shiftCslIds(shift.fromId, shift.amount);
+			smartTree.addNode(id, position, newNode, nodesAdded);
 		});
 	};
 
-	var deleteNode = function (id) {
-		var shift = null;
-
+	var deleteNode = function (id, nodesDeleted) {
 		$.each(smartTrees, function (i, smartTree) {
-			shift = smartTree.deleteNode(id);
-			if (shift !== null) {
-				return false;
-			}
-		});
-
-		assert(shift !== null, "node deleted, but no view");
-
-		$.each(smartTrees, function (i, smartTree) {
-			smartTree.shiftCslIds(shift.fromId, shift.amount);
+			smartTree.deleteNode(id, nodesDeleted);
 		});
 	};
 
@@ -128,42 +108,6 @@ CSLEDIT.SimpleTreeView = function (treeView) {
 		/*
 		var node = thisElement.find('li[cslid="' + id + '"]');
 		thisElement.jstree('rename_node', node, displayNameFromMetadata(ammendedNode));
-		*/
-	};
-
-	var moveNode = function (fromId, toId, position) {
-		var fromNode = treeView.find('li[cslid="' + fromId + '"]'),
-			toNode = treeView.find('li[cslid="' + toId + '"]');
-
-		console.log("move from " + fromId + " to " + toId);
-	
-		smartTrees[0].moveNode(fromNode, toNode, position);
-
-		/*
-		if (fromId < toId) {
-			// do add first
-		} else {
-			// do delete first
-		}
-*/
-		/*
-		var fromNode = thisElement.find('li[cslid="' + fromId + '"]'),
-			toNode = thisElement.find('li[cslid="' + toId + '"]');
-
-		assertEqual(fromNode.length, 1);
-		assertEqual(toNode.length, 1);
-
-		console.log("CslTreeView.moveNode: " + fromId + " to " + toId + ", position: " + position);
-		console.log("CslTreeView.moveNode: " + thisElement.jstree("get_text", fromNode) + " to " + thisElement.jstree("get_text", toNode));
-		thisElement.jstree('move_node', fromNode, toNode, position, false, false, true);
-		
-		// sort the cslids
-		var allNodes;
-		allNodes = thisElement.find('li[cslid]');
-		assert(allNodes.length > 0);
-		allNodes.each(function (index) {
-			$(this).attr('cslid', index);
-		});
 		*/
 	};
 
@@ -185,20 +129,37 @@ CSLEDIT.SimpleTreeView = function (treeView) {
 			tree.expandNode(id);
 		});
 	};
+	
+	var exec = function (command, args) {
+		args = args || [];
+		console.log("executing view update: " + command + "(" + args.join(", ") + ")");
+		this[command].apply(null, args);
+	};
 
 	// public:
 	return {
-		createFromCslData : createFromCslData,
+		createTree : createTree,
 
 		addNode : addNode,
 		deleteNode : deleteNode,
-		moveNode : moveNode,
 		ammendNode : ammendNode,
 
 		selectNode : selectNode,
 		selectedNode : selectedNode,
 
-		expandNode : expandNode
+		expandNode : expandNode,
+
+		formatCitations : function () {
+			formatCitationsCallback();
+		},
+			
+		// This callback is used to avoid re-calculating the example citations
+		// until all subscribers have been informed of the recent change
+		exec : exec,
+
+		setFormatCitationsCallback : function (callback) {
+			formatCitationsCallback = callback;
+		}
 	}
 };
 
