@@ -2,7 +2,7 @@
 
 CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.SimpleTreeView = function (treeView, controller) {
+CSLEDIT.ViewController = function (treeView) {
 	var	// smartTrees display a subset of the proper CSL tree
 		// and allow transformations of the data
 		//

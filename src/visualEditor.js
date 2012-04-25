@@ -473,23 +473,15 @@ CSLEDIT.editorPage = (function () {
 				//viewController = CSLEDIT.CslTreeView($("#treeEditor"))
 				controller = CSLEDIT.Controller();
 
-				// TODO: rename SimpleTreeView to viewController or viewFactory
-				viewController = CSLEDIT.SimpleTreeView($("#treeEditor"));
+				viewController = CSLEDIT.ViewController($("#treeEditor"));
 
 				controller.addSubscriber("addNode", CSLEDIT.data.addNode);
 				controller.addSubscriber("deleteNode", CSLEDIT.data.deleteNode);
 				controller.addSubscriber("moveNode", CSLEDIT.data.moveNode);
 				controller.addSubscriber("ammendNode", CSLEDIT.data.ammendNode);
 				controller.addSubscriber("setCslCode", CSLEDIT.data.setCslCode);	
-				/*
-				controller.addSubscriber("addNode", viewController.addNode);
-				controller.addSubscriber("deleteNode", viewController.deleteNode);
-				controller.addSubscriber("moveNode", viewController.moveNode);
-				controller.addSubscriber("ammendNode", viewController.ammendNode);
-				controller.addSubscriber("setCslCode", viewController.setCslCode);
-*/
-				viewController.setFormatCitationsCallback(formatExampleCitations);
 
+				viewController.setFormatCitationsCallback(formatExampleCitations);
 				CSLEDIT.data.setViewController(viewController);
 
 				createTreeView();
