@@ -165,13 +165,14 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 	
 	var jsTreeDataFromCslData = function (nodePaths) {
 		var cslNodes = [],
-			jsTreeData = [];
+			jsTreeData = [],
+			cslData = CSLEDIT.data.get();
 
 		ranges = [];
 
 		console.log("paths = " + nodePaths.join(", "));
 		$.each(nodePaths, function (i, path) {
-			var nodes = CSLEDIT.data.getNodesFromPath(path);
+			var nodes = CSLEDIT.data.getNodesFromPath(cslData, path);
 			cslNodes = cslNodes.concat(nodes);
 		});
 

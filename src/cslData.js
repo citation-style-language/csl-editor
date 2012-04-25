@@ -99,9 +99,9 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return getNodeAndParent(id).node;
 	};
 
-	// Returns the first matching node in a depth first search or
+	// Returns all matching nodes or
 	// null if it couldn't find a match
-	var getNodesFromPath = function (path) {
+	var getNodesFromPath = function (cslData, path) {
 		var splitPath = path.split("/"),
 			rootNode,
 			result = [];
@@ -112,7 +112,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 			return result;
 		}
 
-		getNodesFromPath_inner(splitPath, get(), result);
+		getNodesFromPath_inner(splitPath, cslData, result);
 		return result;
 	};
 

@@ -245,8 +245,8 @@ CSLEDIT.editorPage = (function () {
 					$("#statusMessage"), $("#exampleOutput"),
 					$("#formattedCitations"), $("#formattedBibliography"),
 					doSyntaxHighlighting,
-					CSLEDIT.data.getFirstCslId(cslData, "citation"),
-					CSLEDIT.data.getFirstCslId(cslData, "bibliography"));
+					CSLEDIT.data.getNodesFromPath(cslData, "style/citation/layout")[0].cslId,
+					CSLEDIT.data.getNodesFromPath(cslData, "style/bibliography/layout")[0].cslId);
 			},
 			selectNode : nodeSelected,
 			deleteNode : function () {
@@ -301,8 +301,8 @@ CSLEDIT.editorPage = (function () {
 			$("#statusMessage"), $("#exampleOutput"),
 			$("#formattedCitations"), $("#formattedBibliography"),
 			doSyntaxHighlighting,
-			CSLEDIT.data.getFirstCslId(cslData, "citation"),
-			CSLEDIT.data.getFirstCslId(cslData, "bibliography"));
+			CSLEDIT.data.getNodesFromPath(cslData, "style/citation/layout")[0].cslId,
+			CSLEDIT.data.getNodesFromPath(cslData, "style/bibliography/layout")[0].cslId);
 	};
 
 	var nodeSelected = function(event, ui) {
