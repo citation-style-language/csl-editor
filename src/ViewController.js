@@ -69,7 +69,7 @@ CSLEDIT.ViewController = function (treeView) {
 				loaded : treeLoaded,
 				selectNode : selectNodeInTree(tree),
 				moveNode : callbacks.moveNode,
-				deleteNode : function () {},
+				deleteNode : callbacks.deleteNode,
 				checkMove : callbacks.checkMove
 			});
 			tree.createTree();
