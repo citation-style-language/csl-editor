@@ -13,12 +13,32 @@ CSLEDIT.ViewController = function (treeView) {
 			{
 				id : "citations",
 				name : "Inline Citations",
-				nodePaths : ["style/citation/layout"]
+				nodePaths : ["style/citation/layout"],
+				buttons : [
+				{
+					icon : "../external/fugue-icons/sort-alphabet.png",
+					node : "style/citation/sort"
+				},
+				{
+					icon : "../external/famfamfam-icons/cog.png",
+					node : "style/citation"
+				}
+				]
 			},
 			{
 				id : "bibliography",
 				name : "Bibliography",
-				nodePaths : ["style/bibliography/layout"]
+				nodePaths : ["style/bibliography/layout"],
+				buttons : [
+				{
+					icon : "../external/fugue-icons/sort-alphabet.png",
+					node : "style/bibliography/sort"
+				},
+				{
+					icon : "../external/famfamfam-icons/cog.png",
+					node : "style/bibliography"
+				}
+				]
 			},
 			{
 				id : "macro",
@@ -31,7 +51,8 @@ CSLEDIT.ViewController = function (treeView) {
 		treesToLoad = 0,
 		callbacks,
 		selectedTree = null,
-		formatCitationsCallback;
+		formatCitationsCallback,
+		selectedNodeId = 0;
 
 	var treeLoaded = function () {
 		treesLoaded++;
@@ -47,17 +68,38 @@ CSLEDIT.ViewController = function (treeView) {
 			citationNodeId,
 			citationNodeData,
 			citationTree,
-			html = "";
+			html = "",
+			cslId,
+			nodes;
 
 		callbacks = _callbacks;
 
 		$.each(smartTreeSchema, function (index, value) {
-			html += '<h3>%1<\/h3>'.replace('%1', value.name) +
-					'<div id="%1"><\/div>'.replace('%1', value.id);
+			html += '<table><tr>';
+			html += '<td><h3>%1<\/h3>'.replace('%1', value.name) + '<\/td>';
+			if (typeof value.buttons !== "undefined") {
+				html += '<td>&nbsp;&nbsp;&nbsp;<\/td>';
+
+				$.each(value.buttons, function (i, button) {
+					nodes = CSLEDIT.data.getNodesFromPath(cslData, button.node);
+					assert(nodes.length > 0);
+					cslId = nodes[0].cslId;
+					html += '<td><img class="cslPropertyButton" cslId="' + cslId +
+						'" src="' + button.icon + '" \/><\/td>';
+				});
+			}
+			html += '<\/tr><\/table>';
+			html += '<div id="%1"><\/div>'.replace('%1', value.id);
 		});
 
 		// create html nodes
 		treeView.html(html);
+
+		treeView.find(".cslPropertyButton").click(function (event) {
+			console.log("clicked property button");
+			cslId = parseInt($(event.target).attr("cslid"));
+			selectNode(cslId);
+		});
 
 		console.log("creating citation tree");
 
@@ -87,8 +129,9 @@ CSLEDIT.ViewController = function (treeView) {
 			});
 
 			selectedTree = tree;
+			selectedNodeId = tree.selectedNode();
 	
-			return callbacks.selectNode(event, ui);
+			return callbacks.selectNode(/*event, ui*/);
 		};
 	};
 
@@ -105,23 +148,24 @@ CSLEDIT.ViewController = function (treeView) {
 	};
 
 	var ammendNode = function (id, ammendedNode) {
-		/*
-		var node = thisElement.find('li[cslid="' + id + '"]');
-		thisElement.jstree('rename_node', node, displayNameFromMetadata(ammendedNode));
-		*/
+		$.each(smartTrees, function (i, smartTree) {
+			smartTree.ammendNode(id, ammendedNode);
+		});
 	};
 
 	var selectNode = function (id) {
-		treeView.find('li[cslid=' + id + '] > a').click();
+		var treeNode = treeView.find('li[cslid=' + id + '] > a');
+
+		if (treeNode.length > 0) {
+			treeNode.first().click();
+		} else {
+			selectedNodeId = id;
+			callbacks.selectNode();
+		}
 	};
 
 	var selectedNode = function () {
-		var selected,
-			cslid;
-		
-		assert(selectedTree !== null);
-
-		return selectedTree.selectedNode();
+		return selectedNodeId;
 	};
 
 	var expandNode = function (id) {

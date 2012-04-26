@@ -305,6 +305,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 				index++;
 			}
 			set(cslData);
+			emit("ammendNode", [id, ammendedNode]);
 			emit("formatCitations");
 		},
 		moveNode : function (fromId, toId, position) {

@@ -32,8 +32,6 @@ asyncTest("create style tree", function () {
 		}
 	});
 	styleTree.createTree();
-
-	
 });
 
 asyncTest("create macros tree", function () {

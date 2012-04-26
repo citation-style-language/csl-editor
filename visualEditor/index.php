@@ -31,7 +31,7 @@
 	<script type="text/javascript" src="../src/schema.js"></script>
 	<script type="text/javascript" src="../src/propertyPanel.js"></script>
 	<script type="text/javascript" src="../src/smartTree.js"></script>
-	<script type="text/javascript" src="../src/viewController.js"></script>
+	<script type="text/javascript" src="../src/ViewController.js"></script>
 	<script type="text/javascript" src="../src/controller.js"></script>
 	<script type="text/javascript" src="../src/visualEditor.js"></script>
 
@@ -52,6 +52,8 @@
 			<li><a href="#">Load from URL</a></li>
 			<!--li><a href="#">Revert (undo all changes)</a></li-->
 			<li><a href="#">Export CSL</a></li>
+			<li><a href="#">Style Info</a></li>
+			<li><a href="#">Global Formatting Options</a></li>
 		</ul>
 	</li>
 	<li>

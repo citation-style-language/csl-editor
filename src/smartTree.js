@@ -272,11 +272,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 		assertEqual(parentNode.length, 1);
 			
 		createSubTree(parentNode, position, jsTreeDataFromCslData_inner(newNode, [id]));
-		/*{
-			"data" : displayNameFromMetadata(newNode),
-			"attr" : { "rel" : newNode.name, "cslid" : -1 },
-			"children" : []
-		});*/
 
 		// sort the cslids
 		var allNodes;
@@ -347,36 +342,49 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 		}
 		range = ranges[thisRangeIndex];
 
-		node = range.rootNode.find('li[cslid="' + id + '"]');
-		assertEqual(node.length, 1);
-		assert(id !== 0);
+		if (id === range.first) {
+			console.log("deleting range / rootNode");
+			ranges.splice(thisRangeIndex, 1);
 
-		assert(id !== range.first, "TODO: implement");
+			treeElement.jstree("remove", range.rootNode);
 
-		console.log("removing node " + id);
+		} else { // update range
+			node = treeElement.find('li[cslid="' + id + '"]');
+			assertEqual(node.length, 1);
+			assert(id !== 0);
 
-		treeElement.jstree("remove", node);
+			console.log("removing node " + id);
+			treeElement.jstree("remove", node);
 
-		oldLastCslId = range;
+			oldLastCslId = range;
 
-		// sort the cslids
-		allNodes = range.rootNode.find('li[cslid]');
+			// sort the cslids
+			allNodes = range.rootNode.find('li[cslid]');
 
-		currentCslId = range.first;
-		allNodes.each(function (index) {
-			currentCslId = range.first + 1 + index;
-			$(this).attr('cslid', currentCslId);
-		});
+			currentCslId = range.first;
+			allNodes.each(function (index) {
+				currentCslId = range.first + 1 + index;
+				$(this).attr('cslid', currentCslId);
+			});
 
-		assertEqual(range.last - currentCslId, nodesDeleted);
+			assertEqual(range.last - currentCslId, nodesDeleted);
 
-		range.last = currentCslId;
+			range.last = currentCslId;
 
-		assertEqual(allNodes.length, range.last - range.first);
+			assertEqual(allNodes.length, range.last - range.first);
+		}
 	};
 
-	var moveNode = function (fromNode, toNode, position) {
-		treeElement.jstree('move_node', fromNode, toNode, position, false, false, true);
+	var ammendNode = function (id, ammendedNode) {
+		var thisRangeIndex = rangeIndex(id),
+			node;
+
+		if (thisRangeIndex === -1) {
+			return;
+		}
+
+		var node = treeElement.find('li[cslid="' + id + '"]');
+		treeElement.jstree('rename_node', node, displayNameFromMetadata(ammendedNode));
 	};
 
 	return {
@@ -388,6 +396,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 		expandNode : expandNode,
 		addNode : addNode,
 		deleteNode : deleteNode,
+		ammendNode : ammendNode,
 
 		shiftCslIds : shiftCslIds,
 

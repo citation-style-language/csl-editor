@@ -442,6 +442,12 @@ CSLEDIT.editorPage = (function () {
 					} else if (clickedName === "New style") {
 						reloadPageWithNewStyle(
 							window.location.protocol + "//" + window.location.hostname + "/csl/content/newStyle.csl");
+					} else if (clickedName === "Style Info") {
+						viewController.selectNode(CSLEDIT.data.getNodesFromPath(
+							CSLEDIT.data.get(), "style/info")[0].cslId);
+					} else if (clickedName === "Global Formatting Options") {
+						viewController.selectNode(CSLEDIT.data.getNodesFromPath(
+							CSLEDIT.data.get(), "style")[0].cslId);
 					}
 				}
 			}

@@ -42,7 +42,7 @@ CSLEDIT.propertyPanel = (function () {
 		panel.children().remove();
 
 		// create new ones
-		$('<h3>' + nodeData.name + ' properites</h3><br \/>').appendTo(panel);
+		$('<h3>' + nodeData.name + ' properties</h3><br \/>').appendTo(panel);
 		$('<table>').appendTo(panel);
 		
 		// value editor (if a text or data element)

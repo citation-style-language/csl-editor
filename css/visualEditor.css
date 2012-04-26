@@ -85,6 +85,12 @@ button::-moz-focus-inner {
     border:0;
     padding:0;
 }
+.cslPropertyButton {
+	float: right;
+}
+.cslPropertyButton:hover {
+	background: #cceeff;
+}
 
 /** Very hacky fix for jstree move between nodes bug:
  *  https://github.com/vakata/jstree/issues/174
