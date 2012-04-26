@@ -30,6 +30,8 @@
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 	<script type="text/javascript" src="../src/propertyPanel.js"></script>
+	<script type="text/javascript" src="../src/sortPropertyPanel.js"></script>
+	<script type="text/javascript" src="../src/editNodeButton.js"></script>
 	<script type="text/javascript" src="../src/smartTree.js"></script>
 	<script type="text/javascript" src="../src/ViewController.js"></script>
 	<script type="text/javascript" src="../src/controller.js"></script>

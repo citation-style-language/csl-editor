@@ -352,8 +352,15 @@ CSLEDIT.editorPage = (function () {
 		dataType = CSLEDIT.schema.elementDataType(parentNodeName + "/" + node.name);
 		schemaAttributes = CSLEDIT.schema.attributes(parentNodeName + "/" + node.name);
 
-		CSLEDIT.propertyPanel.setupPanel(
-			$("#elementProperties"), node, dataType, schemaAttributes, nodeChanged);
+		switch (node.name) {
+			case "sort":
+				CSLEDIT.sortPropertyPanel.setupPanel(
+					$("#elementProperties"), node, dataType, schemaAttributes, nodeChanged);
+				break;
+			default:
+			CSLEDIT.propertyPanel.setupPanel(
+				$("#elementProperties"), node, dataType, schemaAttributes, nodeChanged);
+		}
 
 		$('span[cslid="' + oldSelectedNode + '"]').css(unHighlightedCss);
 		oldSelectedNode = node.cslId;
