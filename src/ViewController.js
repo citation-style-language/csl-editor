@@ -165,7 +165,7 @@ CSLEDIT.ViewController = function (treeView) {
 			smartTree.deleteNode(id, nodesDeleted);
 		});
 		$.each(nodeButtons, function (i, button) {
-			button.deleteNode(id, position, newNode, nodesAdded);
+			button.deleteNode(id, nodesDeleted);
 		});
 	};
 
