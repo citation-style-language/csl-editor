@@ -101,10 +101,14 @@ CSLEDIT.Data = function (CSL_DATA) {
 
 	// Returns all matching nodes or
 	// null if it couldn't find a match
-	var getNodesFromPath = function (cslData, path) {
+	var getNodesFromPath = function (path, cslData /* optional */) {
 		var splitPath = path.split("/"),
 			rootNode,
 			result = [];
+
+		if (typeof cslData === "undefined") {
+			cslData = get();
+		}
 
 		rootNode = splitPath.splice(0,1);
 
@@ -210,6 +214,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 			nodesAdded;
 		newNode.cslId = -1;
 		newNode.children = newNode.children || [];
+		newNode.attributes = newNode.attributes || [];
 
 		if (typeof position === "number") {
 			nodesAdded = spliceNode(id, position, 0, newNode);

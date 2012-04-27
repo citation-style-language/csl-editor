@@ -1,22 +1,24 @@
 module("CSLEDIT.controller");
 
 test("can only subscribe to actual events", function () {
-	var testController = CSLEDIT.Controller();
-
 	raises( function () {
-		testController.addSubscriber("noSuchCommand", function (){} );
-	});
-	raises( function () {
-		testController.exec("noSuchCommand", []);
+		CSLEDIT.controller.addSubscriber("noSuchCommand", function (){} );
 	});
 	
-	testController.addSubscriber("addNode", function (){} );
-	testController.exec("addNode", [] );
+	CSLEDIT.controller.addSubscriber("addNode", function (){} );
+});
+
+test("can only call actual commands and macros", function () {
+	raises(function () {
+		CSLEDIT.controller.exec("fakeCommand", [] );
+	});
+
+	CSLEDIT.controller.exec("addNode", [] );
+	CSLEDIT.controller.exec("addPath", ["style"] );
 });
 		
 test("test subscribe to controller", function () {
-	var testController = CSLEDIT.Controller(),
-		temp,
+	var temp,
 		temp2;
 
 	var addToTemp = function (increment1, increment2) {
@@ -24,28 +26,27 @@ test("test subscribe to controller", function () {
 	};
 
 	temp = 3;
-	testController.addSubscriber("addNode", addToTemp);
-	testController.exec("addNode", [4, 5]);
+	CSLEDIT.controller.addSubscriber("addNode", addToTemp);
+	CSLEDIT.controller.exec("addNode", [4, 5]);
 	equal(temp, 12);
 
 	// it's allowed to add duplicate subscribers, they'll get called multiple times
 	temp = 3
-	testController.addSubscriber("addNode", addToTemp);
-	testController.exec("addNode", [4, 5]);
+	CSLEDIT.controller.addSubscriber("addNode", addToTemp);
+	CSLEDIT.controller.exec("addNode", [4, 5]);
 	equal(temp, 21, "duplicate subscriber");
 
 	// add a different anonymous function
 	temp = 3;
 	temp2 = 3;
-	testController.addSubscriber("addNode", function (a, b) {temp2 += a - b});
-	testController.exec("addNode", [6, 1]);
+	CSLEDIT.controller.addSubscriber("addNode", function (a, b) {temp2 += a - b});
+	CSLEDIT.controller.exec("addNode", [6, 1]);
 	equal(temp, 17, "multiple subscribers");
 	equal(temp2, 8, "multiple subscribers");	
 });
 
 test("test subscribe to all", function () {
-	var testController = CSLEDIT.Controller(),
-		invalidSubscriber,
+	var invalidSubscriber,
 		subscriber,
 		temp = 0;
 
@@ -60,12 +61,12 @@ test("test subscribe to all", function () {
 
 	// setCslCode isn't a function, so throw error
 	raises( function () {
-		testController.subscribeToAllCommands(subscriber);
+		CSLEDIT.controller.subscribeToAllCommands(subscriber);
 	});
 
 	// test simple dummy command 
 	subscriber.setCslCode = function () { temp++; };
-	testController.subscribeToAllCommands(subscriber);
-	testController.exec("setCslCode", []);
+	CSLEDIT.controller.subscribeToAllCommands(subscriber);
+	CSLEDIT.controller.exec("setCslCode", []);
 	equal(temp, 1);
 });

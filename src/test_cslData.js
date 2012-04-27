@@ -154,19 +154,19 @@ test("find by path", function () {
 
 	cslData = CSLEDIT.data.setCslCode(testCsl);
 	
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "").length, 0);
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style/notThere").length, 0);
+	equal(CSLEDIT.data.getNodesFromPath("", cslData).length, 0);
+	equal(CSLEDIT.data.getNodesFromPath("style/notThere", cslData).length, 0);
 
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style")[0].cslId, 0);
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style/info")[0].cslId, 1);
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style/citation/layout")[0].cslId, 4);
+	equal(CSLEDIT.data.getNodesFromPath("style", cslData)[0].cslId, 0);
+	equal(CSLEDIT.data.getNodesFromPath("style/info", cslData)[0].cslId, 1);
+	equal(CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData)[0].cslId, 4);
 
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style/macro")[0].cslId, 5);
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style/macro")[1].cslId, 6);
+	equal(CSLEDIT.data.getNodesFromPath("style/macro", cslData)[0].cslId, 5);
+	equal(CSLEDIT.data.getNodesFromPath("style/macro", cslData)[1].cslId, 6);
 
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style/*")[0].cslId, 1);
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style/*")[1].cslId, 3);
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style/*")[2].cslId, 5);
-	equal(CSLEDIT.data.getNodesFromPath(cslData, "style/*")[3].cslId, 6);
+	equal(CSLEDIT.data.getNodesFromPath("style/*", cslData)[0].cslId, 1);
+	equal(CSLEDIT.data.getNodesFromPath("style/*", cslData)[1].cslId, 3);
+	equal(CSLEDIT.data.getNodesFromPath("style/*", cslData)[2].cslId, 5);
+	equal(CSLEDIT.data.getNodesFromPath("style/*", cslData)[3].cslId, 6);
 });
 

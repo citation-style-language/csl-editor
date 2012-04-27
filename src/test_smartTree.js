@@ -87,14 +87,14 @@ asyncTest("add/delete nodes", function () {
 			equal(treeElement.find('li[cslid=8]').attr("rel"), "macro");
 			equal(treeElement.find('li[cslid=9]').attr("rel"), "inLastMacro");
 
-			macroTree.addNode(6, 0, {name : "text1"}, 1);
-			macroTree.addNode(6, 0, {name : "group"}, 1);
+			macroTree.addNode(6, 0, {name : "text1", cslId:7}, 1);
+			macroTree.addNode(6, 0, {name : "group", cslId:7}, 1);
 
 			equal(treeElement.find('li[cslid=7]').attr("rel"), "group", "add");
 			equal(treeElement.find('li[cslid=8]').attr("rel"), "text1", "add");
 
-			macroTree.addNode(7, "inside", {name : "text2", children : []}, 1);
-			macroTree.addNode(7, "inside", {name : "text3", children : []}, 1);
+			macroTree.addNode(7, "inside", {name : "text2", cslId:8}, 1);
+			macroTree.addNode(7, "inside", {name : "text3", cslId:8}, 1);
 			
 			equal(treeElement.find('li[cslid=8]').attr("rel"), "text3");
 			equal(treeElement.find('li[cslid=9]').attr("rel"), "text2");
@@ -139,7 +139,8 @@ asyncTest("add node with children", function () {
 						children : [ { name : "child1-2", children : [] } ]
 					},
 					{ name : "child2", children : [] }
-				]
+				],
+				cslId : 1
 			}, 4);
 			
 			equal(treeElement.find('li[cslid=0]').attr("rel"), "style");

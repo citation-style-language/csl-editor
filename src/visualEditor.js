@@ -12,8 +12,7 @@ CSLEDIT.editorPage = (function () {
 		unHighlightedCss,
 		highlightedTreeNodes = [],
 		selectedCslId = -1,
-		viewController,
-		controller;
+		viewController;
 
 	var normalisedColor = function (color) {
 		return $('<pre>').css({"color" : color}).css("color");
@@ -245,12 +244,12 @@ CSLEDIT.editorPage = (function () {
 					$("#statusMessage"), $("#exampleOutput"),
 					$("#formattedCitations"), $("#formattedBibliography"),
 					doSyntaxHighlighting,
-					CSLEDIT.data.getNodesFromPath(cslData, "style/citation/layout")[0].cslId,
-					CSLEDIT.data.getNodesFromPath(cslData, "style/bibliography/layout")[0].cslId);
+					CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData)[0].cslId,
+					CSLEDIT.data.getNodesFromPath("style/bibliography/layout", cslData)[0].cslId);
 			},
 			selectNode : nodeSelected,
 			deleteNode : function () {
-				controller.exec("deleteNode", [viewController.selectedNode()]);
+				CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
 			},
 			moveNode : function (move) {
 				var temp,
@@ -264,7 +263,7 @@ CSLEDIT.editorPage = (function () {
 				toParentNode = CSLEDIT.data.getNodeAndParent(toId).parent;
 
 				if (move.last_pos !== false) {
-					controller.exec("moveNode", [fromId, toId, move.last_pos]);
+					CSLEDIT.controller.exec("moveNode", [fromId, toId, move.last_pos]);
 				}
 			},
 			checkMove : function (fromId, toId, position) {
@@ -301,8 +300,8 @@ CSLEDIT.editorPage = (function () {
 			$("#statusMessage"), $("#exampleOutput"),
 			$("#formattedCitations"), $("#formattedBibliography"),
 			doSyntaxHighlighting,
-			CSLEDIT.data.getNodesFromPath(cslData, "style/citation/layout")[0].cslId,
-			CSLEDIT.data.getNodesFromPath(cslData, "style/bibliography/layout")[0].cslId);
+			CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData)[0].cslId,
+			CSLEDIT.data.getNodesFromPath("style/bibliography/layout", cslData)[0].cslId);
 	};
 
 	var nodeSelected = function(event, ui) {
@@ -395,7 +394,7 @@ CSLEDIT.editorPage = (function () {
 		console.timeEnd("readingUserInput");
 		node.attributes = attributes;
 
-		controller.exec("ammendNode", [selectedNodeId, node]);
+		CSLEDIT.controller.exec("ammendNode", [selectedNodeId, node]);
 	};
 
 	var reloadPageWithNewStyle = function (newURL) {
@@ -427,12 +426,12 @@ CSLEDIT.editorPage = (function () {
 
 				if (/^Edit/.test(parentNodeName)) {
 					if (clickedName === "Delete node") {
-						controller.exec("deleteNode", [viewController.selectedNode()]);
+						CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
 					}
 				} else if ((/^Add node/).test(parentNodeName)) {
 					$(event.target).parent().parent().css('visibility', 'hidden');
 
-					controller.exec("addNode", [
+					CSLEDIT.controller.exec("addNode", [
 						viewController.selectedNode(), 0, { name : clickedName, attributes : []}
 					]);
 				} else if ((/^Style/).test(parentNodeName)) {
@@ -450,11 +449,9 @@ CSLEDIT.editorPage = (function () {
 						reloadPageWithNewStyle(
 							window.location.protocol + "//" + window.location.hostname + "/csl/content/newStyle.csl");
 					} else if (clickedName === "Style Info") {
-						viewController.selectNode(CSLEDIT.data.getNodesFromPath(
-							CSLEDIT.data.get(), "style/info")[0].cslId);
+						viewController.selectNode(CSLEDIT.data.getNodesFromPath("style/info")[0].cslId);
 					} else if (clickedName === "Global Formatting Options") {
-						viewController.selectNode(CSLEDIT.data.getNodesFromPath(
-							CSLEDIT.data.get(), "style")[0].cslId);
+						viewController.selectNode(CSLEDIT.data.getNodesFromPath("style")[0].cslId);
 					}
 				}
 			}
@@ -484,15 +481,14 @@ CSLEDIT.editorPage = (function () {
 			CSLEDIT.data.initPageStyle( function () {
 
 				//viewController = CSLEDIT.CslTreeView($("#treeEditor"))
-				controller = CSLEDIT.Controller();
 
 				viewController = CSLEDIT.ViewController($("#treeEditor"));
 
-				controller.addSubscriber("addNode", CSLEDIT.data.addNode);
-				controller.addSubscriber("deleteNode", CSLEDIT.data.deleteNode);
-				controller.addSubscriber("moveNode", CSLEDIT.data.moveNode);
-				controller.addSubscriber("ammendNode", CSLEDIT.data.ammendNode);
-				controller.addSubscriber("setCslCode", CSLEDIT.data.setCslCode);	
+				CSLEDIT.controller.addSubscriber("addNode", CSLEDIT.data.addNode);
+				CSLEDIT.controller.addSubscriber("deleteNode", CSLEDIT.data.deleteNode);
+				CSLEDIT.controller.addSubscriber("moveNode", CSLEDIT.data.moveNode);
+				CSLEDIT.controller.addSubscriber("ammendNode", CSLEDIT.data.ammendNode);
+				CSLEDIT.controller.addSubscriber("setCslCode", CSLEDIT.data.setCslCode);	
 
 				viewController.setFormatCitationsCallback(formatExampleCitations);
 				CSLEDIT.data.setViewController(viewController);

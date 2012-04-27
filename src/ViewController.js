@@ -88,7 +88,7 @@ CSLEDIT.ViewController = function (treeView) {
 
 				$.each(value.buttons, function (i, button) {
 					var buttonElement;
-					nodes = CSLEDIT.data.getNodesFromPath(cslData, button.node);
+					nodes = CSLEDIT.data.getNodesFromPath(button.node, cslData);
 					if (nodes.length > 0) {
 						cslId = nodes[0].cslId;
 					} else {

@@ -172,7 +172,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 
 		console.log("paths = " + nodePaths.join(", "));
 		$.each(nodePaths, function (i, path) {
-			var nodes = CSLEDIT.data.getNodesFromPath(cslData, path);
+			var nodes = CSLEDIT.data.getNodesFromPath(path, cslData);
 			cslNodes = cslNodes.concat(nodes);
 		});
 
@@ -249,11 +249,13 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 		return result;
 	};
 
-	var addNode = function (id, position, newNode, nodesAdded) {
-		var parentNode,
-			thisRangeIndex = rangeIndex(id),
-			currentCslId,
-			range;
+	var addNode = function (parentId, position, newNode, nodesAdded) {
+		var id,	parentNode,	thisRangeIndex,	currentCslId, range;
+
+		id = newNode.cslId;
+
+		// note: no two ranges are expected to have the same parent id
+		thisRangeIndex = rangeIndex(parentId);
 
 		// shift ranges
 		$.each(ranges, function (index, range) {
@@ -267,8 +269,8 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 		}
 		range = ranges[thisRangeIndex];
 
-		console.log("adding to node " + id);
-		parentNode = treeElement.find('li[cslid="' + id + '"]');
+		console.log("adding to node " + parentId);
+		parentNode = treeElement.find('li[cslid="' + parentId + '"]');
 		assertEqual(parentNode.length, 1);
 			
 		createSubTree(parentNode, position, jsTreeDataFromCslData_inner(newNode, [id]));
