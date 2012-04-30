@@ -21,12 +21,15 @@
 	<script type="text/javascript" src="../external/jstree/jquery.jstree.js"></script>
 	<link type="text/css" rel="stylesheet" href="../external/jstree/themes/default/style.css" />
 
+	<script type="text/javascript" src="../external/jquery.jeditable.mini.js"></script>
+
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
 	<script type="text/javascript" src="../src/debug.js"></script>
 	<script type="text/javascript" src="../src/cslParser.js"></script>
 	<script type="text/javascript" src="../src/Iterator.js"></script>
+	<script type="text/javascript" src="../src/cslNode.js"></script>
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 	<script type="text/javascript" src="../src/propertyPanel.js"></script>
@@ -54,7 +57,7 @@
 			<li><a href="#">Load from URL</a></li>
 			<!--li><a href="#">Revert (undo all changes)</a></li-->
 			<li><a href="#">Export CSL</a></li>
-			<li><a href="#">Style Info</a></li>
+			<!--<li><a href="#">Style Info</a></li>-->
 			<li><a href="#">Global Formatting Options</a></li>
 		</ul>
 	</li>

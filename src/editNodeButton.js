@@ -58,7 +58,8 @@ CSLEDIT.EditNodeButton.prototype.deleteNode = function (id, nodesDeleted) {
 		this.cslId -= nodesDeleted;
 	} else if (this.cslId >= id && this.cslId < id + nodesDeleted) {
 		// this node falls within the deleted block
-		assert(false, "shouldn't be allowed to delete an EditNodeButton node");
+		//assert(false, "shouldn't be allowed to delete an EditNodeButton node");
+		this.cslId = -1;
 	} else {
 		return;
 	}

@@ -207,6 +207,16 @@ CSLEDIT.Data = function (CSL_DATA) {
 		}
 		return -1;
 	};
+	
+	var getAttrByName = function (attributes, name) {
+		var index;
+		for (index = 0; index < attributes.length; index++) {
+			if (attributes[index].name === name) {
+				return attributes[index];
+			}
+		}
+		return null;
+	};
 
 	var addNode = function (id, position, newNode) {
 		var nodeInfo,
@@ -317,8 +327,6 @@ CSLEDIT.Data = function (CSL_DATA) {
 			var deletedNode;
 			callbacksEnabled = false;
 
-			assert(typeof position !== "number");
-
 			deletedNode = deleteNode(fromId);
 
 			if (toId > fromId) {
@@ -361,11 +369,14 @@ CSLEDIT.Data = function (CSL_DATA) {
 				loadStyleFromURL(styleURL, callback);
 			}
 		},
+		numNodes : numNodes,
 		numCslNodes : function () { return numNodes(get()); },
 		setViewController : function (_viewController) {
 			viewControllers.push(_viewController);
 		},
-		getNodesFromPath : getNodesFromPath
+		getNodesFromPath : getNodesFromPath,
+		getAttrByName : getAttrByName,
+		indexOfChild : indexOfChild
 	};
 };
 

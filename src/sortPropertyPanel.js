@@ -3,218 +3,320 @@
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.sortPropertyPanel = (function () {
-	var onChangeTimeout;
+	var onChangeTimeout, setupPanel, list, nodeData, panel,
+		namesAttributeNames = [
+			"names-min",
+			"names-use-first",
+			"names-use-last"
+		];;
+	
+	// TODO: put into a common place - copied from src/smartTree.js
+	var getAttr = function (attribute, attributes) {
+		var index;
 
-	var setupPanel = function (panel, nodeData, dataType, schemaAttributes, mainController) {
-		var index,
-			index2,
-			newAttributes = [],
-			dropdownValues,
-			attributes = nodeData.attributes,
-			attribute,
-			schemaAttribute,
-			schemaValues,
-			inputId,
-			labelId,
-			valueIndex,
-			intValue,
-			enabledControls,
-			disabledControls,
-			thisControl,
-			controlDisabledAttr,
-			toggleControlText,
-			values;
+		for (index = 0; index < attributes.length; index++) {
+			if (attributes[index].enabled && attributes[index].key === attribute) {
+				return attributes[index].value;
+			}
+		}
+		return "";
+	};
+
+	var onInput = function () {
+		var sortKeys = [],
+			sortNode,
+			parentCslId;
+
+		// this is altering many keys in one batch, need to use transactions to avoid
+		// so many UI updates
+		list.find('select.sortKey').each(function (index) {
+			var value,
+				macro,
+				node = {
+					name : "key",
+					attributes : [],
+					children : []
+				};
+			
+			value = $(this).val();
+
+			node.attributes = attributesFromVisibleFieldName(value);
+
+			sortKeys.push(node);
+		});
+
+		sortNode = {
+			name : "sort",
+			attributes : [],
+			children : sortKeys
+		};
+
+		parentCslId = CSLEDIT.data.getNodeAndParent(nodeData.cslId).parent.cslId;
+
+		CSLEDIT.controller.exec("deleteNode", [nodeData.cslId]);
+		CSLEDIT.controller.exec("addNode", [parentCslId, 0, sortNode]);
+
+		// TODO: need to respond to data changed events to refresh view
+	};
+
+	var sortableListUpdated = function () {
+		// iterate through nodeData and the UI element noting the changes
+		
+		var index = 0,
+			dragDirection = "unknown", // the direction the user dragged
+			fromId,
+			toPosition;
+
+		list.children().each(function () {
+			var variable, macro, childNode, visibleKey;
+
+			if (index >= nodeData.children.length) {
+				assertEqual(dragDirection, "down");
+				toPosition = nodeData.children.length - 1;
+				return false;
+			}
+
+			visibleKey = $(this).find('select.sortKey').val();
+			childNode = nodeData.children[index];
+			assertEqual(childNode.name, "key");
+
+			if (visibleFieldName(
+					getAttr("macro", childNode.attributes),
+					getAttr("variable", childNode.attributes)) !==
+				visibleKey) {
+
+				if (dragDirection === "up") {
+					fromId = childNode.cslId;
+					return false;
+				} else if (dragDirection === "down") {
+					toPosition = index - 1;
+					return false;
+				} else if (visibleFieldName(
+					getAttr("macro", nodeData.children[index+1].attributes),
+					getAttr("variable", nodeData.children[index+1].attributes)) ===
+					visibleKey)
+				{
+					// The next data element matches, so this is an deletion,
+					// and the user dragged down.
+					dragDirection = "down";
+					fromId = childNode.cslId;
+					index++;
+				} else {
+					// The next data element doesn't match, so this is an addition,
+					// and the user dragged up.
+					dragDirection = "up";
+					toPosition = index;
+					index--;
+				}
+			}
+		
+			index++;
+		});
+
+		if (dragDirection === "up" && typeof fromId === "undefined") {
+			fromId = nodeData.children[index].cslId;
+		}
+
+		CSLEDIT.controller.exec("moveNode", [fromId, nodeData.cslId, toPosition]);
+	};
+
+	var visibleFieldName = function (macro, variable) {
+		if (macro !== "" && typeof macro !== "undefined") {
+			return "Macro: " + macro;
+		} else {
+			return variable;
+		}
+	};
+
+	var attributesFromVisibleFieldName = function (visibleName) {
+		var attributes = [];
+
+		if (visibleName.indexOf("Macro: ") === 0) {
+			attributes.push({
+				key : "macro",
+				value : visibleName.slice("Macro: ".length),
+				enabled : true
+			});
+		} else {
+			attributes.push({
+				key : "variable",
+				value : visibleName,
+				enabled : true
+			});
+		}
+
+		return attributes;
+	};
+
+	var getNamesAttributes = function () {
+		var attributes = [];
+
+		$.each(namesAttributeNames, function (i, name) {
+			var val = panel.find("select." + name).val();
+
+			if (val !== "0") {
+				attributes.push({
+					key : name,
+					value : val,
+					enabled : true
+				});
+			}
+		});
+
+		return attributes;
+	};
+
+	var getKeyNodeData = function (index) {
+		var keyNode = new CSLEDIT.CslNode("key");
+
+		keyNode.attributes = attributesFromVisibleFieldName(
+			list.find('select.sortKey').eq(index).val());
+
+		keyNode.attributes = keyNode.attributes.concat(getNamesAttributes());
+
+		return keyNode;
+	};
+
+	setupPanel = function (_panel, _nodeData) {
+		var table, macros, variables, index, addKeyButton, sortKeyHtml;
+
+		panel = _panel;
+		nodeData = _nodeData;
 
 		console.log("start setup sort panel: " + nodeData.name);
 
 		// clear panel 
 		panel.children().remove();
 
-		// create new ones
+		// create new one
 		$('<h3>' + nodeData.name + ' properties</h3><br \/>').appendTo(panel);
-		$('<table>').appendTo(panel);
 
-		// headings
-		$('<tr>').appendTo(panel);
-		$('<td>Field<\/td>').appendTo(panel);
-		$('<td>Order<\/td>').appendTo(panel);
-		$('<td>Names-min<\/td>').appendTo(panel);
-		$('<td>Names-use-first<\/td>').appendTo(panel);
-		$('<td>Names-use-last<\/td>').appendTo(panel);
-		$('<\/tr>').appendTo(panel);
+		// sortable list
+		list = $('<ul class="sortKeys"><\/ul>');
+		list.appendTo(panel);
+		list.sortable({
+			update : sortableListUpdated
+		});
 
-		// value editor (if a text or data element)
-		if (dataType !== null) {
-			$('<tr><td><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
-				dataType + ' value<\/label><\/td>' + 
-				'<td><input id="textNodeInput" class="propertyInput"' + 'type="text"><\/input><\/td><\/tr>').
-				appendTo(panel);
-		
-			$("#textNodeInput").val(nodeData.textValue);
-		}
+		variables = [];
+		$.each(CSLEDIT.schema.attributes("sort/key").variable.values, function(i, variable) {
+			variables.push(variable.value);
+		});
 
-		// TODO: data validation
-		switch (dataType) {
-		case null:
-			// ignore - no data type
-			break;
-		case "anyURI":
-			// text input with uri validation
-			break;
-		default:
-			// no validation
-		}
+		macros = [];
+		$.each(CSLEDIT.data.getNodesFromPath("style/macro"), function(i, node) {
+			assertEqual(node.attributes[0].key, "name");
+			macros.push(node.attributes[0].value);
+		});
 
-		newAttributes = [];
-		index = -1;
+		sortKeyHtml = '<li class="ui-state-default">';
+		sortKeyHtml += '<span class="ui-icon ui-icon-arrowthick-2-n-s"><\/span> ';
+		sortKeyHtml += '<select class="sortKey">';
+		$.each(macros, function (i, macro) {
+			sortKeyHtml += '<option macro="' + macro + '">Macro: ' + macro + '<\/option>';
+		});
+		$.each(variables, function (i, variable) {
+			sortKeyHtml += '<option variable="' + variable + '">' + variable + '<\/option>';
+		});
+		sortKeyHtml += '<\/select>';
+		sortKeyHtml += ' <button class="deleteSortKey">Delete<\/button>';
+		sortKeyHtml += '<\/li>';
 
-		enabledControls = [];
-		disabledControls = [];
-		values = [];
-
-		// attribute editors
-		for (schemaAttribute in schemaAttributes) {
-			index++;
-			inputId = 'nodeAttribute' + index;
-			labelId = 'nodeAttributeLabel' + index;
-
-			attribute = null;
-			for (index2 = 0; index2 < attributes.length; index2++) {
-				if (attributes[index2].key === schemaAttribute) {
-					attribute = attributes[index2];
-					if (!("enabled" in attribute)) {
-						attribute["enabled"] = true;
-					}
-				}
-			}
-			if (attribute === null) {
-				// create attribute if it doesn't exist
-				attribute = { key : schemaAttribute, value : "", enabled : false };
-				attributes.push(attribute);
-			}
-
-			newAttributes.push(attribute);
-
-			schemaValues = schemaAttributes[schemaAttribute].values;
-			dropdownValues = [];
-
-			if (schemaValues.length > 0) {
-				for (valueIndex = 0; valueIndex < schemaValues.length; valueIndex++) {
-					switch (schemaValues[valueIndex].type) {
-					case "value":
-						dropdownValues.push(schemaValues[valueIndex].value);
-						break;
-					case "data":
-						switch (schemaValues[valueIndex].value) {
-						case "boolean":
-							dropdownValues.push("true");
-							dropdownValues.push("false");
-							break;
-						case "integer":
-							for (intValue = 0; intValue < 20; intValue++) {							
-								dropdownValues.push(intValue);
-							}
-							break;
-						case "language":
-							dropdownValues.push("English");
-							dropdownValues.push("etc... ");
-							dropdownValues.push("(TODO: find proper list");
-							break;
-						default:
-							console.log("WARNING: data type not recognised: " + 
-								schemaValues[valueIndex].type);
-						}
-						break;
-					default:
-						assert(false, "attribute value type not recognised");
-					}
-				}
-			}
-
-			if (attribute.enabled) {
-				controlDisabledAttr = "";
-				toggleControlText = "Disable";
-			} else {
-				controlDisabledAttr = ' disabled="disabled"';
-				toggleControlText = "Enable";
-			}
-
-			if (dropdownValues.length > 0) {
-				thisControl = '<tr><td><label for=' + inputId + ' id="' + labelId + 
-					'" class="propertyLabel">' +
-					schemaAttribute + '<\/label><\/td>' + 
-					'<td><select id="' + inputId + '" class="propertySelect" attr="' + index + '"' +
-					controlDisabledAttr + ' >';
-
-				for (index2 = 0; index2 < dropdownValues.length; index2++) {
-					thisControl += "<option>" + dropdownValues[index2] + "</option>";
-				}
-
-				thisControl += '<\/select><\/td>' +
-					'<td><button class="toggleAttrButton" attrIndex="' + index + '">' + 
-					toggleControlText + '</button>' +
-					'<\/td><\/tr>';
-
-			} else {
-				thisControl = inputAttributeControl(
-					index, inputId, labelId, schemaAttribute, controlDisabledAttr, toggleControlText);
-			}
+		$.each(nodeData.children, function(i, child) {
+			var row = $(sortKeyHtml),
+				select,
+				macro,
+				variable;
 			
-			if (attribute.enabled) {
-				enabledControls.push(thisControl);
-			} else {
-				disabledControls.push(thisControl);
-			}
+			select = row.find("select.sortKey");
+			assertEqual(select.length, 1);
 
-			values[index] = attribute.value;
-		}
+			select.val(visibleFieldName(
+				getAttr("macro", child.attributes),
+				getAttr("variable", child.attributes)));
 
-		// enabled controls at the top
-		for (index = 0; index < enabledControls.length; index++) {
-			$(enabledControls[index]).appendTo(panel);
-		}
-
-		$("<tr><td><br /><\/td><td><\/td><td><\/td><\/tr>").appendTo(panel);
-
-		// disabled controls
-		for (index = 0; index < disabledControls.length; index++) {
-			$(disabledControls[index]).appendTo(panel);
-		}
-
-		// set values
-		for (index = 0; index < attributes.length; index++) {
-			inputId = 'nodeAttribute' + index;
-			$("#" + inputId).val(values[index]);
-		}
-
-		nodeData.attributes = newAttributes;
-
-		$('<\/table>').appendTo(panel);
-	
-		$(".propertyInput").on("input", function () {
-			clearTimeout(onChangeTimeout);
-			onChangeTimeout = setTimeout(function () { onChange(nodeData); }, 500);
+			list.append(row);
 		});
 
-		$(".propertySelect").on("change", function () { onChange(nodeData); });
-
-		$('.toggleAttrButton').click( function (buttonEvent) {
-			index = $(buttonEvent.target).attr("attrIndex");
-
-			if (nodeData.attributes[index].enabled) {
-				nodeData.attributes[index].enabled = false;
-				$("#nodeAttribute" + index).attr("disabled", "disabled");
-			} else {
-				nodeData.attributes[index].enabled = true;
-				$("#nodeAttribute" + index).removeAttr("disabled");
-			}
-			setupPanel(panel, nodeData, dataType, schemaAttributes, function () { onChange(nodeData); });
-			clearTimeout(onChangeTimeout);
-			onChangeTimeout = setTimeout(function () { onChange(nodeData); }, 10);
-		});
+		list.find('button.deleteSortKey').on('click', function (event, ui) {
+			var listElements = list.find('li'),
+				childIndex,
+				cslId;
 		
-		console.timeEnd("setupPanel");
+			childIndex = listElements.index($(this).parent());
+
+			cslId = CSLEDIT.data.getNode(nodeData.cslId).children[childIndex].cslId;
+			listElements.eq(childIndex).remove();
+			CSLEDIT.controller.exec('deleteNode', [cslId]);
+		});
+
+		list.find('select').on('change', function () {
+			var listElements = list.find('li'),
+				childIndex,
+				keyNode;
+		
+			childIndex = listElements.index($(this).parent());
+			keyNode = nodeData.children[childIndex];
+			assertEqual(keyNode.name, "key");
+
+			CSLEDIT.controller.exec("ammendNode", [keyNode.cslId, 
+				getKeyNodeData(childIndex)]);
+		});
+
+		addKeyButton = $('<button>Add key<\/button>');
+		addKeyButton.on('click', function () {
+			list.append(sortKeyHtml);
+			list.find('select').on('change', onInput);
+			onInput();
+		});
+		panel.append(addKeyButton);
+		panel.append('<br \/><br \/>');
+
+		(function () {
+			var select;
+
+			// TODO: only enable if sort keys contain a names element
+			select = $('<select class="names-min"><\/select>');
+			for(index = 0; index < 20; index++) {
+				$('<option>' + index + '<\/option>').appendTo(select);
+			}
+			$('<label>Names-min: <\/label>').appendTo(panel);
+			select.appendTo(panel);
+			panel.append(' ');
+
+			select = $('<select class="names-use-first"><\/select>');
+			for(index = 0; index < 20; index++) {
+				$('<option>' + index + '<\/option>').appendTo(select);
+			}
+			$('<label>Names-use-first: <\/label>').appendTo(panel);
+			select.appendTo(panel);
+			panel.append(' ');
+			
+			select = $('<select class="names-use-last"><\/select>');
+			for(index = 0; index < 20; index++) {
+				$('<option>' + index + '<\/option>').appendTo(select);
+			}
+			$('<label>Names-use-last: <\/label>').appendTo(panel);
+			select.appendTo(panel);
+
+			panel.find('select[class^="names"]').on('change', function () {
+				// update all keys with names attrs
+				// TODO: only add names attrs to keys containing names
+				var namesAttributes = getNamesAttributes(),
+					index;
+
+				for (index = 0; index < nodeData.children.length; index++) {
+
+				}
+
+				$.each(nodeData.children, function (index, keyNode) {
+					assertEqual(keyNode.name, "key");
+					CSLEDIT.controller.exec("ammendNode", [keyNode.cslId, getKeyNodeData(index)]);
+				});
+			});
+		}());
 	};
+
 	return {
 		setupPanel : setupPanel
 	};

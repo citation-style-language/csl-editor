@@ -16,12 +16,14 @@ CSLEDIT.ViewController = function (treeView) {
 				nodePaths : ["style/citation/layout"],
 				buttons : [
 				{
-					icon : "../external/fugue-icons/sort-alphabet.png",
-					node : "style/citation/sort"
-				},
-				{
+					type : "cslNode",
 					icon : "../external/famfamfam-icons/cog.png",
 					node : "style/citation"
+				},
+				{
+					type : "cslNode",
+					icon : "../external/fugue-icons/sort-alphabet.png",
+					node : "style/citation/sort"
 				}
 				]
 			},
@@ -31,19 +33,50 @@ CSLEDIT.ViewController = function (treeView) {
 				nodePaths : ["style/bibliography/layout"],
 				buttons : [
 				{
-					icon : "../external/fugue-icons/sort-alphabet.png",
-					node : "style/bibliography/sort"
-				},
-				{
+					type : "cslNode",
 					icon : "../external/famfamfam-icons/cog.png",
 					node : "style/bibliography"
+				},
+				{
+					type : "cslNode",
+					icon : "../external/fugue-icons/sort-alphabet.png",
+					node : "style/bibliography/sort"
 				}
 				]
 			},
 			{
 				id : "macro",
 				name : "Macros",
-				nodePaths : ["style/macro"]
+				nodePaths : ["style/macro"],
+				buttons : [
+				{
+					type : "custom",
+					text : "Add macro",
+					onClick : function () {
+						// add after the last macro
+						var macroNodes = CSLEDIT.data.getNodesFromPath("style/macro"),
+							position;
+
+						position = CSLEDIT.data.indexOfChild(macroNodes[macroNodes.length - 1],
+							CSLEDIT.data.getNodesFromPath("style")[0]);
+						
+						CSLEDIT.controller.exec("addNode",
+							[
+								0, position + 1, 
+								new CSLEDIT.CslNode("macro", [{
+									key: "name",
+									value: "New Macro",
+									enabled: true
+								}])
+							]);
+					}
+				}
+				]
+			},
+			{
+				id : "info",
+				name : "Style Info",
+				nodePaths : ["style/info/*"]
 			}
 		],
 		smartTrees = [],
@@ -80,39 +113,50 @@ CSLEDIT.ViewController = function (treeView) {
 		
 		treeView.html('');
 		$.each(smartTreeSchema, function (index, value) {
-			table = $('<table><\/table>');
-			row = $('<tr><\/tr>');
-			$('<td><h3>%1<\/h3>'.replace('%1', value.name) + '<\/td>').appendTo(row);
+			table = $('');//<table><\/table>');
+			row = $('');//<tr><\/tr>');
 			if (typeof value.buttons !== "undefined") {
-				$('<td>&nbsp;&nbsp;&nbsp;<\/td>').appendTo(row);
+				//$('<td>&nbsp;&nbsp;&nbsp;<\/td>').appendTo(row);
 
 				$.each(value.buttons, function (i, button) {
 					var buttonElement;
-					nodes = CSLEDIT.data.getNodesFromPath(button.node, cslData);
-					if (nodes.length > 0) {
-						cslId = nodes[0].cslId;
-					} else {
-						cslId = -1;
-					}
+					switch (button.type) {
+						case "cslNode":
+							nodes = CSLEDIT.data.getNodesFromPath(button.node, cslData);
+							if (nodes.length > 0) {
+								cslId = nodes[0].cslId;
+							} else {
+								cslId = -1;
+							}
 				
-					buttonElement = $('<td><\/td>');
-					nodeButtons.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
-						button.icon, function (cslId) {
-							selectedTree = null;
-							selectedNodeId = cslId;
+							buttonElement = $('<div class="cslNodeButton"><\/div>');
+							nodeButtons.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
+								button.icon, function (cslId) {
+									selectedTree = null;
+									selectedNodeId = cslId;
 
-							// deselect nodes in trees
-							$.each(smartTrees, function (i, thisTree) {
-								thisTree.deselectAll();	
-							});
+									// deselect nodes in trees
+									$.each(smartTrees, function (i, thisTree) {
+										thisTree.deselectAll();
+									});
 
-							callbacks.selectNode();
-						}));
-					buttonElement.appendTo(row);
+									callbacks.selectNode();
+								}));
+							break;
+						case "custom":
+							buttonElement = $('<button class="customButton">' + 
+									button.text + '<\/button>');
+							buttonElement.on('click', button.onClick);
+							break;
+						default:
+							assert(false);
+					}
+					buttonElement.appendTo(treeView);
 				});
 			}
-			row.appendTo(table);
-			table.appendTo(treeView);
+			$('<h3>%1<\/h3>'.replace('%1', value.name)).appendTo(treeView);
+			//row.appendTo(table);
+			//table.appendTo(treeView);
 			row = $('<div id="%1"><\/div>'.replace('%1', value.id));
 			row.appendTo(treeView);
 		});

@@ -250,7 +250,8 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 	};
 
 	var addNode = function (parentId, position, newNode, nodesAdded) {
-		var id,	parentNode,	thisRangeIndex,	currentCslId, range;
+		var id,	parentNode,	thisRangeIndex,	currentCslId, range,
+			matchingCslNodes, newTreeNode;
 
 		id = newNode.cslId;
 
@@ -265,6 +266,34 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 		});
 
 		if (thisRangeIndex === -1) {
+			matchingCslNodes = [];
+			// check if the new node belongs to this smartTree
+			$.each(nodePaths, function (i, path) {
+				matchingCslNodes = matchingCslNodes.concat(CSLEDIT.data.getNodesFromPath(path));
+			});
+
+			$.each(matchingCslNodes, function (i, node) {
+				var lastCslId = [-1];
+				if (node.cslId === newNode.cslId) {
+					// TODO: would be nicer not to re-create the entire tree
+					//createTree();
+					
+					createSubTree(ranges[ranges.length-1].rootNode, "after", jsTreeDataFromCslData_inner(
+							newNode, lastCslId));
+
+					var newTreeNode = treeElement.find('li[cslid="' + newNode.cslId + '"]');
+					//assertEqual(newTreeNode.length, 1);
+					
+					ranges.push({
+						first : newNode.cslId,
+						last : newNode.cslId + CSLEDIT.data.numNodes(newNode) - 1,
+						rootNode : newTreeNode
+					});
+					
+					return false;
+				}
+			});
+
 			return;
 		}
 		range = ranges[thisRangeIndex];

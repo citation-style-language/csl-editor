@@ -353,8 +353,7 @@ CSLEDIT.editorPage = (function () {
 
 		switch (node.name) {
 			case "sort":
-				CSLEDIT.sortPropertyPanel.setupPanel(
-					$("#elementProperties"), node, dataType, schemaAttributes, nodeChanged);
+				CSLEDIT.sortPropertyPanel.setupPanel($("#elementProperties"), node);
 				break;
 			default:
 			CSLEDIT.propertyPanel.setupPanel(

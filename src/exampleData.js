@@ -186,6 +186,17 @@ var cslEditorExampleData = {
 			"noteIndex": 0
 		},
 		"schema": "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
+	}, {
+		"citationId": "CITATION-2",
+		"citationItems": [{
+			"id": "ITEM-5",
+		}, {
+			"id": "ITEM-6",
+		}],
+		"properties": {
+			"noteIndex": 0
+		},
+		"schema": "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
 	}]
 };
 

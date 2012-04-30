@@ -85,11 +85,26 @@ button::-moz-focus-inner {
     border:0;
     padding:0;
 }
-.cslPropertyButton {
+div.cslNodeButton {
 	float: right;
+	margin-left: 4px;
+}
+button.customButton {
+	float: right;
+	margin-left: 4px;
+}
+.cslPropertyButton {
+/*	float: right;*/
 }
 .cslPropertyButton:hover {
 	background: #cceeff;
+}
+
+ul.sortKeys span.ui-icon {
+	display: inline-block;
+}
+ul.sortKeys li {
+	width: 300px;
 }
 
 /** Very hacky fix for jstree move between nodes bug:
