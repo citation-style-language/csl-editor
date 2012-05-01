@@ -43,7 +43,7 @@ CSLEDIT.ViewController = function (treeView) {
 					node : "style/bibliography/sort"
 				}
 				]
-			},
+			},/*
 			{
 				id : "macro",
 				name : "Macros",
@@ -72,11 +72,11 @@ CSLEDIT.ViewController = function (treeView) {
 					}
 				}
 				]
-			},
+			},*/
 			{
-				id : "info",
-				name : "Style Info",
-				nodePaths : ["style/info/*"]
+				id : "locale",
+				name : "Advanced",
+				nodePaths : ["style"]
 			}
 		],
 		smartTrees = [],

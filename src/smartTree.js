@@ -261,7 +261,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 		// shift ranges
 		$.each(ranges, function (index, range) {
 			if (thisRangeIndex !== index) {
-				shiftCslIds(range, id + 1, nodesAdded);
+				shiftCslIds(range, id, nodesAdded);
 			}
 		});
 
@@ -277,9 +277,9 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 				if (node.cslId === newNode.cslId) {
 					// TODO: would be nicer not to re-create the entire tree
 					//createTree();
-					
-					createSubTree(ranges[ranges.length-1].rootNode, "after", jsTreeDataFromCslData_inner(
-							newNode, lastCslId));
+					var newJsTreeNode;
+					newJsTreeNode = jsTreeDataFromCslData_inner(newNode, lastCslId);
+					createSubTree(ranges[ranges.length-1].rootNode, "after", newJsTreeNode);
 
 					var newTreeNode = treeElement.find('li[cslid="' + newNode.cslId + '"]');
 					//assertEqual(newTreeNode.length, 1);
@@ -325,9 +325,13 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 
 		newNode = treeElement.jstree('create_node', parentNode, position, 
 			{
-				data : jsTreeData.data,
-				attr : jsTreeData.attr
+				data : jsTreeData.data
+				// attr : jsTreeData.attr
+				// Don't know why, but 'create_node' fails if including a
+				// 'ref' attribute on a root node. It works to just add the
+				// attribute later though
 			});
+		newNode.attr(jsTreeData.attr);
 		
 		$.each(jsTreeData.children, function (i, child) {
 			createSubTree(newNode, i, child);

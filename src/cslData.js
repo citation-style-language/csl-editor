@@ -112,7 +112,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 
 		rootNode = splitPath.splice(0,1);
 
-		if (rootNode[0] !== "style") {
+		if (rootNode[0] === "") {
 			return result;
 		}
 
@@ -134,7 +134,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 		assertEqual(rootNode.length, 1);
 
 		// convert '*' wildcard to regexp equivalent
-		regExp = new RegExp(rootNode[0].replace("*", ".*"));
+		regExp = new RegExp("^" + rootNode[0].replace("*", ".*") + "$");
 
 		for (index = 0; index < nodeData.children.length; index++) {
 			if (regExp.test(nodeData.children[index].name)) {
@@ -211,7 +211,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 	var getAttrByName = function (attributes, name) {
 		var index;
 		for (index = 0; index < attributes.length; index++) {
-			if (attributes[index].name === name) {
+			if (attributes[index].key === name) {
 				return attributes[index];
 			}
 		}

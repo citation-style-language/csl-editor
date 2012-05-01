@@ -22,43 +22,6 @@ CSLEDIT.sortPropertyPanel = (function () {
 		return "";
 	};
 
-	var onInput = function () {
-		var sortKeys = [],
-			sortNode,
-			parentCslId;
-
-		// this is altering many keys in one batch, need to use transactions to avoid
-		// so many UI updates
-		list.find('select.sortKey').each(function (index) {
-			var value,
-				macro,
-				node = {
-					name : "key",
-					attributes : [],
-					children : []
-				};
-			
-			value = $(this).val();
-
-			node.attributes = attributesFromVisibleFieldName(value);
-
-			sortKeys.push(node);
-		});
-
-		sortNode = {
-			name : "sort",
-			attributes : [],
-			children : sortKeys
-		};
-
-		parentCslId = CSLEDIT.data.getNodeAndParent(nodeData.cslId).parent.cslId;
-
-		CSLEDIT.controller.exec("deleteNode", [nodeData.cslId]);
-		CSLEDIT.controller.exec("addNode", [parentCslId, 0, sortNode]);
-
-		// TODO: need to respond to data changed events to refresh view
-	};
-
 	var sortableListUpdated = function () {
 		// iterate through nodeData and the UI element noting the changes
 		
@@ -67,6 +30,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 			fromId,
 			toPosition;
 
+		console.log("sortable list updated");
 		list.children().each(function () {
 			var variable, macro, childNode, visibleKey;
 
@@ -77,6 +41,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 			}
 
 			visibleKey = $(this).find('select.sortKey').val();
+			console.log("node: " + visibleKey);
 			childNode = nodeData.children[index];
 			assertEqual(childNode.name, "key");
 
@@ -118,6 +83,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		}
 
 		CSLEDIT.controller.exec("moveNode", [fromId, nodeData.cslId, toPosition]);
+		nodeData = CSLEDIT.data.getNode(nodeData.cslId);
 	};
 
 	var visibleFieldName = function (macro, variable) {
@@ -173,8 +139,32 @@ CSLEDIT.sortPropertyPanel = (function () {
 			list.find('select.sortKey').eq(index).val());
 
 		keyNode.attributes = keyNode.attributes.concat(getNamesAttributes());
-
 		return keyNode;
+	};
+
+	var onInput = function () {
+		var listElements = list.find('li'),
+			childIndex,
+			keyNode;
+	
+		childIndex = listElements.index($(this).parent());
+		keyNode = nodeData.children[childIndex];
+		assertEqual(keyNode.name, "key");
+
+		CSLEDIT.controller.exec("ammendNode", [keyNode.cslId, 
+			getKeyNodeData(childIndex)]);
+	};
+
+	var onDelete = function () {
+		var listElements = list.find('li'),
+				childIndex,
+				cslId;
+		
+			childIndex = listElements.index($(this).parent());
+
+			cslId = CSLEDIT.data.getNode(nodeData.cslId).children[childIndex].cslId;
+			listElements.eq(childIndex).remove();
+			CSLEDIT.controller.exec('deleteNode', [cslId]);
 	};
 
 	setupPanel = function (_panel, _nodeData) {
@@ -238,19 +228,9 @@ CSLEDIT.sortPropertyPanel = (function () {
 			list.append(row);
 		});
 
-		list.find('button.deleteSortKey').on('click', function (event, ui) {
-			var listElements = list.find('li'),
-				childIndex,
-				cslId;
-		
-			childIndex = listElements.index($(this).parent());
+		list.find('button.deleteSortKey').on('click', onDelete);
 
-			cslId = CSLEDIT.data.getNode(nodeData.cslId).children[childIndex].cslId;
-			listElements.eq(childIndex).remove();
-			CSLEDIT.controller.exec('deleteNode', [cslId]);
-		});
-
-		list.find('select').on('change', function () {
+		list.find('select').on('change', onInput /*function () {
 			var listElements = list.find('li'),
 				childIndex,
 				keyNode;
@@ -261,13 +241,26 @@ CSLEDIT.sortPropertyPanel = (function () {
 
 			CSLEDIT.controller.exec("ammendNode", [keyNode.cslId, 
 				getKeyNodeData(childIndex)]);
-		});
+		}*/);
 
 		addKeyButton = $('<button>Add key<\/button>');
 		addKeyButton.on('click', function () {
+			var selectNodes;
+
+			CSLEDIT.controller.exec('addNode', [nodeData.cslId, "last",
+				new CSLEDIT.CslNode('key', 
+					[{
+						key : "variable",
+						value : "author",
+						enabled : true
+					}])]);
+
 			list.append(sortKeyHtml);
-			list.find('select').on('change', onInput);
-			onInput();
+			selectNodes = list.find('select');
+			selectNodes.on('change', onInput);
+			selectNodes.last().val("author");
+
+			list.find('button.deleteSortKey').last().on('click', onDelete);
 		});
 		panel.append(addKeyButton);
 		panel.append('<br \/><br \/>');
