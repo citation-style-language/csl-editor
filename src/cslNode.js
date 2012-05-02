@@ -2,10 +2,15 @@
 
 CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.CslNode = function (name, attributes, children, cslId) {
+CSLEDIT.CslNode = function (nameOrNode, attributes, children, cslId) {
 	assert(this instanceof CSLEDIT.CslNode);
 
-	this.name = name;
+	if (nameOrNode.hasOwnProperty("name")) {
+		this.copy(nameOrNode);
+		return;
+	}
+
+	this.name = nameOrNode;
 	this.attributes = attributes || [];
 	this.children = children || [];
 	if (typeof cslId === "undefined") {
@@ -43,9 +48,9 @@ CSLEDIT.CslNode.prototype.getAttr = function (attr) {
 	index = this._indexOfAttr(attr);
 
 	if (index === -1) {
-		return null;
+		return "";
 	} else {
-		return this.attributes[index];
+		return this.attributes[index].value;
 	}
 };
 

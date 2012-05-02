@@ -218,15 +218,42 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return null;
 	};
 
+	// if 'id' is a macro instance, returns the corresponding macro definition
+	// if not, returns 'id' 
+	var macroDefinitionIdFromInstanceId = function (id) {
+		var node = new CSLEDIT.CslNode(getNode(id)),
+			macroName,
+			macroNodes,
+			macroNode;
+
+		macroName = node.getAttr("macro");
+		if (node.name === "text" && macroName !== "") {
+			macroNodes = getNodesFromPath("style/macro");
+
+			$.each(macroNodes, function (i, macroNode) {
+				var thisMacroNode = new CSLEDIT.CslNode(macroNode);
+				if (thisMacroNode.getAttr("name") === macroName) {
+					id = thisMacroNode.cslId;
+					return false;
+				}
+			});
+		}
+		return id;
+	}
+
 	var addNode = function (id, position, newNode) {
 		var nodeInfo,
 			positionIndex,
 			nodesAdded;
+		
 		newNode.cslId = -1;
 		newNode.children = newNode.children || [];
 		newNode.attributes = newNode.attributes || [];
 
 		if (typeof position === "number") {
+			// change parent id from macro instances to macro definitions
+			id = macroDefinitionIdFromInstanceId(id);
+			
 			nodesAdded = spliceNode(id, position, 0, newNode);
 			emit("addNode", [id, position, newNode, nodesAdded]);
 		} else {
@@ -319,12 +346,13 @@ CSLEDIT.Data = function (CSL_DATA) {
 				}
 				index++;
 			}
+			assert(typeof node !== "undefined");
 			set(cslData);
-			emit("ammendNode", [id, ammendedNode]);
+			emit("ammendNode", [id, node]);
 			emit("formatCitations");
 		},
 		moveNode : function (fromId, toId, position) {
-			var deletedNode;
+			var deletedNode, fromNode;
 			callbacksEnabled = false;
 
 			deletedNode = deleteNode(fromId);
@@ -376,7 +404,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 		},
 		getNodesFromPath : getNodesFromPath,
 		getAttrByName : getAttrByName,
-		indexOfChild : indexOfChild
+		indexOfChild : indexOfChild,
+		macroDefinitionIdFromInstanceId : macroDefinitionIdFromInstanceId
 	};
 };
 

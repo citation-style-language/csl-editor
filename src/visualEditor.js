@@ -270,7 +270,8 @@ CSLEDIT.editorPage = (function () {
 				var fromNode = CSLEDIT.data.getNode(fromId),
 					toNodeInfo = CSLEDIT.data.getNodeAndParent(toId),
 					parentNodeName,
-					result;
+					result,
+					toCslId;
 
 				if (position === "before" || position === "after") {
 					if (toNodeInfo.parent === null) {
@@ -278,6 +279,14 @@ CSLEDIT.editorPage = (function () {
 					}
 					// go up a level
 					toNodeInfo = CSLEDIT.data.getNodeAndParent(toNodeInfo.parent.cslId);
+				}
+
+				// for moving to a macro instance, note that if the move goes ahead,
+				// this translation is done in CSLEDIT.data.addNode, so it's fine to
+				// give the macro instance id to the addNode controller command
+				toCslId = CSLEDIT.data.macroDefinitionIdFromInstanceId(toNodeInfo.node.cslId);
+				if (toCslId !== toNodeInfo.node.cslId) {
+					toNodeInfo = CSLEDIT.data.getNodeAndParent(toCslId);
 				}
 
 				if (toNodeInfo.parent === null) {
@@ -314,7 +323,9 @@ CSLEDIT.editorPage = (function () {
 			element,
 			possibleChildNodesDropdown,
 			schemaAttributes,
-			dataType;
+			dataType,
+			translatedCslId,
+			translatedNodeInfo;
 
 		nodeAndParent = CSLEDIT.data.getNodeAndParent(viewController.selectedNode());
 		node = nodeAndParent.node;
@@ -336,7 +347,12 @@ CSLEDIT.editorPage = (function () {
 
 		// update possible child elements based on schema
 		if (typeof CSLEDIT.schema !== "undefined") {
-			possibleElements = CSLEDIT.schema.childElements(parentNodeName + "/" + node.name);
+			// in case the user is selecting a macro instance:
+			translatedCslId = CSLEDIT.data.macroDefinitionIdFromInstanceId(node.cslId);
+			translatedNodeInfo = CSLEDIT.data.getNodeAndParent(translatedCslId);
+				
+			possibleElements = CSLEDIT.schema.childElements(
+				translatedNodeInfo.parent.name + "/" + translatedNodeInfo.node.name);
 
 			possibleChildNodesDropdown = $("#possibleChildNodes").html("");
 
@@ -420,7 +436,7 @@ CSLEDIT.editorPage = (function () {
 				selectedNodeId = $('#treeEditor').jstree('get_selected'),
 				parentNode = $(event.target).parent().parent(),
 				parentNodeName,
-				position;
+				position;	
 
 			if (parentNode.attr("class") === "sub_menu")
 			{

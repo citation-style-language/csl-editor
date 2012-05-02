@@ -170,3 +170,17 @@ test("find by path", function () {
 	equal(CSLEDIT.data.getNodesFromPath("style/*", cslData)[3].cslId, 6);
 });
 
+test("find macro definition", function () {
+	var testCsl = "<style><info><author><\/author><\/info>" +
+		'<citation><layout><text macro="m1"><\/text><\/layout><\/citation>' + 
+		'<macro name="m1"><\/macro><macro><\/macro><\/style>';
+
+	CSLEDIT.data.setCslCode(testCsl);
+
+	equal(CSLEDIT.data.getNode(5).name, "text");
+	equal(CSLEDIT.data.getNode(6).name, "macro");
+
+	equal(CSLEDIT.data.macroDefinitionIdFromInstanceId(5), 6, "text goes to macro");
+	equal(CSLEDIT.data.macroDefinitionIdFromInstanceId(6), 6, "macro stays the same");
+	equal(CSLEDIT.data.macroDefinitionIdFromInstanceId(4), 4, "any other id stays the same");
+});
