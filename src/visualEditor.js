@@ -325,7 +325,8 @@ CSLEDIT.editorPage = (function () {
 			schemaAttributes,
 			dataType,
 			translatedCslId,
-			translatedNodeInfo;
+			translatedNodeInfo,
+			translatedParentName;
 
 		nodeAndParent = CSLEDIT.data.getNodeAndParent(viewController.selectedNode());
 		node = nodeAndParent.node;
@@ -350,9 +351,15 @@ CSLEDIT.editorPage = (function () {
 			// in case the user is selecting a macro instance:
 			translatedCslId = CSLEDIT.data.macroDefinitionIdFromInstanceId(node.cslId);
 			translatedNodeInfo = CSLEDIT.data.getNodeAndParent(translatedCslId);
-				
+		
+			if (translatedNodeInfo.parent === null) {
+				translatedParentName = "root";
+			} else {
+				translatedParentName = translatedNodeInfo.parent.name;
+			}
+
 			possibleElements = CSLEDIT.schema.childElements(
-				translatedNodeInfo.parent.name + "/" + translatedNodeInfo.node.name);
+				translatedParentName + "/" + translatedNodeInfo.node.name);
 
 			possibleChildNodesDropdown = $("#possibleChildNodes").html("");
 

@@ -95,8 +95,12 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return { node : null, parent : null };
 	};
 
-	var getNode = function (id) {
-		return getNodeAndParent(id).node;
+	var getNode = function (id, cslData /* optional */) {
+		if (typeof cslData !== "undefined") {
+			return getNodeAndParent(id, cslData).node;
+		} else {
+			return getNodeAndParent(id).node;
+		}
 	};
 
 	// Returns all matching nodes or
@@ -193,6 +197,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 	};
 
 	var emit = function (event, args) {
+		console.log("emmiting " + event + JSON.stringify(args));
 		$.each(viewControllers, function(index, controller) {
 			controller.exec(event, args);
 		});
@@ -253,16 +258,22 @@ CSLEDIT.Data = function (CSL_DATA) {
 		if (typeof position === "number") {
 			// change parent id from macro instances to macro definitions
 			id = macroDefinitionIdFromInstanceId(id);
-			
+
 			nodesAdded = spliceNode(id, position, 0, newNode);
 			emit("addNode", [id, position, newNode, nodesAdded]);
 		} else {
 			switch (position) {
 				case "first":
+					// change parent id from macro instances to macro definitions
+					id = macroDefinitionIdFromInstanceId(id);
+
 					return addNode(id, 0, newNode);
 					break;
 				case "inside":
 				case "last":
+					// change parent id from macro instances to macro definitions
+					id = macroDefinitionIdFromInstanceId(id);
+					
 					return addNode(id, getNode(id).children.length, newNode);
 					break;
 				case "before":
@@ -399,6 +410,9 @@ CSLEDIT.Data = function (CSL_DATA) {
 		},
 		numNodes : numNodes,
 		numCslNodes : function () { return numNodes(get()); },
+		clearViewControllers : function () {
+			viewControllers = [];
+		},
 		setViewController : function (_viewController) {
 			viewControllers.push(_viewController);
 		},

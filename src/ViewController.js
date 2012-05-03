@@ -167,6 +167,7 @@ CSLEDIT.ViewController = function (treeView) {
 			var tree;
 			treesToLoad++;
 			tree = CSLEDIT.SmartTree(treeView.children("#" + value.id), value.nodePaths);
+			//tree.setVerifyAllChanges(true);
 			tree.setCallbacks({
 				loaded : treeLoaded,
 				selectNode : selectNodeInTree(tree),
