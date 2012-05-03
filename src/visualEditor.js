@@ -10,7 +10,7 @@ CSLEDIT.editorPage = (function () {
 		highlightedCss,
 		selectedCss,
 		unHighlightedCss,
-		highlightedTreeNodes = [],
+		highlightedTreeNodes = $(),
 		selectedCslId = -1,
 		viewController;
 
@@ -98,24 +98,34 @@ CSLEDIT.editorPage = (function () {
 
 		assert(hoveredNodeStack.length > 0);
 
-		for (index = 0; index < hoveredNodeStack.length; index++) {
-			viewController.expandNode(hoveredNodeStack[index]);
-		}
+//		for (index = 0; index < hoveredNodeStack.length; index++) {
+//			viewController.expandNode(hoveredNodeStack[index]);
+//		}
 
 		if (selectedCslId !== cslId) {
 			selectedCslId = cslId;
-			viewController.selectNode(cslId);
+			viewController.selectNode(cslId, highlightedTreeNodes);
 		}
 	};
 
 	var unHighlightTree = function () {
 		var node;
 
-		while (highlightedTreeNodes.length > 0) {
-			node = highlightedTreeNodes.pop();
-			node.css(unHighlightedCss);
-			node.css("cursor", "");
-		}
+		highlightedTreeNodes.children('a').css(unHighlightedCss);
+		highlightedTreeNodes.children('a').css("cursor", "");
+	};
+
+	var unHighlightIfNotDescendentOf = function (instanceNode) {
+		var index, nodes;
+
+		$.each(highlightedTreeNodes, function () {
+			var $this = $(this);
+			if (instanceNode.find($this).length === 0) {
+				$this.children('a').css(unHighlightedCss);
+				$this.children('a').css("cursor", "");
+				highlightedTreeNodes = highlightedTreeNodes.not($this);
+			}
+		});
 	};
 
 	// highlight node and all parents, stopping at the "style" node
@@ -135,7 +145,7 @@ CSLEDIT.editorPage = (function () {
 
 		if (node.is('li')) {
 			highlightedNode = node.children('a');
-			highlightedTreeNodes.push(highlightedNode);
+			highlightedTreeNodes = highlightedTreeNodes.add(node);
 			highlightedNode.css(highlightedCss);
 			highlightedNode.css("cursor", "");
 		}
@@ -150,6 +160,19 @@ CSLEDIT.editorPage = (function () {
 			}
 			highlightTree(nodeStack, parentNode, depth);
 		} else {
+			if (nodeStack.length > 0) {
+				// Look for a possible macro instance "text" node in the nodeStack,
+				// if found, clear the highlighting for all macros not within this
+				// instance or the definition
+				var instanceNode;
+				instanceNode = new CSLEDIT.CslNode(
+					CSLEDIT.data.getNode(parseInt(nodeStack[nodeStack.length - 2])));
+				if (instanceNode.name === "text" && instanceNode.getAttr("macro") !== "") {
+					console.log("HIGHLIGHTING macro instance: " + instanceNode.cslId);
+
+					unHighlightIfNotDescendentOf($('li[cslid=' + instanceNode.cslId + ']'));
+				}
+			}
 			// highlight any remaining nodes in the call stack
 			// (e.g. if a macro was called)
 			highlightTree(nodeStack, null, depth);

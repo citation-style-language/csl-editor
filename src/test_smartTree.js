@@ -335,11 +335,11 @@ asyncTest("macro link", function () {
 		'<macro name="macro2"><label><\/label><\/macro>' +
 		"<\/style>");
 
-	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"]);
+	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
 	styleTree.setCallbacks({ loaded : treeLoaded });
 	styleTree.setVerifyAllChanges(true);
 	
-	citationTree = CSLEDIT.SmartTree(treeElement, ["style/citation"]);
+	citationTree = CSLEDIT.SmartTree(treeElement, ["style/citation"], true);
 	citationTree.setCallbacks({ loaded : treeLoaded });
 	citationTree.setVerifyAllChanges(true);
 	
@@ -482,11 +482,11 @@ asyncTest("add to instance after macro", function () {
 		'<citation><layout><text macro="macro1"><\/text><\/layout><\/citation>' +
 		"<\/style>");
 
-	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"]);
+	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
 	styleTree.setCallbacks({ loaded : treeLoaded });
 	styleTree.setVerifyAllChanges(true);
 	
-	citationTree = CSLEDIT.SmartTree(treeElement, ["style/citation"]);
+	citationTree = CSLEDIT.SmartTree(treeElement, ["style/citation"], true);
 	citationTree.setCallbacks({ loaded : treeLoaded });
 	citationTree.setVerifyAllChanges(true);
 	
@@ -646,11 +646,11 @@ asyncTest("macros within macros", function () {
 		'<citation><layout><text macro="macro1"><\/text><\/layout><\/citation>' +
 		"<\/style>");
 
-	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"]);
+	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
 	styleTree.setCallbacks({ loaded : treeLoaded });
 	styleTree.setVerifyAllChanges(true);
 	
-	citationTree = CSLEDIT.SmartTree(treeElement, ["style/citation"]);
+	citationTree = CSLEDIT.SmartTree(treeElement, ["style/citation"], true);
 	citationTree.setCallbacks({ loaded : treeLoaded });
 	citationTree.setVerifyAllChanges(true);
 	
@@ -732,11 +732,11 @@ asyncTest("macros within macros on creation", function () {
 		'<citation><layout><text macro="macro1"><\/text><\/layout><\/citation>' +
 		"<\/style>");
 
-	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"]);
+	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
 	styleTree.setCallbacks({ loaded : treeLoaded });
 	styleTree.setVerifyAllChanges(true);
 	
-	citationTree = CSLEDIT.SmartTree(treeElement, ["style/citation"]);
+	citationTree = CSLEDIT.SmartTree(treeElement, ["style/citation"], true);
 	citationTree.setCallbacks({ loaded : treeLoaded });
 	citationTree.setVerifyAllChanges(true);
 	

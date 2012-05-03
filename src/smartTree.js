@@ -2,7 +2,7 @@
 
 CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.SmartTree = function (treeElement, nodePaths) {
+CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optional*/) {
 	var nodeTypes = {
 			"valid_children" : [ "root" ],
 			"types" : {
@@ -256,10 +256,12 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 			jsTreeData.attr.macrolink = macroLink;
 		}
 
-		// Add 'symlink' to Macro
-		macro = getAttr("macro", cslData.attributes);
-		if (cslData.name === "text" && macro !== "") {
-			addMacro(jsTreeData, cslData, macro);
+		if (enableMacroLinks) {
+			// Add 'symlink' to Macro
+			macro = getAttr("macro", cslData.attributes);
+			if (cslData.name === "text" && macro !== "") {
+				addMacro(jsTreeData, cslData, macro);
+			}
 		}
 
 		return jsTreeData;
@@ -484,7 +486,9 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 			}
 		});
 
-		macroLinksAddNode(parentId, position, newNode, nodesAdded);
+		if (enableMacroLinks) {
+			macroLinksAddNode(parentId, position, newNode, nodesAdded);
+		}
 
 		if (thisRangeIndex === -1) {
 			matchingCslNodes = [];
@@ -587,7 +591,9 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 			}
 		});
 
-		macroLinksDeleteNode(id, nodesDeleted);
+		if (enableMacroLinks) {
+			macroLinksDeleteNode(id, nodesDeleted);
+		}
 
 		if (thisRangeIndex === -1) {
 			return;
@@ -644,7 +650,9 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths) {
 		var node = treeElement.find('li[cslid="' + id + '"]');
 		treeElement.jstree('rename_node', node, displayNameFromMetadata(ammendedNode));
 		
-		macroLinksUpdateNode(ammendedNode.cslId, ammendedNode);
+		if (enableMacroLinks) {
+			macroLinksUpdateNode(ammendedNode.cslId, ammendedNode);
+		}
 		
 		verifyTree();
 	};

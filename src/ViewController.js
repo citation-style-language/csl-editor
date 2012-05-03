@@ -14,6 +14,7 @@ CSLEDIT.ViewController = function (treeView) {
 				id : "citations",
 				name : "Inline Citations",
 				nodePaths : ["style/citation/layout"],
+				macroLinks : true,
 				buttons : [
 				{
 					type : "cslNode",
@@ -31,6 +32,7 @@ CSLEDIT.ViewController = function (treeView) {
 				id : "bibliography",
 				name : "Bibliography",
 				nodePaths : ["style/bibliography/layout"],
+				macroLinks : true,
 				buttons : [
 				{
 					type : "cslNode",
@@ -76,6 +78,7 @@ CSLEDIT.ViewController = function (treeView) {
 			{
 				id : "locale",
 				name : "Advanced",
+				macroLinks : false,
 				nodePaths : ["style"]
 			}
 		],
@@ -166,7 +169,10 @@ CSLEDIT.ViewController = function (treeView) {
 		$.each(smartTreeSchema, function (index, value) {
 			var tree;
 			treesToLoad++;
-			tree = CSLEDIT.SmartTree(treeView.children("#" + value.id), value.nodePaths);
+			tree = CSLEDIT.SmartTree(treeView.children("#" + value.id), value.nodePaths, 
+				value.macroLinks);
+
+			// Use this for debugging if you're not sure the view accurately reflects the data
 			//tree.setVerifyAllChanges(true);
 			tree.setCallbacks({
 				loaded : treeLoaded,
@@ -220,8 +226,14 @@ CSLEDIT.ViewController = function (treeView) {
 		});
 	};
 
-	var selectNode = function (id) {
-		var treeNode = treeView.find('li[cslid=' + id + '] > a');
+	var selectNode = function (id, highlightedNodes) {
+		var treeNode;
+	   
+		if (typeof highlightedNodes === "undefined") {
+			treeNode = treeView.find('li[cslid=' + id + '] > a');
+		} else {
+			treeNode = highlightedNodes.filter('li[cslid=' + id + ']').children('a');
+		}
 
 		if (treeNode.length > 0) {
 			treeNode.first().click();
