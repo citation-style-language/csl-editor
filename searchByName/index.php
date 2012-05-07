@@ -60,6 +60,7 @@ div#styleNameResult {
 	<div id="styleNameInput">
 		<label for="styleNameQuery">Enter style name:</label>
 		<input type="text" id="styleNameQuery" autocomplete="off" placeholder="Enter style name here" />
+		<button id="searchButton"><img src="../external/famfamfam-icons/magnifier.png"></img>Search</button>
 	</div>
 	<div id="styleNameResult"></div>
 </div>

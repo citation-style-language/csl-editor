@@ -25,6 +25,8 @@ CSLEDIT.findByNamePage = (function () {
 			$("#styleNameResult").html("<p>Query too short<\/p>");
 			return;
 		}
+		
+		console.time("searchByStyleName");
 
 		// dumb search, just iterates through all the names
 		for (styleId in exampleCitations.styleTitleFromId) {
@@ -49,18 +51,30 @@ CSLEDIT.findByNamePage = (function () {
 		}
 
 		CSLEDIT.searchResults.displaySearchResults(result, $("#styleNameResult"));
-	};
 
-	var nameSearch = function () {
-		clearTimeout(nameSearchTimeout);
-		nameSearchTimeout = setTimeout(searchForStyleName, 1000);
+		console.timeEnd("searchByStyleName");
 	};
 
 	return {
-		init : function () {		
+		init : function () {
+			// delayed search after typing
 			$("#styleNameQuery").on("input", function(){
-				nameSearch();
+				clearTimeout(nameSearchTimeout);
+				nameSearchTimeout = setTimeout(searchForStyleName, 500);
 			});
+				
+			// instant search after typing enter
+			$("#styleNameQuery").on("change", function(){
+				console.log("on change");
+				searchForStyleName();
+			});
+
+			// instant search after clicking button
+			$("#searchButton").on("click", function(){
+				console.log("button click");
+				searchForStyleName();
+			});
+
 
 			$("#styleNameQuery").focus();
 		
