@@ -27,8 +27,7 @@ CSLEDIT.EditNodeButton = function (element, nodePath, cslId, icon, selectNodeCal
 	this.updateButton();
 };
 
-CSLEDIT.EditNodeButton.prototype.updateButton = function ()
-{
+CSLEDIT.EditNodeButton.prototype.updateButton = function (){
 	this._element.html('<img class="cslPropertyButton" src="' + this.icon + '" \/>');
 };
 

@@ -164,12 +164,13 @@ CSLEDIT.citationEngine = (function () {
 
 		if (newFormattedBibliography.indexOf("<second-field-align>") > -1) {
 			exampleOut.css({
-				"padding-left" : "2em",
+				// TODO: don't change the whole output panel CSS, just the relevant lines
+				"padding-left" : "2.5em",
 				"text-indent" : "-2em"
 			});
 		} else {
 			exampleOut.css({
-				"padding-left" : "0",
+				"padding-left" : "0.5em",
 				"text-indent" : "0"
 			});
 		}

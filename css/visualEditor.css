@@ -28,16 +28,17 @@ div.panel {
 	border-style: solid;
 	border-color: #888888;
 
+	padding: 4px;
+
 	top: 2px;
 	bottom: 2px;
 	left: 2px;
 	right: 2px;
 }
-ul.dropdown {
-/*	float: left;*/
-}
-#treeEditorTitle {
-	float: left;
+#titlebar{
+	position: absolute;
+	left: 25%;
+	margin: 3px;
 }
 #leftContainer {
 	position: absolute;

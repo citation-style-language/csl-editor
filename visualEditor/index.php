@@ -35,6 +35,7 @@
 	<script type="text/javascript" src="../src/infoPropertyPanel.js"></script>
 	<script type="text/javascript" src="../src/editNodeButton.js"></script>
 	<script type="text/javascript" src="../src/smartTree.js"></script>
+	<script type="text/javascript" src="../src/Titlebar.js"></script>
 	<script type="text/javascript" src="../src/ViewController.js"></script>
 	<script type="text/javascript" src="../src/controller.js"></script>
 	<script type="text/javascript" src="../src/visualEditor.js"></script>
@@ -83,6 +84,9 @@
 		</ul>
 	</li>
 </ul>
+<div id="titlebar">
+<h3>Style Title:</h3>
+</div>
 <div id="mainContainer">
 	<div id="leftContainer">
 		<div id="treeEditor" class="panel">

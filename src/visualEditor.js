@@ -86,13 +86,17 @@ CSLEDIT.editorPage = (function () {
 
 	var reverseSelectNode = function () {
 		var index,
-			cslId = hoveredNodeStack[hoveredNodeStack.length - 1];
+			cslId = parseInt(hoveredNodeStack[hoveredNodeStack.length - 1]),
+			selectedNode;
 
 		assert(hoveredNodeStack.length > 0);
 
-//		for (index = 0; index < hoveredNodeStack.length; index++) {
-//			viewController.expandNode(hoveredNodeStack[index]);
-//		}
+		// skip the macro definition nodes, jump to the referencing 'text' node instead
+		selectedNode = CSLEDIT.data.getNode(cslId);
+		if (selectedNode.name === "macro") {
+			assert(hoveredNodeStack.length > 1);
+			cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
+		}
 
 		if (selectedCslId !== cslId) {
 			selectedCslId = cslId;
@@ -248,7 +252,7 @@ CSLEDIT.editorPage = (function () {
 		var nodeIndex = { index : 0 };
 		var cslData = CSLEDIT.data.get(); 
 
-		viewController.createTree(cslData,
+		viewController.init(cslData,
 		{
 			loaded : function (event, data) {
 				console.log("tree loaded");
@@ -527,10 +531,7 @@ CSLEDIT.editorPage = (function () {
 			});
 
 			CSLEDIT.data.initPageStyle( function () {
-
-				//viewController = CSLEDIT.CslTreeView($("#treeEditor"))
-
-				viewController = CSLEDIT.ViewController($("#treeEditor"));
+				viewController = CSLEDIT.ViewController($("#treeEditor"), $("#titlebar"));
 
 				CSLEDIT.controller.addSubscriber("addNode", CSLEDIT.data.addNode);
 				CSLEDIT.controller.addSubscriber("deleteNode", CSLEDIT.data.deleteNode);

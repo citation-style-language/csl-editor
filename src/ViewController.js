@@ -2,7 +2,7 @@
 
 CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.ViewController = function (treeView) {
+CSLEDIT.ViewController = function (treeView, titlebarElement) {
 	var	// smartTrees display a subset of the proper CSL tree
 		// and allow transformations of the data
 		//
@@ -82,7 +82,7 @@ CSLEDIT.ViewController = function (treeView) {
 				nodePaths : ["style"]
 			}
 		],
-		smartTrees = [],
+		views = [],
 		treesLoaded = 0,
 		treesToLoad = 0,
 		callbacks,
@@ -99,7 +99,7 @@ CSLEDIT.ViewController = function (treeView) {
 		};
 	};
 
-	var createTree = function (cslData, _callbacks) {
+	var init = function (cslData, _callbacks) {
 		var eventName,
 			jsTreeData,
 			citationNodeId,
@@ -109,6 +109,10 @@ CSLEDIT.ViewController = function (treeView) {
 			nodes,
 			table,
 			row;
+
+		views = [];
+
+		views.push(new CSLEDIT.Titlebar(titlebarElement));
 
 		callbacks = _callbacks;
 
@@ -133,14 +137,16 @@ CSLEDIT.ViewController = function (treeView) {
 							}
 				
 							buttonElement = $('<div class="cslNodeButton"><\/div>');
-							nodeButtons.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
+							views.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
 								button.icon, function (cslId) {
 									selectedTree = null;
 									selectedNodeId = cslId;
 
 									// deselect nodes in trees
-									$.each(smartTrees, function (i, thisTree) {
-										thisTree.deselectAll();
+									$.each(views, function (i, view) {
+										if ("deselectAll" in view) {
+											thisTree.deselectAll();
+										}
 									});
 
 									callbacks.selectNode();
@@ -182,16 +188,18 @@ CSLEDIT.ViewController = function (treeView) {
 				checkMove : callbacks.checkMove
 			});
 			tree.createTree();
-			smartTrees.push(tree);
+			views.push(tree);
 		});
 	};
 
 	var selectNodeInTree = function (tree) {
 		return function (event, ui) {
 			// deselect nodes in other trees
-			$.each(smartTrees, function (i, thisTree) {
-				if (thisTree !== tree) {
-					thisTree.deselectAll();
+			$.each(views, function (i, view) {
+				if (view !== tree) {
+					if ("deselectAll" in view) {
+						view.deselectAll();
+					}
 				}
 			});
 
@@ -203,26 +211,26 @@ CSLEDIT.ViewController = function (treeView) {
 	};
 
 	var addNode = function (id, position, newNode, nodesAdded) {
-		$.each(smartTrees, function (i, smartTree) {
-			smartTree.addNode(id, position, newNode, nodesAdded);
-		});
-		$.each(nodeButtons, function (i, button) {
-			button.addNode(id, position, newNode, nodesAdded);
+		$.each(views, function (i, view) {
+			if ("addNode" in view) {
+				view.addNode(id, position, newNode, nodesAdded);
+			}
 		});
 	};
 
 	var deleteNode = function (id, nodesDeleted) {
-		$.each(smartTrees, function (i, smartTree) {
-			smartTree.deleteNode(id, nodesDeleted);
-		});
-		$.each(nodeButtons, function (i, button) {
-			button.deleteNode(id, nodesDeleted);
+		$.each(views, function (i, view) {
+			if ("deleteNode" in view) {
+				view.deleteNode(id, nodesDeleted);
+			}
 		});
 	};
 
 	var ammendNode = function (id, ammendedNode) {
-		$.each(smartTrees, function (i, smartTree) {
-			smartTree.ammendNode(id, ammendedNode);
+		$.each(views, function (i, view) {
+			if ("ammendNode" in view) {
+				view.ammendNode(id, ammendedNode);
+			}
 		});
 	};
 
@@ -248,7 +256,7 @@ CSLEDIT.ViewController = function (treeView) {
 	};
 
 	var expandNode = function (id) {
-		$.each(smartTrees, function (i, tree) {
+		$.each(views, function (i, tree) {
 			tree.expandNode(id);
 		});
 	};
@@ -261,7 +269,7 @@ CSLEDIT.ViewController = function (treeView) {
 
 	// public:
 	return {
-		createTree : createTree,
+		init : init,
 
 		addNode : addNode,
 		deleteNode : deleteNode,

@@ -568,7 +568,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 				cslId = parseInt($(this).attr("cslid"));
 				if (cslId >= range.first && cslId <= range.last) {
 					$(this).attr("cslid", cslId + amount);
-					assert (cslId + amount < 250);
 				}
 			});
 			
