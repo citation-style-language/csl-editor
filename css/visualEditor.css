@@ -1,9 +1,17 @@
 html, body {
 	overflow: hidden;
+	position: relative;
 }
 #mainContainer {
-	height: 100%;
-	margin: 10px;
+	position: absolute;
+
+	top: 24px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+
+	min-width: 500px;	/* Splitter can't be too thin ... */
+	min-height: 300px;	/* ... or too flat */
 	clear: both;
 }
 .searched {
@@ -12,15 +20,18 @@ html, body {
 #treeEditor {
 	font-size: 14px;
 
-	height: 100%;
-	width: 100%;
 	overflow: auto;
-	padding-top: 5px;
 }
-#leftPane {
-	float: left;
-	width: 35%;
-	height: 100%;
+div.panel {
+	position: absolute;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #888888;
+
+	top: 2px;
+	bottom: 2px;
+	left: 2px;
+	right: 2px;
 }
 ul.dropdown {
 /*	float: left;*/
@@ -28,14 +39,36 @@ ul.dropdown {
 #treeEditorTitle {
 	float: left;
 }
-#rightPane {
-	float: right;
-	width: 63%;
+#leftContainer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 25%;
+	height: 100%;
+	/*overflow: auto;*/
+}
+#rightContainer {
+	position: absolute;
+	left: 25%;
+	top: 0;
+	width: 75%;
 	height: 100%;
 }
+#topRightContainer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 50%;
+}
+#bottomRightContainer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 50%;
+}
 #exampleOutput {
-/*	margin-top: 50%:*/
-	height: 60%;
 	overflow: auto;
 	cursor: default;
 	font-family:Verdana,Geneva,'DejaVu Sans',sans-serif;
@@ -52,8 +85,6 @@ ul.dropdown {
 #elementProperties {
 	font-size: 14px;
 	background-color: #F5F5DC;
-	width: 100%;
-	height: 40%;
 	overflow: auto;
 }
 #elementProperties > table,

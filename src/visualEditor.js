@@ -34,14 +34,6 @@ CSLEDIT.editorPage = (function () {
 			"cursor" : "default"
 		};
 
-	// resizing that can't be done with CSS
-	var setSizes = function () {
-		var mainContent = $('#mainContainer');
-
-		mainContent.height(mainContent.parent().height() - 60);
-		$("#treeEditor").height($("#treeEditor").parent().height());
-	};
-
 	var addToHoveredNodeStack = function (target) {
 		// build stack 'backwards' from the inner node outwards
 		var parentNode;
@@ -476,6 +468,14 @@ CSLEDIT.editorPage = (function () {
 					if (clickedName === "Delete node") {
 						CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
 					}
+				} else if (/^Tools/.test(parentNodeName)) {
+					if (clickedName === "Code Editor") {
+						window.location.pathname = "/csl/codeEditor";
+					} else if (clickedName === "Search for Style by Name") {
+						window.location.pathname = "/csl/searchByName";
+					} else if (clickedName === "Search for Style by Example") {
+						window.location.pathname = "/csl/searchByExample";
+					}
 				} else if ((/^Add node/).test(parentNodeName)) {
 					$(event.target).parent().parent().css('visibility', 'hidden');
 
@@ -547,9 +547,6 @@ CSLEDIT.editorPage = (function () {
 			setupDropdownMenuHandler(".dropdown a");
 
 			$(".propertyInput").on("change", nodeChanged);
-
-			setSizes();
-			$(window).resize(setSizes);
 		}
 	};
 }());

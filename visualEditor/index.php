@@ -47,7 +47,6 @@
 	<script type="text/javascript" src="../src/analytics.js"></script>
 </head>
 <body id="visualEditor">
-<?php include '../html/navigation.html'; ?>
 <ul class="dropdown">
 	<li>
 		<a href="#">Style</a>
@@ -65,22 +64,6 @@
 		<ul class="sub_menu">
 			<li><a href="#">Add node</a>
 				<ul class="sub_menu" id="possibleChildNodes">
-					 <li><a href="#">info</a></li>
-					 <li><a href="#">macro</a></li>
-					 <li><a href="#">locale</a></li>
-					 <li><a href="#">citation</a></li>
-					 <li><a href="#">bibliography</a></li>
-					 <li><a href="#">text</a></li>
-					 <li><a href="#">sort</a></li>
-					 <li><a href="#">layout</a></li>
-					 <li><a href="#">group</a></li>
-					 <li><a href="#">choose</a></li>
-					 <li><a href="#">if</a></li>
-					 <li><a href="#">else</a></li>
-					 <li><a href="#">names</a></li>
-					 <li><a href="#">name</a></li>
-					 <li><a href="#">substitute</a></li>
-					 <li><a href="#">label</a></li>
 				</ul>
 			</li>
 			<li>
@@ -88,24 +71,39 @@
 			</li>
 		</ul>
 	</li>
+	<li>
+		<a href="#">Tools</a>
+		<ul class="sub_menu">
+			<li><a href="#">Code Editor</a>
+			</li>
+			<li><a href="#">Search for Style by Name</a>
+			</li>
+			<li><a href="#">Search for Style by Example</a>
+			</li>
+		</ul>
+	</li>
 </ul>
 <div id="mainContainer">
-	<div id="leftPane">
-		<div id="treeEditor">
+	<div id="leftContainer">
+		<div id="treeEditor" class="panel">
 		</div>
 	</div>
 
-	<div id="rightPane">
-		<div id="elementProperties">
+	<div id="rightContainer">
+		<div id="topRightContainer">
+			<div id="exampleOutput" class="panel">
+				<div id="statusMessage"></div>
+
+				<h3>Formatted Inline Citations</h3>	
+				<div id="formattedCitations"></div>
+
+				<h3>Formatted Bibliography</h3>
+				<div id="formattedBibliography"></div>
+			</div>
 		</div>
-		<div id="exampleOutput">
-			<div id="statusMessage"></div>
-
-			<h3>Formatted Inline Citations</h3>	
-			<div id="formattedCitations"></div>
-
-			<h3>Formatted Bibliography</h3>
-			<div id="formattedBibliography"></div>
+		<div id="bottomRightContainer">
+			<div id="elementProperties" class="panel">
+			</div>
 		</div>
 	</div>
 </div>

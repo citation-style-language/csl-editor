@@ -154,11 +154,11 @@ var cslEditorExampleData = {
 			"volume": "117"
 		}
 	},
-	citationsItems: [{
+	citationsItems: [
+	/*{
 		"citationId": "CITATION-0",
 		"citationItems": [{
-			"id": "ITEM-1",
-			"uris": [ /*"http://www.mendeley.com/documents/?uuid=dd1a39c6-e14a-4c34-8edb-98ef1731e557" */ ]
+			"id": "ITEM-1"
 		}],
 		"mendeley": {
 			"previouslyFormattedCitation": "(Brown, 1985)"
@@ -167,7 +167,7 @@ var cslEditorExampleData = {
 			"noteIndex": 0
 		},
 		"schema": "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
-	}, {
+	},*/ {
 		"citationId": "CITATION-1",
 		"citationItems": [{
 			"id": "ITEM-2",
@@ -186,7 +186,7 @@ var cslEditorExampleData = {
 			"noteIndex": 0
 		},
 		"schema": "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
-	}, {
+	}/*, {
 		"citationId": "CITATION-2",
 		"citationItems": [{
 			"id": "ITEM-5",
@@ -197,6 +197,7 @@ var cslEditorExampleData = {
 			"noteIndex": 0
 		},
 		"schema": "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
-	}]
+	}*/
+	]
 };
 

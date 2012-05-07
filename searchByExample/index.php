@@ -88,7 +88,7 @@ div#styleFormatResult {
 		<br />
 		Edit bibliography entry:
 		<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
-		<button id="searchButton">Search</button>
+		<button id="searchButton"><img src="/csl/external/famfamfam-icons/magnifier.png"></img>Search</button>
 	</div>
 	<div id=exampleDocument></div>
 	<div class=clearDiv>
