@@ -138,14 +138,14 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 				
 							buttonElement = $('<div class="cslNodeButton"><\/div>');
 							views.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
-								button.icon, function (cslId) {
-									selectedTree = null;
+								button.icon, function (cslId, selectedView) {
+									selectedTree = selectedView;
 									selectedNodeId = cslId;
 
 									// deselect nodes in trees
 									$.each(views, function (i, view) {
 										if ("deselectAll" in view) {
-											thisTree.deselectAll();
+											view.deselectAll();
 										}
 									});
 
@@ -210,6 +210,14 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		};
 	};
 
+	var getSelectedNodePath = function () {
+		if (selectedTree === null) {
+			return "no selected tree";
+		}
+
+		return selectedTree.getSelectedNodePath();
+	};
+
 	var addNode = function (id, position, newNode, nodesAdded) {
 		$.each(views, function (i, view) {
 			if ("addNode" in view) {
@@ -251,6 +259,24 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		}
 	};
 
+	var selectNodeFromPath = function (nodePath) {
+		var treeNode = treeView,
+			cslId;
+
+		$.each(nodePath, function (i, cslId) {
+			treeNode = treeNode.find('li[cslId="' + cslId + '"]');
+		});
+
+		treeNode = treeNode.children('a');
+
+		if (treeNode.length > 0) {
+			treeNode.first().click();
+		} else {
+			selectedNodeId = id;
+			callbacks.selectNode();
+		}		
+	};
+
 	var selectedNode = function () {
 		return selectedNodeId;
 	};
@@ -290,7 +316,11 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 
 		setFormatCitationsCallback : function (callback) {
 			formatCitationsCallback = callback;
-		}
+		},
+
+		getSelectedNodePath : getSelectedNodePath,
+
+		selectNodeFromPath : selectNodeFromPath
 	}
 };
 

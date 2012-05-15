@@ -184,3 +184,21 @@ test("find macro definition", function () {
 	equal(CSLEDIT.data.macroDefinitionIdFromInstanceId(6), 6, "macro stays the same");
 	equal(CSLEDIT.data.macroDefinitionIdFromInstanceId(4), 4, "any other id stays the same");
 });
+
+test("get node stack", function () {
+	var testCsl = "<style><info><author><\/author><\/info>" +
+		'<citation><layout><text macro="m1"><\/text><\/layout><\/citation>' + 
+		'<macro name="m1"><\/macro><macro><\/macro><\/style>',
+		nodeStack;
+
+	CSLEDIT.data.setCslCode(testCsl);
+
+	equal(CSLEDIT.data.getNode(5).name, "text");
+
+	nodeStack = CSLEDIT.data.getNodeStack(5);
+
+	equal(nodeStack[0].name, "style");
+	equal(nodeStack[1].name, "citation");
+	equal(nodeStack[2].name, "layout");
+	equal(nodeStack[3].name, "text");
+});

@@ -30,6 +30,7 @@
 	<script type="text/javascript" src="../src/cslNode.js"></script>
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
+	<script type="text/javascript" src="../src/NodePathView.js"></script>
 	<script type="text/javascript" src="../src/propertyPanel.js"></script>
 	<script type="text/javascript" src="../src/sortPropertyPanel.js"></script>
 	<script type="text/javascript" src="../src/infoPropertyPanel.js"></script>
@@ -106,7 +107,9 @@
 			</div>
 		</div>
 		<div id="bottomRightContainer">
-			<div id="elementProperties" class="panel">
+			<div id="elementPropertyPanel" class="panel">
+				<div id="nodePathView"></div>
+				<div id="elementProperties"></div>
 			</div>
 		</div>
 	</div>

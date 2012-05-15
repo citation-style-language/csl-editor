@@ -164,7 +164,10 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 				console.log("range(" + i + ") = " + range.first + "-" + range.last);
 			});
 		});
-		treeElement.on("select_node.jstree", callbacks.selectNode);
+		treeElement.on("select_node.jstree", function (event, ui) {
+			treeElement.jstree("set_focus");
+			callbacks.selectNode(event, ui);
+		});
 
 		treeElement.jstree({
 			"json_data" : { data : jsTreeData },
@@ -656,6 +659,25 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		verifyTree();
 	};
 
+	var getSelectedNodePath = function () {
+		var selectedNodes = [],
+			treeNode,
+			cslId;
+
+		treeNode = treeElement.jstree('get_selected'),
+		cslId = treeNode.attr("cslid");
+
+		while (typeof cslId !== "undefined") {
+			console.log("selected node path : " + cslId);
+			selectedNodes.splice(0,0,parseInt(cslId));
+			
+			treeNode = treeNode.parent().parent();
+			cslId = treeNode.attr("cslid");
+		}
+
+		return selectedNodes;
+	};
+
 	return {
 		createTree : createTree,
 		deselectAll : function () {
@@ -680,6 +702,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		},
 		getMacroLinks : function () {
 			return macroLinks;
-		}
+		},
+		getSelectedNodePath : getSelectedNodePath
 	};
 };

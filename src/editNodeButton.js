@@ -21,10 +21,14 @@ CSLEDIT.EditNodeButton = function (element, nodePath, cslId, icon, selectNodeCal
 		if (that.cslId === -1) {
 			CSLEDIT.controller.exec("addPath", [nodePath]);
 		} else {
-			selectNodeCallback(that.cslId);
+			selectNodeCallback(that.cslId, that);
 		}
 	});
 	this.updateButton();
+};
+
+CSLEDIT.EditNodeButton.prototype.getSelectedNodePath = function () {
+	return [this.cslId];
 };
 
 CSLEDIT.EditNodeButton.prototype.updateButton = function (){

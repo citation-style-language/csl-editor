@@ -13,6 +13,8 @@ html, body {
 	min-width: 500px;	/* Splitter can't be too thin ... */
 	min-height: 300px;	/* ... or too flat */
 	clear: both;
+
+	background: #eeeeee;
 }
 .searched {
 	background: yellow;
@@ -34,6 +36,8 @@ div.panel {
 	bottom: 2px;
 	left: 2px;
 	right: 2px;
+
+	background: #ffffff;
 }
 #titlebar{
 	position: absolute;
@@ -83,7 +87,7 @@ div.panel {
 	margin-top: 0.5em;
 	margin-bottom: 0.1em;
 }
-#elementProperties {
+#elementPropertyPanel {
 	font-size: 14px;
 	background-color: #F5F5DC;
 	overflow: auto;
@@ -93,6 +97,10 @@ div.panel {
 #elementProperties > table > tr > td
 {
 	width: 100%;
+}
+#nodePathView {
+	margin: 5px;
+	margin-bottom: 10px;
 }
 label.> tr
 {

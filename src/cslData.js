@@ -43,7 +43,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 		nodesBefore = numNodes(cslData);
 
 		// Find the id of the node to add
-		iter = CSLEDIT.Iterator(cslData);
+		iter = new CSLEDIT.Iterator(cslData);
 
 		index = 0;
 		while (iter.hasNext()) {
@@ -63,7 +63,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 		}
 
 		// correct the cslId numbering
-		iter = CSLEDIT.Iterator(cslData);
+		iter = new CSLEDIT.Iterator(cslData);
 		index = 0;
 		while (iter.hasNext()) {
 			node = iter.next();
@@ -77,7 +77,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 	};
 
 	var getNodeAndParent = function (id) {
-		var iter = CSLEDIT.Iterator(get()),
+		var iter = new CSLEDIT.Iterator(get()),
 			node;
 
 		while (iter.hasNext()) {
@@ -93,6 +93,19 @@ CSLEDIT.Data = function (CSL_DATA) {
 
 		// not found
 		return { node : null, parent : null };
+	};
+
+	var getNodeStack = function (id) {
+		var iter = new CSLEDIT.Iterator(get()),
+			nodeStack;
+
+		while (iter.hasNext()) {
+			node = iter.next();
+
+			if (node.cslId === id) {
+				return iter.stack();
+			}
+		}
 	};
 
 	var getNode = function (id, cslData /* optional */) {
@@ -185,7 +198,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 	};
 
 	var numNodes = function (tree) {
-		var iter = CSLEDIT.Iterator(tree),
+		var iter = new CSLEDIT.Iterator(tree),
 			index = 0;
 
 		while (iter.hasNext()) {
@@ -293,7 +306,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 	};
 
 	var deleteNode = function (id) {
-		var iter = CSLEDIT.Iterator(get()),
+		var iter = new CSLEDIT.Iterator(get()),
 			index,
 			node,
 			parentNode,
@@ -341,7 +354,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 				node,
 				index;
 		   
-			iter = CSLEDIT.Iterator(cslData);
+			iter = new CSLEDIT.Iterator(cslData);
 			index = 0;
 
 			while (iter.hasNext()) {
@@ -379,6 +392,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 		},
 		getNode : getNode,
 		getNodeAndParent : getNodeAndParent,
+		getNodeStack : getNodeStack,
 		getFirstCslId : getFirstCslId,
 
 		loadStyleFromURL : loadStyleFromURL,

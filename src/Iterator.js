@@ -9,46 +9,80 @@ CSLEDIT = CSLEDIT || {};
  * Can retrieve the parent node of each child in the tree
  */
 CSLEDIT.Iterator = function (rootNode) {
-	var nextNode = rootNode,
-		nextParent = null,
-		currentParent = null,
-		nodeStack = [{ node : rootNode, childIndex : -1 }];
+	assert(this instanceof CSLEDIT.Iterator);
 
-	// calculates nextNode in advance
-	var next = function () {
-		var topNode,
-			currentNode;
+	this.rootNode = rootNode;
+	this.nodeStack = [];
+	this.finished = false;
+	this.nextNode = null;
+};
 
-		currentNode = nextNode;
-		currentParent = nextParent;
+CSLEDIT.Iterator.prototype.next = function () {
+	var topNode,
+		nextNode,
+		currentNode;
 
-		if (nodeStack.length === 0) {
-			nextNode = null;
-			nextParent = null;
-			return currentNode;
+	nextNode = this.nextNode;
+	this.nextNode = null;
+
+	// used to implement hasNext
+	if (nextNode !== null) {
+		return nextNode;
+	}
+
+	if (this.finished) {
+		return null;
+	}
+
+	if (this.nodeStack.length === 0) {
+		// start
+		this.nodeStack.push({ node : this.rootNode, childIndex : -1 });
+		return this.nodeStack[0].node;
+	}
+
+	topNode = this.nodeStack[this.nodeStack.length - 1];
+	topNode.childIndex++;
+
+	if (topNode.childIndex < topNode.node.children.length) {
+		nextNode = topNode.node.children[topNode.childIndex];
+		this.nodeStack.push({ node : nextNode, childIndex : -1 });
+		return nextNode;
+	} else {
+		this.nodeStack.pop();
+		if (this.nodeStack.length === 0) {
+			this.finished = true;
 		}
+		return this.next();
+	}
+};
 
-		topNode = nodeStack[nodeStack.length - 1];
-		topNode.childIndex++;
-
-		if (topNode.childIndex < topNode.node.children.length) {
-			nextNode = topNode.node.children[topNode.childIndex];
-			nextParent = topNode.node;
-			nodeStack.push({ node : nextNode, childIndex : -1 });
-			return currentNode;
+CSLEDIT.Iterator.prototype.hasNext = function () {
+	if (this.nextNode !== null) {
+		return true;
+	} else {
+		if (this.finished) {
+			return false;
+		} else {
+			this.nextNode = this.next();
+			return this.nextNode !== null;
 		}
+	}
+};
 
-		nodeStack.pop();
-		return next();
-	};
+CSLEDIT.Iterator.prototype.parent = function () {
+	if (this.nodeStack.length > 1) {
+		return this.nodeStack[this.nodeStack.length - 2].node;
+	} else {
+		return null;
+	}
+};
 
-	return {
-		hasNext : function () {
-			return nextNode !== null;
-		},
-		next : next,
-		parent : function () {
-			return currentParent;
-		}
-	};
+CSLEDIT.Iterator.prototype.stack = function () {
+	var stack = [];
+
+	$.each(this.nodeStack, function(i, node) {
+		stack.push(node.node);
+	});
+	
+	return stack;
 };

@@ -179,7 +179,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		panel.children().remove();
 
 		// create new one
-		$('<h3>' + nodeData.name + ' properties</h3><br \/>').appendTo(panel);
+		//$('<h3>' + nodeData.name + ' properties</h3><br \/>').appendTo(panel);
 
 		// sortable list
 		list = $('<ul class="sortKeys"><\/ul>');

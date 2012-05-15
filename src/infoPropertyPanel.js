@@ -189,7 +189,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 		infoNode = infoNode[0];
 
 		panel.children().remove();
-		panel.append('<h3>Style Info<\/h3>');
+		//panel.append('<h3>Style Info<\/h3>');
 
 		$.each(layout, function (i, item) {
 			var nodes = CSLEDIT.data.getNodesFromPath("info/" + item.node, infoNode);;

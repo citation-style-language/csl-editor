@@ -12,7 +12,8 @@ CSLEDIT.editorPage = (function () {
 		unHighlightedCss,
 		highlightedTreeNodes = $(),
 		selectedCslId = -1,
-		viewController;
+		viewController,
+		nodePathView;
 
 	var normalisedColor = function (color) {
 		return $('<pre>').css({"color" : color}).css("color");
@@ -164,8 +165,6 @@ CSLEDIT.editorPage = (function () {
 				instanceNode = new CSLEDIT.CslNode(
 					CSLEDIT.data.getNode(parseInt(nodeStack[nodeStack.length - 2])));
 				if (instanceNode.name === "text" && instanceNode.getAttr("macro") !== "") {
-					console.log("HIGHLIGHTING macro instance: " + instanceNode.cslId);
-
 					unHighlightIfNotDescendentOf($('li[cslid=' + instanceNode.cslId + ']'));
 				}
 			}
@@ -387,6 +386,8 @@ CSLEDIT.editorPage = (function () {
 			}
 		}
 
+		nodePathView.selectNode(viewController.getSelectedNodePath());
+
 		// reregister dropdown handler after changes
 		setupDropdownMenuHandler("#possibleChildNodes a");
 
@@ -531,7 +532,7 @@ CSLEDIT.editorPage = (function () {
 			});
 
 			CSLEDIT.data.initPageStyle( function () {
-				viewController = CSLEDIT.ViewController($("#treeEditor"), $("#titlebar"));
+				viewController = CSLEDIT.ViewController($("#treeEditor"), $("#titlebar"), $("#nodePath"));
 
 				CSLEDIT.controller.addSubscriber("addNode", CSLEDIT.data.addNode);
 				CSLEDIT.controller.addSubscriber("deleteNode", CSLEDIT.data.deleteNode);
@@ -543,6 +544,10 @@ CSLEDIT.editorPage = (function () {
 				CSLEDIT.data.setViewController(viewController);
 
 				createTreeView();
+
+				nodePathView = new CSLEDIT.NodePathView($("#nodePathView"), {
+					selectNodeFromPath : viewController.selectNodeFromPath
+				});
 			});
 
 			setupDropdownMenuHandler(".dropdown a");
