@@ -23,6 +23,11 @@ CSLEDIT.schema.callWhenReady( function () {
 		equal(styleAttributes["default-locale"].values[0].type, "data");
 		equal(styleAttributes["default-locale"].values[0].value, "language");
 	});
+		
+	test("list", function () {
+		equal(CSLEDIT.schema.attributes("layout/text")["variable"].list, false);
+		equal(CSLEDIT.schema.attributes("choose/if")["variable"].list, true);
+	});
 
 	test("all data integrity check", function () {
 		var allData = CSLEDIT.schema.allData(),

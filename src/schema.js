@@ -64,7 +64,8 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			attributes : {},
 			refs : [],
 			attributeValues : [],
-			textNode : false
+			textNode : false,
+			list : false
 		};
 	};
 
@@ -294,6 +295,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		arrayMerge(propertiesA.attributeValues, propertiesB.attributeValues, attributeValueEquality);
 
 		propertiesA.textNode = propertiesA.textNode | propertiesB.textNode;
+		propertiesA.list = propertiesA.list | propertiesB.list;
 	};
 
 	var elementStack = [];
@@ -351,12 +353,14 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 				// Will accept any free-form text
 				thisNodeProperties.attributes[attributeName] = {
 					values : [],
-					refs : [] 
+					refs : [],
+					list : values.list
 				};
 			} else {
 				thisNodeProperties.attributes[attributeName] = {
 					values : values.attributeValues,
-					refs : values.refs
+					refs : values.refs,
+					list : values.list
 				};
 			}
 			return thisNodeProperties;
@@ -381,7 +385,10 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			return parseChildren(node);
 		},
 		list : function (node) {
-			return parseChildren(node);
+			var thisNodeProperties = parseChildren(node);
+			thisNodeProperties.list = true;
+
+			return thisNodeProperties;
 		},
 		mixed : function (node) {
 			return parseChildren(node);
