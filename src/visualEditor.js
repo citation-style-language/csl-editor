@@ -505,6 +505,12 @@ CSLEDIT.editorPage = (function () {
 
 	return {
 		init : function () {
+			if (!$.browser.webkit && !$.browser.mozilla) {
+				$('body').html("<h2>Please use the latest version of " +
+					"Chrome or Firefox to view this page.<\/h2>").css({margin:50});
+				return;
+			}
+
 			$("#dialog-confirm-delete").dialog({autoOpen : false});
 
 			$(function(){
