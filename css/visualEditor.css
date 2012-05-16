@@ -92,6 +92,9 @@ div.panel {
 	background-color: #F5F5DC;
 	overflow: auto;
 }
+#elementPropertyPanel [disabled="disabled"] {
+	opacity:0.5;
+}
 #nodePathView {
 	margin: 5px;
 	margin-bottom: 10px;

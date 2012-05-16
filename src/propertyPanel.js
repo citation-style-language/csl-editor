@@ -28,6 +28,7 @@ CSLEDIT.propertyPanel = (function () {
 			labelId,
 			valueIndex,
 			intValue,
+			allControls,
 			enabledControls,
 			disabledControls,
 			thisControl,
@@ -72,6 +73,7 @@ CSLEDIT.propertyPanel = (function () {
 
 		enabledControls = [];
 		disabledControls = [];
+		allControls = [];
 		values = [];
 
 		// attribute editors
@@ -167,20 +169,27 @@ CSLEDIT.propertyPanel = (function () {
 			} else {
 				disabledControls.push(thisControl);
 			}
+			allControls.push(thisControl);
 
 			values[index] = attribute.value;
 		}
+		
+		if (false /* enabled controls move to top */) {
+			// enabled controls at the top
+			for (index = 0; index < enabledControls.length; index++) {
+				$(enabledControls[index]).appendTo(panel);
+			}
 
-		// enabled controls at the top
-		for (index = 0; index < enabledControls.length; index++) {
-			$(enabledControls[index]).appendTo(panel);
-		}
+			$("<tr><td><br /><\/td><td><\/td><td><\/td><\/tr>").appendTo(panel);
 
-		$("<tr><td><br /><\/td><td><\/td><td><\/td><\/tr>").appendTo(panel);
-
-		// disabled controls
-		for (index = 0; index < disabledControls.length; index++) {
-			$(disabledControls[index]).appendTo(panel);
+			// disabled controls
+			for (index = 0; index < disabledControls.length; index++) {
+				$(disabledControls[index]).appendTo(panel);
+			}
+		} else {
+			$.each(allControls, function (i, controlHtml) {
+				panel.append(controlHtml);
+			});
 		}
 
 		// set values
