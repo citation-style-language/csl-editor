@@ -32,10 +32,10 @@ div.panel {
 
 	padding: 4px;
 
-	top: 2px;
-	bottom: 2px;
-	left: 2px;
-	right: 2px;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
 
 	background: #ffffff;
 }
@@ -44,13 +44,13 @@ div.panel {
 	left: 25%;
 	margin: 3px;
 }
+
 #leftContainer {
 	position: absolute;
 	left: 0;
 	top: 0;
 	width: 25%;
 	height: 100%;
-	/*overflow: auto;*/
 }
 #rightContainer {
 	position: absolute;

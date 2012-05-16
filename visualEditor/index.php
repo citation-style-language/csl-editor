@@ -21,6 +21,8 @@
 	<script type="text/javascript" src="../external/jstree/jquery.jstree.js"></script>
 	<link type="text/css" rel="stylesheet" href="../external/jstree/themes/default/style.css" />
 
+	<script type="text/javascript" src="../external/jquery.layout-latest-min.js"></script>
+
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
@@ -89,13 +91,13 @@
 <h3>Style Title:</h3>
 </div>
 <div id="mainContainer">
-	<div id="leftContainer">
+	<div id="leftContainer" class="ui-layout-west">
 		<div id="treeEditor" class="panel">
 		</div>
 	</div>
 
-	<div id="rightContainer">
-		<div id="topRightContainer">
+	<div id="rightContainer" class="ui-layout-center">
+		<div id="topRightContainer" class="ui-layout-north">
 			<div id="exampleOutput" class="panel">
 				<div id="statusMessage"></div>
 
@@ -106,7 +108,7 @@
 				<div id="formattedBibliography"></div>
 			</div>
 		</div>
-		<div id="bottomRightContainer">
+		<div id="bottomRightContainer" class="ui-layout-center">
 			<div id="elementPropertyPanel" class="panel">
 				<div id="nodePathView"></div>
 				<div id="elementProperties"></div>

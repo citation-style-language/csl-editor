@@ -553,6 +553,18 @@ CSLEDIT.editorPage = (function () {
 			setupDropdownMenuHandler(".dropdown a");
 
 			$(".propertyInput").on("change", nodeChanged);
+
+			$("#mainContainer").layout({
+				closable : false,
+				resizble : true,
+				livePaneResizing : true
+			});
+			$("#rightContainer").layout({
+				closable : false,
+				resizable : true,
+				livePaneResizing : true,
+				north__size : 200
+			});
 		}
 	};
 }());
