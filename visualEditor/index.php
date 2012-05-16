@@ -23,6 +23,8 @@
 
 	<script type="text/javascript" src="../external/jquery.layout-latest-min.js"></script>
 
+	<script type="text/javascript" src="../external/jquery.hoverIntent.minified.js"></script>
+
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>

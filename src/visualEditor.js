@@ -516,7 +516,7 @@ CSLEDIT.editorPage = (function () {
 			$("#dialog-confirm-delete").dialog({autoOpen : false});
 
 			$(function(){
-				$("ul.dropdown li").hover(function(){
+				$("ul.dropdown li").hoverIntent(function(){
 				
 					$(this).addClass("hover");
 					$('ul:first',this).css('visibility', 'visible');
