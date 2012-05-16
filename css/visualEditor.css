@@ -92,12 +92,6 @@ div.panel {
 	background-color: #F5F5DC;
 	overflow: auto;
 }
-#elementProperties > table,
-#elementProperties > table > tr,
-#elementProperties > table > tr > td
-{
-	width: 100%;
-}
 #nodePathView {
 	margin: 5px;
 	margin-bottom: 10px;

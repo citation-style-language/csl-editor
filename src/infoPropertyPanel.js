@@ -172,7 +172,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 
 	var editorRow = function (item, node, attributes) {
 		if (attributeNodes.indexOf(item.node) >= 0) {
-			return  attributeEditorRow(item, node, attributes);
+			return attributeEditorRow(item, node, attributes);
 		} else if (nameNodes.indexOf(item.node) >=0) {
 			return nameEditorRow(item, node);
 		} else {
@@ -193,23 +193,45 @@ CSLEDIT.infoPropertyPanel = (function () {
 
 		$.each(layout, function (i, item) {
 			var nodes = CSLEDIT.data.getNodesFromPath("info/" + item.node, infoNode);;
-			var attributes, deleteButton, addButton, value, thisRow;
+			var attributes, deleteButton, addButton, value, thisRow,
+				table,
+				titleRow, inputRow;
 			
 			if (multipleNodes.indexOf(item.node) >= 0) {
 				attributes = CSLEDIT.schema.attributes("info/" + item.node);
 				panel.append('<h4>' + pluralise(item.name) + '<\/h4>');
+				table = $("<table><\/table>");
 				$.each(nodes, function (i, node) {
 					thisRow = editorRow(item, node, attributes);
+					console.log("thisRow = " + thisRow.html());
+
+					// convert 1st thisRow into table title
+					if (typeof titleRow === "undefined") {
+						titleRow = $('<tr><\/tr>');
+						thisRow.find('label').each(function () {
+							titleRow.append($('<td><\/td>').append($(this)));
+						});
+						table.append(titleRow);
+					}
+					
+					// convert thisRow into table row
+					inputRow = $('<tr><\/tr>');
+					thisRow.find('input').each(function () {
+						inputRow.append($('<td><\/td>').append($(this)));
+					});
 
 					deleteButton = $('<button>Delete<\/button>');
 					deleteButton.on('click', function () {
 						CSLEDIT.controller.exec("deleteNode", [node.cslId]);
 						setupPanel(panel);
 					});
-					thisRow.append(deleteButton);
-					panel.append(thisRow);
+
+					inputRow.append($('<td><\/td>').append(deleteButton));
+					table.append(inputRow);
 				});
 
+				panel.append(table);
+				
 				addButton = $('<button>Add ' + item.name + '<\/button>');
 				panel.append(addButton);
 
