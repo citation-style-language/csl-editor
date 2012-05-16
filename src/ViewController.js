@@ -252,7 +252,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		}
 
 		if (treeNode.length > 0) {
-			treeNode.first().click();
+			clickNode(treeNode.first());
 		} else {
 			selectedNodeId = id;
 			callbacks.selectNode();
@@ -270,11 +270,18 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		treeNode = treeNode.children('a');
 
 		if (treeNode.length > 0) {
-			treeNode.first().click();
+			clickNode(treeNode.first());
 		} else {
 			selectedNodeId = id;
 			callbacks.selectNode();
 		}		
+	};
+
+	var clickNode = function (node) {
+		node.click();
+		treeView.scrollTo(node, 200, {
+			offset:{left: -treeView.width() + 80, top: -treeView.height() * 0.4}
+		});
 	};
 
 	var selectedNode = function () {

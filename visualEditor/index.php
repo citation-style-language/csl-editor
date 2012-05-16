@@ -22,8 +22,8 @@
 	<link type="text/css" rel="stylesheet" href="../external/jstree/themes/default/style.css" />
 
 	<script type="text/javascript" src="../external/jquery.layout-latest-min.js"></script>
-
 	<script type="text/javascript" src="../external/jquery.hoverIntent.minified.js"></script>
+	<script type="text/javascript" src="../external/jquery.scrollTo-1.4.2-min.js"></script>
 
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../src/exampleData.js"></script>
