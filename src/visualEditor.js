@@ -473,14 +473,6 @@ CSLEDIT.editorPage = (function () {
 					if (clickedName === "Delete node") {
 						CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
 					}
-				} else if (/^Tools/.test(parentNodeName)) {
-					if (clickedName === "Code Editor") {
-						window.location.pathname = "/csl/codeEditor";
-					} else if (clickedName === "Search for Style by Name") {
-						window.location.pathname = "/csl/searchByName";
-					} else if (clickedName === "Search for Style by Example") {
-						window.location.pathname = "/csl/searchByExample";
-					}
 				} else if ((/^Add node/).test(parentNodeName)) {
 					$(event.target).parent().parent().css('visibility', 'hidden');
 

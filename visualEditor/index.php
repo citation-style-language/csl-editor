@@ -80,11 +80,20 @@
 	<li>
 		<a href="#">Tools</a>
 		<ul class="sub_menu">
-			<li><a href="#">Code Editor</a>
+			<li><a href="/csl/codeEditor">Code Editor</a>
 			</li>
-			<li><a href="#">Search for Style by Name</a>
+			<li><a href="/csl/searchByName">Search for Style by Name</a>
 			</li>
-			<li><a href="#">Search for Style by Example</a>
+			<li><a href="/csl/searchByExample">Search for Style by Example</a>
+			</li>
+		</ul>
+	</li>
+	<li>
+		<a href="#">Help</a>
+		<ul class="sub_menu">
+			<li><a href="/csl/home">Home page</a>
+			</li>
+			<li><a href="/csl/about">About</a>
 			</li>
 		</ul>
 	</li>
