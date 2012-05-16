@@ -47,7 +47,7 @@ CSLEDIT.EditNodeButton.prototype.addNode = function (parentId, position, newNode
 		if (pathNodes.length > 0) {
 			assertEqual(pathNodes.length, 1);
 			this.cslId = pathNodes[0].cslId;
-			this.selectNodeCallback(this.cslId);
+			this.selectNodeCallback(this.cslId, this);
 		}
 	} else {
 		return;
