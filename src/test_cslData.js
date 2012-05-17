@@ -1,9 +1,11 @@
 "use strict";
 
-module("CSLEDIT.cslData");
-
-// replace CSLEDIT.data with test version
-CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+module("CSLEDIT.cslData", {
+	setup : function () {
+		// replace CSLEDIT.data with test version
+		CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+	}
+});
 
 test("set code", function () {
 	var cslData;
