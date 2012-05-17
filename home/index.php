@@ -31,7 +31,7 @@ div#mainContainer {
 	<p>This is <strong>not recommended</strong>. It's much easier to <a href="/csl/searchByExample">Search by Example</a> to find a similar style first, which you can then edit.
 	</p>
 	<p>
-	If you really want to start a new style, you can create a new one with the <a href="/csl/visualEditor/?styleURL=http://<?php echo $_SERVER['HTTP_HOST']; ?>/csl/content/newStyle.csl" >Visual Editor</a>.
+	If you really want to start a new style, you can create a new one by clicking <strong>Style->New Style</strong> in the <a href="/csl/visualEditor/" >Visual Editor</a>.
 </div>
 </body>
 </html>
