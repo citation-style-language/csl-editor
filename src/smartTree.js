@@ -374,8 +374,14 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		macroLinksShiftCslIds(id, nodesAdded);
 
 		// TODO: check if new node is a macro instance
-
 		parentNodes = treeElement.find('li[cslid=' + parentId + '][macrolink="true"]');
+
+		// shift references to the instance cslIds
+		$.each(macroLinks, function (i, macroLink) {
+			if (macroLink.instanceCslId >= id) {
+				macroLink.instanceCslId += nodesAdded;
+			}
+		});
 
 		console.log("macro links add to " + parentId + ", length = " + macroLinks.length);
 		// Add macro node children to all instances
@@ -389,12 +395,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			}
 		});
 
-		// shift references to the instance cslIds
-		$.each(macroLinks, function (i, macroLink) {
-			if (macroLink.instanceCslId >= id) {
-				macroLink.instanceCslId += nodesAdded;
-			}
-		});
 		
 		parentNodes.each(function () {
 			createSubTree($(this), position,
@@ -480,12 +480,13 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		// note: no two ranges are expected to have the same parent id
 		thisRangeIndex = rangeIndex(parentId);
 
-		// TODO: I think this can be done the same way as the macroLink shifting,
-		//       just do it all in one treeElement.find('li[cslid]').each(...)
 		// shift ranges
 		$.each(ranges, function (index, range) {
-			if (thisRangeIndex !== index) {
-				shiftCslIds(range, id, nodesAdded);
+			shiftCslIds(range, id, nodesAdded);
+			
+			// if adding to the end of a range, expand the range
+			if (thisRangeIndex === index && id > range.last) {
+				range.last += nodesAdded;
 			}
 		});
 
@@ -528,9 +529,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		
 		createSubTree(parentNode, position, jsTreeDataFromCslData_inner(newNode, [id]));
 
-		// sort the cslids
-		sortRange(range);
-
 		macroLinksUpdateNode(newNode.cslId, newNode);
 		
 		verifyTree();
@@ -569,12 +567,22 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			range.rootNode.attr("cslid", parseInt(range.rootNode.attr("cslid")) + amount);
 			range.rootNode.find('li[cslid][macroLink!="true"]').each( function () {
 				cslId = parseInt($(this).attr("cslid"));
-				if (cslId >= range.first && cslId <= range.last) {
+				assert(cslId <= range.last);
+				if (cslId >= range.first) {
 					$(this).attr("cslid", cslId + amount);
 				}
 			});
 			
 			range.first += amount;
+			range.last += amount;
+		} else if (range.last >= fromId) {
+			range.rootNode.find('li[cslid][macroLink!="true"]').each( function () {
+				cslId = parseInt($(this).attr("cslid"));
+				assert(cslId <= range.last);
+				if (cslId >= fromId) {
+					$(this).attr("cslid", cslId + amount);
+				}
+			});
 			range.last += amount;
 		}
 	};
@@ -586,7 +594,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			currentCslId,
 			range;
 
-		// shift ranges
+		// shift ranges, except for ones containing the deleted node
 		$.each(ranges, function (index, range) {
 			if (thisRangeIndex !== index) {
 				shiftCslIds(range, id + nodesDeleted, -nodesDeleted);
@@ -617,28 +625,13 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			treeElement.jstree("remove", node);
 
 			console.log("range before: " + range.first + "-" + range.last);
-			// sort the cslids
-			sortRange(range);
+
+			// shift this range
+			shiftCslIds(range, id + nodesDeleted, -nodesDeleted);
 			console.log("range after: " + range.first + "-" + range.last);
 		}
 
 		verifyTree();
-	};
-
-	var sortRange = function (range) {
-		var allNodes, currentCslId;
-
-		allNodes = range.rootNode.find('li[cslid][macrolink!="true"]');
-
-		currentCslId = range.first;
-		allNodes.each(function (index) {
-			//assertEqual($(this).attr('cslid'), range.first + 1 + index);
-			$(this).attr('cslid', range.first + 1 + index);
-			currentCslId++;
-		});
-
-		range.last = currentCslId;
-		assertEqual(allNodes.length, range.last - range.first);
 	};
 
 	var ammendNode = function (id, ammendedNode) {

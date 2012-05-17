@@ -139,9 +139,9 @@ asyncTest("add node with children", function () {
 			macroTree.addNode(0, 0, new CSLEDIT.CslNode(
 				"citation", [], [
 					new CSLEDIT.CslNode("child1", [],
-						[ new CSLEDIT.CslNode("child1-2") ]
+						[ new CSLEDIT.CslNode("child1-2", [], [], 3) ], 2
 						),
-					new CSLEDIT.CslNode("child2")
+					new CSLEDIT.CslNode("child2", [], [], 4)
 				], 1), 4);
 			
 			equal(treeElement.find('li[cslid=0]').attr("rel"), "style");
@@ -248,7 +248,9 @@ asyncTest("macro link", function () {
 		// add a node within the macro before text
 		// NOTE: parent node 9 is not displayed in the smartTree,
 		// but the smartTree still needs to update the instance
+		equal(citationTree.getRanges()[0].last, 8);
 		CSLEDIT.data.addNode(9, 0, new CSLEDIT.CslNode("nodewithin",[],[],10));
+		equal(citationTree.getRanges()[0].last, 8, "range size not changed");
 		equal(treeElement.find('li[cslid=8][macrolink!="true"]').attr("rel"), "text");
 		equal(treeElement.find('li[cslid=8]').find(
 			'li[cslid=10]').attr("rel"), "nodewithin", "add within macro");
@@ -322,7 +324,7 @@ asyncTest("macro link", function () {
 		equal(treeElement.find('li[cslid=6]').length, 0, "delete node in macro");
 		equal(styleTreeElement.find('li[cslid=6]').attr("rel"), "macro");
 		equal(citationTree.getMacroLinks().length, 0);
-		equal(styleTree.getMacroLinks().length, 0);
+		equal(styleTree.getMacroLinks().length, 0, "no macro links in style tree");
 
 		start();
 	};
@@ -401,12 +403,16 @@ asyncTest("add to instance after macro", function () {
 		equal(styleTreeElement.find('li[cslid=10]').
 			find('li[cslid=4][macrolink=true]').attr("rel"), "newnode");
 		equal(styleTreeElement.find('li[cslid=10]').
-			find('li[cslid=5][macrolink=true]').attr("rel"), "text");
+			find('li[cslid=5][macrolink=true]').attr("rel"), "text", "added to instance");
 
 		// add another macro instance at the end
 		var newNode = new CSLEDIT.CslNode("text");
 		newNode.setAttr("macro", "macro1");
+
+		equal(citationTree.getRanges()[0].last, 10);
 		CSLEDIT.data.addNode(10, "after", newNode);
+		
+		equal(citationTree.getRanges()[0].last, 11);
 
 		equal(styleTreeElement.find('li[cslid=11]').attr('rel'), "text");
 		equal(styleTreeElement.find('li[cslid=11]').
