@@ -35,6 +35,7 @@
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 	<script type="text/javascript" src="../src/NodePathView.js"></script>
+	<script type="text/javascript" src="../src/MultiComboBox.js"></script>
 	<script type="text/javascript" src="../src/propertyPanel.js"></script>
 	<script type="text/javascript" src="../src/sortPropertyPanel.js"></script>
 	<script type="text/javascript" src="../src/infoPropertyPanel.js"></script>

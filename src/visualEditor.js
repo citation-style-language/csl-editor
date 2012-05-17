@@ -428,8 +428,15 @@ CSLEDIT.editorPage = (function () {
 
 		console.time("readingUserInput");
 		for (index = 0; index < numAttributes; index++) {
-			key = $("#nodeAttributeLabel" + index).html();
-			value = $("#nodeAttribute" + index).val();
+			if ($("#nodeAttribute" + index).length > 0) {
+				key = $("#nodeAttributeLabel" + index).html();
+				value = $("#nodeAttribute" + index).val();
+			} else {
+				key = CSLEDIT.propertyPanel.getMultiInput(index).attr;
+				value = CSLEDIT.propertyPanel.getMultiInput(index).input.val();
+
+				console.log("got multi input: " + key + ": " + value);
+			}
 			attributes.push({
 				key : key,
 				value : value,

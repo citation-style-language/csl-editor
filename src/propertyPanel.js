@@ -3,7 +3,8 @@
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.propertyPanel = (function () {
-	var onChangeTimeout;
+	var onChangeTimeout,
+		multiInputs;
 
 	var inputAttributeControl = function (
 			index, inputId, labelId, schemaAttribute, controlDisabledAttr, toggleControlText) {
@@ -31,10 +32,11 @@ CSLEDIT.propertyPanel = (function () {
 			allControls,
 			enabledControls,
 			disabledControls,
-			thisControl,
+			thisRow,
 			controlDisabledAttr,
 			toggleControlText,
-			values;
+			values,
+			multiInput;
 
 		console.log("start setupPanel: " + nodeData.name);
 		console.time("setupPanel");
@@ -75,6 +77,7 @@ CSLEDIT.propertyPanel = (function () {
 		disabledControls = [];
 		allControls = [];
 		values = [];
+		multiInputs = {};
 
 		// attribute editors
 		for (schemaAttribute in schemaAttributes) {
@@ -120,9 +123,10 @@ CSLEDIT.propertyPanel = (function () {
 							}
 							break;
 						case "language":
+							/*
 							dropdownValues.push("English");
 							dropdownValues.push("etc... ");
-							dropdownValues.push("(TODO: find proper list");
+							dropdownValues.push("(TODO: find proper list");*/
 							break;
 						default:
 							console.log("WARNING: data type not recognised: " + 
@@ -144,32 +148,45 @@ CSLEDIT.propertyPanel = (function () {
 			}
 
 			if (dropdownValues.length > 0) {
-				thisControl = '<tr><td><label for=' + inputId + ' id="' + labelId + 
-					'" class="propertyLabel">' +
-					schemaAttribute + '<\/label><\/td>' + 
-					'<td><select id="' + inputId + '" class="propertySelect" attr="' + index + '"' +
-					controlDisabledAttr + ' >';
-
-				for (index2 = 0; index2 < dropdownValues.length; index2++) {
-					thisControl += "<option>" + dropdownValues[index2] + "</option>";
+				thisRow = $('<tr><\/tr>');
+				thisRow.append('<tr><td><label for=' + inputId + ' id="' + labelId + 
+					'" class="propertyLabel">' + schemaAttribute + '<\/label><\/td>');
+				if (schemaAttributes[schemaAttribute].list) {
+					multiInput = new CSLEDIT.MultiComboBox(
+							$('<td><\/td>'), dropdownValues, function() {onChange(nodeData);});
+					multiInput.val(attribute.value, true);
+					
+					if (!attribute.enabled) {
+						multiInput.getElement().attr("disabled", "disabled");
+					}
+					thisRow.append(multiInput.getElement());
+					multiInputs[index] = { attr : schemaAttribute, input : multiInput };
+				} else {
+					thisRow.append((function () {
+						var html = '<td><select id="' + inputId + '" class="propertySelect" attr="' + 
+							index + '"' + controlDisabledAttr + ' >';
+						for (index2 = 0; index2 < dropdownValues.length; index2++) {
+							html += "<option>" + dropdownValues[index2] + "</option>";
+						}
+						html += '<\/select><\/td>';
+						return html;
+					}()));
 				}
-
-				thisControl += '<\/select><\/td>' +
-					'<td><button class="toggleAttrButton" attrIndex="' + index + '">' + 
+				thisRow.append('<td><button class="toggleAttrButton" attrIndex="' + index + '">' + 
 					toggleControlText + '</button>' +
-					'<\/td><\/tr>';
+					'<\/td><\/tr>');
 
 			} else {
-				thisControl = inputAttributeControl(
-					index, inputId, labelId, schemaAttribute, controlDisabledAttr, toggleControlText);
+				thisRow = $(inputAttributeControl(index, inputId, labelId,
+					schemaAttribute, controlDisabledAttr, toggleControlText));
 			}
 			
 			if (attribute.enabled) {
-				enabledControls.push(thisControl);
+				enabledControls.push(thisRow);
 			} else {
-				disabledControls.push(thisControl);
+				disabledControls.push(thisRow);
 			}
-			allControls.push(thisControl);
+			allControls.push(thisRow);
 
 			values[index] = attribute.value;
 		}
@@ -187,8 +204,8 @@ CSLEDIT.propertyPanel = (function () {
 				$(disabledControls[index]).appendTo(panel);
 			}
 		} else {
-			$.each(allControls, function (i, controlHtml) {
-				panel.append(controlHtml);
+			$.each(allControls, function (i, control) {
+				panel.append(control);
 			});
 		}
 
@@ -228,6 +245,9 @@ CSLEDIT.propertyPanel = (function () {
 	};
 	
 	return {
-		setupPanel : setupPanel
+		setupPanel : setupPanel,
+		getMultiInput : function (index) {
+			return multiInputs[index];
+		}
 	};
 }());

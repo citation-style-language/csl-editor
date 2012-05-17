@@ -1,0 +1,25 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/csl/src/debug.js"></script>
+<script type="text/javascript" src="/csl/src/MultiComboBox.js"></script>
+<script>
+"use strict";
+
+$("document").ready( function () {
+	var multiCombo = new CSLEDIT.MultiComboBox(
+		$('#multiCombo_1'),
+		["no", "way", "pedro", "of", "box"], function (value) {
+			console.log(value);
+		});
+
+	multiCombo.val("test value of the box");
+});
+</script>
+</head>
+<body>
+	<h2>Multi combo box test</h2>
+	<p>This is a multi-combo: <span id="multiCombo_1"></span></p>
+</body>
+</html>
