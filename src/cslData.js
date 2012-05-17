@@ -412,7 +412,11 @@ CSLEDIT.Data = function (CSL_DATA) {
 			if (styleURL != "" && typeof styleURL !== 'undefined') {
 				console.log("loading given URL");
 				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-				loadStyleFromURL(styleURL, callback);
+				loadStyleFromURL(styleURL, function () {
+					// reload page without the styleURL query string, to avoid the user
+					// refreshing the page triggering a re-load of the style
+					window.location.href = window.location.href.replace(/\?.*$/, "");
+				});
 			} else if (cslData !== null && cslData !== "") {
 				console.log("loading previous style");
 				callback();
