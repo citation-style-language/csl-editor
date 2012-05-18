@@ -92,6 +92,7 @@ CSLEDIT.editorPage = (function () {
 	var unHighlightTree = function () {
 		var node;
 
+		clearTimeout(highlightTimeout);
 		highlightedTreeNodes.children('a').removeClass("highlighted");
 	};
 
