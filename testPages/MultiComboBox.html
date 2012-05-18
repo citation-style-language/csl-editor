@@ -8,18 +8,25 @@
 "use strict";
 
 $("document").ready( function () {
-	var multiCombo = new CSLEDIT.MultiComboBox(
+	var multiCombo1,
+   		multiCombo2;
+	
+	multiCombo1 = new CSLEDIT.MultiComboBox(
 		$('#multiCombo_1'),
-		["no", "way", "pedro", "of", "box"], function (value) {
+		["nothing", "way", "pedro", "long-attribute-name-here", "box"], function (value) {
 			console.log(value);
 		});
 
-	multiCombo.val("test value of the box");
+	multiCombo1.val("test value of the box");
+	
+	multiCombo2 = new CSLEDIT.MultiComboBox($('#multiCombo_2'), ["test", "values"]);
+	multiCombo2.val("");
 });
 </script>
 </head>
 <body>
 	<h2>Multi combo box test</h2>
 	<p>This is a multi-combo: <span id="multiCombo_1"></span></p>
+	<p>This is an initially empty multi-combo: <span id="multiCombo_2"></span></p>
 </body>
 </html>

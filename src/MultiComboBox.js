@@ -6,10 +6,11 @@ var CSLEDIT = CSLEDIT || {};
  * each of which must be one of the supplied values
  */
 
-CSLEDIT.MultiComboBox = function (element, possibleValues, onChange) {
+CSLEDIT.MultiComboBox = function (element, possibleValues, onChange, unique) {
 	this._element = element;
 	this._values = [];
 	this._onChange = onChange;
+	this._unique = unique;
 
 	assert(possibleValues.length > 0);
 	this._selectHtml = '<select><option>' +	possibleValues.join('<\/option><option>') +
@@ -27,7 +28,11 @@ CSLEDIT.MultiComboBox.prototype.val = function (val, suppressOnChange) {
 		this._readValues();
 		return this._values.join(" ");
 	} else {
-		this._values = val.split(" ");
+		if (val === "") {
+			this._values = [];
+		} else {
+			this._values = val.split(" ");
+		}
 		if (typeof suppressOnChange === "undefined") {
 			suppressOnChange = false;
 		}
@@ -45,22 +50,29 @@ CSLEDIT.MultiComboBox.prototype._readValues = function () {
 };
 
 CSLEDIT.MultiComboBox.prototype._refresh = function (suppressOnChange) {
-	var that = this;
+	var that = this,
+		table = $('<table><\/table>');
 
 	this._element.html('');
-		
+	
 	$.each(this._values, function (i, value) {
-		var select = $(that._selectHtml).css({"margin-right": 0}),
+		var row = $('<tr><\/tr>'),
+			select = $(that._selectHtml).css({"margin-right": 0}),
 			deleteButton = $('<button class="delete" data-index="' + i + '">X<\/button>').css({"margin-left": 0});
 
 		select.val(value);
 
-		that._element.append(select);
-		that._element.append(deleteButton);
-		that._element.append("<br \/>");
+		row.append($('<td><\/td>').append(select));
+		row.append($('<td><\/td>').append(deleteButton));
+		table.append(row);
 	});
 
-	that._element.append('<button class="add">+ Add</button>');
+	(function(){
+		var addButton = $('<button class="add">+ Add</button>');//.css('width', '100%');
+		table.append($('<tr><\/tr>').append($('<td><\/td>').append(addButton)));
+	}());
+
+	this._element.append(table);
 
 	this._element.find('button.delete').on('click', function (event) {
 		var index = $(event.target).attr("data-index");

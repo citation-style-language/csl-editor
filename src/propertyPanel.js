@@ -80,7 +80,8 @@ CSLEDIT.propertyPanel = (function () {
 			disabledControls,
 			thisRow,
 			values,
-			multiInput;
+			multiInput,
+			table;
 
 		nodeData = _nodeData;
 
@@ -91,13 +92,11 @@ CSLEDIT.propertyPanel = (function () {
 
 		// create new ones
 		//$('<h3>' + nodeData.name + ' properties</h3><br \/>').appendTo(panel);
-		$('<table>').appendTo(panel);
-		
 		// value editor (if a text or data element)
 		if (dataType !== null) {
 			$('<tr><td><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
 				dataType + ' value<\/label><\/td>' + 
-				'<td><input id="textNodeInput" class="propertyInput"><\/input><\/td><\/tr>').
+				'<td class="input"><input id="textNodeInput" class="propertyInput"><\/input><\/td><\/tr>').
 				appendTo(panel);
 		
 			$("#textNodeInput").val(nodeData.textValue);
@@ -187,7 +186,7 @@ CSLEDIT.propertyPanel = (function () {
 					'" class="propertyLabel">' + attributeName + '<\/label><\/td>');
 				if (schemaAttribute.list) {
 					multiInput = new CSLEDIT.MultiComboBox(
-							$('<td><\/td>'), dropdownValues, function() {nodeChanged();});
+							$('<td class="input"><\/td>'), dropdownValues, function() {nodeChanged();});
 					multiInput.val(attribute.value, true);
 					
 					if (!attribute.enabled) {
@@ -198,19 +197,20 @@ CSLEDIT.propertyPanel = (function () {
 				} else {
 					console.log('dropdown vals = ' + JSON.stringify(dropdownValues));
 					thisRow.append((function () {
-						var select;
+						var select, cell;
 						select = $('<select id="' + inputId(index) + '" class="propertySelect" attr="' + 
 							index + '"><\/select>');
 
-						if (!attribute.enabled) {
-							select.attr('disabled', true);
-						}
-						
 						$.each(dropdownValues, function (i, value) {
 							select.append("<option>" + value + "<\/option>");
 						});
 						
-						return $('<td><\/td>').append(select);
+						cell = $('<td class="input"><\/td>').append(select)
+						if (!attribute.enabled) {
+							cell.attr('disabled', true);
+						}
+						
+						return cell;
 					}()));
 				}
 			} else {
@@ -236,22 +236,24 @@ CSLEDIT.propertyPanel = (function () {
 			values[index] = attribute.value;
 		});
 		
+		table = $('<table>');
 		if (enabledControlsOnTop) {
 			for (index = 0; index < enabledControls.length; index++) {
 				$(enabledControls[index]).appendTo(panel);
 			}
 
-			$("<tr><td><br /><\/td><td><\/td><td><\/td><\/tr>").appendTo(panel);
+			table.append($("<tr><td><br /><\/td><td><\/td><td><\/td><\/tr>"));
 
 			// disabled controls
 			for (index = 0; index < disabledControls.length; index++) {
-				$(disabledControls[index]).appendTo(panel);
+				table.append($(disabledControls[index]));
 			}
 		} else {
 			$.each(allControls, function (i, control) {
-				panel.append(control);
+				table.append(control);
 			});
 		}
+		panel.append(table);
 
 		// set values
 		for (index = 0; index < attributes.length; index++) {

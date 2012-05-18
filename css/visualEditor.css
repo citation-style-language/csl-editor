@@ -95,6 +95,9 @@ div.panel {
 #elementPropertyPanel [disabled="disabled"] {
 	opacity:0.5;
 }
+#elementPropertyPanel table tr td.input {
+	background-color: #D5D5BC;
+}
 #nodePathView {
 	margin: 5px;
 	margin-bottom: 10px;
