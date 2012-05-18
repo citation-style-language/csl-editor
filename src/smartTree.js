@@ -445,19 +445,19 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		});
 	};
 
-	var macroLinksUpdateNode = function (id, _ammendedNode) {
-		var ammendedNode = new CSLEDIT.CslNode(""),
+	var macroLinksUpdateNode = function (id, _amendedNode) {
+		var amendedNode = new CSLEDIT.CslNode(""),
 			macroName,
 			jsTreeData = {children: [], attr: [], data: ""};
 			
-		ammendedNode.copy(_ammendedNode);
+		amendedNode.copy(_amendedNode);
 
-		macroName = ammendedNode.getAttr("macro");
-		if (ammendedNode.name === "text" && macroName !== "") {
-			addMacro(jsTreeData, ammendedNode, macroName);
+		macroName = amendedNode.getAttr("macro");
+		if (amendedNode.name === "text" && macroName !== "") {
+			addMacro(jsTreeData, amendedNode, macroName);
 
-			console.log("ammending macro instance : " + ammendedNode.cslId);
-			treeElement.find('[cslid=' + ammendedNode.cslId + ']').each( function () {
+			console.log("amending macro instance : " + amendedNode.cslId);
+			treeElement.find('[cslid=' + amendedNode.cslId + ']').each( function () {
 				var $this = $(this);
 				// remove all children
 				$.jstree._reference(treeElement)._get_children($this).each(function () {
@@ -634,7 +634,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		verifyTree();
 	};
 
-	var ammendNode = function (id, ammendedNode) {
+	var amendNode = function (id, amendedNode) {
 		var thisRangeIndex = rangeIndex(id),
 			node;
 
@@ -643,10 +643,10 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 
 		var node = treeElement.find('li[cslid="' + id + '"]');
-		treeElement.jstree('rename_node', node, displayNameFromMetadata(ammendedNode));
+		treeElement.jstree('rename_node', node, displayNameFromMetadata(amendedNode));
 		
 		if (enableMacroLinks) {
-			macroLinksUpdateNode(ammendedNode.cslId, ammendedNode);
+			macroLinksUpdateNode(amendedNode.cslId, amendedNode);
 		}
 		
 		verifyTree();
@@ -680,7 +680,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		expandNode : expandNode,
 		addNode : addNode,
 		deleteNode : deleteNode,
-		ammendNode : ammendNode,
+		amendNode : amendNode,
 
 		shiftCslIds : shiftCslIds,
 

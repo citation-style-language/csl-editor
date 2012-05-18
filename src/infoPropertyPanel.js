@@ -126,7 +126,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 				$this.removeAttr("parentcslid");
 				$this.attr("cslid", parentId + numNodesInParent);
 			} else {
-				CSLEDIT.controller.exec('ammendNode', [cslId, thisNode]);
+				CSLEDIT.controller.exec('amendNode', [cslId, thisNode]);
 			}
 		}, 500);
 	};

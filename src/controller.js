@@ -11,7 +11,7 @@ CSLEDIT.controller = (function () {
 			"addNode" : [],
 			"deleteNode" : [],
 			"moveNode" : [],
-			"ammendNode" : [],
+			"amendNode" : [],
 			"setCslCode" : []
 		},
 		commandHistory = [];

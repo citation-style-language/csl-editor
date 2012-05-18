@@ -23,7 +23,7 @@ asyncTest("create tree view", function () {
 	});
 });
 
-asyncTest("add/delete/ammend nodes", function () {
+asyncTest("add/delete/amend nodes", function () {
 	var cslData,
 		treeView;
 
@@ -51,11 +51,11 @@ asyncTest("add/delete/ammend nodes", function () {
 			raises(function () {treeView.deleteNode(0);} );
 			equal(treeView.jQueryElement.find('li[cslid=1]').attr("rel"), "citation");
 
-			// test ammending
+			// test amending
 			equal(
 				treeView.jQueryElement.jstree('get_text',treeView.jQueryElement.find('li[cslid=1]')),
 				"Inline Citations");
-			treeView.ammendNode(1, { name : "bibliography" } );
+			treeView.amendNode(1, { name : "bibliography" } );
 			equal(
 				treeView.jQueryElement.jstree('get_text',treeView.jQueryElement.find('li[cslid=1]')),
 				"Bibliography");

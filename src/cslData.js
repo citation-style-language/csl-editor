@@ -7,7 +7,7 @@ var CSLEDIT = CSLEDIT || {};
  * - Load from CSL XML
  * - Add node
  * - Delete node
- * - Ammend node
+ * - Amend node
  */
 
 CSLEDIT.Data = function (CSL_DATA) {
@@ -347,7 +347,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 			emit("formatCitations");
 		},
 
-		ammendNode : function (id, ammendedNode) {
+		amendNode : function (id, amendedNode) {
 			// replace everything of the original node except the children and the cslId
 			var cslData = get(),
 				iter,
@@ -362,9 +362,9 @@ CSLEDIT.Data = function (CSL_DATA) {
 				if (index === id) {
 					assertEqual(node.cslId, id);
 
-					node.name = ammendedNode.name;
-					node.attributes = ammendedNode.attributes;
-					node.textValue = ammendedNode.textValue;
+					node.name = amendedNode.name;
+					node.attributes = amendedNode.attributes;
+					node.textValue = amendedNode.textValue;
 
 					break;
 				}
@@ -372,7 +372,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 			}
 			assert(typeof node !== "undefined");
 			set(cslData);
-			emit("ammendNode", [id, node]);
+			emit("amendNode", [id, node]);
 			emit("formatCitations");
 		},
 		moveNode : function (fromId, toId, position) {

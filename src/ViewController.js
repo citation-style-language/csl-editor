@@ -234,10 +234,10 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		});
 	};
 
-	var ammendNode = function (id, ammendedNode) {
+	var amendNode = function (id, amendedNode) {
 		$.each(views, function (i, view) {
-			if ("ammendNode" in view) {
-				view.ammendNode(id, ammendedNode);
+			if ("amendNode" in view) {
+				view.amendNode(id, amendedNode);
 			}
 		});
 	};
@@ -306,7 +306,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 
 		addNode : addNode,
 		deleteNode : deleteNode,
-		ammendNode : ammendNode,
+		amendNode : amendNode,
 
 		selectNode : selectNode,
 		selectedNode : selectedNode,

@@ -151,7 +151,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		keyNode = nodeData.children[childIndex];
 		assertEqual(keyNode.name, "key");
 
-		CSLEDIT.controller.exec("ammendNode", [keyNode.cslId, 
+		CSLEDIT.controller.exec("amendNode", [keyNode.cslId, 
 			getKeyNodeData(childIndex)]);
 	};
 
@@ -239,7 +239,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 			keyNode = nodeData.children[childIndex];
 			assertEqual(keyNode.name, "key");
 
-			CSLEDIT.controller.exec("ammendNode", [keyNode.cslId, 
+			CSLEDIT.controller.exec("amendNode", [keyNode.cslId, 
 				getKeyNodeData(childIndex)]);
 		}*/);
 
@@ -304,7 +304,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 
 				$.each(nodeData.children, function (index, keyNode) {
 					assertEqual(keyNode.name, "key");
-					CSLEDIT.controller.exec("ammendNode", [keyNode.cslId, getKeyNodeData(index)]);
+					CSLEDIT.controller.exec("amendNode", [keyNode.cslId, getKeyNodeData(index)]);
 				});
 			});
 		}());

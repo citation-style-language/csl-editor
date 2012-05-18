@@ -276,7 +276,7 @@ asyncTest("macro link", function () {
 			'li[cslid=6]').attr("rel"), "text", "delete before");
 
 		// rename the text node to point to a different macro
-		CSLEDIT.data.ammendNode(4, new CSLEDIT.CslNode(
+		CSLEDIT.data.amendNode(4, new CSLEDIT.CslNode(
 			"text", [{key:"macro", value:"macro2", enabled: "true"}], [], 4));
 
 		equal(treeElement.find('li[cslid=4][macrolink!="true"]').attr("rel"), "text");
@@ -286,7 +286,7 @@ asyncTest("macro link", function () {
 			'li[cslid=8]').attr("rel"), "label", "rename macro, new one there");
 
 		// rename the text node to point to a non-existent macro
-		CSLEDIT.data.ammendNode(4, new CSLEDIT.CslNode(
+		CSLEDIT.data.amendNode(4, new CSLEDIT.CslNode(
 			"text", [{key:"macro", value:"no-such-macro", enabled: "true"}], [], 4));
 
 		equal(treeElement.find('li[cslid=4][macrolink!="true"]').attr("rel"), "text");
@@ -295,7 +295,7 @@ asyncTest("macro link", function () {
 				"macro definition still in style tree");
 	
 		// point it back to the 1st macro, and add another one
-		CSLEDIT.data.ammendNode(4, new CSLEDIT.CslNode(
+		CSLEDIT.data.amendNode(4, new CSLEDIT.CslNode(
 			"text", [{key:"macro", value:"macro1", enabled: "true"}], []));
 		CSLEDIT.data.addNode(4, "before", new CSLEDIT.CslNode(
 			"text", [{key:"macro", value:"macro1", enabled: "true"}], []));

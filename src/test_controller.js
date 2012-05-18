@@ -54,7 +54,7 @@ test("test subscribe to all", function () {
 		addNode : function () {},
 		deleteNode : function () {},
 		moveNode : function () {},
-		ammendNode : function () {},
+		amendNode : function () {},
 		shiftCslIds : function () {},
 		setCslCode : 5
 	};

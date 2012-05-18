@@ -505,7 +505,7 @@ CSLEDIT.editorPage = (function () {
 				CSLEDIT.controller.addSubscriber("addNode", CSLEDIT.data.addNode);
 				CSLEDIT.controller.addSubscriber("deleteNode", CSLEDIT.data.deleteNode);
 				CSLEDIT.controller.addSubscriber("moveNode", CSLEDIT.data.moveNode);
-				CSLEDIT.controller.addSubscriber("ammendNode", CSLEDIT.data.ammendNode);
+				CSLEDIT.controller.addSubscriber("amendNode", CSLEDIT.data.amendNode);
 				CSLEDIT.controller.addSubscriber("setCslCode", CSLEDIT.data.setCslCode);	
 
 				viewController.setFormatCitationsCallback(formatExampleCitations);

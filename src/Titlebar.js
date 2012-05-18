@@ -22,7 +22,7 @@ CSLEDIT.Titlebar.prototype.displayTitle = function () {
 	} else {
 		title = this.titleNode.textValue;
 	}
-	this.element.html("<h3>Style Title: " + title + "<\/h3");
+	this.element.html("<h3>Style Title: " + title + "<\/h3>");
 };
 
 CSLEDIT.Titlebar.prototype.getTitleNode = function () {
@@ -57,9 +57,9 @@ CSLEDIT.Titlebar.prototype.deleteNode = function (id, numDeleted) {
 	}
 };
 
-CSLEDIT.Titlebar.prototype.ammendNode = function (id, ammendedNode) {
+CSLEDIT.Titlebar.prototype.amendNode = function (id, amendedNode) {
 	if (id === this.cslId) {
-		this.titleNode = ammendedNode;
+		this.titleNode = amendedNode;
 		this.displayTitle();
 	}
 };

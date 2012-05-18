@@ -40,7 +40,7 @@ CSLEDIT.propertyPanel = (function () {
 		});
 		nodeData.attributes = attributes;
 
-		CSLEDIT.controller.exec("ammendNode", [nodeData.cslId, nodeData]);
+		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, nodeData]);
 	};
 
 	var setupPanel = function (panel, _nodeData, dataType, schemaAttributes) {

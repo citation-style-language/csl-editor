@@ -160,9 +160,9 @@ CSLEDIT.CslTreeView = function (treeView) {
 		});
 	};
 
-	var ammendNode = function (id, ammendedNode) {
+	var amendNode = function (id, amendedNode) {
 		var node = treeView.find('li[cslid="' + id + '"]');
-		treeView.jstree('rename_node', node, displayNameFromMetadata(ammendedNode));
+		treeView.jstree('rename_node', node, displayNameFromMetadata(amendedNode));
 	};
 
 	var moveNode = function (fromId, toId, position) {
@@ -290,7 +290,7 @@ CSLEDIT.CslTreeView = function (treeView) {
 		addNode : addNode,
 		deleteNode : deleteNode,
 		moveNode : moveNode,
-		ammendNode : ammendNode,
+		amendNode : amendNode,
 
 		selectNode : selectNode,
 		selectedNode : selectedNode,

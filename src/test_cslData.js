@@ -51,16 +51,16 @@ test("add/delete/ammed nodes", function () {
 	equal(CSLEDIT.data.get().children[0].name, "newNode3", "deleteNode");
 	equal(CSLEDIT.data.get().children[0].cslId, 1, "deleteNode");
 
-	// ammend
-	CSLEDIT.data.ammendNode(1, {
-		name : "ammendedName",
+	// amend
+	CSLEDIT.data.amendNode(1, {
+		name : "amendedName",
 		attributes : ["attr1"],
 		textValue : "textVal",
 		cslId : "999",
 		arbitraryKey : "newValue"
 	});
 	cslData = CSLEDIT.data.get();
-	equal(cslData.children[0].name, "ammendedName");
+	equal(cslData.children[0].name, "amendedName");
 	equal(cslData.children[0].attributes[0], "attr1");
 	equal(cslData.children[0].textValue, "textVal");
 	equal(cslData.children[0].cslId, 1); // this should remain consitent with position in the tree
