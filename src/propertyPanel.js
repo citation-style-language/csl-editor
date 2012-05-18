@@ -5,69 +5,85 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.propertyPanel = (function () {
 	var onChangeTimeout,
 		multiInputs,
-		nodeData;
+		nodeData,
+		enabledControlsOnTop = false;
 
-	var inputAttributeControl = function (
-			index, inputId, labelId, schemaAttribute, controlDisabledAttr, toggleControlText) {
-		return '<tr><td><label for=' + inputId + ' id="' + labelId + '" class="propertyLabel">' +
-			schemaAttribute + '<\/label><\/td>' + 
-			'<td><input id="' + inputId + '" class="propertyInput" attr="' + index + '"' +
-			'type="text" ' + controlDisabledAttr + ' ><\/input><\/td>' +
-			'<td><button class="toggleAttrButton" attrIndex="' + index + '">' + toggleControlText + 
-			'</button><\/td>' +	'<\/tr>'
+	var inputAttributeRow = function (index, schemaAttribute, enabled) {
+		var row, textInput;
+
+		row = $('<tr><\/tr>');
+		row.append($('<td><\/td>').append(label(index,schemaAttribute)));
+
+		textInput = $('<input class="propertyInput"><\/input>');
+		textInput.attr('id', inputId(index));
+
+		if (!enabled) {
+			textInput.attr('disabled', true);
+		}
+		row.append(textInput);
+
+		return row;
+	};
+
+	var label = function (index, attribute) {
+		var element = $('<label class="propertyLabel"><\/label>');
+	   	element.attr('for', inputId(index));
+		element.attr('id', labelId(index));
+		element.html(attribute);
+
+		return element;
 	};
 	
 	var nodeChanged = function () {
-		var attributes = [];
-
 		// TODO: assert check that persistent data wasn't changed in another tab, making
 		//       this form data possibly refer to a different node
 
 		// read user data
-		$('[id^="nodeAttributeLabel"]').each( function (index) {
-			var key, value;
+		$('[id^="nodeAttributeLabel"]').each( function () {
+			var key, value, index;
+			index = $(this).attr("id").replace(/^nodeAttributeLabel/, "");
 			key = $(this).html();
 			if ($("#nodeAttribute" + index).length > 0) {
 				value = $("#nodeAttribute" + index).val();
 			} else {
-				value = CSLEDIT.propertyPanel.getMultiInput(index).input.val();
+				value = multiInputs[index].val();
 			}
-			attributes.push({
+			nodeData.attributes[index] = {
 				key : key,
 				value : value,
 				enabled : nodeData.attributes[index].enabled
-			});
+			};
 		});
-		nodeData.attributes = attributes;
 
 		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, nodeData]);
 	};
 
+	var labelId = function (index) {
+		return 'nodeAttributeLabel' + index;
+	};
+
+	var inputId = function (index) {
+		return 'nodeAttribute' + index;
+	};
+
 	var setupPanel = function (panel, _nodeData, dataType, schemaAttributes) {
 		var index,
-			index2,
 			newAttributes = [],
 			dropdownValues,
 			attributes = _nodeData.attributes,
 			attribute,
-			schemaAttribute,
 			schemaValues,
-			inputId,
-			labelId,
 			valueIndex,
 			intValue,
 			allControls,
 			enabledControls,
 			disabledControls,
 			thisRow,
-			controlDisabledAttr,
-			toggleControlText,
 			values,
 			multiInput;
 
 		nodeData = _nodeData;
 
-		console.log("start setupPanel: " + nodeData.name);
 		console.time("setupPanel");
 
 		// remove child nodes
@@ -81,7 +97,7 @@ CSLEDIT.propertyPanel = (function () {
 		if (dataType !== null) {
 			$('<tr><td><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
 				dataType + ' value<\/label><\/td>' + 
-				'<td><input id="textNodeInput" class="propertyInput"' + 'type="text"><\/input><\/td><\/tr>').
+				'<td><input id="textNodeInput" class="propertyInput"><\/input><\/td><\/tr>').
 				appendTo(panel);
 		
 			$("#textNodeInput").val(nodeData.textValue);
@@ -100,7 +116,6 @@ CSLEDIT.propertyPanel = (function () {
 		}
 
 		newAttributes = [];
-		index = -1;
 
 		enabledControls = [];
 		disabledControls = [];
@@ -109,29 +124,27 @@ CSLEDIT.propertyPanel = (function () {
 		multiInputs = {};
 
 		// attribute editors
-		for (schemaAttribute in schemaAttributes) {
+		index = -1;
+		$.each(schemaAttributes, function (attributeName, schemaAttribute) {
 			index++;
-			inputId = 'nodeAttribute' + index;
-			labelId = 'nodeAttributeLabel' + index;
-
 			attribute = null;
-			for (index2 = 0; index2 < attributes.length; index2++) {
-				if (attributes[index2].key === schemaAttribute) {
-					attribute = attributes[index2];
+			$.each(attributes, function (i, thisAttribute) {
+				if (thisAttribute.key === attributeName) {
+					attribute = thisAttribute;
 					if (!("enabled" in attribute)) {
 						attribute["enabled"] = true;
 					}
 				}
-			}
+			});
 			if (attribute === null) {
 				// create attribute if it doesn't exist
-				attribute = { key : schemaAttribute, value : "", enabled : false };
+				attribute = { key : attributeName, value : "", enabled : false };
 				attributes.push(attribute);
 			}
 
 			newAttributes.push(attribute);
 
-			schemaValues = schemaAttributes[schemaAttribute].values;
+			schemaValues = schemaAttribute.values;
 			dropdownValues = [];
 
 			if (schemaValues.length > 0) {
@@ -168,47 +181,50 @@ CSLEDIT.propertyPanel = (function () {
 				}
 			}
 
-			if (attribute.enabled) {
-				controlDisabledAttr = "";
-				toggleControlText = "Disable";
-			} else {
-				controlDisabledAttr = ' disabled="disabled"';
-				toggleControlText = "Enable";
-			}
-
 			if (dropdownValues.length > 0) {
 				thisRow = $('<tr><\/tr>');
-				thisRow.append('<tr><td><label for=' + inputId + ' id="' + labelId + 
-					'" class="propertyLabel">' + schemaAttribute + '<\/label><\/td>');
-				if (schemaAttributes[schemaAttribute].list) {
+				thisRow.append('<tr><td><label for=' + inputId(index) + ' id="' + labelId(index) + 
+					'" class="propertyLabel">' + attributeName + '<\/label><\/td>');
+				if (schemaAttribute.list) {
 					multiInput = new CSLEDIT.MultiComboBox(
 							$('<td><\/td>'), dropdownValues, function() {nodeChanged();});
 					multiInput.val(attribute.value, true);
 					
 					if (!attribute.enabled) {
-						multiInput.getElement().attr("disabled", "disabled");
+						multiInput.getElement().attr("disabled", true);
 					}
 					thisRow.append(multiInput.getElement());
-					multiInputs[index] = { attr : schemaAttribute, input : multiInput };
+					multiInputs[index] = multiInput;
 				} else {
+					console.log('dropdown vals = ' + JSON.stringify(dropdownValues));
 					thisRow.append((function () {
-						var html = '<td><select id="' + inputId + '" class="propertySelect" attr="' + 
-							index + '"' + controlDisabledAttr + ' >';
-						for (index2 = 0; index2 < dropdownValues.length; index2++) {
-							html += "<option>" + dropdownValues[index2] + "</option>";
+						var select;
+						select = $('<select id="' + inputId(index) + '" class="propertySelect" attr="' + 
+							index + '"><\/select>');
+
+						if (!attribute.enabled) {
+							select.attr('disabled', true);
 						}
-						html += '<\/select><\/td>';
-						return html;
+						
+						$.each(dropdownValues, function (i, value) {
+							select.append("<option>" + value + "<\/option>");
+						});
+						
+						return $('<td><\/td>').append(select);
 					}()));
 				}
-				thisRow.append('<td><button class="toggleAttrButton" attrIndex="' + index + '">' + 
-					toggleControlText + '</button>' +
-					'<\/td><\/tr>');
-
 			} else {
-				thisRow = $(inputAttributeControl(index, inputId, labelId,
-					schemaAttribute, controlDisabledAttr, toggleControlText));
+				thisRow = inputAttributeRow(index, attributeName, attribute.enabled);
 			}
+
+			var toggleButton;
+			toggleButton = $('<button class="toggleAttrButton" attrIndex="' + index + '"></button>');
+			if (attribute.enabled) {
+				toggleButton.html('Disable');
+			} else {
+				toggleButton.html('Enable');
+			}
+			thisRow.append($('<td><\/td>').append(toggleButton));
 			
 			if (attribute.enabled) {
 				enabledControls.push(thisRow);
@@ -218,10 +234,9 @@ CSLEDIT.propertyPanel = (function () {
 			allControls.push(thisRow);
 
 			values[index] = attribute.value;
-		}
+		});
 		
-		if (false /* enabled controls move to top */) {
-			// enabled controls at the top
+		if (enabledControlsOnTop) {
 			for (index = 0; index < enabledControls.length; index++) {
 				$(enabledControls[index]).appendTo(panel);
 			}
@@ -240,8 +255,7 @@ CSLEDIT.propertyPanel = (function () {
 
 		// set values
 		for (index = 0; index < attributes.length; index++) {
-			inputId = 'nodeAttribute' + index;
-			$("#" + inputId).val(values[index]);
+			$("#" + inputId(index)).val(values[index]);
 		}
 
 		nodeData.attributes = newAttributes;
@@ -274,9 +288,6 @@ CSLEDIT.propertyPanel = (function () {
 	};
 	
 	return {
-		setupPanel : setupPanel,
-		getMultiInput : function (index) {
-			return multiInputs[index];
-		}
+		setupPanel : setupPanel
 	};
 }());
