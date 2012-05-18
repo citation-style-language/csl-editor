@@ -112,7 +112,6 @@ CSLEDIT.CslTreeView = function (treeView) {
 
 	var addNode = function (id, position, newNode) {
 		var parentNode;
-		console.log("adding to node " + id);
 		parentNode = treeView.find('li[cslid="' + id + '"]');
 		assertEqual(parentNode.length, 1);
 
@@ -172,8 +171,6 @@ CSLEDIT.CslTreeView = function (treeView) {
 		assertEqual(fromNode.length, 1);
 		assertEqual(toNode.length, 1);
 
-		console.log("CslTreeView.moveNode: " + fromId + " to " + toId + ", position: " + position);
-		console.log("CslTreeView.moveNode: " + treeView.jstree("get_text", fromNode) + " to " + treeView.jstree("get_text", toNode));
 		treeView.jstree('move_node', fromNode, toNode, position, false, false, true);
 		
 		// sort the cslids
@@ -195,7 +192,6 @@ CSLEDIT.CslTreeView = function (treeView) {
 		
 		selected = treeView.jstree('get_selected'),
 		cslid = parseInt(selected.attr("cslid"));
-		console.log("selected cslid = " + cslid);
 		return cslid;
 	};
 

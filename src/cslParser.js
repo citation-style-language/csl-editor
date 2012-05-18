@@ -143,7 +143,6 @@ CSLEDIT.cslParser = (function() {
 		// nodeIndex.index is the depth-first traversal position of CSL node
 		// it must start at 0, and it will be returned with nodeIndex.index = number of nodes - 1
 		cslDataFromCslCode : function (xmlData) {
-			console.time("jsonFromCslXml");
 			var parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(xmlData, "application/xml"),
 				errors;
@@ -155,15 +154,12 @@ CSLEDIT.cslParser = (function() {
 
 			var jsonData = jsonNodeFromXml(styleNode, { index: 0 } );
 		
-			console.timeEnd("jsonFromCslXml");
 			return jsonData;
 		},
 
 		cslCodeFromCslData : function (jsonData) {
- 			console.time("cslXmlFromJson");
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
 			cslXml += xmlNodeFromJson(jsonData, 0);
- 			console.timeEnd("cslXmlFromJson");
 			return cslXml;
 		},
 

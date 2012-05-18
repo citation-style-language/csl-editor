@@ -44,7 +44,8 @@ CSLEDIT.searchResults = {
 				citation + '<\/td><\/tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Bibliography<\/span><\/td><td>' +
 				bibliography + "<\/td><\/tr>" +
-				'<tr><td><\/td><td><a href="#" class="editStyleButton" styleURL="' + style.styleId + '">Edit style<\/a><\/td><\/tr>' +
+				'<tr><td><\/td><td><a href="#" class="editStyleButton" styleURL="' +
+				style.styleId + '">Edit style<\/a><\/td><\/tr>' +
 				'<\/table>');
 		}
 		
@@ -54,13 +55,11 @@ CSLEDIT.searchResults = {
 		);
 
 		$("a").click( function (event) {
-			console.log("button clicked");
 			var styleURL = $(event.target).attr("styleURL");
 
 			styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
 
 			CSLEDIT.data.loadStyleFromURL(styleURL, function () {
-				console.log("callback");
 				window.location.href =
 					window.location.protocol + "//" + 
 					window.location.host + "/csl/visualEditor";

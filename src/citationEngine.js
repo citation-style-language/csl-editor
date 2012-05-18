@@ -175,8 +175,6 @@ CSLEDIT.citationEngine = (function () {
 			});
 		}
 
-		console.time("citeproc diffs");
-
 		// lazy instantiation of diff_match_patch
 		if (dmp === null) {
 			dmp = new diff_match_patch();
@@ -192,10 +190,7 @@ CSLEDIT.citationEngine = (function () {
 		dmp.diff_cleanupSemantic(bibliographyDiffs);
 		var diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(bibliographyDiffs));
 
-		console.timeEnd("citeproc diffs");
-
 		if (dmp.diff_levenshtein(citationDiffs) === 0 && dmp.diff_levenshtein(bibliographyDiffs) === 0) {
-			console.log("no change");
 			citationsOut.html(newFormattedCitation);
 			bibliographyOut.html(newFormattedBibliography);
 			if (typeof callback !== "undefined") {
@@ -203,7 +198,6 @@ CSLEDIT.citationEngine = (function () {
 			}
 
 		} else {
-			console.log("output changed");
 			// display the diff
 			citationsOut.html(diffFormattedCitation);
 			bibliographyOut.html(diffFormattedBibliography);

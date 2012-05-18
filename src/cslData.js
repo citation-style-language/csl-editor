@@ -183,7 +183,6 @@ CSLEDIT.Data = function (CSL_DATA) {
 		styleURL = newURL;
 		$.get(styleURL, {}, function(cslCode) {
 			cslCode = cslCode.replace(/<!--.*?-->/g, "");
-			console.log("loaded style from " + styleURL);
 			setCslCode(cslCode);
 			if (typeof callback !== "undefined") {
 				callback();
@@ -210,7 +209,6 @@ CSLEDIT.Data = function (CSL_DATA) {
 	};
 
 	var emit = function (event, args) {
-		console.log("emmiting " + event + JSON.stringify(args));
 		$.each(viewControllers, function(index, controller) {
 			controller.exec(event, args);
 		});
@@ -381,6 +379,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 
 			deletedNode = deleteNode(fromId);
 
+			console.log("deletedNode = " + deletedNode.cslId);
 			if (toId > fromId) {
 				toId -= numNodes(deletedNode);
 			}
@@ -410,7 +409,6 @@ CSLEDIT.Data = function (CSL_DATA) {
 			console.log("url from url: " + styleURL);
 
 			if (styleURL != "" && typeof styleURL !== 'undefined') {
-				console.log("loading given URL");
 				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
 				loadStyleFromURL(styleURL, function () {
 					// reload page without the styleURL query string, to avoid the user
@@ -418,10 +416,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 					window.location.href = window.location.href.replace(/\?.*$/, "");
 				});
 			} else if (cslData !== null && cslData !== "") {
-				console.log("loading previous style");
 				callback();
 			} else {
-				console.log("loading default style - apa.csl");
 				styleURL = "../external/csl-styles/apa.csl";
 				loadStyleFromURL(styleURL, callback);
 			}

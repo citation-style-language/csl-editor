@@ -41,7 +41,6 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 	$.get(mainSchemaURL, {}, function(data) {
 		mainSchemaData = data;
 		urlsGot++;
-		console.log("got schema " + urlsGot + " of " + includeSchemaURLs.length + 1);
 		if (urlsGot === includeSchemaURLs.length + 1) {
 			init();
 		}
@@ -51,7 +50,6 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		$.get(url, {}, function(data) {
 			schemas.push(data);
 			urlsGot++;
-			console.log("got schema " + urlsGot + " of " + includeSchemaURLs.length + 1);
 			if (urlsGot === includeSchemaURLs.length + 1) {
 				init();
 			}
@@ -74,8 +72,6 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		var parser = new DOMParser(),
 			xmlDoc;
 
-		console.log("init");
-
 		xmlDoc = parser.parseFromString(mainSchemaData, "application/xml");
 
 		// This is the root node for the grammar
@@ -87,8 +83,6 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			// Parse schema
 			parseChildren(xmlDoc);
 		});
-
-		console.log("nodes parsed : " + nodesParsed);
 
 		// Simplify schema (replace all refs with the corresponding define
 		simplify();

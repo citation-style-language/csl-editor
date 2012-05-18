@@ -166,6 +166,7 @@ CSLEDIT.FakeViewController = function () {
 			},
 		exec : function (command, args) {
 
+			console.log("Fake view exec: " + command + ": " + JSON.stringify(args));
 			if (command === "formatCitations") {
 				return;
 			}
@@ -193,8 +194,6 @@ asyncTest("macro link", function () {
 
 	var treeLoaded = function () {
 		treesToLoad--;
-
-		console.log("treesToLoad = " + treesToLoad);
 
 		if (treesToLoad > 0) {
 			return;
@@ -376,8 +375,6 @@ asyncTest("add to instance after macro", function () {
 	var treeLoaded = function () {
 		treesToLoad--;
 
-		console.log("treesToLoad = " + treesToLoad);
-
 		if (treesToLoad > 0) {
 			return;
 		}
@@ -508,7 +505,6 @@ asyncTest("add to instance after macro", function () {
 
 });
 
-
 asyncTest("macros within macros", function () {
 	// testing the macro link functionality requires data to be in sync with
 	// the view, since it's used for macro-name lookups
@@ -527,8 +523,6 @@ asyncTest("macros within macros", function () {
 
 	var treeLoaded = function () {
 		treesToLoad--;
-
-		console.log("treesToLoad = " + treesToLoad);
 
 		if (treesToLoad > 0) {
 			return;
@@ -672,6 +666,107 @@ asyncTest("macros within macros", function () {
 
 });
 
+asyncTest("move macro instance 1 from macro instance 2 to macro instance 3", function () {
+	var cslData,
+		citationTree,
+		treeElement = $("<div><\/div>"),
+		styleTreeElement = $("<div><\/div>"),
+		styleTree,
+		treesToLoad,
+		newNode,
+		description,
+		fakeViewController = new CSLEDIT.FakeViewController();
+
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+
+	var treeLoaded = function () {
+		treesToLoad--;
+
+		if (treesToLoad > 0) {
+			return;
+		}
+		
+		equal(styleTreeElement.find('li[cslid=0]').attr("rel"), "style");
+		equal(styleTreeElement.find('li[cslid=3]').attr("rel"), "macro", "macro 1 def");
+		equal(styleTreeElement.find('li[cslid=3]').find('li[cslid=4]').attr("rel"), "label");
+		equal(styleTreeElement.find('li[cslid=5]').attr("rel"), "macro", "macro 2 def");
+		equal(styleTreeElement.find('li[cslid=5]').find('li[cslid=6]').attr("rel"), "text", "macro 1 instance");
+		equal(styleTreeElement.find('li[cslid=7]').attr("rel"), "macro", "macro 3 def");
+		equal(styleTreeElement.find('li[cslid=8]').attr("rel"), "citation");
+		equal(styleTreeElement.find('li[cslid=9]').attr("rel"), "layout");
+		equal(styleTreeElement.find('li[cslid=10]').attr("rel"), "text", "macro2 instance");
+		equal(styleTreeElement.find('li[cslid=10]').find('li[cslid=6][macrolink=true]').attr("rel"), "text");
+		equal(styleTreeElement.find('li[cslid=10]').find('li[cslid=6][macrolink=true]').
+		                                            find('li[cslid=4][macrolink=true]').attr("rel"), "label");
+		equal(styleTreeElement.find('li[cslid=11]').attr("rel"), "text", "macro3 instance");
+		
+		equal(styleTree.getMacroLinks().length, 3, "check macro links");
+
+
+		//CSLEDIT.data.moveNode(6, 11, 0);
+		CSLEDIT.data.deleteNode(6);
+		CSLEDIT.data.addNode(10, 0, new CSLEDIT.CslNode(
+			"text", [{key:"macro", value:"macro1", enabled: "true"}]));
+		
+		equal(styleTree.getMacroLinks().length, 3, "check macro links");
+		
+		description = "macro 2 and 3 instances stay where they are";
+		equal(styleTreeElement.find('li[cslid=10]').attr("rel"), "text", "macro2 instance");
+		equal(styleTreeElement.find('li[cslid=11]').attr("rel"), "text", "macro3 instance");
+
+		description = "macro 2 definition no longer has macro 1";
+		equal(styleTreeElement.find('li[cslid=5]').find('li[cslid=6]').length, 0, description);
+
+		description = "macro 3 definition now has macro 1";
+		equal(styleTreeElement.find('li[cslid=6]').attr("rel"), "macro", description);
+		equal(styleTreeElement.find('li[cslid=6]').find('li[cslid=7]').attr("rel"), "text", description);
+		equal(styleTreeElement.find('li[cslid=6]').find('li[cslid=7]').
+		                       find('li[cslid=4][macrolink=true]').attr("rel"), "label", description);
+
+		description = "macro 2 instance no longer has macro 1";
+		equal(styleTreeElement.find('li[cslid=10]').find('li[cslid=6]').length, 0, description);
+
+		description = "macro 3 instance now has macro 1";
+		equal(styleTreeElement.find('li[cslid=11]').
+		                       find('li[cslid=7][macrolink=true]').attr("rel"), "text", description);
+		equal(styleTreeElement.find('li[cslid=11]').
+		                       find('li[cslid=7][macrolink=true]').
+							   find('li[cslid=4][macrolink=true]').attr("rel"), "label", description);
+		start();
+	};
+
+	cslData = CSLEDIT.data.setCslCode (
+		"<style>" +
+		"<info><author><\/author><\/info>" +
+		'<macro name="macro1"><label><\/label><\/macro>' +
+		'<macro name="macro2"><text macro="macro1"><\/text><\/macro>' +
+		'<macro name="macro3"><\/macro>' +
+		'<citation><layout>' +
+		'<text macro="macro2"><\/text>' +
+		'<text macro="macro3"><\/text>' +
+		'<\/layout><\/citation>' +
+		"<\/style>");
+
+	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
+	styleTree.setCallbacks({ loaded : treeLoaded });
+	styleTree.setVerifyAllChanges(true);
+	
+	citationTree = CSLEDIT.SmartTree(treeElement, ["style/citation"], true);
+	citationTree.setCallbacks({ loaded : treeLoaded });
+	citationTree.setVerifyAllChanges(true);
+	
+	fakeViewController.addView(citationTree);
+	fakeViewController.addView(styleTree);
+	
+	CSLEDIT.data.setViewController(fakeViewController);
+
+	treesToLoad = 2;
+
+	styleTree.createTree();
+	citationTree.createTree();
+
+});
+
 asyncTest("macros within macros on creation", function () {
 	// testing the macro link functionality requires data to be in sync with
 	// the view, since it's used for macro-name lookups
@@ -690,8 +785,6 @@ asyncTest("macros within macros on creation", function () {
 
 	var treeLoaded = function () {
 		treesToLoad--;
-
-		console.log("treesToLoad = " + treesToLoad);
 
 		if (treesToLoad > 0) {
 			return;

@@ -203,7 +203,6 @@ CSLEDIT.infoPropertyPanel = (function () {
 				table = $("<table><\/table>");
 				$.each(nodes, function (i, node) {
 					thisRow = editorRow(item, node, attributes);
-					console.log("thisRow = " + thisRow.html());
 
 					// convert 1st thisRow into table title
 					if (typeof titleRow === "undefined") {

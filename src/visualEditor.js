@@ -212,8 +212,6 @@ CSLEDIT.editorPage = (function () {
 	var doSyntaxHighlighting = function () {
 		var numCslNodes = CSLEDIT.data.numCslNodes();
 			
-		console.log("syntax Higlight! " + numCslNodes);
-		console.time("syntaxHighlighting");
 		// clear the hovered node stack
 		hoveredNodeStack.length = 0;
 		selectedCslId = -1;
@@ -222,7 +220,6 @@ CSLEDIT.editorPage = (function () {
 		for (var index = 0; index < numCslNodes; index++) {
 			setupSyntaxHighlightForNode(index);
 		}
-		console.timeEnd("syntaxHighlighting");
 	};
 
 	var createTreeView = function () {
@@ -232,8 +229,6 @@ CSLEDIT.editorPage = (function () {
 		viewController.init(cslData,
 		{
 			loaded : function (event, data) {
-				console.log("tree loaded");
-
 				var cslData = CSLEDIT.data.get();
 
 				CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
@@ -290,9 +285,7 @@ CSLEDIT.editorPage = (function () {
 				} else {
 					parentNodeName = toNodeInfo.parent.name;
 				}
-				console.log("check if " + fromNode.name + " in " + parentNodeName + "/" + toNodeInfo.node.name);
 				result = (fromNode.name in CSLEDIT.schema.childElements(parentNodeName + "/" + toNodeInfo.node.name));
-				console.log("result = " + result);
 				return result;
 			}
 		});
@@ -328,16 +321,11 @@ CSLEDIT.editorPage = (function () {
 		node = nodeAndParent.node;
 		parentNode = nodeAndParent.parent;
 
-		console.log("selected node : " + node.name);
-		console.log("parent node : " + parent.name);
-
 		// hack to stop parent of style being style
 		if (node.name === "style") {
 			parentNodeName = "root";
 		} else if (parentNode !== false) {
-			console.time("get parent");
 			parentNodeName = parentNode.name;
-			console.timeEnd("get parent");
 		} else {
 			parentNodeName = "root";
 		}

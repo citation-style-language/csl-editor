@@ -30,7 +30,6 @@ CSLEDIT.sortPropertyPanel = (function () {
 			fromId,
 			toPosition;
 
-		console.log("sortable list updated");
 		list.children().each(function () {
 			var variable, macro, childNode, visibleKey;
 
@@ -41,7 +40,6 @@ CSLEDIT.sortPropertyPanel = (function () {
 			}
 
 			visibleKey = $(this).find('select.sortKey').val();
-			console.log("node: " + visibleKey);
 			childNode = nodeData.children[index];
 			assertEqual(childNode.name, "key");
 
@@ -173,13 +171,8 @@ CSLEDIT.sortPropertyPanel = (function () {
 		panel = _panel;
 		nodeData = _nodeData;
 
-		console.log("start setup sort panel: " + nodeData.name);
-
 		// clear panel 
 		panel.children().remove();
-
-		// create new one
-		//$('<h3>' + nodeData.name + ' properties</h3><br \/>').appendTo(panel);
 
 		// sortable list
 		list = $('<ul class="sortKeys"><\/ul>');

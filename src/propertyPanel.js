@@ -85,8 +85,6 @@ CSLEDIT.propertyPanel = (function () {
 
 		nodeData = _nodeData;
 
-		console.time("setupPanel");
-
 		// remove child nodes
 		panel.children().remove();
 
@@ -195,7 +193,6 @@ CSLEDIT.propertyPanel = (function () {
 					thisRow.append(multiInput.getElement());
 					multiInputs[index] = multiInput;
 				} else {
-					console.log('dropdown vals = ' + JSON.stringify(dropdownValues));
 					thisRow.append((function () {
 						var select, cell;
 						select = $('<select id="' + inputId(index) + '" class="propertySelect" attr="' + 
@@ -285,8 +282,6 @@ CSLEDIT.propertyPanel = (function () {
 			clearTimeout(onChangeTimeout);
 			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 10);
 		});
-		
-		console.timeEnd("setupPanel");
 	};
 	
 	return {

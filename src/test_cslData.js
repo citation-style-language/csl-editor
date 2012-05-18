@@ -34,8 +34,6 @@ test("add/delete/ammed nodes", function () {
 	CSLEDIT.data.addNode(1, 0, {name: "newNode2"});
 	CSLEDIT.data.addNode(0, 1, {name: "newNode3"});
 
-	console.log("added node: " + JSON.stringify(CSLEDIT.data.get()));
-
 	equal(CSLEDIT.data.get().children.length, 2);
 	equal(CSLEDIT.data.get().children[0].name, "newNode1");
 	equal(CSLEDIT.data.get().children[1].name, "newNode3");
@@ -113,8 +111,6 @@ test("find nodes", function () {
 
 	cslData = CSLEDIT.data.setCslCode(
 		"<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><\/style>");
-
-	console.log("cslData = " + JSON.stringify(cslData));
 
 	equal(CSLEDIT.data.getFirstCslId(cslData, "citation"), 3);
 	equal(CSLEDIT.data.getFirstCslId(cslData, "layout"), 4);

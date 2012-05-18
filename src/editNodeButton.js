@@ -17,7 +17,6 @@ CSLEDIT.EditNodeButton = function (element, nodePath, cslId, icon, selectNodeCal
 	this.selectNodeCallback = selectNodeCallback;
 
 	element.click(function () {
-		console.log("button clicked");
 		if (that.cslId === -1) {
 			CSLEDIT.controller.exec("addPath", [nodePath]);
 		} else {

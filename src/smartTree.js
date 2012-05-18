@@ -94,8 +94,8 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 	var verifyTree = function () {
 		var cslData = CSLEDIT.data.get();
 
-		console.time("verifyTree");
 		if (verifyAllChanges) {
+			console.time("verifyTree");
 			// Check for inconsistencies with CSLEDIT.data
 			treeElement.find('li[cslid]').each(function () {
 				var $this = $(this),
@@ -107,8 +107,8 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 
 			// Can't have non-macrolink nodes as children of a text node
 			assertEqual(treeElement.find('li[cslid][rel=text] li[macrolink!=true]').length, 0);
+			console.timeEnd("verifyTree");
 		}
-		console.timeEnd("verifyTree");
 	};
 
 	var displayNameFromMetadata = function (metadata) {
@@ -148,8 +148,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 
 		jsTreeData = jsTreeDataFromCslData(nodePaths);
 
-		//console.log("jsTreeData = " + JSON.stringify(jsTreeData));
-
 		treeElement.on("loaded.jstree", function () {
 			// set up range root nodes
 			$.each(ranges, function (index, range) {
@@ -160,9 +158,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			callbacks.loaded();
 
 			verifyTree();
-			$.each(ranges, function (i, range) {
-				console.log("range(" + i + ") = " + range.first + "-" + range.last);
-			});
 		});
 		treeElement.on("select_node.jstree", function (event, ui) {
 			treeElement.jstree("set_focus");
@@ -205,7 +200,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		ranges = [];
 		macroLinks = [];
 
-		console.log("paths = " + nodePaths.join(", "));
 		$.each(nodePaths, function (i, path) {
 			var nodes = CSLEDIT.data.getNodesFromPath(path, cslData);
 			cslNodes = cslNodes.concat(nodes);
@@ -221,7 +215,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			});
 		});
 
-		console.log("ranges: " + JSON.stringify(ranges));
 		return jsTreeData;
 	};
 
@@ -273,10 +266,8 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 	var addMacro = function (jsTreeData, cslNode, macroName) {
 		var macroNodes,
 			macroNode,
-			lastCslId = [0],
+			lastCslId,
 			index;
-
-		console.time("addMacro");
 
 		// delete any existing macroLinks
 		for (index = 0; index < macroLinks.length; index++) {
@@ -301,17 +292,16 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			return;
 		}
 		
+		lastCslId = [macroNode.cslId];
+		
 		// add the macro's children to this node
 		$.each(macroNode.children, function (i, childNode) {
 			jsTreeData.children.push(jsTreeDataFromCslData_inner(childNode, lastCslId, true));
 		});
 
-		console.log("adding to macroLinks, instance = " + cslNode.cslId);
 		macroLinks.push({
 			instanceCslId : cslNode.cslId, 
 			first: macroNode.cslId, last: lastCslId[0] });
-
-		console.timeEnd("addMacro");
 	};
 
 	var selectedNode = function () {
@@ -343,7 +333,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 	};
 
 	var macroLinksShiftCslIds = function (id, nodesAdded) {
-		console.log("shifting macrolinks by " + nodesAdded);
 		treeElement.find('li[cslid][macrolink="true"]').each(function () {
 			var $this = $(this),
 				cslId;
@@ -368,8 +357,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		var id = newNode.cslId,
 			parentNodes;
 
-		console.time("macroLinksAddNode");
-
 		// Shift references to the macro definition
 		macroLinksShiftCslIds(id, nodesAdded);
 
@@ -383,15 +370,12 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			}
 		});
 
-		console.log("macro links add to " + parentId + ", length = " + macroLinks.length);
 		// Add macro node children to all instances
 		$.each(macroLinks, function(i, macroLink) {
-			console.log("macroLink: " + JSON.stringify(macroLink));
 			if (macroLink.first === parentId) {
 				parentNodes = parentNodes.add(
 					treeElement.find('li[cslid=' + macroLink.instanceCslId + ']'));
 				assert(parentNodes.length > 0);
-				console.log("adding " + parentNodes.length + " to macro instance");
 			}
 		});
 
@@ -400,8 +384,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			createSubTree($(this), position,
 				jsTreeDataFromCslData_inner(newNode, [id], true));
 		});
-
-		console.timeEnd("macroLinksAddNode");
 	};
 
 	var macroLinksDeleteNode = function (nodeId, nodesDeleted) {
@@ -418,7 +400,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 
 			if (macroLink.instanceCslId === nodeId) {
 				macroLinks.splice(index, 1);
-				return false;
+				break;
 			}
 			if (macroLink.first === nodeId) {
 				console.log("WARNING: macro deleted, leaving broken instance links");
@@ -456,7 +438,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		if (amendedNode.name === "text" && macroName !== "") {
 			addMacro(jsTreeData, amendedNode, macroName);
 
-			console.log("amending macro instance : " + amendedNode.cslId);
 			treeElement.find('[cslid=' + amendedNode.cslId + ']').each( function () {
 				var $this = $(this);
 				// remove all children
@@ -523,7 +504,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 		range = ranges[thisRangeIndex];
 
-		console.log("adding to node " + parentId);
 		parentNode = treeElement.find('li[cslid="' + parentId + '"][macrolink!="true"]');
 		assertEqual(parentNode.length, 1);
 		
@@ -540,7 +520,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 	var createSubTree = function (parentNode, position, jsTreeData) {
 		var newNode;
 
-		console.time("createNode");
 		newNode = treeElement.jstree('create_node', parentNode, position, 
 			{
 				data : jsTreeData.data
@@ -551,8 +530,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			});
 		newNode.attr(jsTreeData.attr);
 
-		console.timeEnd("createNode");
-
 		$.each(jsTreeData.children, function (i, child) {
 			createSubTree(newNode, i, child);
 		});
@@ -562,8 +539,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		var cslId;
 
 		if (range.first >= fromId) {
-			console.log("shifting cslids for range starting " + range.first + " by " + amount);
-
 			range.rootNode.attr("cslid", parseInt(range.rootNode.attr("cslid")) + amount);
 			range.rootNode.find('li[cslid][macroLink!="true"]').each( function () {
 				cslId = parseInt($(this).attr("cslid"));
@@ -611,7 +586,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		range = ranges[thisRangeIndex];
 
 		if (id === range.first) {
-			console.log("deleting range / rootNode");
 			ranges.splice(thisRangeIndex, 1);
 
 			treeElement.jstree("remove", range.rootNode);
@@ -621,14 +595,10 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			assert(node.length > 0);
 			assert(id !== 0);
 
-			console.log("removing node " + id);
 			treeElement.jstree("remove", node);
-
-			console.log("range before: " + range.first + "-" + range.last);
 
 			// shift this range
 			shiftCslIds(range, id + nodesDeleted, -nodesDeleted);
-			console.log("range after: " + range.first + "-" + range.last);
 		}
 
 		verifyTree();
@@ -661,7 +631,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		cslId = treeNode.attr("cslid");
 
 		while (typeof cslId !== "undefined") {
-			console.log("selected node path : " + cslId);
 			selectedNodes.splice(0,0,parseInt(cslId));
 			
 			treeNode = treeNode.parent().parent();

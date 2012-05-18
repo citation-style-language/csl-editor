@@ -170,8 +170,6 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 			row.appendTo(treeView);
 		});
 
-		console.log("creating citation tree");
-
 		$.each(smartTreeSchema, function (index, value) {
 			var tree;
 			treesToLoad++;
