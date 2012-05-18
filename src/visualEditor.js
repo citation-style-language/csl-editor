@@ -403,50 +403,13 @@ CSLEDIT.editorPage = (function () {
 				break;
 			default:
 			CSLEDIT.propertyPanel.setupPanel(
-				$("#elementProperties"), node, dataType, schemaAttributes, nodeChanged);
+				$("#elementProperties"), node, dataType, schemaAttributes);
 		}
 
 		$('span[cslid="' + oldSelectedNode + '"]').css(unHighlightedCss);
 		oldSelectedNode = node.cslId;
 
 		$('span[cslid="' + node.cslId + '"]').css(selectedCss);
-	};
-
-	var nodeChanged = function (node) {
-		var selectedNodeId = viewController.selectedNode(),
-			attributes = [];
-
-		//node = CSLEDIT.data.getNode(selectedNodeId);
-
-		// TODO: assert check that persistent data wasn't changed in another tab, making
-		//       this form data possibly refer to a different node
-
-		// read user data
-		var numAttributes = $('[id^="nodeAttributeLabel"]').length,
-			index,
-			key, value;
-
-		console.time("readingUserInput");
-		for (index = 0; index < numAttributes; index++) {
-			if ($("#nodeAttribute" + index).length > 0) {
-				key = $("#nodeAttributeLabel" + index).html();
-				value = $("#nodeAttribute" + index).val();
-			} else {
-				key = CSLEDIT.propertyPanel.getMultiInput(index).attr;
-				value = CSLEDIT.propertyPanel.getMultiInput(index).input.val();
-
-				console.log("got multi input: " + key + ": " + value);
-			}
-			attributes.push({
-				key : key,
-				value : value,
-				enabled : node.attributes[index].enabled
-			});
-		}
-		console.timeEnd("readingUserInput");
-		node.attributes = attributes;
-
-		CSLEDIT.controller.exec("ammendNode", [selectedNodeId, node]);
 	};
 
 	var reloadPageWithNewStyle = function (newURL) {
@@ -556,8 +519,6 @@ CSLEDIT.editorPage = (function () {
 			});
 
 			setupDropdownMenuHandler(".dropdown a");
-
-			$(".propertyInput").on("change", nodeChanged);
 
 			$("#mainContainer").layout({
 				closable : false,

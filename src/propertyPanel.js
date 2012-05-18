@@ -4,7 +4,8 @@ var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.propertyPanel = (function () {
 	var onChangeTimeout,
-		multiInputs;
+		multiInputs,
+		nodeData;
 
 	var inputAttributeControl = function (
 			index, inputId, labelId, schemaAttribute, controlDisabledAttr, toggleControlText) {
@@ -15,13 +16,39 @@ CSLEDIT.propertyPanel = (function () {
 			'<td><button class="toggleAttrButton" attrIndex="' + index + '">' + toggleControlText + 
 			'</button><\/td>' +	'<\/tr>'
 	};
+	
+	var nodeChanged = function () {
+		var attributes = [];
 
-	var setupPanel = function (panel, nodeData, dataType, schemaAttributes, onChange) {
+		// TODO: assert check that persistent data wasn't changed in another tab, making
+		//       this form data possibly refer to a different node
+
+		// read user data
+		$('[id^="nodeAttributeLabel"]').each( function (index) {
+			var key, value;
+			key = $(this).html();
+			if ($("#nodeAttribute" + index).length > 0) {
+				value = $("#nodeAttribute" + index).val();
+			} else {
+				value = CSLEDIT.propertyPanel.getMultiInput(index).input.val();
+			}
+			attributes.push({
+				key : key,
+				value : value,
+				enabled : nodeData.attributes[index].enabled
+			});
+		});
+		nodeData.attributes = attributes;
+
+		CSLEDIT.controller.exec("ammendNode", [nodeData.cslId, nodeData]);
+	};
+
+	var setupPanel = function (panel, _nodeData, dataType, schemaAttributes) {
 		var index,
 			index2,
 			newAttributes = [],
 			dropdownValues,
-			attributes = nodeData.attributes,
+			attributes = _nodeData.attributes,
 			attribute,
 			schemaAttribute,
 			schemaValues,
@@ -37,6 +64,8 @@ CSLEDIT.propertyPanel = (function () {
 			toggleControlText,
 			values,
 			multiInput;
+
+		nodeData = _nodeData;
 
 		console.log("start setupPanel: " + nodeData.name);
 		console.time("setupPanel");
@@ -153,7 +182,7 @@ CSLEDIT.propertyPanel = (function () {
 					'" class="propertyLabel">' + schemaAttribute + '<\/label><\/td>');
 				if (schemaAttributes[schemaAttribute].list) {
 					multiInput = new CSLEDIT.MultiComboBox(
-							$('<td><\/td>'), dropdownValues, function() {onChange(nodeData);});
+							$('<td><\/td>'), dropdownValues, function() {nodeChanged();});
 					multiInput.val(attribute.value, true);
 					
 					if (!attribute.enabled) {
@@ -221,10 +250,10 @@ CSLEDIT.propertyPanel = (function () {
 	
 		$(".propertyInput").on("input", function () {
 			clearTimeout(onChangeTimeout);
-			onChangeTimeout = setTimeout(function () { onChange(nodeData); }, 500);
+			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 500);
 		});
 
-		$(".propertySelect").on("change", function () { onChange(nodeData); });
+		$(".propertySelect").on("change", function () { nodeChanged(); });
 
 		$('.toggleAttrButton').click( function (buttonEvent) {
 			index = $(buttonEvent.target).attr("attrIndex");
@@ -236,9 +265,9 @@ CSLEDIT.propertyPanel = (function () {
 				nodeData.attributes[index].enabled = true;
 				$("#nodeAttribute" + index).removeAttr("disabled");
 			}
-			setupPanel(panel, nodeData, dataType, schemaAttributes, function () { onChange(nodeData); });
+			setupPanel(panel, nodeData, dataType, schemaAttributes, function () { nodeChanged(); });
 			clearTimeout(onChangeTimeout);
-			onChangeTimeout = setTimeout(function () { onChange(nodeData); }, 10);
+			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 10);
 		});
 		
 		console.timeEnd("setupPanel");
