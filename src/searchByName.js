@@ -3,7 +3,8 @@
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.findByNamePage = (function () {
-	var nameSearchTimeout;
+	var nameSearchTimeout,
+		previousQuery;
 
 	// --- Functions for style name search ---
 	
@@ -25,9 +26,12 @@ CSLEDIT.findByNamePage = (function () {
 			$("#styleNameResult").html("<p>Query too short<\/p>");
 			return;
 		}
-		
-		console.time("searchByStyleName");
 
+		if (searchQuery === previousQuery) {
+			return;
+		}
+		previousQuery = searchQuery;
+		
 		// dumb search, just iterates through all the names
 		for (styleId in exampleCitations.styleTitleFromId) {
 			if (exampleCitations.styleTitleFromId.hasOwnProperty(styleId)) {
@@ -51,8 +55,6 @@ CSLEDIT.findByNamePage = (function () {
 		}
 
 		CSLEDIT.searchResults.displaySearchResults(result, $("#styleNameResult"));
-
-		console.timeEnd("searchByStyleName");
 	};
 
 	return {
@@ -65,13 +67,11 @@ CSLEDIT.findByNamePage = (function () {
 				
 			// instant search after typing enter
 			$("#styleNameQuery").on("change", function(){
-				console.log("on change");
 				searchForStyleName();
 			});
 
 			// instant search after clicking button
 			$("#searchButton").on("click", function(){
-				console.log("button click");
 				searchForStyleName();
 			});
 
