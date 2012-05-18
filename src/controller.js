@@ -89,7 +89,8 @@ CSLEDIT.controller = (function () {
 	return {
 		addSubscriber : addSubscriber,
 		subscribeToAllCommands : subscribeToAllCommands,
-		exec : exec
+		exec : exec,
+		commandHistory : commandHistory
 	};
 }());
 
