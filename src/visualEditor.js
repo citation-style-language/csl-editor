@@ -30,25 +30,23 @@ CSLEDIT.editorPage = (function () {
 		}
 	}
 
-	var removeFromHoveredNodeStack = function (nodeIndex) {
-		// pop all nodes up to and including the target node
+	var removeFromHoveredNodeStack = function (removeAll) {
+		// pop one node, or all nodes, from hoveredNodeStack
 		var poppedNode;
 
 		if (hoveredNodeStack.length > 0) {
 			poppedNode = hoveredNodeStack.pop();
 			unHighlightNode(poppedNode);
 
-			if (poppedNode == nodeIndex) {
-				return;
+			if (removeAll) {
+				removeFromHoveredNodeStack (removeAll);
 			}
-			removeFromHoveredNodeStack (nodeIndex);
 		}
 	}
 
 	var highlightNode = function (nodeStack) {
 		var cslId = nodeStack[nodeStack.length - 1];
 
-		console.time("highlight node");
 		highlightOutput(cslId);
 
 		// undo previous highlighting
@@ -56,8 +54,7 @@ CSLEDIT.editorPage = (function () {
 		highlightTimeout = setTimeout(function () {
 			unHighlightTree();
 			highlightTree(nodeStack, null, 0);
-		}, 50);
-		console.timeEnd("highlight node");
+		}, 100);
 	};
 
 	var highlightOutput = function (cslId)
@@ -114,8 +111,6 @@ CSLEDIT.editorPage = (function () {
 	var highlightTree = function (nodeStack, node, depth) {
 		var nodeIndex, node, parentNode, parentIndex, highlightedNode;
 
-		console.time("highlightTree");
-
 		if (node === null) {
 			nodeIndex = nodeStack.pop();
 			if (typeof nodeIndex === "undefined") {
@@ -158,7 +153,6 @@ CSLEDIT.editorPage = (function () {
 			// (e.g. if a macro was called)
 			highlightTree(nodeStack, null, depth);
 		}
-		console.timeEnd("highlightTree");
 	};
 
 	var unHighlightNode = function (nodeIndex) {
@@ -172,13 +166,13 @@ CSLEDIT.editorPage = (function () {
 		}
 	};
 
-	var setupSyntaxHighlightForNode = function (cslId) {
-		$('span[cslid="' + cslId + '"]').hover(
+	var setupSyntaxHighlightForNode = function () {
+		$('span[cslid]').hover(
 			function (event) {
 				var target = $(event.target).closest("span[cslid]");
 				
 				// remove all
-				removeFromHoveredNodeStack(-1);
+				removeFromHoveredNodeStack(true);
 
 				// populate hovered node stack
 				addToHoveredNodeStack(target);
@@ -191,7 +185,7 @@ CSLEDIT.editorPage = (function () {
 				}
 			},
 			function () {
-				removeFromHoveredNodeStack(cslId);
+				removeFromHoveredNodeStack();
 				
 				if (hoveredNodeStack.length > 0) {
 					highlightNode(hoveredNodeStack.slice());
@@ -202,17 +196,23 @@ CSLEDIT.editorPage = (function () {
 		);
 
 		// set up click handling
-		$('span[cslid="' + cslId + '"]').click( function () {
+		$('span[cslid]').click( function () {
+			var target = $(event.target).closest("span[cslid]"),
+				cslId = parseInt(target.attr('cslId'));
 			reverseSelectNode(cslId);
 		});
 
 		// set up hovering over tree nodes
-		$('li[cslid="' + cslId + '"] > a').unbind('mouseenter mouseleave');
-		$('li[cslid="' + cslId + '"] > a').hover(
-			function () {
+		$('li[cslid] > a').unbind('mouseenter mouseleave');
+		$('li[cslid] > a').hover(
+			function (event) {
+				var target = $(event.target).closest("li[cslid]"),
+					cslId = parseInt(target.attr('cslId'));
 				highlightOutput(cslId);
 			},
-			function () {
+			function (event) {
+				var target = $(event.target).closest("li[cslid]"),
+					cslId = parseInt(target.attr('cslId'));
 				unHighlightNode(cslId);
 			}
 		);
@@ -225,10 +225,7 @@ CSLEDIT.editorPage = (function () {
 		hoveredNodeStack.length = 0;
 		selectedCslId = -1;
 
-		// syntax highlighting
-		for (var index = 0; index < numCslNodes; index++) {
-			setupSyntaxHighlightForNode(index);
-		}
+		setupSyntaxHighlightForNode();
 	};
 
 	var createTreeView = function () {
