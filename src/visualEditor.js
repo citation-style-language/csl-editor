@@ -13,7 +13,8 @@ CSLEDIT.editorPage = (function () {
 		highlightedTreeNodes = $(),
 		selectedCslId = -1,
 		viewController,
-		nodePathView;
+		nodePathView,
+		highlightTimeout;
 
 	var addToHoveredNodeStack = function (target) {
 		// build stack 'backwards' from the inner node outwards
@@ -47,11 +48,16 @@ CSLEDIT.editorPage = (function () {
 	var highlightNode = function (nodeStack) {
 		var cslId = nodeStack[nodeStack.length - 1];
 
+		console.time("highlight node");
 		highlightOutput(cslId);
 
 		// undo previous highlighting
-		unHighlightTree();
-		highlightTree(nodeStack, null, 0);
+		clearTimeout(highlightTimeout);
+		highlightTimeout = setTimeout(function () {
+			unHighlightTree();
+			highlightTree(nodeStack, null, 0);
+		}, 50);
+		console.timeEnd("highlight node");
 	};
 
 	var highlightOutput = function (cslId)
@@ -108,6 +114,8 @@ CSLEDIT.editorPage = (function () {
 	var highlightTree = function (nodeStack, node, depth) {
 		var nodeIndex, node, parentNode, parentIndex, highlightedNode;
 
+		console.time("highlightTree");
+
 		if (node === null) {
 			nodeIndex = nodeStack.pop();
 			if (typeof nodeIndex === "undefined") {
@@ -150,6 +158,7 @@ CSLEDIT.editorPage = (function () {
 			// (e.g. if a macro was called)
 			highlightTree(nodeStack, null, depth);
 		}
+		console.timeEnd("highlightTree");
 	};
 
 	var unHighlightNode = function (nodeIndex) {
