@@ -15,26 +15,6 @@ CSLEDIT.editorPage = (function () {
 		viewController,
 		nodePathView;
 
-	var normalisedColor = function (color) {
-		return $('<pre>').css({"color" : color}).css("color");
-	};
-
-	highlightedCss = {
-			"color" : normalisedColor("black"),
-			"background-color" : normalisedColor("#bbffbb"),
-			"cursor" : "pointer"
-		};
-	selectedCss = {
-			"color" : normalisedColor("white"),
-			"background-color" : normalisedColor("#009900"),
-			"cursor" : "default"
-		};
-	unHighlightedCss = {
-			"color" : "",
-			"background-color" : "",
-			"cursor" : "default"
-		};
-
 	var addToHoveredNodeStack = function (target) {
 		// build stack 'backwards' from the inner node outwards
 		var parentNode;
@@ -77,11 +57,12 @@ CSLEDIT.editorPage = (function () {
 	var highlightOutput = function (cslId)
 	{
 		var node = $('span[cslid="' + cslId + '"]');
-		if (node.css("background-color") == selectedCss["background-color"])
+
+		if (node.hasClass("selected"))
 		{
 			// leave alone - selection takes precedence
 		} else {
-			node.css(highlightedCss);
+			node.addClass("highlighted");
 		}
 	};
 
@@ -108,8 +89,7 @@ CSLEDIT.editorPage = (function () {
 	var unHighlightTree = function () {
 		var node;
 
-		highlightedTreeNodes.children('a').css(unHighlightedCss);
-		highlightedTreeNodes.children('a').css("cursor", "");
+		highlightedTreeNodes.children('a').removeClass("highlighted");
 	};
 
 	var unHighlightIfNotDescendentOf = function (instanceNode) {
@@ -118,8 +98,7 @@ CSLEDIT.editorPage = (function () {
 		$.each(highlightedTreeNodes, function () {
 			var $this = $(this);
 			if (instanceNode.find($this).length === 0) {
-				$this.children('a').css(unHighlightedCss);
-				$this.children('a').css("cursor", "");
+				$this.children('a').removeClass("highlighted");
 				highlightedTreeNodes = highlightedTreeNodes.not($this);
 			}
 		});
@@ -143,8 +122,7 @@ CSLEDIT.editorPage = (function () {
 		if (node.is('li')) {
 			highlightedNode = node.children('a');
 			highlightedTreeNodes = highlightedTreeNodes.add(node);
-			highlightedNode.css(highlightedCss);
-			highlightedNode.css("cursor", "");
+			highlightedNode.addClass("highlighted");
 		}
 
 		parentNode = node.parent().closest("li[cslid]");
@@ -177,11 +155,11 @@ CSLEDIT.editorPage = (function () {
 	var unHighlightNode = function (nodeIndex) {
 		var	node = $('span[cslid="' + nodeIndex + '"]');
 
-		if (node.css("background-color") == selectedCss["background-color"])
+		if (node.hasClass("selected"))
 		{
 			// leave alone - selection takes precedence
 		} else {
-			node.css(unHighlightedCss);
+			node.removeClass("highlighted");
 		}
 	};
 
@@ -406,10 +384,12 @@ CSLEDIT.editorPage = (function () {
 				$("#elementProperties"), node, dataType, schemaAttributes);
 		}
 
-		$('span[cslid="' + oldSelectedNode + '"]').css(unHighlightedCss);
+		$('span[cslid="' + oldSelectedNode + '"]').removeClass("highlighted");
+		$('span[cslid="' + oldSelectedNode + '"]').removeClass("selected");
 		oldSelectedNode = node.cslId;
 
-		$('span[cslid="' + node.cslId + '"]').css(selectedCss);
+		$('span[cslid="' + node.cslId + '"]').removeClass("highlighted");
+		$('span[cslid="' + node.cslId + '"]').addClass("selected");
 	};
 
 	var reloadPageWithNewStyle = function (newURL) {

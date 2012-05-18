@@ -173,3 +173,24 @@ z-index: 30 !important;
 	background-color:transparent;
 	background-position: 0px, 0px;
 }
+
+/* Highlighting */
+.selected {
+	color : white;
+	background-color : #009900;
+	cursor : default;
+}
+.highlighted {
+	color : black;
+	background-color : #bbffbb;
+	cursor : pointer;
+}
+
+#elementPropertyPanel h3 {
+	font-weight: normal;
+}
+#elementPropertyPanel h3 span.selected {
+	color: black;
+	background-color: transparent;
+	font-weight: bold;
+}
