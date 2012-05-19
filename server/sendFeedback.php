@@ -7,7 +7,7 @@ if (file_exists('../server/feedbackEmail.txt')) {
 	$message = $_REQUEST['message'];
 	$fromEmail = $_REQUEST['email'];
 
-	//mail($toEmail, $subject, $message, "From:" . $fromEmail);
+	mail($toEmail, $subject, $message, "From:" . $fromEmail);
 	echo "Thanks for your feedback!";
 } else {
 	echo "No recipient email address. Feedback not sent.";
