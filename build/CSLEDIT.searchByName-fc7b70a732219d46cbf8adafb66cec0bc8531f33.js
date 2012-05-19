@@ -1,0 +1,162 @@
+// CSLEDIT.searchByName built from commit $gitCommit
+var CSLEDIT = CSLEDIT || {};
+
+CSLEDIT.searchResults = {
+	displaySearchResults : function (styles, outputNode) {
+		var index,
+			outputList = [],
+			masterStyleSuffix = "",
+			style,
+			citation,
+			bibliography;
+
+		for (index = 0; index < Math.min(styles.length, 20); index++)
+		{
+			style = styles[index];
+			if (style.masterId != style.styleId)
+			{
+				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
+							exampleCitations.styleTitleFromId[style.masterId] + '<\/a>)';
+			} else {
+				masterStyleSuffix = '';
+			}
+
+			citation = exampleCitations.exampleCitationsFromMasterId[style.masterId].formattedCitations[0];
+			bibliography = exampleCitations.exampleCitationsFromMasterId[style.masterId].formattedBibliography;
+			
+			/* Disable pretty diffs due to bug handling formatting tags (e.g. bold, italic)
+			if (typeof style.userCitation !== "undefined" &&
+				style.userCitation !== "" &&
+				citation !== "") {
+				citation = CSLEDIT.diff.prettyHtmlDiff(style.userCitation, citation);
+			}
+
+			if (typeof style.userBibliography !== "undefined" &&
+				style.userBibliography !== "" &&
+				bibliography !== "") {
+				bibliography = CSLEDIT.diff.prettyHtmlDiff(style.userBibliography, bibliography);
+			}
+			*/
+
+			outputList.push('<a href="' + style.styleId + '">' +
+				exampleCitations.styleTitleFromId[style.styleId] + "<\/a>"
+				+ masterStyleSuffix + "<br \/>" +
+				'<table>' +
+				'<tr><td nowrap="nowrap"><span class="faint">Inline citaiton<\/span>' +
+				'<\/td><td>' +
+				citation + '<\/td><\/tr>' +
+				'<tr><td nowrap="nowrap"><span class="faint">Bibliography<\/span><\/td><td>' +
+				bibliography + "<\/td><\/tr>" +
+				'<tr><td><\/td><td><a href="#" class="editStyleButton" styleURL="' +
+				style.styleId + '">Edit style<\/a><\/td><\/tr>' +
+				'<\/table>');
+		}
+		
+		outputNode.html(
+			'<p>Displaying ' + outputList.length + ' results:<\/p>' +
+				outputList.join("<p><p>")
+		);
+
+		$("a").click( function (event) {
+			var styleURL = $(event.target).attr("styleURL");
+
+			styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
+
+			CSLEDIT.data.loadStyleFromURL(styleURL, function () {
+				window.location.href =
+					window.location.protocol + "//" + 
+					window.location.host + "/csl/visualEditor";
+			});
+		});
+	}
+}
+"use strict";
+
+var CSLEDIT = CSLEDIT || {};
+
+CSLEDIT.findByNamePage = (function () {
+	var nameSearchTimeout,
+		previousQuery;
+
+	// --- Functions for style name search ---
+	
+	var searchForStyleName = function () {
+		var searchQuery = $("#styleNameQuery").val(),
+			searchQueryLower = searchQuery.toLowerCase(),
+			result = [],
+			styleId,
+			styleName,
+			masterId,
+			masterStyleName;
+
+		if (searchQuery.length === 0) {
+			$("#styleNameResult").html("");
+			return;
+		}
+
+		if (searchQuery.length < 3) {
+			$("#styleNameResult").html("<p>Query too short<\/p>");
+			return;
+		}
+
+		if (searchQuery === previousQuery) {
+			return;
+		}
+		previousQuery = searchQuery;
+		
+		// dumb search, just iterates through all the names
+		for (styleId in exampleCitations.styleTitleFromId) {
+			if (exampleCitations.styleTitleFromId.hasOwnProperty(styleId)) {
+				styleName = exampleCitations.styleTitleFromId[styleId];
+
+				if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
+					styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
+					masterId = exampleCitations.masterIdFromId[styleId];
+					if (masterId !== styleId) {
+						masterStyleName = ' (same as <a href="' + masterId + '">' +
+							exampleCitations.styleTitleFromId[masterId] + '<\/a>)';
+					} else {
+						masterStyleName = "";
+					}
+					result.push({
+							styleId : styleId,
+							masterId : masterId
+						});
+				}
+			}
+		}
+
+		CSLEDIT.searchResults.displaySearchResults(result, $("#styleNameResult"));
+	};
+
+	return {
+		init : function () {
+			// delayed search after typing
+			$("#styleNameQuery").on("input", function(){
+				clearTimeout(nameSearchTimeout);
+				nameSearchTimeout = setTimeout(searchForStyleName, 500);
+			});
+				
+			// instant search after typing enter
+			$("#styleNameQuery").on("change", function(){
+				searchForStyleName();
+			});
+
+			// instant search after clicking button
+			$("#searchButton").on("click", function(){
+				searchForStyleName();
+			});
+
+
+			$("#styleNameQuery").focus();
+		
+			searchForStyleName();
+		}
+	};
+}());
+
+$(document).ready(function () {
+	CSLEDIT.findByNamePage.init();		
+});
+
+

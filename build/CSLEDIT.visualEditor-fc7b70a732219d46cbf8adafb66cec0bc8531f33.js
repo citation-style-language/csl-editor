@@ -1,3 +1,4 @@
+// CSLEDIT.visualEditor built from commit $gitCommit
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.citationEngine = (function () {

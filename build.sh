@@ -5,29 +5,51 @@ echo "gitCommit = $gitCommit"
 
 mkdir build
 
-declare outputFile="build/CSLEDIT.visualEditor-$gitCommit.js"
-echo '// CSLEDIT.visualEditor built from commit $gitCommit' > $outputFile
+declare visualEditor="build/CSLEDIT.visualEditor-$gitCommit.js"
+echo '// CSLEDIT.visualEditor built from commit $gitCommit' > $visualEditor
 
-cat "src/citationEngine.js" >> $outputFile
-cat "src/exampleData.js" >> $outputFile
-cat "src/diff.js" >> $outputFile
-cat "src/debug.js" >> $outputFile
-cat "src/cslParser.js" >> $outputFile
-cat "src/Iterator.js" >> $outputFile
-cat "src/cslNode.js" >> $outputFile
-cat "src/cslData.js" >> $outputFile
-cat "src/schema.js" >> $outputFile
+cat "src/citationEngine.js" >> $visualEditor
+cat "src/exampleData.js" >> $visualEditor
+cat "src/diff.js" >> $visualEditor
+cat "src/debug.js" >> $visualEditor
+cat "src/cslParser.js" >> $visualEditor
+cat "src/Iterator.js" >> $visualEditor
+cat "src/cslNode.js" >> $visualEditor
+cat "src/cslData.js" >> $visualEditor
+cat "src/schema.js" >> $visualEditor
 
-cat "src/feedback.js" >> $outputFile
-cat "src/editReferences.js" >> $outputFile
-cat "src/NodePathView.js" >> $outputFile
-cat "src/MultiComboBox.js" >> $outputFile
-cat "src/propertyPanel.js" >> $outputFile
-cat "src/sortPropertyPanel.js" >> $outputFile
-cat "src/infoPropertyPanel.js" >> $outputFile
-cat "src/editNodeButton.js" >> $outputFile
-cat "src/smartTree.js" >> $outputFile
-cat "src/Titlebar.js" >> $outputFile
-cat "src/ViewController.js" >> $outputFile
-cat "src/controller.js" >> $outputFile
-cat "src/visualEditor.js" >> $outputFile
+cat "src/feedback.js" >> $visualEditor
+cat "src/editReferences.js" >> $visualEditor
+cat "src/NodePathView.js" >> $visualEditor
+cat "src/MultiComboBox.js" >> $visualEditor
+cat "src/propertyPanel.js" >> $visualEditor
+cat "src/sortPropertyPanel.js" >> $visualEditor
+cat "src/infoPropertyPanel.js" >> $visualEditor
+cat "src/editNodeButton.js" >> $visualEditor
+cat "src/smartTree.js" >> $visualEditor
+cat "src/Titlebar.js" >> $visualEditor
+cat "src/ViewController.js" >> $visualEditor
+cat "src/controller.js" >> $visualEditor
+cat "src/visualEditor.js" >> $visualEditor
+
+declare searchByExample="build/CSLEDIT.searchByExample-$gitCommit.js"
+echo '// CSLEDIT.searchByExample built from commit $gitCommit' > $searchByExample
+
+cat "src/xmlUtility.js" >> $searchByExample
+cat "src/citationEngine.js" >> $searchByExample
+cat "server/config.js" >> $searchByExample
+cat "generated/exampleCitationsEnc.js" >> $searchByExample
+
+cat "src/debug.js" >> $searchByExample
+cat "src/diff.js" >> $searchByExample
+cat "src/cslParser.js" >> $searchByExample
+cat "src/cslData.js" >> $searchByExample
+cat "src/searchResults.js" >> $searchByExample
+cat "src/searchByExample.js" >> $searchByExample
+cat "src/analytics.js" >> $searchByExample
+
+declare searchByName="build/CSLEDIT.searchByName-$gitCommit.js"
+echo '// CSLEDIT.searchByName built from commit $gitCommit' > $searchByName
+
+cat "src/searchResults.js" >> $searchByName
+cat "src/searchByName.js" >> $searchByName

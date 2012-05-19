@@ -25,7 +25,7 @@
 	<script type="text/javascript" src="../external/jquery.scrollTo-1.4.2-min.js"></script>
 	<script type="text/javascript" src="../external/jstree/jquery.jstree-patch1.js"></script>
 
-	<script type="text/javascript" src="../build/CSLEDIT.visualEditor-62cdc733b862bb0f4350dd7b37126dc0a71d4165.js"></script>
+	<script type="text/javascript" src="../build/CSLEDIT.visualEditor-fc7b70a732219d46cbf8adafb66cec0bc8531f33.js"></script>
 
 	<link type="text/css" rel="stylesheet" href="../css/dropdown.css" />
 

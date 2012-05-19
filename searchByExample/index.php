@@ -17,20 +17,11 @@
 	<script type="text/javascript" src="../external/citeproc/loadsys.js"></script>
 	<script type="text/javascript" src="../external/citeproc/runcites.js"></script>
 
-	<script type="text/javascript" src="../src/xmlUtility.js"></script>
-	<script type="text/javascript" src="../src/citationEngine.js"></script>
-	<script type="text/javascript" src="../server/config.js"></script>
-	<script type="text/javascript" src="../generated/exampleCitationsEnc.js"></script>
-
 	<script type="text/javascript" src="../external/cleditor/jquery.cleditor.js"></script>
 	<link rel="stylesheet" type="text/css" href="../external/cleditor/jquery.cleditor.css">
 
-	<script type="text/javascript" src="../src/debug.js"></script>
-	<script type="text/javascript" src="../src/diff.js"></script>
-	<script type="text/javascript" src="../src/cslParser.js"></script>
-	<script type="text/javascript" src="../src/cslData.js"></script>
-	<script type="text/javascript" src="../src/searchResults.js"></script>
-	<script type="text/javascript" src="../src/searchByExample.js"></script>
+	<script type="text/javascript" src="../build/CSLEDIT.searchByExample-fc7b70a732219d46cbf8adafb66cec0bc8531f33.js"></script>
+
 	<script type="text/javascript" src="../src/analytics.js"></script>
 	
 	<link rel="stylesheet" href="../css/base.css" />
