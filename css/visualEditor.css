@@ -194,3 +194,18 @@ z-index: 30 !important;
 	background-color: transparent;
 	font-weight: bold;
 }
+div#feedbackPanel {
+	padding: 8px;
+}
+
+div#feedbackPanel h3,
+div#feedbackPanel input {
+	margin-bottom: 6px;
+	width: 100%;
+}
+div#feedbackPanel textarea {
+	margin-bottom: 6px;
+	width: 100%;
+	height: 100px;
+}
+

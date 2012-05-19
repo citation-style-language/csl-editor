@@ -12,6 +12,8 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 2. Java runtime (doesn't have to be on server, just for pre-processing)
 
+3. Mail server (only for sending feedback emails)
+
 ### Instructions
 
 1. Checkout repo into directory that apache will read when receiving GET http://hostname/csl/ requests (e.g. on my server it's /var/www/steveridout.com/public\_html/csl).

@@ -35,6 +35,7 @@
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 
+	<script type="text/javascript" src="../src/feedback.js"></script>
 	<script type="text/javascript" src="../src/editReferences.js"></script>
 	<script type="text/javascript" src="../src/NodePathView.js"></script>
 	<script type="text/javascript" src="../src/MultiComboBox.js"></script>
@@ -102,6 +103,20 @@
 			<li><a href="/csl/searchByName">Search for Style by Name</a>
 			</li>
 			<li><a href="/csl/searchByExample">Search for Style by Example</a>
+			</li>
+		</ul>
+	</li>
+	<li>
+		<a href="#">Feedback</a>
+		<ul class="sub_menu">
+			<li>
+				<div id="feedbackPanel">
+					<h3>What do you think?</h3>
+					<textarea class="message" placeholder="Enter your bug report or any other feedback here" ></textarea><br />
+					Your email: (if you'd like a reply)<br />
+					<input class="email" type="text" placeholder="Email address"/><br />
+					<input type="submit" value="Submit" />
+				</div>
 			</li>
 		</ul>
 	</li>
