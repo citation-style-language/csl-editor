@@ -53,3 +53,15 @@ echo '// CSLEDIT.searchByName built from commit $gitCommit' > $searchByName
 
 cat "src/searchResults.js" >> $searchByName
 cat "src/searchByName.js" >> $searchByName
+
+declare codeEditor="build/CSLEDIT.codeEditor-$gitCommit.js"
+echo '// CSLEDIT.codeEditor built from commit $gitCommit' > $codeEditor
+
+cat "src/debug.js" >> $codeEditor
+cat "src/citationEngine.js" >> $codeEditor
+cat "src/exampleData.js" >> $codeEditor
+cat "src/diff.js" >> $codeEditor
+cat "src/cslParser.js" >> $codeEditor
+cat "src/cslData.js" >> $codeEditor
+cat "src/codeEditor.js" >> $codeEditor
+

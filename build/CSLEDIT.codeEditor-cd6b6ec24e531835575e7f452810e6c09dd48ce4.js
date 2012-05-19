@@ -1,3 +1,245 @@
+// CSLEDIT.codeEditor built from commit $gitCommit
+
+var assertEqual = function (actual, expected, place) {
+	if (actual !== expected) {
+		throw Error("assert fail: " + place + "\n" +
+			actual + " !== " + expected);
+	}
+};
+
+var assert = function (assertion, place) {
+	if (!assertion) {
+		throw Error("assert fail: " + place);
+	}
+};
+
+var CSLEDIT = CSLEDIT || {};
+
+CSLEDIT.citationEngine = (function () {
+	var oldFormattedCitation = "",
+		newFormattedCitation = "",
+		oldFormattedBibliography = "",
+		newFormattedBibliography = "",
+		diffTimeout,
+		dmp = null; // for diff_match_patch object
+
+	var stripTags = function (html, tag) {
+		var stripRegExp = new RegExp("<" + tag + ".*?>|<\/\s*" + tag + "\s*?\>", "g");
+
+		// creating new string because of bug where some html from generateExampleCitations.js
+		// was type object instead of string and didn't have the replace() function
+		var stripped = new String(html);
+		stripped = stripped.replace(stripRegExp, "");
+		return stripped;
+	};
+
+	var formatCitations = function (style, documents, citationClusters, taggedOutput) {
+		// TODO: this shouldn't be a global
+		jsonDocuments = documents;
+
+		var result = { "statusMessage":"", "formattedCitations":[], "formattedBibliography": [] };
+		result.statusMessage = "";
+		try
+		{
+			var sys = new Sys(abbreviations);
+			var citeproc = new CSL.Engine(sys, style);
+		}
+		catch(err)
+		{
+			result.statusMessage = "Citeproc initialisation exception: " + err;
+			return result;
+		}
+		
+		var inLineCitations = "";
+		var inLineCitationArray = new Array();
+		
+		for (var cluster=0; cluster<citationClusters.length; cluster++)
+		{
+			try
+			{
+				var citations = citeproc.appendCitationCluster(citationClusters[cluster],false);
+			}
+			catch(err)
+			{
+				result.statusMessage = "Citeproc exception: " + err;
+				return result;
+			}
+			
+			for (var i = 0; i < citations.length; i++)
+			{
+				var pos = citations[i][0];
+				
+				if (inLineCitations != "")
+				{
+					inLineCitations += "<br>";
+				}
+				
+				if (taggedOutput !== true) {
+					citations[i][1] = stripTags(citations[i][1], "span");
+				}
+
+				inLineCitations += citations[i][1];
+				inLineCitationArray.push(citations[i][1]);
+			}
+		}
+		result.formattedCitations = inLineCitationArray;
+		
+		var makeBibliographyArgument;
+		
+		var enumerateCitations = true;
+		if (enumerateCitations == true) {
+			makeBibliographyArgument = undefined;
+		}
+		else {
+			makeBibliographyArgument = "citation-number";
+		}
+		
+		try
+		{
+			var bibliography = citeproc.makeBibliography(makeBibliographyArgument);
+		}
+		catch(err)
+		{
+			result.statusMessage = "Citeproc exception: " + err;
+			return result;
+		}
+
+		var hangingindent = false;
+		var has_bibliography = (bibliography !== false);
+
+		if (has_bibliography)
+		{
+			hangingindent = (bibliography[0].hangingindent != 0 && "undefined" !== typeof(bibliography[0].hangingindent));
+			bibliography = bibliography[1];
+		}
+		else
+		{
+			bibliography = [[(citations[0][1])]];
+		}
+
+		if (taggedOutput !== true) {
+			var index;
+			for (index = 0; index < bibliography.length; index++) {
+				bibliography[index] = stripTags(bibliography[index], "span");
+			}
+		}
+
+		result.formattedBibliography = bibliography;
+		return result;
+	};
+
+	var runCiteprocAndDisplayOutput = function (
+			statusOut, exampleOut, citationsOut, bibliographyOut, callback,
+			citationNodeCslId, bibliographyNodeCslId) {
+
+		console.time("runCiteprocAndDisplayOutput");
+
+		var style = CSLEDIT.data.getCslCode(),
+			inLineCitations = "",
+			citations = [],
+			formattedResult,
+			citationTagStart = "<p>",
+			citationTagEnd = "<\/p>",
+			bibliographyTagStart = "<p>",
+			bibliographyTagEnd = "<\/p>",
+			startTime;
+
+		statusOut.html("<i>Re-formatting citations...</i>");
+	
+		console.time("formatCitations");
+
+		formattedResult = formatCitations(
+			style, cslEditorExampleData.jsonDocuments, cslEditorExampleData.citationsItems, true);
+		
+		console.timeEnd("formatCitations");
+
+		statusOut.html(formattedResult.statusMessage);
+
+		// add syntax highlighting at highest level
+		if (typeof citationNodeCslId !== "undefined") {
+			citationTagStart = '<p><span cslid="' + citationNodeCslId + '">';
+		    citationTagEnd = '<\/span><\/p>';
+		}
+		if (typeof bibliographyNodeCslId !== "undefined") {
+			bibliographyTagStart = '<p><span cslid="' + bibliographyNodeCslId + '">';
+			bibliographyTagEnd = '<\/span><\/p>';
+		}
+
+		oldFormattedCitation = newFormattedCitation;
+		newFormattedCitation = citationTagStart;
+		newFormattedCitation += formattedResult.formattedCitations.join(
+			citationTagEnd + citationTagStart);
+		newFormattedCitation += citationTagEnd;
+
+		oldFormattedBibliography = newFormattedBibliography;
+		newFormattedBibliography = bibliographyTagStart;
+		newFormattedBibliography += formattedResult.formattedBibliography.join(
+			bibliographyTagEnd + bibliographyTagStart);
+		newFormattedBibliography += bibliographyTagEnd;
+
+		if (newFormattedBibliography.indexOf("<second-field-align>") > -1) {
+			exampleOut.css({
+				// TODO: don't change the whole output panel CSS, just the relevant lines
+				"padding-left" : "2.5em",
+				"text-indent" : "-2em"
+			});
+		} else {
+			exampleOut.css({
+				"padding-left" : "0.5em",
+				"text-indent" : "0"
+			});
+		}
+
+		// lazy instantiation of diff_match_patch
+		if (dmp === null) {
+			dmp = new diff_match_patch();
+		}
+
+		var citationDiffs =
+			dmp.diff_main(stripTags(oldFormattedCitation, "span"), stripTags(newFormattedCitation, "span"));
+		dmp.diff_cleanupSemantic(citationDiffs);
+		var diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(citationDiffs));
+
+		bibliographyDiffs =
+			dmp.diff_main(stripTags(oldFormattedBibliography, "span"), stripTags(newFormattedBibliography, "span"));
+		dmp.diff_cleanupSemantic(bibliographyDiffs);
+		var diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(bibliographyDiffs));
+
+		if (dmp.diff_levenshtein(citationDiffs) === 0 && dmp.diff_levenshtein(bibliographyDiffs) === 0) {
+			citationsOut.html(newFormattedCitation);
+			bibliographyOut.html(newFormattedBibliography);
+			if (typeof callback !== "undefined") {
+				callback();
+			}
+
+		} else {
+			// display the diff
+			citationsOut.html(diffFormattedCitation);
+			bibliographyOut.html(diffFormattedBibliography);
+
+			// display the new version in 1000ms
+			clearTimeout(diffTimeout);
+			diffTimeout = setTimeout(
+				function () {
+					citationsOut.html(newFormattedCitation);
+					bibliographyOut.html(newFormattedBibliography);
+					if (typeof callback !== "undefined") {
+						callback();
+					}
+				},
+			1000);
+		}
+		
+		console.timeEnd("runCiteprocAndDisplayOutput");
+	}
+
+	// Return public members:
+	return {
+		formatCitations : formatCitations,
+		runCiteprocAndDisplayOutput : runCiteprocAndDisplayOutput
+	};
+
+}());
 var cslEditorExampleData = {};
 
 cslEditorExampleData.citationsItems = [
@@ -1284,3 +1526,750 @@ cslEditorExampleData.jsonDocuments = {
 	},
 }
 
+"use strict";
+
+var CSLEDIT = CSLEDIT || {};
+
+CSLEDIT.diff = {
+	dmp : new diff_match_patch(),
+
+	/**
+	 * Modified version of the diff-match-patch function which
+	 * doesn't escape the original HTML tags
+	 * (There's a risk now of mangling the tags, but it's a risk I'm willing to take)
+	 *  
+	 * Convert a diff array into a pretty HTML report.
+	 * @param {!Array.<!diff_match_patch.Diff>} diffs Array of diff tuples.
+	 * @return {string} HTML representation.
+	 */
+	prettyHtml : function(diffs) {
+	  var html = [];
+	  var pattern_amp = /&/g;
+	  var pattern_lt = /</g;
+	  var pattern_gt = />/g;
+	  var pattern_para = /\n/g;
+	  var x = 0;
+
+	  for (x = 0; x < diffs.length; x++) {
+		var op = diffs[x][0];    // Operation (insert, delete, equal)
+		var data = diffs[x][1];  // Text of change.
+		var text = data;//.replace(pattern_amp, '&amp;').replace(pattern_lt, '&lt;').replace(pattern_gt, '&gt;').replace(pattern_para, '&para;<br>');
+		switch (op) {
+		  case DIFF_INSERT:
+			html[x] = '<ins style="background:#e6ffe6;">' + text + '</ins>';
+			break;
+		  case DIFF_DELETE:
+			html[x] = '<del style="background:#ffe6e6;">' + text + '</del>';
+			break;
+		  case DIFF_EQUAL:
+			html[x] = '<span>' + text + '</span>';
+			break;
+		}
+	  }
+	  return html.join('');
+	},
+
+	prettyHtmlDiff : function (oldString, newString) {
+		var diffs = this.dmp.diff_main(oldString, newString);
+		this.dmp.diff_cleanupSemantic(diffs);
+		return this.prettyHtml(diffs);
+	},
+
+	customEditDistance : function (oldString, newString) {
+		var diffs = this.dmp.diff_main(oldString, newString);
+		return this.weightedLevenshtein(diffs);
+	},
+
+	/**
+	 * Like levenshtein but gives much more weight to deletions.
+	 * 
+	 * Generally when searching you want everything you've typed to appear
+	 * in the results.
+	 */
+	weightedLevenshtein : function (diffs) {
+	  var levenshtein = 0;
+	  var insertions = 0;
+	  var deletions = 0;
+
+	  var deletionWeight = 20;
+
+	  for (var x = 0; x < diffs.length; x++) {
+		var op = diffs[x][0];
+		var data = diffs[x][1];
+		switch (op) {
+		  case DIFF_INSERT:
+			insertions += data.length;
+			break;
+		  case DIFF_DELETE:
+			deletions += data.length;
+			break;
+		  case DIFF_EQUAL:
+			// A deletion and an insertion is one substitution.
+			levenshtein += Math.max(insertions, deletions*deletionWeight);
+			insertions = 0;
+			deletions = 0;
+			break;
+		}
+	  }
+	  levenshtein += Math.max(insertions, deletions*deletionWeight);
+	  return levenshtein;
+	}
+};
+"use strict";
+
+var CSLEDIT = CSLEDIT || {};
+
+CSLEDIT.cslParser = (function() {
+	// Private functions:
+	var jsonNodeFromXml = function (node, nodeIndex) {
+		var children = [],
+			index,
+			jsonData,
+			childNode,
+			textValue,
+			TEXT_NODE,
+			thisNodeIndex = nodeIndex.index;
+
+		TEXT_NODE = 3;
+		
+		for (index = 0; index < node.childNodes.length; index++) {
+			childNode = node.childNodes[index];
+
+			if (childNode.localName !== null) {
+				nodeIndex.index++;
+				children.push(jsonNodeFromXml(node.childNodes[index], nodeIndex));
+			} else {
+				if (childNode.nodeType === TEXT_NODE && typeof childNode.data !== "undefined" && 
+						childNode.data.trim() != "") {
+					textValue = childNode.data;
+				}
+			}
+		}
+
+		assert(typeof textValue === "undefined" || children.length === 0, "textValue = " + textValue + " children.length = " + children.length);
+
+		var attributesString = "";
+		var attributesStringList = [];
+		var attributesList = [];
+		var thisNodeData;
+		
+		if (node.attributes !== null && node.attributes.length > 0) {
+			for (index = 0; index < node.attributes.length; index++) {
+				attributesList.push(
+					{
+						key : node.attributes.item(index).localName,
+						value : node.attributes.item(index).nodeValue,
+						enabled : true
+					});
+				attributesStringList.push(
+					node.attributes.item(index).localName + '="' +
+					node.attributes.item(index).nodeValue + '"');
+			}
+			attributesString = ": " + attributesStringList.join(", ");
+		}
+
+		thisNodeData = {
+				name : node.localName,
+				attributes : attributesList,
+				cslId : thisNodeIndex,
+				children : children
+			};
+
+		if (typeof textValue !== "undefined") {
+			// trim whitespace from start and end
+			thisNodeData.textValue = textValue.replace(/^\s+|\s+$/g,"");
+		}
+
+		return thisNodeData;
+	};
+
+	var htmlEscape = function (text) {
+		var escaped = text;
+
+		escaped = escaped.replace("<", "&lt;");
+		escaped = escaped.replace(">", "&gt;");
+		escaped = escaped.replace("&", "&amp;");
+		escaped = escaped.replace('"', "&quot;");
+
+		return escaped;
+	};
+
+	var generateIndent = function (indentAmount) {
+		var index,
+			result = "";
+		for (index = 0; index < indentAmount; index++) {
+			result += "\t";
+		}
+		return result;
+	};
+
+	var xmlNodeFromJson = function (jsonData, indent) {
+		var attributesString = "",
+			xmlString,
+			index;
+
+		if (jsonData.attributes.length > 0) {
+		  	for (index = 0; index < jsonData.attributes.length; index++) {
+				if (jsonData.attributes[index].enabled && jsonData.attributes[index].value !== "") {
+					// TODO: the key probably shouldn't have characters needing escaping anyway,
+					//       should not allow to input them in the first place
+					attributesString += " " + 
+						htmlEscape(jsonData.attributes[index].key) + '="' + 
+						htmlEscape(jsonData.attributes[index].value) + '"';
+				}
+			}
+		}
+		xmlString = generateIndent(indent) + "<" + jsonData.name + attributesString + ">\n";
+
+		if (typeof jsonData.children !== "undefined" && jsonData.children.length > 0) {
+			for (index = 0; index < jsonData.children.length; index++) {
+				xmlString += xmlNodeFromJson(jsonData.children[index], indent + 1);
+			}
+		} else if (typeof jsonData.textValue !== "undefined") {
+			xmlString += generateIndent(indent+1) + htmlEscape(jsonData.textValue) + "\n";
+		}
+
+		xmlString += generateIndent(indent) + "</" + htmlEscape(jsonData.name) + ">\n";
+
+		return xmlString;
+	};
+	
+	var updateCslIds = function (jsonData, cslId) {
+		var childIndex;
+
+		jsonData.metadata["cslId"] = cslId.index;
+		cslId.index++;
+		if (jsonData.children) {
+			for (childIndex = 0; childIndex < jsonData.children.length; childIndex++)
+			{
+				updateCslIds(jsonData.children[childIndex], cslId);
+			}
+		}
+	};
+
+	// public:
+	return {
+		isCslValid : function(xmlData) {
+			var parser = new DOMParser();
+			var xmlDoc = parser.parseFromString(xmlData, "application/xml");
+
+			var styleNode = xmlDoc.childNodes[0];
+			return styleNode.localName === "style";
+		},
+
+		// nodeIndex.index is the depth-first traversal position of CSL node
+		// it must start at 0, and it will be returned with nodeIndex.index = number of nodes - 1
+		cslDataFromCslCode : function (xmlData) {
+			var parser = new DOMParser(),
+				xmlDoc = parser.parseFromString(xmlData, "application/xml"),
+				errors;
+			errors = xmlDoc.getElementsByTagName( 'parsererror' );
+			assertEqual(errors.length, 0, "xml parser error");
+
+			var styleNode = xmlDoc.childNodes[0];
+			assertEqual(styleNode.localName, "style", "Invalid style - no style node");
+
+			var jsonData = jsonNodeFromXml(styleNode, { index: 0 } );
+		
+			return jsonData;
+		},
+
+		cslCodeFromCslData : function (jsonData) {
+			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
+			cslXml += xmlNodeFromJson(jsonData, 0);
+			return cslXml;
+		},
+
+		updateCslIds : updateCslIds
+	};
+}());
+var CSLEDIT = CSLEDIT || {};
+
+/* Uses localStorage to store current csl data object
+ *
+ * Supports the following actions:
+ * - New style
+ * - Load from CSL XML
+ * - Add node
+ * - Delete node
+ * - Amend node
+ */
+
+CSLEDIT.Data = function (CSL_DATA) {
+	var viewControllers = [],
+		callbacksEnabled = true;
+
+	var get = function () {
+		return JSON.parse(localStorage.getItem(CSL_DATA));
+	};
+	var set = function (cslData) {
+		localStorage.setItem(CSL_DATA, JSON.stringify(cslData));
+		return cslData;
+	};
+	var setCslCode = function (cslCode) {
+		return set(CSLEDIT.cslParser.cslDataFromCslCode(cslCode));
+		if (callbacksEnabled) {
+			emit("createTree", []);
+		}
+	};
+	var getCslCode = function () {
+		return CSLEDIT.cslParser.cslCodeFromCslData(get());
+	};
+
+	var spliceNode = function (id, position, nodesToDelete, newNode) {
+		var iter,
+			cslData,
+			index,
+			node,
+			nodesBefore;
+
+		cslData = get();
+
+		nodesBefore = numNodes(cslData);
+
+		// Find the id of the node to add
+		iter = new CSLEDIT.Iterator(cslData);
+
+		index = 0;
+		while (iter.hasNext()) {
+			node = iter.next();
+			
+			if (index === id) {
+				assertEqual(node.cslId, index);
+				assert(position + nodesToDelete <= node.children.length);
+
+				if (typeof newNode === "undefined") {
+					node.children.splice(position, nodesToDelete);
+				} else {
+					node.children.splice(position, nodesToDelete, newNode);
+				}
+			}
+			index++;
+		}
+
+		// correct the cslId numbering
+		iter = new CSLEDIT.Iterator(cslData);
+		index = 0;
+		while (iter.hasNext()) {
+			node = iter.next();
+			node.cslId = index;
+			index++;
+		}
+
+		set(cslData);
+
+		return index - nodesBefore; // difference in number of nodes
+	};
+
+	var getNodeAndParent = function (id) {
+		var iter = new CSLEDIT.Iterator(get()),
+			node;
+
+		while (iter.hasNext()) {
+			node = iter.next();
+
+			if (node.cslId === id) {
+				return {
+					node : node,
+					parent : iter.parent()
+				}
+			}
+		}
+
+		// not found
+		return { node : null, parent : null };
+	};
+
+	var getNodeStack = function (id) {
+		var iter = new CSLEDIT.Iterator(get()),
+			nodeStack;
+
+		while (iter.hasNext()) {
+			node = iter.next();
+
+			if (node.cslId === id) {
+				return iter.stack();
+			}
+		}
+	};
+
+	var getNode = function (id, cslData /* optional */) {
+		if (typeof cslData !== "undefined") {
+			return getNodeAndParent(id, cslData).node;
+		} else {
+			return getNodeAndParent(id).node;
+		}
+	};
+
+	// Returns all matching nodes or
+	// null if it couldn't find a match
+	var getNodesFromPath = function (path, cslData /* optional */) {
+		var splitPath = path.split("/"),
+			rootNode,
+			result = [];
+
+		if (typeof cslData === "undefined") {
+			cslData = get();
+		}
+
+		rootNode = splitPath.splice(0,1);
+
+		if (rootNode[0] === "") {
+			return result;
+		}
+
+		getNodesFromPath_inner(splitPath, cslData, result);
+		return result;
+	};
+
+	var getNodesFromPath_inner = function (path, nodeData, result) {
+		var index,
+			rootNode,
+			regExp;
+
+		if (path.length === 0) {
+			result.push(nodeData);
+			return;
+		}
+
+		rootNode = path.splice(0, 1);
+		assertEqual(rootNode.length, 1);
+
+		// convert '*' wildcard to regexp equivalent
+		regExp = new RegExp("^" + rootNode[0].replace("*", ".*") + "$");
+
+		for (index = 0; index < nodeData.children.length; index++) {
+			if (regExp.test(nodeData.children[index].name)) {
+				getNodesFromPath_inner(path, nodeData.children[index], result);
+			}
+		}
+	};
+
+	var getFirstCslId = function (cslData, nodeName) {
+		var index,
+			result;
+
+		if (cslData.name === nodeName) {
+			return cslData.cslId;
+		} else {
+			for (index = 0; index < cslData.children.length; index++) {
+				result = getFirstCslId(cslData.children[index], nodeName);
+				if (result > -1) {
+					return result;
+				}
+			}
+		}
+		// couldn't find it
+		return -1;
+	};
+	
+	// Load new style without reloading page
+	var loadStyleFromURL = function (newURL, callback) {
+		styleURL = newURL;
+		$.get(styleURL, {}, function(cslCode) {
+			cslCode = cslCode.replace(/<!--.*?-->/g, "");
+			setCslCode(cslCode);
+			if (typeof callback !== "undefined") {
+				callback();
+			}
+		});
+	};
+
+	// from https://gist.github.com/1771618
+	var getUrlVar = function (key) {
+		var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+		return result && unescape(result[1]) || "";
+	};
+
+	var numNodes = function (tree) {
+		var iter = new CSLEDIT.Iterator(tree),
+			index = 0;
+
+		while (iter.hasNext()) {
+			iter.next();
+			index++;
+		}
+
+		return index;
+	};
+
+	var emit = function (event, args) {
+		$.each(viewControllers, function(index, controller) {
+			controller.exec(event, args);
+		});
+	};
+	
+	var indexOfChild = function (childNode, parentNode) {
+		var index;
+		for (index = 0; index < parentNode.children.length; index++) {
+			if (childNode.cslId === parentNode.children[index].cslId) {
+				return index;
+			}
+		}
+		return -1;
+	};
+	
+	var getAttrByName = function (attributes, name) {
+		var index;
+		for (index = 0; index < attributes.length; index++) {
+			if (attributes[index].key === name) {
+				return attributes[index];
+			}
+		}
+		return null;
+	};
+
+	// if 'id' is a macro instance, returns the corresponding macro definition
+	// if not, returns 'id' 
+	var macroDefinitionIdFromInstanceId = function (id) {
+		var node = new CSLEDIT.CslNode(getNode(id)),
+			macroName,
+			macroNodes,
+			macroNode;
+
+		macroName = node.getAttr("macro");
+		if (node.name === "text" && macroName !== "") {
+			macroNodes = getNodesFromPath("style/macro");
+
+			$.each(macroNodes, function (i, macroNode) {
+				var thisMacroNode = new CSLEDIT.CslNode(macroNode);
+				if (thisMacroNode.getAttr("name") === macroName) {
+					id = thisMacroNode.cslId;
+					return false;
+				}
+			});
+		}
+		return id;
+	}
+
+	var addNode = function (id, position, newNode) {
+		var nodeInfo,
+			positionIndex,
+			nodesAdded;
+		
+		newNode.cslId = -1;
+		newNode.children = newNode.children || [];
+		newNode.attributes = newNode.attributes || [];
+
+		if (typeof position === "number") {
+			// change parent id from macro instances to macro definitions
+			id = macroDefinitionIdFromInstanceId(id);
+
+			nodesAdded = spliceNode(id, position, 0, newNode);
+			emit("addNode", [id, position, newNode, nodesAdded]);
+		} else {
+			switch (position) {
+				case "first":
+					// change parent id from macro instances to macro definitions
+					id = macroDefinitionIdFromInstanceId(id);
+
+					return addNode(id, 0, newNode);
+					break;
+				case "inside":
+				case "last":
+					// change parent id from macro instances to macro definitions
+					id = macroDefinitionIdFromInstanceId(id);
+					
+					return addNode(id, getNode(id).children.length, newNode);
+					break;
+				case "before":
+				case "after":
+					assert(id !== 0);
+					nodeInfo = getNodeAndParent(id);
+					positionIndex = indexOfChild(nodeInfo.node, nodeInfo.parent);
+					if (position === "after") {
+						positionIndex++;
+					}
+					return addNode(nodeInfo.parent.cslId, positionIndex, newNode);
+					break;
+				case "default":
+					assert(false, "position: " + position + " not recognised");
+			}
+		}
+	};
+
+	var deleteNode = function (id) {
+		var iter = new CSLEDIT.Iterator(get()),
+			index,
+			node,
+			parentNode,
+			nodesDeleted;
+
+		assert(id !== 0); // can't delete the style node
+
+		index = 0;
+		while (iter.hasNext()) {
+			node = iter.next();
+
+			if (index === id) {
+				parentNode = iter.parent();
+				break;
+			}
+			index++;
+		}
+
+		assert(typeof parentNode !== "undefined");
+		nodesDeleted = -spliceNode(parentNode.cslId, indexOfChild(node, parentNode), 1);
+		assertEqual(node.cslId, id);
+		
+		emit("deleteNode", [id, nodesDeleted]);
+		
+		return node;
+	};
+
+	return {
+		setCslCode : setCslCode,
+		getCslCode : getCslCode,
+		get : get,
+		addNode : function (id, position, newNode) {
+			addNode(id, position, newNode);
+			emit("formatCitations");
+		},
+		deleteNode : function (id) {
+			deleteNode(id);
+			emit("formatCitations");
+		},
+
+		amendNode : function (id, amendedNode) {
+			// replace everything of the original node except the children and the cslId
+			var cslData = get(),
+				iter,
+				node,
+				index;
+		   
+			iter = new CSLEDIT.Iterator(cslData);
+			index = 0;
+
+			while (iter.hasNext()) {
+				node = iter.next();
+				if (index === id) {
+					assertEqual(node.cslId, id);
+
+					node.name = amendedNode.name;
+					node.attributes = amendedNode.attributes;
+					node.textValue = amendedNode.textValue;
+
+					break;
+				}
+				index++;
+			}
+			assert(typeof node !== "undefined");
+			set(cslData);
+			emit("amendNode", [id, node]);
+			emit("formatCitations");
+		},
+		moveNode : function (fromId, toId, position) {
+			var deletedNode, fromNode;
+			callbacksEnabled = false;
+
+			deletedNode = deleteNode(fromId);
+
+			console.log("deletedNode = " + deletedNode.cslId);
+			if (toId > fromId) {
+				toId -= numNodes(deletedNode);
+			}
+
+			addNode(toId, position, deletedNode);
+			callbacksEnabled = true;
+
+			emit("formatCitations");
+		},
+		getNode : getNode,
+		getNodeAndParent : getNodeAndParent,
+		getNodeStack : getNodeStack,
+		getFirstCslId : getFirstCslId,
+
+		loadStyleFromURL : loadStyleFromURL,
+
+		initPageStyle : function (callback) {
+			var cslData;
+			cslData = get(); 
+			/*
+			if (cslData !== null && cslData !== "" && !CSLEDIT.parser.isCslValid(cslCode)) {
+				alert("Warning: couldn't recover CSL from previous session");
+				cslCode = "";
+				CSLEDIT.code.set(cslCode);
+			}*/
+			styleURL = getUrlVar("styleURL");
+			console.log("url from url: " + styleURL);
+
+			if (styleURL != "" && typeof styleURL !== 'undefined') {
+				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
+				loadStyleFromURL(styleURL, function () {
+					// reload page without the styleURL query string, to avoid the user
+					// refreshing the page triggering a re-load of the style
+					window.location.href = window.location.href.replace(/\?.*$/, "");
+				});
+			} else if (cslData !== null && cslData !== "") {
+				callback();
+			} else {
+				styleURL = "../external/csl-styles/apa.csl";
+				loadStyleFromURL(styleURL, callback);
+			}
+		},
+		numNodes : numNodes,
+		numCslNodes : function () { return numNodes(get()); },
+		clearViewControllers : function () {
+			viewControllers = [];
+		},
+		setViewController : function (_viewController) {
+			viewControllers.push(_viewController);
+		},
+		getNodesFromPath : getNodesFromPath,
+		getAttrByName : getAttrByName,
+		indexOfChild : indexOfChild,
+		macroDefinitionIdFromInstanceId : macroDefinitionIdFromInstanceId
+	};
+};
+
+// global instance, this is overwritten for unit tests
+CSLEDIT.data = CSLEDIT.Data("CSLEDIT.cslData");
+"use strict";
+
+var CSLEDIT = CSLEDIT || {};
+
+CSLEDIT.editorPage = (function () {
+	var codeTimeout,
+		editor,
+		diffTimeout,
+		diffMatchPatch = new diff_match_patch(),
+		oldFormattedCitation = "",
+		newFormattedCitation = "",
+		oldFormattedBibliography = "",
+		newFormattedBibliography = "",
+		styleURL;
+
+	// from https://gist.github.com/1771618
+	var getUrlVar = function (key) {
+		var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+		return result && unescape(result[1]) || "";
+	};
+
+	return {
+		init : function () {
+			CodeMirror.defaults.onChange = function()
+			{
+				clearTimeout(codeTimeout);
+				codeTimeout = setTimeout( function () {
+					CSLEDIT.data.setCslCode(editor.getValue());
+					CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
+						$("#statusMessage"), $("#exampleOutput"),
+						$("#formattedCitations"), $("#formattedBibliography"));
+				}, 500);
+			};
+
+			editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+					mode: { name: "xml", htmlMode: true},
+					lineNumbers: true
+			});
+
+			CSLEDIT.data.initPageStyle( function () {
+				editor.setValue(CSLEDIT.data.getCslCode());
+			});
+		}
+	};
+}());
+
+$("document").ready( function() {
+	CSLEDIT.editorPage.init();
+});
