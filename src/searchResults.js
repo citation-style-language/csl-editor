@@ -22,7 +22,8 @@ CSLEDIT.searchResults = {
 
 			citation = exampleCitations.exampleCitationsFromMasterId[style.masterId].formattedCitations[0];
 			bibliography = exampleCitations.exampleCitationsFromMasterId[style.masterId].formattedBibliography;
-
+			
+			/* Disable pretty diffs due to bug handling formatting tags (e.g. bold, italic)
 			if (typeof style.userCitation !== "undefined" &&
 				style.userCitation !== "" &&
 				citation !== "") {
@@ -34,6 +35,7 @@ CSLEDIT.searchResults = {
 				bibliography !== "") {
 				bibliography = CSLEDIT.diff.prettyHtmlDiff(style.userBibliography, bibliography);
 			}
+			*/
 
 			outputList.push('<a href="' + style.styleId + '">' +
 				exampleCitations.styleTitleFromId[style.styleId] + "<\/a>"

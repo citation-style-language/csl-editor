@@ -193,6 +193,10 @@ CSLEDIT.finderPage = (function () {
 			"<\/table>";
 	}
 
+	function clearResults() {
+		$("#styleFormatResult").html("<i>Click search to find similar styles<\/i>");
+	}
+
 	function formChanged() {
 		var userCitation,
 			userBibliography;
@@ -238,7 +242,12 @@ CSLEDIT.finderPage = (function () {
 				$("#userBibliography").cleditor()[0].change(formChanged);
 				$('#searchButton').hide();
 			} else {
-				$('#searchButton').on("click", formChanged);
+				$("#userCitation").cleditor()[0].change(clearResults);
+				$("#userBibliography").cleditor()[0].change(clearResults);
+				$('#searchButton').on("click", function () {
+					$("#styleFormatResult").html("<i>Searching...<\/i>");
+					formChanged();
+				});
 			}
 		
 			// prepopulate search by style format with APA example
