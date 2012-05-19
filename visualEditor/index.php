@@ -18,36 +18,14 @@
 	<script type="text/javascript" src="../external/diff-match-patch/diff_match_patch.js"></script>
 
 	<script type="text/javascript" src="../external/jstree/_lib/jquery.hotkeys.js"></script>
-	<script type="text/javascript" src="../external/jstree/jquery.jstree.js"></script>
 	<link type="text/css" rel="stylesheet" href="../external/jstree/themes/default/style.css" />
 
 	<script type="text/javascript" src="../external/jquery.layout-latest-min.js"></script>
 	<script type="text/javascript" src="../external/jquery.hoverIntent.minified.js"></script>
 	<script type="text/javascript" src="../external/jquery.scrollTo-1.4.2-min.js"></script>
+	<script type="text/javascript" src="../external/jstree/jquery.jstree-patch1.js"></script>
 
-	<script type="text/javascript" src="../src/citationEngine.js"></script>
-	<script type="text/javascript" src="../src/exampleData.js"></script>
-	<script type="text/javascript" src="../src/diff.js"></script>
-	<script type="text/javascript" src="../src/debug.js"></script>
-	<script type="text/javascript" src="../src/cslParser.js"></script>
-	<script type="text/javascript" src="../src/Iterator.js"></script>
-	<script type="text/javascript" src="../src/cslNode.js"></script>
-	<script type="text/javascript" src="../src/cslData.js"></script>
-	<script type="text/javascript" src="../src/schema.js"></script>
-
-	<script type="text/javascript" src="../src/feedback.js"></script>
-	<script type="text/javascript" src="../src/editReferences.js"></script>
-	<script type="text/javascript" src="../src/NodePathView.js"></script>
-	<script type="text/javascript" src="../src/MultiComboBox.js"></script>
-	<script type="text/javascript" src="../src/propertyPanel.js"></script>
-	<script type="text/javascript" src="../src/sortPropertyPanel.js"></script>
-	<script type="text/javascript" src="../src/infoPropertyPanel.js"></script>
-	<script type="text/javascript" src="../src/editNodeButton.js"></script>
-	<script type="text/javascript" src="../src/smartTree.js"></script>
-	<script type="text/javascript" src="../src/Titlebar.js"></script>
-	<script type="text/javascript" src="../src/ViewController.js"></script>
-	<script type="text/javascript" src="../src/controller.js"></script>
-	<script type="text/javascript" src="../src/visualEditor.js"></script>
+	<script type="text/javascript" src="../build/CSLEDIT.visualEditor-62cdc733b862bb0f4350dd7b37126dc0a71d4165.js"></script>
 
 	<link type="text/css" rel="stylesheet" href="../css/dropdown.css" />
 
