@@ -235,16 +235,7 @@ CSLEDIT.editorPage = (function () {
 
 		viewController.init(cslData,
 		{
-			loaded : function (event, data) {
-				var cslData = CSLEDIT.data.get();
-
-				CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
-					$("#statusMessage"), $("#exampleOutput"),
-					$("#formattedCitations"), $("#formattedBibliography"),
-					doSyntaxHighlighting,
-					CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData)[0].cslId,
-					CSLEDIT.data.getNodesFromPath("style/bibliography/layout", cslData)[0].cslId);
-			},
+			loaded : formatExampleCitations,
 			selectNode : nodeSelected,
 			deleteNode : function () {
 				CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
@@ -494,6 +485,9 @@ CSLEDIT.editorPage = (function () {
 			});
 
 			setupDropdownMenuHandler(".dropdown a");
+
+			CSLEDIT.editReferences.init($('ul.#exampleCitation1'), formatExampleCitations, 0, [0]);
+			CSLEDIT.editReferences.init($('ul.#exampleCitation2'), formatExampleCitations, 1, [11]);
 
 			$("#mainContainer").layout({
 				closable : false,

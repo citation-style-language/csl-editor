@@ -41,7 +41,7 @@ div.panel {
 }
 #titlebar{
 	position: absolute;
-	left: 25%;
+	right: 20px;
 	margin: 3px;
 }
 

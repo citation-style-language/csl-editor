@@ -34,6 +34,8 @@
 	<script type="text/javascript" src="../src/cslNode.js"></script>
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
+
+	<script type="text/javascript" src="../src/editReferences.js"></script>
 	<script type="text/javascript" src="../src/NodePathView.js"></script>
 	<script type="text/javascript" src="../src/MultiComboBox.js"></script>
 	<script type="text/javascript" src="../src/propertyPanel.js"></script>
@@ -79,22 +81,27 @@
 		</ul>
 	</li>
 	<li>
-		<a href="#">Tools</a>
+		<a href="#">Citation 1</a>
+		<ul class="sub_menu" id="exampleCitation1">
+		</ul>
+	</li>
+	<li>
+		<a href="#">Citation 2</a>
+		<ul class="sub_menu" id="exampleCitation2">
+		</ul>
+	</li>
+	<li>
+		<a href="#">Links</a>
 		<ul class="sub_menu">
+			<li><a href="/csl/home">Home page</a>
+			</li>
+			<li><a href="/csl/about">About</a>
+			</li>
 			<li><a href="/csl/codeEditor">Code Editor</a>
 			</li>
 			<li><a href="/csl/searchByName">Search for Style by Name</a>
 			</li>
 			<li><a href="/csl/searchByExample">Search for Style by Example</a>
-			</li>
-		</ul>
-	</li>
-	<li>
-		<a href="#">Help</a>
-		<ul class="sub_menu">
-			<li><a href="/csl/home">Home page</a>
-			</li>
-			<li><a href="/csl/about">About</a>
 			</li>
 		</ul>
 	</li>
@@ -127,6 +134,7 @@
 			</div>
 		</div>
 	</div>
+	<button id="exampleDocuments">Edit References</button>
 </div>
 </body>
 </html>
