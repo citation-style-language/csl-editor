@@ -492,13 +492,14 @@ CSLEDIT.editorPage = (function () {
 			$("#mainContainer").layout({
 				closable : false,
 				resizble : true,
-				livePaneResizing : true
+				livePaneResizing : true,
+				west__size : 240
 			});
 			$("#rightContainer").layout({
 				closable : false,
 				resizable : true,
 				livePaneResizing : true,
-				north__size : 200
+				north__size : 250
 			});
 			
 			CSLEDIT.feedback.init($("#feedbackPanel"));
