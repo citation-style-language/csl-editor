@@ -183,8 +183,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 	
 	// Load new style without reloading page
 	var loadStyleFromURL = function (newURL, callback) {
-		styleURL = newURL;
-		$.get(styleURL, {}, function(cslCode) {
+		$.get(newURL, {}, function(cslCode) {
 			cslCode = cslCode.replace(/<!--.*?-->/g, "");
 			setCslCode(cslCode);
 			if (typeof callback !== "undefined") {
