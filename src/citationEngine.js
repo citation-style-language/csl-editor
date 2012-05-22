@@ -1,4 +1,9 @@
+
+"use strict";
+
 var CSLEDIT = CSLEDIT || {};
+
+var jsonDocuments;
 
 CSLEDIT.citationEngine = (function () {
 	var oldFormattedCitation = "",
@@ -127,7 +132,11 @@ CSLEDIT.citationEngine = (function () {
 			citationTagEnd = "<\/p>",
 			bibliographyTagStart = "<p>",
 			bibliographyTagEnd = "<\/p>",
-			startTime;
+			startTime,
+			citationDiffs,
+			bibliographyDiffs,
+			diffFormattedCitation,
+			diffFormattedBibliography;
 
 		statusOut.html("<i>Re-formatting citations...</i>");
 	
@@ -180,15 +189,15 @@ CSLEDIT.citationEngine = (function () {
 			dmp = new diff_match_patch();
 		}
 
-		var citationDiffs =
+		citationDiffs =
 			dmp.diff_main(stripTags(oldFormattedCitation, "span"), stripTags(newFormattedCitation, "span"));
 		dmp.diff_cleanupSemantic(citationDiffs);
-		var diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(citationDiffs));
+		diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(citationDiffs));
 
 		bibliographyDiffs =
 			dmp.diff_main(stripTags(oldFormattedBibliography, "span"), stripTags(newFormattedBibliography, "span"));
 		dmp.diff_cleanupSemantic(bibliographyDiffs);
-		var diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(bibliographyDiffs));
+		diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(bibliographyDiffs));
 
 		if (dmp.diff_levenshtein(citationDiffs) === 0 && dmp.diff_levenshtein(bibliographyDiffs) === 0) {
 			citationsOut.html(newFormattedCitation);

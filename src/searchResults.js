@@ -1,3 +1,5 @@
+"use strict";
+
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.searchResults = {

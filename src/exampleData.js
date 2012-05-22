@@ -1,3 +1,5 @@
+"use strict";
+
 var cslEditorExampleData = {};
 
 cslEditorExampleData.citationsItems = [
@@ -85,7 +87,8 @@ cslEditorExampleData.jsonDocuments = {
 		"author": [{
 			"family": "Cohen",
 			"given": "Michael"
-,
+		},
+		{
 			"family": "Feynman",
 			"given": "Richard"
 		}],

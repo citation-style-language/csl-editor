@@ -1,3 +1,4 @@
+"use strict";
 
 var assertEqual = function (actual, expected, place) {
 	if (actual !== expected) {

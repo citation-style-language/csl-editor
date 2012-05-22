@@ -10,10 +10,10 @@
 	<script type="text/javascript" src="../generated/exampleCitationsEnc.js"></script>
 	<script type="text/javascript" src="../src/cslParser.js"></script>
 	<script type="text/javascript" src="../src/cslData.js"></script>
+	<script type="text/javascript" src="../src/searchResults.js"></script>
 	<link rel="stylesheet" href="../css/base.css" />
 
-	<script type="text/javascript" src="../build/CSLEDIT.searchByName-fc7b70a732219d46cbf8adafb66cec0bc8531f33.js"></script>
-
+	<script type="text/javascript" src="../src/searchByName.js"></script>
 	<script type="text/javascript" src="../src/analytics.js"></script>
 <style>
 div#styleNameInput {

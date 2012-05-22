@@ -1,3 +1,5 @@
+"use strict";
+
 // google analytics code snippet
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-4601387-1']);

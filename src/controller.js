@@ -1,3 +1,5 @@
+"use strict";
+
 CSLEDIT = CSLEDIT || {};
 
 // Allows clients to:
@@ -81,6 +83,7 @@ CSLEDIT.controller = (function () {
 	};
 
 	var _exec = function(command, args) {
+		var index;
 		for (index = 0; index < commandSubscribers[command].length; index++) {
 			commandSubscribers[command][index].apply(null, args);
 		}

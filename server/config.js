@@ -1,3 +1,4 @@
+"use strict";
 
 var cslServerConfig = (function(){
 	// private members

@@ -1,3 +1,5 @@
+"use strict";
+
 var CSLEDIT = CSLEDIT || {};
 
 /* Uses localStorage to store current csl data object
@@ -397,7 +399,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 		loadStyleFromURL : loadStyleFromURL,
 
 		initPageStyle : function (callback) {
-			var cslData;
+			var cslData, styleURL;
 			cslData = get(); 
 			/*
 			if (cslData !== null && cslData !== "" && !CSLEDIT.parser.isCslValid(cslCode)) {
