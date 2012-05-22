@@ -67,6 +67,10 @@ pages = [
     {
         "page" : "searchByName",
         "jsFiles" : [
+            "src/debug.js",
+            "generated/exampleCitationsEnc.js",
+            "src/cslParser.js",
+            "src/cslData.js",
             "src/searchResults.js",
             "src/searchByName.js"
         ]
@@ -107,6 +111,13 @@ directoriesToCopy = [
     'content',
     'server',
     'external'
+]
+
+filesToCopy = [
+    'index.php',
+    'getFromOtherWebsite.php',
+    '.htaccess',
+    '404page.html'
 ]
 
 def ignored_files(adir, filenames):
@@ -193,4 +204,7 @@ for page in pages:
 # copy other resources:
 for dir in directoriesToCopy:
     shutil.copytree(dir, buildDir + '/' + dir, ignore=ignored_files)
+
+for file in filesToCopy:
+    shutil.copyfile(file, buildDir + '/' + file) 
 

@@ -141,6 +141,6 @@ outputString = outputString.replace(/[\u007f-\uffff]/g, function (c) {
 outputString = outputString.replace(/\\u00e2\\u0080\\u009c/g, "\\u201c");
 outputString = outputString.replace(/\\u00e2\\u0080\\u009d/g, "\\u201d");
 
-fileWriter.write('"use strict";');
+fileWriter.write('"use strict";\n');
 fileWriter.write("var exampleCitations = " + outputString + ';');
 fileWriter.close();
