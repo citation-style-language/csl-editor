@@ -7,10 +7,10 @@
 
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
-	<link rel="stylesheet" href="./codemirror.css">
+	<link rel="stylesheet" href="../css/codemirror.css" />
 	<script src="../external/codemirror2/lib/codemirror.js"></script>
 	<script src="../external/codemirror2/mode/xml/xml.js"></script>
-	<link rel="stylesheet" href="./docs.css">
+	<link rel="stylesheet" href="../css/docs.css" />
 
 	<script type="text/javascript" src="../external/citeproc/loadabbrevs.js"></script>
 	<script type="text/javascript" src="../external/citeproc/xmldom.js"></script>

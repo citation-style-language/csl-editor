@@ -21,8 +21,9 @@ CSLEDIT.Titlebar.prototype.displayTitle = function () {
 		title = "No title";
 	} else {
 		title = this.titleNode.textValue;
+		// TODO: Elide text
 	}
-	this.element.html("<h3>Style Title: " + title + "<\/h3>");
+	this.element.html('<h3>Style Title: <span cslid=' + this.cslId + '>' + title + '<\/span><\/h3>');
 };
 
 CSLEDIT.Titlebar.prototype.getTitleNode = function () {

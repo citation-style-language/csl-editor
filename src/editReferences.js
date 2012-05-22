@@ -10,7 +10,7 @@ CSLEDIT.editReferences = (function () {
 			
 		// create menus
 		$.each(cslEditorExampleData.jsonDocuments, function (itemName, item) {
-			listElement.append('<li><input type="checkbox" value="' + index + '" \/> <strong>' + item.type + 
+			listElement.append('<li class=sidePadding><input type="checkbox" value="' + index + '" \/> <strong>' + item.type + 
 				'<\/strong>: ' + item.title + '<\/li>');
 			index++;
 		});

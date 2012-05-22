@@ -57,56 +57,10 @@
 	<script type="text/javascript" src="../src/analytics.js"></script>
 </head>
 <body id="visualEditor">
+<?php include '../html/navigation.html'; ?>
+
 <ul class="dropdown">
-	<li>
-		<a href="#">Style</a>
-		<ul class="sub_menu">
-			<li><a href="#">New style</a></li>
-			<li><a href="#">Load from URL</a></li>
-			<!--li><a href="#">Revert (undo all changes)</a></li-->
-			<li><a href="#">Export CSL</a></li>
-			<li><a href="#">Style Info</a>
-			<li><a href="#">Global Formatting Options</a></li>
-		</ul>
-	</li>
-	<li>
-		<a href="#">Edit</a>
-		<ul class="sub_menu">
-			<li><a href="#">Add node</a>
-				<ul class="sub_menu" id="possibleChildNodes">
-				</ul>
-			</li>
-			<li>
-				<a href="#">Delete node</a>
-			</li>
-		</ul>
-	</li>
-	<li>
-		<a href="#">Citation 1</a>
-		<ul class="sub_menu" id="exampleCitation1">
-		</ul>
-	</li>
-	<li>
-		<a href="#">Citation 2</a>
-		<ul class="sub_menu" id="exampleCitation2">
-		</ul>
-	</li>
-	<li>
-		<a href="#">Links</a>
-		<ul class="sub_menu">
-			<li><a href="/csl/home">Home page</a>
-			</li>
-			<li><a href="/csl/about">About</a>
-			</li>
-			<li><a href="/csl/codeEditor">Code Editor</a>
-			</li>
-			<li><a href="/csl/searchByName">Search for Style by Name</a>
-			</li>
-			<li><a href="/csl/searchByExample">Search for Style by Example</a>
-			</li>
-		</ul>
-	</li>
-	<li>
+<!--	<li>
 		<a href="#">Feedback</a>
 		<ul class="sub_menu">
 			<li>
@@ -119,18 +73,51 @@
 				</div>
 			</li>
 		</ul>
-	</li>
+	</li>-->
 </ul>
-<div id="titlebar">
-<h3>Style Title:</h3>
-</div>
 <div id="mainContainer">
 	<div id="leftContainer" class="ui-layout-west">
+		<ul class="dropdown">
+			<li>
+				<a href="#">Style</a>
+				<ul class="sub_menu">
+					<li><a href="#">New style</a></li>
+					<li><a href="#">Load from URL</a></li>
+					<!--li><a href="#">Revert (undo all changes)</a></li-->
+					<li><a href="#">Export CSL</a></li>
+					<li><a href="#">Style Info</a>
+					<li><a href="#">Global Formatting Options</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">Add Node</a>
+					<ul class="sub_menu" id="possibleChildNodes">
+					</ul>
+			</li>
+			<li>
+				<a href="#">Delete Node</a>
+			</li>
+		</ul>
 		<div id="treeEditor" class="panel">
 		</div>
 	</div>
 
 	<div id="rightContainer" class="ui-layout-center">
+		<ul class="dropdown">
+			<li>
+				<a href="#">Citation 1</a>
+				<ul class="sub_menu" id="exampleCitation1">
+				</ul>
+			</li>
+			<li>
+				<a href="#">Citation 2</a>
+				<ul class="sub_menu" id="exampleCitation2">
+				</ul>
+			</li>
+		</ul>
+		<div id="titlebar">
+			<h3>Style Title:</h3>
+		</div>
 		<div id="topRightContainer" class="ui-layout-north">
 			<div id="exampleOutput" class="panel">
 				<div id="statusMessage"></div>

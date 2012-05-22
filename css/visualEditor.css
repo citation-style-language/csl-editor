@@ -5,7 +5,7 @@ html, body {
 #mainContainer {
 	position: absolute;
 
-	top: 24px;
+	top: 27px;
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
@@ -20,7 +20,9 @@ html, body {
 	background: yellow;
 }
 #treeEditor {
-	font-size: 14px;
+	position: absolute;
+	top: 24px;
+	font-size: 12px;
 
 	overflow: auto;
 }
@@ -42,6 +44,7 @@ div.panel {
 #titlebar{
 	position: absolute;
 	right: 20px;
+	left: 150px;
 	margin: 3px;
 }
 
@@ -74,6 +77,8 @@ div.panel {
 	height: 55%;
 }
 #exampleOutput {
+	position: absolute;
+	top: 24px;
 	overflow: auto;
 	cursor: default;
 	font-family:Verdana,Geneva,'DejaVu Sans',sans-serif;
@@ -209,3 +214,9 @@ div#feedbackPanel textarea {
 	height: 100px;
 }
 
+li.sidePadding {
+	padding-left: 5px;
+	padding-right: 10px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}

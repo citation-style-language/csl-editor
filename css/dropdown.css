@@ -1,7 +1,7 @@
 /* adapted from CSS-tricks: http://css-tricks.com/simple-jquery-dropdowns/ */
 
 * 									{ margin: 0; padding: 0; }
-body								{ font: 14px Helvetica, Sans-Serif; } 
+body								{ font: 12px Helvetica, Sans-Serif; } 
 #page-wrap							{ width: 800px; margin: 25px auto; } 
 a									{ text-decoration: none; }
 ul									{ list-style: none; }
@@ -25,7 +25,7 @@ ul.dropdown li.hover a              { color: black; }
 /* 
 	LEVEL TWO
 */
-ul.dropdown ul 						{ width: 220px; visibility: hidden; position: absolute; top: 100%; left: 0; }
+ul.dropdown ul 						{ width: 280px; visibility: hidden; position: absolute; top: 100%; left: 0; }
 ul.dropdown ul li 					{ font-weight: normal; background: #f6f6f6; color: #000; 
 									  border-bottom: 1px solid #ccc; float: none; }
 									  

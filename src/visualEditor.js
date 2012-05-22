@@ -405,11 +405,7 @@ CSLEDIT.editorPage = (function () {
 			{
 				parentNodeName = parentNode.siblings('a').text();
 
-				if (/^Edit/.test(parentNodeName)) {
-					if (clickedName === "Delete node") {
-						CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
-					}
-				} else if ((/^Add node/).test(parentNodeName)) {
+				if ((/^Add Node/).test(parentNodeName)) {
 					$(event.target).parent().parent().css('visibility', 'hidden');
 
 					CSLEDIT.controller.exec("addNode", [
@@ -435,6 +431,8 @@ CSLEDIT.editorPage = (function () {
 						viewController.selectNode(CSLEDIT.data.getNodesFromPath("style")[0].cslId);
 					}
 				}
+			} else if (clickedName === "Delete Node") {
+				CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
 			}
 		});
 	};
@@ -493,7 +491,8 @@ CSLEDIT.editorPage = (function () {
 				closable : false,
 				resizble : true,
 				livePaneResizing : true,
-				west__size : 240
+				west__size : 240,
+				west__minSize : 200
 			});
 			$("#rightContainer").layout({
 				closable : false,
