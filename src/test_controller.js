@@ -1,3 +1,5 @@
+"use strict";
+
 module("CSLEDIT.controller");
 
 test("can only subscribe to actual events", function () {

@@ -1,3 +1,5 @@
+"use strict";
+
 module("CSLEDIT.cslParser");
 
 CSLEDIT.test_cslJSON = {

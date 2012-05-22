@@ -1,3 +1,5 @@
+"use strict";
+
 CSLEDIT.schema.callWhenReady( function () {
 	module("CSLEDIT.schema");
 

@@ -71,6 +71,32 @@ pages = [
             "src/searchResults.js",
             "src/searchByName.js"
         ]
+    },
+    {
+        "page" : "test",
+        "jsFiles" : [
+            "src/debug.js",
+            "src/schema.js",
+            "src/test_schema.js",	
+            "src/controller.js",
+            "src/test_controller.js",
+            "src/cslParser.js",
+            "src/test_cslParser.js",
+            "src/Iterator.js",
+            "src/test_Iterator.js",
+            "src/cslNode.js",
+            "src/test_cslNode.js",	
+            "src/cslData.js",
+            "src/test_cslData.js",
+            "src/cslTreeView.js",
+            "src/test_cslTreeView.js",
+            "src/xmlUtility.js",
+            "src/test_xmlUtility.js",	
+            "src/smartTree.js",
+            "src/test_smartTree.js",
+            "src/editNodeButton.js",
+            "src/test_editNodeButton.js"
+        ]
     }
 ]
 
@@ -82,8 +108,7 @@ directoriesToCopy = [
     'src',
     'content',
     'server',
-    'external',
-    'testPages'
+    'external'
 ]
 
 def ignored_files(adir, filenames):
@@ -130,7 +155,7 @@ for page in pages:
     
     # strip existing references to the javascript source files and
     # in place of the last one write the concatenated file
-    foundLines = 0
+    foundLines = []
     for line in inFile:
         useLine = True
         containsUseStrict = {}
@@ -142,15 +167,15 @@ for page in pages:
 
             if line.find(beforeText + '../' + jsFile + afterText) != -1:
                 useLine = False
-                foundLines += 1
+                foundLines.append(jsFile)
                 if foundLines == len(page['jsFiles']):
                     outFile.write(beforeText + combinedFilename + afterText)
         if useLine:
             outFile.write(line)
 
-    if foundLines != len(page['jsFiles']):
+    if set(foundLines) != set(page['jsFiles']):
         print "ERROR: didn't find all source file references in ", phpFilepath
-        print foundLines, len(page['jsFiles'])
+        print "missing references = ", set(page['jsFiles']) - set(foundLines)
         sys.exit(1)
 
     inFile.close()
