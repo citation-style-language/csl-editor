@@ -100,17 +100,24 @@ pages = [
             "src/editNodeButton.js",
             "src/test_editNodeButton.js"
         ]
+    },
+    {
+        "page" : "home",
+        "jsFiles" : []
+    },
+    {
+        "page" : "about",
+        "jsFiles" : []
     }
 ]
 
 directoriesToCopy = [
-    'about',
-    'home',
     'html',
     'src',
     'content',
     'server',
-    'external'
+    'external',
+    'generated'
 ]
 
 filesToCopy = [
