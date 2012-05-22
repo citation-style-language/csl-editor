@@ -99,7 +99,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 
 	var getNodeStack = function (id) {
 		var iter = new CSLEDIT.Iterator(get()),
-			nodeStack;
+			nodeStack,
+			node;
 
 		while (iter.hasNext()) {
 			node = iter.next();
