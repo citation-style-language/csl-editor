@@ -35,7 +35,6 @@
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 
-	<script type="text/javascript" src="../src/feedback.js"></script>
 	<script type="text/javascript" src="../src/editReferences.js"></script>
 	<script type="text/javascript" src="../src/NodePathView.js"></script>
 	<script type="text/javascript" src="../src/MultiComboBox.js"></script>
@@ -51,6 +50,7 @@
 
 	<link type="text/css" rel="stylesheet" href="../css/dropdown.css" />
 
+	<link rel="stylesheet" href="../css/feedback.css" />
 	<link rel="stylesheet" href="../css/base.css" />
 	<link rel="stylesheet" href="../css/visualEditor.css" />
 
@@ -58,23 +58,6 @@
 </head>
 <body id="visualEditor">
 <?php include '../html/navigation.html'; ?>
-
-<ul class="dropdown">
-<!--	<li>
-		<a href="#">Feedback</a>
-		<ul class="sub_menu">
-			<li>
-				<div id="feedbackPanel">
-					<h3>What do you think?</h3>
-					<textarea class="message" placeholder="Enter your bug report or any other feedback here" ></textarea><br />
-					Your email: (if you'd like a reply)<br />
-					<input class="email" type="text" placeholder="Email address"/><br />
-					<input type="submit" value="Submit" />
-				</div>
-			</li>
-		</ul>
-	</li>-->
-</ul>
 <div id="mainContainer">
 	<div id="leftContainer" class="ui-layout-west">
 		<ul class="dropdown">

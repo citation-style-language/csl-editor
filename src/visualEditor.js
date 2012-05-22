@@ -501,7 +501,7 @@ CSLEDIT.editorPage = (function () {
 				north__size : 250
 			});
 			
-			CSLEDIT.feedback.init($("#feedbackPanel"));
+			CSLEDIT.feedback.init($('#feedbackTab'), $('#feedbackPanel'));
 		}
 	};
 }());

@@ -1,14 +1,15 @@
 <html>
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+	<title>About</title>
 
-<title>About</title>
-
-<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/base.css" />
+	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 <style>
 #mainContent {
-	padding: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 </style>
 <!-- google analytics -->
