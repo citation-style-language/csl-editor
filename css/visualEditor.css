@@ -21,7 +21,7 @@ html, body {
 }
 #treeEditor {
 	position: absolute;
-	top: 24px;
+	top: 23px;
 	font-size: 12px;
 
 	overflow: auto;
@@ -90,7 +90,7 @@ div.panel {
 }
 #exampleOutput {
 	position: absolute;
-	top: 24px;
+	top: 23px;
 	overflow: auto;
 	cursor: default;
 	font-family:Verdana,Geneva,'DejaVu Sans',sans-serif;
