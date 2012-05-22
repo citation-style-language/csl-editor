@@ -123,8 +123,6 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 			table = $('');//<table><\/table>');
 			row = $('');//<tr><\/tr>');
 			if (typeof value.buttons !== "undefined") {
-				//$('<td>&nbsp;&nbsp;&nbsp;<\/td>').appendTo(row);
-
 				$.each(value.buttons, function (i, button) {
 					var buttonElement;
 					switch (button.type) {
@@ -168,6 +166,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 			//table.appendTo(treeView);
 			row = $('<div id="%1"><\/div>'.replace('%1', value.id));
 			row.appendTo(treeView);
+			treeView.append($('<div class=spacer><\/div>'));
 		});
 
 		$.each(smartTreeSchema, function (index, value) {

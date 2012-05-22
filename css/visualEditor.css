@@ -26,6 +26,14 @@ html, body {
 
 	overflow: auto;
 }
+/* don't show background for focussed trees since it messes up when horizontally scrolling */
+#treeEditor .jstree-default.jstree-focused { background:#ffffff; }
+
+div.spacer {
+	width: 6px;
+	height: 6px;
+}
+
 div.panel {
 	position: absolute;
 	border-width: 1px;
@@ -166,13 +174,12 @@ z-index: 20 !important;
 #jstree-marker-line {
 z-index: 10 !important;
 }
-
 ul.dropdown {
 z-index: 30 !important;
 }
 
 /* Icons */
-.jstree-default li[rel] > a > ins {
+#treeEditor.jstree-default li[rel] > a > ins {
 	background-image:url("../external/famfamfam-icons/bullet_black.png");
 	background-repeat:no-repeat;
 	background-color:transparent;
