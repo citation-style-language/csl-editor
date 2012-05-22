@@ -49,10 +49,14 @@ div.panel {
 
 	background: #ffffff;
 }
+#titlebarContainer{
+	position: absolute;
+	right: 0px;
+	left: 150px;
+}
 #titlebar{
 	position: absolute;
 	right: 20px;
-	left: 150px;
 	margin: 3px;
 }
 

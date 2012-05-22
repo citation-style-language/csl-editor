@@ -98,8 +98,10 @@
 				</ul>
 			</li>
 		</ul>
-		<div id="titlebar">
-			<h3>Style Title:</h3>
+		<div id="titlebarContainer">
+			<div id="titlebar">
+				<h3>Style Title:</h3>
+			</div>
 		</div>
 		<div id="topRightContainer" class="ui-layout-north">
 			<div id="exampleOutput" class="panel">
