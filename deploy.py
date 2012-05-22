@@ -119,7 +119,7 @@ if os.path.exists(buildDir):
 
 os.makedirs(buildDir)
 
-gitCommit = subprocess.Popen('git rev-parse HEAD', stdout=subprocess.PIPE).communicate()[0].replace('\n','')
+gitCommit = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE).communicate()[0].replace('\n','')
 print 'building from commit ', gitCommit
 
 for page in pages:
