@@ -197,7 +197,7 @@ CSLEDIT.editorPage = (function () {
 		);
 
 		// set up click handling
-		$('span[cslid]').click( function () {
+		$('span[cslid]').click( function (event) {
 			var target = $(event.target).closest("span[cslid]"),
 				cslId = parseInt(target.attr('cslId'));
 			reverseSelectNode(cslId);
