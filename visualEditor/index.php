@@ -50,7 +50,6 @@
 
 	<link type="text/css" rel="stylesheet" href="../css/dropdown.css" />
 
-	<link rel="stylesheet" href="../css/feedback.css" />
 	<link rel="stylesheet" href="../css/base.css" />
 	<link rel="stylesheet" href="../css/visualEditor.css" />
 

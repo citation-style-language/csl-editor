@@ -21,7 +21,6 @@ pages = [
             "src/cslData.js",
             "src/schema.js",
 
-            "src/feedback.js",
             "src/editReferences.js",
             "src/NodePathView.js",
             "src/MultiComboBox.js",
@@ -120,7 +119,7 @@ if os.path.exists(buildDir):
 
 os.makedirs(buildDir)
 
-gitCommit = subprocess.check_output('git rev-parse HEAD').replace('\n','')
+gitCommit = subprocess.Popen('git rev-parse HEAD', stdout=subprocess.PIPE).communicate()[0].replace('\n','')
 print 'building from commit ', gitCommit
 
 for page in pages:
@@ -168,8 +167,9 @@ for page in pages:
             if line.find(beforeText + '../' + jsFile + afterText) != -1:
                 useLine = False
                 foundLines.append(jsFile)
-                if foundLines == len(page['jsFiles']):
+                if len(foundLines) == len(page['jsFiles']):
                     outFile.write(beforeText + combinedFilename + afterText)
+
         if useLine:
             outFile.write(line)
 
