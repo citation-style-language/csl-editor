@@ -33,7 +33,7 @@ pages = [
             "src/ViewController.js",
             "src/controller.js",
             "src/visualEditor.js"
-        ]
+        ]            
     },
     {
         "page" : "codeEditor",
@@ -103,7 +103,6 @@ directoriesToCopy = [
     'about',
     'home',
     'html',
-    'css',
     'src',
     'content',
     'server',
@@ -118,9 +117,18 @@ if os.path.exists(buildDir):
     shutil.rmtree(buildDir)
 
 os.makedirs(buildDir)
+os.makedirs(buildDir + '/css')
 
 gitCommit = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE).communicate()[0].replace('\n','')
 print 'building from commit ', gitCommit
+
+# find all css files
+cssFiles = []
+for filename in os.listdir('css'):
+    if filename.endswith('.css'):
+        filebase = filename.replace('.css','')
+        cssFiles.append(filebase)
+        shutil.copyfile('css/' + filename, buildDir + '/css/' + filebase + '-' + gitCommit + '.css')
 
 for page in pages:
     phpFilepath = page['page'] + '/index.php'
@@ -148,7 +156,6 @@ for page in pages:
            print 'ERROR: no "use strict"; in ', jsFile
            sys.exit(1)
 
-
     inFile = open(phpFilepath)
     outFile = open(outputPath + '/index.php', 'w+')
     
@@ -159,8 +166,10 @@ for page in pages:
         useLine = True
         containsUseStrict = {}
 
-        for jsFile in page['jsFiles']:
+        for cssFile in cssFiles:
+            line = line.replace('"../css/' + cssFile + '.css"', '"../css/' + cssFile + '-' + gitCommit + '.css"')
 
+        for jsFile in page['jsFiles']:
             beforeText = '\t<script type="text/javascript" src="'
             afterText = '"></script>'
 
