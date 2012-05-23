@@ -227,6 +227,11 @@ CSLEDIT.editorPage = (function () {
 		selectedCslId = -1;
 
 		setupSyntaxHighlightForNode();
+
+		// highlight the selected node if there is one
+		if (viewController.selectedNode() != -1) {
+			$('span[cslid=' + viewController.selectedNode() + ']').addClass('selected');
+		}
 	};
 
 	var createTreeView = function () {

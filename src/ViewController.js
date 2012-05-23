@@ -88,7 +88,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		callbacks,
 		selectedTree = null,
 		formatCitationsCallback,
-		selectedNodeId = 0,
+		selectedNodeId = -1,
 		nodeButtons;
 
 	var treeLoaded = function () {
