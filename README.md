@@ -26,10 +26,11 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 4. Run "python deploy.py"
 
-5. Point your browser to /csl to access the site
+5. Point your browser to /csl/ to access the site
 
-6. Point your browser to /csl/test to run unit tests
+6. Point your browser to /csl/test/ to run unit tests
 
+(Testing on /csl-source/ should also work, and may be simpler for development since the .js files are not concatenated.)
 
 # Attributions 
 
