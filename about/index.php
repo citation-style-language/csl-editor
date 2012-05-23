@@ -24,7 +24,8 @@
 
 <h1>About Citation Style Editor</h1>
 
-<p>This site allows you to search and edit citation styles. It's still a prototype.</p>
+<p>This site is for searching and editing styles written in the <a href="http://citationstyles.org/">Citation Style Language</a>, used by reference managers <a href="http://www.zotero.org">Zotero</a>, <a href="http://www.mendeley.com">Mendeley</a> and <a href="http://www.mekentosj.com/papers/">Papers</a>.</p>
+<p>It's still in the early stages of development. If you find bugs, please help us and report them using the feedback tab on the right.</p>
 
 <p>Blog: <a href="http://csleditor.wordpress.com/">http://csleditor.wordpress.com/</a></p>
 

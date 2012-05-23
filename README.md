@@ -1,6 +1,6 @@
-#Search and Edit tools for .csl (Citation Style Language) files
+# Search and Edit tools for .csl (Citation Style Language) files
 
-This web application is intended to allow users of CSL based reference managers to search for citation styles and edit them. It's still a prototype, and not user friendly enough. Yet.
+This web application is intended to allow users of CSL based reference managers to search for citation styles and edit them. It's still an alpha version, but the Visual Editor supports all the features of CSL (AFAIK) and it should be possible to do real work with it.
 
 Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
