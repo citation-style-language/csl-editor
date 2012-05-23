@@ -33,6 +33,7 @@ CSLEDIT.citationEngine = (function () {
 		{
 			var sys = new Sys(abbreviations);
 			var citeproc = new CSL.Engine(sys, style);
+			citeproc.opt.development_extensions.csl_reverse_lookup_support = true;
 		}
 		catch(err)
 		{

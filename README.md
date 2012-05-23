@@ -12,17 +12,24 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 2. Java runtime (doesn't have to be on server, just for pre-processing)
 
-3. Mail server (only for sending feedback emails)
+3. Mail server (for sending feedback emails)
+
+4. Python 2.6.5 or 2.7
 
 ### Instructions
 
-1. Checkout repo into directory that apache will read when receiving GET http://hostname/csl/ requests (e.g. on my server it's /var/www/steveridout.com/public\_html/csl).
+1. Checkout repo into directory <SERVER-ROOT>/csl-source/ where SERVER-ROOT is typically public\_html.
 
 2. Run "git submodule update --init" to fetch submodules.
 
 3. Run configure.sh from the checked out repository directory.
 
-4. That's it!
+4. Run "python deploy.py"
+
+5. Point your browser to /csl to access the site
+
+6. Point your browser to /csl/test to run unit tests
+
 
 # Attributions 
 
