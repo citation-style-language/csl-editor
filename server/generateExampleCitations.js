@@ -6,7 +6,7 @@ importPackage(java.io);
 load("../external/citeproc/loadabbrevs.js");
 load("../external/citeproc/xmle4x.js");
 load("../external/citeproc/xmldom.js");
-load("../external/citeproc/citeproc.js");
+load("../external/citeproc/citeproc-1.0.336.js");
 load("../external/citeproc/loadlocale.js");
 load("../external/citeproc/loadsys.js");
 load("../external/citeproc/runcites.js");
