@@ -22,7 +22,7 @@
 
 <div id="mainContent">
 
-<h1>Citation Style Editor</h1>
+<h1>About Citation Style Editor</h1>
 
 <p>This site allows you to search and edit citation styles. It's still a prototype.</p>
 
