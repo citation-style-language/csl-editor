@@ -2,6 +2,20 @@ html, body {
 	overflow: hidden;
 	position: relative;
 }
+#notificationBar {
+	position: absolute;
+	display: none;
+	background-color: #FFFF88;
+	z-index: 40;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+#notificationBar .message {
+	margin: 6px;
+}
+#notificationBar .dismiss {
+	margin: 6px;
+}
 #mainContainer {
 	position: absolute;
 

@@ -35,6 +35,7 @@
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 
+	<script type="text/javascript" src="../src/notificationBar.js"></script>
 	<script type="text/javascript" src="../src/editReferences.js"></script>
 	<script type="text/javascript" src="../src/NodePathView.js"></script>
 	<script type="text/javascript" src="../src/MultiComboBox.js"></script>
@@ -56,6 +57,7 @@
 	<script type="text/javascript" src="../src/analytics.js"></script>
 </head>
 <body id="visualEditor">
+<div id="notificationBar"><span class="message"></span><button class="dismiss">Dismiss</button></div>
 <?php include '../html/navigation.html'; ?>
 <div id="mainContainer">
 	<div id="leftContainer" class="ui-layout-west">

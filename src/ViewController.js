@@ -89,7 +89,8 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		selectedTree = null,
 		formatCitationsCallback,
 		selectedNodeId = -1,
-		nodeButtons;
+		nodeButtons,
+		recentlyEditedMacro = -1;
 
 	var treeLoaded = function () {
 		treesLoaded++;
@@ -215,7 +216,23 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		return selectedTree.getSelectedNodePath();
 	};
 
+	var macroEditNotification = function (id) {
+		var nodeStack = CSLEDIT.data.getNodeStack(id),
+			node;
+
+		while (nodeStack.length > 0) {
+			node = nodeStack.pop();
+			if (node.name === "macro" && recentlyEditedMacro !== node.cslId) {
+				recentlyEditedMacro = node.cslId;
+				CSLEDIT.notificationBar.showMessage(
+					'You just edited a macro node, which may be used in multiple places');
+			}
+		}
+	};
+
 	var addNode = function (id, position, newNode, nodesAdded) {
+		macroEditNotification (id);	
+
 		$.each(views, function (i, view) {
 			if ("addNode" in view) {
 				view.addNode(id, position, newNode, nodesAdded);
@@ -224,6 +241,8 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 	};
 
 	var deleteNode = function (id, nodesDeleted) {
+		macroEditNotification(id);
+
 		$.each(views, function (i, view) {
 			if ("deleteNode" in view) {
 				view.deleteNode(id, nodesDeleted);
@@ -232,6 +251,8 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 	};
 
 	var amendNode = function (id, amendedNode) {
+		macroEditNotification(id);
+
 		$.each(views, function (i, view) {
 			if ("amendNode" in view) {
 				view.amendNode(id, amendedNode);

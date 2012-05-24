@@ -500,6 +500,8 @@ CSLEDIT.editorPage = (function () {
 				livePaneResizing : true,
 				north__size : 250
 			});
+
+			CSLEDIT.notificationBar.init($('#notificationBar'));
 		}
 	};
 }());
