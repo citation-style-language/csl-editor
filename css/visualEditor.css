@@ -167,17 +167,16 @@ ul.sortKeys li {
 /** Very hacky fix for jstree move between nodes bug:
  *  https://github.com/vakata/jstree/issues/174
  *
+ *  The z-index hack mentioned above worked at some point, but looked very ugly.
+ *
+ *  Now it doesn't work at all, so I've made the marker line invisible.
+ *
  *  TODO: Delve into jstree code and do a better fix
  */
-
-.jstree li {
-position: relative;
-z-index: 20 !important;
-}
-
 #jstree-marker-line {
-z-index: 10 !important;
+visibility: hidden;
 }
+
 ul.dropdown {
 z-index: 30 !important;
 }
