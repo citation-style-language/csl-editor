@@ -68,12 +68,20 @@ CSLEDIT.controller = (function () {
 		}
 	};
 
+	var undo = function () {
+		var command = commandHistory.pop(),
+			index;
+
+		for (index = 0; index < commandSubscribers[command.command].length; index++) {
+			commandSubscribers[command.inverse[index].command][index].apply(
+				null, command.inverse[index].args);
+		}
+	};
+
 	var exec = function (command, args) {
 		var index;
 
 		assert(command in commandSubscribers || command in macros, "command doesn't exist");
-		console.log("executing command " + command + "(" + JSON.stringify(args) + ")");
-		commandHistory.push(command, args);
 
 		if (command in macros) {
 			macros[command].apply(null, args);
@@ -83,9 +91,19 @@ CSLEDIT.controller = (function () {
 	};
 
 	var _exec = function(command, args) {
-		var index;
+		var index, inverseCommands = [];
+
+		console.log("executing command " + command + "(" + JSON.stringify(args) + ")");
+		
 		for (index = 0; index < commandSubscribers[command].length; index++) {
-			commandSubscribers[command][index].apply(null, args);
+			inverseCommands.push(commandSubscribers[command][index].apply(null, args));
+		}
+
+		if (command === "setCslCode") {
+			// no undo available for this yet, wipe command history
+			commandHistory = [];
+		} else {
+			commandHistory.push({command:command, args:args, inverse:inverseCommands});
 		}
 	};
 
@@ -93,7 +111,8 @@ CSLEDIT.controller = (function () {
 		addSubscriber : addSubscriber,
 		subscribeToAllCommands : subscribeToAllCommands,
 		exec : exec,
-		commandHistory : commandHistory
+		commandHistory : commandHistory,
+		undo : undo
 	};
 }());
 

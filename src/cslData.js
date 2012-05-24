@@ -303,6 +303,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 					assert(false, "position: " + position + " not recognised");
 			}
 		}
+		return newNode.cslId;
 	};
 
 	var deleteNode = function (id) {
@@ -339,20 +340,43 @@ CSLEDIT.Data = function (CSL_DATA) {
 		getCslCode : getCslCode,
 		get : get,
 		addNode : function (id, position, newNode) {
-			addNode(id, position, newNode);
+			var newCslId = addNode(id, position, newNode),
+				inverse;
 			emit("formatCitations");
+
+			// return the inverse command for undo functionality
+			return {
+				command : "deleteNode",
+				args : [ newCslId ]
+			};
 		},
 		deleteNode : function (id) {
-			deleteNode(id);
-			emit("formatCitations");
-		},
+			var deletedNode,
+				nodeAndParent = getNodeAndParent(id),
+				parentNode,
+				position;
 
+			parentNode = nodeAndParent.parent.cslId;
+			position = indexOfChild(nodeAndParent.node, nodeAndParent.parent);
+
+			deletedNode = deleteNode(id);
+
+			emit("formatCitations");
+
+			// return the inverse command for undo functionality
+			return {
+				command : "addNode",
+				args : [ parentNode, position, deletedNode ]
+			};
+		},
 		amendNode : function (id, amendedNode) {
 			// replace everything of the original node except the children and the cslId
 			var cslData = get(),
 				iter,
 				node,
-				index;
+				index,
+				result,
+				oldNode;
 		   
 			iter = new CSLEDIT.Iterator(cslData);
 			index = 0;
@@ -361,6 +385,9 @@ CSLEDIT.Data = function (CSL_DATA) {
 				node = iter.next();
 				if (index === id) {
 					assertEqual(node.cslId, id);
+					
+					oldNode = new CSLEDIT.CslNode(node.name, node.attributes, [], node.cslId);
+					oldNode.textValue = node.textValue;
 
 					node.name = amendedNode.name;
 					node.attributes = amendedNode.attributes;
@@ -374,10 +401,23 @@ CSLEDIT.Data = function (CSL_DATA) {
 			set(cslData);
 			emit("amendNode", [id, node]);
 			emit("formatCitations");
+			// return inverse command
+			return {
+				command : "amendNode",
+				args : [id, oldNode]
+			};
 		},
 		moveNode : function (fromId, toId, position) {
-			var deletedNode, fromNode;
+			var deletedNode, fromNode,
+				inverseFromCslId,
+				inverseToNodeAndParent = getNodeAndParent(fromId),
+				inverseToCslId,
+				inverseToPosition;
+
 			callbacksEnabled = false;
+
+			inverseToCslId = inverseToNodeAndParent.parent.cslId;
+			inverseToPosition = indexOfChild(inverseToNodeAndParent.node, inverseToNodeAndParent.parent);
 
 			deletedNode = deleteNode(fromId);
 
@@ -386,10 +426,19 @@ CSLEDIT.Data = function (CSL_DATA) {
 				toId -= numNodes(deletedNode);
 			}
 
-			addNode(toId, position, deletedNode);
+			inverseFromCslId = addNode(toId, position, deletedNode);
+			if (inverseToCslId > inverseFromCslId) {
+				inverseToCslId += numNodes(deletedNode);
+			}
+
 			callbacksEnabled = true;
 
 			emit("formatCitations");
+			// return inverse command
+			return {
+				command : "moveNode",
+				args : [inverseFromCslId, inverseToCslId, inverseToPosition]
+			};
 		},
 		getNode : getNode,
 		getNodeAndParent : getNodeAndParent,
