@@ -2,37 +2,28 @@
 
 CSLEDIT = CSLEDIT || {};
 
-// Allows clients to:
-// - broadcast events
-// - subscribe to events
+// Sends commands to the data module, and maintains the command history used by
+// the undo function
 //
 // ** Any action which affects the data should go through the controller **
 // 
 CSLEDIT.controller = (function () {
-	var commandSubscribers = {
-			"addNode" : [],
-			"deleteNode" : [],
-			"moveNode" : [],
-			"amendNode" : [],
-			"setCslCode" : []
-		},
-		commandHistory = [];
+	var commands = [
+			"addNode",
+			"deleteNode",
+			"moveNode",
+			"amendNode",
+			"setCslCode"
+		],
+		commandHistory = [],
+		cslData;
 
-	var addSubscriber = function (command, callback) {
-		assert(command in commandSubscribers, "command doesn't exist");
+	var setCslData = function (_cslData) {
+		$.each(commands, function (index, command) {
+			assertEqual(typeof _cslData[command], "function", "cslData must contain: " + command);
+		});
 		
-		// note: we don't check whether the callback has already been added
-		commandSubscribers[command].push(callback);
-	};
-
-	var subscribeToAllCommands = function (object) {
-		$.each(commandSubscribers, function (k, v) {
-			assert(typeof object[k] === "function", "function " + k + " doesn't exist in subscriber");
-		});
-
-		$.each(commandSubscribers, function (k, v) {
-			v.push(object[k]);
-		});
+		cslData = _cslData;
 	};
 
 	// These can be called like regular commands, but can't be subscribed to.
@@ -69,47 +60,36 @@ CSLEDIT.controller = (function () {
 	};
 
 	var undo = function () {
-		var command = commandHistory.pop(),
-			index;
+		var command = commandHistory.pop();
 
-		for (index = 0; index < commandSubscribers[command.command].length; index++) {
-			commandSubscribers[command.inverse[index].command][index].apply(
-				null, command.inverse[index].args);
-		}
+		cslData[command.inverse.command].apply(null, command.inverse.args);
 	};
 
 	var exec = function (command, args) {
-		var index;
-
-		assert(command in commandSubscribers || command in macros, "command doesn't exist");
-
 		if (command in macros) {
 			macros[command].apply(null, args);
 		} else {
+			assert(commands.indexOf(command) !== -1, "command doesn't exist");
 			_exec(command, args);
 		}
 	};
 
 	var _exec = function(command, args) {
-		var index, inverseCommands = [];
+		var inverseCommand;
 
 		console.log("executing command " + command + "(" + JSON.stringify(args) + ")");
+		inverseCommand = cslData[command].apply(null, args);
 		
-		for (index = 0; index < commandSubscribers[command].length; index++) {
-			inverseCommands.push(commandSubscribers[command][index].apply(null, args));
-		}
-
 		if (command === "setCslCode") {
 			// no undo available for this yet, wipe command history
 			commandHistory = [];
 		} else {
-			commandHistory.push({command:command, args:args, inverse:inverseCommands});
+			commandHistory.push({command:command, args:args, inverse:inverseCommand});
 		}
 	};
 
 	return {
-		addSubscriber : addSubscriber,
-		subscribeToAllCommands : subscribeToAllCommands,
+		setCslData : setCslData,
 		exec : exec,
 		commandHistory : commandHistory,
 		undo : undo

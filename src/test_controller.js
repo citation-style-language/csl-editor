@@ -1,74 +1,87 @@
 "use strict";
 
-module("CSLEDIT.controller");
+module("CSLEDIT.controller", {
+	setup : function () {
+		CSLEDIT.data = new CSLEDIT.Data("CSLEDIT.test_cslData");
+	}
+});
 
-test("can only subscribe to actual events", function () {
+test("cslData must contain all the commands", function () {
 	raises( function () {
-		CSLEDIT.controller.addSubscriber("noSuchCommand", function (){} );
+		CSLEDIT.controller.setCslData({});
 	});
-	
-	CSLEDIT.controller.addSubscriber("addNode", function (){} );
 });
 
 test("can only call actual commands and macros", function () {
-	raises(function () {
-		CSLEDIT.controller.exec("fakeCommand", [] );
+	CSLEDIT.controller.setCslData(CSLEDIT.data);
+
+	CSLEDIT.controller.setCslData({
+		addNode : function () {},
+		deleteNode : function () {},
+		moveNode : function () {},
+		amendNode : function () {},
+		setCslCode : function () {},
 	});
 
-	CSLEDIT.controller.exec("addNode", [] );
-	CSLEDIT.controller.exec("addPath", ["style"] );
+	CSLEDIT.controller.exec("addNode");
+
+	raises( function () {
+		CSLEDIT.controller.exec("noSuchCommand");
+	});
 });
 		
-test("test subscribe to controller", function () {
-	var temp,
-		temp2;
+test("test exec", function () {
+	var temp;
 
 	var addToTemp = function (increment1, increment2) {
 		temp += increment1 + increment2;
 	};
 
 	temp = 3;
-	CSLEDIT.controller.addSubscriber("addNode", addToTemp);
-	CSLEDIT.controller.exec("addNode", [4, 5]);
-	equal(temp, 12);
-
-	// it's allowed to add duplicate subscribers, they'll get called multiple times
-	temp = 3
-	CSLEDIT.controller.addSubscriber("addNode", addToTemp);
-	CSLEDIT.controller.exec("addNode", [4, 5]);
-	equal(temp, 21, "duplicate subscriber");
-
-	// add a different anonymous function
-	temp = 3;
-	temp2 = 3;
-	CSLEDIT.controller.addSubscriber("addNode", function (a, b) {temp2 += a - b});
-	CSLEDIT.controller.exec("addNode", [6, 1]);
-	equal(temp, 17, "multiple subscribers");
-	equal(temp2, 8, "multiple subscribers");	
-});
-
-test("test subscribe to all", function () {
-	var invalidSubscriber,
-		subscriber,
-		temp = 0;
-
-	subscriber = {
-		addNode : function () {},
+	CSLEDIT.controller.setCslData({
+		addNode : addToTemp,
 		deleteNode : function () {},
 		moveNode : function () {},
 		amendNode : function () {},
-		shiftCslIds : function () {},
-		setCslCode : 5
-	};
-
-	// setCslCode isn't a function, so throw error
-	raises( function () {
-		CSLEDIT.controller.subscribeToAllCommands(subscriber);
+		setCslCode : function () {},
 	});
 
-	// test simple dummy command 
-	subscriber.setCslCode = function () { temp++; };
-	CSLEDIT.controller.subscribeToAllCommands(subscriber);
-	CSLEDIT.controller.exec("setCslCode", []);
-	equal(temp, 1);
+	CSLEDIT.controller.exec("addNode", [4, 5]);
+	equal(temp, 12);
+});
+
+test("undo", function () {
+	// undo requires CSLEDIT.data to return the inverse function
+	// for every function that's called
+
+	var lastCommand;
+
+	CSLEDIT.controller.setCslData({
+		addNode : function (arg) {
+			lastCommand = "addNode(" + arg + ")";
+			// return inverse of addNode(id)
+			return {
+				command : "deleteNode",
+				args : [arg]
+			}
+		},
+		deleteNode : function (arg) {
+			lastCommand = "deleteNode(" + arg + ")";
+		},
+		moveNode : function () {},
+		amendNode : function () {},
+		setCslCode : function () {},
+	});
+
+	CSLEDIT.controller.exec("addNode", [1]);
+	equal(lastCommand, "addNode(1)");
+	CSLEDIT.controller.exec("addNode", [2]);
+	equal(lastCommand, "addNode(2)");
+
+	CSLEDIT.controller.undo();
+	equal(lastCommand, "deleteNode(2)");
+	CSLEDIT.controller.undo();
+	equal(lastCommand, "deleteNode(1)");
+
+	equal(CSLEDIT.controller.commandHistory.length, 0);
 });
