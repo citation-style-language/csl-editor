@@ -33,7 +33,7 @@ CSLEDIT.schema.callWhenReady( function () {
 
 	test("all data integrity check", function () {
 		var allData = CSLEDIT.schema.allData(),
-			element;
+			elementName;
 
 		for(elementName in allData) {
 			ok(allData[elementName].attributeValues.length <= 1);
