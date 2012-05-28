@@ -6,7 +6,33 @@ CSLEDIT.propertyPanel = (function () {
 	var onChangeTimeout,
 		multiInputs,
 		nodeData,
-		enabledControlsOnTop = false;
+		enabledTableControlsOnTop = false,
+		allTableControls,
+		enabledTableControls,
+		disabledTableControls,
+		newAttributes,
+		customControls,
+		toolbar,
+		customControlSchema = {
+			'font-style' : {
+				'italic' : { text : 'i' },
+				'normal' : 'default'
+				// "oblique" not supported
+			},
+			'font-variant' : {
+				'small-caps' : { text : 'All Caps' },
+				'normal' : 'default'
+			},
+			'font-weight' : {
+				'normal' : 'default',
+				'bold' : { text : 'B' }
+				// 'light' not supported
+			},
+			'text-decoration' : {
+				'none' : 'default',
+				'underline' : { text : 'u' }
+			}			
+		};
 
 	var inputAttributeRow = function (index, schemaAttribute, enabled) {
 		var row, textInput;
@@ -66,21 +92,161 @@ CSLEDIT.propertyPanel = (function () {
 		return 'nodeAttribute' + index;
 	};
 
+	var createButton = function (attributeName, schemaAttribute, index, attribute) {
+		var defaultValue;
+
+		toolbar.append($('<label id=' + labelId(index) + '>' + attributeName + '<\/label>').
+				css({visibility:'hidden'}));
+		$.each(customControlSchema[attributeName], function (value, control) {
+			if (control === 'default') {
+				defaultValue = value;
+			}
+		});
+
+		assert(typeof defaultValue !== "undefined");
+		$.each(customControlSchema[attributeName], function (attributeValue, control) {
+			var button, buttonLabel;
+			if (control !== 'default') {
+				buttonLabel = $('<label for="' + inputId(index) + '">' + control.text + '<\/label>');
+				button = $('<input type="checkbox" id="' + inputId(index) + '" \/>');
+				toolbar.append(button);
+				toolbar.append(buttonLabel);
+
+				console.log('attr value = ' + attribute.value);
+				if (attribute.value === attributeValue) {
+					button.attr('checked', 'checked');
+				}
+				button.button();
+			}
+		});
+	};
+
+	var createAttributeEditor = function (attributeName, schemaAttribute, index) {
+		var attribute,
+			schemaValues,
+			dropdownValues,
+			valueIndex,
+			thisRow,
+			multiInput;
+
+		attribute = null;
+
+		$.each(nodeData.attributes, function (i, thisAttribute) {
+			if (thisAttribute.key === attributeName) {
+				attribute = thisAttribute;
+				if (!("enabled" in attribute)) {
+					attribute["enabled"] = true;
+				}
+			}
+		});
+		if (attribute === null) {
+			// create attribute if it doesn't exist
+			attribute = { key : attributeName, value : "", enabled : false };
+			nodeData.attributes.push(attribute);
+		}
+
+		newAttributes.push(attribute);
+
+		if (typeof customControlSchema[attributeName] !== "undefined") {
+			createButton(attributeName, schemaAttribute, index, attribute);
+			return;
+		}
+
+		schemaValues = schemaAttribute.values;
+		dropdownValues = [];
+
+		if (schemaValues.length > 0) {
+			for (valueIndex = 0; valueIndex < schemaValues.length; valueIndex++) {
+				switch (schemaValues[valueIndex].type) {
+				case "value":
+					dropdownValues.push(schemaValues[valueIndex].value);
+					break;
+				case "data":
+					switch (schemaValues[valueIndex].value) {
+					case "boolean":
+						dropdownValues.push("true");
+						dropdownValues.push("false");
+						break;
+					case "integer":
+						for (intValue = 0; intValue < 20; intValue++) {							
+							dropdownValues.push(intValue);
+						}
+						break;
+					case "language":
+						/*
+						dropdownValues.push("English");
+						dropdownValues.push("etc... ");
+						dropdownValues.push("(TODO: find proper list");*/
+						break;
+					default:
+						console.log("WARNING: data type not recognised: " + 
+							schemaValues[valueIndex].type);
+					}
+					break;
+				default:
+					assert(false, "attribute value type not recognised");
+				}
+			}
+		}
+
+		if (dropdownValues.length > 0) {
+			thisRow = $('<tr><\/tr>');
+			thisRow.append('<tr><td><label for=' + inputId(index) + ' id="' + labelId(index) + 
+				'" class="propertyLabel">' + attributeName + '<\/label><\/td>');
+			if (schemaAttribute.list) {
+				multiInput = new CSLEDIT.MultiComboBox(
+						$('<td class="input"><\/td>'), dropdownValues, function() {nodeChanged();});
+				multiInput.val(attribute.value, true);
+				
+				if (!attribute.enabled) {
+					multiInput.getElement().attr("disabled", true);
+				}
+				thisRow.append(multiInput.getElement());
+				multiInputs[index] = multiInput;
+			} else {
+				thisRow.append((function () {
+					var select, cell;
+					select = $('<select id="' + inputId(index) + '" class="propertySelect" attr="' + 
+						index + '"><\/select>');
+
+					$.each(dropdownValues, function (i, value) {
+						select.append("<option>" + value + "<\/option>");
+					});
+					
+					cell = $('<td class="input"><\/td>').append(select)
+					if (!attribute.enabled) {
+						cell.attr('disabled', true);
+					}
+					
+					return cell;
+				}()));
+			}
+		} else {
+			thisRow = inputAttributeRow(index, attributeName, attribute.enabled);
+		}
+
+		var toggleButton;
+		toggleButton = $('<button class="toggleAttrButton" attrIndex="' + index + '"></button>');
+		if (attribute.enabled) {
+			toggleButton.html('Disable');
+		} else {
+			toggleButton.html('Enable');
+		}
+		thisRow.append($('<td><\/td>').append(toggleButton));
+		
+		if (attribute.enabled) {
+			enabledTableControls.push(thisRow);
+		} else {
+			disabledTableControls.push(thisRow);
+		}
+		allTableControls.push(thisRow);
+
+		thisRow.find("#" + inputId(index)).val(attribute.value);
+	};
+
 	var setupPanel = function (panel, _nodeData, dataType, schemaAttributes) {
 		var index,
-			newAttributes = [],
-			dropdownValues,
-			attributes = _nodeData.attributes,
-			attribute,
-			schemaValues,
-			valueIndex,
 			intValue,
-			allControls,
-			enabledControls,
-			disabledControls,
-			thisRow,
-			values,
-			multiInput,
 			table;
 
 		nodeData = _nodeData;
@@ -88,7 +254,10 @@ CSLEDIT.propertyPanel = (function () {
 		// remove child nodes
 		panel.children().remove();
 
-		// create new ones
+		toolbar = $('<div class="propertyToolbar"><\/div>');
+		panel.append(toolbar);
+
+		// create new ones 
 		//$('<h3>' + nodeData.name + ' properties</h3><br \/>').appendTo(panel);
 		// value editor (if a text or data element)
 		if (dataType !== null) {
@@ -114,148 +283,36 @@ CSLEDIT.propertyPanel = (function () {
 
 		newAttributes = [];
 
-		enabledControls = [];
-		disabledControls = [];
-		allControls = [];
-		values = [];
+		enabledTableControls = [];
+		disabledTableControls = [];
+		allTableControls = [];
 		multiInputs = {};
 
 		// attribute editors
 		index = -1;
 		$.each(schemaAttributes, function (attributeName, schemaAttribute) {
 			index++;
-			attribute = null;
-			$.each(attributes, function (i, thisAttribute) {
-				if (thisAttribute.key === attributeName) {
-					attribute = thisAttribute;
-					if (!("enabled" in attribute)) {
-						attribute["enabled"] = true;
-					}
-				}
-			});
-			if (attribute === null) {
-				// create attribute if it doesn't exist
-				attribute = { key : attributeName, value : "", enabled : false };
-				attributes.push(attribute);
-			}
-
-			newAttributes.push(attribute);
-
-			schemaValues = schemaAttribute.values;
-			dropdownValues = [];
-
-			if (schemaValues.length > 0) {
-				for (valueIndex = 0; valueIndex < schemaValues.length; valueIndex++) {
-					switch (schemaValues[valueIndex].type) {
-					case "value":
-						dropdownValues.push(schemaValues[valueIndex].value);
-						break;
-					case "data":
-						switch (schemaValues[valueIndex].value) {
-						case "boolean":
-							dropdownValues.push("true");
-							dropdownValues.push("false");
-							break;
-						case "integer":
-							for (intValue = 0; intValue < 20; intValue++) {							
-								dropdownValues.push(intValue);
-							}
-							break;
-						case "language":
-							/*
-							dropdownValues.push("English");
-							dropdownValues.push("etc... ");
-							dropdownValues.push("(TODO: find proper list");*/
-							break;
-						default:
-							console.log("WARNING: data type not recognised: " + 
-								schemaValues[valueIndex].type);
-						}
-						break;
-					default:
-						assert(false, "attribute value type not recognised");
-					}
-				}
-			}
-
-			if (dropdownValues.length > 0) {
-				thisRow = $('<tr><\/tr>');
-				thisRow.append('<tr><td><label for=' + inputId(index) + ' id="' + labelId(index) + 
-					'" class="propertyLabel">' + attributeName + '<\/label><\/td>');
-				if (schemaAttribute.list) {
-					multiInput = new CSLEDIT.MultiComboBox(
-							$('<td class="input"><\/td>'), dropdownValues, function() {nodeChanged();});
-					multiInput.val(attribute.value, true);
-					
-					if (!attribute.enabled) {
-						multiInput.getElement().attr("disabled", true);
-					}
-					thisRow.append(multiInput.getElement());
-					multiInputs[index] = multiInput;
-				} else {
-					thisRow.append((function () {
-						var select, cell;
-						select = $('<select id="' + inputId(index) + '" class="propertySelect" attr="' + 
-							index + '"><\/select>');
-
-						$.each(dropdownValues, function (i, value) {
-							select.append("<option>" + value + "<\/option>");
-						});
-						
-						cell = $('<td class="input"><\/td>').append(select)
-						if (!attribute.enabled) {
-							cell.attr('disabled', true);
-						}
-						
-						return cell;
-					}()));
-				}
-			} else {
-				thisRow = inputAttributeRow(index, attributeName, attribute.enabled);
-			}
-
-			var toggleButton;
-			toggleButton = $('<button class="toggleAttrButton" attrIndex="' + index + '"></button>');
-			if (attribute.enabled) {
-				toggleButton.html('Disable');
-			} else {
-				toggleButton.html('Enable');
-			}
-			thisRow.append($('<td><\/td>').append(toggleButton));
-			
-			if (attribute.enabled) {
-				enabledControls.push(thisRow);
-			} else {
-				disabledControls.push(thisRow);
-			}
-			allControls.push(thisRow);
-
-			values[index] = attribute.value;
+			createAttributeEditor(attributeName, schemaAttribute, index);
 		});
 		
 		table = $('<table>');
-		if (enabledControlsOnTop) {
-			for (index = 0; index < enabledControls.length; index++) {
-				$(enabledControls[index]).appendTo(panel);
+		if (enabledTableControlsOnTop) {
+			for (index = 0; index < enabledTableControls.length; index++) {
+				$(enabledTableControls[index]).appendTo(panel);
 			}
 
 			table.append($("<tr><td><br /><\/td><td><\/td><td><\/td><\/tr>"));
 
 			// disabled controls
-			for (index = 0; index < disabledControls.length; index++) {
-				table.append($(disabledControls[index]));
+			for (index = 0; index < disabledTableControls.length; index++) {
+				table.append($(disabledTableControls[index]));
 			}
 		} else {
-			$.each(allControls, function (i, control) {
+			$.each(allTableControls, function (i, control) {
 				table.append(control);
 			});
 		}
 		panel.append(table);
-
-		// set values
-		for (index = 0; index < attributes.length; index++) {
-			$("#" + inputId(index)).val(values[index]);
-		}
 
 		nodeData.attributes = newAttributes;
 
