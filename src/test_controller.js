@@ -2,6 +2,7 @@
 
 module("CSLEDIT.controller", {
 	setup : function () {
+		CSLEDIT.controller.clearHistory();
 		CSLEDIT.data = new CSLEDIT.Data("CSLEDIT.test_cslData");
 	}
 });

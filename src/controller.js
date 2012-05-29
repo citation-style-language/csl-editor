@@ -92,7 +92,10 @@ CSLEDIT.controller = (function () {
 		setCslData : setCslData,
 		exec : exec,
 		commandHistory : commandHistory,
-		undo : undo
+		undo : undo,
+		clearHistory : function () {
+			commandHistory = [];
+		}
 	};
 }());
 
