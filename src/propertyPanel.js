@@ -11,8 +11,9 @@ CSLEDIT.propertyPanel = (function () {
 		enabledTableControls,
 		disabledTableControls,
 		newAttributes,
-		customControls,
 		toolbar,
+		panel,
+		customControlIndex,
 		customControlSchema = {
 			'font-style' : {
 				'italic' : { text : 'i' },
@@ -59,6 +60,38 @@ CSLEDIT.propertyPanel = (function () {
 
 		return element;
 	};
+
+	var indexOfAttribute = function (attributeName, attributes) {
+		var index;
+		for (index = 0; index < attributes.length; index++) {
+			if (attributes[index].key === attributeName) {
+				return index;
+			}
+		}
+		// couldn't find
+		return -1;
+	};
+
+	var customControlChanged = function (event) {
+		var target = $(event.target),
+			attribute = target.attr('data-attribute'),
+			value,
+			index = indexOfAttribute(attribute, nodeData.attributes);
+
+		if (target.is(':checked')) {
+			value = target.attr('data-value');
+		} else {
+			value = defaultValueForCustomControl(attribute);
+		}
+
+		nodeData.attributes[index] = {
+			key : attribute,
+			value : value,
+			enabled : true
+		}
+
+		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, nodeData]);
+	};
 	
 	var nodeChanged = function () {
 		// TODO: assert check that persistent data wasn't changed in another tab, making
@@ -92,23 +125,27 @@ CSLEDIT.propertyPanel = (function () {
 		return 'nodeAttribute' + index;
 	};
 
-	var createButton = function (attributeName, schemaAttribute, index, attribute) {
+	var defaultValueForCustomControl = function (attributeName) {
 		var defaultValue;
-
-		toolbar.append($('<label id=' + labelId(index) + '>' + attributeName + '<\/label>').
-				css({visibility:'hidden'}));
 		$.each(customControlSchema[attributeName], function (value, control) {
 			if (control === 'default') {
 				defaultValue = value;
+				return false;
 			}
 		});
+		return defaultValue;
+	}
 
-		assert(typeof defaultValue !== "undefined");
+	var createButton = function (attributeName, schemaAttribute, index, attribute) {
+		assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
 		$.each(customControlSchema[attributeName], function (attributeValue, control) {
-			var button, buttonLabel;
+			var button, buttonLabel, customControlId;
+			customControlId = "customControl" + customControlIndex;
+
 			if (control !== 'default') {
-				buttonLabel = $('<label for="' + inputId(index) + '">' + control.text + '<\/label>');
-				button = $('<input type="checkbox" id="' + inputId(index) + '" \/>');
+				buttonLabel = $('<label for="' + customControlId + '">' + control.text + '<\/label>');
+				button = $('<input type="checkbox" id="' + customControlId + '" data-attribute="' +
+					attributeName + '" data-value="' + attributeValue + '" \/>');
 				toolbar.append(button);
 				toolbar.append(buttonLabel);
 
@@ -117,6 +154,7 @@ CSLEDIT.propertyPanel = (function () {
 					button.attr('checked', 'checked');
 				}
 				button.button();
+				customControlIndex++;
 			}
 		});
 	};
@@ -244,11 +282,12 @@ CSLEDIT.propertyPanel = (function () {
 		thisRow.find("#" + inputId(index)).val(attribute.value);
 	};
 
-	var setupPanel = function (panel, _nodeData, dataType, schemaAttributes) {
+	var setupPanel = function (_panel, _nodeData, dataType, schemaAttributes) {
 		var index,
 			intValue,
 			table;
 
+		panel = _panel;
 		nodeData = _nodeData;
 
 		// remove child nodes
@@ -287,6 +326,8 @@ CSLEDIT.propertyPanel = (function () {
 		disabledTableControls = [];
 		allTableControls = [];
 		multiInputs = {};
+
+		customControlIndex = 0;
 
 		// attribute editors
 		index = -1;
@@ -339,6 +380,8 @@ CSLEDIT.propertyPanel = (function () {
 			clearTimeout(onChangeTimeout);
 			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 10);
 		});
+
+		panel.find('input[id^=customControl]').on('change', customControlChanged);
 	};
 	
 	return {
