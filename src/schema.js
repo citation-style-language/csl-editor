@@ -63,7 +63,8 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			refs : [],
 			attributeValues : [],
 			textNode : false,
-			list : false
+			list : false,
+			choices : []
 		};
 	};
 
@@ -231,7 +232,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		});
 	};
 
-	var parseChildren = function (node) {
+	var parseChildren = function (node, applyToEachChild) {
 		var index,
 			parser,
 			childNode,
@@ -249,6 +250,10 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 					childResult = nodeParsers[childNode.nodeName](childNode);
 
 					if (childResult !== null) {
+						if (typeof applyToEachChild === "function") {
+							applyToEachChild(childResult);
+						}
+
 						joinProperties(nodeProperties, childResult);
 					}
 				} else {
@@ -285,6 +290,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			}
 		}
 
+		arrayMerge(propertiesA.choices, propertiesB.choices);
 		arrayMerge(propertiesA.refs, propertiesB.refs);
 		arrayMerge(propertiesA.attributeValues, propertiesB.attributeValues, attributeValueEquality);
 
@@ -366,8 +372,20 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			return parseChildren(node);
 		},
 		choice : function (node) {
-			// for now, just union the possible child nodes
-			return parseChildren(node);
+			var choices = [],
+				thisNodeProperties;			
+
+			thisNodeProperties = parseChildren(node, function (childNodeProperties) {
+				var attributeNames = [];
+				// nested choices not supported
+				assertEqual(childNodeProperties.choices.length, 0);
+				$.each(childNodeProperties.attributes, function (attributeName, attr) {
+					attributeNames.push(attributeName);
+				});
+				choices.push(attributeNames);
+			});
+			thisNodeProperties.choices = choices;
+			return thisNodeProperties;
 		},
 		optional : function (node) {
 			return parseChildren(node);
@@ -475,6 +493,9 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			} else {
 				return node.attributeValues[0].value;
 			}
+		},
+		choices : function (element) {
+			return nodeProperties[element].choices;
 		},
 		allData : function () {
 			return nodeProperties;

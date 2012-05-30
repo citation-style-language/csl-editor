@@ -39,4 +39,15 @@ CSLEDIT.schema.callWhenReady( function () {
 			ok(allData[elementName].attributeValues.length <= 1);
 		}
 	});
+
+	test("choices", function () {
+		equal(CSLEDIT.schema.choices("layout/text").length, 4, "length");
+		equal(CSLEDIT.schema.choices("layout/text")[0][0], "macro");
+		equal(CSLEDIT.schema.choices("layout/text")[1][0], "term");
+		equal(CSLEDIT.schema.choices("layout/text")[1][1], "form");
+		equal(CSLEDIT.schema.choices("layout/text")[1][2], "plural");
+		equal(CSLEDIT.schema.choices("layout/text")[2][0], "value");
+		equal(CSLEDIT.schema.choices("layout/text")[3][0], "variable");
+		equal(CSLEDIT.schema.choices("layout/text")[3][1], "form");
+	});
 });
