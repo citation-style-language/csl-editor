@@ -351,7 +351,8 @@ CSLEDIT.editorPage = (function () {
 			possibleChildNodesDropdown = $("#possibleChildNodes").html("");
 
 			for (element in possibleElements) {
-				$('<li><a href="#">' + element + '</a></li>').appendTo(possibleChildNodesDropdown);
+				$('<li><a href="#">' + element + '</a></li>').appendTo(
+					possibleChildNodesDropdown);
 			}
 		}
 

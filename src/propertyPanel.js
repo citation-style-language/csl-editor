@@ -38,6 +38,14 @@ CSLEDIT.propertyPanel = (function () {
 				'baseline' : 'default',
 				'sup' : { text : 'sup' },
 				'sub' : { text : 'sub' }
+			},
+			'quotes' : {
+				'false' : 'default',
+				'true' : { text : '""' }
+			},
+			'strip-periods' : {
+				'false' : 'default',
+				'true' : { text : 'Strip Periods' }
 			}
 	};
 
@@ -54,7 +62,7 @@ CSLEDIT.propertyPanel = (function () {
 			textInput.attr('disabled', true);
 		}
 
-		row.append(textInput);
+		row.append($('<td><\/td>').append(textInput));
 
 		return row;
 	};
@@ -183,7 +191,6 @@ CSLEDIT.propertyPanel = (function () {
 				if (attribute.value === attributeValue) {
 					button.attr('checked', 'checked');
 				}
-				//button.button();
 				customControlIndex++;
 			}
 		});
@@ -260,8 +267,7 @@ CSLEDIT.propertyPanel = (function () {
 
 		if (dropdownValues.length > 0) {
 			thisRow = $('<tr><\/tr>');
-			thisRow.append('<tr><td><label for=' + inputId(index) + ' id="' + labelId(index) + 
-				'" class="propertyLabel">' + attributeName + '<\/label><\/td>');
+			thisRow.append($('<td><\/td>').append(label(index, attributeName)));
 			if (schemaAttribute.list) {
 				multiInput = new CSLEDIT.MultiComboBox(
 						$('<td class="input"><\/td>'), dropdownValues, function() {nodeChanged();});
@@ -326,18 +332,6 @@ CSLEDIT.propertyPanel = (function () {
 		toolbar = $('<div class="propertyToolbar"><\/div>');
 		panel.append(toolbar);
 
-		// create new ones 
-		//$('<h3>' + nodeData.name + ' properties</h3><br \/>').appendTo(panel);
-		// value editor (if a text or data element)
-		if (dataType !== null) {
-			$('<tr><td><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
-				dataType + ' value<\/label><\/td>' + 
-				'<td class="input"><input id="textNodeInput" class="propertyInput"><\/input><\/td><\/tr>').
-				appendTo(panel);
-		
-			$("#textNodeInput").val(nodeData.textValue);
-		}
-
 		// TODO: data validation
 		switch (dataType) {
 		case null:
@@ -359,6 +353,17 @@ CSLEDIT.propertyPanel = (function () {
 
 		customControlIndex = 0;
 
+		table = $('<table><\/table>');
+		// create value editor (if a text or data element)
+		if (dataType !== null) {
+			$('<tr><td><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
+				dataType + ' value<\/label><\/td>' + 
+				'<td class="input"><input id="textNodeInput" class="propertyInput"><\/input><\/td><\/tr>').
+				appendTo(panel);
+		
+			$("#textNodeInput").val(nodeData.textValue);
+		}
+
 		// attribute editors
 		index = -1;
 		$.each(schemaAttributes, function (attributeName, schemaAttribute) {
@@ -366,7 +371,6 @@ CSLEDIT.propertyPanel = (function () {
 			createAttributeEditor(attributeName, schemaAttribute, index);
 		});
 		
-		table = $('<table>');
 		if (enabledTableControlsOnTop) {
 			for (index = 0; index < enabledTableControls.length; index++) {
 				$(enabledTableControls[index]).appendTo(panel);
@@ -387,8 +391,6 @@ CSLEDIT.propertyPanel = (function () {
 
 		nodeData.attributes = newAttributes;
 
-		$('<\/table>').appendTo(panel);
-	
 		$(".propertyInput").on("input", function () {
 			clearTimeout(onChangeTimeout);
 			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 500);
