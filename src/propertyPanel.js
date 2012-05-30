@@ -14,26 +14,32 @@ CSLEDIT.propertyPanel = (function () {
 		toolbar,
 		panel,
 		customControlIndex,
+		customControls,
 		customControlSchema = {
-			'font-style' : {
-				'italic' : { text : 'i' },
-				'normal' : 'default'
-				// "oblique" not supported
-			},
-			'font-variant' : {
-				'small-caps' : { text : 'All Caps' },
-				'normal' : 'default'
-			},
 			'font-weight' : {
 				'normal' : 'default',
 				'bold' : { text : 'B' }
 				// 'light' not supported
 			},
+			'font-style' : {
+				'italic' : { text : 'i' },
+				'normal' : 'default'
+				// "oblique" not supported
+			},
 			'text-decoration' : {
 				'none' : 'default',
 				'underline' : { text : 'u' }
-			}			
-		};
+			},
+			'font-variant' : {
+				'small-caps' : { text : 'All Caps' },
+				'normal' : 'default'
+			},
+			'vertical-align' : {
+				'baseline' : 'default',
+				'sup' : { text : 'sup' },
+				'sub' : { text : 'sub' }
+			}
+	};
 
 	var inputAttributeRow = function (index, schemaAttribute, enabled) {
 		var row, textInput;
@@ -47,6 +53,7 @@ CSLEDIT.propertyPanel = (function () {
 		if (!enabled) {
 			textInput.attr('disabled', true);
 		}
+
 		row.append(textInput);
 
 		return row;
@@ -72,11 +79,30 @@ CSLEDIT.propertyPanel = (function () {
 		return -1;
 	};
 
+	var positionInSchema = function (attributeName) {
+		var index = 0,
+			position = -1;
+
+		$.each(customControlSchema, function (key, value) {
+			if (key === attributeName) {
+				position = index;
+				return false;
+			}
+			index++;
+		});
+
+		return position;
+	};
+
 	var customControlChanged = function (event) {
 		var target = $(event.target),
 			attribute = target.attr('data-attribute'),
 			value,
-			index = indexOfAttribute(attribute, nodeData.attributes);
+			index = indexOfAttribute(attribute, nodeData.attributes),
+			siblingControls = $(event.target).siblings('[data-attribute="' + attribute + '"]');
+		
+		// disable any other buttons for this attribute
+		siblingControls.removeAttr('checked').button('refresh');
 
 		if (target.is(':checked')) {
 			value = target.attr('data-value');
@@ -138,6 +164,7 @@ CSLEDIT.propertyPanel = (function () {
 
 	var createButton = function (attributeName, schemaAttribute, index, attribute) {
 		assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
+
 		$.each(customControlSchema[attributeName], function (attributeValue, control) {
 			var button, buttonLabel, customControlId;
 			customControlId = "customControl" + customControlIndex;
@@ -146,14 +173,17 @@ CSLEDIT.propertyPanel = (function () {
 				buttonLabel = $('<label for="' + customControlId + '">' + control.text + '<\/label>');
 				button = $('<input type="checkbox" id="' + customControlId + '" data-attribute="' +
 					attributeName + '" data-value="' + attributeValue + '" \/>');
-				toolbar.append(button);
-				toolbar.append(buttonLabel);
 
-				console.log('attr value = ' + attribute.value);
+				customControls.push({
+					position : positionInSchema(attributeName),
+					control : button,
+					label : buttonLabel
+				});
+
 				if (attribute.value === attributeValue) {
 					button.attr('checked', 'checked');
 				}
-				button.button();
+				//button.button();
 				customControlIndex++;
 			}
 		});
@@ -165,7 +195,8 @@ CSLEDIT.propertyPanel = (function () {
 			dropdownValues,
 			valueIndex,
 			thisRow,
-			multiInput;
+			multiInput,
+			intValue;
 
 		attribute = null;
 
@@ -284,7 +315,6 @@ CSLEDIT.propertyPanel = (function () {
 
 	var setupPanel = function (_panel, _nodeData, dataType, schemaAttributes) {
 		var index,
-			intValue,
 			table;
 
 		panel = _panel;
@@ -320,8 +350,8 @@ CSLEDIT.propertyPanel = (function () {
 			// no validation
 		}
 
+		customControls = [];
 		newAttributes = [];
-
 		enabledTableControls = [];
 		disabledTableControls = [];
 		allTableControls = [];
@@ -381,7 +411,20 @@ CSLEDIT.propertyPanel = (function () {
 			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 10);
 		});
 
-		panel.find('input[id^=customControl]').on('change', customControlChanged);
+		customControls.sort(function (a, b) {
+			return a.position - b.position;
+		});
+
+		$.each(customControls, function (i, control) {
+			if (control.hasOwnProperty('control')) {
+				toolbar.append(control.control);
+				toolbar.append(control.label);
+				
+				control.control.button();
+			}
+		});
+
+		toolbar.find('input[id^=customControl]').on('change', customControlChanged);
 	};
 	
 	return {

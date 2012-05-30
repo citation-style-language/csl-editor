@@ -129,6 +129,10 @@ div.panel {
 #elementPropertyPanel table tr td.input {
 	background-color: #D5D5BC;
 }
+#elementPropertyPanel .ui-button .ui-button-text
+{
+	line-height: 1.0;
+}
 #nodePathView {
 	margin: 5px;
 	margin-bottom: 10px;
