@@ -18,11 +18,11 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 ### Instructions
 
-1. Checkout repo into directory <SERVER-ROOT>/csl-source/ where SERVER-ROOT is typically public\_html.
+1. Checkout repo into directory &lt;SERVER-ROOT&gt;/csl-source/ where SERVER-ROOT is typically public\_html
 
-2. Run "git submodule update --init" to fetch submodules.
+2. Run "git submodule update --init" from checked out directory to fetch submodules
 
-3. Run configure.sh from the checked out repository directory.
+3. Run configure.sh
 
 4. Run "python deploy.py"
 
