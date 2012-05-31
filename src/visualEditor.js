@@ -373,7 +373,8 @@ CSLEDIT.editorPage = (function () {
 				break;
 			default:
 			CSLEDIT.propertyPanel.setupPanel(
-				$("#elementProperties"), node, dataType, schemaAttributes);
+				$("#elementProperties"), node, dataType, schemaAttributes,
+				CSLEDIT.schema.choices(parentNodeName + "/" + node.name));
 		}
 
 		$('span[cslid="' + oldSelectedNode + '"]').removeClass("highlighted");

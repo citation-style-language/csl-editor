@@ -26,7 +26,9 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		urlsGot = 0,
 		callback = null,
 		initialised = false,
-		refParents = {};
+		refParents = {},
+		zeroOrMore = false,
+		oneOrMore = false;
 
 	var arrayForEach = function (array, action) {
 		if (typeof array === "undefined") {
@@ -64,7 +66,8 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			attributeValues : [],
 			textNode : false,
 			list : false,
-			choices : []
+			choices : [],
+			choiceRefs : []
 		};
 	};
 
@@ -143,10 +146,10 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 				// already mostly simplified, just need to dereference the attr. values
 				simplifyAttributeValues(node, attributeName);
 			}
+			simplifyChoices(node);
 
 			// remove refs array
 			delete node.refs;
-
 			return;
 		}
 		
@@ -207,6 +210,33 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		} else {
 			assert(false, "Couldn't find attr value define: " + ref);
 		}
+	};
+
+	var attributeNamesFromRef = function (ref) {
+		var define = defineProperties[ref],
+			attributeNames = [];
+
+		assert(typeof define !== 'undefined');
+
+		$.each(define.refs, function (i, ref) {
+			attributeNames = attributeNames.concat(attributeNamesFromRef(ref));
+		});
+
+		$.each(define.attributes, function (name, attribute) {
+			attributeNames.push(name);
+		});
+
+		return attributeNames;
+	};
+
+	var simplifyChoices = function (node) {
+		$.each (node.choiceRefs, function (i, choiceRef) {
+			var attributeNames = attributeNamesFromRef(choiceRef);
+			if (attributeNames.length > 0) {
+				node.choices.push(attributeNames);
+			}
+		});
+		delete node.choiceRefs;
 	};
 
 	var arrayContains = function (array, element, equalityFunction) {
@@ -290,6 +320,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			}
 		}
 
+		arrayMerge(propertiesA.choiceRefs, propertiesB.choiceRefs);
 		arrayMerge(propertiesA.choices, propertiesB.choices);
 		arrayMerge(propertiesA.refs, propertiesB.refs);
 		arrayMerge(propertiesA.attributeValues, propertiesB.attributeValues, attributeValueEquality);
@@ -373,28 +404,54 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		},
 		choice : function (node) {
 			var choices = [],
-				thisNodeProperties;			
+				choiceRefs = [],
+				thisNodeProperties,
+				applyToEachChild = function (childNodeProperties) {
+					var attributeNames = [];
+					// nested choices not supported
+					assertEqual(childNodeProperties.choices.length, 0);
 
-			thisNodeProperties = parseChildren(node, function (childNodeProperties) {
-				var attributeNames = [];
-				// nested choices not supported
-				assertEqual(childNodeProperties.choices.length, 0);
-				$.each(childNodeProperties.attributes, function (attributeName, attr) {
-					attributeNames.push(attributeName);
-				});
-				choices.push(attributeNames);
-			});
-			thisNodeProperties.choices = choices;
+					$.each (childNodeProperties.refs, function (i, choiceRef) {
+						console.log('choiceRefs = ' + choiceRef);
+						choiceRefs.push(choiceRef);
+					});
+
+					$.each(childNodeProperties.attributes, function (attributeName, attr) {
+						attributeNames.push(attributeName);
+					});
+					if (attributeNames.length > 0) {
+						choices.push(attributeNames);	
+					}
+				};
+
+			if (zeroOrMore || oneOrMore) {
+				thisNodeProperties = parseChildren(node);
+			} else {
+				thisNodeProperties = parseChildren(node, applyToEachChild);
+				thisNodeProperties.choices = choices;
+				thisNodeProperties.choiceRefs = choiceRefs;
+			}
+
 			return thisNodeProperties;
 		},
 		optional : function (node) {
 			return parseChildren(node);
 		},
 		zeroOrMore : function (node) {
-			return parseChildren(node);
+			var thisNodeProperties;
+			assertEqual(zeroOrMore, false);
+			//zeroOrMore = true;
+			thisNodeProperties = parseChildren(node);
+			zeroOrMore = false;
+			return thisNodeProperties;
 		},
 		oneOrMore : function (node) {
-			return parseChildren(node);
+			var thisNodeProperties;
+			assertEqual(oneOrMore, false);
+			//oneOrMore = true;
+			thisNodeProperties = parseChildren(node);
+			oneOrMore = false;
+			return thisNodeProperties;
 		},
 		list : function (node) {
 			var thisNodeProperties = parseChildren(node);

@@ -18,17 +18,17 @@ CSLEDIT.propertyPanel = (function () {
 		customControlSchema = {
 			'font-weight' : {
 				'normal' : 'default',
-				'bold' : { text : 'B' }
+				'bold' : { text : '<strong>B<\/strong>' }
 				// 'light' not supported
 			},
 			'font-style' : {
-				'italic' : { text : 'i' },
+				'italic' : { text : '<i>I<\/i>' },
 				'normal' : 'default'
 				// "oblique" not supported
 			},
 			'text-decoration' : {
 				'none' : 'default',
-				'underline' : { text : 'u' }
+				'underline' : { text : '<u>U<\/u>' }
 			},
 			'font-variant' : {
 				'small-caps' : { text : 'All Caps' },
@@ -36,18 +36,20 @@ CSLEDIT.propertyPanel = (function () {
 			},
 			'vertical-align' : {
 				'baseline' : 'default',
-				'sup' : { text : 'sup' },
-				'sub' : { text : 'sub' }
+				'sup' : { text : 'x<sup>2<\/sup>' },
+				'sub' : { text : 'x<sub>2<\/sub>' }
 			},
 			'quotes' : {
 				'false' : 'default',
-				'true' : { text : '""' }
+				'true' : { text : '&#8220;&#8221;' }
 			},
 			'strip-periods' : {
 				'false' : 'default',
 				'true' : { text : 'Strip Periods' }
 			}
-	};
+		},
+		choiceTabs,
+		schemaChoices;
 
 	var inputAttributeRow = function (index, schemaAttribute, enabled) {
 		var row, textInput;
@@ -231,6 +233,13 @@ CSLEDIT.propertyPanel = (function () {
 		schemaValues = schemaAttribute.values;
 		dropdownValues = [];
 
+		// add macro dropdown values, they aren't in the schema
+		if (attributeName === "macro") {
+			$.each(CSLEDIT.data.getNodesFromPath("style/macro"), function (i, node) {
+				dropdownValues.push(node.attributes[indexOfAttribute("name", node.attributes)].value);
+			});
+		}
+
 		if (schemaValues.length > 0) {
 			for (valueIndex = 0; valueIndex < schemaValues.length; valueIndex++) {
 				switch (schemaValues[valueIndex].type) {
@@ -314,14 +323,74 @@ CSLEDIT.propertyPanel = (function () {
 		} else {
 			disabledTableControls.push(thisRow);
 		}
-		allTableControls.push(thisRow);
+
+		addControl(attributeName, thisRow);
 
 		thisRow.find("#" + inputId(index)).val(attribute.value);
 	};
 
-	var setupPanel = function (_panel, _nodeData, dataType, schemaAttributes) {
+	var addControl = function (attributeName, control) {
+		var addedToTab = false;
+		
+		$.each(schemaChoices, function (choiceIndex, choice) {
+			$.each(choice, function (attrIndex, attribute) {
+				if (attributeName === attribute) {
+					control.find('button.toggleAttrButton').remove();
+					control.find('*').removeAttr('disabled');
+					panel.find('#schemaChoice' + choiceIndex).append(control);
+					addedToTab = true;
+				}
+			});
+		});
+
+		if (!addedToTab) {
+			allTableControls.push(control);
+		}
+	};
+
+	var setupChoiceTabs = function () {
+		var selectedChoice = [];
+
+		// select the enabled mode
+		$.each(schemaChoices, function (choiceIndex, choice) {
+			$.each(choice, function (attrIndex, attribute) {
+				if (nodeData.attributes[indexOfAttribute(attribute, nodeData.attributes)].enabled) {
+					selectedChoice.push(choiceIndex);
+					return false;
+				}
+			});
+		});
+
+		if (selectedChoice.length > 0) {
+			assertEqual(selectedChoice.length, 1);
+
+			choiceTabs.tabs('select', selectedChoice[0]);
+			enableControlsInTab(selectedChoice[0]);
+		}
+		
+		if (typeof choiceTabs !== "undefined") {
+			choiceTabs.on('tabsselect', function (event, ui) {
+				enableControlsInTab(ui.index);
+				nodeChanged();
+			});
+		}
+	};
+
+	var enableControlsInTab = function (index) {
+		// enable all controls in selected tab and disable the rest
+		$.each(schemaChoices, function (choiceIndex, choice) {
+			$.each(choice, function (attrIndex, attribute) {
+				nodeData.attributes[indexOfAttribute(attribute, nodeData.attributes)].enabled = 
+					(choiceIndex === index);
+			});
+		});
+	};
+
+	var setupPanel = function (_panel, _nodeData, dataType, schemaAttributes, _schemaChoices) {
 		var index,
 			table;
+		
+		schemaChoices = _schemaChoices;
 
 		panel = _panel;
 		nodeData = _nodeData;
@@ -352,6 +421,17 @@ CSLEDIT.propertyPanel = (function () {
 		multiInputs = {};
 
 		customControlIndex = 0;
+
+		if (schemaChoices.length > 0) {
+			choiceTabs = $('<div id="schemaChoices"><ul><\/ul><\/div>');
+			panel.append(choiceTabs);
+
+			choiceTabs.tabs();
+
+			$.each(schemaChoices, function (i, attributes) {
+				choiceTabs.tabs('add', '#schemaChoice' + i, attributes[0]);
+			});
+		}
 
 		table = $('<table><\/table>');
 		// create value editor (if a text or data element)
@@ -427,6 +507,8 @@ CSLEDIT.propertyPanel = (function () {
 		});
 
 		toolbar.find('input[id^=customControl]').on('change', customControlChanged);
+
+		setupChoiceTabs();
 	};
 	
 	return {
