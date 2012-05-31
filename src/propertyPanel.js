@@ -45,7 +45,8 @@ CSLEDIT.propertyPanel = (function () {
 			}
 		},
 		choiceTabs,
-		schemaChoices;
+		schemaChoices,
+		schemaChoiceIndexes;
 
 	var inputAttributeRow = function (index, schemaAttribute, enabled) {
 		var row, textInput;
@@ -140,6 +141,7 @@ CSLEDIT.propertyPanel = (function () {
 			} else {
 				value = multiInputs[index].val();
 			}
+
 			nodeData.attributes[index] = {
 				key : key,
 				value : value,
@@ -358,10 +360,10 @@ CSLEDIT.propertyPanel = (function () {
 			choiceTabs.tabs('select', definiteSelectedChoices[0]);
 			enableControlsInTab(definiteSelectedChoices[0]);
 		} else if (possibleSelectedChoices.length > 0) {
-			if (possibleSelectedChoices.length > 0) {
+			if (possibleSelectedChoices.length > 1) {
 				console.log('WARNING: not clear which mode this node is in');
 			}
-			choiceTabs.tabs('select', definiteSelectedChoices[0]);
+			choiceTabs.tabs('select', possibleSelectedChoices[0]);
 			enableControlsInTab(possibleSelectedChoices[0]);
 		}
 		
@@ -375,10 +377,9 @@ CSLEDIT.propertyPanel = (function () {
 
 	var enableControlsInTab = function (index) {
 		// enable all controls in selected tab and disable the rest
-		$.each(schemaChoices, function (choiceIndex, choice) {
-			$.each(choice, function (attributeName, attribute) {
-				nodeData.attributes[indexOfAttribute(attributeName, nodeData.attributes)].enabled = 
-					(choiceIndex === index);
+		$.each(schemaChoiceIndexes, function (choiceIndex, choice) {
+			$.each(choice, function (i, attributeIndex) {
+				nodeData.attributes[attributeIndex].enabled = (choiceIndex === index);
 			});
 		});
 	};
@@ -413,6 +414,7 @@ CSLEDIT.propertyPanel = (function () {
 		checkboxControls = [];
 		newAttributes = [];
 		multiInputs = {};
+		schemaChoiceIndexes = [];
 
 		checkboxControlIndex = 0;
 
@@ -426,6 +428,7 @@ CSLEDIT.propertyPanel = (function () {
 
 			$.each(schemaChoices, function (choiceIndex, attributes) {
 				var addedToTab = false;
+				schemaChoiceIndexes[choiceIndex] = [];
 				$.each(attributes, function (attributeName, attribute) {
 					var editor;
 					if (!addedToTab) {
@@ -435,10 +438,11 @@ CSLEDIT.propertyPanel = (function () {
 					
 					attrIndex++;
 					editor = createAttributeEditor(attributeName, attribute, attrIndex);
+					schemaChoiceIndexes[choiceIndex].push(attrIndex);
 
 					editor.find('button.toggleAttrButton').remove();
 					editor.find('*').removeAttr('disabled');
-					panel.find('#schemaChoice' + choiceIndex).append(editor.clone());
+					panel.find('#schemaChoice' + choiceIndex).append(editor);
 				});
 			});
 		}
