@@ -28,16 +28,6 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		initialised = false,
 		refParents = {};
 
-	var arrayForEach = function (array, action) {
-		if (typeof array === "undefined") {
-			return;
-		}
-		var index;
-		for (index = 0; index < array.length; index++) {
-			action(array[index]);
-		}
-	};
-	
 	$.get(mainSchemaURL, {}, function(data) {
 		mainSchemaData = data;
 		urlsGot++;
@@ -46,7 +36,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		}
 	});
 
-	arrayForEach(includeSchemaURLs, function(url) {
+	$.each(includeSchemaURLs, function(i, url) {
 		$.get(url, {}, function(data) {
 			schemas.push(data);
 			urlsGot++;
@@ -79,7 +69,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		// This is the root node for the grammar
 		nodeProperties["root"] = parseChildren(xmlDoc);
 
-		arrayForEach(schemas, function (schemaData) {
+		$.each(schemas, function (i, schemaData) {
 			xmlDoc = parser.parseFromString(schemaData, "application/xml");
 		
 			// Parse schema
@@ -110,10 +100,10 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			originalNodes.push(node);
 		}
 
-		arrayForEach(originalNodes, function (node) {
+		$.each(originalNodes, function (i, node) {
 			match = defRegExp.exec(node);
 			if (match !== null) {
-				arrayForEach(refParents[match[1]], function (refParent) {
+				$.each(refParents[match[1]], function (i2, refParent) {
 					newNodeName = refParent + "/" + match[2];
 					if (newNodeName in nodeProperties) {
 						joinProperties(nodeProperties[newNodeName], nodeProperties[node]);
@@ -253,7 +243,11 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 	
 	// merge the two arrays putting result in arrayA
 	var arrayMerge = function (arrayA, arrayB, equalityFunction) {
-		arrayForEach(arrayB, function(eleB) {
+		if (typeof arrayB === "undefined") {
+			return;
+		}
+
+		$.each(arrayB, function(i, eleB) {
 			if (!arrayContains(arrayA, eleB, equalityFunction)) {
 				arrayA.push(eleB);
 			}
@@ -272,7 +266,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		}
 
 		// add child results to the result list
-		arrayForEach(node.childNodes, function (childNode) {
+		$.each(node.childNodes, function (i, childNode) {
 			if (childNode.localName !== null) {
 				if (childNode.nodeName in nodeParsers) {
 					childResult = nodeParsers[childNode.nodeName](childNode);
@@ -313,6 +307,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			} else {
 				arrayMerge(propertiesA.attributes[attribute].values,
 					propertiesB.attributes[attribute].values, attributeValueEquality);
+			
 				arrayMerge(propertiesA.attributes[attribute].refs,
 					propertiesB.attributes[attribute].refs);
 			}
