@@ -207,7 +207,7 @@ CSLEDIT.citationEngine = (function () {
 				callback();
 			}
 		} else {
-			if (localStorage.getItem('CSLEDIT.options.visualEditorDiffs')) {
+			if (localStorage.getItem('CSLEDIT.options.visualEditorDiffs') === "true") {
 				// display the diff
 				citationsOut.html(diffFormattedCitation);
 				bibliographyOut.html(diffFormattedBibliography);
