@@ -337,7 +337,7 @@ CSLEDIT.propertyPanel = (function () {
 				if (attributeName === attribute) {
 					control.find('button.toggleAttrButton').remove();
 					control.find('*').removeAttr('disabled');
-					panel.find('#schemaChoice' + choiceIndex).append(control);
+					panel.find('#schemaChoice' + choiceIndex).append(control.clone());
 					addedToTab = true;
 				}
 			});
@@ -353,12 +353,14 @@ CSLEDIT.propertyPanel = (function () {
 
 		// select the enabled mode
 		$.each(schemaChoices, function (choiceIndex, choice) {
-			$.each(choice, function (attrIndex, attribute) {
-				if (nodeData.attributes[indexOfAttribute(attribute, nodeData.attributes)].enabled) {
-					selectedChoice.push(choiceIndex);
-					return false;
-				}
-			});
+			// check against the first attribute in each schemaChoice list to determine 
+			// which mode we are in
+			var attribute = choice[0];
+
+			if (nodeData.attributes[indexOfAttribute(attribute, nodeData.attributes)].enabled) {
+				selectedChoice.push(choiceIndex);
+				return false;
+			}
 		});
 
 		if (selectedChoice.length > 0) {
