@@ -22,7 +22,6 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		nodeProperties = {}, // The possible child elements and attributes for each
 		                     // node name
 		defineProperties = {},
-		currentNodeName = "",
 		urlsGot = 0,
 		callback = null,
 		initialised = false,
@@ -132,7 +131,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		if (typeof ref === "undefined") {
 			for (attributeName in node.attributes) {
 				// already mostly simplified, just need to dereference the attr. values
-				simplifyAttributeValues(node, attributeName);
+				simplifyAttributeValues(node.attributes, attributeName);
 			}
 			simplifyChoices(node);
 
@@ -162,26 +161,26 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		}
 	};
 
-	var simplifyAttributeValues = function (node, attributeName) {
+	var simplifyAttributeValues = function (attributes, attributeName) {
 		var ref,
 			define;
 
 		// note: refs may already be deleted because
 		// this attribute may have referenced in a different element,
 		// and it's already been simplified
-		if (typeof node.attributes[attributeName].refs === "undefined") {
+		if (typeof attributes[attributeName].refs === "undefined") {
 			return;
 		}
 
-		ref = node.attributes[attributeName].refs.pop();
+		ref = attributes[attributeName].refs.pop();
 
 		if (typeof ref === "undefined") {
 			// simplified
 			
 			// note, that refs may already be deleted because
 			// it may have been referenced somewhere else
-			if (typeof node.attributes[attributeName].refs !== "undefined") {
-				delete node.attributes[attributeName].refs;
+			if (typeof attributes[attributeName].refs !== "undefined") {
+				delete attributes[attributeName].refs;
 			}
 			return;
 		}
@@ -189,12 +188,12 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		if (ref in defineProperties) {
 			define = defineProperties[ref];
 			
-			arrayMerge(node.attributes[attributeName].values,
+			arrayMerge(attributes[attributeName].values,
 				define.attributeValues);
-			arrayMerge(node.attributes[attributeName].refs,
+			arrayMerge(attributes[attributeName].refs,
 				define.refs);
 
-			simplifyAttributeValues(node, attributeName);
+			simplifyAttributeValues(attributes, attributeName);
 		} else {
 			assert(false, "Couldn't find attr value define: " + ref);
 		}
@@ -219,9 +218,17 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 
 	var simplifyChoices = function (node) {
 		$.each (node.choiceRefs, function (i, choiceRef) {
-			var attributeNames = attributeNamesFromRef(choiceRef);
-			if (attributeNames.length > 0) {
-				node.choices.push(attributeNames);
+			var define = defineProperties[choiceRef];
+			$.each(define.attributes, function () {
+				node.choices.push(define.attributes);
+				return false;
+			});
+		});
+		$.each(node.choices, function (i, choice) {
+			var attributeName;
+			for (attributeName in choice) {
+				// already mostly simplified, just need to dereference the attr. values
+				simplifyAttributeValues(choice, attributeName);
 			}
 		});
 		delete node.choiceRefs;
@@ -287,12 +294,28 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		return nodeProperties;
 	};
 
-	var joinProperties = function (propertiesA, propertiesB) {
-		var element, attribute;
+	var attributeValueEquality = function (a, b) {
+		return (a.type === b.type && a.value === b.value);
+	};
 
-		var attributeValueEquality = function (a, b) {
-			return (a.type === b.type && a.value === b.value);
-		};
+	var attributesMerge = function (attributesA, attributesB) {
+		var attribute;
+
+		for (attribute in attributesB) {
+			if (!(attribute in attributesA)) {
+				attributesA[attribute] = attributesB[attribute];
+			} else {
+				arrayMerge(attributesA[attribute].values,
+					attributesB[attribute].values, attributeValueEquality);
+			
+				arrayMerge(attributesA[attribute].refs,
+					attributesB[attribute].refs);
+			}
+		}
+	};
+
+	var joinProperties = function (propertiesA, propertiesB) {
+		var element;
 
 		for (element in propertiesB.elements) {
 			if (!(element in propertiesA.attributes)) {
@@ -301,20 +324,10 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 				propertiesA.elements[element] = ""; // values of elements not important
 			}
 		}
-		for (attribute in propertiesB.attributes) {
-			if (!(attribute in propertiesA.attributes)) {
-				propertiesA.attributes[attribute] = propertiesB.attributes[attribute];
-			} else {
-				arrayMerge(propertiesA.attributes[attribute].values,
-					propertiesB.attributes[attribute].values, attributeValueEquality);
-			
-				arrayMerge(propertiesA.attributes[attribute].refs,
-					propertiesB.attributes[attribute].refs);
-			}
-		}
+		attributesMerge(propertiesA.attributes, propertiesB.attributes);
 
 		arrayMerge(propertiesA.choiceRefs, propertiesB.choiceRefs);
-		arrayMerge(propertiesA.choices, propertiesB.choices);
+		propertiesA.choices = propertiesA.choices.concat(propertiesB.choices);
 		arrayMerge(propertiesA.refs, propertiesB.refs);
 		arrayMerge(propertiesA.attributeValues, propertiesB.attributeValues, attributeValueEquality);
 
@@ -400,7 +413,6 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 				choiceRefs = [],
 				thisNodeProperties,
 				applyToEachChild = function (childNodeProperties) {
-					var attributeNames = [];
 					// nested choices not supported
 					assertEqual(childNodeProperties.choices.length, 0);
 
@@ -409,12 +421,12 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 						choiceRefs.push(choiceRef);
 					});
 
-					$.each(childNodeProperties.attributes, function (attributeName, attr) {
-						attributeNames.push(attributeName);
+					$.each(childNodeProperties.attributes, function () {
+						choices.push(childNodeProperties.attributes);
+						return false;
 					});
-					if (attributeNames.length > 0) {
-						choices.push(attributeNames);	
-					}
+
+					childNodeProperties.attributes = {};
 				};
 
 			thisNodeProperties = parseChildren(node, applyToEachChild);

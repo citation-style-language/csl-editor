@@ -24,11 +24,13 @@ CSLEDIT.schema.callWhenReady( function () {
 		equal(styleAttributes["default-locale"].values.length, 1);
 		equal(styleAttributes["default-locale"].values[0].type, "data");
 		equal(styleAttributes["default-locale"].values[0].value, "language");
+		
+		ok("font-weight" in CSLEDIT.schema.attributes("layout/text"));
 	});
 		
 	test("list", function () {
-		equal(CSLEDIT.schema.attributes("layout/text")["variable"].list, false);
-		equal(CSLEDIT.schema.attributes("choose/if")["variable"].list, true);
+		equal(CSLEDIT.schema.choices("layout/text")[3]["variable"].list, false);
+		equal(CSLEDIT.schema.choices("choose/if")[6]["variable"].list, true);
 	});
 
 	test("all data integrity check", function () {
@@ -42,12 +44,15 @@ CSLEDIT.schema.callWhenReady( function () {
 
 	test("choices", function () {
 		equal(CSLEDIT.schema.choices("layout/text").length, 4, "length");
-		equal(CSLEDIT.schema.choices("layout/text")[0][0], "macro");
-		equal(CSLEDIT.schema.choices("layout/text")[1][0], "term");
-		equal(CSLEDIT.schema.choices("layout/text")[1][1], "form");
-		equal(CSLEDIT.schema.choices("layout/text")[1][2], "plural");
-		equal(CSLEDIT.schema.choices("layout/text")[2][0], "value");
-		equal(CSLEDIT.schema.choices("layout/text")[3][0], "variable");
-		equal(CSLEDIT.schema.choices("layout/text")[3][1], "form");
+		ok("macro" in CSLEDIT.schema.choices("layout/text")[0]);
+		ok("term" in CSLEDIT.schema.choices("layout/text")[1]);
+		ok("form" in CSLEDIT.schema.choices("layout/text")[1]);
+		ok("plural" in CSLEDIT.schema.choices("layout/text")[1]);
+		ok("value" in CSLEDIT.schema.choices("layout/text")[2]);
+		ok("variable" in CSLEDIT.schema.choices("layout/text")[3]);
+		ok("form" in CSLEDIT.schema.choices("layout/text")[3]);
+
+		// shouldn't have the choices in the normal nodes
+		ok(!("macro" in CSLEDIT.schema.attributes("layout/text")));
 	});
 });

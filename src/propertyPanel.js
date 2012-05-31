@@ -6,16 +6,12 @@ CSLEDIT.propertyPanel = (function () {
 	var onChangeTimeout,
 		multiInputs,
 		nodeData,
-		enabledTableControlsOnTop = false,
-		allTableControls,
-		enabledTableControls,
-		disabledTableControls,
 		newAttributes,
 		toolbar,
 		panel,
-		customControlIndex,
-		customControls,
-		customControlSchema = {
+		checkboxControlIndex,
+		checkboxControls,
+		checkboxControlSchema = {
 			'font-weight' : {
 				'normal' : 'default',
 				'bold' : { text : '<strong>B<\/strong>' }
@@ -93,7 +89,7 @@ CSLEDIT.propertyPanel = (function () {
 		var index = 0,
 			position = -1;
 
-		$.each(customControlSchema, function (key, value) {
+		$.each(checkboxControlSchema, function (key, value) {
 			if (key === attributeName) {
 				position = index;
 				return false;
@@ -104,7 +100,7 @@ CSLEDIT.propertyPanel = (function () {
 		return position;
 	};
 
-	var customControlChanged = function (event) {
+	var checkboxChanged = function (event) {
 		var target = $(event.target),
 			attribute = target.attr('data-attribute'),
 			value,
@@ -138,6 +134,7 @@ CSLEDIT.propertyPanel = (function () {
 			var key, value, index;
 			index = $(this).attr("id").replace(/^nodeAttributeLabel/, "");
 			key = $(this).html();
+
 			if ($("#nodeAttribute" + index).length > 0) {
 				value = $("#nodeAttribute" + index).val();
 			} else {
@@ -163,7 +160,7 @@ CSLEDIT.propertyPanel = (function () {
 
 	var defaultValueForCustomControl = function (attributeName) {
 		var defaultValue;
-		$.each(customControlSchema[attributeName], function (value, control) {
+		$.each(checkboxControlSchema[attributeName], function (value, control) {
 			if (control === 'default') {
 				defaultValue = value;
 				return false;
@@ -175,16 +172,16 @@ CSLEDIT.propertyPanel = (function () {
 	var createButton = function (attributeName, schemaAttribute, index, attribute) {
 		assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
 
-		$.each(customControlSchema[attributeName], function (attributeValue, control) {
-			var button, buttonLabel, customControlId;
-			customControlId = "customControl" + customControlIndex;
+		$.each(checkboxControlSchema[attributeName], function (attributeValue, control) {
+			var button, buttonLabel, checkboxControlId;
+			checkboxControlId = "checkboxControl" + checkboxControlIndex;
 
 			if (control !== 'default') {
-				buttonLabel = $('<label for="' + customControlId + '">' + control.text + '<\/label>');
-				button = $('<input type="checkbox" id="' + customControlId + '" data-attribute="' +
+				buttonLabel = $('<label for="' + checkboxControlId + '">' + control.text + '<\/label>');
+				button = $('<input type="checkbox" id="' + checkboxControlId + '" data-attribute="' +
 					attributeName + '" data-value="' + attributeValue + '" \/>');
 
-				customControls.push({
+				checkboxControls.push({
 					position : positionInSchema(attributeName),
 					control : button,
 					label : buttonLabel
@@ -193,7 +190,7 @@ CSLEDIT.propertyPanel = (function () {
 				if (attribute.value === attributeValue) {
 					button.attr('checked', 'checked');
 				}
-				customControlIndex++;
+				checkboxControlIndex++;
 			}
 		});
 	};
@@ -225,7 +222,7 @@ CSLEDIT.propertyPanel = (function () {
 
 		newAttributes.push(attribute);
 
-		if (typeof customControlSchema[attributeName] !== "undefined") {
+		if (typeof checkboxControlSchema[attributeName] !== "undefined") {
 			createButton(attributeName, schemaAttribute, index, attribute);
 			return;
 		}
@@ -318,56 +315,54 @@ CSLEDIT.propertyPanel = (function () {
 		}
 		thisRow.append($('<td><\/td>').append(toggleButton));
 		
-		if (attribute.enabled) {
-			enabledTableControls.push(thisRow);
-		} else {
-			disabledTableControls.push(thisRow);
-		}
-
-		addControl(attributeName, thisRow);
-
 		thisRow.find("#" + inputId(index)).val(attribute.value);
-	};
 
-	var addControl = function (attributeName, control) {
-		var addedToTab = false;
-		
-		$.each(schemaChoices, function (choiceIndex, choice) {
-			$.each(choice, function (attrIndex, attribute) {
-				if (attributeName === attribute) {
-					control.find('button.toggleAttrButton').remove();
-					control.find('*').removeAttr('disabled');
-					panel.find('#schemaChoice' + choiceIndex).append(control.clone());
-					addedToTab = true;
-				}
-			});
-		});
-
-		if (!addedToTab) {
-			allTableControls.push(control);
-		}
+		return thisRow;
 	};
 
 	var setupChoiceTabs = function () {
-		var selectedChoice = [];
+		var possibleSelectedChoices = [], // choices with some attributes enabled
+			definiteSelectedChoices = []; // choices with all attributes enabled
 
 		// select the enabled mode
 		$.each(schemaChoices, function (choiceIndex, choice) {
 			// check against the first attribute in each schemaChoice list to determine 
 			// which mode we are in
-			var attribute = choice[0];
-
-			if (nodeData.attributes[indexOfAttribute(attribute, nodeData.attributes)].enabled) {
-				selectedChoice.push(choiceIndex);
+			var definitelySelected = false,
+				possiblySelected = false;
+			
+			$.each(choice, function (attributeName, attribute) {
+				definitelySelected = true;
 				return false;
+			});
+
+			$.each(choice, function (attributeName, attribute) {
+				if (nodeData.attributes[indexOfAttribute(attributeName, nodeData.attributes)].enabled) {
+					possiblySelected = true;
+				} else {
+					definitelySelected = false;
+				}
+			});
+
+			if (definitelySelected) {
+				definiteSelectedChoices.push(choiceIndex);
+			}
+			if (possiblySelected) {
+				possibleSelectedChoices.push(choiceIndex);
 			}
 		});
 
-		if (selectedChoice.length > 0) {
-			assertEqual(selectedChoice.length, 1);
+		if (definiteSelectedChoices.length > 0) {
+			assertEqual(definiteSelectedChoices.length, 1);
 
-			choiceTabs.tabs('select', selectedChoice[0]);
-			enableControlsInTab(selectedChoice[0]);
+			choiceTabs.tabs('select', definiteSelectedChoices[0]);
+			enableControlsInTab(definiteSelectedChoices[0]);
+		} else if (possibleSelectedChoices.length > 0) {
+			if (possibleSelectedChoices.length > 0) {
+				console.log('WARNING: not clear which mode this node is in');
+			}
+			choiceTabs.tabs('select', definiteSelectedChoices[0]);
+			enableControlsInTab(possibleSelectedChoices[0]);
 		}
 		
 		if (typeof choiceTabs !== "undefined") {
@@ -381,16 +376,16 @@ CSLEDIT.propertyPanel = (function () {
 	var enableControlsInTab = function (index) {
 		// enable all controls in selected tab and disable the rest
 		$.each(schemaChoices, function (choiceIndex, choice) {
-			$.each(choice, function (attrIndex, attribute) {
-				nodeData.attributes[indexOfAttribute(attribute, nodeData.attributes)].enabled = 
+			$.each(choice, function (attributeName, attribute) {
+				nodeData.attributes[indexOfAttribute(attributeName, nodeData.attributes)].enabled = 
 					(choiceIndex === index);
 			});
 		});
 	};
 
 	var setupPanel = function (_panel, _nodeData, dataType, schemaAttributes, _schemaChoices) {
-		var index,
-			table;
+		var table,
+			attrIndex;
 		
 		schemaChoices = _schemaChoices;
 
@@ -415,23 +410,36 @@ CSLEDIT.propertyPanel = (function () {
 			// no validation
 		}
 
-		customControls = [];
+		checkboxControls = [];
 		newAttributes = [];
-		enabledTableControls = [];
-		disabledTableControls = [];
-		allTableControls = [];
 		multiInputs = {};
 
-		customControlIndex = 0;
+		checkboxControlIndex = 0;
 
+		// start with attribute editors in choice tabs
+		attrIndex = -1;
 		if (schemaChoices.length > 0) {
 			choiceTabs = $('<div id="schemaChoices"><ul><\/ul><\/div>');
 			panel.append(choiceTabs);
 
 			choiceTabs.tabs();
 
-			$.each(schemaChoices, function (i, attributes) {
-				choiceTabs.tabs('add', '#schemaChoice' + i, attributes[0]);
+			$.each(schemaChoices, function (choiceIndex, attributes) {
+				var addedToTab = false;
+				$.each(attributes, function (attributeName, attribute) {
+					var editor;
+					if (!addedToTab) {
+						choiceTabs.tabs('add', '#schemaChoice' + choiceIndex, attributeName);
+						addedToTab = true;
+					}
+					
+					attrIndex++;
+					editor = createAttributeEditor(attributeName, attribute, attrIndex);
+
+					editor.find('button.toggleAttrButton').remove();
+					editor.find('*').removeAttr('disabled');
+					panel.find('#schemaChoice' + choiceIndex).append(editor.clone());
+				});
 			});
 		}
 
@@ -446,29 +454,12 @@ CSLEDIT.propertyPanel = (function () {
 			$("#textNodeInput").val(nodeData.textValue);
 		}
 
-		// attribute editors
-		index = -1;
+		// other attribute editors
 		$.each(schemaAttributes, function (attributeName, schemaAttribute) {
-			index++;
-			createAttributeEditor(attributeName, schemaAttribute, index);
+			attrIndex++;
+			table.append(createAttributeEditor(attributeName, schemaAttribute, attrIndex));
 		});
 		
-		if (enabledTableControlsOnTop) {
-			for (index = 0; index < enabledTableControls.length; index++) {
-				$(enabledTableControls[index]).appendTo(panel);
-			}
-
-			table.append($("<tr><td><br /><\/td><td><\/td><td><\/td><\/tr>"));
-
-			// disabled controls
-			for (index = 0; index < disabledTableControls.length; index++) {
-				table.append($(disabledTableControls[index]));
-			}
-		} else {
-			$.each(allTableControls, function (i, control) {
-				table.append(control);
-			});
-		}
 		panel.append(table);
 
 		nodeData.attributes = newAttributes;
@@ -481,7 +472,7 @@ CSLEDIT.propertyPanel = (function () {
 		$(".propertySelect").on("change", function () { nodeChanged(); });
 
 		$('.toggleAttrButton').click( function (buttonEvent) {
-			index = $(buttonEvent.target).attr("attrIndex");
+			var index = $(buttonEvent.target).attr("attrIndex");
 
 			if (nodeData.attributes[index].enabled) {
 				nodeData.attributes[index].enabled = false;
@@ -490,16 +481,18 @@ CSLEDIT.propertyPanel = (function () {
 				nodeData.attributes[index].enabled = true;
 				$("#nodeAttribute" + index).removeAttr("disabled");
 			}
-			setupPanel(panel, nodeData, dataType, schemaAttributes, function () { nodeChanged(); });
+			
+			setupPanel(panel, nodeData, dataType, schemaAttributes, schemaChoices,
+				function () { nodeChanged(); });
 			clearTimeout(onChangeTimeout);
 			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 10);
 		});
 
-		customControls.sort(function (a, b) {
+		checkboxControls.sort(function (a, b) {
 			return a.position - b.position;
 		});
 
-		$.each(customControls, function (i, control) {
+		$.each(checkboxControls, function (i, control) {
 			if (control.hasOwnProperty('control')) {
 				toolbar.append(control.control);
 				toolbar.append(control.label);
@@ -508,7 +501,7 @@ CSLEDIT.propertyPanel = (function () {
 			}
 		});
 
-		toolbar.find('input[id^=customControl]').on('change', customControlChanged);
+		toolbar.find('input[id^=checkboxControl]').on('change', checkboxChanged);
 
 		setupChoiceTabs();
 	};
