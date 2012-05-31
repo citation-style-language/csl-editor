@@ -206,23 +206,31 @@ CSLEDIT.citationEngine = (function () {
 			if (typeof callback !== "undefined") {
 				callback();
 			}
-
 		} else {
-			// display the diff
-			citationsOut.html(diffFormattedCitation);
-			bibliographyOut.html(diffFormattedBibliography);
+			if (localStorage.getItem('CSLEDIT.options.visualEditorDiffs')) {
+				// display the diff
+				citationsOut.html(diffFormattedCitation);
+				bibliographyOut.html(diffFormattedBibliography);
 
-			// display the new version in 1000ms
-			clearTimeout(diffTimeout);
-			diffTimeout = setTimeout(
-				function () {
-					citationsOut.html(newFormattedCitation);
-					bibliographyOut.html(newFormattedBibliography);
-					if (typeof callback !== "undefined") {
-						callback();
-					}
-				},
-			1000);
+				// display the new version in 1000ms
+				clearTimeout(diffTimeout);
+				diffTimeout = setTimeout(
+					function () {
+						citationsOut.html(newFormattedCitation);
+						bibliographyOut.html(newFormattedBibliography);
+						if (typeof callback !== "undefined") {
+							callback();
+						}
+					},
+				1000);
+			} else {
+				// display the real result
+				citationsOut.html(newFormattedCitation);
+				bibliographyOut.html(newFormattedBibliography);
+				if (typeof callback !== "undefined") {
+					callback();
+				}
+			}
 		}
 		
 		console.timeEnd("runCiteprocAndDisplayOutput");
