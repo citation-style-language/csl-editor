@@ -26,9 +26,7 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		urlsGot = 0,
 		callback = null,
 		initialised = false,
-		refParents = {},
-		zeroOrMore = false,
-		oneOrMore = false;
+		refParents = {};
 
 	var arrayForEach = function (array, action) {
 		if (typeof array === "undefined") {
@@ -424,13 +422,9 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 					}
 				};
 
-			if (zeroOrMore || oneOrMore) {
-				thisNodeProperties = parseChildren(node);
-			} else {
-				thisNodeProperties = parseChildren(node, applyToEachChild);
-				thisNodeProperties.choices = choices;
-				thisNodeProperties.choiceRefs = choiceRefs;
-			}
+			thisNodeProperties = parseChildren(node, applyToEachChild);
+			thisNodeProperties.choices = choices;
+			thisNodeProperties.choiceRefs = choiceRefs;
 
 			return thisNodeProperties;
 		},
@@ -438,20 +432,10 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			return parseChildren(node);
 		},
 		zeroOrMore : function (node) {
-			var thisNodeProperties;
-			assertEqual(zeroOrMore, false);
-			//zeroOrMore = true;
-			thisNodeProperties = parseChildren(node);
-			zeroOrMore = false;
-			return thisNodeProperties;
+			return parseChildren(node);
 		},
 		oneOrMore : function (node) {
-			var thisNodeProperties;
-			assertEqual(oneOrMore, false);
-			//oneOrMore = true;
-			thisNodeProperties = parseChildren(node);
-			oneOrMore = false;
-			return thisNodeProperties;
+			return parseChildren(node);
 		},
 		list : function (node) {
 			var thisNodeProperties = parseChildren(node);
