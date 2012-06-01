@@ -209,8 +209,21 @@ CSLEDIT.propertyPanel = (function () {
 		attribute = null;
 
 		$.each(nodeData.attributes, function (i, thisAttribute) {
+			var existingAttributeIndex;
 			if (thisAttribute.key === attributeName) {
-				attribute = thisAttribute;
+
+				// do deep copy if one already exists
+				existingAttributeIndex = indexOfAttribute(attributeName, newAttributes);
+				if (existingAttributeIndex !== -1) {
+					attribute = {
+						key : thisAttribute.key,
+						value : thisAttribute.value,
+						enabled : thisAttribute.enabled
+					};
+				} else {
+					attribute = thisAttribute;
+				}
+				
 				if (!("enabled" in attribute)) {
 					attribute["enabled"] = true;
 				}
@@ -326,6 +339,10 @@ CSLEDIT.propertyPanel = (function () {
 		var possibleSelectedChoices = [], // choices with some attributes enabled
 			definiteSelectedChoices = []; // choices with all attributes enabled
 
+		if (typeof choiceTabs === "undefined") {
+			return;
+		}
+
 		// select the enabled mode
 		$.each(schemaChoices, function (choiceIndex, choice) {
 			// check against the first attribute in each schemaChoice list to determine 
@@ -365,20 +382,23 @@ CSLEDIT.propertyPanel = (function () {
 			}
 			choiceTabs.tabs('select', possibleSelectedChoices[0]);
 			enableControlsInTab(possibleSelectedChoices[0]);
+		} else {
+			// just select the first one
+			choiceTabs.tabs('select', 0);
+			enableControlsInTab(0);
 		}
 		
-		if (typeof choiceTabs !== "undefined") {
-			choiceTabs.on('tabsselect', function (event, ui) {
-				enableControlsInTab(ui.index);
-				nodeChanged();
-			});
-		}
+		choiceTabs.on('tabsselect', function (event, ui) {
+			enableControlsInTab(ui.index);
+			nodeChanged();
+		});
 	};
 
 	var enableControlsInTab = function (index) {
 		// enable all controls in selected tab and disable the rest
 		$.each(schemaChoiceIndexes, function (choiceIndex, choice) {
 			$.each(choice, function (i, attributeIndex) {
+				console.log('set attr ' + attributeIndex + ' to ' + (choiceIndex === index));
 				nodeData.attributes[attributeIndex].enabled = (choiceIndex === index);
 			});
 		});
