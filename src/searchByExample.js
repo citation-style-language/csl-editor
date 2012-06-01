@@ -88,6 +88,11 @@ CSLEDIT.finderPage = (function () {
 								userBibliography, exampleCitation.formattedBibliography);
 					}
 
+					// give tiny boost to top popular styles
+					if (CSLEDIT.exampleData.topStyles.indexOf(styleId) !== -1) {
+						thisMatchQuality += 0.1;
+					}
+
 					if (thisMatchQuality > tolerance)
 					{
 						matchQualities[index++] = {
@@ -104,8 +109,6 @@ CSLEDIT.finderPage = (function () {
 		}
 		matchQualities.sort(function (a, b) {return b.matchQuality - a.matchQuality});
 
-		// TODO: only put matchQuality > tolerance
-
 		// top results
 		for (index=0; index < Math.min(5, matchQualities.length); index++) {
 			result.push({
@@ -113,7 +116,7 @@ CSLEDIT.finderPage = (function () {
 					masterId : matchQualities[index].styleId,
 					userCitation : userCitation,
 					userBibliography : userBibliography,
-					matchQuality : matchQualities[index].matchQuality
+					matchQuality : Math.min(1, matchQualities[index].matchQuality)
 			});
 		}
 		

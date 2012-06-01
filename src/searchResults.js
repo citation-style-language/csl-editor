@@ -31,7 +31,9 @@ CSLEDIT.searchResults = (function () {
 			citationDiff,
 			citationDistance,
 			bibliographyDiff,
-			bibliographyDistance;
+			bibliographyDistance,
+			featuredStyleClass,
+			featuredStyleText;
 
 		for (index = 0; index < Math.min(styles.length, 20); index++)
 		{
@@ -65,10 +67,18 @@ CSLEDIT.searchResults = (function () {
 						bibliographyDistance, style.userBibliography, bibliography);
 			}
 
-			outputList.push('<a href="' + style.styleId + '">' +
+			featuredStyleClass = '';
+			featuredStyleText = '';
+			if (CSLEDIT.exampleData.topStyles.indexOf(style.styleId) !== -1) {
+				featuredStyleClass = ' class="featuredStyle" ';
+				featuredStyleText = '<span class=featuredStyle>Popular Style<span>';
+			}
+
+			outputList.push(
+				'<table' + featuredStyleClass + '>' +
+				'<tr><td colspan=3><a href="' + style.styleId + '">' +
 				exampleCitations.styleTitleFromId[style.styleId] + "<\/a>"
-				+ masterStyleSuffix + "<br \/>" +
-				'<table>' +
+				+ masterStyleSuffix + featuredStyleText + '<\/td><\/tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Inline citaiton<\/span><\/td>' +
 				'<td class=match>' +
 				citation + '<\/td>' + citationCloseness + '<\/tr>' +

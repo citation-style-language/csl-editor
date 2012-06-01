@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="../generated/exampleCitationsEnc.js"></script>
 	<script type="text/javascript" src="../src/cslParser.js"></script>
 	<script type="text/javascript" src="../src/cslData.js"></script>
+	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/searchResults.js"></script>
 
 	<script type="text/javascript" src="../src/searchByName.js"></script>

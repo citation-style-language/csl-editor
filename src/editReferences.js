@@ -10,10 +10,10 @@ CSLEDIT.editReferences = (function () {
 		listElement.children().remove();
 		
 		// create menus
-		$.each(cslEditorExampleData.jsonDocuments, function (itemName, item) {
+		$.each(CSLEDIT.exampleData.jsonDocuments, function (itemName, item) {
 			var description = '<strong>' + item.type + 
 				'<\/strong>: ' + item.title,
-				additionalOptions = cslEditorExampleData.additionalOptions[index];
+				additionalOptions = CSLEDIT.exampleData.additionalOptions[index];
 
 			if (typeof additionalOptions !== "undefined") {
 				description += '<br \/>(' + additionalOptions.description + ')';
@@ -49,7 +49,7 @@ CSLEDIT.editReferences = (function () {
 		listElement.find('input').each( function (index) {
 			if ($(this).is(':checked')) {
 				citationItem = {id:"ITEM-" + (index + 1)};
-				additionalOptions = cslEditorExampleData.additionalOptions[index];
+				additionalOptions = CSLEDIT.exampleData.additionalOptions[index];
 				if (typeof additionalOptions !== "undefined") {
 					// add options to citationItem
 					$.each (additionalOptions.options, function (key, value) {
@@ -64,7 +64,7 @@ CSLEDIT.editReferences = (function () {
 		
 		localStorage.setItem('CSLEDIT.citation' + citation, JSON.stringify(checked));
 
-		cslEditorExampleData.citationsItems[citation].citationItems = citationItems;
+		CSLEDIT.exampleData.citationsItems[citation].citationItems = citationItems;
 
 		callback();
 	};

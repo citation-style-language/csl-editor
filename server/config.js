@@ -13,7 +13,7 @@ var cslServerConfig = (function(){
 		citationsItems : [
 			{ "citationId" : "CITATION-0", "citationItems" : [ { "id" : "ITEM-1", "uris" : [] } ], "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" }//,
 	//		{ "citationId" : "CITATION-1", "citationItems" : [ { "id" : "ITEM-1", "uris" : [] },  { "id" : "ITEM-2", "uris" : [] } ], "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" }
-	]
+		]
 	};
 }());
 

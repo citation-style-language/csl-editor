@@ -3,6 +3,10 @@
 	width : 800px;
 }
 
+#searchResults table {
+	width : 100%;
+}
+
 #searchResults td {
 	position : relative;
 }
@@ -14,4 +18,17 @@
 #searchResults td.match {
 	background-color : #eeeeee;
 	padding : 10px;
+}
+#searchResults table.featuredStyle {
+	border : solid;
+	background-color : #fff2aa;
+}
+#searchResults table.featuredStyle td.match {
+	background-color : #ffdd88;
+}
+
+#searchResults span.featuredStyle {
+	float : right;
+	margin-right : 5px;
+	font-style : italic;
 }

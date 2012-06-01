@@ -29,6 +29,7 @@
 	<script type="text/javascript" src="../src/diff.js"></script>
 	<script type="text/javascript" src="../src/cslParser.js"></script>
 	<script type="text/javascript" src="../src/cslData.js"></script>
+	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/searchResults.js"></script>
 	<script type="text/javascript" src="../src/searchByExample.js"></script>
 	<script type="text/javascript" src="../src/analytics.js"></script>

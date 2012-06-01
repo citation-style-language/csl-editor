@@ -48,11 +48,43 @@ CSLEDIT.findByNamePage = (function () {
 					}
 					result.push({
 							styleId : styleId,
-							masterId : masterId
+							masterId : masterId,
+							popular : CSLEDIT.exampleData.topStyles.indexOf(styleId)
 						});
 				}
 			}
 		}
+
+		// sort by popularity first, then by master style
+		result.sort(function (a, b) {
+			var aIsMaster,
+				bIsMaster,
+				aIsPopular = (a.popular !== -1),
+				bIsPopular = (b.popular !== -1),
+				popularityCompare = a.popular - b.popular;
+			
+			if (aIsPopular && !bIsPopular) {
+				return -1;
+			}
+			if (bIsPopular && !aIsPopular) {
+				return 1;
+			}
+			if (popularityCompare !== 0) {
+				return popularityCompare;
+			}
+			
+			aIsMaster = (a.styleId === a.masterId);
+			bIsMaster = (b.styleId === b.masterId);
+
+			if (aIsMaster && !bIsMaster) {
+				return -1;
+			}
+			if (bIsMaster && !aIsMaster) {
+				return -1;
+			}
+
+			return 0;
+		});
 
 		CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"));
 	};
