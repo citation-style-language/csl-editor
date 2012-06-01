@@ -1,0 +1,17 @@
+#searchResults {
+	position : absolute;
+	width : 800px;
+}
+
+#searchResults td {
+	position : relative;
+}
+#searchResults td.closeness {
+	width : 160px;
+	font-weight: bold;
+	color: green;
+}
+#searchResults td.match {
+	background-color : #eeeeee;
+	padding : 10px;
+}

@@ -52,6 +52,15 @@ CSLEDIT.diff = {
 		return this.weightedLevenshtein(diffs);
 	},
 
+	// human friendly value from 0 to 100 to use as a match percentage
+	matchQuality : function (oldString, newString) {
+		var editDistance = CSLEDIT.diff.customEditDistance(oldString, newString),
+			matchQuality = Math.max(0, Math.floor(100 * (1.0 - editDistance /
+				(2 * (oldString + newString).length))));
+
+		return matchQuality;
+	},
+
 	/**
 	 * Like levenshtein but gives much more weight to deletions.
 	 * 
@@ -63,7 +72,7 @@ CSLEDIT.diff = {
 	  var insertions = 0;
 	  var deletions = 0;
 
-	  var deletionWeight = 20;
+	  var deletionWeight = 5;
 
 	  for (var x = 0; x < diffs.length; x++) {
 		var op = diffs[x][0];

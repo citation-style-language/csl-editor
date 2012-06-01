@@ -54,7 +54,7 @@ CSLEDIT.findByNamePage = (function () {
 			}
 		}
 
-		CSLEDIT.searchResults.displaySearchResults(result, $("#styleNameResult"));
+		CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"));
 	};
 
 	return {

@@ -11,60 +11,6 @@ CSLEDIT.finderPage = (function () {
 		return $('<pre>').text(string).html();
 	};
 
-	var displaySearchResults = function (styles, outputNode) {
-		var index,
-			outputList = [],
-			masterStyleSuffix = "",
-			style,
-			citation,
-			bibliography;
-
-		for (index = 0; index < Math.min(styles.length, 20); index++)
-		{
-			style = styles[index];
-			if (style.masterId != style.styleId)
-			{
-				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
-							exampleCitations.styleTitleFromId[style.masterId] + '<\/a>)';
-			} else {
-				masterStyleSuffix = '';
-			}
-
-			citation = exampleCitations.exampleCitationsFromMasterId[style.masterId].formattedCitations[0];
-			bibliography = exampleCitations.exampleCitationsFromMasterId[style.masterId].formattedBibliography;
-
-			if (typeof style.userCitation !== "undefined" &&
-				style.userCitation !== "" &&
-				citation !== "") {
-				citation = CSLEDIT.diff.prettyHtmlDiff(style.userCitation, citation);
-			}
-
-			if (typeof style.userBibliography !== "undefined" &&
-				style.userBibliography !== "" &&
-				bibliography !== "") {
-				bibliography = CSLEDIT.diff.prettyHtmlDiff(style.userBibliography, bibliography);
-			}
-
-			outputList.push('<a href="' + style.styleId + '">' +
-				exampleCitations.styleTitleFromId[style.styleId] + "<\/a>"
-				+ masterStyleSuffix + "<br \/>" +
-				'<table>' +
-				'<tr><td><span class="faint">Inline citaiton<\/span>' +
-				'<\/td><td>' +
-				citation + '<\/td><\/tr>' +
-				'<tr><td><span class="faint">Bibliography<\/span><\/td><td>' +
-				bibliography + "<\/td><\/tr>" +
-				'<tr><td><\/td><td><a href="../cslEditor/?styleURL=' + style.styleId + '">Edit style<\/a><\/td><\/tr>' +
-				'<\/table>');
-
-		}
-		
-		outputNode.html(
-			'<p>Displaying ' + outputList.length + ' results:<\/p>' +
-				outputList.join("<p><p>")
-		);
-	};
-
 	// --- Functions for formatted style search ---
 
 	function authorString(authors) {
@@ -87,7 +33,8 @@ CSLEDIT.finderPage = (function () {
 			invisibleTags = [ 'p', 'span', 'div', 'second-field-align' ]; // we want the contents of these but not the actual tags
 
 		input = CSLEDIT.xmlUtility.stripComments(input);
-		input = CSLEDIT.xmlUtility.stripUnsupportedTagsAndContents(input, supportedTags.concat(invisibleTags));
+		input = CSLEDIT.xmlUtility.stripUnsupportedTagsAndContents(
+			input, supportedTags.concat(invisibleTags));
 		input = CSLEDIT.xmlUtility.stripUnsupportedTags(input, supportedTags);
 		input = CSLEDIT.xmlUtility.stripAttributesFromTags(input, supportedTags);
 		input = input.replace(/&nbsp;/g, " ");
@@ -97,20 +44,20 @@ CSLEDIT.finderPage = (function () {
 	};
 
 	var searchForStyle = function () {
-		var tolerance = 500,
-			bestEditDistance = 999,
+		var tolerance = 50,
+			bestMatchQuality = 999,
 			bestMatchIndex = -1,
 			userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML,
 			userCitationText = $("#userCitation").cleditor()[0].doc.body.innerText,
 			userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML,
 			userBibliographyText = $("#userBibliography").cleditor()[0].doc.body.innerText,
 			result = [],
-			editDistances = [],
+			matchQualities = [],
 			index = 0,
 			styleId,
 			exampleCitation,
 			formattedCitation,
-			thisEditDistance,
+			thisMatchQuality,
 			row = function (title, value) {
 				return "<tr><td><span class=faint>" + title + "<\/span><\/td><td>" + value + "<\/td><\/tr>";
 			};
@@ -130,47 +77,47 @@ CSLEDIT.finderPage = (function () {
 
 				if (exampleCitation !== null && exampleCitation.statusMessage === "") {
 					formattedCitation = exampleCitation.formattedCitations[0];
-					thisEditDistance = 0;
+					thisMatchQuality = 0;
 
 					if (userCitation !== "") {
-						thisEditDistance += CSLEDIT.diff.customEditDistance(userCitation, formattedCitation);
+						thisMatchQuality += CSLEDIT.diff.matchQuality(
+								userCitation, formattedCitation);
 					}
 					if (userBibliography !== "") {
-						thisEditDistance += CSLEDIT.diff.customEditDistance(userBibliography, exampleCitation.formattedBibliography);
+						thisMatchQuality += CSLEDIT.diff.matchQuality(
+								userBibliography, exampleCitation.formattedBibliography);
 					}
 
-					if (thisEditDistance < tolerance)
+					if (thisMatchQuality > tolerance)
 					{
-						editDistances[index++] = {
-							editDistance : thisEditDistance,
+						matchQualities[index++] = {
+							matchQuality : thisMatchQuality,
 							styleId : styleId
 						};
 					}
 
-					if (thisEditDistance < bestEditDistance) {
-						bestEditDistance = thisEditDistance;
+					if (thisMatchQuality > bestMatchQuality) {
+						bestMatchQuality = thisMatchQuality;
 					}
 				}
 			}
 		}
-		editDistances.sort(function (a, b) {return a.editDistance - b.editDistance});
+		matchQualities.sort(function (a, b) {return b.matchQuality - a.matchQuality});
 
-		// TODO: only put editDistances < tolerance
+		// TODO: only put matchQuality > tolerance
 
 		// top results
-		for (index=0; index < Math.min(5, editDistances.length); index++) {
-				
+		for (index=0; index < Math.min(5, matchQualities.length); index++) {
 			result.push({
-					styleId : editDistances[index].styleId,
-					masterId : editDistances[index].styleId,
+					styleId : matchQualities[index].styleId,
+					masterId : matchQualities[index].styleId,
 					userCitation : userCitation,
-					userBibliography : userBibliography
-			}
-			);
+					userBibliography : userBibliography,
+					matchQuality : matchQualities[index].matchQuality
+			});
 		}
 		
-		CSLEDIT.searchResults.displaySearchResults(result, $("#styleFormatResult"));
-
+		CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"));
 		console.timeEnd("searchForStyle");
 	};
 
@@ -194,7 +141,7 @@ CSLEDIT.finderPage = (function () {
 	}
 
 	function clearResults() {
-		$("#styleFormatResult").html("<i>Click search to find similar styles<\/i>");
+		$("#searchResults").html("<i>Click search to find similar styles<\/i>");
 	}
 
 	function formChanged() {

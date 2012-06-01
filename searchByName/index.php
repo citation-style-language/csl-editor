@@ -11,10 +11,12 @@
 	<script type="text/javascript" src="../src/cslParser.js"></script>
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/searchResults.js"></script>
-	<link rel="stylesheet" href="../css/base.css" />
 
 	<script type="text/javascript" src="../src/searchByName.js"></script>
 	<script type="text/javascript" src="../src/analytics.js"></script>
+
+	<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/searchResults.css" />
 <style>
 div#styleNameInput {
 	padding: 20px 50px 10px;
@@ -30,7 +32,7 @@ div#styleNameInput label {
 div#mainContainer{
 	width: 800px;
 }
-div#styleNameResult {
+div#searchResults {
 	padding: 0 30px 0 30px;
 	width: 600px;
 }
@@ -62,7 +64,7 @@ div#styleNameResult {
 		<input type="text" id="styleNameQuery" autocomplete="off" placeholder="Enter style name here" />
 		<button id="searchButton"><img src="../external/famfamfam-icons/magnifier.png"></img>Search</button>
 	</div>
-	<div id="styleNameResult"></div>
+	<div id="searchResults"></div>
 </div>
 </body>
 </html>

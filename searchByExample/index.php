@@ -34,6 +34,7 @@
 	<script type="text/javascript" src="../src/analytics.js"></script>
 	
 	<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/searchResults.css" />
 <style>
 #mainContent {
 	padding: 8px;
@@ -94,7 +95,7 @@ div#styleFormatResult {
 	<div class=clearDiv>
 	</div>
 </div>
-<div id="styleFormatResult"></div>
+<div id="searchResults"></div>
 </div>
 </body>
 </html>
