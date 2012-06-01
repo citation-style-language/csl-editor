@@ -417,7 +417,6 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 					assertEqual(childNodeProperties.choices.length, 0);
 
 					$.each (childNodeProperties.refs, function (i, choiceRef) {
-						console.log('choiceRefs = ' + choiceRef);
 						choiceRefs.push(choiceRef);
 					});
 
