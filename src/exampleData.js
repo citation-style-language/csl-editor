@@ -21,6 +21,28 @@ cslEditorExampleData.citationsItems = [
 	}
 ];
 
+cslEditorExampleData.additionalOptions = {
+	0 : {
+		"description" : "Pages 244-255",
+		"options" : {
+			"locator" : "244-252",
+			"label" : "page"
+		}
+	},
+	1 : {
+		"description" : "author-only",
+		"options" : {
+			"author-only" : true
+		}
+	},
+	2 : {
+		"description" : "suppress-author",
+		"options" : {
+			"suppress-author" : true
+		}
+	}
+};
+
 cslEditorExampleData.jsonDocuments = {
 	"ITEM-1": {
 		"ISBN": "0813931029",

@@ -11,9 +11,16 @@ CSLEDIT.editReferences = (function () {
 		
 		// create menus
 		$.each(cslEditorExampleData.jsonDocuments, function (itemName, item) {
+			var description = '<strong>' + item.type + 
+				'<\/strong>: ' + item.title,
+				additionalOptions = cslEditorExampleData.additionalOptions[index];
+
+			if (typeof additionalOptions !== "undefined") {
+				description += '<br \/>(' + additionalOptions.description + ')';
+			}
+
 			listElement.append('<li class=sidePadding><input type="checkbox" value="' + 
-				index + '" \/> <strong>' + item.type + 
-				'<\/strong>: ' + item.title + '<\/li>');
+				index + '" \/>' + description + '<\/li>');
 			index++;
 		});
 
@@ -34,12 +41,23 @@ CSLEDIT.editReferences = (function () {
 	};
 
 	var updateCitations = function (listElement, callback, citation) {
-		var citationItems = [],
-			checked = [];
+		var citationItem,
+			citationItems = [],
+			checked = [],
+			additionalOptions;
 
 		listElement.find('input').each( function (index) {
 			if ($(this).is(':checked')) {
-				citationItems.push({id:"ITEM-" + (index + 1)});
+				citationItem = {id:"ITEM-" + (index + 1)};
+				additionalOptions = cslEditorExampleData.additionalOptions[index];
+				if (typeof additionalOptions !== "undefined") {
+					// add options to citationItem
+					$.each (additionalOptions.options, function (key, value) {
+						citationItem[key] = value;
+					});
+				}
+				console.log('adding citation item: ' + JSON.stringify(citationItem));
+				citationItems.push(citationItem);
 				checked.push(index);
 			}
 		});
