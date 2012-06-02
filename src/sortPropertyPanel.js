@@ -182,7 +182,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		});
 
 		variables = [];
-		$.each(CSLEDIT.schema.attributes("sort/key").variable.values, function(i, variable) {
+		$.each(CSLEDIT.schema.choices("sort/key")[0].variable.values, function(i, variable) {
 			variables.push(variable.value);
 		});
 
