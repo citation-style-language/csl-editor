@@ -449,6 +449,7 @@ CSLEDIT.propertyPanel = (function () {
 			$.each(schemaChoices, function (choiceIndex, attributes) {
 				var addedToTab = false;
 				schemaChoiceIndexes[choiceIndex] = [];
+
 				$.each(attributes, function (attributeName, attribute) {
 					var editor;
 					if (!addedToTab) {
@@ -464,6 +465,10 @@ CSLEDIT.propertyPanel = (function () {
 					editor.find('*').removeAttr('disabled');
 					panel.find('#schemaChoice' + choiceIndex).append(editor);
 				});
+
+				if (!addedToTab) {
+					choiceTabs.tabs('add', '#schemaChoice' + choiceIndex, "No attributes for this option");
+				}
 			});
 		}
 

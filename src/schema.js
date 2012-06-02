@@ -135,6 +135,23 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			}
 			simplifyChoices(node);
 
+			// remove general attribute if it's also a choice attribute
+			// TODO: check with CSL guys if there's a bug in the schema
+			//       which makes this necessary for cs:date and cs:date-part
+			$.each(node.choices, function (i, choice) {
+				var index;
+
+				$.each(choice, function (attributeName) {
+					if (attributeName in node.attributes) {
+						console.log("WARNING: " + attributeName +
+							" in choice and general attributes for node " + nodeName);
+						console.log("Deleting the general attribute");
+						delete node.attributes[attributeName];
+						index--;
+					}
+				});
+			});
+
 			// remove refs array
 			delete node.refs;
 			return;
