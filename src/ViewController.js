@@ -297,6 +297,10 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 
 	var clickNode = function (node) {
 		node.click();
+
+		// to ensure the node isn't toggled closed if already open
+		expandNode(parseInt(node.parent().attr('cslid')));
+		
 		treeView.scrollTo(node, 200, {
 			offset:{left: -treeView.width() + 80, top: -treeView.height() * 0.4}
 		});
@@ -307,8 +311,10 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 	};
 
 	var expandNode = function (id) {
-		$.each(views, function (i, tree) {
-			tree.expandNode(id);
+		$.each(views, function (i, view) {
+			if ('expandNode' in view) {
+				view.expandNode(id);
+			}
 		});
 	};
 	

@@ -185,6 +185,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		});
 		treeElement.on("select_node.jstree", function (event, ui) {
 			treeElement.jstree("set_focus");
+			treeElement.jstree("toggle_node", ui.rslt.obj);
 			callbacks.selectNode(event, ui);
 		});
 
