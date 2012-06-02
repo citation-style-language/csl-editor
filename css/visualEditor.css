@@ -33,10 +33,21 @@ html, body {
 .searched {
 	background: yellow;
 }
-#treeEditor {
+#treeEditorPanel {
 	position: absolute;
 	top: 23px;
 	font-size: 12px;
+}
+#treeEditor {
+	position: absolute;
+	top: 25px;
+	font-size: 12px;
+
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+
+	padding: 4px;
 
 	overflow: auto;
 }
@@ -228,4 +239,8 @@ li.sidePadding {
 	padding-right: 10px;
 	padding-top: 3px;
 	padding-bottom: 3px;
+}
+
+li[cslid][macrolink="true"] {
+	/* style macrolink here */
 }

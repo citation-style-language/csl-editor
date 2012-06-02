@@ -400,6 +400,27 @@ CSLEDIT.editorPage = (function () {
 		createTreeView();
 	};
 
+	var setupTreeEditorToolbar = function () {
+		var toolbar = $('#treeEditorToolbar'),
+			addNodeButton = toolbar.find('button.addNode'),
+			deleteNodeButton = toolbar.find('button.deleteNode');
+
+		assertEqual(addNodeButton.length, 1);
+		assertEqual(deleteNodeButton.length, 1);
+
+		addNodeButton.on('click', function () {
+			alert('New add node UI not yet implemented');
+			/*
+			CSLEDIT.controller.exec("addNode", [
+				viewController.selectedNode(), 0, { name : clickedName, attributes : []}
+			]);*/
+		});
+
+		deleteNodeButton.on('click', function () {
+			CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
+		});
+	};
+
 	var setupDropdownMenuHandler = function (selector) {
 		$(selector).click(function (event) {
 			var clickedName = $(event.target).text(),
@@ -412,13 +433,7 @@ CSLEDIT.editorPage = (function () {
 			{
 				parentNodeName = parentNode.siblings('a').text();
 
-				if ((/^Add Node/).test(parentNodeName)) {
-					$(event.target).parent().parent().css('visibility', 'hidden');
-
-					CSLEDIT.controller.exec("addNode", [
-						viewController.selectedNode(), 0, { name : clickedName, attributes : []}
-					]);
-				} else if ((/^Style/).test(parentNodeName)) {
+				if (/^Style/.test(parentNodeName)) {
 					if (clickedName === "Revert (undo all changes)") {
 						reloadPageWithNewStyle(styleURL);
 					} else if (clickedName === "Export CSL") {
@@ -437,9 +452,15 @@ CSLEDIT.editorPage = (function () {
 					} else if (clickedName === "Global Formatting Options") {
 						viewController.selectNode(CSLEDIT.data.getNodesFromPath("style")[0].cslId);
 					}
+				} else if (parentNodeName === "Edit") {
+					if (clickedName === "Undo") {
+						if (CSLEDIT.controller.commandHistory.length === 0) {
+							alert("No commands to undo");
+						} else {
+							CSLEDIT.controller.undo();
+						}
+					}
 				}
-			} else if (clickedName === "Delete Node") {
-				CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
 			}
 		});
 	};
@@ -484,6 +505,7 @@ CSLEDIT.editorPage = (function () {
 				});
 			});
 
+			setupTreeEditorToolbar();
 			setupDropdownMenuHandler(".dropdown a");
 
 			CSLEDIT.editReferences.init($('ul.#exampleCitation1'), formatExampleCitations, 0, [0]);

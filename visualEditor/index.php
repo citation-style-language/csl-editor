@@ -74,15 +74,18 @@
 				</ul>
 			</li>
 			<li>
-				<a href="#">Add Node</a>
-					<ul class="sub_menu" id="possibleChildNodes">
+				<a href="#">Edit</a>
+					<ul class="sub_menu">
+						<li><a href="#">Undo</a></li>
 					</ul>
 			</li>
-			<li>
-				<a href="#">Delete Node</a>
-			</li>
 		</ul>
-		<div id="treeEditor" class="panel">
+		<div id="treeEditorPanel" class="panel">
+			<div id="treeEditorToolbar">
+				<button class='addNode'>+ Add Node</button>
+				<button class='deleteNode'>- Delete Node</button>
+			</div>
+			<div id="treeEditor"></div>
 		</div>
 	</div>
 
