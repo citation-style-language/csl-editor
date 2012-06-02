@@ -6,6 +6,11 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 	var nodeTypes = {
 			"valid_children" : [ "root" ],
 			"types" : {
+				"default" : {
+					"icon" : {
+						"image" : "../external/famfamfam-icons/bullet_black.png"
+					}
+				},
 				"text" : {
 					"icon" : {
 						"image" : "../external/famfamfam-icons/style.png"
@@ -72,8 +77,39 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		macroLinks, // like symlinks for macros
 		            // [{ instanceCslId: ?, macroRange: ?}]
 		callbacks,
-		verifyAllChanges = false; // does a complete check against CSLEDIT.data after
+		verifyAllChanges = false, // does a complete check against CSLEDIT.data after
 		                          // every change for debugging
+		displayNames = {
+			"macro" : function (node) {
+				return "Macro: " + getAttr("name", node.attributes);
+			},
+			"text" : function (node) {
+				var macro = getAttr("macro", node.attributes),
+					term = getAttr("term", node.attributes),
+					value = getAttr("value", node.attributes),
+					variable = getAttr("variable", node.attributes);
+
+				if (macro !== "") {
+					return  "Text (macro): " + macro;
+				} else if (term !== "") {
+					return "Text (term): " + term;
+				} else if (value !== "") {
+					return "Text (value): " + value;
+				} else if (variable !== "") {
+					return "Text (variable): " + variable;
+				}
+				return "Text";
+			},
+			"label" : function (node) {
+				return "Label: " + getAttr("variable", node.attributes);
+			},
+			"citation" : function () {
+				return "Inline Citations";
+			},
+			"bibliography" : function () {
+				return "Bibliography";
+			}
+		}
 
 	var setCallbacks = function (_callbacks) {
 		callbacks = _callbacks;
@@ -110,37 +146,25 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			console.timeEnd("verifyTree");
 		}
 	};
+	
+	var capitaliseFirstLetter = function (string)
+	{
+	    return string.charAt(0).toUpperCase() + string.slice(1);
+	}
 
-	var displayNameFromMetadata = function (metadata) {
+	var displayNameFromMetadata = function (node) {
 		var index,
 			attributesString = "",
 			attributesStringList = [],
 			displayName,
 			macro;
 
-		switch (metadata.name) {
-			case "macro":
-				displayName = "Macro: " + getAttr("name", metadata.attributes);
-				break;
-			case "text":
-				macro = getAttr("macro", metadata.attributes);
-				if (macro !== "") {
-					displayName = "Text (macro): " + macro;
-				} else {
-					displayName = "Text";
-				}
-				break;
-			case "citation":
-				displayName = "Inline Citations";
-				break;
-			case "bibliography":
-				displayName = "Bibliography";
-				break;
-			default:
-				displayName = metadata.name;
+		if (node.name in displayNames) {
+			return displayNames[node.name](node);
 		}
 
-		return displayName;
+		// fall back to using the node name
+		return capitaliseFirstLetter(node.name);
 	};
 
 	var createTree = function () {
