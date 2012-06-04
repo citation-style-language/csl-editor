@@ -264,7 +264,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 	};
 
 	var deleteNode = function (id, nodesDeleted) {
-		macroEditNotification(id);
+		macroEditNotification(id - 1);
 
 		$.each(views, function (i, view) {
 			if ("deleteNode" in view) {
