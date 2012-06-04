@@ -92,8 +92,6 @@ pages = [
             "src/test_cslNode.js",	
             "src/cslData.js",
             "src/test_cslData.js",
-            "src/cslTreeView.js",
-            "src/test_cslTreeView.js",
             "src/xmlUtility.js",
             "src/test_xmlUtility.js",	
             "src/smartTree.js",
