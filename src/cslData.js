@@ -252,11 +252,21 @@ CSLEDIT.Data = function (CSL_DATA) {
 	var addNode = function (id, position, newNode) {
 		var nodeInfo,
 			positionIndex,
-			nodesAdded;
+			nodesAdded,
+			defaultAttributes;
 		
 		newNode.cslId = -1;
 		newNode.children = newNode.children || [];
 		newNode.attributes = newNode.attributes || [];
+
+		defaultAttributes = CSLEDIT.uiConfig.defaultAttributes[newNode.name];
+
+		// populate with default attributes
+		if (newNode.attributes.length === 0 && typeof defaultAttributes !== "undefined") {
+			$.each(defaultAttributes, function (attribute, value) {
+				newNode.attributes.push({key:attribute, value:value, enabled:true});
+			});
+		}
 
 		if (typeof position === "number") {
 			// change parent id from macro instances to macro definitions
