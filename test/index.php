@@ -29,9 +29,6 @@
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/test_cslData.js"></script>
 
-	<script type="text/javascript" src="../src/cslTreeView.js"></script>
-	<script type="text/javascript" src="../src/test_cslTreeView.js"></script>
-
 	<script type="text/javascript" src="../src/xmlUtility.js"></script>
 	<script type="text/javascript" src="../src/test_xmlUtility.js"></script>
 	
