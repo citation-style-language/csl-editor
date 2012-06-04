@@ -34,20 +34,15 @@ CSLEDIT.infoPropertyPanel = (function () {
 	var attributeNodes = ["link", "category"];
 	var nameNodes = ["author", "contributor"];
 
-	var attributeEditorRow = function (item, node, attributes) {
+	var attributeEditorRow = function (item, node, schemaAttributes) {
 		var thisRow = $('<div><\/div>');
-		$.each(attributes, function (name, value) {
-			var input, attribute, value;
+		$.each(schemaAttributes, function (name) {
+			var input, attributeValue;
 			thisRow.append(' <label>' + name + '<\/label> ');
 
-			attribute = CSLEDIT.data.getAttrByName(node.attributes, name);
+			attributeValue = node.getAttr(name);
 
-			value = "";
-			if (attribute !== null) {
-				value = attribute.value;
-			}
-			
-			input = createInput(item.node, node, name, value);
+			input = createInput(item.node, node, name, attributeValue);
 			thisRow.append(input);
 		});
 		return thisRow;
@@ -170,9 +165,9 @@ CSLEDIT.infoPropertyPanel = (function () {
 		return thisRow;
 	};
 
-	var editorRow = function (item, node, attributes) {
+	var editorRow = function (item, node, schemaAttributes) {
 		if (attributeNodes.indexOf(item.node) >= 0) {
-			return attributeEditorRow(item, node, attributes);
+			return attributeEditorRow(item, node, schemaAttributes);
 		} else if (nameNodes.indexOf(item.node) >=0) {
 			return nameEditorRow(item, node);
 		} else {
@@ -192,17 +187,17 @@ CSLEDIT.infoPropertyPanel = (function () {
 		//panel.append('<h3>Style Info<\/h3>');
 
 		$.each(layout, function (i, item) {
-			var nodes = CSLEDIT.data.getNodesFromPath("info/" + item.node, infoNode);;
-			var attributes, deleteButton, addButton, value, thisRow,
+			var nodes = CSLEDIT.data.getNodesFromPath("info/" + item.node, infoNode),
+				schemaAttributes, deleteButton, addButton, value, thisRow,
 				table,
 				titleRow, inputRow;
 			
 			if (multipleNodes.indexOf(item.node) >= 0) {
-				attributes = CSLEDIT.schema.attributes("info/" + item.node);
+				schemaAttributes = CSLEDIT.schema.attributes("info/" + item.node);
 				panel.append('<h4>' + pluralise(item.name) + '<\/h4>');
 				table = $("<table><\/table>");
 				$.each(nodes, function (i, node) {
-					thisRow = editorRow(item, node, attributes);
+					thisRow = editorRow(item, node, schemaAttributes);
 
 					// convert 1st thisRow into table title
 					if (typeof titleRow === "undefined") {

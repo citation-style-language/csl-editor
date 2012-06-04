@@ -400,6 +400,60 @@ CSLEDIT.editorPage = (function () {
 		createTreeView();
 	};
 
+	var showAddNodeDialog = function () {
+		var dialogDiv = $('<div><\/div>'),
+			node = CSLEDIT.data.getNode(viewController.selectedNode()),
+			translatedCslId,
+			translatedNodeInfo,
+			translatedParentName,
+			possibleElements,
+			element,
+			table = $('<table><\/table>');
+
+		dialogDiv.attr('title', 'Add node within ' + node.name);
+
+		// populate with possible child elements based on schema
+		
+		// in case the user is selecting a macro instance:
+		translatedCslId = CSLEDIT.data.macroDefinitionIdFromInstanceId(node.cslId);
+		translatedNodeInfo = CSLEDIT.data.getNodeAndParent(translatedCslId);
+	
+		if (translatedNodeInfo.parent === null) {
+			translatedParentName = "root";
+		} else {
+			translatedParentName = translatedNodeInfo.parent.name;
+		}
+
+		possibleElements = CSLEDIT.schema.childElements(
+			translatedParentName + "/" + translatedNodeInfo.node.name);
+
+		$.each(possibleElements, function (element) {
+			var img = '<td><\/td>',
+				nodeType = CSLEDIT.uiConfig.nodeTypes[element];
+
+			if (typeof nodeType !== "undefined") {
+				img = '<td><img src="' + nodeType.icon.image + '"><\/img><\/td>';
+			}
+
+			table.append($('<tr>' + img + '<td><button class="addNodeType" data-nodeName="' +
+				element + '">' + element + '<\/button><\/td><\/tr>'));
+		});
+
+		dialogDiv.append(table);
+
+		dialogDiv.find('button.addNodeType').on('click', function (event) {
+			var target = $(event.target),
+				nodeName = target.attr('data-nodeName');
+
+			CSLEDIT.controller.exec("addNode", [
+				viewController.selectedNode(), 0, { name : nodeName, attributes : []}
+			]);
+
+			dialogDiv.dialog('destroy');
+		});
+		dialogDiv.dialog({modal : true});
+	};
+
 	var setupTreeEditorToolbar = function () {
 		var toolbar = $('#treeEditorToolbar'),
 			addNodeButton = toolbar.find('button.addNode'),
@@ -409,11 +463,8 @@ CSLEDIT.editorPage = (function () {
 		assertEqual(deleteNodeButton.length, 1);
 
 		addNodeButton.on('click', function () {
-			alert('New add node UI not yet implemented');
-			/*
-			CSLEDIT.controller.exec("addNode", [
-				viewController.selectedNode(), 0, { name : clickedName, attributes : []}
-			]);*/
+			showAddNodeDialog();
+
 		});
 
 		deleteNodeButton.on('click', function () {
@@ -472,8 +523,6 @@ CSLEDIT.editorPage = (function () {
 					"Chrome or Firefox to view this page.<\/h2>").css({margin:50});
 				return;
 			}
-
-			$("#dialog-confirm-delete").dialog({autoOpen : false});
 
 			$(function(){
 				$("ul.dropdown li").hoverIntent(function(){

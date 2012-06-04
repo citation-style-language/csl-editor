@@ -3,129 +3,17 @@
 CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optional*/) {
-	var nodeTypes = {
-			"valid_children" : [ "root" ],
-			"types" : {
-				"default" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/bullet_black.png"
-					}
-				},
-				"text" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/style.png"
-					}
-				},
-				"macro" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/brick.png"
-					}
-				},
-				"info" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/information.png"
-					}
-				},
-				"choose" : {
-					"icon" : {
-						"image" : "../external/fugue-icons/question-white.png"
-					}
-				},
-				"date" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/date.png"
-					}
-				},
-				"style" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/cog.png"
-					}
-				},
-				"citation" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/page_white_edit.png"
-					}
-				},
-				"bibliography" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/text_list_numbers.png"
-					}
-				},
-				"sort" : {
-					"icon" : {
-						"image" : "../external/fugue-icons/sort-alphabet.png"
-					}
-				},
-				"number" : {
-					"icon" : {
-						"image" : "../external/fugue-icons/edit-number.png"
-					}
-				},
-				"layout" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/page_white_stack.png"
-					}
-				},
-				"group" : {
-					"icon" : {
-						"image" : "../external/famfamfam-icons/page_white_stack.png"
-					}
-				}
-			}
-		},
-		ranges,
+	var ranges,
 		macroLinks, // like symlinks for macros
 		            // [{ instanceCslId: ?, macroRange: ?}]
 		callbacks,
-		verifyAllChanges = false, // does a complete check against CSLEDIT.data after
+		verifyAllChanges = false; // does a complete check against CSLEDIT.data after
 		                          // every change for debugging
-		displayNames = {
-			"macro" : function (node) {
-				return "Macro: " + getAttr("name", node.attributes);
-			},
-			"text" : function (node) {
-				var macro = getAttr("macro", node.attributes),
-					term = getAttr("term", node.attributes),
-					value = getAttr("value", node.attributes),
-					variable = getAttr("variable", node.attributes);
-
-				if (macro !== "") {
-					return  "Text (macro): " + macro;
-				} else if (term !== "") {
-					return "Text (term): " + term;
-				} else if (value !== "") {
-					return "Text (value): " + value;
-				} else if (variable !== "") {
-					return "Text (variable): " + variable;
-				}
-				return "Text";
-			},
-			"label" : function (node) {
-				return "Label: " + getAttr("variable", node.attributes);
-			},
-			"citation" : function () {
-				return "Inline Citations";
-			},
-			"bibliography" : function () {
-				return "Bibliography";
-			}
-		}
 
 	var setCallbacks = function (_callbacks) {
 		callbacks = _callbacks;
 	};
 	
-	var getAttr = function (attribute, attributes) {
-		var index;
-
-		for (index = 0; index < attributes.length; index++) {
-			if (attributes[index].enabled && attributes[index].key === attribute) {
-				return attributes[index].value;
-			}
-		}
-		return "";
-	};
-
 	// Check the tree matches the data - for testing and debugging
 	var verifyTree = function () {
 		var cslData = CSLEDIT.data.get();
@@ -147,26 +35,6 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 	};
 	
-	var capitaliseFirstLetter = function (string)
-	{
-	    return string.charAt(0).toUpperCase() + string.slice(1);
-	}
-
-	var displayNameFromMetadata = function (node) {
-		var index,
-			attributesString = "",
-			attributesStringList = [],
-			displayName,
-			macro;
-
-		if (node.name in displayNames) {
-			return displayNames[node.name](node);
-		}
-
-		// fall back to using the node name
-		return capitaliseFirstLetter(node.name);
-	};
-
 	var createTree = function () {
 		var jsTreeData;
 
@@ -191,7 +59,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 
 		treeElement.jstree({
 			"json_data" : { data : jsTreeData },
-			"types" : nodeTypes,
+			"types" : { types : CSLEDIT.uiConfig.nodeTypes },
 			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
 				"types", "hotkeys"],
 			//"core" : { "initially_open" : [ "node1" ] },
@@ -265,7 +133,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 
 		var jsTreeData = {
-			data : displayNameFromMetadata(cslData),
+			data : CSLEDIT.uiConfig.displayNameFromMetadata(cslData),
 			attr : {
 				rel : cslData.name,
 				cslid : cslData.cslId,
@@ -279,7 +147,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 
 		if (enableMacroLinks) {
 			// Add 'symlink' to Macro
-			macro = getAttr("macro", cslData.attributes);
+			macro = new CSLEDIT.CslNode(cslData).getAttr("macro");
 			if (cslData.name === "text" && macro !== "") {
 				addMacro(jsTreeData, cslData, macro);
 			}
@@ -306,7 +174,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		macroNodes = CSLEDIT.data.getNodesFromPath("style/macro");
 
 		$.each(macroNodes, function (i, node) {
-			if (getAttr("name", node.attributes) === macroName) {
+			if (new CSLEDIT.CslNode(node).getAttr("name") === macroName) {
 				macroNode = node;
 				return false;
 			}
@@ -638,7 +506,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 
 		var node = treeElement.find('li[cslid="' + id + '"]');
-		treeElement.jstree('rename_node', node, displayNameFromMetadata(amendedNode));
+		treeElement.jstree('rename_node', node, CSLEDIT.uiConfig.displayNameFromMetadata(amendedNode));
 		
 		if (enableMacroLinks) {
 			macroLinksUpdateNode(amendedNode.cslId, amendedNode);

@@ -226,16 +226,6 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return -1;
 	};
 	
-	var getAttrByName = function (attributes, name) {
-		var index;
-		for (index = 0; index < attributes.length; index++) {
-			if (attributes[index].key === name) {
-				return attributes[index];
-			}
-		}
-		return null;
-	};
-
 	// if 'id' is a macro instance, returns the corresponding macro definition
 	// if not, returns 'id' 
 	var macroDefinitionIdFromInstanceId = function (id) {
@@ -482,7 +472,6 @@ CSLEDIT.Data = function (CSL_DATA) {
 			viewControllers.push(_viewController);
 		},
 		getNodesFromPath : getNodesFromPath,
-		getAttrByName : getAttrByName,
 		indexOfChild : indexOfChild,
 		macroDefinitionIdFromInstanceId : macroDefinitionIdFromInstanceId
 	};

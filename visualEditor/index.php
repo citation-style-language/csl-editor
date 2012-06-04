@@ -35,6 +35,7 @@
 	<script type="text/javascript" src="../src/cslData.js"></script>
 	<script type="text/javascript" src="../src/schema.js"></script>
 
+	<script type="text/javascript" src="../src/uiConfig.js"></script>
 	<script type="text/javascript" src="../src/notificationBar.js"></script>
 	<script type="text/javascript" src="../src/editReferences.js"></script>
 	<script type="text/javascript" src="../src/NodePathView.js"></script>

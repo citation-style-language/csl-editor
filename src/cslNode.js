@@ -47,7 +47,8 @@ CSLEDIT.CslNode.prototype.getAttr = function (attr) {
 
 	index = this._indexOfAttr(attr);
 
-	if (index === -1) {
+	if (index === -1 ||
+			(this.attributes[index].hasOwnProperty('enabled') && !this.attributes[index].enabled)) {
 		return "";
 	} else {
 		return this.attributes[index].value;
