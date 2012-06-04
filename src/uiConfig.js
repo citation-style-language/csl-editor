@@ -105,6 +105,34 @@ CSLEDIT.uiConfig.displayNameFromNode = function (node) {
 		return CSLEDIT.uiConfig.capitaliseFirstLetter(node.name);
 	};
 
+CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
+	var displayName = "",
+		elideLimit = 30;
+
+/*  Don't bother displaying 'if' or 'else-if' - redundant
+	if (node.name === "else-if") {
+		displayName = "Else If";
+	}
+*/
+	$.each(node.attributes, function (i, attribute) {
+		if (attribute.enabled && attribute.key !== "match") {
+			displayName += attribute.value;
+
+			// type is so common, don't bother displaying it
+			if (attribute.key !== "type") {
+				displayName += " (" + attribute.key + ")";
+			}
+			return false;
+		}
+	});
+
+	if (displayName.length > elideLimit) {
+		displayName = displayName.substr(0, elideLimit-3) + "...";
+	}
+
+	return displayName;
+};
+
 CSLEDIT.uiConfig.displayNames = {
 		"macro" : function (node) {
 			return "Macro: " + new CSLEDIT.CslNode(node).getAttr("name");
@@ -117,13 +145,13 @@ CSLEDIT.uiConfig.displayNames = {
 				variable = cslNode.getAttr("variable");
 
 			if (macro !== "") {
-				return  "Text (macro): " + macro;
+				return  macro + " (macro)";
 			} else if (term !== "") {
-				return "Text (term): " + term;
+				return term + " (term)";
 			} else if (value !== "") {
-				return "Text (value): " + value;
+				return value + " (value)";
 			} else if (variable !== "") {
-				return "Text (variable): " + variable;
+				return variable + " (variable)";
 			}
 			return "Text";
 		},
@@ -132,10 +160,20 @@ CSLEDIT.uiConfig.displayNames = {
 				displayName = "Label";
 
 			if (variable !== "") {
-				displayName += ": " + variable;
+				displayName = variable + " (Label)";
 			}
 			return displayName;
 		},
+		"number" : function (node) {
+			var variable = new CSLEDIT.CslNode(node).getAttr("variable");
+
+			if (variable !== "") {
+				return variable;
+			}
+			return "Number";
+		},
+		"if" : CSLEDIT.uiConfig.conditionalDisplayName,
+		"else-if" : CSLEDIT.uiConfig.conditionalDisplayName,
 		"citation" : function () {
 			return "Inline Citations";
 		},
