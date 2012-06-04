@@ -218,14 +218,37 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 
 	var macroEditNotification = function (id) {
 		var nodeStack = CSLEDIT.data.getNodeStack(id),
-			node;
+			node,
+			iter,
+			next,
+			macroName,
+			timesUsed;
 
 		while (nodeStack.length > 0) {
 			node = nodeStack.pop();
 			if (node.name === "macro" && recentlyEditedMacro !== node.cslId) {
-				recentlyEditedMacro = node.cslId;
-				CSLEDIT.notificationBar.showMessage(
-					'You just edited a macro node, which may be used in multiple places');
+				macroName = new CSLEDIT.CslNode(node).getAttr("name");
+				if (macroName === "") {
+					return;
+				}
+
+				// check how many places this macro is used
+				iter = new CSLEDIT.Iterator(CSLEDIT.data.get());
+				timesUsed = 0;
+
+				while (iter.hasNext()) {
+					next = new CSLEDIT.CslNode(iter.next());
+
+					if (next.name === "text" && next.getAttr("macro") === macroName) {
+						timesUsed++;
+
+						if (timesUsed > 1) {
+							recentlyEditedMacro = node.cslId;
+							CSLEDIT.notificationBar.showMessage(
+								'You just edited a macro which is used in multiple places');
+						}
+					}
+				}
 			}
 		}
 	};

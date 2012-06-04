@@ -329,26 +329,34 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 	};
 
 	var macroLinksUpdateNode = function (id, _amendedNode) {
-		var amendedNode = new CSLEDIT.CslNode(""),
+		var amendedNode = new CSLEDIT.CslNode(_amendedNode),
 			macroName,
-			jsTreeData = {children: [], attr: [], data: ""};
+			jsTreeData = {children: [], attr: [], data: ""},
+			removeChildren = false,
+			addNewChildren = false;
 			
-		amendedNode.copy(_amendedNode);
-
 		macroName = amendedNode.getAttr("macro");
-		if (amendedNode.name === "text" && macroName !== "") {
+		if (macroName === "") {
+			removeChildren = true;			
+		} else if (amendedNode.name === "text" && macroName !== "") {
 			addMacro(jsTreeData, amendedNode, macroName);
+			removeChildren = true;
+			addNewChildren = true;
+		}
 
+		if (removeChildren || addNewChildren) {
 			treeElement.find('[cslid=' + amendedNode.cslId + ']').each( function () {
 				var $this = $(this);
-				// remove all children
-				$.jstree._reference(treeElement)._get_children($this).each(function () {
-					treeElement.jstree('remove', $(this));
-				});
-				// create new children
-				$.each(jsTreeData.children, function (i, child) {
-					createSubTree($this, i, child);
-				});
+				if (removeChildren) {
+					$.jstree._reference(treeElement)._get_children($this).each(function () {
+						treeElement.jstree('remove', $(this));
+					});
+				}
+				if (addNewChildren) {
+					$.each(jsTreeData.children, function (i, child) {
+						createSubTree($this, i, child);
+					});
+				}
 			});
 		}
 	};
