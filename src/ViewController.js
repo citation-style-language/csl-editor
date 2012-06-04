@@ -299,7 +299,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		node.click();
 
 		// to ensure the node isn't toggled closed if already open
-		expandNode(parseInt(node.parent().attr('cslid')));
+		//expandNode(parseInt(node.parent().attr('cslid')));
 		
 		treeView.scrollTo(node, 200, {
 			offset:{left: -treeView.width() + 80, top: -treeView.height() * 0.4}

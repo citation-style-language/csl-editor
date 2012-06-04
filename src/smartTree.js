@@ -7,8 +7,9 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		macroLinks, // like symlinks for macros
 		            // [{ instanceCslId: ?, macroRange: ?}]
 		callbacks,
-		verifyAllChanges = false; // does a complete check against CSLEDIT.data after
+		verifyAllChanges = false, // does a complete check against CSLEDIT.data after
 		                          // every change for debugging
+		oldSelectedNode = -1;
 
 	var setCallbacks = function (_callbacks) {
 		callbacks = _callbacks;
@@ -53,7 +54,14 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		});
 		treeElement.on("select_node.jstree", function (event, ui) {
 			treeElement.jstree("set_focus");
-			treeElement.jstree("toggle_node", ui.rslt.obj);
+
+			if (selectedNode() === oldSelectedNode) {
+				treeElement.jstree("toggle_node", ui.rslt.obj);
+			} else {
+				treeElement.jstree("open_node", ui.rslt.obj);
+			}
+			oldSelectedNode = selectedNode();
+
 			callbacks.selectNode(event, ui);
 		});
 
