@@ -133,7 +133,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 
 		var jsTreeData = {
-			data : CSLEDIT.uiConfig.displayNameFromMetadata(cslData),
+			data : CSLEDIT.uiConfig.displayNameFromNode(cslData),
 			attr : {
 				rel : cslData.name,
 				cslid : cslData.cslId,
@@ -506,7 +506,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 
 		var node = treeElement.find('li[cslid="' + id + '"]');
-		treeElement.jstree('rename_node', node, CSLEDIT.uiConfig.displayNameFromMetadata(amendedNode));
+		treeElement.jstree('rename_node', node, CSLEDIT.uiConfig.displayNameFromNode(amendedNode));
 		
 		if (enableMacroLinks) {
 			macroLinksUpdateNode(amendedNode.cslId, amendedNode);

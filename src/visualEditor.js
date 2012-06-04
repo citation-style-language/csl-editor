@@ -410,7 +410,7 @@ CSLEDIT.editorPage = (function () {
 			element,
 			table = $('<table><\/table>');
 
-		dialogDiv.attr('title', 'Add node within ' + node.name);
+		dialogDiv.attr('title', 'Add node within ' + CSLEDIT.uiConfig.displayNameFromNode(node));
 
 		// populate with possible child elements based on schema
 		
@@ -434,9 +434,17 @@ CSLEDIT.editorPage = (function () {
 			if (typeof nodeType !== "undefined") {
 				img = '<td><img src="' + nodeType.icon.image + '"><\/img><\/td>';
 			}
+			var displayName;
+
+			displayName = 
+				CSLEDIT.uiConfig.displayNameFromNode(new CSLEDIT.CslNode(element));
+
+			console.log("display name = " + displayName );
 
 			table.append($('<tr>' + img + '<td><button class="addNodeType" data-nodeName="' +
-				element + '">' + element + '<\/button><\/td><\/tr>'));
+				element + '">' + 
+				displayName + 
+				'<\/button><\/td><\/tr>'));
 		});
 
 		dialogDiv.append(table);

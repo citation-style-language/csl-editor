@@ -83,8 +83,8 @@
 		</ul>
 		<div id="treeEditorPanel" class="panel">
 			<div id="treeEditorToolbar">
-				<button class='addNode'>+ Add Node</button>
-				<button class='deleteNode'>- Delete Node</button>
+				<button class='addNode icon'>Add Node</button>
+				<button class='deleteNode icon'>Delete Node</button>
 			</div>
 			<div id="treeEditor"></div>
 		</div>

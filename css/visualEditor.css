@@ -244,3 +244,15 @@ li.sidePadding {
 li[cslid][macrolink="true"] {
 	/* style macrolink here */
 }
+
+button.icon {
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 18px;
+}
+button.addNode {
+	background-image: url("../external/famfamfam-icons/add.png");
+}
+button.deleteNode {
+	background-image: url("../external/famfamfam-icons/delete.png");
+}

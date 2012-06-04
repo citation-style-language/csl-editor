@@ -77,6 +77,12 @@ div#styleFormatResult {
 	padding: 0 22px 0;
 	width: 600px;
 }
+button#searchButton {
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 18px;
+	background-image: url("../external/famfamfam-icons/magnifier.png");
+}
 </style>
 </head>
 <body id="searchByExample">
@@ -90,7 +96,7 @@ div#styleFormatResult {
 		<br />
 		Edit bibliography entry:
 		<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
-		<button id="searchButton"><img src="/csl/external/famfamfam-icons/magnifier.png"></img>Search</button>
+		<button id="searchButton">Search</button>
 	</div>
 	<div id=exampleDocument></div>
 	<div class=clearDiv>

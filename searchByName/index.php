@@ -54,6 +54,12 @@ div#searchResults {
 #userCitation, #userBibliography
 {
 }
+button#searchButton {
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 18px;
+	background-image: url("../external/famfamfam-icons/magnifier.png");
+}
 </style>
 </head>
 <body id="searchByName">
@@ -63,7 +69,7 @@ div#searchResults {
 	<div id="styleNameInput">
 		<label for="styleNameQuery">Enter style name:</label>
 		<input type="text" id="styleNameQuery" autocomplete="off" placeholder="Enter style name here" />
-		<button id="searchButton"><img src="../external/famfamfam-icons/magnifier.png"></img>Search</button>
+		<button id="searchButton">Search</button>
 	</div>
 	<div id="searchResults"></div>
 </div>
