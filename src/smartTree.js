@@ -334,11 +334,15 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			jsTreeData = {children: [], attr: [], data: ""},
 			removeChildren = false,
 			addNewChildren = false;
-			
+
+		if (amendedNode.name !== "text") {
+			return;
+		}
+		
 		macroName = amendedNode.getAttr("macro");
 		if (macroName === "") {
-			removeChildren = true;			
-		} else if (amendedNode.name === "text" && macroName !== "") {
+			removeChildren = true;
+		} else if (amendedNode.name === "text") {
 			addMacro(jsTreeData, amendedNode, macroName);
 			removeChildren = true;
 			addNewChildren = true;
