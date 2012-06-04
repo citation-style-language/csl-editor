@@ -355,8 +355,26 @@ CSLEDIT.propertyPanel = (function () {
 				return false;
 			});
 
-			$.each(choice, function (attributeName, attribute) {
-				if (nodeData.attributes[indexOfAttribute(attributeName, nodeData.attributes)].enabled) {
+			$.each(choice, function (attributeName, schemaAttribute) {
+				var thisAttribute =
+						nodeData.attributes[indexOfAttribute(attributeName, nodeData.attributes)],
+					valueFound = false;
+
+				if (thisAttribute.enabled) {
+					// matching attribute name isn't enough, need to check that the value is valid too
+					if (schemaAttribute.values.length === 0) {
+						valueFound = true;
+					} else {
+						$.each(schemaAttribute.values, function (i, value) {
+							if (thisAttribute.value === value.value) {
+								valueFound = true;
+								return false;
+							}
+						});
+					}
+				}
+
+				if (valueFound) {
 					possiblySelected = true;
 				} else {
 					definitelySelected = false;
@@ -400,6 +418,7 @@ CSLEDIT.propertyPanel = (function () {
 			$.each(choice, function (i, attributeIndex) {
 				console.log('set attr ' + attributeIndex + ' to ' + (choiceIndex === index));
 				nodeData.attributes[attributeIndex].enabled = (choiceIndex === index);
+				panel.find('#' + inputId(index)).val(nodeData.attributes[attributeIndex].value);
 			});
 		});
 	};
