@@ -257,8 +257,6 @@ CSLEDIT.propertyPanel = (function () {
 
 		attribute = null;
 
-		console.log("create attr " + attributeName);
-
 		$.each(nodeData.attributes, function (i, thisAttribute) {
 			var existingAttributeIndex;
 			
@@ -346,7 +344,6 @@ CSLEDIT.propertyPanel = (function () {
 						$('<td class="input"><\/td>'), dropdownValues, function() {nodeChanged();});
 				multiInput.val(attribute.value, true);
 				
-				console.log("multi input " + JSON.stringify(attribute));
 				if (!attribute.enabled) {
 					multiInput.getElement().attr("disabled", true);
 				}
@@ -413,7 +410,6 @@ CSLEDIT.propertyPanel = (function () {
 					thisAttribute;
 				
 				$.each(attributeIndexes, function (i, attributeIndex) {
-					console.log("checking attribute " + nodeData.attributes[attributeIndex].key);
 					if (isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
 						thisAttribute = nodeData.attributes[attributeIndex];
 						return false;
@@ -428,11 +424,9 @@ CSLEDIT.propertyPanel = (function () {
 			});
 
 			if (definitelySelected) {
-				console.log("definitely selected choice " + choiceIndex);
 				definiteSelectedChoices.push(choiceIndex);
 			}
 			if (possiblySelected) {
-				console.log("possibly selected choice " + choiceIndex);
 				possibleSelectedChoices.push(choiceIndex);
 			}
 		});
@@ -577,8 +571,6 @@ CSLEDIT.propertyPanel = (function () {
 				$("#nodeAttribute" + index).removeAttr("disabled");
 			}
 
-			console.log("toggled attr " + JSON.stringify(nodeData.attributes[index]));
-			
 			setupPanel(panel, nodeData, dataType, schemaAttributes, schemaChoices,
 				function () { nodeChanged(); });
 			clearTimeout(onChangeTimeout);
