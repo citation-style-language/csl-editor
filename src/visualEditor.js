@@ -408,7 +408,13 @@ CSLEDIT.editorPage = (function () {
 			translatedParentName,
 			possibleElements,
 			element,
-			table = $('<table><\/table>');
+			table = $('<table><\/table>'),
+			possibleElementsExist = false;
+
+		if (node === null) {
+			alert("Please select a node in to create within first");
+			return;
+		}
 
 		dialogDiv.attr('title', 'Add node within ' + CSLEDIT.uiConfig.displayNameFromNode(node));
 
@@ -426,6 +432,7 @@ CSLEDIT.editorPage = (function () {
 
 		possibleElements = CSLEDIT.schema.childElements(
 			translatedParentName + "/" + translatedNodeInfo.node.name);
+
 
 		$.each(possibleElements, function (element) {
 			var img = '<td><\/td>',
@@ -445,7 +452,14 @@ CSLEDIT.editorPage = (function () {
 				element + '">' + 
 				displayName + 
 				'<\/button><\/td><\/tr>'));
+
+			possibleElementsExist = true;
 		});
+
+		if (!possibleElementsExist) {
+			alert("You can't create nodes within " + CSLEDIT.uiConfig.displayNameFromNode(node) + ".");
+			return;
+		}
 
 		dialogDiv.append(table);
 
@@ -459,6 +473,7 @@ CSLEDIT.editorPage = (function () {
 
 			dialogDiv.dialog('destroy');
 		});
+
 		dialogDiv.dialog({modal : true});
 	};
 
