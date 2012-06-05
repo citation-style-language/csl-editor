@@ -464,8 +464,8 @@ CSLEDIT.editorPage = (function () {
 
 	var setupTreeEditorToolbar = function () {
 		var toolbar = $('#treeEditorToolbar'),
-			addNodeButton = toolbar.find('button.addNode'),
-			deleteNodeButton = toolbar.find('button.deleteNode');
+			addNodeButton = toolbar.find('button.add'),
+			deleteNodeButton = toolbar.find('button.delete');
 
 		assertEqual(addNodeButton.length, 1);
 		assertEqual(deleteNodeButton.length, 1);

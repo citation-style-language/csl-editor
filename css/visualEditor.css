@@ -250,9 +250,9 @@ button.icon {
 	background-repeat: no-repeat;
 	padding-left: 18px;
 }
-button.addNode {
+button.icon.add {
 	background-image: url("../external/famfamfam-icons/add.png");
 }
-button.deleteNode {
+button.icon.delete {
 	background-image: url("../external/famfamfam-icons/delete.png");
 }
