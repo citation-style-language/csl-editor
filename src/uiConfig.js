@@ -130,7 +130,11 @@ CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 		}
 	});
 
-	displayName = node.name + " ";
+	if (node.name === "if") {
+		displayName = "If ";
+	} else {
+		displayName = "Else-If ";
+	}
 
 	if (match === "any") {
 		displayName += terms.join(" OR ");
