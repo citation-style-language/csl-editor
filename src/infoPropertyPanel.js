@@ -40,7 +40,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 			var input, attributeValue;
 			thisRow.append(' <label>' + name + '<\/label> ');
 
-			attributeValue = node.getAttr(name);
+			attributeValue = new CSLEDIT.CslNode(node).getAttr(name);
 
 			input = createInput(item.node, node, name, attributeValue);
 			thisRow.append(input);
