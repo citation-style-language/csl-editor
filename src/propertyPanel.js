@@ -112,11 +112,11 @@ CSLEDIT.propertyPanel = (function () {
 		return position;
 	};
 
-	var isValidValue = function (value, schemaValues) {
+	var isValidValue = function (value, schemaAttribute) {
 		var containsValueType = false,
 			isValid = false;
 
-		$.each(schemaValues, function (i, schemaValue) {
+		$.each(schemaAttribute.values, function (i, schemaValue) {
 			if (schemaValue.type === "value") {
 				containsValueType = true;
 				return false;
@@ -124,12 +124,17 @@ CSLEDIT.propertyPanel = (function () {
 		});
 
 		if (containsValueType) {
-			$.each(schemaValues, function (i, schemaValue) {
-				if (value === schemaValue.value) {
-					isValid = true;
-					return false;
-				}
-			});
+			if (schemaAttribute.list) {
+				// Note: doesn't check validity of list contents at present
+				isValid = true;
+			} else {
+				$.each(schemaAttribute.values, function (i, schemaValue) {
+					if (value === schemaValue.value) {
+						isValid = true;
+						return false;
+					}
+				});
+			}
 		} else {
 			isValid = true;
 		}
@@ -159,7 +164,15 @@ CSLEDIT.propertyPanel = (function () {
 			enabled : true
 		}
 
-		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, nodeData]);
+		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
+	};
+
+	var stripChildren = function (nodeData) {
+		return {
+			name : nodeData.name,
+			cslId : nodeData.cslId,
+			attributes : nodeData.attributes
+		};
 	};
 	
 	var nodeChanged = function () {
@@ -185,7 +198,7 @@ CSLEDIT.propertyPanel = (function () {
 			};
 		});
 
-		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, nodeData]);
+		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
 	};
 
 	var labelId = function (index) {
@@ -244,10 +257,13 @@ CSLEDIT.propertyPanel = (function () {
 
 		attribute = null;
 
+		console.log("create attr " + attributeName);
+
 		$.each(nodeData.attributes, function (i, thisAttribute) {
 			var existingAttributeIndex;
+			
 			if (thisAttribute.key === attributeName &&
-				isValidValue(thisAttribute.value, schemaAttribute.values)) {
+				isValidValue(thisAttribute.value, schemaAttribute)) {
 
 				// do deep copy if one already exists
 				existingAttributeIndex = indexOfAttribute(attributeName, newAttributes);
@@ -330,6 +346,7 @@ CSLEDIT.propertyPanel = (function () {
 						$('<td class="input"><\/td>'), dropdownValues, function() {nodeChanged();});
 				multiInput.val(attribute.value, true);
 				
+				console.log("multi input " + JSON.stringify(attribute));
 				if (!attribute.enabled) {
 					multiInput.getElement().attr("disabled", true);
 				}
@@ -397,7 +414,7 @@ CSLEDIT.propertyPanel = (function () {
 				
 				$.each(attributeIndexes, function (i, attributeIndex) {
 					console.log("checking attribute " + nodeData.attributes[attributeIndex].key);
-					if (isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute.values)) {
+					if (isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
 						thisAttribute = nodeData.attributes[attributeIndex];
 						return false;
 					}
@@ -559,6 +576,8 @@ CSLEDIT.propertyPanel = (function () {
 				nodeData.attributes[index].enabled = true;
 				$("#nodeAttribute" + index).removeAttr("disabled");
 			}
+
+			console.log("toggled attr " + JSON.stringify(nodeData.attributes[index]));
 			
 			setupPanel(panel, nodeData, dataType, schemaAttributes, schemaChoices,
 				function () { nodeChanged(); });
