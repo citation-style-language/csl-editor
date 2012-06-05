@@ -79,7 +79,7 @@ CSLEDIT.searchResults = (function () {
 				'<tr><td colspan=3><a href="' + style.styleId + '">' +
 				exampleCitations.styleTitleFromId[style.styleId] + "<\/a>"
 				+ masterStyleSuffix + featuredStyleText + '<\/td><\/tr>' +
-				'<tr><td nowrap="nowrap"><span class="faint">Inline citaiton<\/span><\/td>' +
+				'<tr><td nowrap="nowrap"><span class="faint">Inline citation<\/span><\/td>' +
 				'<td class=match>' +
 				citation + '<\/td>' + citationCloseness + '<\/tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Bibliography<\/span><\/td>' +
