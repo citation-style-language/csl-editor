@@ -86,6 +86,17 @@ CSLEDIT.propertyPanel = (function () {
 		return -1;
 	};
 
+	var indexesOfAttribute = function (attributeName, attributes) {
+		var indexes = [],
+			index;
+		for (index = 0; index < attributes.length; index++) {
+			if (attributes[index].key === attributeName) {
+				indexes.push(index);
+			}
+		}
+		return indexes;
+	};
+
 	var positionInSchema = function (attributeName) {
 		var index = 0,
 			position = -1;
@@ -99,6 +110,31 @@ CSLEDIT.propertyPanel = (function () {
 		});
 
 		return position;
+	};
+
+	var isValidValue = function (value, schemaValues) {
+		var containsValueType = false,
+			isValid = false;
+
+		$.each(schemaValues, function (i, schemaValue) {
+			if (schemaValue.type === "value") {
+				containsValueType = true;
+				return false;
+			}
+		});
+
+		if (containsValueType) {
+			$.each(schemaValues, function (i, schemaValue) {
+				if (value === schemaValue.value) {
+					isValid = true;
+					return false;
+				}
+			});
+		} else {
+			isValid = true;
+		}
+
+		return isValid;
 	};
 
 	var checkboxChanged = function (event) {
@@ -210,7 +246,8 @@ CSLEDIT.propertyPanel = (function () {
 
 		$.each(nodeData.attributes, function (i, thisAttribute) {
 			var existingAttributeIndex;
-			if (thisAttribute.key === attributeName) {
+			if (thisAttribute.key === attributeName &&
+				isValidValue(thisAttribute.value, schemaAttribute.values)) {
 
 				// do deep copy if one already exists
 				existingAttributeIndex = indexOfAttribute(attributeName, newAttributes);
@@ -232,7 +269,6 @@ CSLEDIT.propertyPanel = (function () {
 		if (attribute === null) {
 			// create attribute if it doesn't exist
 			attribute = { key : attributeName, value : "", enabled : false };
-			nodeData.attributes.push(attribute);
 		}
 
 		newAttributes.push(attribute);
@@ -356,25 +392,18 @@ CSLEDIT.propertyPanel = (function () {
 			});
 
 			$.each(choice, function (attributeName, schemaAttribute) {
-				var thisAttribute =
-						nodeData.attributes[indexOfAttribute(attributeName, nodeData.attributes)],
-					valueFound = false;
-
-				if (thisAttribute.enabled) {
-					// matching attribute name isn't enough, need to check that the value is valid too
-					if (schemaAttribute.values.length === 0) {
-						valueFound = true;
-					} else {
-						$.each(schemaAttribute.values, function (i, value) {
-							if (thisAttribute.value === value.value) {
-								valueFound = true;
-								return false;
-							}
-						});
+				var attributeIndexes = indexesOfAttribute(attributeName, nodeData.attributes),
+					thisAttribute;
+				
+				$.each(attributeIndexes, function (i, attributeIndex) {
+					console.log("checking attribute " + nodeData.attributes[attributeIndex].key);
+					if (isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute.values)) {
+						thisAttribute = nodeData.attributes[attributeIndex];
+						return false;
 					}
-				}
+				});
 
-				if (valueFound) {
+				if (typeof thisAttribute !== "undefined" && thisAttribute.enabled) {
 					possiblySelected = true;
 				} else {
 					definitelySelected = false;
@@ -382,9 +411,11 @@ CSLEDIT.propertyPanel = (function () {
 			});
 
 			if (definitelySelected) {
+				console.log("definitely selected choice " + choiceIndex);
 				definiteSelectedChoices.push(choiceIndex);
 			}
 			if (possiblySelected) {
+				console.log("possibly selected choice " + choiceIndex);
 				possibleSelectedChoices.push(choiceIndex);
 			}
 		});
@@ -416,9 +447,8 @@ CSLEDIT.propertyPanel = (function () {
 		// enable all controls in selected tab and disable the rest
 		$.each(schemaChoiceIndexes, function (choiceIndex, choice) {
 			$.each(choice, function (i, attributeIndex) {
-				console.log('set attr ' + attributeIndex + ' to ' + (choiceIndex === index));
 				nodeData.attributes[attributeIndex].enabled = (choiceIndex === index);
-				panel.find('#' + inputId(index)).val(nodeData.attributes[attributeIndex].value);
+				panel.find('#' + inputId(attributeIndex)).val(nodeData.attributes[attributeIndex].value);
 			});
 		});
 	};
