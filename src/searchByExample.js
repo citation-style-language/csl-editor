@@ -3,8 +3,8 @@
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.finderPage = (function () {
-	var nameSearchTimeout;
-	var styleFormatSearchTimeout;
+	var nameSearchTimeout,
+		styleFormatSearchTimeout;
 
 	// used to display HTML tags for debugging
 	var escapeHTML = function (string) {

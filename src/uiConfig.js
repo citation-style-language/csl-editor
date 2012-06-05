@@ -107,24 +107,40 @@ CSLEDIT.uiConfig.displayNameFromNode = function (node) {
 
 CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 	var displayName = "",
-		elideLimit = 30;
+		elideLimit = 30,
+		match = "any",
+		terms = [],
+		variable = "",
+		join = "";
 
-/*  Don't bother displaying 'if' or 'else-if' - redundant
-	if (node.name === "else-if") {
-		displayName = "Else If";
-	}
-*/
 	$.each(node.attributes, function (i, attribute) {
-		if (attribute.enabled && attribute.key !== "match") {
-			displayName += attribute.value;
+		if (attribute.enabled) {
+		   if (attribute.key === "match") {
+				match = attribute.value;
+			} else {
+				assertEqual(terms.length, 0);
+				console.log(node);
+				terms = attribute.value.split(" ");
 
-			// type is so common, don't bother displaying it
-			if (attribute.key !== "type") {
-				displayName += " (" + attribute.key + ")";
+				// type is so common, don't bother displaying it
+				if (attribute.key !== "type") {
+					variable = attribute.key;
+				}
 			}
-			return false;
 		}
 	});
+
+	displayName = node.name + " ";
+
+	if (match === "any") {
+		displayName += terms.join(" OR ");
+	} else if (match === "all") {
+		displayName += terms.join(" AND ");
+	} else if (match === "none") {
+		displayName += "NOT (" + terms.join(" OR ") + ")";
+	} else {
+		assert(false);
+	}
 
 	if (displayName.length > elideLimit) {
 		displayName = displayName.substr(0, elideLimit-3) + "...";
