@@ -58,6 +58,7 @@ pages = [
             "server/config.js",
             "generated/exampleCitationsEnc.js",
 
+            "src/exampleData.js",
             "src/debug.js",
             "src/diff.js",
             "src/cslParser.js",
