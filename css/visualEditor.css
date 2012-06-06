@@ -147,6 +147,19 @@ div.panel {
 {
 	line-height: 1.0;
 }
+#elementPropertyPanel div.multiPanel {
+	padding: 5px;
+	margin: 5px;
+
+	border-style: solid;
+	border-width: 1px;
+}
+#elementPropertyPanel div.multiPanel label {
+	padding-right: 15px;
+}
+#elementPropertyPanel div.multiPanel .radioButtons {
+	padding-bottom: 10px;
+}
 #nodePathView {
 	margin: 5px;
 	margin-bottom: 10px;
@@ -256,3 +269,4 @@ button.icon.add {
 button.icon.delete {
 	background-image: url("../external/famfamfam-icons/delete.png");
 }
+

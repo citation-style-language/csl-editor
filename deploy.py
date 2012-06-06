@@ -21,6 +21,8 @@ pages = [
             "src/cslData.js",
             "src/schema.js",
 
+            "src/uiConfig.js",
+            "src/MultiPanel.js",
             "src/notificationBar.js",
             "src/editReferences.js",
             "src/NodePathView.js",

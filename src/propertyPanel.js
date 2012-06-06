@@ -44,7 +44,7 @@ CSLEDIT.propertyPanel = (function () {
 				'true' : { text : 'Strip Periods' }
 			}
 		},
-		choiceTabs,
+		choicePanel,
 		schemaChoices,
 		schemaChoiceIndexes;
 
@@ -389,7 +389,7 @@ CSLEDIT.propertyPanel = (function () {
 		var possibleSelectedChoices = [], // choices with some attributes enabled
 			definiteSelectedChoices = []; // choices with all attributes enabled
 
-		if (typeof choiceTabs === "undefined") {
+		if (typeof choicePanel === "undefined") {
 			return;
 		}
 
@@ -434,22 +434,22 @@ CSLEDIT.propertyPanel = (function () {
 		if (definiteSelectedChoices.length > 0) {
 			assertEqual(definiteSelectedChoices.length, 1);
 
-			choiceTabs.tabs('select', definiteSelectedChoices[0]);
+			choicePanel.select(definiteSelectedChoices[0]);
 			enableControlsInTab(definiteSelectedChoices[0]);
 		} else if (possibleSelectedChoices.length > 0) {
 			if (possibleSelectedChoices.length > 1) {
 				console.log('WARNING: not clear which mode this node is in');
 			}
-			choiceTabs.tabs('select', possibleSelectedChoices[0]);
+			choicePanel.select(possibleSelectedChoices[0]);
 			enableControlsInTab(possibleSelectedChoices[0]);
 		} else {
 			// just select the first one
-			choiceTabs.tabs('select', 0);
+			choicePanel.select(0);
 			enableControlsInTab(0);
 		}
 		
-		choiceTabs.on('tabsselect', function (event, ui) {
-			enableControlsInTab(ui.index);
+		choicePanel.onChange(function(index) {
+			enableControlsInTab(index);
 			nodeChanged();
 		});
 	};
@@ -501,10 +501,9 @@ CSLEDIT.propertyPanel = (function () {
 		// start with attribute editors in choice tabs
 		attrIndex = -1;
 		if (schemaChoices.length > 0) {
-			choiceTabs = $('<div id="schemaChoices"><ul><\/ul><\/div>');
-			panel.append(choiceTabs);
 
-			choiceTabs.tabs();
+			choicePanel = new CSLEDIT.MultiPanel('multiPanel');
+			panel.append(choicePanel.element);
 
 			$.each(schemaChoices, function (choiceIndex, attributes) {
 				var addedToTab = false;
@@ -513,7 +512,7 @@ CSLEDIT.propertyPanel = (function () {
 				$.each(attributes, function (attributeName, attribute) {
 					var editor;
 					if (!addedToTab) {
-						choiceTabs.tabs('add', '#schemaChoice' + choiceIndex, attributeName);
+						choicePanel.addPanel(attributeName);
 						addedToTab = true;
 					}
 					
@@ -523,11 +522,11 @@ CSLEDIT.propertyPanel = (function () {
 
 					editor.find('button.toggleAttrButton').remove();
 					editor.find('*').removeAttr('disabled');
-					panel.find('#schemaChoice' + choiceIndex).append(editor);
+					choicePanel.contentPanels[choiceIndex].append(editor);
 				});
 
 				if (!addedToTab) {
-					choiceTabs.tabs('add', '#schemaChoice' + choiceIndex, "No attributes for this option");
+					choicePanel.addPanel("No attributes for this option");
 				}
 			});
 		}
