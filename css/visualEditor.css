@@ -228,13 +228,13 @@ z-index: 30 !important;
 
 /* Highlighting */
 .selected {
-	color : white;
-	background-color : #009900;
+	color : black;
+	background-color : #BEEBFF;
 	cursor : default;
 }
 .highlighted {
 	color : black;
-	background-color : #bbffbb;
+	background-color : #E7F4F9;
 	cursor : pointer;
 }
 
