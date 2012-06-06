@@ -119,7 +119,6 @@ CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 				match = attribute.value;
 			} else {
 				assertEqual(terms.length, 0);
-				console.log(node);
 				terms = attribute.value.split(" ");
 
 				// type is so common, don't bother displaying it

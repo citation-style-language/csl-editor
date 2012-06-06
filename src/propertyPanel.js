@@ -57,6 +57,10 @@ CSLEDIT.propertyPanel = (function () {
 		textInput = $('<input class="propertyInput"><\/input>');
 		textInput.attr('id', inputId(index));
 
+		if (schemaAttribute.documentation !== "") {
+			textInput.attr('title', schemaAttribute.documentation);
+		}
+
 		if (!enabled) {
 			textInput.attr('disabled', true);
 		}
@@ -343,6 +347,9 @@ CSLEDIT.propertyPanel = (function () {
 				multiInput = new CSLEDIT.MultiComboBox(
 						$('<td class="input"><\/td>'), dropdownValues, function() {nodeChanged();});
 				multiInput.val(attribute.value, true);
+				if (schemaAttribute.documentation !== "") {
+					multiInput.setTooltip(schemaAttribute.documentation);
+				}
 				
 				if (!attribute.enabled) {
 					multiInput.getElement().attr("disabled", true);
@@ -358,6 +365,10 @@ CSLEDIT.propertyPanel = (function () {
 					$.each(dropdownValues, function (i, value) {
 						select.append("<option>" + value + "<\/option>");
 					});
+
+					if (schemaAttribute.documentation !== "") {
+						select.attr("title", schemaAttribute.documentation);
+					}
 					
 					cell = $('<td class="input"><\/td>').append(select)
 					if (!attribute.enabled) {

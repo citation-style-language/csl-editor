@@ -54,7 +54,8 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			textNode : false,
 			list : false,
 			choices : [],
-			choiceRefs : []
+			choiceRefs : [],
+			documentation : ""
 		};
 	};
 
@@ -332,7 +333,8 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 	};
 
 	var joinProperties = function (propertiesA, propertiesB) {
-		var element;
+		var element,
+			documentation = [];
 
 		for (element in propertiesB.elements) {
 			if (!(element in propertiesA.attributes)) {
@@ -350,6 +352,15 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 
 		propertiesA.textNode = propertiesA.textNode | propertiesB.textNode;
 		propertiesA.list = propertiesA.list | propertiesB.list;
+
+		if (propertiesA.documentation !== "") {
+			documentation.push(propertiesA.documentation);
+		}
+		if (propertiesB.documentation !== "") {
+			documentation.push(propertiesB.documentation);
+		}
+
+		propertiesA.documentation = documentation.join("\n");
 	};
 
 	var elementStack = [];
@@ -408,13 +419,15 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 				thisNodeProperties.attributes[attributeName] = {
 					values : [],
 					refs : [],
-					list : values.list
+					list : values.list,
+					documentation : values.documentation
 				};
 			} else {
 				thisNodeProperties.attributes[attributeName] = {
 					values : values.attributeValues,
 					refs : values.refs,
-					list : values.list
+					list : values.list,
+					documentation : values.documentation
 				};
 			}
 			return thisNodeProperties;
@@ -489,10 +502,13 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			return thisNodeProperties;
 		},
 		value : function (node) {
-			var thisNodeProperties = new NodeProperties();
+			var thisNodeProperties = new NodeProperties(),
+				childNodes = parseChildren(node);
+
 			thisNodeProperties.attributeValues = [{
 				type : "value",
-				value : node.textContent
+				value : node.textContent,
+				documentation : childNodes.documentation
 			}];
 			return thisNodeProperties;
 		},
@@ -534,6 +550,11 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			defineProperties[defineName] = parseChildren(node);
 			elementStack.pop();
 			return null;
+		},
+		"a:documentation" : function (node) {
+			var thisNodeProperties = new NodeProperties();
+			thisNodeProperties.documentation = node.textContent;
+			return thisNodeProperties;
 		}
 	};
 
@@ -550,7 +571,6 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			if (nodeProperties[element].textNode) {
 				return "text";
 			}
-
 			assert(node.attributeValues.length < 2);
 			if (node.attributeValues.length === 0 || node.attributeValues[0].type !== "data") {
 				return null;
@@ -560,6 +580,9 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		},
 		choices : function (element) {
 			return nodeProperties[element].choices;
+		},
+		documentation : function (element) {
+			return nodeProperties[element].documentation;
 		},
 		allData : function () {
 			return nodeProperties;

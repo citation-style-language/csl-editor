@@ -23,6 +23,10 @@ CSLEDIT.MultiComboBox.prototype.getElement = function () {
 	return this._element;
 };
 
+CSLEDIT.MultiComboBox.prototype.setTooltip = function (tooltip) {
+	this._element.attr("title", tooltip);
+};
+
 CSLEDIT.MultiComboBox.prototype.val = function (val, suppressOnChange) {
 	if (typeof val === "undefined") {
 		this._readValues();
@@ -58,7 +62,8 @@ CSLEDIT.MultiComboBox.prototype._refresh = function (suppressOnChange) {
 	$.each(this._values, function (i, value) {
 		var row = $('<tr><\/tr>'),
 			select = $(that._selectHtml).css({"margin-right": 0}),
-			deleteButton = $('<button class="icon delete" data-index="' + i + '">Delete<\/button>').css({"margin-left": 0});
+			deleteButton = $('<button class="icon delete" data-index="' + i +
+				'">Delete<\/button>').css({"margin-left": 0});
 
 		select.val(value);
 
