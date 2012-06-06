@@ -73,6 +73,8 @@ pages = [
         "jsFiles" : [
             "src/debug.js",
             "generated/exampleCitationsEnc.js",
+
+            "src/exampleData.js",
             "src/cslParser.js",
             "src/cslData.js",
             "src/searchResults.js",
