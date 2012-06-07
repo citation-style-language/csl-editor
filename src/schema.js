@@ -25,7 +25,9 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 		urlsGot = 0,
 		callback = null,
 		initialised = false,
-		refParents = {};
+		refParents = {},
+		lastAttributeValue = null; // needed because the documentation for an attribute value
+		                           // comes after, instead of within, and attribute
 
 	$.get(mainSchemaURL, {}, function(data) {
 		mainSchemaData = data;
@@ -412,6 +414,8 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 				attributeName = node.attributes.item("name").nodeValue,
 				values;
 
+			lastAttributeValue = null;
+
 			values = parseChildren(node);
 
 			if (values.textNode) {
@@ -505,11 +509,12 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			var thisNodeProperties = new NodeProperties(),
 				childNodes = parseChildren(node);
 
-			thisNodeProperties.attributeValues = [{
+			lastAttributeValue = {
 				type : "value",
 				value : node.textContent,
-				documentation : childNodes.documentation
-			}];
+				documentation : ""
+			};
+			thisNodeProperties.attributeValues = [lastAttributeValue];
 			return thisNodeProperties;
 		},
 		data : function (node) {
@@ -552,9 +557,17 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			return null;
 		},
 		"a:documentation" : function (node) {
-			var thisNodeProperties = new NodeProperties();
-			thisNodeProperties.documentation = node.textContent;
-			return thisNodeProperties;
+			var thisNodeProperties;
+
+			if (lastAttributeValue === null) {
+				thisNodeProperties = new NodeProperties();
+				thisNodeProperties.documentation = node.textContent;
+				return thisNodeProperties;				
+			} else {
+				lastAttributeValue.documentation = node.textContent;
+				lastAttributeValue = null;
+				return null;
+			}
 		}
 	};
 

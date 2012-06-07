@@ -224,7 +224,7 @@ CSLEDIT.propertyPanel = (function () {
 		return defaultValue;
 	}
 
-	var createButton = function (attributeName, schemaAttribute, index, attribute) {
+	var createButton = function (attributeName, cslSchemaAttribute, index, attribute) {
 		assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
 
 		$.each(checkboxControlSchema[attributeName], function (attributeValue, control) {
@@ -235,6 +235,11 @@ CSLEDIT.propertyPanel = (function () {
 				buttonLabel = $('<label for="' + checkboxControlId + '">' + control.text + '<\/label>');
 				button = $('<input type="checkbox" id="' + checkboxControlId + '" data-attribute="' +
 					attributeName + '" data-value="' + attributeValue + '" \/>');
+
+				if (cslSchemaAttribute.documentation !== "") {
+					console.log("button doc: " + cslSchemaAttribute.documentation);
+					button.attr("title", cslSchemaAttribute.documentation);
+				}
 
 				checkboxControls.push({
 					position : positionInSchema(attributeName),
@@ -254,6 +259,7 @@ CSLEDIT.propertyPanel = (function () {
 		var attribute,
 			schemaValues,
 			dropdownValues,
+			dropdownDocumentation,
 			valueIndex,
 			thisRow,
 			multiInput,
@@ -298,6 +304,7 @@ CSLEDIT.propertyPanel = (function () {
 
 		schemaValues = schemaAttribute.values;
 		dropdownValues = [];
+		dropdownDocumentation = {};
 
 		// add macro dropdown values, they aren't in the schema
 		if (attributeName === "macro") {
@@ -311,6 +318,10 @@ CSLEDIT.propertyPanel = (function () {
 				switch (schemaValues[valueIndex].type) {
 				case "value":
 					dropdownValues.push(schemaValues[valueIndex].value);
+					if (schemaValues[valueIndex].documention !== "") {
+						dropdownDocumentation[schemaValues[valueIndex].value] =
+							schemaValues[valueIndex].documentation;
+					}
 					break;
 				case "data":
 					switch (schemaValues[valueIndex].value) {
@@ -347,9 +358,6 @@ CSLEDIT.propertyPanel = (function () {
 				multiInput = new CSLEDIT.MultiComboBox(
 						$('<td class="input"><\/td>'), dropdownValues, function() {nodeChanged();});
 				multiInput.val(attribute.value, true);
-				if (schemaAttribute.documentation !== "") {
-					multiInput.setTooltip(schemaAttribute.documentation);
-				}
 				
 				if (!attribute.enabled) {
 					multiInput.getElement().attr("disabled", true);
@@ -363,13 +371,13 @@ CSLEDIT.propertyPanel = (function () {
 						index + '"><\/select>');
 
 					$.each(dropdownValues, function (i, value) {
-						select.append("<option>" + value + "<\/option>");
+						var option = $("<option>" + value + "<\/option>");
+						if (value in dropdownDocumentation) {
+							option.attr("title", dropdownDocumentation[value]);
+						}
+						select.append(option);
 					});
 
-					if (schemaAttribute.documentation !== "") {
-						select.attr("title", schemaAttribute.documentation);
-					}
-					
 					cell = $('<td class="input"><\/td>').append(select)
 					if (!attribute.enabled) {
 						cell.attr('disabled', true);
@@ -390,8 +398,11 @@ CSLEDIT.propertyPanel = (function () {
 			toggleButton.html('Enable');
 		}
 		thisRow.append($('<td><\/td>').append(toggleButton));
-		
 		thisRow.find("#" + inputId(index)).val(attribute.value);
+			
+		if (schemaAttribute.documentation !== "") {
+			thisRow.attr('title', schemaAttribute.documentation);
+		}
 
 		return thisRow;
 	};
@@ -597,6 +608,10 @@ CSLEDIT.propertyPanel = (function () {
 				toolbar.append(control.label);
 				
 				control.control.button();
+
+				if (typeof control.control.attr("title") !== "undefined") {
+					control.control.button('widget').attr("title", control.control.attr("title"));
+				}
 			}
 		});
 
