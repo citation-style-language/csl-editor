@@ -217,6 +217,29 @@ CSLEDIT.editorPage = (function () {
 				unHighlightNode(cslId);
 			}
 		);
+		$('li[cslid] > a').hoverIntent(
+			function (event) {
+				var target = $(event.target).closest("li[cslid]"),
+					cslId = parseInt(target.attr('cslId')),
+					nodeAndParent = CSLEDIT.data.getNodeAndParent(cslId),
+					documentation;
+	   
+				if (nodeAndParent.parent === null) {
+					documentation = CSLEDIT.schema.documentation('root/' + nodeAndParent.node.name);
+				} else {
+					documentation = CSLEDIT.schema.documentation(
+						nodeAndParent.parent.name + '/' + nodeAndParent.node.name);
+				}
+
+				if (documentation !== "") {
+					target.attr("title", documentation);
+				}
+			},
+			function (event) {
+				// no-op
+			}
+		);
+
 	};
 
 	var doSyntaxHighlighting = function () {

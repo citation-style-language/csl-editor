@@ -144,7 +144,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			data : CSLEDIT.uiConfig.displayNameFromNode(cslData),
 			attr : {
 				rel : cslData.name,
-				cslid : cslData.cslId,
+				cslid : cslData.cslId
 			},
 			children : children
 		};
