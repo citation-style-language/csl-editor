@@ -2,7 +2,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.editorPage = (function () {
+CSLEDIT.VisualEditor = function (editorElement, options) {
 	var editTimeout,
 		styleURL,
 		oldSelectedNode,
@@ -15,6 +15,11 @@ CSLEDIT.editorPage = (function () {
 		viewController,
 		nodePathView,
 		highlightTimeout;
+
+	editorElement = $(editorElement);
+	editorElement.load("../html/visualEditor.html", function () {
+		CSLEDIT.schema.callWhenReady(init);
+	});
 
 	var addToHoveredNodeStack = function (target) {
 		// build stack 'backwards' from the inner node outwards
@@ -59,7 +64,7 @@ CSLEDIT.editorPage = (function () {
 
 	var highlightOutput = function (cslId)
 	{
-		var node = $('span[cslid="' + cslId + '"]');
+		var node = editorElement.find('span[cslid="' + cslId + '"]');
 
 		if (node.hasClass("selected"))
 		{
@@ -117,7 +122,7 @@ CSLEDIT.editorPage = (function () {
 			if (typeof nodeIndex === "undefined") {
 				return;
 			}
-			node = $('li[cslid="' + nodeIndex + '"]');
+			node = editorElement.find('li[cslid="' + nodeIndex + '"]');
 		}
 
 		depth++;
@@ -147,7 +152,7 @@ CSLEDIT.editorPage = (function () {
 				instanceNode = new CSLEDIT.CslNode(
 					CSLEDIT.data.getNode(parseInt(nodeStack[nodeStack.length - 2])));
 				if (instanceNode.name === "text" && instanceNode.getAttr("macro") !== "") {
-					unHighlightIfNotDescendentOf($('li[cslid=' + instanceNode.cslId + ']'));
+					unHighlightIfNotDescendentOf(editorElement.find('li[cslid=' + instanceNode.cslId + ']'));
 				}
 			}
 			// highlight any remaining nodes in the call stack
@@ -157,7 +162,7 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var unHighlightNode = function (nodeIndex) {
-		var	node = $('span[cslid="' + nodeIndex + '"]');
+		var	node = editorElement.find('span[cslid="' + nodeIndex + '"]');
 
 		if (node.hasClass("selected"))
 		{
@@ -168,7 +173,7 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var setupSyntaxHighlightForNode = function () {
-		$('span[cslid]').hover(
+		editorElement.find('span[cslid]').hover(
 			function (event) {
 				var target = $(event.target).closest("span[cslid]");
 				
@@ -197,15 +202,15 @@ CSLEDIT.editorPage = (function () {
 		);
 
 		// set up click handling
-		$('span[cslid]').click( function (event) {
+		editorElement.find('span[cslid]').click( function (event) {
 			var target = $(event.target).closest("span[cslid]"),
 				cslId = parseInt(target.attr('cslId'));
 			reverseSelectNode(cslId);
 		});
 
 		// set up hovering over tree nodes
-		$('li[cslid] > a').unbind('mouseenter mouseleave');
-		$('li[cslid] > a').hover(
+		editorElement.find('li[cslid] > a').unbind('mouseenter mouseleave');
+		editorElement.find('li[cslid] > a').hover(
 			function (event) {
 				var target = $(event.target).closest("li[cslid]"),
 					cslId = parseInt(target.attr('cslId'));
@@ -217,7 +222,7 @@ CSLEDIT.editorPage = (function () {
 				unHighlightNode(cslId);
 			}
 		);
-		$('li[cslid] > a').hoverIntent(
+		editorElement.find('li[cslid] > a').hoverIntent(
 			function (event) {
 				var target = $(event.target).closest("li[cslid]"),
 					cslId = parseInt(target.attr('cslId')),
@@ -253,7 +258,7 @@ CSLEDIT.editorPage = (function () {
 
 		// highlight the selected node if there is one
 		if (viewController.selectedNode() != -1) {
-			$('span[cslid=' + viewController.selectedNode() + ']').addClass('selected');
+			editorElement.find('span[cslid=' + viewController.selectedNode() + ']').addClass('selected');
 		}
 	};
 
@@ -321,8 +326,8 @@ CSLEDIT.editorPage = (function () {
 		var cslData = CSLEDIT.data.get();
 
 		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
-			$("#statusMessage"), $("#exampleOutput"),
-			$("#formattedCitations"), $("#formattedBibliography"),
+			editorElement.find("#statusMessage"), editorElement.find("#exampleOutput"),
+			editorElement.find("#formattedCitations"), editorElement.find("#formattedBibliography"),
 			doSyntaxHighlighting,
 			CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData)[0].cslId,
 			CSLEDIT.data.getNodesFromPath("style/bibliography/layout", cslData)[0].cslId);
@@ -333,7 +338,7 @@ CSLEDIT.editorPage = (function () {
 			node,
 			parentNode,
 			parentNodeName,
-			propertyPanel = $("#elementProperties"),
+			propertyPanel = editorElement.find("#elementProperties"),
 			possibleElements,
 			element,
 			possibleChildNodesDropdown,
@@ -371,11 +376,10 @@ CSLEDIT.editorPage = (function () {
 			possibleElements = CSLEDIT.schema.childElements(
 				translatedParentName + "/" + translatedNodeInfo.node.name);
 
-			possibleChildNodesDropdown = $("#possibleChildNodes").html("");
+			possibleChildNodesDropdown = editorElement.find("#possibleChildNodes").html("");
 
 			for (element in possibleElements) {
-				$('<li><a href="#">' + element + '</a></li>').appendTo(
-					possibleChildNodesDropdown);
+				possibleChildNodesDropdown.append('<li><a href="#">' + element + '</a></li>');
 			}
 		}
 
@@ -389,23 +393,23 @@ CSLEDIT.editorPage = (function () {
 
 		switch (node.name) {
 			case "sort":
-				CSLEDIT.sortPropertyPanel.setupPanel($("#elementProperties"), node);
+				CSLEDIT.sortPropertyPanel.setupPanel(editorElement.find("#elementProperties"), node);
 				break;
 			case "info":
-				CSLEDIT.infoPropertyPanel.setupPanel($("#elementProperties"), node);
+				CSLEDIT.infoPropertyPanel.setupPanel(editorElement.find("#elementProperties"), node);
 				break;
 			default:
 			CSLEDIT.propertyPanel.setupPanel(
-				$("#elementProperties"), node, dataType, schemaAttributes,
+				editorElement.find("#elementProperties"), node, dataType, schemaAttributes,
 				CSLEDIT.schema.choices(parentNodeName + "/" + node.name));
 		}
 
-		$('span[cslid="' + oldSelectedNode + '"]').removeClass("highlighted");
-		$('span[cslid="' + oldSelectedNode + '"]').removeClass("selected");
+		editorElement.find('span[cslid="' + oldSelectedNode + '"]').removeClass("highlighted");
+		editorElement.find('span[cslid="' + oldSelectedNode + '"]').removeClass("selected");
 		oldSelectedNode = node.cslId;
 
-		$('span[cslid="' + node.cslId + '"]').removeClass("highlighted");
-		$('span[cslid="' + node.cslId + '"]').addClass("selected");
+		editorElement.find('span[cslid="' + node.cslId + '"]').removeClass("highlighted");
+		editorElement.find('span[cslid="' + node.cslId + '"]').addClass("selected");
 	};
 
 	var reloadPageWithNewStyle = function (newURL) {
@@ -501,7 +505,7 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var setupTreeEditorToolbar = function () {
-		var toolbar = $('#treeEditorToolbar'),
+		var toolbar = editorElement.find('#treeEditorToolbar'),
 			addNodeButton = toolbar.find('button.add'),
 			deleteNodeButton = toolbar.find('button.delete');
 
@@ -519,9 +523,9 @@ CSLEDIT.editorPage = (function () {
 	};
 
 	var setupDropdownMenuHandler = function (selector) {
-		$(selector).click(function (event) {
+		editorElement.find(selector).click(function (event) {
 			var clickedName = $(event.target).text(),
-				selectedNodeId = $('#treeEditor').jstree('get_selected'),
+				selectedNodeId = editorElement.find('#treeEditor').jstree('get_selected'),
 				parentNode = $(event.target).parent().parent(),
 				parentNodeName,
 				position;	
@@ -562,70 +566,64 @@ CSLEDIT.editorPage = (function () {
 		});
 	};
 
-	return {
-		init : function () {
-			if (!$.browser.webkit && !$.browser.mozilla) {
-				$('body').html("<h2>Please use the latest version of " +
-					"Chrome or Firefox to view this page.<\/h2>").css({margin:50});
-				return;
-			}
-
-			$(function(){
-				$("ul.dropdown li").hoverIntent(function(){
-				
-					$(this).addClass("hover");
-					$('ul:first',this).css('visibility', 'visible');
-				
-				}, function(){
-				
-					$(this).removeClass("hover");
-					$('ul:first',this).css('visibility', 'hidden');
-				
-				});
-				
-				$("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
-			});
-
-			CSLEDIT.data.initPageStyle( function () {
-				viewController = CSLEDIT.ViewController($("#treeEditor"), $("#titlebar"), $("#nodePath"));
-
-				CSLEDIT.controller.setCslData(CSLEDIT.data);
-				viewController.setFormatCitationsCallback(formatExampleCitations);
-				CSLEDIT.data.setViewController(viewController);
-
-				createTreeView();
-
-				nodePathView = new CSLEDIT.NodePathView($("#nodePathView"), {
-					selectNodeFromPath : viewController.selectNodeFromPath
-				});
-			});
-
-			setupTreeEditorToolbar();
-			setupDropdownMenuHandler(".dropdown a");
-
-			CSLEDIT.editReferences.init($('ul.#exampleCitation1'), formatExampleCitations, 0, [0]);
-			CSLEDIT.editReferences.init($('ul.#exampleCitation2'), formatExampleCitations, 1, [11]);
-
-			$("#mainContainer").layout({
-				closable : false,
-				resizble : true,
-				livePaneResizing : true,
-				west__size : 240,
-				west__minSize : 200
-			});
-			$("#rightContainer").layout({
-				closable : false,
-				resizable : true,
-				livePaneResizing : true,
-				north__size : 250
-			});
-
-			CSLEDIT.notificationBar.init($('#notificationBar'));
+	var init = function () {
+		if (!$.browser.webkit && !$.browser.mozilla) {
+			$('body').html("<h2>Please use the latest version of " +
+				"Chrome or Firefox to view this page.<\/h2>").css({margin:50});
+			return;
 		}
+
+		$(function(){
+			editorElement.find("ul.dropdown li").hoverIntent(function(){
+				$(this).addClass("hover");
+				$('ul:first',this).css('visibility', 'visible');
+			}, function(){
+				$(this).removeClass("hover");
+				$('ul:first',this).css('visibility', 'hidden');
+			});
+			
+			editorElement.find("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
+		});
+
+		CSLEDIT.data.initPageStyle( function () {
+			viewController = CSLEDIT.ViewController(
+				editorElement.find("#treeEditor"),
+				editorElement.find("#titlebar"),
+				editorElement.find("#nodePath"));
+
+			CSLEDIT.controller.setCslData(CSLEDIT.data);
+			viewController.setFormatCitationsCallback(formatExampleCitations);
+			CSLEDIT.data.setViewController(viewController);
+
+			createTreeView();
+
+			nodePathView = new CSLEDIT.NodePathView(editorElement.find("#nodePathView"), {
+				selectNodeFromPath : viewController.selectNodeFromPath
+			});
+		});
+
+		setupTreeEditorToolbar();
+		setupDropdownMenuHandler(".dropdown a");
+
+		CSLEDIT.editReferences.init(
+			editorElement.find('ul.#exampleCitation1'), formatExampleCitations, 0, [0]);
+		CSLEDIT.editReferences.init(
+			editorElement.find('ul.#exampleCitation2'), formatExampleCitations, 1, [11]);
+
+		editorElement.find('#mainContainer').layout({
+			closable : false,
+			resizble : true,
+			livePaneResizing : true,
+			west__size : 240,
+			west__minSize : 200
+		});
+		editorElement.find("#rightContainer").layout({
+			closable : false,
+			resizable : true,
+			livePaneResizing : true,
+			north__size : 250
+		});
+
+		CSLEDIT.notificationBar.init(editorElement.find('#notificationBar'));
 	};
-}());
-
-$("document").ready( function () {
-	CSLEDIT.schema.callWhenReady( CSLEDIT.editorPage.init );
-});
-
+};

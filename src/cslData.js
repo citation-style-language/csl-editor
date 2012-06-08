@@ -2,7 +2,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-/* Uses localStorage to store current csl data object
+/* Uses CSLEDIT.storage to store current csl data object
  *
  * Supports the following actions:
  * - New style
@@ -17,10 +17,15 @@ CSLEDIT.Data = function (CSL_DATA) {
 		callbacksEnabled = true;
 
 	var get = function () {
-		return JSON.parse(localStorage.getItem(CSL_DATA));
+		var cslData = CSLEDIT.storage.getItem(CSL_DATA);
+		if (cslData === null) {
+			return null;
+		} else {
+			return JSON.parse(cslData);
+		}
 	};
 	var set = function (cslData) {
-		localStorage.setItem(CSL_DATA, JSON.stringify(cslData));
+		CSLEDIT.storage.setItem(CSL_DATA, JSON.stringify(cslData));
 		return cslData;
 	};
 	var setCslCode = function (cslCode) {
@@ -461,11 +466,12 @@ CSLEDIT.Data = function (CSL_DATA) {
 
 			if (styleURL != "" && typeof styleURL !== 'undefined') {
 				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-				loadStyleFromURL(styleURL, function () {
+				
+				loadStyleFromURL(styleURL, callback);/*function () {
 					// reload page without the styleURL query string, to avoid the user
 					// refreshing the page triggering a re-load of the style
 					window.location.href = window.location.href.replace(/\?.*$/, "");
-				});
+				});*/
 			} else if (cslData !== null && cslData !== "") {
 				callback();
 			} else {

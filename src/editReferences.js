@@ -24,7 +24,7 @@ CSLEDIT.editReferences = (function () {
 			index++;
 		});
 
-		checked = localStorage.getItem('CSLEDIT.citation' + citation);
+		checked = CSLEDIT.storage.getItem('CSLEDIT.citation' + citation);
 		if (checked === null || checked === "") {
 			checked = defaultCheckedRefs;
 		} else {
@@ -62,7 +62,7 @@ CSLEDIT.editReferences = (function () {
 			}
 		});
 		
-		localStorage.setItem('CSLEDIT.citation' + citation, JSON.stringify(checked));
+		CSLEDIT.storage.setItem('CSLEDIT.citation' + citation, JSON.stringify(checked));
 
 		CSLEDIT.exampleData.citationsItems[citation].citationItems = citationItems;
 

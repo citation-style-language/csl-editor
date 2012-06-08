@@ -11,6 +11,7 @@ pages = [
     {
         "page" : "visualEditor", 
         "jsFiles" : [
+            "src/storage.js",
             "src/citationEngine.js",
             "src/exampleData.js",
             "src/diff.js",

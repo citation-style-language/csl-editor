@@ -25,6 +25,7 @@
 	<script type="text/javascript" src="../external/jquery.hoverIntent.minified.js"></script>
 	<script type="text/javascript" src="../external/jquery.scrollTo-1.4.2-min.js"></script>
 
+	<script type="text/javascript" src="../src/storage.js"></script>
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../src/exampleData.js"></script>
 	<script type="text/javascript" src="../src/diff.js"></script>
@@ -57,76 +58,26 @@
 	<link rel="stylesheet" href="../css/visualEditor.css" />
 
 	<script type="text/javascript" src="../src/analytics.js"></script>
+
+	<style>
+		#visualEditorContainer {
+			position: absolute;
+			top: 27px;
+			bottom: 0px;
+			left: 0px;
+			right: 0px;
+		}
+	</style>
+	<script type="text/javascript">
+		var cslEditor;
+		$("document").ready( function () {
+			cslEditor = new CSLEDIT.VisualEditor('#visualEditorContainer');
+		});
+	</script>
 </head>
 <body id="visualEditor">
-<div id="notificationBar"><span class="message"></span><button class="dismiss">Dismiss</button></div>
 <?php include '../html/navigation.html'; ?>
-<div id="mainContainer">
-	<div id="leftContainer" class="ui-layout-west">
-		<ul class="dropdown">
-			<li>
-				<a href="#">Style</a>
-				<ul class="sub_menu">
-					<li><a href="#">New style</a></li>
-					<li><a href="#">Load from URL</a></li>
-					<!--li><a href="#">Revert (undo all changes)</a></li-->
-					<li><a href="#">Export CSL</a></li>
-					<li><a href="#">Style Info</a>
-					<li><a href="#">Global Formatting Options</a></li>
-				</ul>
-			</li>
-			<li>
-				<a href="#">Edit</a>
-					<ul class="sub_menu">
-						<li><a href="#">Undo</a></li>
-					</ul>
-			</li>
-		</ul>
-		<div id="treeEditorPanel" class="panel">
-			<div id="treeEditorToolbar">
-				<button class='add icon'>Add Node</button>
-				<button class='delete icon'>Delete Node</button>
-			</div>
-			<div id="treeEditor"></div>
-		</div>
-	</div>
-
-	<div id="rightContainer" class="ui-layout-center">
-		<ul class="dropdown">
-			<li>
-				<a href="#">Citation 1</a>
-				<ul class="sub_menu" id="exampleCitation1">
-				</ul>
-			</li>
-			<li>
-				<a href="#">Citation 2</a>
-				<ul class="sub_menu" id="exampleCitation2">
-				</ul>
-			</li>
-		</ul>
-		<div id="titlebarContainer">
-			<div id="titlebar">
-				<h3>Style Title:</h3>
-			</div>
-		</div>
-		<div id="topRightContainer" class="ui-layout-north">
-			<div id="exampleOutput" class="panel">
-				<div id="statusMessage"></div>
-
-				<h3>Formatted Inline Citations</h3>	
-				<div id="formattedCitations"></div>
-
-				<h3>Formatted Bibliography</h3>
-				<div id="formattedBibliography"></div>
-			</div>
-		</div>
-		<div id="bottomRightContainer" class="ui-layout-center">
-			<div id="elementPropertyPanel" class="panel">
-				<div id="nodePathView"></div>
-				<div id="elementProperties"></div>
-			</div>
-		</div>
-	</div>
+<div id="visualEditorContainer">
 </div>
 </body>
 </html>
