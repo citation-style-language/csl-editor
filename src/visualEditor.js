@@ -2,7 +2,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.VisualEditor = function (editorElement, options) {
+CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	var editTimeout,
 		styleURL,
 		oldSelectedNode,
@@ -14,7 +14,8 @@ CSLEDIT.VisualEditor = function (editorElement, options) {
 		selectedCslId = -1,
 		viewController,
 		nodePathView,
-		highlightTimeout;
+		highlightTimeout,
+		options = new CSLEDIT.Options(userOptions);
 
 	editorElement = $(editorElement);
 	editorElement.load("../html/visualEditor.html", function () {
@@ -523,12 +524,18 @@ CSLEDIT.VisualEditor = function (editorElement, options) {
 	};
 
 	var setupDropdownMenuHandler = function (selector) {
+		var dropdown = $(selector),
+			loadCsl;
+
+		dropdown.find('a.loadcsl_name').html(options.get('loadcsl_name'));
+		dropdown.find('a.savecsl_name').html(options.get('savecsl_name'));
+
 		editorElement.find(selector).click(function (event) {
 			var clickedName = $(event.target).text(),
 				selectedNodeId = editorElement.find('#treeEditor').jstree('get_selected'),
 				parentNode = $(event.target).parent().parent(),
 				parentNodeName,
-				position;	
+				position;
 
 			if (parentNode.attr("class") === "sub_menu")
 			{
@@ -537,17 +544,17 @@ CSLEDIT.VisualEditor = function (editorElement, options) {
 				if (/^Style/.test(parentNodeName)) {
 					if (clickedName === "Revert (undo all changes)") {
 						reloadPageWithNewStyle(styleURL);
-					} else if (clickedName === "Export CSL") {
-						window.location.href =
-							"data:application/xml;charset=utf-8," +
-							encodeURIComponent(CSLEDIT.data.getCslCode());
-					} else if (clickedName === "Load from URL") {
-						reloadPageWithNewStyle(
-							prompt("Please enter the URL of the style you wish to load")
-						);
+					} else if (clickedName === "Save CSL") {
+						options.get('savecsl_func')(CSLEDIT.data.getCslCode());
+					} else if (clickedName === "Load CSL") {
+						var csl = options.get('loadcsl_func')();
+						if (csl !== null && typeof csl !== "undefined") {
+							CSLEDIT.controller.exec('setCslCode', [csl]);
+						}
 					} else if (clickedName === "New style") {
 						reloadPageWithNewStyle(
-							window.location.protocol + "//" + window.location.hostname + "/csl/content/newStyle.csl");
+							window.location.protocol + "//" + window.location.hostname +
+							"/csl/content/newStyle.csl");
 					} else if (clickedName === "Style Info") {
 						viewController.selectNode(CSLEDIT.data.getNodesFromPath("style/info")[0].cslId);
 					} else if (clickedName === "Global Formatting Options") {
@@ -625,5 +632,11 @@ CSLEDIT.VisualEditor = function (editorElement, options) {
 		});
 
 		CSLEDIT.notificationBar.init(editorElement.find('#notificationBar'));
+	};
+
+	return {
+		setCslCode : function (cslCode) {
+			CSLEDIT.controller.exec('setCslCode', [cslCode]);
+		}
 	};
 };

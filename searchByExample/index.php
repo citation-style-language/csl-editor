@@ -17,6 +17,7 @@
 	<script type="text/javascript" src="../external/citeproc/loadsys.js"></script>
 	<script type="text/javascript" src="../external/citeproc/runcites.js"></script>
 
+	<script type="text/javascript" src="../src/storage.js"></script>
 	<script type="text/javascript" src="../src/xmlUtility.js"></script>
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../server/config.js"></script>

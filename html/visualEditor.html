@@ -1,0 +1,68 @@
+<div id="notificationBar"><span class="message"></span><button class="dismiss">Dismiss</button>
+</div>
+<div id="mainContainer">
+	<div id="leftContainer" class="ui-layout-west">
+		<ul class="dropdown">
+			<li>
+				<a href="#">Style</a>
+				<ul class="sub_menu">
+					<li><a href="#">New style</a></li>
+					<li><a class="loadcsl" href="#">Load CSL</a></li>
+					<li><a class="savecsl" href="#">Save CSL</a></li>
+					<li><a href="#">Style Info</a>
+					<li><a href="#">Global Formatting Options</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">Edit</a>
+					<ul class="sub_menu">
+						<li><a href="#">Undo</a></li>
+					</ul>
+			</li>
+		</ul>
+		<div id="treeEditorPanel" class="panel">
+			<div id="treeEditorToolbar">
+				<button class='add icon'>Add Node</button>
+				<button class='delete icon'>Delete Node</button>
+			</div>
+			<div id="treeEditor"></div>
+		</div>
+	</div>
+
+	<div id="rightContainer" class="ui-layout-center">
+		<ul class="dropdown">
+			<li>
+				<a href="#">Citation 1</a>
+				<ul class="sub_menu" id="exampleCitation1">
+				</ul>
+			</li>
+			<li>
+				<a href="#">Citation 2</a>
+				<ul class="sub_menu" id="exampleCitation2">
+				</ul>
+			</li>
+		</ul>
+		<div id="titlebarContainer">
+			<div id="titlebar">
+				<h3>Style Title:</h3>
+			</div>
+		</div>
+		<div id="topRightContainer" class="ui-layout-north">
+			<div id="exampleOutput" class="panel">
+				<div id="statusMessage"></div>
+
+				<h3>Formatted Inline Citations</h3>	
+				<div id="formattedCitations"></div>
+
+				<h3>Formatted Bibliography</h3>
+				<div id="formattedBibliography"></div>
+			</div>
+		</div>
+		<div id="bottomRightContainer" class="ui-layout-center">
+			<div id="elementPropertyPanel" class="panel">
+				<div id="nodePathView"></div>
+				<div id="elementProperties"></div>
+			</div>
+		</div>
+	</div>
+</div>

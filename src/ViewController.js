@@ -100,6 +100,10 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		};
 	};
 
+	var newStyle = function () {
+		init(CSLEDIT.data.get(), callbacks);
+	};
+
 	var init = function (cslData, _callbacks) {
 		var eventName,
 			jsTreeData,
@@ -340,7 +344,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 			}
 		});
 	};
-	
+
 	var exec = function (command, args) {
 		args = args || [];
 		console.log("executing view update: " + command + "(" + args.join(", ") + ")");
@@ -354,6 +358,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		addNode : addNode,
 		deleteNode : deleteNode,
 		amendNode : amendNode,
+		newStyle : newStyle,
 
 		selectNode : selectNode,
 		selectedNode : selectedNode,

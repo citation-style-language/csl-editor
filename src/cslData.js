@@ -29,10 +29,8 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return cslData;
 	};
 	var setCslCode = function (cslCode) {
-		return set(CSLEDIT.cslParser.cslDataFromCslCode(cslCode));
-		if (callbacksEnabled) {
-			emit("createTree", []);
-		}
+		set(CSLEDIT.cslParser.cslDataFromCslCode(cslCode));
+		emit("newStyle", []);
 	};
 	var getCslCode = function () {
 		return CSLEDIT.cslParser.cslCodeFromCslData(get());

@@ -25,6 +25,7 @@
 	<script type="text/javascript" src="../external/jquery.hoverIntent.minified.js"></script>
 	<script type="text/javascript" src="../external/jquery.scrollTo-1.4.2-min.js"></script>
 
+	<script type="text/javascript" src="../src/options.js"></script>
 	<script type="text/javascript" src="../src/storage.js"></script>
 	<script type="text/javascript" src="../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../src/exampleData.js"></script>
@@ -71,7 +72,17 @@
 	<script type="text/javascript">
 		var cslEditor;
 		$("document").ready( function () {
-			cslEditor = new CSLEDIT.VisualEditor('#visualEditorContainer');
+			cslEditor = new CSLEDIT.VisualEditor('#visualEditorContainer',
+				{
+					loadcsl_name : "Load style from Mendeley",
+					loadcsl_func : function () {
+						alert("hello from mendeley");
+						
+						setTimeout(function () {
+							cslEditor.setCslCode("<style><\/style>");
+						}, 1000);
+					}
+				});
 		});
 	</script>
 </head>
