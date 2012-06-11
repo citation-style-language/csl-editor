@@ -72,15 +72,12 @@
 	<script type="text/javascript">
 		var cslEditor;
 		$("document").ready( function () {
-			cslEditor = new CSLEDIT.VisualEditor('#visualEditorContainer',
+			cslEditor = new CSLEDIT.VisualEditor('#visualEditorContainer',	
 				{
-					loadcsl_name : "Load style from Mendeley",
+				// Example options over-riding load and save functions
+					loadcsl_name : "Load style from ref manager",
 					loadcsl_func : function () {
-						alert("hello from mendeley");
-						
-						setTimeout(function () {
-							cslEditor.setCslCode("<style><\/style>");
-						}, 1000);
+						cslEditor.setCslCode("<style><\/style>");
 					},
 					rootURL : "../.."
 				});

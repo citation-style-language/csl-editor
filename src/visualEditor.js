@@ -531,15 +531,16 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		var dropdown = $(selector),
 			loadCsl;
 
-		dropdown.find('a.loadcsl_name').html(CSLEDIT.options.get('loadcsl_name'));
-		dropdown.find('a.savecsl_name').html(CSLEDIT.options.get('savecsl_name'));
+		dropdown.filter('a.loadcsl').html(CSLEDIT.options.get('loadcsl_name'));
+		dropdown.filter('a.savecsl').html(CSLEDIT.options.get('savecsl_name'));
 
 		editorElement.find(selector).click(function (event) {
 			var clickedName = $(event.target).text(),
 				selectedNodeId = editorElement.find('#treeEditor').jstree('get_selected'),
 				parentNode = $(event.target).parent().parent(),
 				parentNodeName,
-				position;
+				position,
+				newStyle;
 
 			if (parentNode.attr("class") === "sub_menu")
 			{
@@ -548,17 +549,23 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				if (/^Style/.test(parentNodeName)) {
 					if (clickedName === "Revert (undo all changes)") {
 						reloadPageWithNewStyle(styleURL);
-					} else if (clickedName === "Save CSL") {
+					} else if ($(event.target).is('savecsl')) {
 						CSLEDIT.options.get('savecsl_func')(CSLEDIT.data.getCslCode());
-					} else if (clickedName === "Load CSL") {
+					} else if ($(event.target).is('.loadcsl')) {
 						var csl = CSLEDIT.options.get('loadcsl_func')();
 						if (csl !== null && typeof csl !== "undefined") {
 							CSLEDIT.controller.exec('setCslCode', [csl]);
 						}
 					} else if (clickedName === "New style") {
-						reloadPageWithNewStyle(
-							window.location.protocol + "//" + window.location.hostname +
-							CSLEDIT.options.get("rootURL") + "/content/newStyle.csl");
+						// fetch the URL
+						$.ajax({
+							url : CSLEDIT.options.get("rootURL") + "/content/newStyle.csl",
+							success : function (result) {
+								newStyle = result;
+							},
+							async: false
+						});
+						CSLEDIT.controller.exec('setCslCode', [newStyle]);
 					} else if (clickedName === "Style Info") {
 						viewController.selectNode(CSLEDIT.data.getNodesFromPath("style/info")[0].cslId);
 					} else if (clickedName === "Global Formatting Options") {

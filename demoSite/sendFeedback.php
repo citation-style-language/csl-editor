@@ -1,6 +1,6 @@
 <?php
-if (file_exists('../server/feedbackEmail.txt')) {
-	$toEmail = file_get_contents('../server/feedbackEmail.txt');
+if (file_exists('feedbackEmail.txt')) {
+	$toEmail = file_get_contents('feedbackEmail.txt');
 
 	//send email
 	$subject = $_REQUEST['subject'];

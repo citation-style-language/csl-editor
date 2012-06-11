@@ -140,6 +140,8 @@ demoSiteFilesToCopy = [
     'getFromOtherWebsite.php',
     '.htaccess',
     '404page.html',
+    'sendFeedback.php',
+    'feedbackEmail.txt'
 ]
 
 demoSiteDirectoriesToCopy = [
@@ -226,7 +228,6 @@ for page in pages:
         match = findSourceFile.search(line)
         if match != None:
             sourceFile = match.group(3)
-            print "found source ", sourceFile
 
             for jsFile in page['jsFiles']:
                 if sourceFile == jsFile:
@@ -258,5 +259,5 @@ for dir in demoSiteDirectoriesToCopy:
     shutil.copytree('demoSite/' + dir, demoSiteDir + '/' + dir, ignore=ignored_files)
 
 for file in demoSiteFilesToCopy:
-    shutil.copyfile(file, demoSiteDir + '/' + file) 
+    shutil.copyfile('demoSite/' + file, demoSiteDir + '/' + file) 
 

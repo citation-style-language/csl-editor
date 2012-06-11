@@ -29,8 +29,15 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return cslData;
 	};
 	var setCslCode = function (cslCode) {
-		set(CSLEDIT.cslParser.cslDataFromCslCode(cslCode));
+		var cslData;
+		try {
+			cslData = CSLEDIT.cslParser.cslDataFromCslCode(cslCode);
+		} catch(err) {
+			return { error: "Error parsing CSL Code" };
+		}
+		set(cslData);
 		emit("newStyle", []);
+		return {};
 	};
 	var getCslCode = function () {
 		return CSLEDIT.cslParser.cslCodeFromCslData(get());
@@ -473,7 +480,7 @@ CSLEDIT.Data = function (CSL_DATA) {
 			} else if (cslData !== null && cslData !== "") {
 				callback();
 			} else {
-				styleURL = "../external/csl-styles/apa.csl";
+				styleURL = CSLEDIT.options.get("rootURL") + "/external/csl-styles/apa.csl";
 				loadStyleFromURL(styleURL, callback);
 			}
 		},

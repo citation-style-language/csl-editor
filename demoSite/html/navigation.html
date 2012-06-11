@@ -121,7 +121,7 @@ CSLEDIT.feedback = {
 			message = feedbackPanel.find('.message').val();
 			email = feedbackPanel.find('.email').val();
 
-			var url = "/csl/server/sendFeedback.php?subject=" + encodeURIComponent("CSL editor feedback") +
+			var url = "../sendFeedback.php?subject=" + encodeURIComponent("CSL editor feedback") +
 				"&message=" + encodeURIComponent(message) +
 				"&email=" + encodeURIComponent(email);
 
