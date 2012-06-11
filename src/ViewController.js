@@ -18,12 +18,12 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 				buttons : [
 				{
 					type : "cslNode",
-					icon : "../external/famfamfam-icons/cog.png",
+					icon : "/external/famfamfam-icons/cog.png",
 					node : "style/citation"
 				},
 				{
 					type : "cslNode",
-					icon : "../external/fugue-icons/sort-alphabet.png",
+					icon : "/external/fugue-icons/sort-alphabet.png",
 					node : "style/citation/sort"
 				}
 				]
@@ -36,12 +36,12 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 				buttons : [
 				{
 					type : "cslNode",
-					icon : "../external/famfamfam-icons/cog.png",
+					icon : "/external/famfamfam-icons/cog.png",
 					node : "style/bibliography"
 				},
 				{
 					type : "cslNode",
-					icon : "../external/fugue-icons/sort-alphabet.png",
+					icon : "/external/fugue-icons/sort-alphabet.png",
 					node : "style/bibliography/sort"
 				}
 				]
@@ -141,7 +141,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 				
 							buttonElement = $('<div class="cslNodeButton"><\/div>');
 							views.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
-								button.icon, function (cslId, selectedView) {
+								CSLEDIT.options.get("rootURL") + button.icon, function (cslId, selectedView) {
 									selectedTree = selectedView;
 									selectedNodeId = cslId;
 
@@ -167,8 +167,6 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 				});
 			}
 			$('<h3>%1<\/h3>'.replace('%1', value.name)).appendTo(treeView);
-			//row.appendTo(table);
-			//table.appendTo(treeView);
 			row = $('<div id="%1"><\/div>'.replace('%1', value.id));
 			row.appendTo(treeView);
 			treeView.append($('<div class=spacer><\/div>'));

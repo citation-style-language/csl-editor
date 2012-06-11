@@ -14,11 +14,15 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		selectedCslId = -1,
 		viewController,
 		nodePathView,
-		highlightTimeout,
-		options = new CSLEDIT.Options(userOptions);
+		highlightTimeout;
+
+	CSLEDIT.options.setUserOptions(userOptions);
 
 	editorElement = $(editorElement);
-	editorElement.load(options.get("cslEditorDirectory") + "/html/visualEditor.html", function () {
+	editorElement.load(CSLEDIT.options.get("rootURL") + "/html/visualEditor.html", function () {
+		CSLEDIT.schema = CSLEDIT.Schema(
+			CSLEDIT.options.get("cslSchema_mainURL"),
+			CSLEDIT.options.get("cslSchema_childURLs"));
 		CSLEDIT.schema.callWhenReady(init);
 	});
 
@@ -527,8 +531,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		var dropdown = $(selector),
 			loadCsl;
 
-		dropdown.find('a.loadcsl_name').html(options.get('loadcsl_name'));
-		dropdown.find('a.savecsl_name').html(options.get('savecsl_name'));
+		dropdown.find('a.loadcsl_name').html(CSLEDIT.options.get('loadcsl_name'));
+		dropdown.find('a.savecsl_name').html(CSLEDIT.options.get('savecsl_name'));
 
 		editorElement.find(selector).click(function (event) {
 			var clickedName = $(event.target).text(),
@@ -545,16 +549,16 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 					if (clickedName === "Revert (undo all changes)") {
 						reloadPageWithNewStyle(styleURL);
 					} else if (clickedName === "Save CSL") {
-						options.get('savecsl_func')(CSLEDIT.data.getCslCode());
+						CSLEDIT.options.get('savecsl_func')(CSLEDIT.data.getCslCode());
 					} else if (clickedName === "Load CSL") {
-						var csl = options.get('loadcsl_func')();
+						var csl = CSLEDIT.options.get('loadcsl_func')();
 						if (csl !== null && typeof csl !== "undefined") {
 							CSLEDIT.controller.exec('setCslCode', [csl]);
 						}
 					} else if (clickedName === "New style") {
 						reloadPageWithNewStyle(
 							window.location.protocol + "//" + window.location.hostname +
-							"/csl/content/newStyle.csl");
+							CSLEDIT.options.get("rootURL") + "/content/newStyle.csl");
 					} else if (clickedName === "Style Info") {
 						viewController.selectNode(CSLEDIT.data.getNodesFromPath("style/info")[0].cslId);
 					} else if (clickedName === "Global Formatting Options") {

@@ -32,7 +32,7 @@
 <p>Source code: <a href="https://github.com/citation-style-editor">https://github.com/citation-style-editor</a></p>
 
 <div id="gitCommit">
-<strong>Current site version: </strong> <a href="https://github.com/citation-style-editor/csl-editor/commit/<?php include '../generated/commit.txt'; ?>"><?php include '../generated/commit.txt'; ?></a>
+<strong>Current CSL Editor version: </strong> <a href="https://github.com/citation-style-editor/csl-editor/commit/$GIT_COMMIT>">$GIT_COMMIT</a>
 </div>
 
 <h2>Attributions</h2>

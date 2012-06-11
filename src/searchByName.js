@@ -91,6 +91,12 @@ CSLEDIT.findByNamePage = (function () {
 
 	return {
 		init : function () {
+			// add icon
+			$('button#searchButton').css({
+				'background-image' :
+					"url(" + CSLEDIT.options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
+			});
+
 			// delayed search after typing
 			$("#styleNameQuery").on("input", function(){
 				clearTimeout(nameSearchTimeout);

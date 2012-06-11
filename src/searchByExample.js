@@ -180,8 +180,13 @@ CSLEDIT.finderPage = (function () {
 			$.cleditor.defaultOptions.width = 390;
 			$.cleditor.defaultOptions.height = 100;
 			$.cleditor.defaultOptions.controls =
-				"bold italic underline strikethrough subscript superscript ";
+				"bold italic underline subscript superscript ";
 			//		+ "| undo redo | cut copy paste";
+
+			$('button#searchButton').css({
+				'background-image' :
+					"url(" + CSLEDIT.options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
+			});
 
 			var userCitationInput = $("#userCitation").cleditor({height: 55})[0];
 			$("#userBibliography").cleditor({height: 85});

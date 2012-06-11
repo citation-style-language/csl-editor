@@ -37,7 +37,8 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 	};
 	
 	var createTree = function () {
-		var jsTreeData;
+		var jsTreeData,
+			nodeTypes;
 
 		jsTreeData = jsTreeDataFromCslData(nodePaths);
 
@@ -64,10 +65,16 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 
 			callbacks.selectNode(event, ui);
 		});
+		
+		// build the node types from the uiConfig data		
+		nodeTypes = {};
+		$.each(CSLEDIT.uiConfig.nodeIcons, function (type, icon) {
+			nodeTypes[type] = { icon : { image : CSLEDIT.options.get("rootURL") + icon } };
+		});
 
 		treeElement.jstree({
 			"json_data" : { data : jsTreeData },
-			"types" : { types : CSLEDIT.uiConfig.nodeTypes },
+			"types" : { types : nodeTypes },
 			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
 				"types", "hotkeys"],
 			//"core" : { "initially_open" : [ "node1" ] },

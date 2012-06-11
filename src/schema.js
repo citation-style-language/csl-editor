@@ -15,7 +15,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
+CSLEDIT.Schema = function (mainSchemaURL, includeSchemaURLs) {
 	var mainSchemaData,
 		schemas = [],
 		nodesParsed = 0,
@@ -608,12 +608,4 @@ CSLEDIT.schema = (function (mainSchemaURL, includeSchemaURLs) {
 			}
 		}
 	};
-}(
-	"http://" + window.location.host + "/csl/external/csl-schema/csl.rng",
-	[
-		"http://" + window.location.host + "/csl/external/csl-schema/csl-categories.rng",
-		"http://" + window.location.host + "/csl/external/csl-schema/csl-terms.rng",
-		"http://" + window.location.host + "/csl/external/csl-schema/csl-types.rng",
-		"http://" + window.location.host + "/csl/external/csl-schema/csl-variables.rng"
-	]
-));
+};

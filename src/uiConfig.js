@@ -23,72 +23,20 @@ CSLEDIT.uiConfig.defaultAttributes = {
 }
 
 // for jstree
-CSLEDIT.uiConfig.nodeTypes = {
-		"default" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/bullet_black.png"
-			}
-		},
-		"text" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/style.png"
-			}
-		},
-		"macro" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/brick.png"
-			}
-		},
-		"info" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/information.png"
-			}
-		},
-		"choose" : {
-			"icon" : {
-				"image" : "../external/fugue-icons/question-white.png"
-			}
-		},
-		"date" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/date.png"
-			}
-		},
-		"style" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/cog.png"
-			}
-		},
-		"citation" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/page_white_edit.png"
-			}
-		},
-		"bibliography" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/text_list_numbers.png"
-			}
-		},
-		"sort" : {
-			"icon" : {
-				"image" : "../external/fugue-icons/sort-alphabet.png"
-			}
-		},
-		"number" : {
-			"icon" : {
-				"image" : "../external/fugue-icons/edit-number.png"
-			}
-		},
-		"layout" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/page_white_stack.png"
-			}
-		},
-		"group" : {
-			"icon" : {
-				"image" : "../external/famfamfam-icons/page_white_stack.png"
-			}
-		}
+CSLEDIT.uiConfig.nodeIcons = {
+		"default" : "/external/famfamfam-icons/bullet_black.png",
+		"text" : "/external/famfamfam-icons/style.png",
+		"macro" : "/external/famfamfam-icons/brick.png",
+		"info" : "/external/famfamfam-icons/information.png",
+		"choose" : "/external/fugue-icons/question-white.png",
+		"date" : "/external/famfamfam-icons/date.png",
+		"style" : "/external/famfamfam-icons/cog.png",
+		"citation" : "/external/famfamfam-icons/page_white_edit.png",
+		"bibliography" : "/external/famfamfam-icons/text_list_numbers.png",
+		"sort" : "/external/fugue-icons/sort-alphabet.png",
+		"number" : "/external/fugue-icons/edit-number.png",
+		"layout" : "/external/famfamfam-icons/page_white_stack.png",
+		"group" : "/external/famfamfam-icons/page_white_stack.png"
 	};
 
 CSLEDIT.uiConfig.capitaliseFirstLetter = function (string)

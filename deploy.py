@@ -4,8 +4,14 @@ import os
 import shutil
 import subprocess
 import sys
+import re
 
-buildDir = "../csl";
+# these directories must be siblings of the current source directory
+cslEditRoot = "/CSLEDIT";
+demoSiteRoot = "/csl";
+
+cslEditDir = ".." + cslEditRoot;
+demoSiteDir = ".." + demoSiteRoot;
 
 pages = [
     {
@@ -22,6 +28,8 @@ pages = [
             "src/cslData.js",
             "src/schema.js",
 
+            "src/options.js",
+            "src/storage.js",
             "src/uiConfig.js",
             "src/MultiPanel.js",
             "src/notificationBar.js",
@@ -37,12 +45,13 @@ pages = [
             "src/ViewController.js",
             "src/controller.js",
             "src/visualEditor.js"
-        ]            
+        ]
     },
     {
         "page" : "codeEditor",
         "jsFiles" : [
             "src/debug.js",
+            "src/storage.js",
             "src/citationEngine.js",
             "src/exampleData.js",
             "src/diff.js",
@@ -59,6 +68,8 @@ pages = [
             "server/config.js",
             "generated/exampleCitationsEnc.js",
 
+            "src/options.js",
+            "src/storage.js",
             "src/exampleData.js",
             "src/debug.js",
             "src/diff.js",
@@ -66,7 +77,6 @@ pages = [
             "src/cslData.js",
             "src/searchResults.js",
             "src/searchByExample.js",
-            "src/analytics.js"
         ]
     },
     {
@@ -75,6 +85,8 @@ pages = [
             "src/debug.js",
             "generated/exampleCitationsEnc.js",
 
+            "src/options.js",
+            "src/storage.js",
             "src/exampleData.js",
             "src/cslParser.js",
             "src/cslData.js",
@@ -99,7 +111,7 @@ pages = [
             "src/cslData.js",
             "src/test_cslData.js",
             "src/xmlUtility.js",
-            "src/test_xmlUtility.js",	
+            "src/test_xmlUtility.js",
             "src/smartTree.js",
             "src/test_smartTree.js",
             "src/editNodeButton.js",
@@ -116,31 +128,39 @@ pages = [
     }
 ]
 
-directoriesToCopy = [
+cslEditDirectoriesToCopy = [
     'html',
-    'src',
     'content',
-    'server',
     'external',
     'generated'
 ]
 
-filesToCopy = [
+demoSiteFilesToCopy = [
     'index.php',
     'getFromOtherWebsite.php',
     '.htaccess',
-    '404page.html'
+    '404page.html',
+]
+
+demoSiteDirectoriesToCopy = [
+    'html',
+    'src'
 ]
 
 def ignored_files(adir, filenames):
     return [filename for filename in filenames if filename == '.git']
 
 # clean build dir
-if os.path.exists(buildDir):
-    shutil.rmtree(buildDir)
+if os.path.exists(cslEditDir):
+    shutil.rmtree(cslEditDir)
 
-os.makedirs(buildDir)
-os.makedirs(buildDir + '/css')
+if os.path.exists(demoSiteDir):
+    shutil.rmtree(demoSiteDir)
+
+os.makedirs(cslEditDir)
+os.makedirs(cslEditDir + '/css')
+
+os.makedirs(demoSiteDir)
 
 gitCommit = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE).communicate()[0].replace('\n','')
 print 'building from commit ', gitCommit
@@ -151,16 +171,22 @@ for filename in os.listdir('css'):
     if filename.endswith('.css'):
         filebase = filename.replace('.css','')
         cssFiles.append(filebase)
-        shutil.copyfile('css/' + filename, buildDir + '/css/' + filebase + '-' + gitCommit + '.css')
+        shutil.copyfile('css/' + filename, cslEditDir + '/css/' + filebase + '-' + gitCommit + '.css')
+
+findSourceFile = re.compile("^(.*)(\.\.\/\.\.\/)(.*\.(?:js|css))(.*)$")
 
 for page in pages:
-    phpFilepath = page['page'] + '/index.php'
-    outputPath = buildDir + '/' + page['page']
+    phpFilepath = 'demoSite/' + page['page'] + '/index.php'
+    phpOutputPath = demoSiteDir + '/' + page['page']
+    outputPath = cslEditDir + '/src'
     
     combinedFilename = 'CSLEDIT.' + page['page'] + '-' + gitCommit + '.js'
     
     if not os.path.exists(outputPath):
         os.makedirs(outputPath)
+
+    if not os.path.exists(phpOutputPath):
+        os.makedirs(phpOutputPath)
     
     # create concatenated file
     combinedFile = open(outputPath + '/' + combinedFilename, 'w+')
@@ -180,29 +206,40 @@ for page in pages:
            sys.exit(1)
 
     inFile = open(phpFilepath)
-    outFile = open(outputPath + '/index.php', 'w+')
+    outFile = open(phpOutputPath + '/index.php', 'w+')
     
     # strip existing references to the javascript source files and
     # in place of the last one write the concatenated file
     foundLines = []
     for line in inFile:
-        useLine = True
+        lineHandled = False
         containsUseStrict = {}
 
         for cssFile in cssFiles:
-            line = line.replace('"../css/' + cssFile + '.css"', '"../css/' + cssFile + '-' + gitCommit + '.css"')
+            line = line.replace(
+                    '"../../css/' + cssFile + '.css"',
+                    '"' + cslEditRoot + '/css/' + cssFile + '-' + gitCommit + '.css"')
 
-        for jsFile in page['jsFiles']:
-            beforeText = '\t<script type="text/javascript" src="'
-            afterText = '"></script>'
+        line = line.replace('rootURL : "../.."', 'rootURL : "' + cslEditRoot + '"')
 
-            if line.find(beforeText + '../' + jsFile + afterText) != -1:
-                useLine = False
-                foundLines.append(jsFile)
-                if len(foundLines) == len(page['jsFiles']):
-                    outFile.write(beforeText + combinedFilename + afterText)
+        # use regexp to convert
+        match = findSourceFile.search(line)
+        if match != None:
+            sourceFile = match.group(3)
+            print "found source ", sourceFile
 
-        if useLine:
+            for jsFile in page['jsFiles']:
+                if sourceFile == jsFile:
+                    foundLines.append(jsFile)
+                    if len(foundLines) == len(page['jsFiles']):
+                        outFile.write(match.group(1) + cslEditRoot + "/src/" + combinedFilename + match.group(4))
+                    lineHandled = True
+            
+            if not lineHandled: 
+                outFile.write(match.group(1) + cslEditRoot + "/" + match.group(3) + match.group(4))
+                lineHandled = True
+
+        if not lineHandled:
             outFile.write(line)
 
     if set(foundLines) != set(page['jsFiles']):
@@ -214,9 +251,12 @@ for page in pages:
     outFile.close()
 
 # copy other resources:
-for dir in directoriesToCopy:
-    shutil.copytree(dir, buildDir + '/' + dir, ignore=ignored_files)
+for dir in cslEditDirectoriesToCopy:
+    shutil.copytree(dir, cslEditDir + '/' + dir, ignore=ignored_files)
 
-for file in filesToCopy:
-    shutil.copyfile(file, buildDir + '/' + file) 
+for dir in demoSiteDirectoriesToCopy:
+    shutil.copytree('demoSite/' + dir, demoSiteDir + '/' + dir, ignore=ignored_files)
+
+for file in demoSiteFilesToCopy:
+    shutil.copyfile(file, demoSiteDir + '/' + file) 
 

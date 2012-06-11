@@ -6,19 +6,20 @@
 
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
-	<script type="text/javascript" src="../src/debug.js"></script>
-	<script type="text/javascript" src="../src/storage.js"></script>
-	<script type="text/javascript" src="../generated/exampleCitationsEnc.js"></script>
-	<script type="text/javascript" src="../src/cslParser.js"></script>
-	<script type="text/javascript" src="../src/cslData.js"></script>
-	<script type="text/javascript" src="../src/exampleData.js"></script>
-	<script type="text/javascript" src="../src/searchResults.js"></script>
+	<script type="text/javascript" src="../../src/debug.js"></script>
+	<script type="text/javascript" src="../../src/options.js"></script>
+	<script type="text/javascript" src="../../src/storage.js"></script>
+	<script type="text/javascript" src="../../generated/exampleCitationsEnc.js"></script>
+	<script type="text/javascript" src="../../src/cslParser.js"></script>
+	<script type="text/javascript" src="../../src/cslData.js"></script>
+	<script type="text/javascript" src="../../src/exampleData.js"></script>
+	<script type="text/javascript" src="../../src/searchResults.js"></script>
 
-	<script type="text/javascript" src="../src/searchByName.js"></script>
+	<script type="text/javascript" src="../../src/searchByName.js"></script>
 	<script type="text/javascript" src="../src/analytics.js"></script>
 
-	<link rel="stylesheet" href="../css/base.css" />
-	<link rel="stylesheet" href="../css/searchResults.css" />
+	<link rel="stylesheet" href="../../css/base.css" />
+	<link rel="stylesheet" href="../../css/searchResults.css" />
 <style>
 div#styleNameInput {
 	padding: 20px 50px 10px;
@@ -59,7 +60,7 @@ button#searchButton {
 	background-position: left center;
 	background-repeat: no-repeat;
 	padding-left: 18px;
-	background-image: url("../external/famfamfam-icons/magnifier.png");
+	/* define background-image in javascript since it depends on rootURL */
 }
 </style>
 </head>
