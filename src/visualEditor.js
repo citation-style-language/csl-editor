@@ -328,14 +328,10 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	};
 
 	var formatExampleCitations = function () {
-		var cslData = CSLEDIT.data.get();
-
 		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
 			editorElement.find("#statusMessage"), editorElement.find("#exampleOutput"),
 			editorElement.find("#formattedCitations"), editorElement.find("#formattedBibliography"),
-			doSyntaxHighlighting,
-			CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData)[0].cslId,
-			CSLEDIT.data.getNodesFromPath("style/bibliography/layout", cslData)[0].cslId);
+			doSyntaxHighlighting);
 	};
 
 	var nodeSelected = function(event, ui) {

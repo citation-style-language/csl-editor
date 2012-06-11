@@ -35,6 +35,13 @@ CSLEDIT.Data = function (CSL_DATA) {
 		} catch(err) {
 			return { error: "Error parsing CSL Code" };
 		}
+
+		if (getNodesFromPath("style", cslData).length === 0 ||
+			getNodesFromPath("style/citation/layout", cslData).length === 0 ||
+			getNodesFromPath("style/bibliography/layout", cslData).length === 0) {
+			return { error : "CSL code is missing essential layout nodes" };
+		}
+
 		set(cslData);
 		emit("newStyle", []);
 		return {};

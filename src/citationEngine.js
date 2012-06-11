@@ -120,8 +120,7 @@ CSLEDIT.citationEngine = (function () {
 	};
 
 	var runCiteprocAndDisplayOutput = function (
-			statusOut, exampleOut, citationsOut, bibliographyOut, callback,
-			citationNodeCslId, bibliographyNodeCslId) {
+			statusOut, exampleOut, citationsOut, bibliographyOut, callback) {
 
 		console.time("runCiteprocAndDisplayOutput");
 
@@ -137,7 +136,10 @@ CSLEDIT.citationEngine = (function () {
 			citationDiffs,
 			bibliographyDiffs,
 			diffFormattedCitation,
-			diffFormattedBibliography;
+			diffFormattedBibliography,
+			cslData = CSLEDIT.data.get(),
+			citationNodeCslId = CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData)[0].cslId,
+			bibliographyNodeCslId = CSLEDIT.data.getNodesFromPath("style/bibliography/layout", cslData)[0].cslId;
 
 		statusOut.html("<i>Re-formatting citations...</i>");
 	
