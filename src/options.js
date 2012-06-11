@@ -27,7 +27,8 @@ CSLEDIT.Options = function (userOptions) {
 			window.location.href =
 				"data:application/xml;charset=utf-8," +
 				encodeURIComponent(cslCode);
-		}
+		},
+		cslEditorDirectory : ".."
 	};
 };
 

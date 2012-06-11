@@ -18,7 +18,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		options = new CSLEDIT.Options(userOptions);
 
 	editorElement = $(editorElement);
-	editorElement.load("../html/visualEditor.html", function () {
+	editorElement.load(options.get("cslEditorDirectory") + "/html/visualEditor.html", function () {
 		CSLEDIT.schema.callWhenReady(init);
 	});
 
