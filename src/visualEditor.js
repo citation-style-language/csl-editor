@@ -639,9 +639,23 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		CSLEDIT.notificationBar.init(editorElement.find('#notificationBar'));
 	};
 
+	// public API
 	return {
 		setCslCode : function (cslCode) {
 			CSLEDIT.controller.exec('setCslCode', [cslCode]);
+		},
+		getStyleName : function () {
+			var styleNameNode = CSLEDIT.data.getNodesFromPath('style/info/title')[0];
+			return styleNameNode.textValue;
+		},
+		getStyleId : function () {
+			var styleIdNode = CSLEDIT.data.getNodesFromPath('style/info/id')[0];
+			return styleIdNode.textValue;
+		},
+		setStyleId : function (styleId) {
+			var styleIdNode = CSLEDIT.data.getNodesFromPath('style/info/id')[0];
+			styleIdNode.textValue = styleId;
+			CSLEDIT.controller.exec('amendNode', [styleIdNode.cslId, styleIdNode]);
 		}
 	};
 };

@@ -43,12 +43,24 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 			return { error: "Error parsing CSL Code" };
 		}
 
-		$.each(requiredNodes, function (i, requiredNode) {
-			if (getNodesFromPath(requiredNode, cslData).length === 0) {
-				error = "CSL code is missing essential node: " + requiredNode;
-				return false;
+		// check if this is a dependent style:
+		$.each(getNodesFromPath('style/info/link', cslData), function (i, node) {
+			var linkNode = new CSLEDIT.CslNode(node);
+			if (linkNode.getAttr("rel") === "independent-parent") {
+				error = "Editing of dependent styles not yet supported.\n\n" + 
+					"Please find and edit this master style instead:\n\n" +
+					linkNode.getAttr("href");
 			}
 		});
+
+		if (typeof error === "undefined") {
+			$.each(requiredNodes, function (i, requiredNode) {
+				if (getNodesFromPath(requiredNode, cslData).length === 0) {
+					error = "CSL code is missing essential node: " + requiredNode;
+					return false;
+				}
+			});
+		}
 
 		if (error) {
 			return { error: error };

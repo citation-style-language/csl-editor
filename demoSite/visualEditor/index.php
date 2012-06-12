@@ -104,10 +104,20 @@
 								'<p>Save CSL style for use in your Reference Manager<\/p>' +
 								'<p id="downloadify">downloadify<\/p>' +
 								'<\/div>'),
-							saveButton = dialog.find('#downloadify');
+							saveButton = dialog.find('#downloadify'),
+							filename,
+							styleId = cslEditor.getStyleId();
 
 						assertEqual(saveButton.length, 1);
-						
+						filename = cslEditor.getStyleName().replace(/[\\/:"*?<>| ]+/g, "_") + '.csl';
+
+						// prefix styleId with cslEditor/ so it doesn't clash with existing styles
+						if (!/^cslEditor\//.test(styleId)) {
+							styleId = 'cslEditor/' + styleId;
+							cslEditor.setStyleId(styleId);
+							assertEqual(cslEditor.getStyleId(), styleId);
+						}
+
 						dialog.dialog({
 							modal : true,
 							open :  function () {
@@ -116,15 +126,17 @@
 									downloadImage : '../external/downloadify/download.png',
 									width : 100,
 									height : 30,
-									filename : 'testSaveCsl.csl',
+									filename : filename,
 									data : cslCode,
 									transparent : true,
-									onComplete: function(){ alert('Your CSL Style Has Been Saved!'); },
+									onComplete: function(){
+										alert('Your CSL Style Has Been Saved!');
+										dialog.dialog('destroy');
+									},
 									onCancel: function(){ /* no-op */ },
 									onError: function(){ alert('Error saving file.'); }
 								});
 							}
-						
 						});
 					},
 					rootURL : "../.."
