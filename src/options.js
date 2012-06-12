@@ -6,7 +6,7 @@ CSLEDIT.options = (function () {
 	var defaultOptions = {
 			loadcsl_name : "Load CSL",
 			loadcsl_func : function () {
-				var url = prompt("Please enter the URL of the style you wish to load"),
+				var url = prompt("Please enter the URL of the style you want to load"),
 					newStyle;
 
 				// fetch the URL
@@ -28,7 +28,12 @@ CSLEDIT.options = (function () {
 					"data:application/xml;charset=utf-8," +
 					encodeURIComponent(cslCode);
 			},
-			rootURL : "/CSLEDIT"
+			rootURL : "/CSLEDIT",
+			editStyle_name : "Edit Style",
+			editStyle_func : function (url) {
+				alert("Edit style not avaiable.\n\n" +
+					"For implementers: You need to add an editStyle_func to the options.");
+			}
 		};
 
 	// create the default options which are a function of user options

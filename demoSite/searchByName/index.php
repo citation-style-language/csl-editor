@@ -20,60 +20,26 @@
 
 	<link rel="stylesheet" href="../../css/base.css" />
 	<link rel="stylesheet" href="../../css/searchResults.css" />
-<style>
-div#styleNameInput {
-	padding: 20px 50px 10px;
-}
-div#styleNameInput input {
-	font-size: 18px;	
-	width: 400px;
-}
-div#styleNameInput label {
-	font-size: 18px;
-	font-family: Arial, Helvetica;
-}
-div#mainContainer{
-	width: 800px;
-}
-div#searchResults {
-	padding: 0 30px 0 30px;
-	width: 600px;
-}
-.faint
-{
-	color: #888888;
-}
-#styleFormatInputControls
-{
-	float: left;
-	width: 45%;
-	margin-left: 0px;
-}
-.clearDiv
-{
-	clear: both;
-}
-#userCitation, #userBibliography
-{
-}
-button#searchButton {
-	background-position: left center;
-	background-repeat: no-repeat;
-	padding-left: 18px;
-	/* define background-image in javascript since it depends on rootURL */
-}
-</style>
+	<link rel="stylesheet" href="../../css/searchByName.css" />
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			CSLEDIT.searchByName = CSLEDIT.SearchByName($('#mainContainer'), {
+				rootURL : "../..",
+				editStyle_func : function (styleURL) {
+					styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
+					CSLEDIT.data.loadStyleFromURL(styleURL, function () {
+						window.location.href = "../visualEditor";
+					});
+				}
+			});
+		});
+	</script>
 </head>
 <body id="searchByName">
 <?php include '../html/navigation.html'; ?>
 
 <div id="mainContainer">
-	<div id="styleNameInput">
-		<label for="styleNameQuery">Enter style name:</label>
-		<input type="text" id="styleNameQuery" autocomplete="off" placeholder="Enter style name here" />
-		<button id="searchButton">Search</button>
-	</div>
-	<div id="searchResults"></div>
 </div>
 </body>
 </html>

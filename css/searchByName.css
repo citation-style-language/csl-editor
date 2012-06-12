@@ -1,0 +1,41 @@
+div#styleNameInput {
+	padding: 20px 50px 10px;
+}
+div#styleNameInput input {
+	font-size: 18px;	
+	width: 400px;
+}
+div#styleNameInput label {
+	font-size: 18px;
+	font-family: Arial, Helvetica;
+}
+div#mainContainer{
+	width: 800px;
+}
+div#searchResults {
+	padding: 0 30px 0 30px;
+	width: 600px;
+}
+.faint
+{
+	color: #888888;
+}
+#styleFormatInputControls
+{
+	float: left;
+	width: 45%;
+	margin-left: 0px;
+}
+.clearDiv
+{
+	clear: both;
+}
+#userCitation, #userBibliography
+{
+}
+button#searchButton {
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 18px;
+	/* define background-image in javascript since it depends on rootURL */
+}

@@ -2,7 +2,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.FinderPage = function (mainContainer, userOptions) {
+CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	var nameSearchTimeout,
 		styleFormatSearchTimeout;
 
@@ -220,6 +220,4 @@ CSLEDIT.FinderPage = function (mainContainer, userOptions) {
 
 		formChanged();
 	}
-
 };
-

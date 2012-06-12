@@ -40,13 +40,19 @@
 	<link rel="stylesheet" href="../../css/searchByExample.css" />
 	<link rel="stylesheet" href="../../css/searchResults.css" />
 
-<script type="text/javascript">
-	$(document).ready(function () {
-		CSLEDIT.finderPage = new CSLEDIT.FinderPage($('#mainContainer'), {
-			rootURL : "../.."
+	<script type="text/javascript">
+		$(document).ready(function () {
+			CSLEDIT.searchByExample = CSLEDIT.SearchByExample($('#mainContainer'), {
+				rootURL : "../..",
+				editStyle_func : function (styleURL) {
+					styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
+					CSLEDIT.data.loadStyleFromURL(styleURL, function () {
+						window.location.href = "../visualEditor";
+					});
+				}
+			});
 		});
-	});
-</script>
+	</script>
 </head>
 <body id="searchByExample">
 <?php include '../html/navigation.html'; ?>

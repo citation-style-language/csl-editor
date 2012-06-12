@@ -85,7 +85,7 @@ CSLEDIT.searchResults = (function () {
 				'<tr><td nowrap="nowrap"><span class="faint">Bibliography<\/span><\/td>' +
 				'<td class=match>' +
 				bibliography + '<\/td>' + bibliographyCloseness + "<\/tr>" +
-				'<tr><td><\/td><td><a href="#" class="editStyleButton" styleURL="' +
+				'<tr><td><\/td><td><button class="editStyle" styleURL="' +
 				style.styleId + '">Edit style<\/a><\/td><\/tr>' +
 				'<\/table>');
 		}
@@ -95,16 +95,9 @@ CSLEDIT.searchResults = (function () {
 				outputList.join("<p><p>")
 		);
 
-		$("a").click( function (event) {
+		$("button.editStyle").click( function (event) {
 			var styleURL = $(event.target).attr("styleURL");
-
-			styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-
-			CSLEDIT.data.loadStyleFromURL(styleURL, function () {
-				window.location.href =
-					window.location.protocol + "//" + 
-					window.location.host + "/csl/visualEditor";
-			});
+			CSLEDIT.options.get("editStyle_func")(styleURL);
 		});
 	};
 
