@@ -39,7 +39,6 @@ CSLEDIT.options = (function () {
 	// create the default options which are a function of user options
 	var createExtraDefaults = function () {
 		defaultOptions.cslSchema_mainURL = get('rootURL') + "/external/csl-schema/csl.rng"
-		
 		defaultOptions.cslSchema_childURLs = [];
 		$.each([
 				"/external/csl-schema/csl-categories.rng",

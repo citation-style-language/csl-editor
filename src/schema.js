@@ -15,7 +15,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.Schema = function (mainSchemaURL, includeSchemaURLs) {
+CSLEDIT.Schema = function () {
 	var mainSchemaData,
 		schemas = [],
 		nodesParsed = 0,
@@ -26,8 +26,10 @@ CSLEDIT.Schema = function (mainSchemaURL, includeSchemaURLs) {
 		callback = null,
 		initialised = false,
 		refParents = {},
-		lastAttributeValue = null; // needed because the documentation for an attribute value
+		lastAttributeValue = null, // needed because the documentation for an attribute value
 		                           // comes after, instead of within, and attribute
+		mainSchemaURL = CSLEDIT.options.get("cslSchema_mainURL"),
+		includeSchemaURLs = CSLEDIT.options.get("cslSchema_childURLs");
 
 	$.get(mainSchemaURL, {}, function(data) {
 		mainSchemaData = data;

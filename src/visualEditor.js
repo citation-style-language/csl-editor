@@ -20,9 +20,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 	editorElement = $(editorElement);
 	editorElement.load(CSLEDIT.options.get("rootURL") + "/html/visualEditor.html", function () {
-		CSLEDIT.schema = CSLEDIT.Schema(
-			CSLEDIT.options.get("cslSchema_mainURL"),
-			CSLEDIT.options.get("cslSchema_childURLs"));
+		CSLEDIT.schema = CSLEDIT.Schema();
 		CSLEDIT.schema.callWhenReady(init);
 	});
 

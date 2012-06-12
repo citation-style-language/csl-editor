@@ -8,18 +8,19 @@ module("CSLEDIT.cslData", {
 });
 
 test("set code", function () {
-	var cslData;
+	var cslData,
+		result;
 
-	raises(function () {
-		CSLEDIT.data.setCslCode("<needs_to_start_with_style_node><\/needs_to_start_with_style_node>");
-	});
+	result = CSLEDIT.data.setCslCode("<needs_to_start_with_style_node><\/needs_to_start_with_style_node>");
+	console.log(result.error);
+	ok(result.error.length > 0);
 
-	raises(function () {
-		CSLEDIT.data.setCslCode("<style><mis><\/match><\/style>");
-	});
+	result = CSLEDIT.data.setCslCode("<style><mis><\/match><\/style>");
+	ok(result.error.length > 0);
 
-	cslData = CSLEDIT.data.setCslCode("<style><\/style>");
-	equal(JSON.stringify(cslData), JSON.stringify(CSLEDIT.data.get()));
+	result = CSLEDIT.data.setCslCode("<style><citation><layout \/><\/citation>" +
+		"<bibliography><layout \/><\/bibliography><\/style>");
+	ok(!result.hasOwnProperty('error'));
 	equal(CSLEDIT.data.get().name, "style");
 });
 
@@ -109,8 +110,10 @@ test("move nodes", function () {
 test("find nodes", function () {
 	var cslData;
 
-	cslData = CSLEDIT.data.setCslCode(
+	CSLEDIT.data.setCslCode(
 		"<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><\/style>");
+
+	cslData = CSLEDIT.data.get();
 
 	equal(CSLEDIT.data.getFirstCslId(cslData, "citation"), 3);
 	equal(CSLEDIT.data.getFirstCslId(cslData, "layout"), 4);
@@ -150,8 +153,9 @@ test("find by path", function () {
 	var testCsl = "<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><macro><\/macro><macro><\/macro><\/style>",
 		cslData;
 
-	cslData = CSLEDIT.data.setCslCode(testCsl);
-	
+	CSLEDIT.data.setCslCode(testCsl);
+	cslData = CSLEDIT.data.get();
+
 	equal(CSLEDIT.data.getNodesFromPath("", cslData).length, 0);
 	equal(CSLEDIT.data.getNodesFromPath("style/notThere", cslData).length, 0);
 

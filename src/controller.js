@@ -80,7 +80,7 @@ CSLEDIT.controller = (function () {
 		console.log("executing command " + command + "(" + JSON.stringify(args) + ")");
 		inverseCommand = cslData[command].apply(null, args);
 		
-		if (inverseCommand.hasOwnProperty("error")) {
+		if (typeof inverseCommand !== "undefined" && inverseCommand.hasOwnProperty("error")) {
 			alert("Error executing command " + command + "(" + JSON.stringify(args) + ")\n\n"
 				+ inverseCommand.error);
 			return;
