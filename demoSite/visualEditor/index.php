@@ -116,6 +116,7 @@
 							styleId = 'cslEditor/' + styleId;
 							cslEditor.setStyleId(styleId);
 							assertEqual(cslEditor.getStyleId(), styleId);
+							cslCode = CSLEDIT.data.getCslCode();
 						}
 
 						dialog.dialog({

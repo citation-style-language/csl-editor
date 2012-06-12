@@ -225,8 +225,13 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 	// Load new style without reloading page
 	var loadStyleFromURL = function (newURL, callback) {
 		$.get(newURL, {}, function(cslCode) {
+			var result;
 			cslCode = cslCode.replace(/<!--.*?-->/g, "");
-			setCslCode(cslCode);
+			result = setCslCode(cslCode);
+			if (result.hasOwnProperty('error')) {
+				alert(result.error);
+				return;
+			}
 			if (typeof callback !== "undefined") {
 				callback();
 			}
