@@ -24,7 +24,7 @@
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			CSLEDIT.searchByName = CSLEDIT.SearchByName($('#mainContainer'), {
+			CSLEDIT.searchByName = new CSLEDIT.SearchByName($('#mainContainer'), {
 				rootURL : "../..",
 				editStyle_func : function (styleURL) {
 					styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);

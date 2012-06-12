@@ -42,7 +42,7 @@
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			CSLEDIT.searchByExample = CSLEDIT.SearchByExample($('#mainContainer'), {
+			CSLEDIT.searchByExample = new CSLEDIT.SearchByExample($('#mainContainer'), {
 				rootURL : "../..",
 				editStyle_func : function (styleURL) {
 					styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
