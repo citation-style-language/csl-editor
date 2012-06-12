@@ -545,7 +545,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				if (/^Style/.test(parentNodeName)) {
 					if (clickedName === "Revert (undo all changes)") {
 						reloadPageWithNewStyle(styleURL);
-					} else if ($(event.target).is('savecsl')) {
+					} else if ($(event.target).is('.savecsl')) {
 						CSLEDIT.options.get('savecsl_func')(CSLEDIT.data.getCslCode());
 					} else if ($(event.target).is('.loadcsl')) {
 						var csl = CSLEDIT.options.get('loadcsl_func')();
