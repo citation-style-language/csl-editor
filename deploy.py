@@ -74,6 +74,7 @@ pages = [
             "src/debug.js",
             "src/diff.js",
             "src/cslParser.js",
+            "src/cslNode.js",
             "src/cslData.js",
             "src/searchResults.js",
             "src/searchByExample.js",
@@ -89,6 +90,7 @@ pages = [
             "src/storage.js",
             "src/exampleData.js",
             "src/cslParser.js",
+            "src/cslNode.js",
             "src/cslData.js",
             "src/searchResults.js",
             "src/searchByName.js"
@@ -97,6 +99,9 @@ pages = [
     {
         "page" : "test",
         "jsFiles" : [
+            "src/options.js",
+            "src/uiConfig.js",
+            "src/storage.js",
             "src/debug.js",
             "src/schema.js",
             "src/test_schema.js",	
