@@ -525,8 +525,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		var dropdown = $(selector),
 			loadCsl;
 
-		dropdown.filter('a.loadcsl').html(CSLEDIT.options.get('loadcsl_name'));
-		dropdown.filter('a.savecsl').html(CSLEDIT.options.get('savecsl_name'));
+		dropdown.filter('a.loadcsl').html(CSLEDIT.options.get('loadCSLName'));
+		dropdown.filter('a.savecsl').html(CSLEDIT.options.get('saveCSLName'));
 
 		editorElement.find(selector).click(function (event) {
 			var clickedName = $(event.target).text(),
@@ -544,9 +544,9 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 					if (clickedName === "Revert (undo all changes)") {
 						reloadPageWithNewStyle(styleURL);
 					} else if ($(event.target).is('.savecsl')) {
-						CSLEDIT.options.get('savecsl_func')(CSLEDIT.data.getCslCode());
+						CSLEDIT.options.get('saveCSLFunc')(CSLEDIT.data.getCslCode());
 					} else if ($(event.target).is('.loadcsl')) {
-						var csl = CSLEDIT.options.get('loadcsl_func')();
+						var csl = CSLEDIT.options.get('loadCSLFunc')();
 						if (csl !== null && typeof csl !== "undefined") {
 							CSLEDIT.controller.exec('setCslCode', [csl]);
 						}

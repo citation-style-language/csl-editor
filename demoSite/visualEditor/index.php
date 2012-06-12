@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
-	<title>CSL Visual Editor</title>
+	<title>Visual CSL Editor</title>
 
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
@@ -75,8 +75,8 @@
 			cslEditor = new CSLEDIT.VisualEditor('#visualEditorContainer',	
 				{
 				// Example options over-riding load and save functions
-					loadcsl_name : "Load style from ref manager",
-					loadcsl_func : function () {
+					loadCSLName : "Load style from ref manager",
+					loadCSLFunc : function () {
 						cslEditor.setCslCode("<style><\/style>");
 					},
 					rootURL : "../.."

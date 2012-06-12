@@ -4,8 +4,8 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.options = (function () {
 	var userOptions = {};
 	var defaultOptions = {
-			loadcsl_name : "Load CSL",
-			loadcsl_func : function () {
+			loadCSLName : "Load CSL",
+			loadCSLFunc : function () {
 				var url = prompt("Please enter the URL of the style you want to load"),
 					newStyle;
 
@@ -22,15 +22,15 @@ CSLEDIT.options = (function () {
 				// to perform async
 				return newStyle;
 			},
-			savecsl_name : "Save CSL",
-			savecsl_func : function (cslCode) {			
+			saveCSLName : "Save CSL",
+			saveCSLFunc : function (cslCode) {			
 				window.location.href =
 					"data:application/xml;charset=utf-8," +
 					encodeURIComponent(cslCode);
 			},
 			rootURL : "/CSLEDIT",
-			editStyle_name : "Edit Style",
-			editStyle_func : function (url) {
+			editStyleName : "Edit Style",
+			editStyleFunc : function (url) {
 				alert("Edit style not avaiable.\n\n" +
 					"For implementers: You need to add an editStyle_func to the options.");
 			}
