@@ -53,6 +53,9 @@
 	<script type="text/javascript" src="../../src/controller.js"></script>
 	<script type="text/javascript" src="../../src/visualEditor.js"></script>
 
+	<script type="text/javascript" src="../external/downloadify/swfobject.js"></script>
+	<script type="text/javascript" src="../external/downloadify/downloadify.min.js"></script>
+
 	<link type="text/css" rel="stylesheet" href="../../css/dropdown.css" />
 
 	<link rel="stylesheet" href="../../css/base.css" />
@@ -74,10 +77,55 @@
 		$("document").ready( function () {
 			cslEditor = new CSLEDIT.VisualEditor('#visualEditorContainer',	
 				{
-				// Example options over-riding load and save functions
-					loadCSLName : "Load style from ref manager",
+					// Use FileAPI to read files from local file system
+					loadCSLName : "Load Style",
 					loadCSLFunc : function () {
-						cslEditor.setCslCode("<style><\/style>");
+						var dialog = $('<div title="Load CSL Style">' + 
+								'<p>Choose a CSL file to load<\/p>' +
+								'<input type="file" \/>' +
+								'<\/div>');
+						dialog.find('input[type=file]').change(function (event) {
+							var file = event.target.files[0],
+								reader = new FileReader();
+							reader.onload = function (event) {
+								cslEditor.setCslCode(event.target.result);
+								dialog.dialog("destroy");
+							};
+							reader.readAsText(file);
+						});
+
+						dialog.dialog({modal : true});
+					},
+
+					// Use Flash based downloadify plugin to save files to local file system
+					saveCSLName : 'Save Style',
+					saveCSLFunc : function (cslCode) {
+						var dialog = $('<div title="Save CSL Style">' + 
+								'<p>Save CSL style for use in your Reference Manager<\/p>' +
+								'<p id="downloadify">downloadify<\/p>' +
+								'<\/div>'),
+							saveButton = dialog.find('#downloadify');
+
+						assertEqual(saveButton.length, 1);
+						
+						dialog.dialog({
+							modal : true,
+							open :  function () {
+								saveButton.downloadify({
+									swf : '../external/downloadify/downloadify.swf',
+									downloadImage : '../external/downloadify/download.png',
+									width : 100,
+									height : 30,
+									filename : 'testSaveCsl.csl',
+									data : cslCode,
+									transparent : true,
+									onComplete: function(){ alert('Your CSL Style Has Been Saved!'); },
+									onCancel: function(){ /* no-op */ },
+									onError: function(){ alert('Error saving file.'); }
+								});
+							}
+						
+						});
 					},
 					rootURL : "../.."
 				});
