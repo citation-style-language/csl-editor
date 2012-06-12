@@ -223,6 +223,7 @@ for page in pages:
                     '"' + cslEditRoot + '/css/' + cssFile + '-' + gitCommit + '.css"')
 
         line = line.replace('rootURL : "../.."', 'rootURL : "' + cslEditRoot + '"')
+        line = line.replace('$GIT_COMMIT', gitCommit)
 
         # use regexp to convert
         match = findSourceFile.search(line)
