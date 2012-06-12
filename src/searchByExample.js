@@ -2,9 +2,15 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.finderPage = (function () {
+CSLEDIT.FinderPage = function (mainContainer, userOptions) {
 	var nameSearchTimeout,
 		styleFormatSearchTimeout;
+
+	CSLEDIT.options.setUserOptions(userOptions);
+	mainContainer = $(mainContainer);
+	mainContainer.load(CSLEDIT.options.get("rootURL") + "/html/searchByExample.html", function () {
+		init();
+	});
 
 	// used to display HTML tags for debugging
 	var escapeHTML = function (string) {
@@ -124,7 +130,7 @@ CSLEDIT.finderPage = (function () {
 		console.timeEnd("searchForStyle");
 	};
 
-	function formatFindByStyleExampleDocument() {
+	var formatFindByStyleExampleDocument = function () {
 		var jsonDocuments = cslServerConfig.jsonDocuments;
 		document.getElementById("explanation").innerHTML = "<i>Please edit this example citation to match the style you are searching for.<br />";
 		document.getElementById("exampleDocument").innerHTML =
@@ -141,13 +147,13 @@ CSLEDIT.finderPage = (function () {
 			"<tr><td>Publisher:<\/td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "<\/td><\/tr>" +
 			"<tr><td>Document type:<\/td><td>" + jsonDocuments["ITEM-1"]["type"] + "<\/td><\/tr>" +
 			"<\/table>";
-	}
+	};
 
-	function clearResults() {
+	var clearResults = function () {
 		$("#searchResults").html("<i>Click search to find similar styles<\/i>");
-	}
+	};
 
-	function formChanged() {
+	var formChanged = function () {
 		var userCitation,
 			userBibliography;
 
@@ -161,62 +167,59 @@ CSLEDIT.finderPage = (function () {
 		$("#userBibliography").cleditor()[0].doc.body.innerHTML = cleanInput(userBibliography);
 
 		styleFormatSearchTimeout = setTimeout(searchForStyle, 1000);
+	};
+
+	var init = function () {
+		formatFindByStyleExampleDocument();
+		$("#inputTabs").tabs({
+			show: function (event, ui) {
+				if (ui.panel.id === "styleNameInput") {
+					$("#styleNameResult").show();
+					$("#styleFormatResult").hide();
+				} else {
+					$("#styleNameResult").hide();
+					$("#styleFormatResult").show();
+				}
+			}
+		});
+		$.cleditor.defaultOptions.width = 390;
+		$.cleditor.defaultOptions.height = 100;
+		$.cleditor.defaultOptions.controls =
+			"bold italic underline subscript superscript ";
+		//		+ "| undo redo | cut copy paste";
+
+		$('button#searchButton').css({
+			'background-image' :
+				"url(" + CSLEDIT.options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
+		});
+
+		var userCitationInput = $("#userCitation").cleditor({height: 55})[0];
+		$("#userBibliography").cleditor({height: 85});
+
+		var realTimeSearch = false;
+		if (realTimeSearch) {
+			$("#userCitation").cleditor()[0].change(formChanged);
+			$("#userBibliography").cleditor()[0].change(formChanged);
+			$('#searchButton').hide();
+		} else {
+			$("#userCitation").cleditor()[0].change(clearResults);
+			$("#userBibliography").cleditor()[0].change(clearResults);
+			$('#searchButton').on("click", function () {
+				$("#styleFormatResult").html("<i>Searching...<\/i>");
+				formChanged();
+			});
+		}
+	
+		// prepopulate search by style format with APA example
+		$("#userCitation").cleditor()[0].doc.body.innerHTML =
+			exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].
+			formattedCitations[0];
+		$("#userBibliography").cleditor()[0].doc.body.innerHTML =
+			exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].
+			formattedBibliography;
+
+		formChanged();
 	}
 
-	return {
-		init : function () {		
-			formatFindByStyleExampleDocument();
-			$("#inputTabs").tabs({
-				show: function (event, ui) {
-					if (ui.panel.id === "styleNameInput") {
-						$("#styleNameResult").show();
-						$("#styleFormatResult").hide();
-					} else {
-						$("#styleNameResult").hide();
-						$("#styleFormatResult").show();
-					}
-				}
-			});
-			$.cleditor.defaultOptions.width = 390;
-			$.cleditor.defaultOptions.height = 100;
-			$.cleditor.defaultOptions.controls =
-				"bold italic underline subscript superscript ";
-			//		+ "| undo redo | cut copy paste";
-
-			$('button#searchButton').css({
-				'background-image' :
-					"url(" + CSLEDIT.options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
-			});
-
-			var userCitationInput = $("#userCitation").cleditor({height: 55})[0];
-			$("#userBibliography").cleditor({height: 85});
-
-			var realTimeSearch = false;
-			if (realTimeSearch) {
-				$("#userCitation").cleditor()[0].change(formChanged);
-				$("#userBibliography").cleditor()[0].change(formChanged);
-				$('#searchButton').hide();
-			} else {
-				$("#userCitation").cleditor()[0].change(clearResults);
-				$("#userBibliography").cleditor()[0].change(clearResults);
-				$('#searchButton').on("click", function () {
-					$("#styleFormatResult").html("<i>Searching...<\/i>");
-					formChanged();
-				});
-			}
-		
-			// prepopulate search by style format with APA example
-			$("#userCitation").cleditor()[0].doc.body.innerHTML =
-				exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].formattedCitations[0];
-			$("#userBibliography").cleditor()[0].doc.body.innerHTML =
-				exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].formattedBibliography;
-
-			formChanged();
-		}
-	};
-}());
-
-$(document).ready(function () {
-	CSLEDIT.finderPage.init();		
-});
+};
 

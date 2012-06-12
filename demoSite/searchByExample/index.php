@@ -37,75 +37,20 @@
 	<script type="text/javascript" src="../src/analytics.js"></script>
 	
 	<link rel="stylesheet" href="../../css/base.css" />
+	<link rel="stylesheet" href="../../css/searchByExample.css" />
 	<link rel="stylesheet" href="../../css/searchResults.css" />
-<style>
-#mainContent {
-	padding: 8px;
-	width: 800px;
-}
-input, textarea
-{
-	width: 100%;
-}
-h1
-{
-	text-align: center;
-	font-family: sans-serif;
-}
-#exampleDocument
-{
-	float: right;
-	margin-left: 5px;
-	width: 48%;
-	background-color: #F5F5DC;
-	border-style: solid;
-	border-width: 2px;
-}
-.faint
-{
-	color: #888888;
-}
-#styleFormatInputControls
-{
-	float: left;
-	width: 50%;
-	margin-left: 0px;
-}
-.clearDiv
-{
-	clear: both;
-}
-div#styleFormatResult {
-	padding: 0 22px 0;
-	width: 600px;
-}
-button#searchButton {
-	background-position: left center;
-	background-repeat: no-repeat;
-	padding-left: 18px;
-/*	background-image defined in searchByExample.js.
- *	A bit ugly but lets us use the rootURL option. */
-}
-</style>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		CSLEDIT.finderPage = new CSLEDIT.FinderPage($('#mainContainer'), {
+			rootURL : "../.."
+		});
+	});
+</script>
 </head>
 <body id="searchByExample">
 <?php include '../html/navigation.html'; ?>
-<div id="mainContent">
-<div id="styleFormatInput">
-	<div id="styleFormatInputControls">
-		<p id=explanation></p>
-		Edit in-line citation:
-		<textarea type="text" id="userCitation" placeholder="Type inline citation here" ></textarea>
-		<br />
-		Edit bibliography entry:
-		<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
-		<button id="searchButton">Search</button>
-	</div>
-	<div id=exampleDocument></div>
-	<div class=clearDiv>
-	</div>
-</div>
-<div id="searchResults"></div>
+<div id="mainContainer">
 </div>
 </body>
 </html>
