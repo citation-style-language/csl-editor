@@ -12,9 +12,14 @@ var CSLEDIT = CSLEDIT || {};
  * - Amend node
  */
 
-CSLEDIT.Data = function (CSL_DATA) {
+CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 	var viewControllers = [],
-		callbacksEnabled = true;
+		callbacksEnabled = true,
+		requiredNodes = _requiredNodes || [
+			"style/info",
+			"style/citation/layout",
+			"style/bibliography/layout"
+		];
 
 	var get = function () {
 		var cslData = CSLEDIT.storage.getItem(CSL_DATA);
@@ -29,17 +34,24 @@ CSLEDIT.Data = function (CSL_DATA) {
 		return cslData;
 	};
 	var setCslCode = function (cslCode) {
-		var cslData;
+		var cslData,
+			error;
+		
 		try {
 			cslData = CSLEDIT.cslParser.cslDataFromCslCode(cslCode);
 		} catch(err) {
 			return { error: "Error parsing CSL Code" };
 		}
 
-		if (getNodesFromPath("style", cslData).length === 0 /*||
-			getNodesFromPath("style/citation/layout", cslData).length === 0 ||
-			getNodesFromPath("style/bibliography/layout", cslData).length === 0*/) {
-			return { error : "CSL code is missing essential layout nodes" };
+		$.each(requiredNodes, function (i, requiredNode) {
+			if (getNodesFromPath(requiredNode, cslData).length === 0) {
+				error = "CSL code is missing essential node: " + requiredNode;
+				return false;
+			}
+		});
+
+		if (error) {
+			return { error: error };
 		}
 
 		set(cslData);

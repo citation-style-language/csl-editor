@@ -5,13 +5,11 @@ CSLEDIT = CSLEDIT || {};
 module("CSLEDIT.smartTree");
 
 asyncTest("create style tree", function () {
-	var cslData,
-		styleTree,
+	var styleTree,
 		treeElement = $("<div><\/div>");
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
-
-	cslData = CSLEDIT.data.setCslCode (
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
+	CSLEDIT.data.setCslCode (
 		"<style>" +
 		"<info><author><\/author><\/info>" +
 		"<citation><layout><\/layout><\/citation>" +
@@ -38,7 +36,7 @@ asyncTest("create macros tree", function () {
 		macroTree,
 		treeElement = $("<div><\/div>");
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
@@ -68,7 +66,7 @@ asyncTest("add/delete nodes", function () {
 		macroTree,
 		treeElement = $("<div><\/div>");
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
@@ -126,7 +124,7 @@ asyncTest("add node with children", function () {
 		macroTree,
 		treeElement = $("<div><\/div>");
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
 	cslData = CSLEDIT.data.setCslCode("<style><bibliography><\/bibliography><\/style>");
 
@@ -190,7 +188,7 @@ asyncTest("macro link", function () {
 		treesToLoad,
 		fakeViewController = new CSLEDIT.FakeViewController();
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", ["style/citation/layout"]);
 
 	var treeLoaded = function () {
 		treesToLoad--;
@@ -370,7 +368,7 @@ asyncTest("add to instance after macro", function () {
 		description,
 		fakeViewController = new CSLEDIT.FakeViewController();
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
 	var treeLoaded = function () {
 		treesToLoad--;
@@ -519,7 +517,7 @@ asyncTest("macros within macros", function () {
 		description,
 		fakeViewController = new CSLEDIT.FakeViewController();
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
 	var treeLoaded = function () {
 		treesToLoad--;
@@ -677,7 +675,7 @@ asyncTest("move macro instance 1 from macro instance 2 to macro instance 3", fun
 		description,
 		fakeViewController = new CSLEDIT.FakeViewController();
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
 	var treeLoaded = function () {
 		treesToLoad--;
@@ -781,7 +779,7 @@ asyncTest("macros within macros on creation", function () {
 		description,
 		fakeViewController = new CSLEDIT.FakeViewController();
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
 	var treeLoaded = function () {
 		treesToLoad--;

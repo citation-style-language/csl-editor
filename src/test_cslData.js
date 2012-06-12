@@ -3,7 +3,7 @@
 module("CSLEDIT.cslData", {
 	setup : function () {
 		// replace CSLEDIT.data with test version
-		CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+		CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 	}
 });
 
@@ -203,4 +203,19 @@ test("get node stack", function () {
 	equal(nodeStack[1].name, "citation");
 	equal(nodeStack[2].name, "layout");
 	equal(nodeStack[3].name, "text");
+});
+
+test("required nodes", function () {
+	var result;
+
+	// require nodes (note: style node is always required, regardless of arguments)
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", ["style/parent1", "style/parent2/child1"]);
+	
+	result = CSLEDIT.data.setCslCode("<style><parent1><\/parent1><\/style>");
+	ok(result.error.length > 0);
+	console.log(result.error);
+
+	result = CSLEDIT.data.setCslCode("<style><parent1><\/parent1>" +
+		"<parent2><child1><\/child1><\/parent2><\/style>");
+	ok(!result.hasOwnProperty('error'));
 });
