@@ -97,9 +97,9 @@
 		// Use Flash based downloadify plugin to save files to local file system
 		var saveCSL = function (cslCode) {
 			var dialog = $('<div title="Save CSL Style">' + 
-					'<div id="refManagerInstructions"><\/div>' +
 					'<p style="padding-left: 300px">' +
 					'<span id="downloadify">downloadify<\/span><\/p>' +
+					'<div id="refManagerInstructions"><\/div>' +
 					'<\/div>'),
 				saveButton = dialog.find('#downloadify'),
 				filename,
