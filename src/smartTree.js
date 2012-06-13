@@ -526,10 +526,11 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 
 	var amendNode = function (id, amendedNode) {
 		var thisRangeIndex = rangeIndex(id),
-			node;
+			nodes = treeElement.find('li[cslid="' + id + '"]');
 
-		var node = treeElement.find('li[cslid="' + id + '"]');
-		treeElement.jstree('rename_node', node, CSLEDIT.uiConfig.displayNameFromNode(amendedNode));
+		nodes.each(function () {
+			treeElement.jstree('rename_node', $(this), CSLEDIT.uiConfig.displayNameFromNode(amendedNode));
+		});
 		
 		if (thisRangeIndex === -1) {
 			return;
