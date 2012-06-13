@@ -14,6 +14,8 @@ div#mainContainer {
 	margin: 20px;
 }
 </style>
+<!-- google analytics -->
+<script type="text/javascript" src="../src/analytics.js"></script>
 </head>
 <body id="homepage">
 <?php include '../html/navigation.html'; ?>
