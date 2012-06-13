@@ -56,6 +56,7 @@ pages = [
             "src/exampleData.js",
             "src/diff.js",
             "src/cslParser.js",
+            "src/cslNode.js",
             "src/cslData.js",
             "src/codeEditor.js"
         ]
