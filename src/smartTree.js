@@ -528,13 +528,13 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		var thisRangeIndex = rangeIndex(id),
 			node;
 
+		var node = treeElement.find('li[cslid="' + id + '"]');
+		treeElement.jstree('rename_node', node, CSLEDIT.uiConfig.displayNameFromNode(amendedNode));
+		
 		if (thisRangeIndex === -1) {
 			return;
 		}
 
-		var node = treeElement.find('li[cslid="' + id + '"]');
-		treeElement.jstree('rename_node', node, CSLEDIT.uiConfig.displayNameFromNode(amendedNode));
-		
 		if (enableMacroLinks) {
 			macroLinksUpdateNode(amendedNode.cslId, amendedNode);
 		}
