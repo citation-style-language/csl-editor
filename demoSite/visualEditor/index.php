@@ -80,8 +80,10 @@ if (isset($_GET['embedded']) && $_GET['embedded'] == "true") {
 if (!isset($_GET['embedded']) || $_GET['embedded'] != "true") {
 	echo("<script type=\"text/javascript\" src=\"../external/downloadify/swfobject.js\"></script>\n");
 	echo("<script type=\"text/javascript\" src=\"../external/downloadify/downloadify.min.js\"></script>\n");
-	echo("<script type=\"text/javascript\" src=\"../src/visualEditorDemo.js\"></script>\n");
 	echo("<script type=\"text/javascript\">\n");
+
+	// including this way for now to avoid cache problems without having to version
+	include '../src/visualEditorDemo.js';
 	echo("initVisualEditorDemo(\"../..\");\n");
 	echo("</script>\n");
 }
