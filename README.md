@@ -16,7 +16,7 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 4. Python 2.6.5 or 2.7
 
-### Instructions
+### To Deploy Website
 
 1. Checkout repo into directory &lt;SERVER-ROOT&gt;/csl-source/ where SERVER-ROOT is typically public\_html
 
@@ -24,13 +24,58 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 3. Run configure.sh
 
+(For developing with the original js source files, you can now point your browser to /csl-source/demoSite/)
+
 4. Run "python deploy.py"
 
-5. Point your browser to /csl/ to access the site
+5. Point your browser to /csl/ to access the site (uses concatenated js files and renamed css files)
 
-6. Point your browser to /csl/test/ to run unit tests
+6. Point your browser to either /csl-source/demoSite/test or /csl/test/ to run unit tests
 
-(Testing on /csl-source/ should also work, and may be simpler for development since the .js files are not concatenated.)
+### To Embed Website in a web pane in your reference manager
+
+1. Create a web pane and point it to one of the following URLs:
+
+ - My current 'stable' version (recommended)
+
+   `http://steveridout.com/csl/visualEditor?embedded=true`
+
+ - Your local checked out version of the code (good if you want to debug or fiddle with the CSL Editor source code)
+
+   `http://localhost/csl-source/demoSite/visualEditor?embedded=true`
+
+ - Your local 'deployed' version of the site:
+
+   `http://localhost/csl/visualEditor?embedded=true`
+
+2. Within the webpage, execute this code:
+
+```javascript
+var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
+	// The name of the load style button
+	loadCSLName : "Load Style from Ref Manager",
+
+	// Your function to load a CSL file into the editor
+	loadCSLFunc : function () {
+		// change this to be proper CSL file contents
+		alert("Loading a blank CSL style");
+		cslEditor.setCslCode("<style><info \/><citation><layout \/><\/citation><bibliography><layout \/><\/bibliography><\/style>");
+	},
+
+	// The name of the save/export style button
+	saveCSLName : "Save Style to Ref Manager",
+
+	// Your function to save/export a style out of the editor
+	saveCSLFunc : function (cslCode) {
+		alert("Save function not implemented");
+	},
+
+	// IMPORTANT: The relative or absolute URL must point to the location of the CSL Editor library.
+	//            It should be "../.." if you are using the /csl-source/demoSite/visualEditor
+	//            Or "/CSLEDIT" if you are using /csl/visualEditor
+	rootURL : "/CSLEDIT"
+});
+```
 
 # Attributions 
 
@@ -49,3 +94,4 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 - [jQuery UI Layout Plugin](http://layout.jquery-dev.net)
 - [jQuery hoverIntent Plugin](http://cherne.net/brian/resources/jquery.hoverIntent.html)
 - [jQuery scrollTo Plugin](http://demos.flesler.com/jquery/scrollTo/)
+

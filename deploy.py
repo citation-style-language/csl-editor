@@ -229,7 +229,9 @@ for page in pages:
                     '"../../css/' + cssFile + '.css"',
                     '"' + cslEditRoot + '/css/' + cssFile + '-' + gitCommit + '.css"')
 
-        line = line.replace('rootURL : "../.."', 'rootURL : "' + cslEditRoot + '"')
+        line = line.replace(
+            'initVisualEditorDemo(\\"../..\\");',
+            'initVisualEditorDemo(\\"' + cslEditRoot + '\\");')
         line = line.replace('$GIT_COMMIT', gitCommit)
 
         # use regexp to convert

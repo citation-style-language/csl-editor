@@ -4,7 +4,7 @@
 "use strict";
 // javascript redirect
 // (this is not permentantly cached like 301 redirects)
-window.location.pathname = "/csl/home";
+window.location.href = "./home";
 </script>
 </head>
 <body>

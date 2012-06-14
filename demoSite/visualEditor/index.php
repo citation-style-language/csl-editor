@@ -64,7 +64,7 @@
 		#visualEditorContainer {
 			position: absolute;
 <?php
-if ($_GET['bare'] == "true") {
+if (isset($_GET['embedded']) && $_GET['embedded'] == "true") {
 			echo("top: 0px;");
 } else {
 			echo("top: 27px;");
@@ -77,18 +77,20 @@ if ($_GET['bare'] == "true") {
 	</style>
 
 <?php
-if ($_GET['bare'] != "true") {
-	echo('<script type="text/javascript" src="../external/downloadify/swfobject.js"></script>');
-	echo('<script type="text/javascript" src="../external/downloadify/downloadify.min.js"></script>');
-	echo('<script type="text/javascript" src="../src/visualEditorDemo.js">');
+if (!isset($_GET['embedded']) || $_GET['embedded'] != "true") {
+	echo("<script type=\"text/javascript\" src=\"../external/downloadify/swfobject.js\"></script>\n");
+	echo("<script type=\"text/javascript\" src=\"../external/downloadify/downloadify.min.js\"></script>\n");
+	echo("<script type=\"text/javascript\" src=\"../src/visualEditorDemo.js\"></script>\n");
+	echo("<script type=\"text/javascript\">\n");
+	echo("initVisualEditorDemo(\"../..\");\n");
+	echo("</script>\n");
 }
 ?>
-	<script type="text/javascript">
-	</script>
+
 </head>
 <body id="visualEditor">
 <?php
-if ($_GET['bare'] != "true") {
+if (!isset($_GET['embedded']) || $_GET['embedded'] != "true") {
 	include '../html/navigation.html';
 }
 ?>
