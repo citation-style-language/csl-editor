@@ -462,7 +462,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 		$.each(possibleElements, function (element) {
 			var img = '<td><\/td>',
-				nodeIcon = CSLEDIT.uiConfig.nodeIcons[element];
+				nodeIcon = CSLEDIT.options.get('rootURL') + CSLEDIT.uiConfig.nodeIcons[element];
 
 			if (typeof nodeIcon !== "undefined") {
 				img = '<td><img src="' + nodeIcon + '"><\/img><\/td>';
