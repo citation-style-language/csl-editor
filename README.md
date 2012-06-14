@@ -69,8 +69,9 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 		alert("Save function not implemented");
 	},
 
-	// IMPORTANT: The relative or absolute URL must point to the location of the CSL Editor library.
-	//            It should be "../.." if you are using the /csl-source/demoSite/visualEditor
+	// IMPORTANT: This must point to the location of the CSL Editor library.
+    //            It can be a relative or absolute URL.
+	//            It should be "../.." if you are using /csl-source/demoSite/visualEditor
 	//            Or "/CSLEDIT" if you are using /csl/visualEditor
 	rootURL : "/CSLEDIT"
 });
