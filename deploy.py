@@ -229,6 +229,7 @@ for page in pages:
                     '"../../css/' + cssFile + '.css"',
                     '"' + cslEditRoot + '/css/' + cssFile + '-' + gitCommit + '.css"')
 
+        line = line.replace('rootURL : "../.."', 'rootURL : "' + cslEditRoot + '"')
         line = line.replace(
             'initVisualEditorDemo(\\"../..\\");',
             'initVisualEditorDemo(\\"' + cslEditRoot + '\\");')
