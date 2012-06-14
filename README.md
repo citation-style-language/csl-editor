@@ -8,33 +8,33 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 ### Prerequisites
 
-1. Basic LAMP stack
+- Basic LAMP stack
 
-2. Java runtime (doesn't have to be on server, just for pre-processing)
+- Java runtime (doesn't have to be on server, just for pre-processing)
 
-3. Mail server (for sending feedback emails)
+- Mail server (for sending feedback emails)
 
-4. Python 2.6.5 or 2.7
+- Python 2.6.5 or 2.7
 
 ### To Deploy Website
 
-1. Checkout repo into directory &lt;SERVER-ROOT&gt;/csl-source/ where SERVER-ROOT is typically public\_html
+- Checkout repo into directory &lt;SERVER-ROOT&gt;/csl-source/ where SERVER-ROOT is typically public\_html
 
-2. Run "git submodule update --init" from checked out directory to fetch submodules
+- Run "git submodule update --init" from checked out directory to fetch submodules
 
-3. Run configure.sh
+- Run configure.sh
 
 (For developing with the original js source files, you can now point your browser to /csl-source/demoSite/)
 
-4. Run "python deploy.py"
+- Run "python deploy.py"
 
-5. Point your browser to /csl/ to access the site (uses concatenated js files and renamed css files)
+- Point your browser to /csl/ to access the site (uses concatenated js files and renamed css files)
 
-6. Point your browser to either /csl-source/demoSite/test or /csl/test/ to run unit tests
+- Point your browser to either /csl-source/demoSite/test or /csl/test/ to run unit tests
 
 ### To Embed Website in a web pane in your reference manager
 
-1. Create a web pane and point it to one of the following URLs:
+- Create a web pane and point it to one of the following URLs:
 
 	- My current 'stable' version (recommended)
 
@@ -48,7 +48,7 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 		'http://localhost/csl/visualEditor?embedded=true`
 
-2. Within the webpage, execute this code:
+- Within the webpage, execute this code:
 
 ```javascript
 var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
