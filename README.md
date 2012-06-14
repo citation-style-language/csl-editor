@@ -36,17 +36,17 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 1. Create a web pane and point it to one of the following URLs:
 
- - My current 'stable' version (recommended)
+	- My current 'stable' version (recommended)
 
-   `http://steveridout.com/csl/visualEditor?embedded=true`
+		`http://steveridout.com/csl/visualEditor?embedded=true`
 
- - Your local checked out version of the code (good if you want to debug or fiddle with the CSL Editor source code)
+	- Your local checked out version of the code (good if you want to debug or fiddle with the CSL Editor source code)
 
-   `http://localhost/csl-source/demoSite/visualEditor?embedded=true`
+		`http://localhost/csl-source/demoSite/visualEditor?embedded=true`
 
- - Your local 'deployed' version of the site:
+	- Your local 'deployed' version of the site:
 
-   `http://localhost/csl/visualEditor?embedded=true`
+		'http://localhost/csl/visualEditor?embedded=true`
 
 2. Within the webpage, execute this code:
 
