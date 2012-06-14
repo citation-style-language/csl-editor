@@ -46,7 +46,7 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 	- Your local 'deployed' version of the site:
 
-		'http://localhost/csl/visualEditor?embedded=true`
+		`http://localhost/csl/visualEditor?embedded=true`
 
 - Within the webpage, execute this code:
 
