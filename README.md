@@ -52,17 +52,16 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 ```javascript
 var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
-	// The name of the load style button
+	// The name of the load style menu item
 	loadCSLName : "Load Style from Ref Manager",
 
 	// Your function to load a CSL file into the editor
 	loadCSLFunc : function () {
-		// change this to be proper CSL file contents
 		alert("Loading a blank CSL style");
 		cslEditor.setCslCode("<style><info \/><citation><layout \/><\/citation><bibliography><layout \/><\/bibliography><\/style>");
 	},
 
-	// The name of the save/export style button
+	// The name of the save/export style menu item
 	saveCSLName : "Save Style to Ref Manager",
 
 	// Your function to save/export a style out of the editor
