@@ -69,10 +69,10 @@ CSLEDIT.cslParser = (function() {
 	var htmlEscape = function (text) {
 		var escaped = text;
 
-		escaped = escaped.replace("<", "&lt;");
-		escaped = escaped.replace(">", "&gt;");
-		escaped = escaped.replace("&", "&amp;");
-		escaped = escaped.replace('"', "&quot;");
+		escaped = escaped.replace(/</g, "&lt;");
+		escaped = escaped.replace(/>/g, "&gt;");
+		escaped = escaped.replace(/&/g, "&amp;");
+		escaped = escaped.replace(/"/g, "&quot;");
 
 		return escaped;
 	};
