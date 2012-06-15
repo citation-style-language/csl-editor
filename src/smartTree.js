@@ -518,7 +518,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			treeElement.jstree("remove", node);
 
 			// shift this range
-			shiftCslIds(range, id + nodesDeleted, -nodesDeleted);
+			shiftCslIds(range, id, -nodesDeleted);
 		}
 
 		verifyTree();

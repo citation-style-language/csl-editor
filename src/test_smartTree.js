@@ -119,6 +119,66 @@ asyncTest("add/delete nodes", function () {
 	macroTree.createTree();
 });
 
+asyncTest("move subtree", function () {
+	var cslData,
+		citationTree,
+		bibliographyTree,
+		citationTreeElement = $("<div><\/div>"),
+		bibliographyTreeElement = $("<div><\/div>"),
+		fakeViewController = new CSLEDIT.FakeViewController(),
+		description;
+
+	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
+	CSLEDIT.data.setViewController(fakeViewController);
+
+	cslData = CSLEDIT.data.setCslCode (
+		"<style>" +
+		"<info><author><\/author><\/info>" +
+		"<citation><layout><group><text><\/text><\/group><\/layout><\/citation>" +
+		"<bibliography><layout><\/layout><\/bibliography>" +
+		"<\/style>");
+
+	citationTree = CSLEDIT.SmartTree(citationTreeElement, ["style/citation/layout"]);
+	bibliographyTree = CSLEDIT.SmartTree(bibliographyTreeElement, ["style/bibliography/layout"]);
+	
+	fakeViewController.addView(citationTree);
+	fakeViewController.addView(bibliographyTree);
+
+	citationTree.setVerifyAllChanges(true);
+	bibliographyTree.setVerifyAllChanges(true);
+
+	citationTree.setCallbacks({
+		loaded : function () {
+			description = "before move";
+			equal(citationTreeElement.find('li[cslid=0]').length, 0, description);
+			equal(citationTreeElement.find('li[cslid=4]').attr("rel"), "layout", description);
+			equal(citationTreeElement.find('li[cslid=5]').attr("rel"), "group", description);
+			equal(citationTreeElement.find('li[cslid=6]').attr("rel"), "text", description);
+			equal(citationTreeElement.find('li[cslid=7]').length, 0, description);
+			equal(bibliographyTreeElement.find('li[cslid=8]').attr("rel"), "layout", description);
+
+			// move group node from citation/layout to bibliography/layout
+			CSLEDIT.data.moveNode(5, 8, 0);
+
+			description = "after move";
+			equal(citationTreeElement.find('li[cslid=0]').length, 0, description);
+			equal(citationTreeElement.find('li[cslid=4]').attr("rel"), "layout", description);
+			equal(citationTreeElement.find('li[cslid=5]').length, 0, description);
+			equal(bibliographyTreeElement.find('li[cslid=6]').attr("rel"), "layout", description);
+			equal(bibliographyTreeElement.find('li[cslid=7]').attr("rel"), "group", description);
+			equal(bibliographyTreeElement.find('li[cslid=8]').attr("rel"), "text", description);
+
+			start();
+		}
+	});
+	bibliographyTree.setCallbacks({
+		loaded : function () {
+			citationTree.createTree();
+		}
+	});
+	bibliographyTree.createTree();
+});
+
 asyncTest("add node with children", function () {
 	var cslData,
 		macroTree,
