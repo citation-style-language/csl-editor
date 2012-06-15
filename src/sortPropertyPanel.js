@@ -8,7 +8,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 			"names-min",
 			"names-use-first",
 			"names-use-last"
-		];;
+		];
 	
 	// TODO: put into a common place - copied from src/smartTree.js
 	var getAttr = function (attribute, attributes) {

@@ -160,6 +160,30 @@ div.panel {
 #elementPropertyPanel div.multiPanel .radioButtons {
 	padding-bottom: 10px;
 }
+#elementPropertyPanel table.conditional {
+	table-layout: fixed;
+}
+#elementPropertyPanel table.conditional tr {
+	background-color: #EEEEEE;
+}
+#elementPropertyPanel table.conditional td {
+	padding: 12px;
+}
+#elementPropertyPanel table.conditional col.c1 {
+	width: 200px;
+}
+#elementPropertyPanel table.conditional col.c2 {
+	width: 200px;
+}
+#elementPropertyPanel table.conditional col.c3 {
+	width: 200px;
+}
+#elementPropertyPanel table.conditional col.c4 {
+	width: 50px;
+}
+#elementPropertyPanel table.conditional col.c5 {
+	width: 50px;
+}
 #nodePathView {
 	margin: 5px;
 	margin-bottom: 10px;

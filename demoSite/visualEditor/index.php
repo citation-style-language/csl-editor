@@ -46,6 +46,7 @@
 	<script type="text/javascript" src="../../src/propertyPanel.js"></script>
 	<script type="text/javascript" src="../../src/sortPropertyPanel.js"></script>
 	<script type="text/javascript" src="../../src/infoPropertyPanel.js"></script>
+	<script type="text/javascript" src="../../src/conditionalPropertyPanel.js"></script>
 	<script type="text/javascript" src="../../src/editNodeButton.js"></script>
 	<script type="text/javascript" src="../../src/smartTree.js"></script>
 	<script type="text/javascript" src="../../src/Titlebar.js"></script>

@@ -257,12 +257,12 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 
 	var addNode = function (id, position, newNode, nodesAdded) {
 		macroEditNotification (id);	
-
 		$.each(views, function (i, view) {
 			if ("addNode" in view) {
 				view.addNode(id, position, newNode, nodesAdded);
 			}
 		});
+		selectNode(newNode.cslId);
 	};
 
 	var deleteNode = function (id, nodesDeleted) {

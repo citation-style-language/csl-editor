@@ -39,6 +39,7 @@ pages = [
             "src/propertyPanel.js",
             "src/sortPropertyPanel.js",
             "src/infoPropertyPanel.js",
+            "src/conditionalPropertyPanel.js",
             "src/editNodeButton.js",
             "src/smartTree.js",
             "src/Titlebar.js",

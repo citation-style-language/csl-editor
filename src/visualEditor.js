@@ -14,7 +14,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		selectedCslId = -1,
 		viewController,
 		nodePathView,
-		highlightTimeout;
+		highlightTimeout,
+		propertyPanel;
 
 	CSLEDIT.options.setUserOptions(userOptions);
 
@@ -337,7 +338,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			node,
 			parentNode,
 			parentNodeName,
-			propertyPanel = editorElement.find("#elementProperties"),
 			possibleElements,
 			element,
 			possibleChildNodesDropdown,
@@ -396,6 +396,11 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				break;
 			case "info":
 				CSLEDIT.infoPropertyPanel.setupPanel(editorElement.find("#elementProperties"), node);
+				break;
+			case "if":
+			case "else-if":
+				propertyPanel = new CSLEDIT.conditionalPropertyPanel(
+						editorElement.find("#elementProperties"), node);
 				break;
 			default:
 			CSLEDIT.propertyPanel.setupPanel(

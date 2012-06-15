@@ -42,6 +42,32 @@ CSLEDIT.CslNode.prototype.setAttr = function (attr, value) {
 	}
 };
 
+CSLEDIT.CslNode.prototype.setAttrEnabled = function (attr, enabled, defaultValue) {
+	var index;
+
+	defaultValue = defaultValue || "";
+
+	index = this._indexOfAttr(attr);
+	if (index === -1) {
+		if (enabled) {
+			this.attributes.push({
+				key: attr,
+				value: defaultValue, /* TODO: get default value */
+				enabled: true});
+			return;
+		} else {
+			// a non-existant attribute is equivalent to a disabled one
+			return;
+		}
+	}
+	this.attributes[index].enabled = enabled;
+};
+
+CSLEDIT.CslNode.prototype.hasAttr = function (attr) {
+	var index = this._indexOfAttr(attr);
+	return index !== -1 && this.attributes[index].enabled;
+};
+
 CSLEDIT.CslNode.prototype.getAttr = function (attr) {
 	var index;
 

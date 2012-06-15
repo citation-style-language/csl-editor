@@ -10,10 +10,10 @@ CSLEDIT.uiConfig.defaultAttributes = {
 		"value" : ""
 	},
 	"if" : {
-		"type" : ""
+		"type" : "article"
 	},
 	"else-if" : {
-		"type" : ""
+		"type" : "article"
 	},
 	"date" : {
 		"form" : "text",
