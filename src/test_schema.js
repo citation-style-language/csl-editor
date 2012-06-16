@@ -26,6 +26,9 @@ CSLEDIT.schema.callWhenReady( function () {
 		equal(styleAttributes["default-locale"].values.length, 1);
 		equal(styleAttributes["default-locale"].values[0].type, "data");
 		equal(styleAttributes["default-locale"].values[0].value, "language");
+
+		equal(styleAttributes["delimiter-precedes-et-al"].values[0].value, "contextual");
+		equal(styleAttributes["delimiter-precedes-et-al"].defaultValue, "contextual");
 		
 		ok("font-weight" in CSLEDIT.schema.attributes("layout/text"));
 	});

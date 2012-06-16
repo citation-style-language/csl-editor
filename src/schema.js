@@ -414,6 +414,7 @@ CSLEDIT.Schema = function () {
 		attribute : function (node) {
 			var thisNodeProperties = new NodeProperties(),
 				attributeName = node.attributes.item("name").nodeValue,
+				defaultValue = node.attributes.getNamedItem("a:defaultValue"),
 				values;
 
 			lastAttributeValue = null;
@@ -436,6 +437,10 @@ CSLEDIT.Schema = function () {
 					documentation : values.documentation
 				};
 			}
+			if (defaultValue !== null) {
+				thisNodeProperties.attributes[attributeName].defaultValue = defaultValue.value;
+			}
+
 			return thisNodeProperties;
 		},
 		group : function (node) {
