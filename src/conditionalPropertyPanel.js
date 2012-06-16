@@ -232,21 +232,23 @@ CSLEDIT.conditionalPropertyPanel.prototype.drawControls = function () {
 			append(' of the following conditions are met'));
 
 	if (this.node.getAttr('match') === "all") {
-		valueSeparator = " and ";
+		valueSeparator = '<span class="weak">and<\/span>';
 	} else {
-		valueSeparator = " or ";
+		valueSeparator = '<span class="weak">or<\/span>';
 	}
 
 	$.each(this.valueControls, function (i, valueControl) {
 		var row = $('<tr><\/tr>');
 
 		if (i === 0) {
-			row.append($('<td><\/td>').append(that.mainOptionSelect));
+			row.append($('<td class="mainOption"><\/td>').append(that.mainOptionSelect));
 		} else {
 			row.append('<td><\/td>');
 		}
 
-		if (that.node.getAttr('disambiguate') !== "true") {
+		if (that.node.getAttr('disambiguate') === "true") {
+			row.append($('<td><\/td>'));
+		} else {
 			row.append($('<td><\/td>').append(valueControl));
 
 			if (i === that.valueControls.length - 1) {
@@ -254,16 +256,15 @@ CSLEDIT.conditionalPropertyPanel.prototype.drawControls = function () {
 			} else {
 				row.append($('<td>' + valueSeparator + '<\/td>'));
 			}		
+			row.append('<td class="delete"><button class="deleteValue">&ndash;<\/button><\/td>');
 			if (that.valueControls.length === 1) {
-				row.append('<td><\/td>');
-			} else {
-				row.append('<td><button class="deleteValue">Delete<\/button><\/td>');
+				row.find('button.deleteValue').css({visibility:"hidden"});
 			}
 
 			if (i === that.valueControls.length - 1) {
-				row.append('<td><button class="addValue">Add<\/button><\/td>');
+				row.append('<td class="add"><button class="addValue">+<\/button><\/td>');
 			} else {
-				row.append('<td><\/td>');
+				row.append('<td class="add"><\/td>');
 			}
 		}
 		table.append(row);

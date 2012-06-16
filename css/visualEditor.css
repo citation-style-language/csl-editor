@@ -133,6 +133,7 @@ div.panel {
 #elementPropertyPanel {
 	font-size: 14px;
 	overflow: auto;
+	padding: 10px;
 }
 #elementPropertyPanel [disabled="disabled"] {
 	opacity:0.5;
@@ -162,30 +163,49 @@ div.panel {
 }
 #elementPropertyPanel table.conditional {
 	table-layout: fixed;
+	border-spacing: 0px;
 }
 #elementPropertyPanel table.conditional tr {
 	background-color: #EEEEEE;
 }
 #elementPropertyPanel table.conditional td {
-	padding: 12px;
+	padding-left: 3px;
+	padding-right: 4px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+	border-bottom: solid;
+	border-color: white;
+	border-width: 1px;
+}
+#elementPropertyPanel table.conditional td.mainOption {
+	padding-left: 10px;
 }
 #elementPropertyPanel table.conditional col.c1 {
-	width: 200px;
+	min-width: 100px;
 }
 #elementPropertyPanel table.conditional col.c2 {
-	width: 200px;
+	min-width: 200px;
 }
 #elementPropertyPanel table.conditional col.c3 {
-	width: 200px;
+	min-width: 100px;
 }
-#elementPropertyPanel table.conditional col.c4 {
-	width: 50px;
+#elementPropertyPanel table.conditional td.delete {
+	padding-left: 25px;
+	padding-right: 3px;
 }
-#elementPropertyPanel table.conditional col.c5 {
-	width: 50px;
+#elementPropertyPanel table.conditional td.add {
+	padding-left: 3px;
+	padding-right: 15px;
+}
+#elementPropertyPanel table.conditional button.deleteValue,
+#elementPropertyPanel table.conditional button.addValue {
+	width: 23px;
+}
+#elementPropertyPanel .weak {
+	color: #777777;
 }
 #nodePathView {
-	margin: 5px;
 	margin-bottom: 10px;
 }
 label.> tr
