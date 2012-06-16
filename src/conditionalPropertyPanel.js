@@ -256,7 +256,7 @@ CSLEDIT.conditionalPropertyPanel.prototype.drawControls = function () {
 			} else {
 				row.append($('<td>' + valueSeparator + '<\/td>'));
 			}		
-			row.append('<td class="delete"><button class="deleteValue">&ndash;<\/button><\/td>');
+			row.append('<td class="delete"><button class="deleteValue">-<\/button><\/td>');
 			if (that.valueControls.length === 1) {
 				row.find('button.deleteValue').css({visibility:"hidden"});
 			}
