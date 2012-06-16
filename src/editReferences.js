@@ -19,8 +19,9 @@ CSLEDIT.editReferences = (function () {
 				description += '<br \/>(' + additionalOptions.description + ')';
 			}
 
-			listElement.append('<li class=sidePadding><input type="checkbox" value="' + 
-				index + '" \/>' + description + '<\/li>');
+			listElement.append('<li class=sidePadding><input type="checkbox" ' + 
+				'id="ref' + citation + '-' + index + '" value="' + 
+				index + '" \/> <label for="ref' + citation + '-' + index + '">' + description + '<\/label><\/li>');
 			index++;
 		});
 
