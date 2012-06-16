@@ -539,7 +539,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				parentNode = $(event.target).parent().parent(),
 				parentNodeName,
 				position,
-				newStyle;
+				newStyle,
+				styleURL;
 
 			if (parentNode.attr("class") === "sub_menu")
 			{
@@ -565,6 +566,19 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 							async: false
 						});
 						CSLEDIT.controller.exec('setCslCode', [newStyle]);
+					} else if (clickedName === "Load Style from URL") {
+						styleURL = prompt("Please enter the URL of the style you want to load"),
+
+						// fetch the URL
+						$.ajax({
+							url : '../getFromOtherWebsite.php?url=' + encodeURIComponent(styleURL),
+							success : function (result) {
+								newStyle = result;
+							},
+							async: false
+						});
+
+						CSLEDIT.controller.exec("setCslCode", [newStyle]);
 					} else if (clickedName === "Style Info") {
 						viewController.selectNode(CSLEDIT.data.getNodesFromPath("style/info")[0].cslId);
 					} else if (clickedName === "Global Formatting Options") {

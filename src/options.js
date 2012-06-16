@@ -6,21 +6,7 @@ CSLEDIT.options = (function () {
 	var defaultOptions = {
 			loadCSLName : "Load CSL",
 			loadCSLFunc : function () {
-				var url = prompt("Please enter the URL of the style you want to load"),
-					newStyle;
-
-				// fetch the URL
-				$.ajax({
-					url : '../getFromOtherWebsite.php?url=' + encodeURIComponent(url),
-					success : function (result) {
-						newStyle = result;
-					},
-					async: false
-				});
-
-				// can return null here and use VisualEditor.controller.exec('setCslCode')
-				// to perform async
-				return newStyle;
+				alert("load CSL function not implemented");
 			},
 			saveCSLName : "Save CSL",
 			saveCSLFunc : function (cslCode) {			
