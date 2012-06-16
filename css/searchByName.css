@@ -39,3 +39,6 @@ button#searchButton {
 	padding-left: 18px;
 	/* define background-image in javascript since it depends on rootURL */
 }
+#message {
+	padding-left: 250px;
+}

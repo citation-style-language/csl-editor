@@ -9,7 +9,7 @@ CSLEDIT.exampleData.topStyles = [
 	'http://www.zotero.org/styles/ieee',
 	'http://www.zotero.org/styles/harvard1',
 	'http://www.zotero.org/styles/nature',
-	'http://www.zotero.org/styles/ama',
+	'http://www.zotero.org/styles/american-medical-association', /* manually updated from styles/ama */
 	'http://www.zotero.org/styles/chicago-author-date',
 	'http://www.zotero.org/styles/apsa',
 	'http://www.zotero.org/styles/vancouver',
@@ -17,9 +17,9 @@ CSLEDIT.exampleData.topStyles = [
 	'http://www.zotero.org/styles/mla',
 	'http://www.zotero.org/styles/mhra',
 	'http://www.zotero.org/styles/chicago-fullnote-bibliography',
-	'http://www.zotero.org/styles/abnt',
+	'http://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas', /* manually updated from styles/abnt */
 	'http://www.zotero.org/styles/chicago-note-bibliography',
-	'http://www.zotero.org/styles/nlm',
+	'http://www.zotero.org/styles/national-library-of-medicine', /* manually updated from styles/nlm */
 	'http://www.zotero.org/styles/american-chemical-society',
 	'http://www.zotero.org/styles/cell',
 	'http://www.zotero.org/styles/science',

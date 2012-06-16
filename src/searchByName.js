@@ -20,15 +20,29 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 			styleId,
 			styleName,
 			masterId,
-			masterStyleName;
+			masterStyleName,
+			index;
+
+		$("#message").html("");
 
 		if (searchQuery.length === 0) {
-			$("#styleNameResult").html("");
+			$("#message").html("<h2>Popular Styles<\/h2>");
+			for (index=0; index<20; index++) {
+				styleId = CSLEDIT.exampleData.topStyles[index];
+				result.push({
+					styleId : styleId,
+					masterId : exampleCitations.masterIdFromId[styleId]
+				});
+			}
+			CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"));
+			previousQuery = "";
 			return;
 		}
 
 		if (searchQuery.length < 3) {
-			$("#styleNameResult").html("<p>Query too short<\/p>");
+			$("#message").html("<p>Query too short<\/p>");
+			$("#searchResults").html("");
+			previousQuery = "";
 			return;
 		}
 
