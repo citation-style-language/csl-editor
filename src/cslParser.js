@@ -102,17 +102,21 @@ CSLEDIT.cslParser = (function() {
 				}
 			}
 		}
-		xmlString = generateIndent(indent) + "<" + jsonData.name + attributesString + ">\n";
+		
+		xmlString = generateIndent(indent);
 
-		if (typeof jsonData.children !== "undefined" && jsonData.children.length > 0) {
-			for (index = 0; index < jsonData.children.length; index++) {
-				xmlString += xmlNodeFromJson(jsonData.children[index], indent + 1);
+		if (typeof jsonData.textValue !== "undefined") {
+			xmlString += "<" + jsonData.name + attributesString + ">";
+			xmlString += htmlEscape(jsonData.textValue) + "<\/" + htmlEscape(jsonData.name) + ">\n";
+		} else {
+			xmlString += "<" + jsonData.name + attributesString + ">\n";
+			if (typeof jsonData.children !== "undefined" && jsonData.children.length > 0) {
+				for (index = 0; index < jsonData.children.length; index++) {
+					xmlString += xmlNodeFromJson(jsonData.children[index], indent + 1);
+				}
 			}
-		} else if (typeof jsonData.textValue !== "undefined") {
-			xmlString += generateIndent(indent+1) + htmlEscape(jsonData.textValue) + "\n";
+			xmlString += generateIndent(indent) + "<\/" + htmlEscape(jsonData.name) + ">\n";
 		}
-
-		xmlString += generateIndent(indent) + "</" + htmlEscape(jsonData.name) + ">\n";
 
 		return xmlString;
 	};
