@@ -645,14 +645,25 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			closable : false,
 			resizble : true,
 			livePaneResizing : true,
-			west__size : 240,
-			west__minSize : 200
+			west__size : CSLEDIT.storage.getItem("CSLEDIT.geometry.leftPaneWidth") || 240,
+			west__minSize : 200,
+			onresize : function (paneName, paneElement, paneState) {
+				if (paneState.edge === "west") {
+					CSLEDIT.storage.setItem("CSLEDIT.geometry.leftPaneWidth", paneState.size);
+				}
+			}
 		});
+
 		editorElement.find("#rightContainer").layout({
 			closable : false,
 			resizable : true,
 			livePaneResizing : true,
-			north__size : 250
+			south__size : CSLEDIT.storage.getItem("CSLEDIT.geometry.southPaneWidth") || 300,
+			onresize : function (paneName, paneElement, paneState) {
+				if (paneState.edge === "south") {
+					CSLEDIT.storage.setItem("CSLEDIT.geometry.southPaneWidth", paneState.size);
+				}
+			}
 		});
 
 		CSLEDIT.notificationBar.init(editorElement.find('#notificationBar'));
