@@ -568,10 +568,10 @@ CSLEDIT.Schema = function () {
 
 			if (lastAttributeValue === null) {
 				thisNodeProperties = new NodeProperties();
-				thisNodeProperties.documentation = node.textContent;
+				thisNodeProperties.documentation = node.textContent.replace(/\n/g, " ");
 				return thisNodeProperties;				
 			} else {
-				lastAttributeValue.documentation = node.textContent;
+				lastAttributeValue.documentation = node.textContent.replace(/\n/g, " ");;
 				lastAttributeValue = null;
 				return null;
 			}
