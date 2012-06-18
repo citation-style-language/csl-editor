@@ -228,8 +228,9 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		);
 		editorElement.find('li[cslid] > a').hover(
 			function (event) {
-				var target = $(event.target).closest("li[cslid]"),
-					cslId = parseInt(target.attr('cslId')),
+				var target = $(event.target),
+					liElement = target.closest("li[cslid]"),
+					cslId = parseInt(liElement.attr('cslId')),
 					nodeAndParent = CSLEDIT.data.getNodeAndParent(cslId),
 					documentation;
 	   
