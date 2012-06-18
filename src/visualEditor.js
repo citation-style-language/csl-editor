@@ -658,10 +658,10 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			closable : false,
 			resizable : true,
 			livePaneResizing : true,
-			south__size : CSLEDIT.storage.getItem("CSLEDIT.geometry.southPaneWidth") || 300,
+			north__size : CSLEDIT.storage.getItem("CSLEDIT.geometry.topPaneWidth") || 300,
 			onresize : function (paneName, paneElement, paneState) {
-				if (paneState.edge === "south") {
-					CSLEDIT.storage.setItem("CSLEDIT.geometry.southPaneWidth", paneState.size);
+				if (paneState.edge === "north") {
+					CSLEDIT.storage.setItem("CSLEDIT.geometry.topPaneWidth", paneState.size);
 				}
 			}
 		});
