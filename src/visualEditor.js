@@ -226,7 +226,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				unHighlightNode(cslId);
 			}
 		);
-		editorElement.find('li[cslid] > a').hoverIntent(
+		editorElement.find('li[cslid] > a').hover(
 			function (event) {
 				var target = $(event.target).closest("li[cslid]"),
 					cslId = parseInt(target.attr('cslId')),
@@ -241,7 +241,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				}
 
 				if (documentation !== "") {
-					target.attr("title", documentation);
+					target.attr("title", nodeAndParent.node.name + "\n\n" + documentation);
 				}
 			},
 			function (event) {
