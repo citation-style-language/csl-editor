@@ -57,7 +57,6 @@ CSLEDIT.editReferences = (function () {
 						citationItem[key] = value;
 					});
 				}
-				console.log('adding citation item: ' + JSON.stringify(citationItem));
 				citationItems.push(citationItem);
 				checked.push(index);
 			}

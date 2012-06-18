@@ -45,8 +45,6 @@ CSLEDIT.MultiPanel.prototype.update = function () {
 	this.element.find('input[type="radio"]').each( function (index) {
 		var $this = $(this);
 		if ($this.is(':checked')) {
-			console.log($this + " is checked");
-
 			// display the correct panel
 			$.each(that.contentPanels, function (i, panel) {
 				if (i === index) {

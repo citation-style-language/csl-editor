@@ -237,7 +237,6 @@ CSLEDIT.propertyPanel = (function () {
 					attributeName + '" data-value="' + attributeValue + '" \/>');
 
 				if (cslSchemaAttribute.documentation !== "") {
-					console.log("button doc: " + cslSchemaAttribute.documentation);
 					button.attr("title", cslSchemaAttribute.documentation);
 				}
 
