@@ -571,7 +571,7 @@ CSLEDIT.Schema = function () {
 				thisNodeProperties.documentation = node.textContent.replace(/\n/g, " ");
 				return thisNodeProperties;				
 			} else {
-				lastAttributeValue.documentation = node.textContent.replace(/\n/g, " ");;
+				lastAttributeValue.documentation = node.textContent.replace(/\n/g, " ");
 				lastAttributeValue = null;
 				return null;
 			}
