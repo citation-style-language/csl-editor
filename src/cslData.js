@@ -501,6 +501,7 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 				if (result.hasOwnProperty('error')) {
 					alert(result.error);
 				} else {
+					callback();
 					emit("formatCitations");
 					return;
 				}
