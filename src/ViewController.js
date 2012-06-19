@@ -98,6 +98,9 @@ CSLEDIT.ViewController = function (
 		treesLoaded++;
 
 		if (treesLoaded === treesToLoad) {
+			if (selectedNode() === -1) {
+				selectNode(CSLEDIT.data.getNodesFromPath('style/info')[0].cslId);
+			}
 			callbacks.formatCitations();
 		};
 	};
@@ -117,6 +120,7 @@ CSLEDIT.ViewController = function (
 			table,
 			row;
 
+		selectedNodeId = -1;
 		views = [];
 
 		views.push(new CSLEDIT.Titlebar(titlebarElement));
@@ -196,6 +200,8 @@ CSLEDIT.ViewController = function (
 		nodePathView = new CSLEDIT.NodePathView(nodePathElement, {
 			selectNodeFromPath : selectNodeFromPath
 		});
+		
+
 	};
 	
 	var selectedNodeChanged = function() {
