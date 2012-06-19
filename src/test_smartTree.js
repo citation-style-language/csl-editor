@@ -129,7 +129,7 @@ asyncTest("move subtree", function () {
 		description;
 
 	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
-	CSLEDIT.data.setViewController(fakeViewController);
+	CSLEDIT.data.addViewController(fakeViewController);
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
@@ -222,7 +222,7 @@ CSLEDIT.FakeViewController = function () {
 		addView : function (view) {
 				views.push(view);
 			},
-		exec : function (command, args) {
+		styleChanged : function (command, args) {
 
 			console.log("Fake view exec: " + command + ": " + JSON.stringify(args));
 			if (command === "formatCitations") {
@@ -405,7 +405,7 @@ asyncTest("macro link", function () {
 	fakeViewController.addView(citationTree);
 	fakeViewController.addView(styleTree);
 	
-	CSLEDIT.data.setViewController(fakeViewController);
+	CSLEDIT.data.addViewController(fakeViewController);
 
 	treesToLoad = 2;
 
@@ -554,7 +554,7 @@ asyncTest("add to instance after macro", function () {
 	fakeViewController.addView(citationTree);
 	fakeViewController.addView(styleTree);
 	
-	CSLEDIT.data.setViewController(fakeViewController);
+	CSLEDIT.data.addViewController(fakeViewController);
 
 	treesToLoad = 2;
 
@@ -715,7 +715,7 @@ asyncTest("macros within macros", function () {
 	fakeViewController.addView(citationTree);
 	fakeViewController.addView(styleTree);
 	
-	CSLEDIT.data.setViewController(fakeViewController);
+	CSLEDIT.data.addViewController(fakeViewController);
 
 	treesToLoad = 2;
 
@@ -816,7 +816,7 @@ asyncTest("move macro instance 1 from macro instance 2 to macro instance 3", fun
 	fakeViewController.addView(citationTree);
 	fakeViewController.addView(styleTree);
 	
-	CSLEDIT.data.setViewController(fakeViewController);
+	CSLEDIT.data.addViewController(fakeViewController);
 
 	treesToLoad = 2;
 

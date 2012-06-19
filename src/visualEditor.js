@@ -273,7 +273,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 		viewController.init(cslData,
 		{
-			loaded : formatExampleCitations,
+			formatCitations : formatExampleCitations,
 			selectNode : nodeSelected,
 			deleteNode : function () {
 				CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
@@ -625,14 +625,25 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		});
 
 		CSLEDIT.data.initPageStyle( function () {
+			var userOnChangeCallback = CSLEDIT.options.get("onChange");
+			
 			viewController = CSLEDIT.ViewController(
 				editorElement.find("#treeEditor"),
 				editorElement.find("#titlebar"),
 				editorElement.find("#nodePath"));
 
 			CSLEDIT.controller.setCslData(CSLEDIT.data);
-			viewController.setFormatCitationsCallback(formatExampleCitations);
-			CSLEDIT.data.setViewController(viewController);
+			CSLEDIT.data.addViewController(viewController);
+
+			if (typeof userOnChangeCallback === "function") {
+				CSLEDIT.data.addViewController({
+					styleChanged : function (command) {
+						if (command === "formatCitations") {
+							userOnChangeCallback();
+						}
+					}
+				});
+			}
 
 			createTreeView();
 
@@ -681,6 +692,9 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	return {
 		setCslCode : function (cslCode) {
 			CSLEDIT.controller.exec('setCslCode', [cslCode]);
+		},
+		getCslCode : function () {
+			CSLEDIT.data.getCslCode();
 		},
 		getStyleName : function () {
 			var styleNameNode = CSLEDIT.data.getNodesFromPath('style/info/title')[0];

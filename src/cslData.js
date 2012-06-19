@@ -258,7 +258,7 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 
 	var emit = function (event, args) {
 		$.each(viewControllers, function(index, controller) {
-			controller.exec(event, args);
+			controller.styleChanged(event, args);
 		});
 	};
 	
@@ -519,13 +519,15 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 				styleURL = CSLEDIT.options.get("rootURL") + "/external/csl-styles/apa.csl";
 				loadStyleFromURL(styleURL, callback);
 			}
+
+			emit("formatCitations");
 		},
 		numNodes : numNodes,
 		numCslNodes : function () { return numNodes(get()); },
 		clearViewControllers : function () {
 			viewControllers = [];
 		},
-		setViewController : function (_viewController) {
+		addViewController : function (_viewController) {
 			viewControllers.push(_viewController);
 		},
 		getNodesFromPath : getNodesFromPath,

@@ -87,7 +87,6 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		treesToLoad = 0,
 		callbacks,
 		selectedTree = null,
-		formatCitationsCallback,
 		selectedNodeId = -1,
 		nodeButtons,
 		recentlyEditedMacro = -1;
@@ -96,7 +95,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		treesLoaded++;
 
 		if (treesLoaded === treesToLoad) {
-			callbacks.loaded();
+			callbacks.formatCitations();
 		};
 	};
 
@@ -267,7 +266,6 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 
 	var deleteNode = function (id, nodesDeleted) {
 		macroEditNotification(id - 1);
-
 		$.each(views, function (i, view) {
 			if ("deleteNode" in view) {
 				view.deleteNode(id, nodesDeleted);
@@ -277,7 +275,6 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 
 	var amendNode = function (id, amendedNode) {
 		macroEditNotification(id);
-
 		$.each(views, function (i, view) {
 			if ("amendNode" in view) {
 				view.amendNode(id, amendedNode);
@@ -343,7 +340,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		});
 	};
 
-	var exec = function (command, args) {
+	var styleChanged = function (command, args) {
 		args = args || [];
 		console.log("executing view update: " + command + "(" + args.join(", ") + ")");
 		this[command].apply(null, args);
@@ -364,16 +361,10 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		expandNode : expandNode,
 
 		formatCitations : function () {
-			formatCitationsCallback();
+			callbacks.formatCitations();
 		},
 			
-		// This callback is used to avoid re-calculating the example citations
-		// until all subscribers have been informed of the recent change
-		exec : exec,
-
-		setFormatCitationsCallback : function (callback) {
-			formatCitationsCallback = callback;
-		},
+		styleChanged : styleChanged,
 
 		getSelectedNodePath : getSelectedNodePath,
 
