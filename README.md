@@ -73,7 +73,13 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
     //            It can be a relative or absolute URL.
 	//            It should be "../.." if you are using /csl-source/demoSite/visualEditor
 	//            Or "/CSLEDIT" if you are using /csl/visualEditor
-	rootURL : "/CSLEDIT"
+	rootURL : "/CSLEDIT",
+	onChange : function () {
+		// this is called after every style edit.
+
+		// access the current style contents using:
+		// var code = cslEditor.getCslCode();
+	}
 });
 ```
 
