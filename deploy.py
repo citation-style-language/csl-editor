@@ -19,6 +19,7 @@ pages = [
         "jsFiles" : [
             "src/storage.js",
             "src/citationEngine.js",
+            "src/exampleCitations.js",
             "src/exampleData.js",
             "src/diff.js",
             "src/debug.js",

@@ -146,7 +146,7 @@ CSLEDIT.citationEngine = (function () {
 		console.time("formatCitations");
 
 		formattedResult = formatCitations(
-			style, CSLEDIT.exampleData.jsonDocuments, CSLEDIT.exampleData.citationsItems, true);
+			style, CSLEDIT.exampleCitations.getCiteprocReferences(), CSLEDIT.exampleCitations.getCitations(), true);
 		
 		console.timeEnd("formatCitations");
 

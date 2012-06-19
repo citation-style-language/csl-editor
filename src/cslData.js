@@ -22,12 +22,7 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 		];
 
 	var get = function () {
-		var cslData = CSLEDIT.storage.getItem(CSL_DATA);
-		if (cslData === null) {
-			return null;
-		} else {
-			return JSON.parse(cslData);
-		}
+		return CSLEDIT.storage.getItemJson(CSL_DATA);
 	};
 	var set = function (cslData) {
 		CSLEDIT.storage.setItem(CSL_DATA, JSON.stringify(cslData));

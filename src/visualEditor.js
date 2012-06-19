@@ -311,15 +311,16 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			}
 
 			createTreeView();
+
+			CSLEDIT.EditReferences(
+				editorElement.find('ul.#exampleCitation1'), formatExampleCitations, 0, [0]);
+			CSLEDIT.EditReferences(
+				editorElement.find('ul.#exampleCitation2'), formatExampleCitations, 1, [11], $('#exampleOutput'));
+
 		});
 
 		setupTreeEditorToolbar();
 		setupDropdownMenuHandler(".dropdown a");
-
-		CSLEDIT.editReferences.init(
-			editorElement.find('ul.#exampleCitation1'), formatExampleCitations, 0, [0]);
-		CSLEDIT.editReferences.init(
-			editorElement.find('ul.#exampleCitation2'), formatExampleCitations, 1, [11], $('#exampleOutput'));
 
 		editorElement.find('#mainContainer').layout({
 			closable : false,

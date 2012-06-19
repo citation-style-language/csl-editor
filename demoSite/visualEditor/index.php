@@ -25,6 +25,7 @@
 	<script type="text/javascript" src="../../external/jquery.hoverIntent.minified.js"></script>
 	<script type="text/javascript" src="../../external/jquery.scrollTo-1.4.2-min.js"></script>
 
+	<script type="text/javascript" src="../../src/exampleCitations.js"></script>
 	<script type="text/javascript" src="../../src/options.js"></script>
 	<script type="text/javascript" src="../../src/storage.js"></script>
 	<script type="text/javascript" src="../../src/citationEngine.js"></script>

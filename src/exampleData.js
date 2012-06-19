@@ -72,8 +72,20 @@ CSLEDIT.exampleData.additionalOptions = {
 	}
 };
 
-CSLEDIT.exampleData.jsonDocuments = {
-	"ITEM-1": {
+CSLEDIT.exampleData.getJsonDocuments = function () {
+	var jsonDocuments = {};
+
+	$.each(CSLEDIT.exampleData.jsonDocumentList, function (i, jsonDocument) {
+		var itemString = "ITEM-" + (i + 1);
+		jsonDocument.id = itemString;
+		jsonDocuments[itemString] = jsonDocument;
+	});
+
+	return jsonDocuments;
+};
+
+CSLEDIT.exampleData.jsonDocumentList = [
+	{
 		"ISBN": "0813931029",
 		"abstract": "Traditional narratives imply that art in early America was severely limited in scope. By contrast, these essays collectively argue that visual arts played a critical role in shaping an early American understanding of the body politic. American artists in the late colonial and early national periods enlisted the arts to explore and exploit their visions of the relationship of the American colonies to the mother country and, later, to give material shape to the ideals of modern republican nationhood. Taking a uniquely broad view of both politics and art, Shaping the Body Politic ranges in topic from national politics to the politics of national identity, and from presidential portraits to the architectures of the ordinary. The book covers subject matter from the 1760s to the 1820s, ranging from Patience Wright's embodiment of late colonial political tension to Thomas Jefferson's designs for the entry hall at Monticello as a museum. Paul Staiti, Maurie McInnis, and Roger Stein offer new readings of canonical presidential images and spaces: Jean-Antoine Houdon's George Washington, Gilbert Stuart's the Lansdowne portrait of Washington, and Thomas Jefferson's Monticello. In essays that engage print and painting, portraiture and landscape, Wendy Bellion, David Steinberg, and John Crowley explore the formation of national identity. The volume's concluding essays, by Susan Rather and Bernard Herman, examine the politics of the everyday. The accompanying eighty-five illustrations and color plates demonstrate the broad range of politically resonant visual material in early America. ContributorsWendy Bellion, University of Delaware * John E. Crowley, Dalhousie University * Bernard L. Herman, University of North Carolina, Chapel Hill * Maurie D. McInnis, University of Virginia * Louis P. Nelson, University of Virginia * Susan Rather, University of Texas, Austin * Paul Staiti, Mount Holyoke College * Roger B. Stein, emeritus, University of Virginia * David Steinberg, Independent Scholar Thomas Jefferson Foundation Distinguished Lecture Series",
 		"author": [{
@@ -83,7 +95,6 @@ CSLEDIT.exampleData.jsonDocuments = {
 			"family": "Nelson",
 			"given": "Louis P."
 		}],
-		"id": "ITEM-1",
 		"issued": {
 			"date-parts": [
 				["2011"]
@@ -94,7 +105,7 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"title": "Shaping the Body Politic: Art and Political Formation in Early America",
 		"type": "book"
 	},
-	"ITEM-2": {
+	{
 		"ISBN": "0881929115",
 		"abstract": "The latest techniques for planting roofs and walls to enhance our buildings and benefit the environment. The green roof industry is booming and the technology changing fast as professionals respond to the unique challenges of each new planting. In this comprehensively updated, fully revised edition of their authoritative reference, Nigel Dunnett and Nol Kingsbury reveal the very latest techniques, materials, and plants, and showcase some spectacular new case studies for the non-professional. Green roofs and walls reduce pollution and runoff, help insulate and reduce the maintenance needs of buildings, contribute to biodiversity, and provide habitats for wildlife. In addition to all this, they are attractive to look at and enhance the quality of life of residents. In Planting Green Roofs and Living Walls, Revised and Updated Edition, the authors describe and illustrate the practical techniques required to design, implement, and maintain a green roof or wall to the highest standards. This informative, up-to-the-minute reference will encourage gardeners everywhere to consider the enormous benefits to be gained from planting on their roofs and walls.",
 		"author": [{
@@ -104,7 +115,6 @@ CSLEDIT.exampleData.jsonDocuments = {
 			"family": "Kingsbury",
 			"given": "No\u00ebl"
 		}],
-		"id": "ITEM-2",
 		"issued": {
 			"date-parts": [
 				["2008"]
@@ -115,13 +125,12 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"title": "Planting green roofs and living walls",
 		"type": "book"
 	},
-	"ITEM-3": {
+	{
 		"author": [{
 			"family": "FODERARO",
 			"given": "LISA W."
 		}],
 		"container-title": "New York Times",
-		"id": "ITEM-3",
 		"issued": {
 			"date-parts": [
 				["2012", "4", "6"]
@@ -133,7 +142,7 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"title": "Rooftop Greenhouse Will Boost City Farming - NYTimes.com",
 		"type": "article-newspaper"
 	},
-	"ITEM-4": {
+	{
 		"DOI": "10.1103/PhysRev.107.13",
 		"author": [{
 			"family": "Cohen",
@@ -144,7 +153,6 @@ CSLEDIT.exampleData.jsonDocuments = {
 			"given": "Richard"
 		}],
 		"container-title": "Physical Review",
-		"id": "ITEM-4",
 		"issue": "1",
 		"issued": {
 			"date-parts": [
@@ -156,7 +164,7 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"type": "article-journal",
 		"volume": "107"
 	},
-	"ITEM-5": {
+	{
 		"DOI": "10.1088/1748-0221/7/03/P03012",
 		"abstract": "This paper presents a complete description of Virgo, the French-Italian gravitational wave detector.\n The detector, built at Cascina, near Pisa (Italy), is a very large Michelson interferometer, with 3\n km-long arms. In this paper, following a presentation of the physics requirements, leading to the\n specifications for the construction of the detector, a detailed description of all its different\n elements is given. These include civil engineering infrastructures, a huge ultra-high vacuum (UHV)\n chamber (about 6000 cubic metres), all of the optical components, including high quality mirrors and\n their seismic isolating suspensions, all of the electronics required to control the interferometer\n and for signal detection. The expected performances of these different elements are given, leading\n to an overall sensitivity curve as a function of the incoming gravitational wave frequency. This\n description represents the detector as built and used in the first data-taking runs. Improvements in\n different parts have been and continue to be performed, leading to better sensitivities. These will\n be detailed in a forthcoming paper.",
 		"author": [{
@@ -1169,7 +1177,6 @@ CSLEDIT.exampleData.jsonDocuments = {
 			"given": "Z"
 		}],
 		"container-title": "Journal of Instrumentation",
-		"id": "ITEM-5",
 		"issue": "03",
 		"issued": {
 			"date-parts": [
@@ -1181,7 +1188,7 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"type": "article-journal",
 		"volume": "7"
 	},
-	"ITEM-6": {
+	{
 		"author": [{
 			"family": "Borges",
 			"given": "Jorge Luis"
@@ -1190,7 +1197,6 @@ CSLEDIT.exampleData.jsonDocuments = {
 			"family": "Weinberger",
 			"given": "Eliot"
 		}],
-		"id": "ITEM-6",
 		"issued": {
 			"date-parts": [
 				["1999"]
@@ -1212,13 +1218,12 @@ CSLEDIT.exampleData.jsonDocuments = {
 		}],
 		"type": "book"
 	},
-	"ITEM-7": {
+	{
 		"ISBN": "9781451648539",
 		"author": [{
 			"family": "Isaacson",
 			"given": "Walter"
 		}],
-		"id": "ITEM-7",
 		"issued": {
 			"date-parts": [
 				["2011", "10", "24"]
@@ -1229,12 +1234,11 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"title": "Steve Jobs",
 		"type": "book"
 	},
-	"ITEM-8": {
+	{
 		"author": [{
 			"family": "Van Dan Elzen",
 			"given": "Hans"
 		}],
-		"id": "ITEM-8",
 		"issued": {
 			"date-parts": [
 				["2011"]
@@ -1244,8 +1248,7 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"title": "YO-YO HAVING A MODIFIABLE STRING GAP",
 		"type": "patent"
 	},
-	"ITEM-9": {
-		"id": "ITEM-9",
+	{
 		"issued": {
 			"date-parts": [
 				["2010"]
@@ -1254,7 +1257,7 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"title": "Fullilove v. Klutznick",
 		"type": "article"
 	},
-	"ITEM-10": {
+	{
 		"DOI": "10.1038/119558a0",
 		"URL": "http://www.nature.com/doifinder/10.1038/119558a0",
 		"accessed": {
@@ -1271,7 +1274,6 @@ CSLEDIT.exampleData.jsonDocuments = {
 		}],
 		"container-title": "Nature",
 		"editor": [],
-		"id": "ITEM-10",
 		"issue": "2998",
 		"issued": {
 			"date-parts": [
@@ -1284,7 +1286,7 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"type": "article-journal",
 		"volume": "119"
 	},
-	"ITEM-11": {
+	{
 		"DOI": "10.1088/0143-0807/27/4/007",
 		"URL": "http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf",
 		"abstract": "General description of special relativity",
@@ -1295,7 +1297,6 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"chapter-number": "3",
 		"container-title": "Annalen der Physik",
 		"editor": [],
-		"id": "ITEM-11",
 		"issue": "4",
 		"issued": {
 			"date-parts": [
@@ -1309,7 +1310,7 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"type": "article-journal",
 		"volume": "17"
 	},
-	"ITEM-12": {
+	{
 		"DOI": "10.1038/171737a0",
 		"URL": "http://www.ncbi.nlm.nih.gov/pubmed/13054692",
 		"abstract": "We wish to suggest a structure for the salt of deoxyribose nucleic acid (D.N.A.). This structure has novel features which are of considerable biological interest.",
@@ -1322,7 +1323,6 @@ CSLEDIT.exampleData.jsonDocuments = {
 		}],
 		"container-title": "Nature",
 		"editor": [],
-		"id": "ITEM-12",
 		"issue": "4356",
 		"issued": {
 			"date-parts": [
@@ -1335,6 +1335,6 @@ CSLEDIT.exampleData.jsonDocuments = {
 		"translator": [],
 		"type": "article-journal",
 		"volume": "171"
-	},
-}
+	}
+]
 

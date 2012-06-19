@@ -2,12 +2,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.editReferences = (function () {
-	var listElement,
-		callback,
-		citation,
-		defaultCheckedRefs;
-
+CSLEDIT.EditReferences = function (listElement, callback, citation, defaultCheckedRefs, dragDropTarget) {
 	var setupDragDrop = function (target) {
 		target.bind('dragover', function (event) {
 			console.log('ondragover');
@@ -17,18 +12,10 @@ CSLEDIT.editReferences = (function () {
 			var dataTransfer = event.originalEvent.dataTransfer,
 				data = dataTransfer.getData("text"),
 				dataItems,
-				jsonData,
-				numItems;
-			event.preventDefault();
-			
-			console.log("dropped " + data);
+				jsonData;
 
-			// TODO: make jsonDocuments a list instead of object
-			numItems = 0;
-			$.each(CSLEDIT.exampleData.jsonDocuments, function () {
-				numItems++;
-			});
-	
+			event.preventDefault();
+			console.log("dropped " + data);
 			dataItems = data.split("\n");
 			
 			$.each(dataItems, function (i, dataItem) {
@@ -39,25 +26,18 @@ CSLEDIT.editReferences = (function () {
 				if (typeof jsonData === null) {
 					alert("Not valid csl-data.json:\n\n" + dataItem);
 				} else {
-					numItems++;
-					jsonData["id"] = "ITEM-" + numItems;
-					CSLEDIT.exampleData.jsonDocuments["ITEM-" + numItems] = jsonData;
+					CSLEDIT.exampleCitations.addReference(jsonData);
 					alert("Reference imported:\n\n" + dataItem);
 				}
 			});
 
-			init(listElement, callback, citation, defaultCheckedRefs);
+			init();
 		});
 	};
 
-	var init = function (_listElement, _callback, _citation, _defaultCheckedRefs, dragDropTarget) {
+	var init = function () {
 		var index = 0,
 			checked;
-
-		listElement = _listElement;
-		callback = _callback;
-		citation = _citation;
-		defaultCheckedRefs = _defaultCheckedRefs;
 
 		if (typeof dragDropTarget !== "undefined") {
 			setupDragDrop(dragDropTarget);
@@ -66,7 +46,7 @@ CSLEDIT.editReferences = (function () {
 		listElement.children().remove();
 		
 		// create menus
-		$.each(CSLEDIT.exampleData.jsonDocuments, function (itemName, item) {
+		$.each(CSLEDIT.exampleCitations.getReferences(), function (i, item) {
 			var description = '<strong>' + item.type + 
 				'<\/strong>: ' + item.title,
 				additionalOptions = CSLEDIT.exampleData.additionalOptions[index];
@@ -81,12 +61,8 @@ CSLEDIT.editReferences = (function () {
 			index++;
 		});
 
-		checked = CSLEDIT.storage.getItem('CSLEDIT.citation' + citation);
-		if (checked === null || checked === "") {
-			checked = defaultCheckedRefs;
-		} else {
-			checked = JSON.parse(checked);
-		}
+		checked = CSLEDIT.exampleCitations.getReferenceIndexesForCitation(citation);
+		console.log("checked = " + JSON.stringify(checked));
 
 		// select the first 3
 		listElement.find('input').val(checked).on('change', function () {
@@ -118,12 +94,16 @@ CSLEDIT.editReferences = (function () {
 			}
 		});
 		
-		CSLEDIT.storage.setItem('CSLEDIT.citation' + citation, JSON.stringify(checked));
-		CSLEDIT.exampleData.citationsItems[citation].citationItems = citationItems;
+		console.log("setting " + citation + " to " + JSON.stringify(checked));
+
+		CSLEDIT.exampleCitations.setReferenceIndexesForCitation(citation, checked);
+		//CSLEDIT.storage.setItem('CSLEDIT.citation' + citation, JSON.stringify(checked));
+		//CSLEDIT.exampleData.citationsItems[citation].citationItems = citationItems;
 		callback();
 	};
 
+	init();
+
 	return {
-		init : init
 	};
-}());
+};
