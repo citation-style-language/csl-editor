@@ -5,7 +5,6 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	var editTimeout,
 		styleURL,
-		oldSelectedNode,
 		hoveredNodeStack = [],
 		highlightedCss,
 		selectedCss,
@@ -13,6 +12,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		highlightedTreeNodes = $(),
 		selectedCslId = -1,
 		viewController,
+		syntaxHighlighter,
 		nodePathView,
 		highlightTimeout,
 		propertyPanel;
@@ -274,7 +274,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		viewController.init(cslData,
 		{
 			formatCitations : formatExampleCitations,
-			selectNode : nodeSelected,
 			deleteNode : function () {
 				CSLEDIT.controller.exec("deleteNode", [viewController.selectedNode()]);
 			},
@@ -334,95 +333,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			doSyntaxHighlighting);
 	};
 
-	// TODO: move this to the view controller
-	var nodeSelected = function() {
-		var nodeAndParent,
-			node,
-			parentNode,
-			parentNodeName,
-			possibleElements,
-			element,
-			possibleChildNodesDropdown,
-			schemaAttributes,
-			dataType,
-			translatedCslId,
-			translatedNodeInfo,
-			translatedParentName;
-
-		if (viewController.selectedNode() === -1) {
-			// clear property panel if nothing selected
-			$('#elementProperties').children().remove();
-			return;
-		}
-
-		nodeAndParent = CSLEDIT.data.getNodeAndParent(viewController.selectedNode());
-		node = nodeAndParent.node;
-		parentNode = nodeAndParent.parent;
-
-		// hack to stop parent of style being style
-		if (node.name === "style") {
-			parentNodeName = "root";
-		} else if (parentNode !== false) {
-			parentNodeName = parentNode.name;
-		} else {
-			parentNodeName = "root";
-		}
-
-		// update possible child elements based on schema
-		if (typeof CSLEDIT.schema !== "undefined") {
-			// in case the user is selecting a macro instance:
-			translatedCslId = CSLEDIT.data.macroDefinitionIdFromInstanceId(node.cslId);
-			translatedNodeInfo = CSLEDIT.data.getNodeAndParent(translatedCslId);
-		
-			if (translatedNodeInfo.parent === null) {
-				translatedParentName = "root";
-			} else {
-				translatedParentName = translatedNodeInfo.parent.name;
-			}
-
-			possibleElements = CSLEDIT.schema.childElements(
-				translatedParentName + "/" + translatedNodeInfo.node.name);
-
-			possibleChildNodesDropdown = editorElement.find("#possibleChildNodes").html("");
-
-			for (element in possibleElements) {
-				possibleChildNodesDropdown.append('<li><a href="#">' + element + '</a></li>');
-			}
-		}
-
-		nodePathView.selectNode(viewController.getSelectedNodePath());
-
-		// reregister dropdown handler after changes
-		setupDropdownMenuHandler("#possibleChildNodes a");
-
-		dataType = CSLEDIT.schema.elementDataType(parentNodeName + "/" + node.name);
-		schemaAttributes = CSLEDIT.schema.attributes(parentNodeName + "/" + node.name);
-
-		switch (node.name) {
-			case "sort":
-				CSLEDIT.sortPropertyPanel.setupPanel(editorElement.find("#elementProperties"), node);
-				break;
-			case "info":
-				CSLEDIT.infoPropertyPanel.setupPanel(editorElement.find("#elementProperties"), node);
-				break;
-			case "if":
-			case "else-if":
-				propertyPanel = new CSLEDIT.conditionalPropertyPanel(
-						editorElement.find("#elementProperties"), node);
-				break;
-			default:
-			CSLEDIT.propertyPanel.setupPanel(
-				editorElement.find("#elementProperties"), node, dataType, schemaAttributes,
-				CSLEDIT.schema.choices(parentNodeName + "/" + node.name));
-		}
-
-		editorElement.find('span[cslid="' + oldSelectedNode + '"]').removeClass("highlighted");
-		editorElement.find('span[cslid="' + oldSelectedNode + '"]').removeClass("selected");
-		oldSelectedNode = node.cslId;
-
-		editorElement.find('span[cslid="' + node.cslId + '"]').removeClass("highlighted");
-		editorElement.find('span[cslid="' + node.cslId + '"]').addClass("selected");
-	};
 
 	var reloadPageWithNewStyle = function (newURL) {
 		var reloadURL = window.location.href;
@@ -627,10 +537,15 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		CSLEDIT.data.initPageStyle( function () {
 			var userOnChangeCallback = CSLEDIT.options.get("onChange");
 			
+			syntaxHighlighter = CSLEDIT.SyntaxHighlighter(editorElement);
+
 			viewController = CSLEDIT.ViewController(
 				editorElement.find("#treeEditor"),
 				editorElement.find("#titlebar"),
-				editorElement.find("#nodePath"));
+				editorElement.find("#elementProperties"),
+				editorElement.find("#nodePathView"),
+				setupDropdownMenuHandler,
+				syntaxHighlighter);
 
 			CSLEDIT.controller.setCslData(CSLEDIT.data);
 			CSLEDIT.data.addViewController(viewController);
@@ -646,10 +561,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			}
 
 			createTreeView();
-
-			nodePathView = new CSLEDIT.NodePathView(editorElement.find("#nodePathView"), {
-				selectNodeFromPath : viewController.selectNodeFromPath
-			});
 		});
 
 		setupTreeEditorToolbar();

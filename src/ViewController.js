@@ -2,7 +2,9 @@
 
 CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.ViewController = function (treeView, titlebarElement) {
+CSLEDIT.ViewController = function ( 
+		treeView, titlebarElement, propertyPanelElement, nodePathElement,
+		setupDropdownMenuHandler, syntaxHighlighter) {
 	var	// smartTrees display a subset of the proper CSL tree
 		// and allow transformations of the data
 		//
@@ -89,7 +91,8 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 		selectedTree = null,
 		selectedNodeId = -1,
 		nodeButtons,
-		recentlyEditedMacro = -1;
+		recentlyEditedMacro = -1,
+		nodePathView;
 
 	var treeLoaded = function () {
 		treesLoaded++;
@@ -151,7 +154,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 										}
 									});
 
-									callbacks.selectNode();
+									selectedNodeChanged();
 								}));
 							break;
 						case "custom":
@@ -189,6 +192,71 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 			tree.createTree();
 			views.push(tree);
 		});
+
+		nodePathView = new CSLEDIT.NodePathView(nodePathElement, {
+			selectNodeFromPath : selectNodeFromPath
+		});
+	};
+	
+	var selectedNodeChanged = function() {
+		var nodeAndParent,
+			node,
+			parentNode,
+			parentNodeName,
+			possibleElements,
+			element,
+			possibleChildNodesDropdown,
+			schemaAttributes,
+			dataType,
+			translatedCslId,
+			translatedNodeInfo,
+			translatedParentName;
+
+		if (selectedNode() === -1) {
+			// clear property panel if nothing selected
+			propertyPanelElement.children().remove();
+			return;
+		}
+
+		nodeAndParent = CSLEDIT.data.getNodeAndParent(selectedNode());
+		node = nodeAndParent.node;
+		parentNode = nodeAndParent.parent;
+
+		// hack to stop parent of style being style
+		if (node.name === "style") {
+			parentNodeName = "root";
+		} else if (parentNode !== false) {
+			parentNodeName = parentNode.name;
+		} else {
+			parentNodeName = "root";
+		}
+
+		nodePathView.selectNode(getSelectedNodePath());
+
+		// reregister dropdown handler after changes
+		setupDropdownMenuHandler("#possibleChildNodes a");
+
+		dataType = CSLEDIT.schema.elementDataType(parentNodeName + "/" + node.name);
+		schemaAttributes = CSLEDIT.schema.attributes(parentNodeName + "/" + node.name);
+
+		switch (node.name) {
+			case "sort":
+				CSLEDIT.sortPropertyPanel.setupPanel(propertyPanelElement, node);
+				break;
+			case "info":
+				CSLEDIT.infoPropertyPanel.setupPanel(propertyPanelElement, node);
+				break;
+			case "if":
+			case "else-if":
+				new CSLEDIT.conditionalPropertyPanel(propertyPanelElement, node);
+				break;
+			default:
+			CSLEDIT.propertyPanel.setupPanel(
+				propertyPanelElement, node, dataType, schemaAttributes,
+				CSLEDIT.schema.choices(parentNodeName + "/" + node.name));
+		}
+
+		syntaxHighlighter.selectedNodeChanged(node.cslId);		
 	};
 
 	var selectNodeInTree = function (tree) {
@@ -205,7 +273,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 			selectedTree = tree;
 			selectedNodeId = tree.selectedNode();
 	
-			return callbacks.selectNode(/*event, ui*/);
+			selectedNodeChanged();
 		};
 	};
 
@@ -295,7 +363,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 			clickNode(treeNode.first());
 		} else {
 			selectedNodeId = id;
-			callbacks.selectNode();
+			selectedNodeChanged();
 		}
 	};
 
@@ -313,7 +381,7 @@ CSLEDIT.ViewController = function (treeView, titlebarElement) {
 			clickNode(treeNode.first());
 		} else {
 			selectedNodeId = id;
-			callbacks.selectNode();
+			selectedNodeChanged();
 		}		
 	};
 

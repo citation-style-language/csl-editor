@@ -31,6 +31,7 @@ pages = [
             "src/options.js",
             "src/storage.js",
             "src/uiConfig.js",
+            "src/syntaxHighlight.js",
             "src/MultiPanel.js",
             "src/notificationBar.js",
             "src/editReferences.js",
