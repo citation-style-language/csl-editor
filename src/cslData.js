@@ -494,17 +494,23 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 		loadStyleFromURL : loadStyleFromURL,
 
 		initPageStyle : function (callback) {
-			var cslData, styleURL;
+			var cslData, styleURL, result;
 			cslData = get(); 
-			/*
-			if (cslData !== null && cslData !== "" && !CSLEDIT.parser.isCslValid(cslCode)) {
-				alert("Warning: couldn't recover CSL from previous session");
-				cslCode = "";
-				CSLEDIT.code.set(cslCode);
-			}*/
+			
 			styleURL = getUrlVar("styleURL");
 			console.log("url from url: " + styleURL);
 
+			// try loading style specified in options
+			if (typeof CSLEDIT.options.get("initialCslCode") !== "undefined") {
+				result = setCslCode(CSLEDIT.options.get("initialCslCode"));
+				if (result.hasOwnProperty('error')) {
+					alert(result.error);
+				} else {
+					emit("formatCitations");
+					return;
+				}
+			}
+			
 			if (styleURL != "" && typeof styleURL !== 'undefined') {
 				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
 				

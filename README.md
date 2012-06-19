@@ -82,6 +82,8 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 		// access the current style contents using:
 		// var code = cslEditor.getCslCode();
 	}
+	// override the default initial style of APA with this:
+	//,initialCslCode : "<style>this style is not valid!<\/style>"
 });
 ```
 
