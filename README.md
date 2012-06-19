@@ -26,6 +26,8 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 (For developing with the original js source files, you can now point your browser to /csl-source/demoSite/)
 
+- Create the file demoSite/feedbackEmail.txt containing a single email address that you want the feedback widget to send to
+
 - Run "python deploy.py"
 
 - Point your browser to /csl/ to access the site (uses concatenated js files and renamed css files)
