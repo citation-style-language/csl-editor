@@ -355,7 +355,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			CSLEDIT.controller.exec('setCslCode', [cslCode]);
 		},
 		getCslCode : function () {
-			CSLEDIT.data.getCslCode();
+			return CSLEDIT.data.getCslCode();
 		},
 		getStyleName : function () {
 			var styleNameNode = CSLEDIT.data.getNodesFromPath('style/info/title')[0];
