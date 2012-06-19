@@ -45,8 +45,10 @@ CSLEDIT.Titlebar.prototype.addNode = function (id, position, node, numAdded) {
 	}
 
 	this.titleNode = this.getTitleNode();
-	this.cslId = this.titleNode.cslId;
-	this.displayTitle();
+	if (this.titleNode !== null) {
+		this.cslId = this.titleNode.cslId;
+		this.displayTitle();
+	}
 };
 
 CSLEDIT.Titlebar.prototype.deleteNode = function (id, numDeleted) {
