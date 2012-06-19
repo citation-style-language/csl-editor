@@ -334,7 +334,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			doSyntaxHighlighting);
 	};
 
-	var nodeSelected = function(event, ui) {
+	// TODO: move this to the view controller
+	var nodeSelected = function() {
 		var nodeAndParent,
 			node,
 			parentNode,
@@ -347,6 +348,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			translatedCslId,
 			translatedNodeInfo,
 			translatedParentName;
+
+		if (viewController.selectedNode() === -1) {
+			// clear property panel if nothing selected
+			$('#elementProperties').children().remove();
+			return;
+		}
 
 		nodeAndParent = CSLEDIT.data.getNodeAndParent(viewController.selectedNode());
 		node = nodeAndParent.node;
