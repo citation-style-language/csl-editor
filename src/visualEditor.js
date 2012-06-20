@@ -285,7 +285,9 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		});
 
 		CSLEDIT.data.initPageStyle( function () {
-			var userOnChangeCallback = CSLEDIT.options.get("onChange");
+			var userOnChangeCallback = CSLEDIT.options.get("onChange"),
+				citationEditor1,
+				citationEditor2;
 			
 			syntaxHighlighter = CSLEDIT.SyntaxHighlighter(editorElement);
 
@@ -312,10 +314,15 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 			createTreeView();
 
-			CSLEDIT.EditReferences(
+			citationEditor1 = CSLEDIT.EditReferences(
 				editorElement.find('ul.#exampleCitation1'), formatExampleCitations, 0, [0]);
-			CSLEDIT.EditReferences(
-				editorElement.find('ul.#exampleCitation2'), formatExampleCitations, 1, [11], $('#exampleOutput'));
+			citationEditor2 = CSLEDIT.EditReferences(
+				editorElement.find('ul.#exampleCitation2'), formatExampleCitations, 1, [11]);
+
+			CSLEDIT.AddReferencesDropTarget($('#exampleOutput'), function () {
+				citationEditor1.init();
+				citationEditor2.init();
+			});
 
 		});
 

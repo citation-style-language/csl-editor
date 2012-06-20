@@ -10,7 +10,7 @@ CSLEDIT.EditReferences = function (listElement, callback, citation, defaultCheck
 		});
 		target.bind('drop', function (event) {
 			var dataTransfer = event.originalEvent.dataTransfer,
-				data = dataTransfer.getData("text"),
+				data = dataTransfer.getData("text/plain"),
 				dataItems,
 				jsonData;
 
@@ -38,10 +38,6 @@ CSLEDIT.EditReferences = function (listElement, callback, citation, defaultCheck
 	var init = function () {
 		var index = 0,
 			checked;
-
-		if (typeof dragDropTarget !== "undefined") {
-			setupDragDrop(dragDropTarget);
-		}
 
 		listElement.children().remove();
 		
@@ -103,7 +99,12 @@ CSLEDIT.EditReferences = function (listElement, callback, citation, defaultCheck
 	};
 
 	init();
+	
+	if (typeof dragDropTarget !== "undefined") {
+		setupDragDrop(dragDropTarget);
+	}
 
 	return {
+		init : init
 	};
 };

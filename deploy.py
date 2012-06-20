@@ -29,6 +29,7 @@ pages = [
             "src/cslData.js",
             "src/schema.js",
 
+            "src/addReferencesDropTarget.js",
             "src/options.js",
             "src/storage.js",
             "src/uiConfig.js",
