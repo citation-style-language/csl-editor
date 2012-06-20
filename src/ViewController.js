@@ -92,7 +92,8 @@ CSLEDIT.ViewController = function (
 		selectedNodeId = -1,
 		nodeButtons,
 		recentlyEditedMacro = -1,
-		nodePathView;
+		nodePathView,
+		suppressSelectNode = false;
 
 	var treeLoaded = function () {
 		treesLoaded++;
@@ -328,6 +329,10 @@ CSLEDIT.ViewController = function (
 		}
 	};
 
+	var setSuppressSelectNode = function (suppress) {
+		suppressSelectNode = suppress;
+	};
+
 	var addNode = function (id, position, newNode, nodesAdded) {
 		macroEditNotification (id);	
 		$.each(views, function (i, view) {
@@ -335,7 +340,9 @@ CSLEDIT.ViewController = function (
 				view.addNode(id, position, newNode, nodesAdded);
 			}
 		});
-		selectNode(newNode.cslId);
+		if (!suppressSelectNode) {
+			selectNode(newNode.cslId);
+		}
 	};
 
 	var deleteNode = function (id, nodesDeleted) {
@@ -442,7 +449,9 @@ CSLEDIT.ViewController = function (
 
 		getSelectedNodePath : getSelectedNodePath,
 
-		selectNodeFromPath : selectNodeFromPath
+		selectNodeFromPath : selectNodeFromPath,
+
+		setSuppressSelectNode : setSuppressSelectNode
 	}
 };
 

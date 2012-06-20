@@ -98,7 +98,9 @@ CSLEDIT.infoPropertyPanel = (function () {
 			}
 
 			if (isNaN(cslId)) {
+				CSLEDIT.viewController.setSuppressSelectNode(true);
 				CSLEDIT.controller.exec('addNode', [parentId, "last", thisNode]);
+				CSLEDIT.viewController.setSuppressSelectNode(false);
 				parentNode = CSLEDIT.data.getNode(parentId);
 				numNodesInParent = CSLEDIT.data.numNodes(parentNode);
 
@@ -230,8 +232,10 @@ CSLEDIT.infoPropertyPanel = (function () {
 				panel.append(addButton);
 
 				addButton.on('click', function () {
+					CSLEDIT.viewController.setSuppressSelectNode(true);
 					CSLEDIT.controller.exec("addNode",
 						[infoNode.cslId, "last", new CSLEDIT.CslNode(item.node)]);
+					CSLEDIT.viewController.setSuppressSelectNode(false);
 					setupPanel(panel);
 				});
 				panel.append('<br \/><br \/>');
