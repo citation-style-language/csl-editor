@@ -4,12 +4,7 @@ var CSLEDIT = CSLEDIT || {};
 
 // Use localStorage for persistance if available, otherwise use a simple
 // session based dictionary
-if (typeof localStorage !== "undefined") {
-	CSLEDIT.storage = {};
-	CSLEDIT.storage.getItem = function (key) { return localStorage.getItem(key); };
-	CSLEDIT.storage.setItem = function (key, value) { localStorage.setItem(key, value); };
-	CSLEDIT.storage.removeItem = function (key) { localStorage.removeItem(key); };
-} else {
+if (localStorage === null || typeof(localStorage) === "undefined") {
 	CSLEDIT.storage = (function () {
 		var storage = {};
 		return {
@@ -28,6 +23,11 @@ if (typeof localStorage !== "undefined") {
 			}
 		};
 	}());
+} else {	
+	CSLEDIT.storage = {};
+	CSLEDIT.storage.getItem = function (key) { return localStorage.getItem(key); };
+	CSLEDIT.storage.setItem = function (key, value) { localStorage.setItem(key, value); };
+	CSLEDIT.storage.removeItem = function (key) { localStorage.removeItem(key); };
 }
 
 CSLEDIT.storage.getItemJson = function (key) {
