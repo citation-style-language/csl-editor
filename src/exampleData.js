@@ -50,27 +50,31 @@ CSLEDIT.exampleData.citationsItems = [
 	}
 ];
 
-CSLEDIT.exampleData.additionalOptions = {
-	0 : {
-		"description" : "Pages 244-255",
+CSLEDIT.exampleData.additionalOptions = [
+	{
+		"description" : "Normal citation",
+		"options" : {}
+	},
+	{
+		"description" : "loactor: Pages 244-255",
 		"options" : {
 			"locator" : "244-252",
 			"label" : "page"
 		}
 	},
-	1 : {
+	{
 		"description" : "author-only",
 		"options" : {
 			"author-only" : true
 		}
 	},
-	2 : {
+	{
 		"description" : "suppress-author",
 		"options" : {
 			"suppress-author" : true
 		}
 	}
-};
+];
 
 CSLEDIT.exampleData.getJsonDocuments = function () {
 	var jsonDocuments = {};

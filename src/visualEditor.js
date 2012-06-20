@@ -260,6 +260,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 							CSLEDIT.controller.undo();
 						}
 					}
+				} else if (parentNodeName === "Edit Citations") {
+					if (clickedName === "Citation 1") {
+						CSLEDIT.citationEditor.editCitation(0);
+					} else if (clickedName === "Citation 2") {
+						CSLEDIT.citationEditor.editCitation(1);
+					}
 				}
 			}
 		});
@@ -313,17 +319,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			}
 
 			createTreeView();
-
-			citationEditor1 = CSLEDIT.EditReferences(
-				editorElement.find('ul.#exampleCitation1'), formatExampleCitations, 0, [0]);
-			citationEditor2 = CSLEDIT.EditReferences(
-				editorElement.find('ul.#exampleCitation2'), formatExampleCitations, 1, [11]);
-
-			CSLEDIT.AddReferencesDropTarget($('#exampleOutput'), function () {
-				citationEditor1.init();
-				citationEditor2.init();
-			});
-
 		});
 
 		setupTreeEditorToolbar();
