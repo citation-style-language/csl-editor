@@ -26,10 +26,8 @@ CSLEDIT.citationEditor = (function () {
 	advancedContents.append(addReferenceButton);
 
 	resetReferencesButton.on('click', function () {
-		if (confirm("Are you sure you want to reset the reference list to the default?")) {
-			CSLEDIT.exampleCitations.resetToDefault();
-			updateReferenceList();
-		}
+		CSLEDIT.exampleCitations.resetToDefault();
+		updateReferenceList();
 	});
 
 	addReferenceButton.on('click', function () {
