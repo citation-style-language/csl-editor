@@ -16,6 +16,7 @@ CSLEDIT.controller = (function () {
 			"setCslCode"
 		],
 		commandHistory = [],
+		undoCommandHistory = [],
 		cslData;
 
 	var setCslData = function (_cslData) {
@@ -45,11 +46,11 @@ CSLEDIT.controller = (function () {
 				if (nodes.length === 0) {
 					if (index === 0) {
 						// add root node
-						_exec("addNode", [0, "before", {name: splitPath[index]}]);
+						_exec("addNode", [0, "before", {name: splitPath[index]}], commandHistory);
 						parentCslId = 0;
 					} else {
 						_exec("addNode",
-							[parentCslId, "first", {name: splitPath[index]}]);
+							[parentCslId, "first", {name: splitPath[index]}], commandHistory);
 						parentCslId++;
 					}
 				} else {
@@ -62,19 +63,26 @@ CSLEDIT.controller = (function () {
 	var undo = function () {
 		var command = commandHistory.pop();
 
-		cslData[command.inverse.command].apply(null, command.inverse.args);
+		_exec(command.inverse.command, command.inverse.args, undoCommandHistory);
+	};
+
+	var redo = function () {
+		var command = undoCommandHistory.pop();
+
+		_exec(command.inverse.command, command.inverse.args, commandHistory);
 	};
 
 	var exec = function (command, args) {
+		undoCommandHistory.length = 0;
 		if (command in macros) {
 			macros[command].apply(null, args);
 		} else {
 			assert(commands.indexOf(command) !== -1, "command doesn't exist");
-			_exec(command, args);
+			_exec(command, args, commandHistory);
 		}
 	};
 
-	var _exec = function(command, args) {
+	var _exec = function(command, args, history) {
 		var inverseCommand;
 
 		console.log("executing command " + command + "(" + JSON.stringify(args) + ")");
@@ -87,9 +95,9 @@ CSLEDIT.controller = (function () {
 
 		if (command === "setCslCode") {
 			// no undo available for this yet, wipe command history
-			commandHistory = [];
+			history.length = 0;
 		} else {
-			commandHistory.push({command:command, args:args, inverse:inverseCommand});
+			history.push({command:command, args:args, inverse:inverseCommand});
 		}
 	};
 
@@ -97,9 +105,11 @@ CSLEDIT.controller = (function () {
 		setCslData : setCslData,
 		exec : exec,
 		commandHistory : commandHistory,
+		undoCommandHistory : undoCommandHistory,
 		undo : undo,
+		redo : redo,
 		clearHistory : function () {
-			commandHistory = [];
+			commandHistory.length = 0;
 		}
 	};
 }());

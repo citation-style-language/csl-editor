@@ -268,6 +268,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 						} else {
 							CSLEDIT.controller.undo();
 						}
+					} else if (clickedName === "Redo") {
+						if (CSLEDIT.controller.undoCommandHistory.length === 0) {
+							alert("No commands to redo");
+						} else {
+							CSLEDIT.controller.redo();
+						}
 					}
 				} else if (parentNodeName === "Edit Citations") {
 					if (clickedName === "Citation 1") {
