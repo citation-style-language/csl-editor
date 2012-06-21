@@ -24,11 +24,15 @@
 
 	<script type="text/javascript" src="../../src/debug.js"></script>
 	<script type="text/javascript" src="../../src/storage.js"></script>
-	<script type="text/javascript" src="../../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../../src/exampleData.js"></script>
+	<script type="text/javascript" src="../../src/options.js"></script>
+	<script type="text/javascript" src="../../src/exampleCitations.js"></script>
+	<script type="text/javascript" src="../../src/citationEngine.js"></script>
+	<script type="text/javascript" src="../../src/uiConfig.js"></script>
 	<script type="text/javascript" src="../../src/diff.js"></script>
 	<script type="text/javascript" src="../../src/cslParser.js"></script>
 	<script type="text/javascript" src="../../src/cslNode.js"></script>
+	<script type="text/javascript" src="../../src/Iterator.js"></script>
 	<script type="text/javascript" src="../../src/cslData.js"></script>
 
 	<link rel="stylesheet" href="../../css/base.css" />

@@ -24,7 +24,32 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 	var get = function () {
 		return CSLEDIT.storage.getItemJson(CSL_DATA);
 	};
+
 	var set = function (cslData) {
+		// update 'style/info/updated'
+		var updatedNode = getNodesFromPath('style/info/updated')[0],
+			iter,
+			index,
+			node;
+
+		if (typeof(updatedNode) === "undefined") {
+			console.log("no style/info/updated node: resetting CSL code");
+			setCslCode(CSLEDIT.cslParser.cslCodeFromCslData(cslData));
+			updatedNode = getNodesFromPath('style/info/updated')[0];
+		}
+		 
+		// write timestamp to updated node
+		iter = new CSLEDIT.Iterator(cslData);
+		index = 0;
+		while (iter.hasNext()) {
+			node = iter.next();
+			if (index === updatedNode.cslId) {	
+				node.textValue = (new Date()).toUTCString();
+				break;
+			}
+			index++;
+		}
+
 		CSLEDIT.storage.setItem(CSL_DATA, JSON.stringify(cslData));
 		return cslData;
 	};
@@ -48,6 +73,7 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 			}
 		});
 
+		// check it contains required nodes
 		if (typeof error === "undefined") {
 			$.each(requiredNodes, function (i, requiredNode) {
 				if (getNodesFromPath(requiredNode, cslData).length === 0) {
@@ -62,6 +88,16 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 		}
 
 		set(cslData);
+
+		// add a style/info/updated node if not present
+		// (this will be written to on every edit, create here
+		//  to avoid complicating undo/redo in CSLEDIT.controller)
+		if (getNodesFromPath('style/info/updated', cslData).length === 0) {
+			console.log("creating required updated node");
+			addNode(getNodesFromPath('style/info')[0].cslId, "last",
+					new CSLEDIT.CslNode("updated", [], [], -1), true);
+		}
+
 		emit("newStyle", []);
 		return {};
 	};
@@ -290,7 +326,7 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 		return id;
 	}
 
-	var addNode = function (id, position, newNode) {
+	var addNode = function (id, position, newNode, suppressViewUpdate /*optional*/) {
 		var nodeInfo,
 			positionIndex,
 			nodesAdded,
@@ -314,7 +350,9 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 			id = macroDefinitionIdFromInstanceId(id);
 
 			nodesAdded = spliceNode(id, position, 0, newNode);
-			emit("addNode", [id, position, newNode, nodesAdded]);
+			if (!suppressViewUpdate) {
+				emit("addNode", [id, position, newNode, nodesAdded]);
+			}
 		} else {
 			switch (position) {
 				case "first":
@@ -376,6 +414,45 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 		return node;
 	};
 
+	var amendNode = function (id, amendedNode) {
+		// replace everything of the original node except the children and the cslId
+		var cslData = get(),
+			iter,
+			node,
+			index,
+			result,
+			oldNode;
+	   
+		iter = new CSLEDIT.Iterator(cslData);
+		index = 0;
+
+		while (iter.hasNext()) {
+			node = iter.next();
+			if (index === id) {
+				assertEqual(node.cslId, id);
+				
+				oldNode = new CSLEDIT.CslNode(node.name, node.attributes, [], node.cslId);
+				oldNode.textValue = node.textValue;
+
+				node.name = amendedNode.name;
+				node.attributes = amendedNode.attributes;
+				node.textValue = amendedNode.textValue;
+
+				break;
+			}
+			index++;
+		}
+		assert(typeof node !== "undefined");
+		set(cslData);
+		emit("amendNode", [id, node]);
+		emit("formatCitations");
+		// return inverse command
+		return {
+			command : "amendNode",
+			args : [id, oldNode]
+		};
+	};
+
 	return {
 		setCslCode : setCslCode,
 		getCslCode : getCslCode,
@@ -410,44 +487,7 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 				args : [ parentNode, position, deletedNode ]
 			};
 		},
-		amendNode : function (id, amendedNode) {
-			// replace everything of the original node except the children and the cslId
-			var cslData = get(),
-				iter,
-				node,
-				index,
-				result,
-				oldNode;
-		   
-			iter = new CSLEDIT.Iterator(cslData);
-			index = 0;
-
-			while (iter.hasNext()) {
-				node = iter.next();
-				if (index === id) {
-					assertEqual(node.cslId, id);
-					
-					oldNode = new CSLEDIT.CslNode(node.name, node.attributes, [], node.cslId);
-					oldNode.textValue = node.textValue;
-
-					node.name = amendedNode.name;
-					node.attributes = amendedNode.attributes;
-					node.textValue = amendedNode.textValue;
-
-					break;
-				}
-				index++;
-			}
-			assert(typeof node !== "undefined");
-			set(cslData);
-			emit("amendNode", [id, node]);
-			emit("formatCitations");
-			// return inverse command
-			return {
-				command : "amendNode",
-				args : [id, oldNode]
-			};
-		},
+		amendNode : amendNode,
 		moveNode : function (fromId, toId, position) {
 			var deletedNode, fromNode,
 				inverseFromCslId,
