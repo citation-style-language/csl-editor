@@ -84,12 +84,16 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 	},
 	// override the default initial style of APA with this:
 	//initialCslCode : "<style>this style is not valid!</style>",
+
+	// each example reference follows the csl-data.json schema, but doesn't require the 'id' propery
+	// (see https://github.com/citation-style-language/schema/blob/master/csl-data.json)
 	exampleReferences : [
 		{type:"article", title:"Article Title", author:"An Author", date:"2010"},
 		{type:"book", title:"Book Title", author:"Another Author", date:"2000"}
-	], // each list item follows the csl-data.json schema, but doesn't require the 'id' propery
-	//    (https://github.com/citation-style-language/schema/blob/master/csl-data.json)
-	exampleCitations : [[0,1], [1]] // the references which appear in each citation	
+	],
+
+	// a list of the references to appear in each citation
+	exampleCitations : [[0,1], [1]]
 });
 ```
 
