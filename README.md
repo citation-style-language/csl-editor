@@ -87,7 +87,8 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 	exampleReferences : [
 		{type:"article", title:"Article Title", author:"An Author", date:"2010"},
 		{type:"book", title:"Book Title", author:"Another Author", date:"2000"}
-	],
+	], // each list item follows the csl-data.json schema, but doesn't require the 'id' propery
+	//    (https://github.com/citation-style-language/schema/blob/master/csl-data.json)
 	exampleCitations : [[0,1], [1]] // the references which appear in each citation	
 });
 ```
