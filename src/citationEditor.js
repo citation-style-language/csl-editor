@@ -85,6 +85,8 @@ CSLEDIT.citationEditor = (function () {
 		});
 		referencePanel.append(table);
 
+		table.find('td').css({"padding-right": "8px"});
+
 		console.log("checked = " +
 				JSON.stringify(CSLEDIT.exampleCitations.getReferenceIndexesForCitation(citation)));
 
