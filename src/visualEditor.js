@@ -12,9 +12,18 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	CSLEDIT.options.setUserOptions(userOptions);
 
 	editorElement = $(editorElement);
-	editorElement.load(CSLEDIT.options.get("rootURL") + "/html/visualEditor.html", function () {
-		CSLEDIT.schema = CSLEDIT.Schema();
-		CSLEDIT.schema.callWhenReady(init);
+
+	$.ajax({
+		url: CSLEDIT.options.get("rootURL") + "/html/visualEditor.html",
+		success : function (data) {
+			editorElement.html(data);
+			CSLEDIT.schema = CSLEDIT.Schema();
+			CSLEDIT.schema.callWhenReady(init);
+		},
+		error : function (jaXHR, textStatus, errorThrown) {
+			alert("Couldn't fetch page: " + textStatus);
+		},
+		cache : false
 	});
 
 	var createTreeView = function () {

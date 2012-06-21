@@ -8,8 +8,16 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 
 	CSLEDIT.options.setUserOptions(userOptions);
 	mainContainer = $(mainContainer);
-	mainContainer.load(CSLEDIT.options.get("rootURL") + "/html/searchByName.html", function () {
-		init();
+	$.ajax({
+		url: CSLEDIT.options.get("rootURL") + "/html/searchByName.html",
+		success : function (data) {
+			mainContainer.html(data);
+			init();
+		},
+		error : function (jaXHR, textStatus, errorThrown) {
+			alert("Couldn't fetch page: " + textStatus);
+		},
+		cache : false
 	});
 
 	// --- Functions for style name search ---
