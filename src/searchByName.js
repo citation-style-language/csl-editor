@@ -34,7 +34,7 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 		$("#message").html("");
 
 		if (searchQuery.length === 0) {
-			$("#message").html("<h2>Popular Styles<\/h2>");
+			$("#message").html("<h2>Popular Styles</h2>");
 			for (index=0; index<20; index++) {
 				styleId = CSLEDIT.exampleData.topStyles[index];
 				result.push({
@@ -48,7 +48,7 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 		}
 
 		if (searchQuery.length < 3) {
-			$("#message").html("<p>Query too short<\/p>");
+			$("#message").html("<p>Query too short</p>");
 			$("#searchResults").html("");
 			previousQuery = "";
 			return;
@@ -69,7 +69,7 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 					masterId = exampleCitations.masterIdFromId[styleId];
 					if (masterId !== styleId) {
 						masterStyleName = ' (same as <a href="' + masterId + '">' +
-							exampleCitations.styleTitleFromId[masterId] + '<\/a>)';
+							exampleCitations.styleTitleFromId[masterId] + '</a>)';
 					} else {
 						masterStyleName = "";
 					}

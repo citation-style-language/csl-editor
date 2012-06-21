@@ -6,16 +6,16 @@ module("CSLEDIT.smartTree");
 
 asyncTest("create style tree", function () {
 	var styleTree,
-		treeElement = $("<div><\/div>");
+		treeElement = $("<div></div>");
 
 	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 	CSLEDIT.data.setCslCode (
 		"<style>" +
-		"<info><author><\/author><\/info>" +
-		"<citation><layout><\/layout><\/citation>" +
-		"<macro><\/macro>" +
-		"<macro><text><\/text><\/macro>" +
-		"<\/style>");
+		"<info><author></author></info>" +
+		"<citation><layout></layout></citation>" +
+		"<macro></macro>" +
+		"<macro><text></text></macro>" +
+		"</style>");
 
 	styleTree = CSLEDIT.SmartTree(treeElement, ["style"]);
 	styleTree.setCallbacks({
@@ -34,17 +34,17 @@ asyncTest("create style tree", function () {
 asyncTest("create macros tree", function () {
 	var cslData,
 		macroTree,
-		treeElement = $("<div><\/div>");
+		treeElement = $("<div></div>");
 
 	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
-		"<info><author><\/author><\/info>" +
-		"<citation><layout><\/layout><\/citation>" +
-		"<macro><\/macro>" +
-		"<macro><text><\/text><\/macro>" +
-		"<\/style>");
+		"<info><author></author></info>" +
+		"<citation><layout></layout></citation>" +
+		"<macro></macro>" +
+		"<macro><text></text></macro>" +
+		"</style>");
 
 	macroTree = CSLEDIT.SmartTree(treeElement, ["style/macro"]);
 	macroTree.setCallbacks({
@@ -64,18 +64,18 @@ asyncTest("create macros tree", function () {
 asyncTest("add/delete nodes", function () {
 	var cslData,
 		macroTree,
-		treeElement = $("<div><\/div>");
+		treeElement = $("<div></div>");
 
 	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
-		"<info><author><\/author><\/info>" +
-		"<citation><layout><\/layout><\/citation>" +
-		"<macro><\/macro>" +
-		"<macro><text><\/text><\/macro>" +
-		"<macro><inLastMacro><\/inLastMacro><\/macro>" +
-		"<\/style>");
+		"<info><author></author></info>" +
+		"<citation><layout></layout></citation>" +
+		"<macro></macro>" +
+		"<macro><text></text></macro>" +
+		"<macro><inLastMacro></inLastMacro></macro>" +
+		"</style>");
 
 	macroTree = CSLEDIT.SmartTree(treeElement, ["style/macro"]);
 	macroTree.setCallbacks({
@@ -123,8 +123,8 @@ asyncTest("move subtree", function () {
 	var cslData,
 		citationTree,
 		bibliographyTree,
-		citationTreeElement = $("<div><\/div>"),
-		bibliographyTreeElement = $("<div><\/div>"),
+		citationTreeElement = $("<div></div>"),
+		bibliographyTreeElement = $("<div></div>"),
 		fakeViewController = new CSLEDIT.FakeViewController(),
 		description;
 
@@ -133,10 +133,10 @@ asyncTest("move subtree", function () {
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
-		"<info><author><\/author><\/info>" +
-		"<citation><layout><group><text><\/text><\/group><\/layout><\/citation>" +
-		"<bibliography><layout><\/layout><\/bibliography>" +
-		"<\/style>");
+		"<info><author></author></info>" +
+		"<citation><layout><group><text></text></group></layout></citation>" +
+		"<bibliography><layout></layout></bibliography>" +
+		"</style>");
 
 	citationTree = CSLEDIT.SmartTree(citationTreeElement, ["style/citation/layout"]);
 	bibliographyTree = CSLEDIT.SmartTree(bibliographyTreeElement, ["style/bibliography/layout"]);
@@ -182,11 +182,11 @@ asyncTest("move subtree", function () {
 asyncTest("add node with children", function () {
 	var cslData,
 		macroTree,
-		treeElement = $("<div><\/div>");
+		treeElement = $("<div></div>");
 
 	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", []);
 
-	cslData = CSLEDIT.data.setCslCode("<style><bibliography><\/bibliography><\/style>");
+	cslData = CSLEDIT.data.setCslCode("<style><bibliography></bibliography></style>");
 
 	macroTree = CSLEDIT.SmartTree(treeElement, ["style"]);
 	macroTree.setCallbacks({
@@ -242,8 +242,8 @@ asyncTest("macro link", function () {
 
 	var cslData,
 		citationTree,
-		treeElement = $("<div><\/div>"),
-		styleTreeElement = $("<div><\/div>"),
+		treeElement = $("<div></div>"),
+		styleTreeElement = $("<div></div>"),
 		styleTree,
 		treesToLoad,
 		fakeViewController = new CSLEDIT.FakeViewController();
@@ -388,11 +388,11 @@ asyncTest("macro link", function () {
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
-		"<info><author><\/author><\/info>" +
-		'<citation><layout><text macro="macro1"><\/text><\/layout><\/citation>' +
-		'<macro name="macro1"><text><\/text><\/macro>' +
-		'<macro name="macro2"><label><\/label><\/macro>' +
-		"<\/style>");
+		"<info><author></author></info>" +
+		'<citation><layout><text macro="macro1"></text></layout></citation>' +
+		'<macro name="macro1"><text></text></macro>' +
+		'<macro name="macro2"><label></label></macro>' +
+		"</style>");
 
 	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
 	styleTree.setCallbacks({ loaded : treeLoaded });
@@ -420,8 +420,8 @@ asyncTest("add to instance after macro", function () {
 
 	var cslData,
 		citationTree,
-		treeElement = $("<div><\/div>"),
-		styleTreeElement = $("<div><\/div>"),
+		treeElement = $("<div></div>"),
+		styleTreeElement = $("<div></div>"),
 		styleTree,
 		treesToLoad,
 		newNode,
@@ -537,11 +537,11 @@ asyncTest("add to instance after macro", function () {
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
-		"<info><author><\/author><\/info>" +
-		'<macro name="macro1"><text><\/text><\/macro>' +
-		'<macro name="macro2"><label><\/label><\/macro>' +
-		'<citation><layout><text macro="macro1"><\/text><\/layout><\/citation>' +
-		"<\/style>");
+		"<info><author></author></info>" +
+		'<macro name="macro1"><text></text></macro>' +
+		'<macro name="macro2"><label></label></macro>' +
+		'<citation><layout><text macro="macro1"></text></layout></citation>' +
+		"</style>");
 
 	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
 	styleTree.setCallbacks({ loaded : treeLoaded });
@@ -569,8 +569,8 @@ asyncTest("macros within macros", function () {
 
 	var cslData,
 		citationTree,
-		treeElement = $("<div><\/div>"),
-		styleTreeElement = $("<div><\/div>"),
+		treeElement = $("<div></div>"),
+		styleTreeElement = $("<div></div>"),
 		styleTree,
 		treesToLoad,
 		newNode,
@@ -698,11 +698,11 @@ asyncTest("macros within macros", function () {
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
-		"<info><author><\/author><\/info>" +
-		'<macro name="macro1"><text><\/text><\/macro>' +
-		'<macro name="macro2"><label><\/label><\/macro>' +
-		'<citation><layout><text macro="macro1"><\/text><\/layout><\/citation>' +
-		"<\/style>");
+		"<info><author></author></info>" +
+		'<macro name="macro1"><text></text></macro>' +
+		'<macro name="macro2"><label></label></macro>' +
+		'<citation><layout><text macro="macro1"></text></layout></citation>' +
+		"</style>");
 
 	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
 	styleTree.setCallbacks({ loaded : treeLoaded });
@@ -727,8 +727,8 @@ asyncTest("macros within macros", function () {
 asyncTest("move macro instance 1 from macro instance 2 to macro instance 3", function () {
 	var cslData,
 		citationTree,
-		treeElement = $("<div><\/div>"),
-		styleTreeElement = $("<div><\/div>"),
+		treeElement = $("<div></div>"),
+		styleTreeElement = $("<div></div>"),
 		styleTree,
 		treesToLoad,
 		newNode,
@@ -795,15 +795,15 @@ asyncTest("move macro instance 1 from macro instance 2 to macro instance 3", fun
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
-		"<info><author><\/author><\/info>" +
-		'<macro name="macro1"><label><\/label><\/macro>' +
-		'<macro name="macro2"><text macro="macro1"><\/text><\/macro>' +
-		'<macro name="macro3"><\/macro>' +
+		"<info><author></author></info>" +
+		'<macro name="macro1"><label></label></macro>' +
+		'<macro name="macro2"><text macro="macro1"></text></macro>' +
+		'<macro name="macro3"></macro>' +
 		'<citation><layout>' +
-		'<text macro="macro2"><\/text>' +
-		'<text macro="macro3"><\/text>' +
-		'<\/layout><\/citation>' +
-		"<\/style>");
+		'<text macro="macro2"></text>' +
+		'<text macro="macro3"></text>' +
+		'</layout></citation>' +
+		"</style>");
 
 	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
 	styleTree.setCallbacks({ loaded : treeLoaded });
@@ -831,8 +831,8 @@ asyncTest("macros within macros on creation", function () {
 
 	var cslData,
 		citationTree,
-		treeElement = $("<div><\/div>"),
-		styleTreeElement = $("<div><\/div>"),
+		treeElement = $("<div></div>"),
+		styleTreeElement = $("<div></div>"),
 		styleTree,
 		treesToLoad,
 		newNode,
@@ -883,11 +883,11 @@ asyncTest("macros within macros on creation", function () {
 
 	cslData = CSLEDIT.data.setCslCode (
 		"<style>" +
-		"<info><author><\/author><\/info>" +
-		'<macro name="macro1"><text macro="macro2"><\/text><\/macro>' +
-		'<macro name="macro2"><group><label><\/label><\/group><\/macro>' +
-		'<citation><layout><text macro="macro1"><\/text><\/layout><\/citation>' +
-		"<\/style>");
+		"<info><author></author></info>" +
+		'<macro name="macro1"><text macro="macro2"></text></macro>' +
+		'<macro name="macro2"><group><label></label></group></macro>' +
+		'<citation><layout><text macro="macro1"></text></layout></citation>' +
+		"</style>");
 
 	styleTree = CSLEDIT.SmartTree(styleTreeElement, ["style"], true);
 	styleTree.setCallbacks({ loaded : treeLoaded });

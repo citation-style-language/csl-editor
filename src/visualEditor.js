@@ -109,14 +109,14 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	};
 
 	var showAddNodeDialog = function () {
-		var dialogDiv = $('<div><\/div>'),
+		var dialogDiv = $('<div></div>'),
 			node = CSLEDIT.data.getNode(CSLEDIT.viewController.selectedNode()),
 			translatedCslId,
 			translatedNodeInfo,
 			translatedParentName,
 			possibleElements,
 			element,
-			table = $('<table><\/table>'),
+			table = $('<table></table>'),
 			possibleElementsExist = false;
 
 		if (node === null) {
@@ -143,11 +143,11 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 
 		$.each(possibleElements, function (element) {
-			var img = '<td><\/td>',
+			var img = '<td></td>',
 				nodeIcon = CSLEDIT.uiConfig.nodeIcons[element];
 
 			if (typeof nodeIcon !== "undefined") {
-				img = '<td><img src="' + CSLEDIT.options.get('rootURL') + nodeIcon + '"><\/img><\/td>';
+				img = '<td><img src="' + CSLEDIT.options.get('rootURL') + nodeIcon + '"></img></td>';
 			}
 			var displayName;
 
@@ -159,7 +159,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			table.append($('<tr>' + img + '<td><button class="addNodeType" data-nodeName="' +
 				element + '">' + 
 				displayName + 
-				'<\/button><\/td><\/tr>'));
+				'</button></td></tr>'));
 
 			possibleElementsExist = true;
 		});
@@ -289,7 +289,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	var init = function () {
 		if (!$.browser.webkit && !$.browser.mozilla) {
 			$('body').html("<h2>Please use the latest version of " +
-				"Chrome or Firefox to view this page.<\/h2>").css({margin:50});
+				"Chrome or Firefox to view this page.</h2>").css({margin:50});
 			return;
 		}
 

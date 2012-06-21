@@ -14,7 +14,7 @@ CSLEDIT.citationEngine = (function () {
 		dmp = null; // for diff_match_patch object
 
 	var stripTags = function (html, tag) {
-		var stripRegExp = new RegExp("<" + tag + ".*?>|<\/\s*" + tag + "\s*?\>", "g");
+		var stripRegExp = new RegExp("<" + tag + ".*?>|</\s*" + tag + "\s*?\>", "g");
 
 		// creating new string because of bug where some html from generateExampleCitations.js
 		// was type object instead of string and didn't have the replace() function
@@ -129,9 +129,9 @@ CSLEDIT.citationEngine = (function () {
 			citations = [],
 			formattedResult,
 			citationTagStart = "<p>",
-			citationTagEnd = "<\/p>",
+			citationTagEnd = "</p>",
 			bibliographyTagStart = "<p>",
-			bibliographyTagEnd = "<\/p>",
+			bibliographyTagEnd = "</p>",
 			startTime,
 			citationDiffs,
 			bibliographyDiffs,
@@ -155,11 +155,11 @@ CSLEDIT.citationEngine = (function () {
 		// add syntax highlighting at highest level
 		if (typeof citationNodeCslId !== "undefined") {
 			citationTagStart = '<p><span cslid="' + citationNodeCslId + '">';
-		    citationTagEnd = '<\/span><\/p>';
+		    citationTagEnd = '</span></p>';
 		}
 		if (typeof bibliographyNodeCslId !== "undefined") {
 			bibliographyTagStart = '<p><span cslid="' + bibliographyNodeCslId + '">';
-			bibliographyTagEnd = '<\/span><\/p>';
+			bibliographyTagEnd = '</span></p>';
 		}
 
 		oldFormattedCitation = newFormattedCitation;

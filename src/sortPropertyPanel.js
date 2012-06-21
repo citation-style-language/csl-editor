@@ -175,7 +175,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		panel.children().remove();
 
 		// sortable list
-		list = $('<ul class="sortKeys"><\/ul>');
+		list = $('<ul class="sortKeys"></ul>');
 		list.appendTo(panel);
 		list.sortable({
 			update : sortableListUpdated
@@ -193,17 +193,17 @@ CSLEDIT.sortPropertyPanel = (function () {
 		});
 
 		sortKeyHtml = '<li class="ui-state-default">';
-		sortKeyHtml += '<span class="ui-icon ui-icon-arrowthick-2-n-s"><\/span> ';
+		sortKeyHtml += '<span class="ui-icon ui-icon-arrowthick-2-n-s"></span> ';
 		sortKeyHtml += '<select class="sortKey">';
 		$.each(macros, function (i, macro) {
-			sortKeyHtml += '<option macro="' + macro + '">Macro: ' + macro + '<\/option>';
+			sortKeyHtml += '<option macro="' + macro + '">Macro: ' + macro + '</option>';
 		});
 		$.each(variables, function (i, variable) {
-			sortKeyHtml += '<option variable="' + variable + '">' + variable + '<\/option>';
+			sortKeyHtml += '<option variable="' + variable + '">' + variable + '</option>';
 		});
-		sortKeyHtml += '<\/select>';
-		sortKeyHtml += ' <button class="deleteSortKey">Delete<\/button>';
-		sortKeyHtml += '<\/li>';
+		sortKeyHtml += '</select>';
+		sortKeyHtml += ' <button class="deleteSortKey">Delete</button>';
+		sortKeyHtml += '</li>';
 
 		$.each(nodeData.children, function(i, child) {
 			var row = $(sortKeyHtml),
@@ -236,7 +236,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 				getKeyNodeData(childIndex)]);
 		}*/);
 
-		addKeyButton = $('<button>Add key<\/button>');
+		addKeyButton = $('<button>Add key</button>');
 		addKeyButton.on('click', function () {
 			var selectNodes;
 
@@ -256,33 +256,33 @@ CSLEDIT.sortPropertyPanel = (function () {
 			list.find('button.deleteSortKey').last().on('click', onDelete);
 		});
 		panel.append(addKeyButton);
-		panel.append('<br \/><br \/>');
+		panel.append('<br /><br />');
 
 		(function () {
 			var select;
 
 			// TODO: only enable if sort keys contain a names element
-			select = $('<select class="names-min"><\/select>');
+			select = $('<select class="names-min"></select>');
 			for(index = 0; index < 20; index++) {
-				$('<option>' + index + '<\/option>').appendTo(select);
+				$('<option>' + index + '</option>').appendTo(select);
 			}
-			$('<label>Names-min: <\/label>').appendTo(panel);
+			$('<label>Names-min: </label>').appendTo(panel);
 			select.appendTo(panel);
 			panel.append(' ');
 
-			select = $('<select class="names-use-first"><\/select>');
+			select = $('<select class="names-use-first"></select>');
 			for(index = 0; index < 20; index++) {
-				$('<option>' + index + '<\/option>').appendTo(select);
+				$('<option>' + index + '</option>').appendTo(select);
 			}
-			$('<label>Names-use-first: <\/label>').appendTo(panel);
+			$('<label>Names-use-first: </label>').appendTo(panel);
 			select.appendTo(panel);
 			panel.append(' ');
 			
-			select = $('<select class="names-use-last"><\/select>');
+			select = $('<select class="names-use-last"></select>');
 			for(index = 0; index < 20; index++) {
-				$('<option>' + index + '<\/option>').appendTo(select);
+				$('<option>' + index + '</option>').appendTo(select);
 			}
-			$('<label>Names-use-last: <\/label>').appendTo(panel);
+			$('<label>Names-use-last: </label>').appendTo(panel);
 			select.appendTo(panel);
 
 			panel.find('select[class^="names"]').on('change', function () {

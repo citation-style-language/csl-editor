@@ -11,15 +11,15 @@ test("set code", function () {
 	var cslData,
 		result;
 
-	result = CSLEDIT.data.setCslCode("<needs_to_start_with_style_node><\/needs_to_start_with_style_node>");
+	result = CSLEDIT.data.setCslCode("<needs_to_start_with_style_node></needs_to_start_with_style_node>");
 	console.log(result.error);
 	ok(result.error.length > 0);
 
-	result = CSLEDIT.data.setCslCode("<style><mis><\/match><\/style>");
+	result = CSLEDIT.data.setCslCode("<style><mis></match></style>");
 	ok(result.error.length > 0);
 
-	result = CSLEDIT.data.setCslCode("<style><citation><layout \/><\/citation>" +
-		"<bibliography><layout \/><\/bibliography><\/style>");
+	result = CSLEDIT.data.setCslCode("<style><citation><layout /></citation>" +
+		"<bibliography><layout /></bibliography></style>");
 	ok(!result.hasOwnProperty('error'));
 	equal(CSLEDIT.data.get().name, "style");
 });
@@ -27,7 +27,7 @@ test("set code", function () {
 test("add/delete/ammed nodes", function () {
 	var cslData;
 
-	CSLEDIT.data.setCslCode("<style><\/style>");
+	CSLEDIT.data.setCslCode("<style></style>");
 
 	equal(CSLEDIT.data.get().cslId, 0);
 
@@ -67,7 +67,7 @@ test("add/delete/ammed nodes", function () {
 });
 
 test("move nodes", function () {
-	var testCsl = "<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><\/style>";
+	var testCsl = "<style><info><author></author></info><citation><layout></layout></citation></style>";
 
 	// move info inside citation
 	CSLEDIT.data.setCslCode(testCsl);
@@ -111,7 +111,7 @@ test("find nodes", function () {
 	var cslData;
 
 	CSLEDIT.data.setCslCode(
-		"<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><\/style>");
+		"<style><info><author></author></info><citation><layout></layout></citation></style>");
 
 	cslData = CSLEDIT.data.get();
 
@@ -122,7 +122,7 @@ test("find nodes", function () {
 
 test("get node", function () {
 	CSLEDIT.data.setCslCode(
-		"<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><\/style>");
+		"<style><info><author></author></info><citation><layout></layout></citation></style>");
 
 	equal(CSLEDIT.data.getNode(0).name, "style");
 	equal(CSLEDIT.data.getNode(4).name, "layout");
@@ -133,7 +133,7 @@ test("get node", function () {
 test("on change", function () {
 	var numCalls;
 
-	CSLEDIT.data.setCslCode("<style><\/style>");
+	CSLEDIT.data.setCslCode("<style></style>");
 	CSLEDIT.data.onChanged(function () {numCalls++;});
 
 	numCalls = 0;
@@ -150,7 +150,7 @@ test("on change", function () {
 });
 */
 test("find by path", function () {
-	var testCsl = "<style><info><author><\/author><\/info><citation><layout><\/layout><\/citation><macro><\/macro><macro><\/macro><\/style>",
+	var testCsl = "<style><info><author></author></info><citation><layout></layout></citation><macro></macro><macro></macro></style>",
 		cslData;
 
 	CSLEDIT.data.setCslCode(testCsl);
@@ -173,9 +173,9 @@ test("find by path", function () {
 });
 
 test("find macro definition", function () {
-	var testCsl = "<style><info><author><\/author><\/info>" +
-		'<citation><layout><text macro="m1"><\/text><\/layout><\/citation>' + 
-		'<macro name="m1"><\/macro><macro><\/macro><\/style>';
+	var testCsl = "<style><info><author></author></info>" +
+		'<citation><layout><text macro="m1"></text></layout></citation>' + 
+		'<macro name="m1"></macro><macro></macro></style>';
 
 	CSLEDIT.data.setCslCode(testCsl);
 
@@ -188,9 +188,9 @@ test("find macro definition", function () {
 });
 
 test("get node stack", function () {
-	var testCsl = "<style><info><author><\/author><\/info>" +
-		'<citation><layout><text macro="m1"><\/text><\/layout><\/citation>' + 
-		'<macro name="m1"><\/macro><macro><\/macro><\/style>',
+	var testCsl = "<style><info><author></author></info>" +
+		'<citation><layout><text macro="m1"></text></layout></citation>' + 
+		'<macro name="m1"></macro><macro></macro></style>',
 		nodeStack;
 
 	CSLEDIT.data.setCslCode(testCsl);
@@ -211,11 +211,11 @@ test("required nodes", function () {
 	// require nodes (note: style node is always required, regardless of arguments)
 	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData", ["style/parent1", "style/parent2/child1"]);
 	
-	result = CSLEDIT.data.setCslCode("<style><parent1><\/parent1><\/style>");
+	result = CSLEDIT.data.setCslCode("<style><parent1></parent1></style>");
 	ok(result.error.length > 0);
 	console.log(result.error);
 
-	result = CSLEDIT.data.setCslCode("<style><parent1><\/parent1>" +
-		"<parent2><child1><\/child1><\/parent2><\/style>");
+	result = CSLEDIT.data.setCslCode("<style><parent1></parent1>" +
+		"<parent2><child1></child1></parent2></style>");
 	ok(!result.hasOwnProperty('error'));
 });

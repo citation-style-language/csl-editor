@@ -13,8 +13,8 @@ CSLEDIT.MultiComboBox = function (element, possibleValues, onChange, unique) {
 	this._unique = unique;
 
 	assert(possibleValues.length > 0);
-	this._selectHtml = '<select><option>' +	possibleValues.join('<\/option><option>') +
-		'<\/option><\/select>';
+	this._selectHtml = '<select><option>' +	possibleValues.join('</option><option>') +
+		'</option></select>';
 
 	this._refresh(true);
 };
@@ -55,26 +55,26 @@ CSLEDIT.MultiComboBox.prototype._readValues = function () {
 
 CSLEDIT.MultiComboBox.prototype._refresh = function (suppressOnChange) {
 	var that = this,
-		table = $('<table><\/table>');
+		table = $('<table></table>');
 
 	this._element.html('');
 	
 	$.each(this._values, function (i, value) {
-		var row = $('<tr><\/tr>'),
+		var row = $('<tr></tr>'),
 			select = $(that._selectHtml).css({"margin-right": 0}),
 			deleteButton = $('<button class="icon delete" data-index="' + i +
-				'">Delete<\/button>').css({"margin-left": 0});
+				'">Delete</button>').css({"margin-left": 0});
 
 		select.val(value);
 
-		row.append($('<td><\/td>').append(select));
-		row.append($('<td><\/td>').append(deleteButton));
+		row.append($('<td></td>').append(select));
+		row.append($('<td></td>').append(deleteButton));
 		table.append(row);
 	});
 
 	(function(){
 		var addButton = $('<button class="icon add">Add</button>');
-		table.append($('<tr><\/tr>').append($('<td><\/td>').append(addButton)));
+		table.append($('<tr></tr>').append($('<td></td>').append(addButton)));
 	}());
 
 	this._element.append(table);

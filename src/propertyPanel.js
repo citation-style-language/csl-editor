@@ -14,17 +14,17 @@ CSLEDIT.propertyPanel = (function () {
 		checkboxControlSchema = {
 			'font-weight' : {
 				'normal' : 'default',
-				'bold' : { text : '<strong>B<\/strong>' }
+				'bold' : { text : '<strong>B</strong>' }
 				// 'light' not supported
 			},
 			'font-style' : {
-				'italic' : { text : '<i>I<\/i>' },
+				'italic' : { text : '<i>I</i>' },
 				'normal' : 'default'
 				// "oblique" not supported
 			},
 			'text-decoration' : {
 				'none' : 'default',
-				'underline' : { text : '<u>U<\/u>' }
+				'underline' : { text : '<u>U</u>' }
 			},
 			'font-variant' : {
 				'small-caps' : { text : 'All Caps' },
@@ -32,8 +32,8 @@ CSLEDIT.propertyPanel = (function () {
 			},
 			'vertical-align' : {
 				'baseline' : 'default',
-				'sup' : { text : 'x<sup>2<\/sup>' },
-				'sub' : { text : 'x<sub>2<\/sub>' }
+				'sup' : { text : 'x<sup>2</sup>' },
+				'sub' : { text : 'x<sub>2</sub>' }
 			},
 			'quotes' : {
 				'false' : 'default',
@@ -51,10 +51,10 @@ CSLEDIT.propertyPanel = (function () {
 	var inputAttributeRow = function (index, schemaAttribute, enabled) {
 		var row, textInput;
 
-		row = $('<tr><\/tr>');
-		row.append($('<td><\/td>').append(label(index,schemaAttribute)));
+		row = $('<tr></tr>');
+		row.append($('<td></td>').append(label(index,schemaAttribute)));
 
-		textInput = $('<input class="propertyInput"><\/input>');
+		textInput = $('<input class="propertyInput"></input>');
 		textInput.attr('id', inputId(index));
 
 		if (schemaAttribute.documentation !== "") {
@@ -65,13 +65,13 @@ CSLEDIT.propertyPanel = (function () {
 			textInput.attr('disabled', true);
 		}
 
-		row.append($('<td><\/td>').append(textInput));
+		row.append($('<td></td>').append(textInput));
 
 		return row;
 	};
 
 	var label = function (index, attribute) {
-		var element = $('<label class="propertyLabel"><\/label>');
+		var element = $('<label class="propertyLabel"></label>');
 	   	element.attr('for', inputId(index));
 		element.attr('id', labelId(index));
 		element.html(attribute);
@@ -232,9 +232,9 @@ CSLEDIT.propertyPanel = (function () {
 			checkboxControlId = "checkboxControl" + checkboxControlIndex;
 
 			if (control !== 'default') {
-				buttonLabel = $('<label for="' + checkboxControlId + '">' + control.text + '<\/label>');
+				buttonLabel = $('<label for="' + checkboxControlId + '">' + control.text + '</label>');
 				button = $('<input type="checkbox" id="' + checkboxControlId + '" data-attribute="' +
-					attributeName + '" data-value="' + attributeValue + '" \/>');
+					attributeName + '" data-value="' + attributeValue + '" />');
 
 				if (cslSchemaAttribute.documentation !== "") {
 					button.attr("title", cslSchemaAttribute.documentation);
@@ -351,11 +351,11 @@ CSLEDIT.propertyPanel = (function () {
 		}
 
 		if (dropdownValues.length > 0) {
-			thisRow = $('<tr><\/tr>');
-			thisRow.append($('<td><\/td>').append(label(index, attributeName)));
+			thisRow = $('<tr></tr>');
+			thisRow.append($('<td></td>').append(label(index, attributeName)));
 			if (schemaAttribute.list) {
 				multiInput = new CSLEDIT.MultiComboBox(
-						$('<td class="input"><\/td>'), dropdownValues, function() {nodeChanged();});
+						$('<td class="input"></td>'), dropdownValues, function() {nodeChanged();});
 				multiInput.val(attribute.value, true);
 				
 				if (!attribute.enabled) {
@@ -367,17 +367,17 @@ CSLEDIT.propertyPanel = (function () {
 				thisRow.append((function () {
 					var select, cell;
 					select = $('<select id="' + inputId(index) + '" class="propertySelect" attr="' + 
-						index + '"><\/select>');
+						index + '"></select>');
 
 					$.each(dropdownValues, function (i, value) {
-						var option = $("<option>" + value + "<\/option>");
+						var option = $("<option>" + value + "</option>");
 						if (value in dropdownDocumentation) {
 							option.attr("title", dropdownDocumentation[value]);
 						}
 						select.append(option);
 					});
 
-					cell = $('<td class="input"><\/td>').append(select)
+					cell = $('<td class="input"></td>').append(select)
 					if (!attribute.enabled) {
 						cell.attr('disabled', true);
 					}
@@ -396,7 +396,7 @@ CSLEDIT.propertyPanel = (function () {
 		} else {
 			toggleButton.html('Enable');
 		}
-		thisRow.append($('<td><\/td>').append(toggleButton));
+		thisRow.append($('<td></td>').append(toggleButton));
 		thisRow.find("#" + inputId(index)).val(attribute.value);
 			
 		if (schemaAttribute.documentation !== "") {
@@ -497,7 +497,7 @@ CSLEDIT.propertyPanel = (function () {
 		// remove child nodes
 		panel.children().remove();
 
-		toolbar = $('<div class="propertyToolbar"><\/div>');
+		toolbar = $('<div class="propertyToolbar"></div>');
 		panel.append(toolbar);
 
 		// TODO: data validation
@@ -552,12 +552,12 @@ CSLEDIT.propertyPanel = (function () {
 			});
 		}
 
-		table = $('<table><\/table>');
+		table = $('<table></table>');
 		// create value editor (if a text or data element)
 		if (dataType !== null) {
 			$('<tr><td><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
-				dataType + ' value<\/label><\/td>' + 
-				'<td class="input"><input id="textNodeInput" class="propertyInput"><\/input><\/td><\/tr>').
+				dataType + ' value</label></td>' + 
+				'<td class="input"><input id="textNodeInput" class="propertyInput"></input></td></tr>').
 				appendTo(panel);
 		
 			$("#textNodeInput").val(nodeData.textValue);

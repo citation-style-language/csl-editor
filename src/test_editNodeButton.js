@@ -12,13 +12,13 @@ test("object test", function () {
 
 	// need to use new
 	raises(function () {
-		button = CSLEDIT.EditNodeButton($("<div><\/div"), "style", 4, "noicon");
+		button = CSLEDIT.EditNodeButton($("<div></div"), "style", 4, "noicon");
 	});
-	button = new CSLEDIT.EditNodeButton($("<div><\/div"), "style", 4, "noicon");
+	button = new CSLEDIT.EditNodeButton($("<div></div"), "style", 4, "noicon");
 });
 
 test("add / delete nodes", function () {
-	var button = new CSLEDIT.EditNodeButton($("<div><\/div"), "style", 4, "noicon");
+	var button = new CSLEDIT.EditNodeButton($("<div></div"), "style", 4, "noicon");
 
 	equal(button.cslId, 4);
 	button.addNode("", "", {cslId:4}, 2);

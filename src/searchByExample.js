@@ -73,7 +73,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			formattedCitation,
 			thisMatchQuality,
 			row = function (title, value) {
-				return "<tr><td><span class=faint>" + title + "<\/span><\/td><td>" + value + "<\/td><\/tr>";
+				return "<tr><td><span class=faint>" + title + "</span></td><td>" + value + "</td></tr>";
 			};
 
 		console.time("searchForStyle");
@@ -142,23 +142,23 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		var jsonDocuments = cslServerConfig.jsonDocuments;
 		document.getElementById("explanation").innerHTML = "<i>Please edit this example citation to match the style you are searching for.<br />";
 		document.getElementById("exampleDocument").innerHTML =
-			"<p align=center><strong>Example Article<\/stong><\/p>" +
+			"<p align=center><strong>Example Article</stong></p>" +
 			"<table>" +
-			"<tr><td>Title:<\/td><td>" + jsonDocuments["ITEM-1"].title + "<\/td><\/tr>" +
-			"<tr><td>Authors:<\/td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "<\/td><\/tr>" + 
-			"<tr><td>Year:<\/td><td>" + jsonDocuments["ITEM-1"].issued["date-parts"][0][0] + "<\/td><\/tr>" +
-			"<tr><td>Publication:<\/td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "<\/td><\/tr>" +
-			"<tr><td>Volume:<\/td><td>" + jsonDocuments["ITEM-1"]["volume"] + "<\/td><\/tr>" +
-			"<tr><td>Issue:<\/td><td>" + jsonDocuments["ITEM-1"]["issue"] + "<\/td><\/tr>" +
-			"<tr><td>Chapter:<\/td><td>" + jsonDocuments["ITEM-1"]["chapter-number"] + "<\/td><\/tr>" +
-			"<tr><td>Pages:<\/td><td>" + jsonDocuments["ITEM-1"]["page"] + "<\/td><\/tr>" +
-			"<tr><td>Publisher:<\/td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "<\/td><\/tr>" +
-			"<tr><td>Document type:<\/td><td>" + jsonDocuments["ITEM-1"]["type"] + "<\/td><\/tr>" +
-			"<\/table>";
+			"<tr><td>Title:</td><td>" + jsonDocuments["ITEM-1"].title + "</td></tr>" +
+			"<tr><td>Authors:</td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "</td></tr>" + 
+			"<tr><td>Year:</td><td>" + jsonDocuments["ITEM-1"].issued["date-parts"][0][0] + "</td></tr>" +
+			"<tr><td>Publication:</td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "</td></tr>" +
+			"<tr><td>Volume:</td><td>" + jsonDocuments["ITEM-1"]["volume"] + "</td></tr>" +
+			"<tr><td>Issue:</td><td>" + jsonDocuments["ITEM-1"]["issue"] + "</td></tr>" +
+			"<tr><td>Chapter:</td><td>" + jsonDocuments["ITEM-1"]["chapter-number"] + "</td></tr>" +
+			"<tr><td>Pages:</td><td>" + jsonDocuments["ITEM-1"]["page"] + "</td></tr>" +
+			"<tr><td>Publisher:</td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "</td></tr>" +
+			"<tr><td>Document type:</td><td>" + jsonDocuments["ITEM-1"]["type"] + "</td></tr>" +
+			"</table>";
 	};
 
 	var clearResults = function () {
-		$("#searchResults").html("<i>Click search to find similar styles<\/i>");
+		$("#searchResults").html("<i>Click search to find similar styles</i>");
 	};
 
 	var formChanged = function () {
@@ -213,7 +213,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			$("#userCitation").cleditor()[0].change(clearResults);
 			$("#userBibliography").cleditor()[0].change(clearResults);
 			$('#searchButton').on("click", function () {
-				$("#styleFormatResult").html("<i>Searching...<\/i>");
+				$("#styleFormatResult").html("<i>Searching...</i>");
 				formChanged();
 			});
 		}

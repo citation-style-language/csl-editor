@@ -31,7 +31,7 @@ CSLEDIT.EditNodeButton.prototype.getSelectedNodePath = function () {
 };
 
 CSLEDIT.EditNodeButton.prototype.updateButton = function (){
-	this._element.html('<img class="cslPropertyButton" src="' + this.icon + '" \/>');
+	this._element.html('<img class="cslPropertyButton" src="' + this.icon + '" />');
 };
 
 CSLEDIT.EditNodeButton.prototype.addNode = function (parentId, position, newNode, nodesAdded) {

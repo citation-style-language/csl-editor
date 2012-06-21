@@ -35,10 +35,10 @@ CSLEDIT.infoPropertyPanel = (function () {
 	var nameNodes = ["author", "contributor"];
 
 	var attributeEditorRow = function (item, node, schemaAttributes) {
-		var thisRow = $('<div><\/div>');
+		var thisRow = $('<div></div>');
 		$.each(schemaAttributes, function (name) {
 			var input, attributeValue;
-			thisRow.append(' <label>' + name + '<\/label> ');
+			thisRow.append(' <label>' + name + '</label> ');
 
 			attributeValue = new CSLEDIT.CslNode(node).getAttr(name);
 
@@ -49,7 +49,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 	};
 
 	var createInput = function (nodeName, node, type, value, parentCslId) {
-		var input = $('<input><\/input>');
+		var input = $('<input></input>');
 		if (typeof node === "undefined" || node === null) {
 			if (typeof parentCslId === "undefined") {
 				input.attr("parentcslid", infoNode.cslId);
@@ -131,8 +131,8 @@ CSLEDIT.infoPropertyPanel = (function () {
 	var textValueEditorRow = function (item, node) {
 		var thisRow, value = "";
 
-		thisRow = $('<div><\/div>');
-		thisRow.append(' <label>' + item.name + '<\/label> ');
+		thisRow = $('<div></div>');
+		thisRow.append(' <label>' + item.name + '</label> ');
 
 		if (typeof node !== "undefined") {
 			value = node.textValue;
@@ -144,7 +144,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 	var nameEditorRow = function (item, cslNode) {
 		var thisRow, children, input, cslChildren;
 	   
-		thisRow = $('<div><\/div>');
+		thisRow = $('<div></div>');
 		children = CSLEDIT.schema.childElements("info/author");
 
 		cslChildren = {};
@@ -155,8 +155,8 @@ CSLEDIT.infoPropertyPanel = (function () {
 		$.each(children, function (child, unused) {
 			var value = "";
 
-			thisRow.append(' <label>' + child + '<\/label> ');
-			//input = $('<input class="' + item.node + '-' + child + '"><\/input>');
+			thisRow.append(' <label>' + child + '</label> ');
+			//input = $('<input class="' + item.node + '-' + child + '"></input>');
 
 			if (child in cslChildren) {
 				value = cslChildren[child].textValue;
@@ -186,7 +186,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 		infoNode = infoNode[0];
 
 		panel.children().remove();
-		//panel.append('<h3>Style Info<\/h3>');
+		//panel.append('<h3>Style Info</h3>');
 
 		$.each(layout, function (i, item) {
 			var nodes = CSLEDIT.data.getNodesFromPath("info/" + item.node, infoNode),
@@ -196,39 +196,39 @@ CSLEDIT.infoPropertyPanel = (function () {
 			
 			if (multipleNodes.indexOf(item.node) >= 0) {
 				schemaAttributes = CSLEDIT.schema.attributes("info/" + item.node);
-				panel.append('<h4>' + pluralise(item.name) + '<\/h4>');
-				table = $("<table><\/table>");
+				panel.append('<h4>' + pluralise(item.name) + '</h4>');
+				table = $("<table></table>");
 				$.each(nodes, function (i, node) {
 					thisRow = editorRow(item, node, schemaAttributes);
 
 					// convert 1st thisRow into table title
 					if (typeof titleRow === "undefined") {
-						titleRow = $('<tr><\/tr>');
+						titleRow = $('<tr></tr>');
 						thisRow.find('label').each(function () {
-							titleRow.append($('<td><\/td>').append($(this)));
+							titleRow.append($('<td></td>').append($(this)));
 						});
 						table.append(titleRow);
 					}
 					
 					// convert thisRow into table row
-					inputRow = $('<tr><\/tr>');
+					inputRow = $('<tr></tr>');
 					thisRow.find('input').each(function () {
-						inputRow.append($('<td><\/td>').append($(this)));
+						inputRow.append($('<td></td>').append($(this)));
 					});
 
-					deleteButton = $('<button>Delete<\/button>');
+					deleteButton = $('<button>Delete</button>');
 					deleteButton.on('click', function () {
 						CSLEDIT.controller.exec("deleteNode", [node.cslId]);
 						setupPanel(panel);
 					});
 
-					inputRow.append($('<td><\/td>').append(deleteButton));
+					inputRow.append($('<td></td>').append(deleteButton));
 					table.append(inputRow);
 				});
 
 				panel.append(table);
 				
-				addButton = $('<button>Add ' + item.name + '<\/button>');
+				addButton = $('<button>Add ' + item.name + '</button>');
 				panel.append(addButton);
 
 				addButton.on('click', function () {
@@ -238,7 +238,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 					CSLEDIT.viewController.setSuppressSelectNode(false);
 					setupPanel(panel);
 				});
-				panel.append('<br \/><br \/>');
+				panel.append('<br /><br />');
 			} else {
 				assert(nodes.length < 2);
 				thisRow = editorRow(item, nodes[0], null);

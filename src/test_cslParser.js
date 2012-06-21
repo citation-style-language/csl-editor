@@ -3,7 +3,7 @@
 module("CSLEDIT.cslParser");
 
 CSLEDIT.test_cslJSON = {
-	cslFragment : '<?xml version=\"1.0\" encoding=\"utf-8\"?><style><citation et-al-min="6" et-al-use-first="1" et-al-subsequent-min="3" et-al-subsequent-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name"><sort><key macro="author"><\/key><key macro="issued-sort"><\/key><\/sort><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><text macro="author-short"><\/text><text macro="issued-year"><\/text><text macro="citation-locator"><\/text><\/group><\/layout><\/citation><\/style>',
+	cslFragment : '<?xml version=\"1.0\" encoding=\"utf-8\"?><style><citation et-al-min="6" et-al-use-first="1" et-al-subsequent-min="3" et-al-subsequent-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name"><sort><key macro="author"></key><key macro="issued-sort"></key></sort><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><text macro="author-short"></text><text macro="issued-year"></text><text macro="citation-locator"></text></group></layout></citation></style>',
 	jsTreeData : {
 		"data": "style",
 		"attr": {

@@ -132,8 +132,8 @@ CSLEDIT.ViewController = function (
 		
 		treeView.html('');
 		$.each(smartTreeSchema, function (index, value) {
-			table = $('');//<table><\/table>');
-			row = $('');//<tr><\/tr>');
+			table = $('');//<table></table>');
+			row = $('');//<tr></tr>');
 			if (typeof value.buttons !== "undefined") {
 				$.each(value.buttons, function (i, button) {
 					var buttonElement;
@@ -146,7 +146,7 @@ CSLEDIT.ViewController = function (
 								cslId = -1;
 							}
 				
-							buttonElement = $('<div class="cslNodeButton"><\/div>');
+							buttonElement = $('<div class="cslNodeButton"></div>');
 							views.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
 								CSLEDIT.options.get("rootURL") + button.icon, function (cslId, selectedView) {
 									selectedTree = selectedView;
@@ -164,7 +164,7 @@ CSLEDIT.ViewController = function (
 							break;
 						case "custom":
 							buttonElement = $('<button class="customButton">' + 
-									button.text + '<\/button>');
+									button.text + '</button>');
 							buttonElement.on('click', button.onClick);
 							break;
 						default:
@@ -173,10 +173,10 @@ CSLEDIT.ViewController = function (
 					buttonElement.appendTo(treeView);
 				});
 			}
-			$('<h3>%1<\/h3>'.replace('%1', value.name)).appendTo(treeView);
-			row = $('<div id="%1"><\/div>'.replace('%1', value.id));
+			$('<h3>%1</h3>'.replace('%1', value.name)).appendTo(treeView);
+			row = $('<div id="%1"></div>'.replace('%1', value.id));
 			row.appendTo(treeView);
-			treeView.append($('<div class=spacer><\/div>'));
+			treeView.append($('<div class=spacer></div>'));
 		});
 
 		$.each(smartTreeSchema, function (index, value) {

@@ -6,14 +6,14 @@ CSLEDIT.xmlUtility = {
 	stripUnsupportedTagsAndContents : function (html, supportedTags) {
 		var element;
 
-		element = $("<all>" + html + "<\/all>");		
+		element = $("<all>" + html + "</all>");		
 		element.find("*").not(supportedTags.join(", ")).remove();
 
 		return element.html();
 	},
 
 	stripUnsupportedTags : function (xml, supportedTags) {
-		var regExpText = "<\/?(?:" + supportedTags.join("|") + ")[^<>]*>|(<\/?[^<>]*>)",
+		var regExpText = "</?(?:" + supportedTags.join("|") + ")[^<>]*>|(</?[^<>]*>)",
 			stripUnsupportedTags,
 			match,
 			matches = [];

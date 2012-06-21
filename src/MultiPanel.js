@@ -5,9 +5,9 @@ CSLEDIT = CSLEDIT || {};
 CSLEDIT.MultiPanel = function (id) {
 	var that = this;
 
-	this.element = $('<div class="multiPanel" id="' + id + '"><\/div>');
-	this.radioButtons = $('<div class="radioButtons"><\/div>');
-	this.currentContentPanel = $('<div class="contentPanel"><\/div>');
+	this.element = $('<div class="multiPanel" id="' + id + '"></div>');
+	this.radioButtons = $('<div class="radioButtons"></div>');
+	this.currentContentPanel = $('<div class="contentPanel"></div>');
 	this.element.append(this.radioButtons);
 	this.element.append(this.currentContentPanel);
 	this.contentPanels = [];
@@ -28,10 +28,10 @@ CSLEDIT.MultiPanel.prototype.addPanel = function (name) {
 		newPanel;
 
 	this.radioButtons.append(
-		$('<input id="' + radioId +	'" type="radio" name="multiPanel" \/>' + 
-			'<label for="' + radioId + '">' + name + '<\/label>'));
+		$('<input id="' + radioId +	'" type="radio" name="multiPanel" />' + 
+			'<label for="' + radioId + '">' + name + '</label>'));
 
-	newPanel = $('<div><\/div>').css({display: "none"});
+	newPanel = $('<div></div>').css({display: "none"});
 	this.contentPanels.push(newPanel);
 	this.currentContentPanel.append(newPanel);
 

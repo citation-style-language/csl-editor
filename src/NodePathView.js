@@ -16,10 +16,10 @@ CSLEDIT.NodePathView.prototype.selectNode = function (nodePath) {
 
 	$.each(nodePath, function (i, cslId) {
 		var node = CSLEDIT.data.getNode(cslId, cslData);
-		nodesHtml.push('<span cslid="' + node.cslId + '">' + node.name + '<\/span>');
+		nodesHtml.push('<span cslid="' + node.cslId + '">' + node.name + '</span>');
 	});
 
-	this.element.html('<h3>' + nodesHtml.join(" > ") + '<\/h3>');
+	this.element.html('<h3>' + nodesHtml.join(" > ") + '</h3>');
 
 	this.element.find('span[cslid]').css({"cursor" : "pointer"});
 	this.element.find('span[cslid]').on('click', function(event) {

@@ -16,7 +16,7 @@ CSLEDIT.searchResults = (function () {
 			closeness = matchQuality + "% match";
 		}
 
-		return '<td class="closeness match">' + closeness + '<\/td>';
+		return '<td class="closeness match">' + closeness + '</td>';
 	};
 
 	var displaySearchResults = function (styles, outputNode) {
@@ -41,7 +41,7 @@ CSLEDIT.searchResults = (function () {
 			if (style.masterId != style.styleId)
 			{
 				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
-							exampleCitations.styleTitleFromId[style.masterId] + '<\/a>)';
+							exampleCitations.styleTitleFromId[style.masterId] + '</a>)';
 			} else {
 				masterStyleSuffix = '';
 			}
@@ -77,21 +77,21 @@ CSLEDIT.searchResults = (function () {
 			outputList.push(
 				'<table' + featuredStyleClass + '>' +
 				'<tr><td colspan=3><a href="' + style.styleId + '">' +
-				exampleCitations.styleTitleFromId[style.styleId] + "<\/a>"
-				+ masterStyleSuffix + featuredStyleText + '<\/td><\/tr>' +
-				'<tr><td nowrap="nowrap"><span class="faint">Inline citation<\/span><\/td>' +
+				exampleCitations.styleTitleFromId[style.styleId] + "</a>"
+				+ masterStyleSuffix + featuredStyleText + '</td></tr>' +
+				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
 				'<td class=match>' +
-				citation + '<\/td>' + citationCloseness + '<\/tr>' +
-				'<tr><td nowrap="nowrap"><span class="faint">Bibliography<\/span><\/td>' +
+				citation + '</td>' + citationCloseness + '</tr>' +
+				'<tr><td nowrap="nowrap"><span class="faint">Bibliography</span></td>' +
 				'<td class=match>' +
-				bibliography + '<\/td>' + bibliographyCloseness + "<\/tr>" +
-				'<tr><td><\/td><td><button class="editStyle" styleURL="' +
-				style.styleId + '">Edit style<\/a><\/td><\/tr>' +
-				'<\/table>');
+				bibliography + '</td>' + bibliographyCloseness + "</tr>" +
+				'<tr><td></td><td><button class="editStyle" styleURL="' +
+				style.styleId + '">Edit style</a></td></tr>' +
+				'</table>');
 		}
 		
 		outputNode.html(
-			'<p>Displaying ' + outputList.length + ' results:<\/p>' +
+			'<p>Displaying ' + outputList.length + ' results:</p>' +
 				outputList.join("<p><p>")
 		);
 

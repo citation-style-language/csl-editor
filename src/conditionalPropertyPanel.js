@@ -9,9 +9,9 @@ CSLEDIT.conditionalPropertyPanel = function (element, node) {
 	this.node.children = []; // not interested in the children
 
 	// any / none / all selector
-	this.matchSelect = $('<select><\/select>');
+	this.matchSelect = $('<select></select>');
 	$.each(CSLEDIT.schema.attributes('choose/if').match.values, function (i, value) {
-		that.matchSelect.append('<option>' + value.value + '<\/option>');
+		that.matchSelect.append('<option>' + value.value + '</option>');
 	});
 
 	// generate mainOptions from the schema
@@ -27,9 +27,9 @@ CSLEDIT.conditionalPropertyPanel = function (element, node) {
 	});
 
 	// mainOption selector (document type / variable / date / locator / ...)
-	this.mainOptionSelect = $('<select><\/select>');
+	this.mainOptionSelect = $('<select></select>');
 	$.each(this.mainOptions, function (mainOption, properties) {
-		that.mainOptionSelect.append('<option>' + mainOption + '<\/option>');
+		that.mainOptionSelect.append('<option>' + mainOption + '</option>');
 	});
 
 	this.setup();
@@ -120,16 +120,16 @@ CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 
 	// create subOptionControl
 	if (this.mainOptions[mainOption].length > 1) {
-		this.subOptionControl = $('<select><\/select>');
+		this.subOptionControl = $('<select></select>');
 		$.each(this.mainOptions[mainOption], function (i, properties) {
-			that.subOptionControl.append($('<option>' + properties.subOption + '<\/option>'));
+			that.subOptionControl.append($('<option>' + properties.subOption + '</option>'));
 			if (that.node.hasAttr(properties.attribute)) {
 				that.subOptionControl.val(properties.subOption);
 				that.currentAttribute = properties.attribute;
 			}
 		});
 	} else {
-		this.subOptionControl = $('<span><\/span>');
+		this.subOptionControl = $('<span></span>');
 		$.each(this.mainOptions[mainOption], function (i, properties) {
 			that.subOptionControl.append(properties.subOption);
 			that.currentAttribute = properties.attribute;
@@ -139,9 +139,9 @@ CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 	// create valueControls
 	this.valueControls = [];
 	$.each(this.node.getAttr(this.currentAttribute).split(" "), function (i, value) {
-		var valueControl = $('<select class="valueSelect"><\/select>');
+		var valueControl = $('<select class="valueSelect"></select>');
 		$.each(that.possibleValues(that.currentAttribute), function (i, possibleValue) {
-			valueControl.append('<option>' + possibleValue + '<\/option>');
+			valueControl.append('<option>' + possibleValue + '</option>');
 		});
 		valueControl.val(value);
 		that.valueControls.push(valueControl);
@@ -220,51 +220,51 @@ CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 
 CSLEDIT.conditionalPropertyPanel.prototype.drawControls = function () {
 	var that = this,
-		table = $('<table class="conditional"><col class="c1" \/><col class="c2" \/>' + 
-				'<col class="c3" \/><col class="c4" \/><col class="c5" \/><\/table>'),
+		table = $('<table class="conditional"><col class="c1" /><col class="c2" />' + 
+				'<col class="c3" /><col class="c4" /><col class="c5" /></table>'),
 		valueSeparator;
 	
 	this.element.children().remove();
 
-	this.element.append($('<p><\/p>').
+	this.element.append($('<p></p>').
 			append(this.node.name + ' ').
 			append(this.matchSelect).
 			append(' of the following conditions are met'));
 
 	if (this.node.getAttr('match') === "all") {
-		valueSeparator = '<span class="weak">and<\/span>';
+		valueSeparator = '<span class="weak">and</span>';
 	} else {
-		valueSeparator = '<span class="weak">or<\/span>';
+		valueSeparator = '<span class="weak">or</span>';
 	}
 
 	$.each(this.valueControls, function (i, valueControl) {
-		var row = $('<tr><\/tr>');
+		var row = $('<tr></tr>');
 
 		if (i === 0) {
-			row.append($('<td class="mainOption"><\/td>').append(that.mainOptionSelect));
+			row.append($('<td class="mainOption"></td>').append(that.mainOptionSelect));
 		} else {
-			row.append('<td><\/td>');
+			row.append('<td></td>');
 		}
 
 		if (that.node.getAttr('disambiguate') === "true") {
-			row.append($('<td><\/td>'));
+			row.append($('<td></td>'));
 		} else {
-			row.append($('<td><\/td>').append(valueControl));
+			row.append($('<td></td>').append(valueControl));
 
 			if (i === that.valueControls.length - 1) {
-				row.append($('<td><\/td>').append(that.subOptionControl));
+				row.append($('<td></td>').append(that.subOptionControl));
 			} else {
-				row.append($('<td>' + valueSeparator + '<\/td>'));
+				row.append($('<td>' + valueSeparator + '</td>'));
 			}		
-			row.append('<td class="delete"><button class="deleteValue">-<\/button><\/td>');
+			row.append('<td class="delete"><button class="deleteValue">-</button></td>');
 			if (that.valueControls.length === 1) {
 				row.find('button.deleteValue').css({visibility:"hidden"});
 			}
 
 			if (i === that.valueControls.length - 1) {
-				row.append('<td class="add"><button class="addValue">+<\/button><\/td>');
+				row.append('<td class="add"><button class="addValue">+</button></td>');
 			} else {
-				row.append('<td class="add"><\/td>');
+				row.append('<td class="add"></td>');
 			}
 		}
 		table.append(row);
