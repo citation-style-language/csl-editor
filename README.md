@@ -60,7 +60,7 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 	// Your function to load a CSL file into the editor
 	loadCSLFunc : function () {
 		alert("Loading a blank CSL style");
-		cslEditor.setCslCode("<style><info \/><citation><layout \/><\/citation><bibliography><layout \/><\/bibliography><\/style>");
+		cslEditor.setCslCode("<style><info /><citation><layout /></citation><bibliography><layout /></bibliography></style>");
 	},
 
 	// The name of the save/export style menu item
@@ -81,9 +81,14 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 
 		// access the current style contents using:
 		// var code = cslEditor.getCslCode();
-	}
+	},
 	// override the default initial style of APA with this:
-	//,initialCslCode : "<style>this style is not valid!<\/style>"
+	//initialCslCode : "<style>this style is not valid!</style>",
+	exampleReferences : [
+		{type:"article", title:"Article Title", author:"An Author", date:"2010"},
+		{type:"book", title:"Book Title", author:"Another Author", date:"2000"}
+	],
+	exampleCitations : [[0,1], [1]] // the references which appear in each citation	
 });
 ```
 

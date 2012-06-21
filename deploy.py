@@ -17,10 +17,11 @@ pages = [
     {
         "page" : "visualEditor", 
         "jsFiles" : [
+            "src/exampleData.js",
             "src/storage.js",
+            "src/options.js",
             "src/citationEngine.js",
             "src/exampleCitations.js",
-            "src/exampleData.js",
             "src/diff.js",
             "src/debug.js",
             "src/cslParser.js",
@@ -30,8 +31,6 @@ pages = [
             "src/schema.js",
 
             "src/citationEditor.js",
-            "src/options.js",
-            "src/storage.js",
             "src/uiConfig.js",
             "src/syntaxHighlight.js",
             "src/MultiPanel.js",

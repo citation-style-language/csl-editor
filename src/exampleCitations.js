@@ -4,9 +4,28 @@ var CSLEDIT = CSLEDIT || {};
 
 // use this instead of accessing CSLEDIT.exampleData
 CSLEDIT.exampleCitations = (function () {
+	var suppressUpdate = false;
+
 	var getCitations = function () {
+		var citations;
 		if (CSLEDIT.storage.getItemJson('CSLEDIT.exampleCitations') === null) {
-		   setCitations(CSLEDIT.exampleData.citationsItems);
+
+			// create empty reference lists for each citation
+			citations = [];
+			$.each(CSLEDIT.options.get("exampleCitations"), function (citation) {
+				citations.push({
+					citationId: "CITATION-" + citation,
+					citationItems:[],
+					properties: {noteIndex:0},
+					schema: "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
+				});
+			});
+			setCitations(citations);
+
+			// populate the reference lists
+			$.each(CSLEDIT.options.get("exampleCitations"), function (citation, referenceList) {
+				setReferenceIndexesForCitation(citation, referenceList);
+			});
 		}
 		return CSLEDIT.storage.getItemJson('CSLEDIT.exampleCitations');
 	};
@@ -25,7 +44,7 @@ CSLEDIT.exampleCitations = (function () {
 	var setCitationOptions = function (citationOptions) {
 		var citations = getCitations();
 		CSLEDIT.storage.setItem('CSLEDIT.exampleCitationOptions', JSON.stringify(citationOptions));
-
+		
 		applyCitationOptions(citations, citationOptions);
 		setCitations(citations);
 	};
@@ -82,14 +101,34 @@ CSLEDIT.exampleCitations = (function () {
 
 	var getReferences = function () {
 		if (CSLEDIT.storage.getItemJson('CSLEDIT.exampleReferences') === null) {
-		   setReferences(CSLEDIT.exampleData.jsonDocumentList);
+		   setReferences(CSLEDIT.options.get('exampleReferences'));
 		}
 		return CSLEDIT.storage.getItemJson('CSLEDIT.exampleReferences');
 	};
 	var setReferences = function (referenceList) {
 		CSLEDIT.storage.setItem('CSLEDIT.exampleReferences', JSON.stringify(referenceList));
 
+		suppressUpdate = true;
+		$.each([0, 1], function (i, citation) {
+			limitReferenceIndexesForCitation(citation);
+		});
+		suppressUpdate = false;
+
 		update();
+	};
+
+	// remove out of range indexes
+	var limitReferenceIndexesForCitation = function (citationIndex) {
+		var newReferenceList = [],
+			references = getReferences();
+
+		$.each(getReferenceIndexesForCitation(citationIndex), function (i, referenceIndex) {
+			console.log("references = " + JSON.stringify(references));
+			if (referenceIndex < references.length) {
+				newReferenceList.push(referenceIndex);
+			}
+		});
+		setReferenceIndexesForCitation(citationIndex, newReferenceList);
 	};
 
 	var getReferenceIndexesForCitation = function (citationIndex) {
@@ -103,7 +142,6 @@ CSLEDIT.exampleCitations = (function () {
 		return indexes;
 	};
 
-	// TODO: change to include cite options: page locator, etc...
 	var setReferenceIndexesForCitation = function (citationIndex, references) {
 		var citations = getCitations();
 		
@@ -117,7 +155,7 @@ CSLEDIT.exampleCitations = (function () {
 
 		setCitations(citations);
 	};
-
+	
 	var addReference = function (referenceData, citationToAddTo /* optional */ ) {
 		var references = getReferences(),
 			citations;
@@ -140,7 +178,9 @@ CSLEDIT.exampleCitations = (function () {
 	};
 
 	var update = function () {
-		CSLEDIT.viewController.styleChanged("formatCitations");
+		if (!suppressUpdate) {
+			CSLEDIT.viewController.styleChanged("formatCitations");
+		}
 	};
 
 	return {

@@ -19,7 +19,9 @@ CSLEDIT.options = (function () {
 			editStyleFunc : function (url) {
 				alert("Edit style not avaiable.\n\n" +
 					"For implementers: You need to add an editStyle_func to the options.");
-			}
+			},
+			exampleReferences : CSLEDIT.exampleData.jsonDocumentList,
+			exampleCitations : [[0],[11]]
 		};
 
 	// create the default options which are a function of user options
