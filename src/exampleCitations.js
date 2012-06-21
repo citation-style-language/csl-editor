@@ -123,7 +123,6 @@ CSLEDIT.exampleCitations = (function () {
 			references = getReferences();
 
 		$.each(getReferenceIndexesForCitation(citationIndex), function (i, referenceIndex) {
-			console.log("references = " + JSON.stringify(references));
 			if (referenceIndex < references.length) {
 				newReferenceList.push(referenceIndex);
 			}
