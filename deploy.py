@@ -102,6 +102,7 @@ pages = [
     {
         "page" : "test",
         "jsFiles" : [
+            "src/exampleData.js",
             "src/options.js",
             "src/uiConfig.js",
             "src/storage.js",

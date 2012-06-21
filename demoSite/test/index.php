@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="../../external/jstree/jquery.jstree-patch1.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../external/jstree/themes/default/style.css" />	
 
+	<script type="text/javascript" src="../../src/exampleData.js"></script>
 	<script type="text/javascript" src="../../src/options.js"></script>
 	<script type="text/javascript" src="../../src/storage.js"></script>
 
