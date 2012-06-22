@@ -51,7 +51,7 @@ test("test exec", function () {
 	equal(temp, 12);
 });
 
-test("undo", function () {
+test("undo / redo", function () {
 	// undo requires CSLEDIT.data to return the inverse function
 	// for every function that's called
 
@@ -68,6 +68,11 @@ test("undo", function () {
 		},
 		deleteNode : function (arg) {
 			lastCommand = "deleteNode(" + arg + ")";
+			// return inverse
+			return {
+				command : "addNode",
+				args : [arg]
+			}
 		},
 		moveNode : function () {},
 		amendNode : function () {},
@@ -79,10 +84,28 @@ test("undo", function () {
 	CSLEDIT.controller.exec("addNode", [2]);
 	equal(lastCommand, "addNode(2)");
 
+	// the view can do this check to see if undo is possible
+	equal(CSLEDIT.controller.commandHistory.length, 2);
+
 	CSLEDIT.controller.undo();
 	equal(lastCommand, "deleteNode(2)");
 	CSLEDIT.controller.undo();
 	equal(lastCommand, "deleteNode(1)");
 
-	equal(CSLEDIT.controller.commandHistory.length, 0);
+	// nothing more to undo
+	equal(CSLEDIT.controller.commandHistory.length, 0, "no more undos left");
+
+	// the view can do this check to see if redo is possible
+	equal(CSLEDIT.controller.undoCommandHistory.length, 2, "2 redos possible");
+	CSLEDIT.controller.redo();
+	equal(lastCommand, "addNode(1)", "redo performed: addNode(1)");
+
+	// one more redo possible
+	equal(CSLEDIT.controller.undoCommandHistory.length, 1, "1 redo possible");
+
+	// perfoming any new command resets the undoCommandHistory
+	CSLEDIT.controller.exec("addNode", [4]);
+
+	// no redos allowed (need to undo again first)
+	equal(CSLEDIT.controller.undoCommandHistory.length, 0, "no more redos");
 });
