@@ -87,6 +87,7 @@ pages = [
             "src/diff.js",
             "src/cslParser.js",
             "src/cslNode.js",
+            "src/Iterator.js",
             "src/cslData.js",
             "src/codeEditor.js"
         ]
@@ -106,6 +107,7 @@ pages = [
             "src/diff.js",
             "src/cslParser.js",
             "src/cslNode.js",
+            "src/Iterator.js",
             "src/cslData.js",
             "src/searchResults.js",
             "src/searchByExample.js",
@@ -122,6 +124,7 @@ pages = [
             "src/storage.js",
             "src/cslParser.js",
             "src/cslNode.js",
+            "src/Iterator.js",
             "src/cslData.js",
             "src/searchResults.js",
             "src/searchByName.js"

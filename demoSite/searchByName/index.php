@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="../../generated/exampleCitationsEnc.js"></script>
 	<script type="text/javascript" src="../../src/cslParser.js"></script>
 	<script type="text/javascript" src="../../src/cslNode.js"></script>
+	<script type="text/javascript" src="../../src/Iterator.js"></script>
 	<script type="text/javascript" src="../../src/cslData.js"></script>
 	<script type="text/javascript" src="../../src/searchResults.js"></script>
 
