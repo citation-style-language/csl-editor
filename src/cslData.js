@@ -15,11 +15,7 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
 	var viewControllers = [],
 		callbacksEnabled = true,
-		requiredNodes = _requiredNodes || [
-			"style/info",
-			"style/citation/layout",
-			"style/bibliography/layout"
-		];
+		requiredNodes = _requiredNodes || [];
 
 	var get = function () {
 		return CSLEDIT.storage.getItemJson(CSL_DATA);
