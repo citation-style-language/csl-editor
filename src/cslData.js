@@ -12,7 +12,7 @@ var CSLEDIT = CSLEDIT || {};
  * - Amend node
  */
 
-CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
+CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
 	var viewControllers = [],
 		callbacksEnabled = true,
 		requiredNodes = _requiredNodes || [
@@ -27,27 +27,30 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 
 	var set = function (cslData) {
 		// update 'style/info/updated'
-		var updatedNode = getNodesFromPath('style/info/updated', cslData)[0],
+		var updatedNode,
 			iter,
 			index,
 			node;
 
-		if (typeof(updatedNode) === "undefined") {
-			console.log("no style/info/updated node: resetting CSL code");
-			setCslCode(CSLEDIT.cslParser.cslCodeFromCslData(cslData));
-			updatedNode = getNodesFromPath('style/info/updated')[0];
-		}
-		 
-		// write timestamp to updated node
-		iter = new CSLEDIT.Iterator(cslData);
-		index = 0;
-		while (iter.hasNext()) {
-			node = iter.next();
-			if (index === updatedNode.cslId) {	
-				node.textValue = (new Date()).toUTCString();
-				break;
+		if (updateTime) {
+			updatedNode = getNodesFromPath('style/info/updated', cslData)[0];
+			if (typeof(updatedNode) === "undefined") {
+				console.log("no style/info/updated node: resetting CSL code");
+				setCslCode(CSLEDIT.cslParser.cslCodeFromCslData(cslData));
+				updatedNode = getNodesFromPath('style/info/updated')[0];
 			}
-			index++;
+		 
+			// write timestamp to updated node
+			iter = new CSLEDIT.Iterator(cslData);
+			index = 0;
+			while (iter.hasNext()) {
+				node = iter.next();
+				if (index === updatedNode.cslId) {	
+					node.textValue = (new Date()).toUTCString();
+					break;
+				}
+				index++;
+			}
 		}
 
 		CSLEDIT.storage.setItem(CSL_DATA, JSON.stringify(cslData));
@@ -89,13 +92,15 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 
 		set(cslData);
 
-		// add a style/info/updated node if not present
-		// (this will be written to on every edit, create here
-		//  to avoid complicating undo/redo in CSLEDIT.controller)
-		if (getNodesFromPath('style/info/updated', cslData).length === 0) {
-			console.log("creating required updated node");
-			addNode(getNodesFromPath('style/info')[0].cslId, "last",
-					new CSLEDIT.CslNode("updated", [], [], -1), true);
+		if (updateTime) {
+			// add a style/info/updated node if not present
+			// (this will be written to on every edit, create here
+			//  to avoid complicating undo/redo in CSLEDIT.controller)
+			if (getNodesFromPath('style/info/updated', cslData).length === 0) {
+				console.log("creating required updated node");
+				addNode(getNodesFromPath('style/info')[0].cslId, "last",
+						new CSLEDIT.CslNode("updated", [], [], -1), true);
+			}
 		}
 
 		emit("newStyle", []);
@@ -579,4 +584,5 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 };
 
 // global instance, this is overwritten for unit tests
-CSLEDIT.data = CSLEDIT.Data("CSLEDIT.cslData");
+CSLEDIT.data = CSLEDIT.Data("CSLEDIT.cslData",
+		["style/info", "style/citation/layout", "style/bibliography/layout"], true);
