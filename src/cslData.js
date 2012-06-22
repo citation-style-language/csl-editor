@@ -87,22 +87,28 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			return { error: error };
 		}
 
-		set(cslData);
-
 		if (updateTime) {
 			// add a style/info/updated node if not present
 			// (this will be written to on every edit, create here
-			//  to avoid complicating undo/redo in CSLEDIT.controller)
-			if (getNodesFromPath('style/info/updated', cslData).length === 0) {
+			//  to avoid doing on every change which would complicate
+			//  undo/redo code in CSLEDIT.controller)
+			updateTime = false;
+			set(cslData);
+			if (getNodesFromPath('style/info/updated').length === 0) {
 				console.log("creating required updated node");
 				addNode(getNodesFromPath('style/info')[0].cslId, "last",
 						new CSLEDIT.CslNode("updated", [], [], -1), true);
 			}
+			cslData = get();
+			updateTime = true;
 		}
+
+		set(cslData);
 
 		emit("newStyle", []);
 		return {};
 	};
+
 	var getCslCode = function () {
 		return CSLEDIT.cslParser.cslCodeFromCslData(get());
 	};
