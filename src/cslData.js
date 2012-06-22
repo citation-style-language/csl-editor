@@ -22,13 +22,13 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	};
 
 	var set = function (cslData) {
-		// update 'style/info/updated'
 		var updatedNode,
 			iter,
 			index,
 			node;
 
 		if (updateTime) {
+			// update 'style/info/updated'
 			updatedNode = getNodesFromPath('style/info/updated', cslData)[0];
 			if (typeof(updatedNode) === "undefined") {
 				console.log("no style/info/updated node: resetting CSL code");
@@ -42,7 +42,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			while (iter.hasNext()) {
 				node = iter.next();
 				if (index === updatedNode.cslId) {	
-					node.textValue = (new Date()).toUTCString();
+					node.textValue = (new Date()).toISOString();
 					break;
 				}
 				index++;
@@ -52,6 +52,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		CSLEDIT.storage.setItem(CSL_DATA, JSON.stringify(cslData));
 		return cslData;
 	};
+
 	var setCslCode = function (cslCode) {
 		var cslData,
 			error;
