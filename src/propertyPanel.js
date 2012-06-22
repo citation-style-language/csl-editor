@@ -175,7 +175,8 @@ CSLEDIT.propertyPanel = (function () {
 		return {
 			name : nodeData.name,
 			cslId : nodeData.cslId,
-			attributes : nodeData.attributes
+			attributes : nodeData.attributes,
+			textValue : nodeData.textValue
 		};
 	};
 	
@@ -201,6 +202,7 @@ CSLEDIT.propertyPanel = (function () {
 				enabled : nodeData.attributes[index].enabled
 			};
 		});
+		nodeData.textValue = $('#textNodeInput').val();
 
 		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
 	};
