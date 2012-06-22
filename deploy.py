@@ -26,7 +26,10 @@ print "sys.argv = ", json.dumps(sys.argv)
 
 # these directories must be siblings of the current source directory
 demoSiteRoot = "/" + sys.argv[2];
-cslEditRoot = demoSiteRoot + "/CSLEDIT";
+if (demoSiteRoot == "/"):
+    cslEditRoot = "/CSLEDIT";
+else:
+    cslEditRoot = demoSiteRoot + "/CSLEDIT";
 
 cslEditDir = sys.argv[1] + cslEditRoot;
 demoSiteDir = sys.argv[1] + demoSiteRoot;
