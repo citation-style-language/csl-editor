@@ -6,12 +6,33 @@ import subprocess
 import sys
 import re
 
-# these directories must be siblings of the current source directory
-cslEditRoot = "/CSLEDIT";
-demoSiteRoot = "/csl";
+import json
 
-cslEditDir = ".." + cslEditRoot;
-demoSiteDir = ".." + demoSiteRoot;
+if (len(sys.argv) < 3):
+    print "----------------------------------------"
+    print "Deployment script for CSL Editor website"
+    print "----------------------------------------"
+    print ""
+    print "Please specify root directory and root URL path (without leading forward slash)"
+    print ""
+    print "e.g. to install to the subdomain root"
+    print "     python deploy.py \"../public_html\" \"\""
+    print ""
+    print "     or to install to URL path /csl"
+    print "     python deploy.py \"../public_html\" \"csl\""
+    quit()
+
+print "sys.argv = ", json.dumps(sys.argv)
+
+# these directories must be siblings of the current source directory
+demoSiteRoot = "/" + sys.argv[2];
+cslEditRoot = demoSiteRoot + "/CSLEDIT";
+
+cslEditDir = sys.argv[1] + cslEditRoot;
+demoSiteDir = sys.argv[1] + demoSiteRoot;
+
+print "cslEditDir = ", cslEditDir
+print "demoSiteDir = ", demoSiteDir
 
 pages = [
     {
@@ -167,16 +188,16 @@ def ignored_files(adir, filenames):
     return [filename for filename in filenames if filename == '.git']
 
 # clean build dir
-if os.path.exists(cslEditDir):
-    shutil.rmtree(cslEditDir)
-
 if os.path.exists(demoSiteDir):
     shutil.rmtree(demoSiteDir)
 
-os.makedirs(cslEditDir)
-os.makedirs(cslEditDir + '/css')
+if os.path.exists(cslEditDir):
+    shutil.rmtree(cslEditDir)
 
 os.makedirs(demoSiteDir)
+
+os.makedirs(cslEditDir)
+os.makedirs(cslEditDir + '/css')
 
 gitCommit = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE).communicate()[0].replace('\n','')
 print 'building from commit ', gitCommit
