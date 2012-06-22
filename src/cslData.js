@@ -27,7 +27,7 @@ CSLEDIT.Data = function (CSL_DATA, /*optional*/ _requiredNodes) {
 
 	var set = function (cslData) {
 		// update 'style/info/updated'
-		var updatedNode = getNodesFromPath('style/info/updated')[0],
+		var updatedNode = getNodesFromPath('style/info/updated', cslData)[0],
 			iter,
 			index,
 			node;
