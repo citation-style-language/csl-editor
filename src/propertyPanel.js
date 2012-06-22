@@ -203,7 +203,6 @@ CSLEDIT.propertyPanel = (function () {
 			};
 		});
 		nodeData.textValue = $('#textNodeInput').val();
-
 		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
 	};
 

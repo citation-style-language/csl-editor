@@ -143,7 +143,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 			}
 			highlightTree(nodeStack, parentNode, depth);
 		} else {
-			if (nodeStack.length > 0) {
+			if (nodeStack.length > 1) {
 				// Look for a possible macro instance "text" node in the nodeStack,
 				// if found, clear the highlighting for all macros not within this
 				// instance or the definition
