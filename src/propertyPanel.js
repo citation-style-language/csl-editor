@@ -46,13 +46,14 @@ CSLEDIT.propertyPanel = (function () {
 		},
 		choicePanel,
 		schemaChoices,
-		schemaChoiceIndexes;
+		schemaChoiceIndexes,
+		schemaAttributes;
 
-	var inputAttributeRow = function (index, schemaAttribute, enabled) {
+	var inputAttributeRow = function (index, attributeName, schemaAttribute, enabled) {
 		var row, textInput;
 
 		row = $('<tr></tr>');
-		row.append($('<td></td>').append(label(index,schemaAttribute)));
+		row.append($('<td></td>').append(label(index,attributeName)));
 
 		textInput = $('<input class="propertyInput"></input>');
 		textInput.attr('id', inputId(index));
@@ -61,7 +62,7 @@ CSLEDIT.propertyPanel = (function () {
 			textInput.attr('title', schemaAttribute.documentation);
 		}
 
-		if (!enabled) {
+		if (!enabled && !schemaAttribute.hasOwnProperty("defaultValue")) {
 			textInput.attr('disabled', true);
 		}
 
@@ -186,7 +187,7 @@ CSLEDIT.propertyPanel = (function () {
 
 		// read user data
 		$('[id^="nodeAttributeLabel"]').each( function () {
-			var key, value, index;
+			var key, value, index, enabled;
 			index = $(this).attr("id").replace(/^nodeAttributeLabel/, "");
 			key = $(this).html();
 
@@ -196,10 +197,17 @@ CSLEDIT.propertyPanel = (function () {
 				value = multiInputs[index].val();
 			}
 
+			if (schemaAttributes.hasOwnProperty(key) &&
+					schemaAttributes[key].hasOwnProperty("defaultValue")) {
+				enabled = (value !== schemaAttributes[key].defaultValue);
+			} else {
+				enabled = nodeData.attributes[index].enabled;
+			}
+
 			nodeData.attributes[index] = {
 				key : key,
 				value : value,
-				enabled : nodeData.attributes[index].enabled
+				enabled : enabled
 			};
 		});
 		nodeData.textValue = $('#textNodeInput').val();
@@ -263,7 +271,8 @@ CSLEDIT.propertyPanel = (function () {
 			valueIndex,
 			thisRow,
 			multiInput,
-			intValue;
+			intValue,
+			value;
 
 		attribute = null;
 
@@ -291,8 +300,13 @@ CSLEDIT.propertyPanel = (function () {
 			}
 		});
 		if (attribute === null) {
+			if (!schemaAttribute.hasOwnProperty("defaultValue")) {
+				value = "";
+			} else {
+				value = schemaAttribute.defaultValue;
+			}
 			// create attribute if it doesn't exist
-			attribute = { key : attributeName, value : "", enabled : false };
+			attribute = { key : attributeName, value : value, enabled : false };
 		}
 
 		newAttributes.push(attribute);
@@ -359,7 +373,7 @@ CSLEDIT.propertyPanel = (function () {
 						$('<td class="input"></td>'), dropdownValues, function() {nodeChanged();});
 				multiInput.val(attribute.value, true);
 				
-				if (!attribute.enabled) {
+				if (!attribute.enabled && !schemaAttribute.hasOwnProperty("defaultValue")) {
 					multiInput.getElement().attr("disabled", true);
 				}
 				thisRow.append(multiInput.getElement());
@@ -379,7 +393,7 @@ CSLEDIT.propertyPanel = (function () {
 					});
 
 					cell = $('<td class="input"></td>').append(select)
-					if (!attribute.enabled) {
+					if (!attribute.enabled && !schemaAttribute.hasOwnProperty("defaultValue")) {
 						cell.attr('disabled', true);
 					}
 					
@@ -387,17 +401,20 @@ CSLEDIT.propertyPanel = (function () {
 				}()));
 			}
 		} else {
-			thisRow = inputAttributeRow(index, attributeName, attribute.enabled);
+			thisRow = inputAttributeRow(index, attributeName, schemaAttribute, attribute.enabled);
 		}
 
 		var toggleButton;
-		toggleButton = $('<button class="toggleAttrButton" attrIndex="' + index + '"></button>');
-		if (attribute.enabled) {
-			toggleButton.html('Disable');
-		} else {
-			toggleButton.html('Enable');
+
+		if (!schemaAttribute.hasOwnProperty("defaultValue")) {
+			toggleButton = $('<button class="toggleAttrButton" attrIndex="' + index + '"></button>');
+			if (attribute.enabled) {
+				toggleButton.html('Disable');
+			} else {
+				toggleButton.html('Enable');
+			}
+			thisRow.append($('<td></td>').append(toggleButton));
 		}
-		thisRow.append($('<td></td>').append(toggleButton));
 		thisRow.find("#" + inputId(index)).val(attribute.value);
 			
 		if (schemaAttribute.documentation !== "") {
@@ -486,11 +503,12 @@ CSLEDIT.propertyPanel = (function () {
 		});
 	};
 
-	var setupPanel = function (_panel, _nodeData, dataType, schemaAttributes, _schemaChoices) {
+	var setupPanel = function (_panel, _nodeData, dataType, _schemaAttributes, _schemaChoices) {
 		var table,
 			attrIndex;
 		
 		schemaChoices = _schemaChoices;
+		schemaAttributes = _schemaAttributes;
 
 		panel = _panel;
 		nodeData = _nodeData;
