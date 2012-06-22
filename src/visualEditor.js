@@ -233,7 +233,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 						if (csl !== null && typeof csl !== "undefined") {
 							CSLEDIT.controller.exec('setCslCode', [csl]);
 						}
-					} else if (clickedName === "New style") {
+					} else if (clickedName === "New Style") {
 						// fetch the URL
 						$.ajax({
 							url : CSLEDIT.options.get("rootURL") + "/content/newStyle.csl",
