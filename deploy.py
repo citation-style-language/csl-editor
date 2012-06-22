@@ -6,8 +6,6 @@ import subprocess
 import sys
 import re
 
-import json
-
 if (len(sys.argv) < 3):
     print "----------------------------------------"
     print "Deployment script for CSL Editor website"
@@ -21,8 +19,6 @@ if (len(sys.argv) < 3):
     print "     or to install to URL path /csl"
     print "     python deploy.py \"../public_html\" \"csl\""
     quit()
-
-print "sys.argv = ", json.dumps(sys.argv)
 
 # these directories must be siblings of the current source directory
 demoSiteRoot = "/" + sys.argv[2];
