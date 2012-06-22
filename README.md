@@ -1,6 +1,6 @@
 # Search and Edit tools for .csl (Citation Style Language) files
 
-This web application is intended to allow users of CSL based reference managers to search for citation styles and edit them. It's still an alpha version, but the Visual Editor supports all the features of CSL (AFAIK) and it should be possible to do real work with it.
+This web application is intended to allow users of CSL based reference managers to search for citation styles and edit them. It's still an alpha version, but the Visual Editor supports all the features of independent CSL styles (AFAIK) and it should be possible to do real work with it.
 
 Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
@@ -8,7 +8,7 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 ### Prerequisites
 
-- Basic LAMP stack
+- LAMP stack
 
 - Java runtime (doesn't have to be on server, just for pre-processing)
 
