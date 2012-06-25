@@ -18,19 +18,19 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 ### To Deploy Website
 
-- Checkout repo into directory &lt;SERVER-ROOT&gt;/csl-source/ where SERVER-ROOT is typically public\_html
+- Checkout repo into a directory *outside* of the root path you want the webapp installed to.
 
-- Run "git submodule update --init" from checked out directory to fetch submodules
+- Run `git submodule update --init` from checked out directory to fetch submodules
 
 - Run configure.sh
 
 (For developing with the original js source files, you can now point your browser to /csl-source/demoSite/)
 
-- Create the file demoSite/feedbackEmail.txt containing a single email address that you want the feedback widget to send to
+- Create the file feedbackEmail.txt within the demoSite directory containing a single email address that you want the feedback widget to send to
 
-- Run "python deploy.py"
+- Run `python deploy.py $SERVER\_ROOT\_DIRECTORY $SITE\_PATH`, where `$SERVER\_ROOT\_DIRECTORY` is typically `public\_html` and `$SITE\_PATH` can be an empty string to install to the domain root or a subdirectory of the server root directory. Note that anything in the directory `$SERVER\_ROOT\_DIRECTORY/$SITE\_PATH` will be removed!
 
-- Point your browser to /csl/ to access the site (uses concatenated js files and renamed css files)
+- Point your browser to DOMAIN\_NAME/$SITE\_PATH to access the site (uses concatenated js files and renamed css files)
 
 - Point your browser to either /csl-source/demoSite/test or /csl/test/ to run unit tests
 
