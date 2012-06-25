@@ -15,7 +15,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.Schema = function () {
+CSLEDIT.Schema = function (addMissingDefaultValues) {
 	var mainSchemaData,
 		schemas = [],
 		nodesParsed = 0,
@@ -437,9 +437,24 @@ CSLEDIT.Schema = function () {
 					documentation : values.documentation
 				};
 			}
-			if (defaultValue !== null) {
-				thisNodeProperties.attributes[attributeName].defaultValue = defaultValue.value;
+
+			if (addMissingDefaultValues) {
+				// add an empty string if no default value is present
+				
+				if (defaultValue === null) {
+					defaultValue = {value:""};
+				
+					if (thisNodeProperties.attributes[attributeName].values.length > 0) {
+						thisNodeProperties.attributes[attributeName].values.splice(0,0,{
+							documentation: "No value",
+							type: "novalue",
+							value: defaultValue.value
+						});
+					}
+				}
 			}
+
+			thisNodeProperties.attributes[attributeName].defaultValue = defaultValue.value;
 
 			return thisNodeProperties;
 		},

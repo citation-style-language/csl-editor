@@ -330,6 +330,11 @@ CSLEDIT.propertyPanel = (function () {
 		if (schemaValues.length > 0) {
 			for (valueIndex = 0; valueIndex < schemaValues.length; valueIndex++) {
 				switch (schemaValues[valueIndex].type) {
+				case "novalue":
+					dropdownValues.push(schemaValues[valueIndex].value);
+					dropdownDocumentation[schemaValues[valueIndex].value] =
+						schemaValues[valueIndex].documentation;
+					break;
 				case "value":
 					dropdownValues.push(schemaValues[valueIndex].value);
 					if (schemaValues[valueIndex].documention !== "") {
@@ -365,7 +370,7 @@ CSLEDIT.propertyPanel = (function () {
 			}
 		}
 
-		if (dropdownValues.length > 0) {
+		if (dropdownValues.length > 1 /* 1 because it includes the default value */) {
 			thisRow = $('<tr></tr>');
 			thisRow.append($('<td></td>').append(label(index, attributeName)));
 			if (schemaAttribute.list) {

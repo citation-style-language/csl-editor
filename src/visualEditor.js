@@ -17,7 +17,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		url: CSLEDIT.options.get("rootURL") + "/html/visualEditor.html",
 		success : function (data) {
 			editorElement.html(data);
-			CSLEDIT.schema = CSLEDIT.Schema();
+			CSLEDIT.schema = CSLEDIT.Schema(true);
 			CSLEDIT.schema.callWhenReady(init);
 		},
 		error : function (jaXHR, textStatus, errorThrown) {
