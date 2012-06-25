@@ -129,8 +129,9 @@ CSLEDIT.conditionalPropertyPanel.prototype.possibleValues = function (attribute)
 	$.each(CSLEDIT.schema.choices("choose/if"), function (i, attributes) {
 		if (attributes.hasOwnProperty(attribute)) {
 			$.each(attributes[attribute].values, function (i2, possibleValue) {
-				assertEqual(possibleValue.type, "value");
-				possibleValues.push(possibleValue.value);
+				if (possibleValue.type === "value") {
+					possibleValues.push(possibleValue.value);
+				}
 			});
 			return false;
 		}
@@ -141,9 +142,6 @@ CSLEDIT.conditionalPropertyPanel.prototype.possibleValues = function (attribute)
 CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 	var that = this,
 		mainOption;
-
-	// set matchSelect value
-	this.matchSelect.val(this.node.getAttr('match') || "any"); /* TODO: get schema defualt */;
 
 	// set mainOptionSelect value
 	$.each(this.node.attributes, function (i, attribute) {
@@ -157,7 +155,9 @@ CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 		}
 	});
 
-	console.log('mainOption = ' + mainOption);
+	// set matchSelect value
+	this.matchSelect.val(this.node.getAttr('match') || 
+			CSLEDIT.schema.attributes("choose/if").match.defaultValue);
 
 	if (typeof mainOption === "undefined") {
 		// should show at least one attribute value, so create one
@@ -165,6 +165,7 @@ CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 		//       but should usually only happen after Add Node
 
 		this.node.setAttr("type", "article");
+		this.node.setAttr("match", "any");
 		CSLEDIT.controller.exec('amendNode', [this.node.cslId, this.node]);
 		this.setup();
 		return;
@@ -276,7 +277,9 @@ CSLEDIT.conditionalPropertyPanel.prototype.drawControls = function () {
 	var that = this,
 		table = $('<table class="conditional"><col class="c1" /><col class="c2" />' + 
 				'<col class="c3" /><col class="c4" /><col class="c5" /></table>'),
-		valueSeparator;
+		valueSeparator,
+		matchValue = this.node.getAttr('match') ||
+			CSLEDIT.schema.attributes("choose/if").match.defaultValue;
 	
 	this.element.children().remove();
 
@@ -285,7 +288,7 @@ CSLEDIT.conditionalPropertyPanel.prototype.drawControls = function () {
 			append(this.matchSelect).
 			append(' of the following conditions are met'));
 
-	if (this.node.getAttr('match') === "all") {
+	if (matchValue === "all") {
 		valueSeparator = '<span class="weak">and</span>';
 	} else {
 		valueSeparator = '<span class="weak">or</span>';
