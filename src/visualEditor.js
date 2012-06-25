@@ -175,11 +175,11 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			var target = $(event.target),
 				nodeName = target.attr('data-nodeName');
 
+			dialogDiv.dialog('destroy');
+
 			CSLEDIT.controller.exec("addNode", [
 				CSLEDIT.viewController.selectedNode(), 0, { name : nodeName, attributes : []}
 			]);
-
-			dialogDiv.dialog('destroy');
 		});
 
 		dialogDiv.dialog({modal : true});
