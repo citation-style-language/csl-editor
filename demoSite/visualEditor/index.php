@@ -36,6 +36,7 @@
 	<script type="text/javascript" src="../../src/Iterator.js"></script>
 	<script type="text/javascript" src="../../src/cslNode.js"></script>
 	<script type="text/javascript" src="../../src/cslData.js"></script>
+	<script type="text/javascript" src="../../src/schemaOptions.js"></script>
 	<script type="text/javascript" src="../../src/schema.js"></script>
 
 	<script type="text/javascript" src="../../src/citationEditor.js"></script>

@@ -15,7 +15,8 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.Schema = function (addMissingDefaultValues) {
+CSLEDIT.Schema = function (
+		schemaOptions /* used to apply modifications appropriate to Visual Editor */ ) {
 	var mainSchemaData,
 		schemas = [],
 		nodesParsed = 0,
@@ -438,23 +439,23 @@ CSLEDIT.Schema = function (addMissingDefaultValues) {
 				};
 			}
 
-			if (addMissingDefaultValues) {
+			if ('defaultDefaultAttribute' in schemaOptions) {
 				// add an empty string if no default value is present
-				
 				if (defaultValue === null) {
-					defaultValue = {value:""};
+					defaultValue = {
+						value: schemaOptions.defaultDefaultAttribute.value
+					};
 				
 					if (thisNodeProperties.attributes[attributeName].values.length > 0) {
-						thisNodeProperties.attributes[attributeName].values.splice(0,0,{
-							documentation: "No value",
-							type: "novalue",
-							value: defaultValue.value
-						});
+						thisNodeProperties.attributes[attributeName].values.splice(
+								0,0,schemaOptions.defaultDefaultAttribute);
 					}
 				}
 			}
 
-			thisNodeProperties.attributes[attributeName].defaultValue = defaultValue.value;
+			if (defaultValue !== null) {
+				thisNodeProperties.attributes[attributeName].defaultValue = defaultValue.value;
+			}
 
 			return thisNodeProperties;
 		},
@@ -579,14 +580,19 @@ CSLEDIT.Schema = function (addMissingDefaultValues) {
 			return null;
 		},
 		"a:documentation" : function (node) {
-			var thisNodeProperties;
+			var thisNodeProperties,
+				documentation;
+
+			if ('documentationFilter' in schemaOptions) {
+				documentation = schemaOptions.documentationFilter(node.textContent);
+			}
 
 			if (lastAttributeValue === null) {
 				thisNodeProperties = new NodeProperties();
-				thisNodeProperties.documentation = node.textContent.replace(/\n/g, " ");
+				thisNodeProperties.documentation = documentation;
 				return thisNodeProperties;				
 			} else {
-				lastAttributeValue.documentation = node.textContent.replace(/\n/g, " ");
+				lastAttributeValue.documentation = documentation;
 				lastAttributeValue = null;
 				return null;
 			}

@@ -48,6 +48,7 @@ pages = [
             "src/Iterator.js",
             "src/cslNode.js",
             "src/cslData.js",
+            "src/schemaOptions.js",
             "src/schema.js",
 
             "src/citationEditor.js",
