@@ -480,7 +480,25 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			var deletedNode,
 				nodeAndParent = getNodeAndParent(id),
 				parentNode,
-				position;
+				position,
+				error;
+
+			// can't delete required nodes
+			$.each(requiredNodes, function (i, nodePath) {
+				$.each (getNodesFromPath(nodePath), function (i, node) {
+					if (node.cslId === id) {
+						error = "Cannot delete required node: " + nodePath;
+						return false;
+					}
+				});
+				if (error) {
+					return false;
+				}
+			});
+
+			if (error) {
+				return {error : error};
+			}
 
 			parentNode = nodeAndParent.parent.cslId;
 			position = indexOfChild(nodeAndParent.node, nodeAndParent.parent);

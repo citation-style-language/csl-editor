@@ -109,7 +109,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	};
 
 	var showAddNodeDialog = function () {
-		var dialogDiv = $('<div></div>'),
+		var dialogDiv = $('<div id="addNodeDialog"></div>'),
 			node = CSLEDIT.data.getNode(CSLEDIT.viewController.selectedNode()),
 			translatedCslId,
 			translatedNodeInfo,
@@ -141,10 +141,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		possibleElements = CSLEDIT.schema.childElements(
 			translatedParentName + "/" + translatedNodeInfo.node.name);
 
-
 		$.each(possibleElements, function (element) {
 			var img = '<td></td>',
-				nodeIcon = CSLEDIT.uiConfig.nodeIcons[element];
+				nodeIcon = CSLEDIT.uiConfig.nodeIcons[element],
+				documentation = CSLEDIT.schema.documentation(
+					translatedNodeInfo.node.name + "/" + element),
+				row;
 
 			if (typeof nodeIcon !== "undefined") {
 				img = '<td><img src="' + CSLEDIT.options.get('rootURL') + nodeIcon + '"></img></td>';
@@ -156,10 +158,16 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 			console.log("display name = " + displayName );
 
-			table.append($('<tr>' + img + '<td><button class="addNodeType" data-nodeName="' +
+			row = $('<tr>' + img + '<td><button class="addNodeType" data-nodeName="' +
 				element + '">' + 
 				displayName + 
-				'</button></td></tr>'));
+				'</button></td></tr>');
+
+			if (typeof(documentation) !== "undefined") {
+				row.append('<td>' + documentation + '</td>');
+			}
+
+			table.append(row);
 
 			possibleElementsExist = true;
 		});
@@ -181,8 +189,10 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				CSLEDIT.viewController.selectedNode(), 0, { name : nodeName, attributes : []}
 			]);
 		});
-
-		dialogDiv.dialog({modal : true});
+		dialogDiv.dialog({
+			modal : true,
+			width : "650px"
+		});
 	};
 
 	var setupTreeEditorToolbar = function () {

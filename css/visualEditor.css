@@ -319,4 +319,9 @@ button.icon.add {
 button.icon.delete {
 	background-image: url("../external/famfamfam-icons/delete.png");
 }
-
+#addNodeDialog table td {
+	padding: 5px;
+}
+#addNodeDialog button {
+	width: 100%;
+}
