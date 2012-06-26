@@ -93,7 +93,7 @@ CSLEDIT.cslParser = (function() {
 
 		if (jsonData.attributes.length > 0) {
 		  	for (index = 0; index < jsonData.attributes.length; index++) {
-				if (jsonData.attributes[index].enabled && jsonData.attributes[index].value !== "") {
+				if (jsonData.attributes[index].enabled) {
 					// TODO: the key probably shouldn't have characters needing escaping anyway,
 					//       should not allow to input them in the first place
 					attributesString += " " + 
