@@ -81,6 +81,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				}
 				result = (fromNode.name in CSLEDIT.schema.childElements(parentNodeName + "/" + toNodeInfo.node.name));
 				return result;
+			},
+			viewInitialised : function () {
+				var loaded = CSLEDIT.options.get("loaded");
+				if (typeof(loaded) !== "undefined") {
+					loaded();
+				}
 			}
 		});
 	};
@@ -91,7 +97,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			editorElement.find("#formattedCitations"), editorElement.find("#formattedBibliography"),
 			syntaxHighlighter.setupSyntaxHighlighting);
 	};
-
 
 	var reloadPageWithNewStyle = function (newURL) {
 		var reloadURL = window.location.href;

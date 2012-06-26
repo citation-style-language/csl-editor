@@ -18,7 +18,7 @@ CSLEDIT.schemaOptions = {
 	processNodeProperties : function (nodeProperties) {
 		// remove value "sub verbo"
 		// TODO: remove this if "sub verbo" gets removed from the CSL schema
-		//       (https://github.com/citation-style-language/schema/issues/72)				
+		//       (https://github.com/citation-style-language/schema/issues/72)
 		// TODO: check for any other list items with spaces
 		$.each(nodeProperties, function (i, element) {
 			$.each(element.choices, function (i2, choice) {

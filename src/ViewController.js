@@ -103,6 +103,7 @@ CSLEDIT.ViewController = function (
 				selectNode(CSLEDIT.data.getNodesFromPath('style/info')[0].cslId);
 			}
 			callbacks.formatCitations();
+			callbacks.viewInitialised();
 		};
 	};
 
