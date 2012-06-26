@@ -84,6 +84,10 @@ CSLEDIT.Schema = function (
 		// Simplify schema (replace all refs with the corresponding define
 		simplify();
 
+		if ('processNodeProperties' in schemaOptions) {
+			schemaOptions.processNodeProperties(nodeProperties);
+		}
+
 		initialised = true;
 		if (callback !== null) {
 			callback();
