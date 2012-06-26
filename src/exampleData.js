@@ -56,7 +56,7 @@ CSLEDIT.exampleData.additionalOptions = [
 		"options" : {}
 	},
 	{
-		"description" : "loactor: Pages 244-255",
+		"description" : "locator: Pages 244-255",
 		"options" : {
 			"locator" : "244-252",
 			"label" : "page"
