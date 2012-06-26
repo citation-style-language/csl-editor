@@ -83,7 +83,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				return result;
 			},
 			viewInitialised : function () {
-				var loaded = CSLEDIT.options.get("loaded");
+				var loaded = CSLEDIT.options.get("onLoaded");
 				if (typeof(loaded) !== "undefined") {
 					loaded();
 				}

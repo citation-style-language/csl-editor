@@ -94,7 +94,7 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 
 	// a list of the references to appear in each citation
 	exampleCitations : [[0,1], [1]],
-	loaded : function () {
+	onLoaded : function () {
 		// do stuff after the UI has finished initializing
 	}
 });
