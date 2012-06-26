@@ -80,7 +80,9 @@ CSLEDIT.sortPropertyPanel = (function () {
 			fromId = nodeData.children[index].cslId;
 		}
 
+		CSLEDIT.viewController.setSuppressSelectNode(true);
 		CSLEDIT.controller.exec("moveNode", [fromId, nodeData.cslId, toPosition]);
+		CSLEDIT.viewController.setSuppressSelectNode(false);
 		nodeData = CSLEDIT.data.getNode(nodeData.cslId);
 	};
 
@@ -240,6 +242,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		addKeyButton.on('click', function () {
 			var selectNodes;
 
+			CSLEDIT.viewController.setSuppressSelectNode(true);
 			CSLEDIT.controller.exec('addNode', [nodeData.cslId, "last",
 				new CSLEDIT.CslNode('key', 
 					[{
@@ -247,6 +250,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 						value : "author",
 						enabled : true
 					}])]);
+			CSLEDIT.viewController.setSuppressSelectNode(false);
 
 			list.append(sortKeyHtml);
 			selectNodes = list.find('select');
