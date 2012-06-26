@@ -139,6 +139,19 @@ CSLEDIT.conditionalPropertyPanel.prototype.possibleValues = function (attribute)
 	return possibleValues;
 };
 
+CSLEDIT.conditionalPropertyPanel.prototype.availableValues = function () {
+	var availableValues = this.possibleValues(this.currentAttribute),
+		selectedValues = this.attributeValue();
+
+	// remove currently selcted values from availableValues
+	$.each(this.attributeValue().split(" "), function (i, value) {
+		var index = availableValues.indexOf(value);
+		if (index !== -1) {
+			availableValues.splice(index, 1);
+		}
+	});
+	return availableValues;
+};
 CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 	var that = this,
 		mainOption;
@@ -162,7 +175,8 @@ CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 	if (typeof mainOption === "undefined") {
 		// should show at least one attribute value, so create one
 		// NOTE: this is slightly strange behaviour for a view
-		//       but should usually only happen after Add Node
+		//       but should never happen - only after loading an
+		//       invalid style
 
 		this.node.setAttr("type", "article");
 		this.node.setAttr("match", "any");
@@ -245,8 +259,12 @@ CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 	});
 
 	this.element.find('button.addValue').on('click', function () {
+		if (that.availableValues().length === 0) {
+			alert("No more available values");
+			return;
+		}
 		that.node.setAttr(that.currentAttribute, that.attributeValue() + " " +
-			that.possibleValues(that.currentAttribute)[0]);
+			that.availableValues()[0]);
 		CSLEDIT.controller.exec('amendNode', [that.node.cslId, that.node]);
 		that.setup();
 	});
