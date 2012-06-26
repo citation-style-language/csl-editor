@@ -84,7 +84,7 @@ CSLEDIT.Schema = function (
 		// Simplify schema (replace all refs with the corresponding define
 		simplify();
 
-		if ('processNodeProperties' in schemaOptions) {
+		if (schemaOptions && 'processNodeProperties' in schemaOptions) {
 			schemaOptions.processNodeProperties(nodeProperties);
 		}
 
@@ -446,7 +446,7 @@ CSLEDIT.Schema = function (
 						 (values.attributeValues[0].type === "data" &&
 						  values.attributeValues[0].value === "integer")
 						) &&
-						'defaultDefaultAttribute' in schemaOptions) {
+						schemaOptions && 'defaultDefaultAttribute' in schemaOptions) {
 					// add an empty string if no default value is present
 					if (defaultValue === null) {
 						defaultValue = {
@@ -591,7 +591,7 @@ CSLEDIT.Schema = function (
 			var thisNodeProperties,
 				documentation;
 
-			if ('documentationFilter' in schemaOptions) {
+			if (schemaOptions && 'documentationFilter' in schemaOptions) {
 				documentation = schemaOptions.documentationFilter(node.textContent);
 			}
 

@@ -26,7 +26,7 @@ CSLEDIT.exampleData.topStyles = [
 	'http://www.zotero.org/styles/elsevier-with-titles',
 	'http://www.zotero.org/styles/ecology',
 	'http://www.zotero.org/styles/elsevier-harvard',
-	'http://www.zotero.org/styles/royal-society-chemistry',
+	'http://www.zotero.org/styles/royal-society-of-chemistry',
 	'http://www.zotero.org/styles/journal-of-the-american-chemical-society',
 	'http://www.zotero.org/styles/pnas'
 ];

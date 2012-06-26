@@ -59,8 +59,7 @@ CSLEDIT.cslParser = (function() {
 			};
 
 		if (typeof textValue !== "undefined") {
-			// trim whitespace from start and end
-			thisNodeData.textValue = textValue.replace(/^\s+|\s+$/g,"");
+			thisNodeData.textValue = textValue;
 		}
 
 		return thisNodeData;
@@ -69,9 +68,9 @@ CSLEDIT.cslParser = (function() {
 	var htmlEscape = function (text) {
 		var escaped = text;
 
+		escaped = escaped.replace(/&/g, "&amp;");
 		escaped = escaped.replace(/</g, "&lt;");
 		escaped = escaped.replace(/>/g, "&gt;");
-		escaped = escaped.replace(/&/g, "&amp;");
 		escaped = escaped.replace(/"/g, "&quot;");
 
 		return escaped;
@@ -81,7 +80,7 @@ CSLEDIT.cslParser = (function() {
 		var index,
 			result = "";
 		for (index = 0; index < indentAmount; index++) {
-			result += "\t";
+			result += "  ";
 		}
 		return result;
 	};
@@ -89,7 +88,8 @@ CSLEDIT.cslParser = (function() {
 	var xmlNodeFromJson = function (jsonData, indent) {
 		var attributesString = "",
 			xmlString,
-			index;
+			index,
+			innerString;
 
 		if (jsonData.attributes.length > 0) {
 		  	for (index = 0; index < jsonData.attributes.length; index++) {
@@ -102,20 +102,23 @@ CSLEDIT.cslParser = (function() {
 				}
 			}
 		}
-		
 		xmlString = generateIndent(indent);
 
 		if (typeof jsonData.textValue !== "undefined") {
 			xmlString += "<" + jsonData.name + attributesString + ">";
 			xmlString += htmlEscape(jsonData.textValue) + "</" + htmlEscape(jsonData.name) + ">\n";
 		} else {
-			xmlString += "<" + jsonData.name + attributesString + ">\n";
+			xmlString += "<" + jsonData.name + attributesString + ">";
+			innerString = "";
 			if (typeof jsonData.children !== "undefined" && jsonData.children.length > 0) {
 				for (index = 0; index < jsonData.children.length; index++) {
-					xmlString += xmlNodeFromJson(jsonData.children[index], indent + 1);
+					innerString += xmlNodeFromJson(jsonData.children[index], indent + 1);
 				}
 			}
-			xmlString += generateIndent(indent) + "</" + htmlEscape(jsonData.name) + ">\n";
+			if (innerString !== "") {
+				xmlString += "\n" + innerString + generateIndent(indent);
+			}
+			xmlString += "</" + htmlEscape(jsonData.name) + ">\n";
 		}
 
 		return xmlString;

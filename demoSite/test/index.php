@@ -10,6 +10,11 @@
 
 	<script type="text/javascript" src="../../src/exampleData.js"></script>
 	<script type="text/javascript" src="../../src/options.js"></script>
+	<script type="text/javascript">
+	CSLEDIT.options.setUserOptions({
+		rootURL : "../.."
+	});
+	</script>
 	<script type="text/javascript" src="../../src/storage.js"></script>
 
 	<script type="text/javascript" src="../../src/uiConfig.js"></script>
