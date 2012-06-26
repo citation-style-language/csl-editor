@@ -605,5 +605,10 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 };
 
 // global instance, this is overwritten for unit tests
-CSLEDIT.data = CSLEDIT.Data("CSLEDIT.cslData",
-		["style/info", "style/citation/layout", "style/bibliography/layout"], true);
+CSLEDIT.data = CSLEDIT.Data("CSLEDIT.cslData", [
+		"style/info",
+		"style/info/title",
+		"style/info/id",
+		"style/citation/layout",
+		"style/bibliography/layout"
+	], true);
