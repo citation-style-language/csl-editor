@@ -441,18 +441,22 @@ CSLEDIT.Schema = function (
 					list : values.list,
 					documentation : values.documentation
 				};
-			}
-
-			if ('defaultDefaultAttribute' in schemaOptions) {
-				// add an empty string if no default value is present
-				if (defaultValue === null) {
-					defaultValue = {
-						value: schemaOptions.defaultDefaultAttribute.value
-					};
-				
-					if (thisNodeProperties.attributes[attributeName].values.length > 0) {
-						thisNodeProperties.attributes[attributeName].values.splice(
-								0,0,schemaOptions.defaultDefaultAttribute);
+				if (values.attributeValues.length > 0 &&
+						(values.attributeValues[0].type === "value" ||
+						 (values.attributeValues[0].type === "data" &&
+						  values.attributeValues[0].value === "integer")
+						) &&
+						'defaultDefaultAttribute' in schemaOptions) {
+					// add an empty string if no default value is present
+					if (defaultValue === null) {
+						defaultValue = {
+							value: schemaOptions.defaultDefaultAttribute.value
+						};
+					
+						if (thisNodeProperties.attributes[attributeName].values.length > 0) {
+							thisNodeProperties.attributes[attributeName].values.splice(
+									0,0,schemaOptions.defaultDefaultAttribute);
+						}
 					}
 				}
 			}
