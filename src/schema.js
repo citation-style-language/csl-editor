@@ -50,18 +50,41 @@ CSLEDIT.Schema = function (
 		});
 	});
 
-	var NodeProperties = function () {
-		return {
-			elements : {},
-			attributes : {},
-			refs : [],
-			attributeValues : [],
-			textNode : false,
-			list : false,
-			choices : [],
-			choiceRefs : [],
-			documentation : ""
-		};
+	var NodeProperties = function (copySource) {
+		if (typeof(copySource) === "undefined") {
+			return {
+				elements : {},
+				attributes : {},
+				refs : [],
+				refQuantifiers : {},
+				attributeValues : [],
+				textNode : false,
+				list : false,
+				choices : [],
+				choiceRefs : [],
+				documentation : ""
+			};
+		} else {
+			// deep copy of elements, shallow copy of all other properties
+			return {
+				elements : (function () {
+						var elements = {};
+						$.each(copySource.elements, function (element, quantifier) {
+							elements[element] = quantifier;
+						});
+						return elements;
+					}()),
+				attributes : copySource.attributes,
+				refs : copySource.refs,
+				refQuantifiers : copySource.refQuantifiers,
+				attributeValues : copySource.attributeValues,
+				textNode : copySource.textNode,
+				list : copySource.list,
+				choices : copySource.choices,
+				choiceRefs : copySource.choiceRefs,
+				documentation : copySource.documentation
+			};
+		}
 	};
 
 	var init = function () {
@@ -133,10 +156,14 @@ CSLEDIT.Schema = function (
 	var simplifyNode = function (nodeName, node) {
 		var define,
 			ref,
+			refQuantifier,
 			attributeName,
-			nodeLocalName;
+			nodeLocalName,
+			element;
 
 		ref = node.refs.pop();
+		refQuantifier = node.refQuantifiers[ref];
+		console.log("ref = " + ref + ", quant = " + refQuantifier);
 
 		if (typeof ref === "undefined") {
 			for (attributeName in node.attributes) {
@@ -168,10 +195,18 @@ CSLEDIT.Schema = function (
 		}
 		
 		if (ref in defineProperties) {
-			define = defineProperties[ref];
+			// deep copy so that original define won't change
+			define = new NodeProperties(defineProperties[ref]);
 
-			joinProperties(node, define);
+			// set quantifier to all child elements within the define
+			if (typeof(refQuantifier) !== "undefined") {
+				for (element in define.elements) {
+					console.log("setting ref quantifier to " + refQuantifier);
+					define.elements[element] = refQuantifier;
+				}
+			}
 
+			joinProperties(node, define);			
 			simplifyNode(nodeName, node);
 		
 			assert(elementName(nodeName).indexOf("def:") === -1, "define parent");
@@ -345,23 +380,31 @@ CSLEDIT.Schema = function (
 		var element,
 			documentation = [];
 
-		for (element in propertiesB.elements) {
-			if (!(element in propertiesA.attributes)) {
+		$.each(propertiesB.elements, function (element, quantifier) {
+			if (!(element in propertiesA.elements) || propertiesA.elements[element] === "") {
 				propertiesA.elements[element] = propertiesB.elements[element];
 			} else {
-				propertiesA.elements[element] = ""; // values of elements not important
+				// propertiesA.elements[element] !== "", so keep it
 			}
-		}
+		});
 		attributesMerge(propertiesA.attributes, propertiesB.attributes);
 
 		arrayMerge(propertiesA.choiceRefs, propertiesB.choiceRefs);
 		propertiesA.choices = propertiesA.choices.concat(propertiesB.choices);
 		arrayMerge(propertiesA.refs, propertiesB.refs);
+
+		$.each(propertiesB.refQuantifiers, function (ref, quantifier) {
+			if (!(ref in propertiesA.refQuantifiers) || propertiesA.refQuantifiers[ref] === "") {
+				console.log("merging to ref: " + JSON.stringify(ref));
+				propertiesA.refQuantifiers[ref] = quantifier;
+			}
+		});
+
 		arrayMerge(propertiesA.attributeValues, propertiesB.attributeValues, attributeValueEquality);
 
 		propertiesA.textNode = propertiesA.textNode | propertiesB.textNode;
 		propertiesA.list = propertiesA.list | propertiesB.list;
-
+		
 		if (propertiesA.documentation !== "") {
 			documentation.push(propertiesA.documentation);
 		}
@@ -385,6 +428,22 @@ CSLEDIT.Schema = function (
 		return topTwoElements.join("/");
 	};
 
+	var applyQuantifierToChildren = function (quantifier) {
+		return function (childNodeProperties) {
+			var newElements = {},
+				index;
+
+			childNodeProperties.quantity = quantifier;
+			$.each(childNodeProperties.elements, function (elementName, quantity) {
+				newElements[elementName] = quantifier;
+			});
+			$.each(childNodeProperties.refs, function (i, ref) {
+				childNodeProperties.refQuantifiers[ref] = quantifier;
+			});
+			childNodeProperties.elements = newElements;
+		};
+	};
+
 	// a list of functions which attempt to parse a node
 	// return true if parsed, false if not
 	var nodeParsers = {
@@ -398,7 +457,7 @@ CSLEDIT.Schema = function (
 				thisElementName = thisElementName.replace(/^cs:/, "");
 
 				elementStack.push(thisElementName);
-				thisNodeProperties.elements[thisElementName] = "";
+				thisNodeProperties.elements[thisElementName] = "one";
 
 				newProperties = parseChildren(node);
 
@@ -500,13 +559,13 @@ CSLEDIT.Schema = function (
 			return thisNodeProperties;
 		},
 		optional : function (node) {
-			return parseChildren(node);
+			return parseChildren(node, applyQuantifierToChildren("optional"));
 		},
 		zeroOrMore : function (node) {
-			return parseChildren(node);
+			return parseChildren(node, applyQuantifierToChildren("zeroOrMore"));
 		},
 		oneOrMore : function (node) {
-			return parseChildren(node);
+			return parseChildren(node, applyQuantifierToChildren("oneOrMore"));
 		},
 		list : function (node) {
 			var thisNodeProperties = parseChildren(node);
@@ -642,6 +701,9 @@ CSLEDIT.Schema = function (
 			} else {
 				callback = newCallback;
 			}
+		},
+		quantity : function (element) {
+			return nodeProperties[element].quantity;
 		}
 	};
 };

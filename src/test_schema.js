@@ -60,4 +60,12 @@ CSLEDIT.schema.callWhenReady( function () {
 		// shouldn't have the choices in the normal nodes
 		ok(!("macro" in CSLEDIT.schema.attributes("layout/text")));
 	});
+	
+	test("child element quantifiers", function () {
+		// these examples are correct, but the quantifiers in general aren't working
+		// properly at the moment
+		equal(CSLEDIT.schema.childElements("layout/choose")['if'], "one");
+		equal(CSLEDIT.schema.childElements("layout/choose")['else-if'], "zeroOrMore");
+		equal(CSLEDIT.schema.childElements("layout/choose")['else'], "optional");
+	});
 });
