@@ -245,6 +245,7 @@ CSLEDIT.ViewController = function (
 		dataType = CSLEDIT.schema.elementDataType(parentNodeName + "/" + node.name);
 		schemaAttributes = CSLEDIT.schema.attributes(parentNodeName + "/" + node.name);
 
+		// show appropriate property panel
 		switch (node.name) {
 			case "sort":
 				CSLEDIT.sortPropertyPanel.setupPanel(propertyPanelElement, node);
@@ -255,6 +256,21 @@ CSLEDIT.ViewController = function (
 			case "if":
 			case "else-if":
 				new CSLEDIT.ConditionalPropertyPanel(propertyPanelElement, node);
+				break;
+			case "choose":
+				propertyPanelElement.children().remove();
+				propertyPanelElement.append(
+					"<p>This node allows you to customise the formatting " +
+					"depending on the properties of the reference being cited.</p>" +
+					"<p>e.g. To show the volume number <em>only</em> " +
+					"if the document type is article-journal:</p>" +
+					'<ol>' +
+					'<li>1. Use the "Add Node" button at the top left to add an "if" node</li>' +
+					'<li>2. Edit the "if" node to say "The document type is article-journal"</li>' +
+					'<li>3. Within the "if" node, add a "number" node and set its ' +
+					'variale to "volume"</li>' +
+					'</ol>'
+					);
 				break;
 			default:
 			CSLEDIT.propertyPanel.setupPanel(
