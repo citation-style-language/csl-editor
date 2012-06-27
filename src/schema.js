@@ -103,7 +103,7 @@ CSLEDIT.Schema = function (
 
 		// replace all def: references in node names with the appropriate child nodes, expanding
 		// out the as neccessary
-		defRegExp = new RegExp("def:([\\w-]+)/(.*)$");
+		defRegExp = new RegExp("def:([\\w-\.]+)/(.*)$");
 
 		for (node in nodeProperties) {
 			originalNodes.push(node);

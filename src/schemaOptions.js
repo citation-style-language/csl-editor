@@ -16,24 +16,6 @@ CSLEDIT.schemaOptions = {
 			.replace(/The font-formatting attributes are based on those of CSS and XSL-FO\./g, "");
 	},
 	processNodeProperties : function (nodeProperties) {
-		// remove value "sub verbo"
-		// TODO: remove this if "sub verbo" gets removed from the CSL schema
-		//       (https://github.com/citation-style-language/schema/issues/72)
-		// TODO: check for any other list items with spaces
-		$.each(nodeProperties, function (i, element) {
-			$.each(element.choices, function (i2, choice) {
-				$.each(choice, function (attributeName, attribute) {
-					var indexToRemove = -1;
-			   		$.each(attribute.values, function (index, value) {
-						if (value.value === "sub verbo") {
-							indexToRemove = index;
-						}
-					});
-					if (indexToRemove !== -1) {
-						attribute.values.splice(indexToRemove, 1);
-					}
-				});
-			});
-		});
+		// can put schema modification code here
 	}
 };
