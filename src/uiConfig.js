@@ -148,5 +148,8 @@ CSLEDIT.uiConfig.displayNames = {
 		},
 		"bibliography" : function () {
 			return "Bibliography";
+		},
+		"choose" : function () {
+			return "Conditional";
 		}
 	};
