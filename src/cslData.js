@@ -191,6 +191,14 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		}
 	};
 
+	var getNodePath = function (id) {
+		var nodeNames = [];
+		$.each(getNodeStack(id), function (i, node) {
+			nodeNames.push(node.name);
+		});
+		return nodeNames.join('/');
+	};
+
 	var getNode = function (id, cslData /* optional */) {
 		if (typeof cslData !== "undefined") {
 			return getNodeAndParent(id, cslData).node;
@@ -481,23 +489,19 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 				nodeAndParent = getNodeAndParent(id),
 				parentNode,
 				position,
+				nodePath = getNodePath(id),
 				error;
 
 			// can't delete required nodes
-			$.each(requiredNodes, function (i, nodePath) {
-				$.each (getNodesFromPath(nodePath), function (i, node) {
-					if (node.cslId === id) {
-						error = "Cannot delete required node: " + nodePath;
-						return false;
-					}
-				});
-				if (error) {
+			$.each(requiredNodes, function (i, requiredNodePath) {
+				if (nodePath === requiredNodePath) {
+					error = "Cannot delete required node: " + nodePath;
 					return false;
 				}
 			});
 
 			if (error) {
-				return {error : error};
+				return { error : error };
 			}
 
 			parentNode = nodeAndParent.parent.cslId;
@@ -550,6 +554,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		getNode : getNode,
 		getNodeAndParent : getNodeAndParent,
 		getNodeStack : getNodeStack,
+		getNodePath : getNodePath,
 		getFirstCslId : getFirstCslId,
 
 		loadStyleFromURL : loadStyleFromURL,
