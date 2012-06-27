@@ -202,8 +202,6 @@ CSLEDIT.ViewController = function (
 		nodePathView = new CSLEDIT.NodePathView(nodePathElement, {
 			selectNodeFromPath : selectNodeFromPath
 		});
-		
-
 	};
 	
 	var selectedNodeChanged = function() {
@@ -256,7 +254,7 @@ CSLEDIT.ViewController = function (
 				break;
 			case "if":
 			case "else-if":
-				new CSLEDIT.conditionalPropertyPanel(propertyPanelElement, node);
+				new CSLEDIT.ConditionalPropertyPanel(propertyPanelElement, node);
 				break;
 			default:
 			CSLEDIT.propertyPanel.setupPanel(
@@ -362,6 +360,7 @@ CSLEDIT.ViewController = function (
 				view.amendNode(id, amendedNode);
 			}
 		});
+		selectedNodeChanged();
 	};
 
 	var selectNode = function (id, highlightedNodes) {

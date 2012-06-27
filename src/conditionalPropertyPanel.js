@@ -1,7 +1,7 @@
 "use strict";
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.conditionalPropertyPanel = function (element, node) {
+CSLEDIT.ConditionalPropertyPanel = function (element, node) {
 	var that = this;
 
 	this.element = element;
@@ -35,7 +35,7 @@ CSLEDIT.conditionalPropertyPanel = function (element, node) {
 	this.setup();
 };
 
-CSLEDIT.conditionalPropertyPanel.prototype.attributeValue = function () {
+CSLEDIT.ConditionalPropertyPanel.prototype.attributeValue = function () {
 	var values = [];
 	$.each(this.valueControls, function (i, valueControl) {
 		values.push(valueControl.val());
@@ -43,7 +43,7 @@ CSLEDIT.conditionalPropertyPanel.prototype.attributeValue = function () {
 	return values.join(" ");
 };
 
-CSLEDIT.conditionalPropertyPanel.prototype.removeDuplicateOptions = function () {
+CSLEDIT.ConditionalPropertyPanel.prototype.removeDuplicateOptions = function () {
 	var that = this,
 		selectedValues = this.attributeValue().split(" "),
 		processedValues = [],
@@ -95,7 +95,7 @@ CSLEDIT.conditionalPropertyPanel.prototype.removeDuplicateOptions = function () 
 	});
 };
 
-CSLEDIT.conditionalPropertyPanel.prototype.attributeUi = {
+CSLEDIT.ConditionalPropertyPanel.prototype.attributeUi = {
 	"disambiguate" : {
 		mainOption: "Citations are disambiguated"
 	},
@@ -123,7 +123,7 @@ CSLEDIT.conditionalPropertyPanel.prototype.attributeUi = {
 	}
 };
 
-CSLEDIT.conditionalPropertyPanel.prototype.possibleValues = function (attribute) {
+CSLEDIT.ConditionalPropertyPanel.prototype.possibleValues = function (attribute) {
 	// get possible values from schema
 	var possibleValues = [];
 	$.each(CSLEDIT.schema.choices("choose/if"), function (i, attributes) {
@@ -139,7 +139,7 @@ CSLEDIT.conditionalPropertyPanel.prototype.possibleValues = function (attribute)
 	return possibleValues;
 };
 
-CSLEDIT.conditionalPropertyPanel.prototype.availableValues = function () {
+CSLEDIT.ConditionalPropertyPanel.prototype.availableValues = function () {
 	var availableValues = this.possibleValues(this.currentAttribute),
 		selectedValues = this.attributeValue();
 
@@ -152,7 +152,7 @@ CSLEDIT.conditionalPropertyPanel.prototype.availableValues = function () {
 	});
 	return availableValues;
 };
-CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
+CSLEDIT.ConditionalPropertyPanel.prototype.setup = function () {
 	var that = this,
 		mainOption;
 
@@ -291,7 +291,7 @@ CSLEDIT.conditionalPropertyPanel.prototype.setup = function () {
 	});
 };
 
-CSLEDIT.conditionalPropertyPanel.prototype.drawControls = function () {
+CSLEDIT.ConditionalPropertyPanel.prototype.drawControls = function () {
 	var that = this,
 		table = $('<table class="conditional"><col class="c1" /><col class="c2" />' + 
 				'<col class="c3" /><col class="c4" /><col class="c5" /></table>'),
