@@ -376,7 +376,6 @@ CSLEDIT.ViewController = function (
 				view.amendNode(id, amendedNode);
 			}
 		});
-		selectedNodeChanged();
 	};
 
 	var selectNode = function (id, highlightedNodes) {
