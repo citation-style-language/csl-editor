@@ -104,7 +104,6 @@ CSLEDIT.infoPropertyPanel = (function () {
 				parentNode = CSLEDIT.data.getNode(parentId);
 				numNodesInParent = CSLEDIT.data.numNodes(parentNode);
 
-				//setupPanel(panel);
 				// update all cslids
 				$.each(["cslid", "parentcslid"], function (i, attribute) {
 					panel.find('input[' + attribute + ']').each(function() {
@@ -186,7 +185,6 @@ CSLEDIT.infoPropertyPanel = (function () {
 		infoNode = infoNode[0];
 
 		panel.children().remove();
-		//panel.append('<h3>Style Info</h3>');
 
 		$.each(layout, function (i, item) {
 			var nodes = CSLEDIT.data.getNodesFromPath("info/" + item.node, infoNode),
@@ -195,7 +193,20 @@ CSLEDIT.infoPropertyPanel = (function () {
 				titleRow, inputRow;
 			
 			if (multipleNodes.indexOf(item.node) >= 0) {
-				schemaAttributes = CSLEDIT.schema.attributes("info/" + item.node);
+				schemaAttributes = {};
+				$.each(CSLEDIT.schema.attributes("info/" + item.node), function (attrName, attr) {
+					schemaAttributes[attrName] = attr;
+				});
+				
+				// add choices to attributes
+				// TODO: correct this to treat choices as mutaully exclusive
+				//       as they should be
+				$.each(CSLEDIT.schema.choices("info/" + item.node), function (i, choice) {
+					$.each(choice, function (attrName, attr) {
+						schemaAttributes[attrName] = attr;
+					});
+				});
+
 				panel.append('<h4>' + pluralise(item.name) + '</h4>');
 				table = $("<table></table>");
 				$.each(nodes, function (i, node) {
