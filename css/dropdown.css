@@ -3,9 +3,12 @@
 * 									{ margin: 0; padding: 0; }
 body								{ font: 12px Helvetica, Sans-Serif; } 
 #page-wrap							{ width: 800px; margin: 25px auto; } 
-a									{ text-decoration: none; }
-ul									{ list-style: none; }
+
 p                                   { margin: 15px 0; }
+
+ul.dropdown a						{ text-decoration: none; }
+ul.dropdown							{ list-style: none; }
+ul.dropdown ul						{ list-style: none; }
 
 /* 
 	LEVEL ONE
