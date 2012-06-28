@@ -143,8 +143,31 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			translatedParentName = translatedNodeInfo.parent.name;
 		}
 
-		possibleElements = CSLEDIT.schema.childElements(
-			translatedParentName + "/" + translatedNodeInfo.node.name);
+		possibleElements = {};
+		$.each(CSLEDIT.schema.childElements(translatedParentName + "/" + translatedNodeInfo.node.name),
+			function (element, quantifier) {
+				possibleElements[element] = quantifier;
+		});
+
+		// hard-coded constraint for 'choose' node
+		// TODO: generalise this to more nodes, using the schema if not too difficult
+		if (translatedNodeInfo.node.name === "choose") {
+			// better order than schema:
+			possibleElements = {
+				"if" : "one",
+				"else-if" : "zeroOrMore",
+				"else" : "optional"
+			};
+
+			// only allowed one 'if' and one 'else' node
+			$.each(translatedNodeInfo.node.children, function (i, childNode) {
+				if (childNode.name === "if" && "if" in possibleElements) {
+					delete possibleElements["if"];
+				} else if (childNode.name === "else" && "else" in possibleElements) {
+					delete possibleElements["else"];
+				}
+			});
+		}
 
 		$.each(possibleElements, function (element) {
 			var img = '<td></td>',
@@ -186,12 +209,24 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 		dialogDiv.find('button.addNodeType').on('click', function (event) {
 			var target = $(event.target),
-				nodeName = target.attr('data-nodeName');
+				nodeName = target.attr('data-nodeName'),
+				position,
+				children = CSLEDIT.data.getNode(CSLEDIT.viewController.selectedNode()).children;
 
 			dialogDiv.dialog('destroy');
 
+			// hard coded constraint for conditional
+			// TODO: generalise
+			if (nodeName === 'if') {
+				position = "first";
+			} else if (nodeName === 'else-if' && children[children.length-1].name === "else") {
+				position = children.length - 1;
+			} else {
+				position = "last";
+			}
+
 			CSLEDIT.controller.exec("addNode", [
-				CSLEDIT.viewController.selectedNode(), 0, { name : nodeName, attributes : []}
+				CSLEDIT.viewController.selectedNode(), position, { name : nodeName, attributes : []}
 			]);
 		});
 		dialogDiv.dialog({
