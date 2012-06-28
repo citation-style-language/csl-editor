@@ -42,7 +42,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			while (iter.hasNext()) {
 				node = iter.next();
 				if (index === updatedNode.cslId) {	
-					node.textValue = (new Date()).toISOString();
+					node.textValue = (new Date()).toISOString().replace(/\.[0-9]{3}Z$/, "+00:00");
 					break;
 				}
 				index++;
