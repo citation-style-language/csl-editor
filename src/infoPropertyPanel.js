@@ -3,7 +3,7 @@
 CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.infoPropertyPanel = (function () {
-	var panel, infoNode, inputTimeout;
+	var panel, infoNode, inputTimeout, executeCommand;
 
 	var layout = [
 		{ name : "Title", node : "title" },
@@ -99,7 +99,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 
 			if (isNaN(cslId)) {
 				CSLEDIT.viewController.setSuppressSelectNode(true);
-				CSLEDIT.controller.exec('addNode', [parentId, "last", thisNode]);
+				executeCommand('addNode', [parentId, "last", thisNode]);
 				CSLEDIT.viewController.setSuppressSelectNode(false);
 				parentNode = CSLEDIT.data.getNode(parentId);
 				numNodesInParent = CSLEDIT.data.numNodes(parentNode);
@@ -122,7 +122,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 				$this.removeAttr("parentcslid");
 				$this.attr("cslid", parentId + numNodesInParent);
 			} else {
-				CSLEDIT.controller.exec('amendNode', [cslId, thisNode]);
+				executeCommand('amendNode', [cslId, thisNode]);
 			}
 		}, 500);
 	};
@@ -178,8 +178,9 @@ CSLEDIT.infoPropertyPanel = (function () {
 
 	// It's assumed that infoNode will always refer to the correct node
 	// while the panel is visible
-	var setupPanel = function (_panel) {
+	var setupPanel = function (_panel, _executeCommand) {
 		panel = _panel;
+		executeCommand = _executeCommand;
 		infoNode = CSLEDIT.data.getNodesFromPath("style/info");
 		assertEqual(infoNode.length, 1);
 		infoNode = infoNode[0];
@@ -229,7 +230,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 
 					deleteButton = $('<button>Delete</button>');
 					deleteButton.on('click', function () {
-						CSLEDIT.controller.exec("deleteNode", [node.cslId]);
+						executeCommand("deleteNode", [node.cslId]);
 						setupPanel(panel);
 					});
 
@@ -244,7 +245,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 
 				addButton.on('click', function () {
 					CSLEDIT.viewController.setSuppressSelectNode(true);
-					CSLEDIT.controller.exec("addNode",
+					executeCommand("addNode",
 						[infoNode.cslId, "last", new CSLEDIT.CslNode(item.node)]);
 					CSLEDIT.viewController.setSuppressSelectNode(false);
 					setupPanel(panel);

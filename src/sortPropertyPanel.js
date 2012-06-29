@@ -3,7 +3,7 @@
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.sortPropertyPanel = (function () {
-	var onChangeTimeout, setupPanel, list, nodeData, panel,
+	var onChangeTimeout, setupPanel, list, nodeData, panel, executeCommand,
 		namesAttributeNames = [
 			"names-min",
 			"names-use-first",
@@ -81,7 +81,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		}
 
 		CSLEDIT.viewController.setSuppressSelectNode(true);
-		CSLEDIT.controller.exec("moveNode", [fromId, nodeData.cslId, toPosition]);
+		executeCommand("moveNode", [fromId, nodeData.cslId, toPosition]);
 		CSLEDIT.viewController.setSuppressSelectNode(false);
 		nodeData = CSLEDIT.data.getNode(nodeData.cslId);
 	};
@@ -151,7 +151,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		keyNode = nodeData.children[childIndex];
 		assertEqual(keyNode.name, "key");
 
-		CSLEDIT.controller.exec("amendNode", [keyNode.cslId, 
+		executeCommand("amendNode", [keyNode.cslId, 
 			getKeyNodeData(childIndex)]);
 	};
 
@@ -164,14 +164,15 @@ CSLEDIT.sortPropertyPanel = (function () {
 
 			cslId = CSLEDIT.data.getNode(nodeData.cslId).children[childIndex].cslId;
 			listElements.eq(childIndex).remove();
-			CSLEDIT.controller.exec('deleteNode', [cslId]);
+			executeCommand('deleteNode', [cslId]);
 	};
 
-	setupPanel = function (_panel, _nodeData) {
+	setupPanel = function (_panel, _nodeData, _executeCommand) {
 		var table, macros, variables, index, addKeyButton, sortKeyHtml;
 
 		panel = _panel;
 		nodeData = _nodeData;
+		executeCommand = _executeCommand;
 
 		// clear panel 
 		panel.children().remove();
@@ -234,7 +235,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 			keyNode = nodeData.children[childIndex];
 			assertEqual(keyNode.name, "key");
 
-			CSLEDIT.controller.exec("amendNode", [keyNode.cslId, 
+			executeCommand("amendNode", [keyNode.cslId, 
 				getKeyNodeData(childIndex)]);
 		}*/);
 
@@ -243,7 +244,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 			var selectNodes;
 
 			CSLEDIT.viewController.setSuppressSelectNode(true);
-			CSLEDIT.controller.exec('addNode', [nodeData.cslId, "last",
+			executeCommand('addNode', [nodeData.cslId, "last",
 				new CSLEDIT.CslNode('key', 
 					[{
 						key : "variable",
@@ -301,7 +302,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 
 				$.each(nodeData.children, function (index, keyNode) {
 					assertEqual(keyNode.name, "key");
-					CSLEDIT.controller.exec("amendNode", [keyNode.cslId, getKeyNodeData(index)]);
+					executeCommand("amendNode", [keyNode.cslId, getKeyNodeData(index)]);
 				});
 			});
 		}());

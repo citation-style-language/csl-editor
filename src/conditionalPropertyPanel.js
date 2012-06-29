@@ -1,7 +1,7 @@
 "use strict";
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.ConditionalPropertyPanel = function (element, node) {
+CSLEDIT.ConditionalPropertyPanel = function (element, node, executeCommand) {
 	var that = this;
 
 	this.element = element;
@@ -68,7 +68,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.removeDuplicateOptions = function () 
 			if (availableValues.length === 0) {
 				// no more available values, set processedValues and setup again
 				that.node.setAttr(that.currentAttribute, processedValues.join(" "));
-				CSLEDIT.controller.exec('amendNode', [that.node.cslId, that.node]);
+				executeCommand('amendNode', [that.node.cslId, that.node]);
 				that.setup();
 				return;
 			} else {
@@ -180,7 +180,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setup = function () {
 
 		this.node.setAttr("type", "article");
 		this.node.setAttr("match", "any");
-		CSLEDIT.controller.exec('amendNode', [this.node.cslId, this.node]);
+		executeCommand('amendNode', [this.node.cslId, this.node]);
 		this.setup();
 		return;
 	}
@@ -231,7 +231,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setup = function () {
 			}
 		});
 		console.log('currentAttr = ' + that.currentAttribute);
-		CSLEDIT.controller.exec('amendNode', [that.node.cslId, that.node]);
+		executeCommand('amendNode', [that.node.cslId, that.node]);
 		that.setup();
 	});
 
@@ -248,14 +248,14 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setup = function () {
 					that.node.setAttrEnabled(attribute, false);
 				}
 			});
-			CSLEDIT.controller.exec('amendNode', [that.node.cslId, that.node]);
+			executeCommand('amendNode', [that.node.cslId, that.node]);
 		});
 	}
 
 	this.element.find('select.valueSelect').on('change', function () {
 		that.removeDuplicateOptions();
 		that.node.setAttr(that.currentAttribute, that.attributeValue());
-		CSLEDIT.controller.exec('amendNode', [that.node.cslId, that.node]);
+		executeCommand('amendNode', [that.node.cslId, that.node]);
 	});
 
 	this.element.find('button.addValue').on('click', function () {
@@ -265,7 +265,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setup = function () {
 		}
 		that.node.setAttr(that.currentAttribute, that.attributeValue() + " " +
 			that.availableValues()[0]);
-		CSLEDIT.controller.exec('amendNode', [that.node.cslId, that.node]);
+		executeCommand('amendNode', [that.node.cslId, that.node]);
 		that.setup();
 	});
 
@@ -280,13 +280,13 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setup = function () {
 		console.log("value list after = " + valueList.join(", "));
 
 		that.node.setAttr(that.currentAttribute, valueList.join(" "));
-		CSLEDIT.controller.exec('amendNode', [that.node.cslId, that.node]);
+		executeCommand('amendNode', [that.node.cslId, that.node]);
 		that.setup();
 	});
 	
 	this.matchSelect.on('change', function () {
 		that.node.setAttr('match', that.matchSelect.val());
-		CSLEDIT.controller.exec('amendNode', [that.node.cslId, that.node]);
+		executeCommand('amendNode', [that.node.cslId, that.node]);
 		that.setup();
 	});
 };

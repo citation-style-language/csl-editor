@@ -47,7 +47,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 		choicePanel,
 		schemaChoices,
 		schemaChoiceIndexes,
-		schemaAttributes;
+		schemaAttributes,
+		executeCommand;
 
 	var inputAttributeRow = function (index, attributeName, schemaAttribute, enabled) {
 		var row, textInput;
@@ -169,7 +170,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			enabled : true
 		}
 
-		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
+		executeCommand("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
 	};
 
 	var stripChildren = function (nodeData) {
@@ -211,7 +212,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			};
 		});
 		nodeData.textValue = $('#textNodeInput').val();
-		CSLEDIT.controller.exec("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
+		executeCommand("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
 	};
 
 	var labelId = function (index) {
@@ -508,12 +509,14 @@ CSLEDIT.genericPropertyPanel = (function () {
 		});
 	};
 
-	var setupPanel = function (_panel, _nodeData, dataType, _schemaAttributes, _schemaChoices) {
+	var setupPanel = function (_panel, _nodeData, dataType, _schemaAttributes, _schemaChoices,
+			_executeCommand) {
 		var table,
 			attrIndex;
 		
 		schemaChoices = _schemaChoices;
 		schemaAttributes = _schemaAttributes;
+		executeCommand = _executeCommand;
 
 		panel = _panel;
 		nodeData = _nodeData;
