@@ -477,7 +477,10 @@ CSLEDIT.genericPropertyPanel = (function () {
 		});
 
 		if (definiteSelectedChoices.length > 0) {
-			assertEqual(definiteSelectedChoices.length, 1);
+			if (definiteSelectedChoices.length > 1) {
+				console.log("WARNING: not clear which mode the node is in.\n" + 
+					"more than 1 definite selected choice");
+			}
 
 			choicePanel.select(definiteSelectedChoices[0]);
 			enableControlsInTab(definiteSelectedChoices[0]);
