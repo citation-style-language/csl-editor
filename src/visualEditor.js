@@ -337,11 +337,37 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	};
 
 	var init = function () {
+		var reloadingPage = false;
+
 		if (!$.browser.webkit && !$.browser.mozilla) {
 			$('body').html("<h2>Please use the latest version of " +
 				"Chrome or Firefox to view this page.</h2>").css({margin:50});
 			return;
 		}
+
+		// create storage with callback funciton which gets called if inconsistencies
+		// are found between the localStorage data (shared between tabs) and this session
+		// data
+		CSLEDIT.storage = new CSLEDIT.Storage(true, function () {
+			if (confirm("Your style has changed in a different tab " +
+					"do you want to load the new version into this tab?")) {
+				// reload page
+				reloadingPage = true;
+				window.location.reload();
+			} else {
+				// use existing data
+				CSLEDIT.storage.recreateLocalStorage();
+			}
+		});
+
+		// check consistency of data on window focus
+		// to detect changes in different tabs
+		console.log("window length = " + $(window).length);
+		$(window).focus(function () {
+			if (!reloadingPage) {
+				CSLEDIT.data.get();
+			}
+		});
 
 		$(function(){
 			editorElement.find("ul.dropdown li").hoverIntent(function(){

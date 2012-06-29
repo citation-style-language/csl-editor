@@ -16,6 +16,7 @@
 	});
 	</script>
 	<script type="text/javascript" src="../../src/storage.js"></script>
+	<script type="text/javascript" src="../../src/test_storage.js"></script>
 
 	<script type="text/javascript" src="../../src/uiConfig.js"></script>
 	<script type="text/javascript" src="../../src/debug.js"></script>

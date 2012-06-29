@@ -135,6 +135,7 @@ pages = [
             "src/options.js",
             "src/uiConfig.js",
             "src/storage.js",
+            "src/test_storage.js",
             "src/debug.js",
             "src/schema.js",
             "src/test_schema.js",	
