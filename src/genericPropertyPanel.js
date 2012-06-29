@@ -2,7 +2,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.propertyPanel = (function () {
+CSLEDIT.genericPropertyPanel = (function () {
 	var onChangeTimeout,
 		multiInputs,
 		nodeData,
