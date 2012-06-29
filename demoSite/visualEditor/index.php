@@ -46,7 +46,7 @@
 	<script type="text/javascript" src="../../src/notificationBar.js"></script>
 	<script type="text/javascript" src="../../src/NodePathView.js"></script>
 	<script type="text/javascript" src="../../src/MultiComboBox.js"></script>
-	<script type="text/javascript" src="../../src/propertyPanel.js"></script>
+	<script type="text/javascript" src="../../src/genericPropertyPanel.js"></script>
 	<script type="text/javascript" src="../../src/sortPropertyPanel.js"></script>
 	<script type="text/javascript" src="../../src/infoPropertyPanel.js"></script>
 	<script type="text/javascript" src="../../src/conditionalPropertyPanel.js"></script>

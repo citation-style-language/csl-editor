@@ -58,7 +58,7 @@ pages = [
             "src/notificationBar.js",
             "src/NodePathView.js",
             "src/MultiComboBox.js",
-            "src/propertyPanel.js",
+            "src/genericPropertyPanel.js",
             "src/sortPropertyPanel.js",
             "src/infoPropertyPanel.js",
             "src/conditionalPropertyPanel.js",

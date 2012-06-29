@@ -6,8 +6,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	var editTimeout,
 		styleURL,
 		syntaxHighlighter,
-		nodePathView,
-		propertyPanel;
+		nodePathView;
 
 	CSLEDIT.options.setUserOptions(userOptions);
 
@@ -79,7 +78,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				} else {
 					parentNodeName = toNodeInfo.parent.name;
 				}
-				result = (fromNode.name in CSLEDIT.schema.childElements(parentNodeName + "/" + toNodeInfo.node.name));
+				result = (fromNode.name in 
+					CSLEDIT.schema.childElements(parentNodeName + "/" + toNodeInfo.node.name));
 				return result;
 			},
 			viewInitialised : function () {

@@ -273,7 +273,7 @@ CSLEDIT.ViewController = function (
 					);
 				break;
 			default:
-			CSLEDIT.propertyPanel.setupPanel(
+			CSLEDIT.genericPropertyPanel.setupPanel(
 				propertyPanelElement, node, dataType, schemaAttributes,
 				CSLEDIT.schema.choices(parentNodeName + "/" + node.name));
 		}
