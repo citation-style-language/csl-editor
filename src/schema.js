@@ -163,7 +163,6 @@ CSLEDIT.Schema = function (
 
 		ref = node.refs.pop();
 		refQuantifier = node.refQuantifiers[ref];
-		console.log("ref = " + ref + ", quant = " + refQuantifier);
 
 		if (typeof ref === "undefined") {
 			for (attributeName in node.attributes) {
@@ -201,7 +200,6 @@ CSLEDIT.Schema = function (
 			// set quantifier to all child elements within the define
 			if (typeof(refQuantifier) !== "undefined") {
 				for (element in define.elements) {
-					console.log("setting ref quantifier to " + refQuantifier);
 					define.elements[element] = refQuantifier;
 				}
 			}
@@ -395,7 +393,6 @@ CSLEDIT.Schema = function (
 
 		$.each(propertiesB.refQuantifiers, function (ref, quantifier) {
 			if (!(ref in propertiesA.refQuantifiers) || propertiesA.refQuantifiers[ref] === "") {
-				console.log("merging to ref: " + JSON.stringify(ref));
 				propertiesA.refQuantifiers[ref] = quantifier;
 			}
 		});
