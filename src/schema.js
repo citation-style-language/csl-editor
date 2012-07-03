@@ -32,23 +32,24 @@ CSLEDIT.Schema = function (
 		mainSchemaURL = CSLEDIT.options.get("cslSchema_mainURL"),
 		includeSchemaURLs = CSLEDIT.options.get("cslSchema_childURLs");
 
-	$.get(mainSchemaURL, {}, function(data) {
-		mainSchemaData = data;
-		urlsGot++;
-		if (urlsGot === includeSchemaURLs.length + 1) {
-			init();
-		}
-	});
+	var readSchemaFromStorage = function () {
+		var mainSchema = JSON.parse(CSLEDIT.storage.getItem("CSLEDIT.mainSchema")),
+			subSchemas = JSON.parse(CSLEDIT.storage.getItem("CSLEDIT.subSchemas"));
 
-	$.each(includeSchemaURLs, function(i, url) {
-		$.get(url, {}, function(data) {
-			schemas.push(data);
-			urlsGot++;
-			if (urlsGot === includeSchemaURLs.length + 1) {
-				init();
+		if (mainSchema !== null) {
+			$.each(mainSchema, function (name, data) {
+				console.log("WARNING: Using custom schema: " + name);
+				mainSchemaData = data;
+			});
+
+			if (subSchemas !== null) {
+				$.each(subSchemas, function (name, data) {
+					console.log("Adding custom sub schema: " + name);
+					schemas.push(data);
+				});
 			}
-		});
-	});
+		}
+	};
 
 	var NodeProperties = function (copySource) {
 		if (typeof(copySource) === "undefined") {
@@ -104,7 +105,7 @@ CSLEDIT.Schema = function (
 			parseChildren(xmlDoc);
 		});
 
-		// Simplify schema (replace all refs with the corresponding define
+		// Simplify schema (replace each refs with the corresponding define)
 		simplify();
 
 		if (schemaOptions && 'processNodeProperties' in schemaOptions) {
@@ -662,6 +663,33 @@ CSLEDIT.Schema = function (
 			}
 		}
 	};
+
+	// -- initialisation code --
+	
+	// schema set in localStorage overrides the URLs
+	readSchemaFromStorage();
+
+	if (typeof(mainSchemaData) !== "undefined") {
+		$.get(mainSchemaURL, {}, function(data) {
+			mainSchemaData = data;
+			urlsGot++;
+			if (urlsGot === includeSchemaURLs.length + 1) {
+				init();
+			}
+		});
+
+		$.each(includeSchemaURLs, function(i, url) {
+			$.get(url, {}, function(data) {
+				schemas.push(data);
+				urlsGot++;
+				if (urlsGot === includeSchemaURLs.length + 1) {
+					init();
+				}
+			});
+		});
+	} else {
+		init();
+	}
 
 	return {
 		attributes : function (element) {
