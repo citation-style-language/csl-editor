@@ -248,7 +248,7 @@ asyncTest("check invariance when deserializing then serializing repo styles", fu
 			// strip comments from inital XML (node type 8)
 			initialXmlElement.find('*').each(function() {
 				if(this.nodeType == 8) {
-					$(this).remove()
+					$(this).remove();
 				}
 			});
 			initialXmlString = '<?xml version="1.0" encoding="utf-8"?>\n' + initialXmlElement.html();

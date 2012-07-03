@@ -13,3 +13,6 @@
 [submodule "external/jstree"]
 	path = external/jstree
 	url = https://github.com/citation-style-editor/jstree.git
+[submodule "external/locales"]
+	path = external/locales
+	url = git://github.com/citation-style-language/locales.git

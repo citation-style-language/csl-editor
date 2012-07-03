@@ -46,6 +46,8 @@
  * or the [AGPLv3] License.”
  */
 
+"use strict";
+
 CSL.Node["#comment"] = {
 	build: function (state, target) {
 		// Should never reach this point, in QtWebKit it happens.

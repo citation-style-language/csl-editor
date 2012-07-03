@@ -14,9 +14,9 @@
 	<script type="text/javascript" src="../../external/citeproc/xmldom.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/citeproc-1.0.336.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/loadlocale.js"></script>
-	<script type="text/javascript" src="../../external/citeproc/loadsys.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/runcites.js"></script>
 
+	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
 	<script type="text/javascript" src="../../src/storage.js"></script>
 	<script type="text/javascript" src="../../src/xmlUtility.js"></script>
 	<script type="text/javascript" src="../../src/citationEngine.js"></script>

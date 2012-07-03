@@ -26,7 +26,6 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	};
 
 	// --- Functions for formatted style search ---
-
 	function authorString(authors) {
 		var result = [],
 			index = 0;

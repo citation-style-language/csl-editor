@@ -18,10 +18,10 @@
 	<script type="text/javascript" src="../../external/citeproc/xmldom.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/citeproc-1.0.336.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/loadlocale.js"></script>
-	<script type="text/javascript" src="../../external/citeproc/loadsys.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/runcites.js"></script>
 	<script type="text/javascript" src="../../external/diff-match-patch/diff_match_patch.js"></script>
 
+	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
 	<script type="text/javascript" src="../../src/debug.js"></script>
 	<script type="text/javascript" src="../../src/storage.js"></script>
 	<script type="text/javascript" src="../../src/exampleData.js"></script>
@@ -37,6 +37,14 @@
 
 	<link rel="stylesheet" href="../../css/base.css" />
 	<script type="text/javascript" src="../../src/codeEditor.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			CSLEDIT.codeEditor = new CSLEDIT.CodeEditor({
+				rootURL : "../.."
+			});
+		});
+	</script>
 
 	<script type="text/javascript" src="../src/analytics.js"></script>
 

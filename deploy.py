@@ -37,6 +37,7 @@ pages = [
     {
         "page" : "visualEditor", 
         "jsFiles" : [
+            "src/citeprocLoadSys.js",
             "src/exampleData.js",
             "src/storage.js",
             "src/options.js",
@@ -74,6 +75,7 @@ pages = [
     {
         "page" : "codeEditor",
         "jsFiles" : [
+            "src/citeprocLoadSys.js",
             "src/debug.js",
             "src/storage.js",
             "src/exampleData.js",
@@ -93,6 +95,7 @@ pages = [
     {
         "page" : "searchByExample",
         "jsFiles" : [
+            "src/citeprocLoadSys.js",
             "src/xmlUtility.js",
             "src/citationEngine.js",
             "server/config.js",

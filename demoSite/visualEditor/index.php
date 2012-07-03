@@ -13,7 +13,6 @@
 	<script type="text/javascript" src="../../external/citeproc/xmldom.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/citeproc-1.0.336.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/loadlocale.js"></script>
-	<script type="text/javascript" src="../../external/citeproc/loadsys.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/runcites.js"></script>
 	<script type="text/javascript" src="../../external/diff-match-patch/diff_match_patch.js"></script>
 
@@ -24,6 +23,8 @@
 	<script type="text/javascript" src="../../external/jquery.layout-latest-min.js"></script>
 	<script type="text/javascript" src="../../external/jquery.hoverIntent.minified.js"></script>
 	<script type="text/javascript" src="../../external/jquery.scrollTo-1.4.2-min.js"></script>
+
+	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
 
 	<script type="text/javascript" src="../../src/exampleData.js"></script>
 	<script type="text/javascript" src="../../src/exampleCitations.js"></script>
