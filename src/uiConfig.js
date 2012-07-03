@@ -60,7 +60,6 @@ CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 		elideLimit = 30,
 		match = CSLEDIT.schema.attributes("choose/if").match.defaultValue,
 		terms = [],
-		variable = "",
 		join = "";
 
 	$.each(node.attributes, function (i, attribute) {
@@ -68,13 +67,9 @@ CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 		   if (attribute.key === "match") {
 				match = attribute.value;
 			} else {
-				assertEqual(terms.length, 0);
-				terms = attribute.value.split(" ");
-
-				// type is so common, don't bother displaying it
-				if (attribute.key !== "type") {
-					variable = attribute.key;
-				}
+				$.each(attribute.value.split(" "), function (i, val) {
+					terms.push(val);
+				});
 			}
 		}
 	});
