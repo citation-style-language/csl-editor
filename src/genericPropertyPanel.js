@@ -622,7 +622,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			}
 
 			setupPanel(panel, nodeData, dataType, schemaAttributes, schemaChoices,
-				function () { nodeChanged(); });
+				executeCommand);
 			clearTimeout(onChangeTimeout);
 			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 10);
 		});
