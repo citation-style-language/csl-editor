@@ -189,7 +189,8 @@ demoSiteFilesToCopy = [
 demoSiteDirectoriesToCopy = [
     'html',
     'src',
-    'external'
+    'external',
+    'settings'
 ]
 
 def ignored_files(adir, filenames):

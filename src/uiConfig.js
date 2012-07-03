@@ -58,9 +58,14 @@ CSLEDIT.uiConfig.displayNameFromNode = function (node) {
 CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 	var displayName = "",
 		elideLimit = 30,
-		match = CSLEDIT.schema.attributes("choose/if").match.defaultValue,
+		match,
 		terms = [],
 		join = "";
+
+	match = CSLEDIT.schema.attributes("choose/if").match.defaultValue;
+	if (match === "") {
+		match = "all"; // becuase it's not specified in MLZ schema, TODO: ask Frank
+	}
 
 	$.each(node.attributes, function (i, attribute) {
 		if (attribute.enabled) {

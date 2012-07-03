@@ -669,7 +669,7 @@ CSLEDIT.Schema = function (
 	// schema set in localStorage overrides the URLs
 	readSchemaFromStorage();
 
-	if (typeof(mainSchemaData) !== "undefined") {
+	if (typeof(mainSchemaData) === "undefined") {
 		$.get(mainSchemaURL, {}, function(data) {
 			mainSchemaData = data;
 			urlsGot++;
