@@ -349,8 +349,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		// are found between the localStorage data (shared between tabs) and this session
 		// data
 		CSLEDIT.storage = new CSLEDIT.Storage(true, function () {
-			if (confirm("Your style has changed in a different tab " +
-					"do you want to load the new version into this tab?")) {
+			if (confirm("Your style has changed in a different tab.\n" +
+					"Do you want to load the new version into this tab?")) {
 				// reload page
 				reloadingPage = true;
 				window.location.reload();
