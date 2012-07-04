@@ -10,11 +10,7 @@
 
 	<script type="text/javascript" src="../../src/exampleData.js"></script>
 	<script type="text/javascript" src="../../src/options.js"></script>
-	<script type="text/javascript">
-	CSLEDIT.options.setUserOptions({
-		rootURL : "../.."
-	});
-	</script>
+
 	<script type="text/javascript" src="../../src/storage.js"></script>
 	<script type="text/javascript" src="../../src/test_storage.js"></script>
 
@@ -47,6 +43,12 @@
 	
 	<script type="text/javascript" src="../../src/editNodeButton.js"></script>
 	<script type="text/javascript" src="../../src/test_editNodeButton.js"></script>
+
+	<script type="text/javascript">
+	CSLEDIT.options.setUserOptions({
+		rootURL : "../.."
+	});
+	</script>
 </head>
 <body>
 	<h1 id="qunit-header">CSL Editor Tests</h1>
