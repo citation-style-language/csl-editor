@@ -125,7 +125,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		}
 
 		depth++;
-		assert(depth < 50, "stack overflow!");
+		assert(depth < 150, "stack overflow!");
 
 		if (node.is('li')) {
 			highlightedNode = node.children('a');
