@@ -95,7 +95,9 @@ var initVisualEditorDemo = function (rootURL) {
 	$("document").ready( function () {
 		window.onerror = function (err, url, line) {
 			var dialog = $('<div title="An Error Occurred"></div>').css({overflow:"auto"}),
-				errLines = err.split("\n");
+				errLines = err.split("\n"),
+				refreshPage = $('<button>Refresh Page</button>'),
+				resetButton = $('<button>Reset Everything</button>');
 
 			$.ajax({
 				url : "../logError.php",
@@ -111,10 +113,19 @@ var initVisualEditorDemo = function (rootURL) {
 				}
 			});
 
-			dialog.append("<h3>You should refresh the page now.</h3>");
-			dialog.append("<p>If this error continues after refresh then use the Search by Name " +
-				"page to load a different style into the editor.</p>");
+			dialog.append($('<p/>').append(refreshPage).append(" try this first"));
+			refreshPage.on("click", function () {
+				window.location.reload();
+			});
+
+			dialog.append($('<p/>').append(resetButton).append(" unsaved work will be lost"));
+			resetButton.on("click", function () {
+				CSLEDIT.storage.clear();
+				window.location.reload();
+			});
+
 			dialog.append("<h3>" + errLines[0] + "</h3>");
+
 			errLines.splice(0, 1);
 			if (errLines.length > 0) {
 				//dialog.append("<ul><li>" + errLines.join("</li><li>") + "</li></ul>");

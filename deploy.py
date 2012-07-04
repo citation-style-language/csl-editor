@@ -311,7 +311,8 @@ for dir in demoSiteDirectoriesToCopy:
 
 for file in demoSiteFilesToCopy:
     shutil.copyfile('demoSite/' + file, demoSiteDir + '/' + file)
+
+    # give write permissions to just the error.log file
     if (file == "error.log" and platform.system() == 'Linux'):
-        # give write permissions
         subprocess.call(['chmod', 'o+w', demoSiteDir + '/' + file]);
 
