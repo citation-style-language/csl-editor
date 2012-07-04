@@ -251,7 +251,9 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setCondition = function (index, newCo
 };
 
 CSLEDIT.ConditionalPropertyPanel.prototype.removeCondition = function (index) {
-	var attribute = that.conditions[index].attribute;
+	var that = this,
+		attribute = that.conditions[index].attribute,
+		i;
 
 	// update conditions
 	that.conditions.splice(index, 1);
@@ -268,7 +270,11 @@ CSLEDIT.ConditionalPropertyPanel.prototype.removeCondition = function (index) {
 	that.refresh();
 
 	// update value
-	that.node.setAttr(that.attributeValue(attribute));
+	if (that.attributeValue(attribute) === "") {
+		that.node.setAttrEnabled(attribute, false);
+	} else {
+		that.node.setAttr(attribute, that.attributeValue(attribute));
+	}
 	that.executeCommand('amendNode', [that.node.cslId, that.node]);
 };
 
