@@ -1,6 +1,7 @@
 #!python
 
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -183,7 +184,8 @@ demoSiteFilesToCopy = [
     '.htaccess',
     '404page.html',
     'sendFeedback.php',
-    'feedbackEmail.txt'
+    'feedbackEmail.txt',
+    'error.log'
 ]
 
 demoSiteDirectoriesToCopy = [
@@ -307,5 +309,8 @@ for dir in demoSiteDirectoriesToCopy:
     shutil.copytree('demoSite/' + dir, demoSiteDir + '/' + dir, ignore=ignored_files)
 
 for file in demoSiteFilesToCopy:
-    shutil.copyfile('demoSite/' + file, demoSiteDir + '/' + file) 
+    shutil.copyfile('demoSite/' + file, demoSiteDir + '/' + file)
+    if (file == "error.log" && platform.system() == 'Linux'):
+        # give write permissions
+        subprocess.call(['chmod', 'o+w', demoSiteDir + '/' + file]);
 
