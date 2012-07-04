@@ -183,6 +183,7 @@ demoSiteFilesToCopy = [
     'getFromOtherWebsite.php',
     '.htaccess',
     '404page.html',
+    'logError.php',
     'sendFeedback.php',
     'feedbackEmail.txt',
     'error.log'
@@ -310,7 +311,7 @@ for dir in demoSiteDirectoriesToCopy:
 
 for file in demoSiteFilesToCopy:
     shutil.copyfile('demoSite/' + file, demoSiteDir + '/' + file)
-    if (file == "error.log" && platform.system() == 'Linux'):
+    if (file == "error.log" and platform.system() == 'Linux'):
         # give write permissions
         subprocess.call(['chmod', 'o+w', demoSiteDir + '/' + file]);
 
