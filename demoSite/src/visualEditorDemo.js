@@ -98,7 +98,7 @@ var initVisualEditorDemo = function (rootURL) {
 				errLines = err.split("\n");
 
 			$.ajax({
-				url : "logError.php",
+				url : "../logError.php",
 				type : "POST",
 				data : {
 						message : err
