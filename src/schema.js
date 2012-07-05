@@ -66,25 +66,9 @@ CSLEDIT.Schema = function (
 				documentation : ""
 			};
 		} else {
-			// deep copy of elements, shallow copy of all other properties
-			return {
-				elements : (function () {
-						var elements = {};
-						$.each(copySource.elements, function (element, quantifier) {
-							elements[element] = quantifier;
-						});
-						return elements;
-					}()),
-				attributes : copySource.attributes,
-				refs : copySource.refs,
-				refQuantifiers : copySource.refQuantifiers,
-				attributeValues : copySource.attributeValues,
-				textNode : copySource.textNode,
-				list : copySource.list,
-				choices : copySource.choices,
-				choiceRefs : copySource.choiceRefs,
-				documentation : copySource.documentation
-			};
+			// deep copy
+			console.log("copied: " + JSON.stringify(copySource));
+			return JSON.parse(JSON.stringify(copySource));
 		}
 	};
 
