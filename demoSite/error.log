@@ -1,3 +1,8 @@
 CSL editor client side errors
 -----------------------------
 
+
+Date: 05.07.2012 09:46:26
+Uncaught TypeError: undefined is not a function
+Url: http://localhost/csl-source/src/infoPropertyPanel.js
+Line: 248

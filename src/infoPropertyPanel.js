@@ -231,7 +231,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 					deleteButton = $('<button>Delete</button>');
 					deleteButton.on('click', function () {
 						executeCommand("deleteNode", [node.cslId]);
-						setupPanel(panel);
+						setupPanel(panel, executeCommand);
 					});
 
 					inputRow.append($('<td></td>').append(deleteButton));
@@ -248,7 +248,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 					executeCommand("addNode",
 						[infoNode.cslId, "last", new CSLEDIT.CslNode(item.node)]);
 					CSLEDIT.viewController.setSuppressSelectNode(false);
-					setupPanel(panel);
+					setupPanel(panel, executeCommand);
 				});
 				panel.append('<br /><br />');
 			} else {
