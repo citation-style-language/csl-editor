@@ -16,7 +16,6 @@ CSLEDIT.propertyPanel = (function () {
 		var dataType,
 			schemaAttributes;
 
-		console.log("property panel setup, suppress = " + suppressUpdates);
 		if (suppressUpdates) {
 			return;
 		}

@@ -51,7 +51,7 @@
 	</script>
 </head>
 <body>
-	<h1 id="qunit-header">CSL Editor Tests</h1>
+	<h1 id="qunit-header">CSL Editor Unit Tests</h1>
 	<h2 id="qunit-banner"></h2>
 	<div id="qunit-testrunner-toolbar"></div>
 	<h2 id="qunit-userAgent"></h2>

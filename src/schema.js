@@ -670,20 +670,32 @@ CSLEDIT.Schema = function (
 	readSchemaFromStorage();
 
 	if (typeof(mainSchemaData) === "undefined") {
-		$.get(mainSchemaURL, {}, function(data) {
-			mainSchemaData = data;
-			urlsGot++;
-			if (urlsGot === includeSchemaURLs.length + 1) {
-				init();
+		$.ajax({
+			url : mainSchemaURL, 
+			success : function (data) {
+				mainSchemaData = data;
+				urlsGot++;
+				if (urlsGot === includeSchemaURLs.length + 1) {
+					init();
+				}
+			},
+			error : function () {
+				throw new Error("Couldn't fetch main schema from: " + url);
 			}
 		});
 
 		$.each(includeSchemaURLs, function(i, url) {
-			$.get(url, {}, function(data) {
-				schemas.push(data);
-				urlsGot++;
-				if (urlsGot === includeSchemaURLs.length + 1) {
-					init();
+			$.ajax({
+				url : url,
+				success : function (data) {
+					schemas.push(data);
+					urlsGot++;
+					if (urlsGot === includeSchemaURLs.length + 1) {
+						init();
+					}
+				},
+				error : function () {
+					throw new Error("Couldn't fetch sub schema from: " + url);
 				}
 			});
 		});

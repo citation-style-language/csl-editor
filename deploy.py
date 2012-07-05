@@ -133,7 +133,7 @@ pages = [
         ]
     },
     {
-        "page" : "test",
+        "page" : "unitTests",
         "jsFiles" : [
             "src/exampleData.js",
             "src/options.js",
@@ -159,6 +159,40 @@ pages = [
             "src/test_smartTree.js",
             "src/editNodeButton.js",
             "src/test_editNodeButton.js"
+        ]
+    },
+    {
+        "page" : "integrationTests",
+        "jsFiles" : [
+            "src/testUtils.js",
+            "src/exampleData.js",
+            "src/options.js",
+            "src/uiConfig.js",
+            "src/storage.js",
+            "src/debug.js",
+            "src/schema.js",
+            "src/controller.js",
+            "src/cslParser.js",
+            "src/Iterator.js",
+            "src/cslNode.js",
+            "src/cslData.js",
+            "src/xmlUtility.js",
+            "src/smartTree.js",
+            "src/editNodeButton.js",
+            "src/schemaOptions.js",
+            "src/MultiPanel.js",
+            "src/MultiComboBox.js",
+            "src/genericPropertyPanel.js",
+            "src/infoPropertyPanel.js",
+            "src/conditionalPropertyPanel.js",
+            "src/sortPropertyPanel.js",
+            "src/propertyPanel.js",
+            "src/ViewController.js",
+            "src/NodePathView.js",
+            "src/Titlebar.js",
+
+            "src/integrationTest_viewsForAllStyles.js",
+            "src/integrationTest_propertyPanels.js"
         ]
     },
     {

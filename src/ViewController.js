@@ -85,8 +85,8 @@ CSLEDIT.ViewController = function (
 			}
 		],
 		views = [],
-		treesLoaded = 0,
-		treesToLoad = 0,
+		treesLoaded,
+		treesToLoad,
 		callbacks,
 		selectedTree = null,
 		selectedNodeId = -1,
@@ -121,6 +121,9 @@ CSLEDIT.ViewController = function (
 			nodes,
 			table,
 			row;
+
+		treesLoaded = 0;
+		treesToLoad = 0;
 
 		selectedNodeId = -1;
 		views = [];
