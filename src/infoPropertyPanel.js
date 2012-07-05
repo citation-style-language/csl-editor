@@ -15,6 +15,9 @@ CSLEDIT.infoPropertyPanel = (function () {
 		{ name : "ISSNL", node : "issnl" },
 		{ name : "eISSN", node : "eissn" },
 		{ name : "ISSN", node : "issn" },
+		// hiding "Updated" for now
+		// if it goes back, it needs updating on each change
+		// { name : "Updated", node : "updated" },
 		{ name : "Link", node : "link" },
 		{ name : "Author", node : "author" },
 		{ name : "Contributor", node : "contributor" },
@@ -30,7 +33,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 	};
 
 	// TODO: could probably get some of this info from the schema
-	var multipleNodes = ["link","author","contributor","category"];
+	var multipleNodes = ["link","author","contributor","category","issn"];
 	var attributeNodes = ["link", "category"];
 	var nameNodes = ["author", "contributor"];
 
