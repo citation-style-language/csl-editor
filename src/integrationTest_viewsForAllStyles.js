@@ -17,6 +17,8 @@ asyncTest("setup views for all popular styles", function () {
 		ok(true, "schema loaded");
 
 		CSLEDIT.data = CSLEDIT.Data("CSLEDIT.testData");
+		CSLEDIT.data.setCslCode(styles[Object.keys(styles)[0]]);
+
 		CSLEDIT.viewController = CSLEDIT.ViewController(
 			$('<div/>'), $('<div/>'), $('<div/>'), $('<div/>'),
 			fakeDropdownMenuHandler,
