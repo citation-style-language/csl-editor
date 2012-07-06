@@ -43,8 +43,8 @@ body#about           a#nav_about {
 <style>
 #feedbackTab {
 	position: fixed;
-	top: 45%;
-	right: 24px;
+	top: 0;
+	right: 20px;
 
 	font-size: 14px;
 	font-weight: bold;
@@ -53,22 +53,33 @@ body#about           a#nav_about {
 	color: white;
 	padding-left: 10px;
 	padding-right: 10px;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 4px;
+	padding-bottom: 4px;
 
 	z-index: 20;
-
-	-webkit-transform: rotate(-90deg); 
-    -webkit-transform-origin: right top;
-
-	-moz-transform: rotate(-90deg);	
-    -moz-transform-origin: right top;
 }
 #feedbackTab:hover {
 	cursor: pointer;
 }
+#feedbackPanel {
+	background-color: #1111cc;
+	color: white;
+
+	position: fixed;
+	right: 0;
+	top: 0;
+
+	padding: 8px;
+	z-index: 30;
+
+	width: 300px;
+
+	font-size: 12px;
+	font-family: Sans-Serif;
+}
 #feedbackPanel h3,
 #feedbackPanel input.email {
+	margin-top: 0px;
 	margin-bottom: 6px;
 	width: 100%;
 }
@@ -80,19 +91,6 @@ body#about           a#nav_about {
 	margin-bottom: 6px;
 	width: 100%;
 	height: 100px;
-}
-#feedbackPanel {
-	background-color: #1111cc;
-	color: white;
-
-	position: fixed;
-	right: 0;
-	top: 40%;
-
-	padding: 8px;
-	z-index: 30;
-
-	width: 300px;
 }
 #feedbackPanel.hidden {
 	visibility: hidden;
@@ -146,7 +144,7 @@ $('document').ready( function() {
 </script>
 
 <div id="feedbackTab">
-	Feedback
+	Give Feedback
 </div>
 <div id="feedbackPanel" class="hidden">
 	<h3>What do you think?</h3>
