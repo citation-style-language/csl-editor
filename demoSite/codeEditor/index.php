@@ -12,7 +12,6 @@
 	<link rel="stylesheet" href="../../css/codemirror.css" />
 	<script src="../../external/codemirror2/lib/codemirror.js"></script>
 	<script src="../../external/codemirror2/mode/xml/xml.js"></script>
-	<link rel="stylesheet" href="../../css/docs.css" />
 
 	<script type="text/javascript" src="../../external/jquery.layout-latest-min.js"></script>
 
