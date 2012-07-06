@@ -213,12 +213,18 @@ CSLEDIT.ConditionalPropertyPanel.prototype.createConditionControls = function (i
 	that.subOptionControls[i] = subOptionControl;
 	
 	// create value control
-	valueControl = $('<select class="valueSelect"></select>');
-	valueControl.attr('data-index', i);
-	$.each(that.possibleValues(condition.attribute), function (i, possibleValue) {
-		valueControl.append('<option>' + possibleValue + '</option>');
-	});
-	valueControl.val(condition.value);
+	if (that.possibleValues(condition.attribute).length > 1) {
+		valueControl = $('<select class="valueSelect"></select>');
+		valueControl.attr('data-index', i);
+	
+		$.each(that.possibleValues(condition.attribute), function (i, possibleValue) {
+			valueControl.append('<option>' + possibleValue + '</option>');
+		});
+		valueControl.val(condition.value);
+	} else {
+		valueControl = $(); // empty
+	}
+
 	that.valueControls[i] = valueControl;
 };
 
