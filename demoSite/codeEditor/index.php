@@ -14,6 +14,8 @@
 	<script src="../../external/codemirror2/mode/xml/xml.js"></script>
 	<link rel="stylesheet" href="../../css/docs.css" />
 
+	<script type="text/javascript" src="../../external/jquery.layout-latest-min.js"></script>
+
 	<script type="text/javascript" src="../../external/citeproc/loadabbrevs.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/xmldom.js"></script>
 	<script type="text/javascript" src="../../external/citeproc/citeproc-1.0.336.js"></script>
@@ -40,7 +42,7 @@
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			CSLEDIT.codeEditor = new CSLEDIT.CodeEditor({
+			CSLEDIT.codeEditor = new CSLEDIT.CodeEditor('#codeEditorContainer', {
 				rootURL : "../.."
 			});
 		});
@@ -49,29 +51,33 @@
 	<script type="text/javascript" src="../src/analytics.js"></script>
 
 <style type="text/css">
+#codeEditorContainer {
+	position: absolute;
+
+	top: 30px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+
+	background: #eeeeee;
+}
 #code {
-	border: 1px solid #eee;
-	overflow: auto;
+	/*border: 1px solid #eee;*/
+	position: absolute;
+
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
 }
 .searched {
 	background: yellow;
 }
-#exampleOutput {
-	margin-left: 20px;
-	margin-right: 20px;
-	height: 60%;
-	overflow: auto;
-	cursor: default;
-	font-family:Verdana,Geneva,'DejaVu Sans',sans-serif;
-	line-height: 1.3;
+#exampleOutput h3 {
+	font-size: 14px;
 }
 #exampleOutput p {
-	margin-top: 0;
-	margin-bottom: 0.2em;
-}
-#exampleOutput h3 {
-	margin-top: 0.5em;
-	margin-bottom: 0.1em;
+	font-size: 12px;
 }
 </style>
 </head>
@@ -79,19 +85,8 @@
 
 <?php include '../html/navigation.html'; ?>
 
-<form name="codeForm">
-	<textarea id="code" name="code">
-	</textarea>
-</form>
-
-<div id="exampleOutput">
-	<div id="statusMessage"></div>
-
-	<h3>Formatted Inline Citations</h3>	
-	<div id="formattedCitations"></div>
-
-	<h3>Formatted Bibliography</h3>
-	<div id="formattedBibliography"></div>
+<div id="codeEditorContainer">
 </div>
+
 </body>
 </html>

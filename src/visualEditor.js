@@ -417,7 +417,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 		editorElement.find('#mainContainer').layout({
 			closable : false,
-			resizble : true,
+			resizable : true,
 			livePaneResizing : true,
 			west__size : CSLEDIT.storage.getItem("CSLEDIT.geometry.leftPaneWidth") || 240,
 			west__minSize : 200,

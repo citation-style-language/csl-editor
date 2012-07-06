@@ -54,26 +54,6 @@ html, body {
 /* don't show background for focussed trees since it messes up when horizontally scrolling */
 #treeEditor .jstree-default.jstree-focused { background:#ffffff; }
 
-div.spacer {
-	width: 6px;
-	height: 6px;
-}
-
-div.panel {
-	position: absolute;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #888888;
-
-	padding: 4px;
-
-	top: 0px;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
-
-	background: #ffffff;
-}
 #titlebarContainer{
 	position: absolute;
 	right: 0px;
@@ -114,21 +94,7 @@ div.panel {
 	height: 55%;
 }
 #exampleOutput {
-	position: absolute;
 	top: 23px;
-	overflow: auto;
-	cursor: default;
-	font-family:Verdana,Geneva,'DejaVu Sans',sans-serif;
-	line-height: 1.3;
-	background-color: #F5F5DC;
-}
-#exampleOutput p {
-	margin-top: 0;
-	margin-bottom: 0.2em;
-}
-#exampleOutput h3 {
-	margin-top: 0.5em;
-	margin-bottom: 0.1em;
 }
 #elementPropertyPanel {
 	font-size: 14px;
