@@ -13,6 +13,12 @@ CSLEDIT.ViewController = function (
 		// children : displayed in tree view as children
 		smartTreeSchema = [
 			{
+				id : "info",
+				name : "Style Info",
+				nodePaths : ["style/info"],
+				macroLinks : false
+			},
+			{
 				id : "citations",
 				name : "Inline Citations",
 				nodePaths : ["style/citation/layout"],
