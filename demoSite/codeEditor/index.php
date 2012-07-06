@@ -72,12 +72,6 @@
 .searched {
 	background: yellow;
 }
-#exampleOutput h3 {
-	font-size: 14px;
-}
-#exampleOutput p {
-	font-size: 12px;
-}
 </style>
 </head>
 <body id="codeEditor">
