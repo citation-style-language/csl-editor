@@ -28,9 +28,9 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 - Create the file feedbackEmail.txt within the demoSite directory containing a single email address that you want the feedback widget to send to
 
-- Run `python deploy.py $SERVER\_ROOT\_DIRECTORY $SITE\_PATH`, where `$SERVER\_ROOT\_DIRECTORY` is typically `public\_html` and `$SITE\_PATH` can be an empty string to install to the domain root or a subdirectory of the server root directory. Note that anything in the directory `$SERVER\_ROOT\_DIRECTORY/$SITE\_PATH` will be removed!
+- Run `python deploy.py $SERVER_ROOT_DIRECTORY/$SITE_PATH`, where `$SERVER_ROOT_DIRECTORY` is typically `public_html` and `$SITE_PATH` can be an empty string to install to the domain root or a subdirectory of the server root directory. Note that anything in the directory `$SERVER_ROOT_DIRECTORY/$SITE_PATH` will be removed!
 
-- Point your browser to DOMAIN\_NAME/$SITE\_PATH to access the site (uses concatenated js files and renamed css files)
+- Point your browser to `DOMAIN_NAME/$SITE_PATH` to access the site (uses concatenated js files and renamed css files)
 
 - Point your browser to either /csl-source/demoSite/test or /csl/test/ to run unit tests
 
