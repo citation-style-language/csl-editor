@@ -27,7 +27,9 @@ CSLEDIT.genericPropertyPanel = (function () {
 				'underline' : { text : '<u>U</u>' }
 			},
 			'font-variant' : {
-				'small-caps' : { text : 'All Caps' },
+				'small-caps' : {
+					text : '<span style="font-variant: small-caps;">Small Caps</span>'
+				},
 				'normal' : 'default'
 			},
 			'vertical-align' : {
