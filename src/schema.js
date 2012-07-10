@@ -67,7 +67,6 @@ CSLEDIT.Schema = function (
 			};
 		} else {
 			// deep copy
-			console.log("copied: " + JSON.stringify(copySource));
 			return JSON.parse(JSON.stringify(copySource));
 		}
 	};
