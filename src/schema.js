@@ -269,7 +269,7 @@ CSLEDIT.Schema = function (
 				return false;
 			});
 		});
-		$.each(node.choices, function (i, choice) {
+		$.each (node.choices, function (i, choice) {
 			var attributeName;
 			for (attributeName in choice) {
 				// already mostly simplified, just need to dereference the attr. values
@@ -373,7 +373,15 @@ CSLEDIT.Schema = function (
 		attributesMerge(propertiesA.attributes, propertiesB.attributes);
 
 		arrayMerge(propertiesA.choiceRefs, propertiesB.choiceRefs);
-		propertiesA.choices = propertiesA.choices.concat(propertiesB.choices);
+		arrayMerge(propertiesA.choices, propertiesB.choices, function (a, b) {
+			// TODO: if this fails, should check again if a equals b using
+			//       guaranteed deterministic alternative to JSON.stringify
+			return JSON.stringify(a) === JSON.stringify(b);
+		});
+
+		if (propertiesA.choices.length > 8) {
+			debugger;
+		}
 		arrayMerge(propertiesA.refs, propertiesB.refs);
 
 		$.each(propertiesB.refQuantifiers, function (ref, quantifier) {
