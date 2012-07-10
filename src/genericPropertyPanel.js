@@ -185,9 +185,6 @@ CSLEDIT.genericPropertyPanel = (function () {
 	};
 	
 	var nodeChanged = function () {
-		// TODO: assert check that persistent data wasn't changed in another tab, making
-		//       this form data possibly refer to a different node
-
 		// read user data
 		$('[id^="nodeAttributeLabel"]').each( function () {
 			var key, value, index, enabled;
