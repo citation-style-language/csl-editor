@@ -70,6 +70,11 @@
 
 					updateView();
 				});
+				
+				$("#resetEverything").click(function () {
+					localStorage.clear();
+					alert("All local settings removed");
+				});
 
 				updateView();
 			});
@@ -88,7 +93,12 @@
 
 		<button id="deleteSchema">Delete All Files (reset schema to default)</button>
 
+		<h3>Reset everything</h3>
+		<button id="resetEverything">Reset all local settings to default (your style will be lost)</button>
+
 		<p>
+
+		<h3>CSL Editor</h3>
 		<a href="../visualEditor">
 			Go to Visual Editor page
 		</a> (these settings will be remembered, return back to this page is you want to change them)
