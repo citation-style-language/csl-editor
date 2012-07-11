@@ -286,7 +286,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 					} else if (clickedName === "New Style") {
 						// fetch the URL
 						$.ajax({
-							url : CSLEDIT.options.get("rootURL") + "/content/newStyle.csl",,
+							url : CSLEDIT.options.get("rootURL") + "/content/newStyle.csl",
 							dataType : "text",
 							success : function (result) {
 								newStyle = result;
