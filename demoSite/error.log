@@ -1,18 +1,3 @@
 CSL editor client side errors
 -----------------------------
 
-
-Date: 11.07.2012 10:08:57
-Uncaught TypeError: Object #<Document> has no method 'replace'
-Url: http://localhost/csl-source/src/cslData.js
-Line: 277
-
-Date: 11.07.2012 10:09:05
-Uncaught TypeError: Object #<Document> has no method 'replace'
-Url: http://localhost/csl-source/src/cslData.js
-Line: 277
-
-Date: 11.07.2012 10:21:39
-Uncaught TypeError: Object #<Document> has no method 'replace'
-Url: http://localhost/csl-source/src/cslData.js
-Line: 277
