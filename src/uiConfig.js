@@ -151,5 +151,8 @@ CSLEDIT.uiConfig.displayNames = {
 		},
 		"choose" : function () {
 			return "Conditional";
+		},
+		"style" : function () {
+			return "Global Formatting Options";
 		}
 	};

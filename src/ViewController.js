@@ -15,8 +15,9 @@ CSLEDIT.ViewController = function (
 			{
 				id : "info",
 				name : "Style Info",
-				nodePaths : ["style/info"],
-				macroLinks : false
+				nodePaths : ["style/info", "style"],
+				macroLinks : false,
+				leafNodes : ["info", "style"]
 			},
 			{
 				id : "citations",
@@ -193,7 +194,7 @@ CSLEDIT.ViewController = function (
 			var tree;
 			treesToLoad++;
 			tree = CSLEDIT.SmartTree(treeView.children("#" + value.id), value.nodePaths, 
-				value.macroLinks);
+				value.macroLinks, value.leafNodes);
 
 			// Use this for debugging if you're not sure the view accurately reflects the data
 			//tree.setVerifyAllChanges(true);

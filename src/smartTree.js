@@ -2,19 +2,34 @@
 
 CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optional*/) {
+CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optional*/, leafNodes /*optional*/) {
 	var ranges,
 		macroLinks, // like symlinks for macros
 		            // [{ instanceCslId: ?, macroRange: ?}]
 		callbacks,
 		verifyAllChanges = false, // does a complete check against CSLEDIT.data after
 		                          // every change for debugging
-		oldSelectedNode = -1;
+		oldSelectedNode = -1,
+		leafNodes = leafNodes || [];
 
 	var setCallbacks = function (_callbacks) {
 		callbacks = _callbacks;
 	};
 	
+	var pathContainsLeafNode = function (nodePath) {
+		// NOTE: this doesn't use the parent element, so "contributor/name" and "names/name"
+		//       would *both* be leaf nodes if "name" is given
+		var result = false,
+			path = nodePath.split("/");
+		$.each(leafNodes, function (i, leafNode) {
+			if (path.indexOf(leafNode) !== -1) {
+				result = true;
+				return false;
+			}
+		});
+		return result;
+	};
+
 	// Check the tree matches the data - for testing and debugging
 	var verifyTree = function () {
 		var cslData = CSLEDIT.data.get();
@@ -142,9 +157,11 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			lastCslId[0] = cslData.cslId;
 		}
 
-		for (index = 0; index < cslData.children.length; index++) {
-			children.push(jsTreeDataFromCslData_inner(
-				cslData.children[index], lastCslId, macroLink));
+		if (!pathContainsLeafNode(cslData.name)) {
+			for (index = 0; index < cslData.children.length; index++) {
+				children.push(jsTreeDataFromCslData_inner(
+					cslData.children[index], lastCslId, macroLink));
+			}
 		}
 
 		var jsTreeData = {
@@ -427,10 +444,10 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		parentNode = treeElement.find('li[cslid="' + parentId + '"][macrolink!="true"]');
 		assertEqual(parentNode.length, 1);
 		
-		createSubTree(parentNode, position, jsTreeDataFromCslData_inner(newNode, [id]));
-
-		macroLinksUpdateNode(newNode.cslId, newNode);
-		
+		if (!pathContainsLeafNode(CSLEDIT.data.getNodePath(newNode.cslId))) {
+			createSubTree(parentNode, position, jsTreeDataFromCslData_inner(newNode, [id]));
+			macroLinksUpdateNode(newNode.cslId, newNode);
+		}
 		verifyTree();
 	};
 
