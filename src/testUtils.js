@@ -23,6 +23,7 @@ CSLEDIT.testUtils.getStyles = function (maxNumberOfStyles) {
 
 		$.ajax({
 			url : url,
+			dataType : "text",
 			success : function (data) {
 				cslCode = data;
 			},
@@ -36,6 +37,7 @@ CSLEDIT.testUtils.getStyles = function (maxNumberOfStyles) {
 	
 			$.ajax({
 				url : url,
+				dataType : "text",
 				success : function (data) {
 					cslCode = data;
 				},

@@ -286,11 +286,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 					} else if (clickedName === "New Style") {
 						// fetch the URL
 						$.ajax({
-							url : CSLEDIT.options.get("rootURL") + "/content/newStyle.csl",
+							url : CSLEDIT.options.get("rootURL") + "/content/newStyle.csl",,
+							dataType : "text",
 							success : function (result) {
 								newStyle = result;
 							},
-							async: false
+							async : false
 						});
 						CSLEDIT.controller.exec('setCslCode', [newStyle]);
 					} else if (clickedName === "Load Style from URL") {
@@ -299,10 +300,11 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 						// fetch the URL
 						$.ajax({
 							url : '../getFromOtherWebsite.php?url=' + encodeURIComponent(styleURL),
+							dataType : "text",
 							success : function (result) {
 								newStyle = result;
 							},
-							async: false
+							async : false
 						});
 
 						CSLEDIT.controller.exec("setCslCode", [newStyle]);

@@ -672,7 +672,8 @@ CSLEDIT.Schema = function (
 			},
 			error : function () {
 				throw new Error("Couldn't fetch main schema from: " + url);
-			}
+			},
+			dataType : "text"
 		});
 
 		$.each(includeSchemaURLs, function(i, url) {
@@ -687,7 +688,8 @@ CSLEDIT.Schema = function (
 				},
 				error : function () {
 					throw new Error("Couldn't fetch sub schema from: " + url);
-				}
+				},
+				dataType : "text"
 			});
 		});
 	} else {

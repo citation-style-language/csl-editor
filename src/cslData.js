@@ -282,7 +282,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			if (typeof callback !== "undefined") {
 				callback();
 			}
-		});
+		}, "text");
 	};
 
 	// from https://gist.github.com/1771618
