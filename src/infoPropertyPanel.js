@@ -206,7 +206,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 				// TODO: correct this to treat choices as mutaully exclusive
 				//       as they should be
 				$.each(CSLEDIT.schema.choices("info/" + item.node), function (i, choice) {
-					$.each(choice, function (attrName, attr) {
+					$.each(choice.attributes, function (attrName, attr) {
 						schemaAttributes[attrName] = attr;
 					});
 				});

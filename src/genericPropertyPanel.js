@@ -444,12 +444,12 @@ CSLEDIT.genericPropertyPanel = (function () {
 			var definitelySelected = false,
 				possiblySelected = false;
 			
-			$.each(choice, function (attributeName, attribute) {
+			$.each(choice.attributes, function (attributeName, attribute) {
 				definitelySelected = true;
 				return false;
 			});
 
-			$.each(choice, function (attributeName, schemaAttribute) {
+			$.each(choice.attributes, function (attributeName, schemaAttribute) {
 				var attributeIndexes = indexesOfAttribute(attributeName, nodeData.attributes),
 					thisAttribute;
 				
@@ -555,11 +555,11 @@ CSLEDIT.genericPropertyPanel = (function () {
 			choicePanel = new CSLEDIT.MultiPanel('multiPanel');
 			panel.append(choicePanel.element);
 
-			$.each(schemaChoices, function (choiceIndex, attributes) {
+			$.each(schemaChoices, function (choiceIndex, choice) {
 				var addedToTab = false;
 				schemaChoiceIndexes[choiceIndex] = [];
 
-				$.each(attributes, function (attributeName, attribute) {
+				$.each(choice.attributes, function (attributeName, attribute) {
 					var editor;
 					if (!addedToTab) {
 						// exception for date-part node
