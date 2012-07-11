@@ -1,9 +1,5 @@
 /* adapted from CSS-tricks: http://css-tricks.com/simple-jquery-dropdowns/ */
 
-* 									{ margin: 0; padding: 0; }
-body								{ font: 12px Helvetica, Sans-Serif; } 
-#page-wrap							{ width: 800px; margin: 25px auto; } 
-
 p                                   { margin: 15px 0; }
 
 ul.dropdown a						{ text-decoration: none; }

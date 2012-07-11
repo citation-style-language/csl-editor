@@ -1,6 +1,8 @@
+* { margin: 0; padding: 0; }
 html, body {
 	overflow: hidden;
 	position: relative;
+	font: 12px Helvetica, Sans-Serif;
 }
 #notificationBar {
 	position: absolute;
