@@ -562,7 +562,12 @@ CSLEDIT.genericPropertyPanel = (function () {
 				$.each(attributes, function (attributeName, attribute) {
 					var editor;
 					if (!addedToTab) {
-						choicePanel.addPanel(attributeName);
+						// exception for date-part node
+						if (nodeData.name === "date-part") {
+							choicePanel.addPanel(attribute.values[attribute.values.length - 1].value);
+						} else {
+							choicePanel.addPanel(attributeName);
+						}
 						addedToTab = true;
 					}
 					
