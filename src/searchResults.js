@@ -7,7 +7,7 @@ CSLEDIT.searchResults = (function () {
 	var closenessString = function (distance, stringA, stringB) {
 		var editDistance = CSLEDIT.diff.customEditDistance(stringA, stringB),
 			matchQuality = Math.max(0, Math.floor(100 * (1.0 - editDistance /
-				(2 * (stringA + stringB).length)))),
+				((stringA + stringB).length)))),
 			closeness;
 
 		if (editDistance === 0) {
