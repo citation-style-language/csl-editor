@@ -19,7 +19,7 @@ CSLEDIT.searchResults = (function () {
 		return '<td class="closeness match">' + closeness + '</td>';
 	};
 
-	var displaySearchResults = function (styles, outputNode) {
+	var displaySearchResults = function (styles, outputNode, exampleIndex /* optional */) {
 		var index,
 			outputList = [],
 			masterStyleSuffix = "",
@@ -35,6 +35,8 @@ CSLEDIT.searchResults = (function () {
 			featuredStyleClass,
 			featuredStyleText;
 
+		exampleIndex = exampleIndex || 0;
+
 		for (index = 0; index < Math.min(styles.length, 20); index++)
 		{
 			style = styles[index];
@@ -46,9 +48,9 @@ CSLEDIT.searchResults = (function () {
 				masterStyleSuffix = '';
 			}
 
-			citation = exampleCitations.exampleCitationsFromMasterId[style.masterId].
+			citation = exampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
 				formattedCitations[0];
-			bibliography = exampleCitations.exampleCitationsFromMasterId[style.masterId].
+			bibliography = exampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
 				formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&

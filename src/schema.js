@@ -544,14 +544,12 @@ CSLEDIT.Schema = function (
 					});
 
 					$.each(childNodeProperties.attributes, function (attributeName, attribute) {
-						console.log("adding choice attr: " + attributeName);
 						choice.attributes[attributeName] = attribute;
 						containsChoice = true;
 					});
 
 					if (containsChoice) {
 						choices.push(choice);
-						console.log(choices.length + "choices");
 					}
 
 					childNodeProperties.attributes = {};

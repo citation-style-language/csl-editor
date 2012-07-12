@@ -51,7 +51,7 @@ CSLEDIT.Storage = function (useLocalStorageIfAvailable, outOfSyncCallback) {
 		}
 	};
 
-	if (localStorage === null || typeof(localStorage) === "undefined" ||
+	if (typeof(localStorage) === "undefined" || localStorage === null ||
 			useLocalStorageIfAvailable !== true) {
 		console.log("Not using localStorage");
 		finalAPI = simpleStorageAPI;
