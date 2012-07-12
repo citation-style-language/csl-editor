@@ -85,7 +85,7 @@ CSLEDIT.cslParser = (function() {
 		return result;
 	};
 
-	var xmlNodeFromJson = function (jsonData, indent) {
+	var xmlNodeFromJson = function (jsonData, indent, fullClosingTags) {
 		var attributesString = "",
 			xmlString,
 			index,
@@ -108,17 +108,20 @@ CSLEDIT.cslParser = (function() {
 			xmlString += "<" + jsonData.name + attributesString + ">";
 			xmlString += htmlEscape(jsonData.textValue) + "</" + htmlEscape(jsonData.name) + ">\n";
 		} else {
-			xmlString += "<" + jsonData.name + attributesString + ">";
+			xmlString += "<" + jsonData.name + attributesString;
 			innerString = "";
 			if (typeof jsonData.children !== "undefined" && jsonData.children.length > 0) {
 				for (index = 0; index < jsonData.children.length; index++) {
-					innerString += xmlNodeFromJson(jsonData.children[index], indent + 1);
+					innerString += xmlNodeFromJson(jsonData.children[index], indent + 1, fullClosingTags);
 				}
 			}
 			if (innerString !== "") {
-				xmlString += "\n" + innerString + generateIndent(indent);
+				xmlString += ">\n" + innerString + generateIndent(indent) + "</" + htmlEscape(jsonData.name) + ">\n";
+			} else if (fullClosingTags) {
+				xmlString += "></" + jsonData.name + ">\n";
+			} else {
+				xmlString += "/>\n";
 			}
-			xmlString += "</" + htmlEscape(jsonData.name) + ">\n";
 		}
 
 		return xmlString;
@@ -164,14 +167,14 @@ CSLEDIT.cslParser = (function() {
 			return jsonData;
 		},
 
-		cslCodeFromCslData : function (jsonData, comment /* optional */) {
+		cslCodeFromCslData : function (jsonData, comment /* optional */, fullClosingTags /* optional */) {
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
 			
-			if (typeof(comment) !== "undefined") {
+			if (typeof(comment) === "string") {
 				cslXml += "<!-- " + comment + " -->\n";
 			}
 			
-			cslXml += xmlNodeFromJson(jsonData, 0);
+			cslXml += xmlNodeFromJson(jsonData, 0, fullClosingTags);
 			return cslXml;
 		},
 
