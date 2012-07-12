@@ -51,7 +51,7 @@ var addCslFileToIndex = function (file) {
 		entries++;
 
 		var fileData = readFile(file.getPath());
-		print('parsing ' + file.getName());
+		print('calculating examples for ' + file.getName());
 		var xmlParser = new CSL_E4X();
 		var xmlDoc;
 
