@@ -164,8 +164,13 @@ CSLEDIT.cslParser = (function() {
 			return jsonData;
 		},
 
-		cslCodeFromCslData : function (jsonData) {
+		cslCodeFromCslData : function (jsonData, comment /* optional */) {
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n';
+			
+			if (typeof(comment) !== "undefined") {
+				cslXml += "<!-- " + comment + " -->\n";
+			}
+			
 			cslXml += xmlNodeFromJson(jsonData, 0);
 			return cslXml;
 		},

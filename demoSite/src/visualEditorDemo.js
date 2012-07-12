@@ -34,15 +34,19 @@ var saveCSL = function (cslCode) {
 	
 	dialog.find('#refManagerInstructions').
 			load("../html/fileDialog.html", function () {
-		filename = cslEditor.getStyleName().replace(/[\\/:"*?<>| ]+/g, "_") + '.csl';
+		filename = cslEditor.getStyleId().replace(/.*\//g, "").replace(/[\\/:"*?<>| ]+/g, "-") + '.csl';
 
 		// prefix styleId with cslEditor/ so it doesn't clash with existing styles
 		if (!/^cslEditor\//.test(styleId)) {
 			styleId = 'cslEditor/' + styleId;
 			cslEditor.setStyleId(styleId);
 			assertEqual(cslEditor.getStyleId(), styleId);
-			cslCode = CSLEDIT.data.getCslCode();
 		}
+
+		// add comment to start
+		cslCode = CSLEDIT.data.getCslCode("This style was created with the Visual CSL Editor (" +
+			window.location.href + ")");
+
 		dialog.dialog({
 			minWidth : 750,
 			minHeight : 450,
