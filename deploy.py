@@ -97,15 +97,16 @@ pages = [
         "page" : "searchByExample",
         "jsFiles" : [
             "src/citeprocLoadSys.js",
+            "src/storage.js",
             "src/xmlUtility.js",
             "src/citationEngine.js",
             "server/config.js",
             "generated/exampleCitationsEnc.js",
 
+            "src/debug.js",
             "src/exampleData.js",
             "src/options.js",
-            "src/storage.js",
-            "src/debug.js",
+            "src/uiConfig.js",
             "src/diff.js",
             "src/cslParser.js",
             "src/cslNode.js",

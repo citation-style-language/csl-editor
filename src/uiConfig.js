@@ -24,6 +24,21 @@ CSLEDIT.uiConfig.defaultAttributes = {
 	}
 }
 
+CSLEDIT.uiConfig.fieldOrder = [
+	"type",
+	"title",
+	"author",
+	"editor",
+	"translator",
+	"issued",
+	"container-title",
+	"volume",
+	"issue",
+	"chapter",
+	"page",
+	"publisher"
+];
+
 // for jstree
 CSLEDIT.uiConfig.nodeIcons = {
 		"default" : "/external/famfamfam-icons/bullet_black.png",
