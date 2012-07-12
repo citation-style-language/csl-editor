@@ -454,7 +454,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 					thisAttribute;
 				
 				$.each(attributeIndexes, function (i, attributeIndex) {
-					if (isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
+					if (nodeData.attributes[attributeIndex].enabled &&
+						isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
 						thisAttribute = nodeData.attributes[attributeIndex];
 						return false;
 					}
