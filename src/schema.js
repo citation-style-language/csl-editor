@@ -470,7 +470,7 @@ CSLEDIT.Schema = function (
 		},
 		attribute : function (node) {
 			var thisNodeProperties = new NodeProperties(),
-				attributeName = node.attributes.item("name").nodeValue,
+				attributeName = node.attributes.item("name").nodeValue.replace(/^xml:/, ""),
 				defaultValue = node.attributes.getNamedItem("a:defaultValue"),
 				values;
 
