@@ -41,7 +41,6 @@ CSLEDIT.citationEditor = (function () {
 			return;
 		}
 
-		debugger;
 		// will accept individual references or a list
 		referenceList = [].concat(jsonData);
 		$.each(referenceList, function (i, reference) {
