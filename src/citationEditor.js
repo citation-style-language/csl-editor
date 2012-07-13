@@ -146,7 +146,7 @@ CSLEDIT.citationEditor = (function () {
 		// list references
 		dialog.dialog({
 			title : 'Edit Citation ' + (citation + 1),
-			width : "700px"
+			width : 700
 		});
 
 		if (!initialised) {
@@ -155,6 +155,10 @@ CSLEDIT.citationEditor = (function () {
 				active : false
 			});
 			initialised = true;
+		}
+		
+		if (dialog.height() > $(window).height() - 50) {
+			dialog.height($(window).height() - 50);
 		}
 	};
 
