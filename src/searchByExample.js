@@ -167,7 +167,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		var jsonDocument = CSLEDIT.exampleData.jsonDocumentList[exampleIndex],
 			table,
 			rows = [];
-
+		
 		table = $("<table/>");
 
 		$.each(jsonDocument, function (key, value) {
@@ -247,6 +247,11 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	};
 
 	var init = function () {
+		if (exampleCitations.exampleCitationsFromMasterId[defaultStyle].length !==
+			CSLEDIT.exampleData.jsonDocumentList.length) {
+				alert("Example citations need re-calculating on server");
+		}
+
 		formatExampleDocument();
 		$("#inputTabs").tabs({
 			show: function (event, ui) {
