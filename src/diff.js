@@ -5,7 +5,11 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.diff = (function () {
 	var dmp = new diff_match_patch();
 
-	dmp.Diff_Timeout = 0.002; // 2ms timeout, increase if 
+	dmp.Diff_Timeout = 0.003; // Very low, increase if too inaccurate.
+	                          // Unfortunately I couldn't find a way
+							  // to do this which was determinitic,
+							  // this method could produce different
+							  // results depending on the machine speed.
 	
 	/**
 	 * Modified version of the diff-match-patch function which

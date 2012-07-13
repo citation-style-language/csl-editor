@@ -90,10 +90,14 @@ CSLEDIT.searchResults = (function () {
 				'</table>');
 		}
 		
-		outputNode.html(
-			'<p>Displaying ' + outputList.length + ' results:</p>' +
-				outputList.join("<p><p>")
-		);
+		if (outputList.length === 0) {
+			outputNode.html('<p>No results found</p>');
+		} else {
+			outputNode.html(
+				'<p>Displaying ' + outputList.length + ' results:</p>' +
+					outputList.join("<p><p>")
+			);
+		}
 
 		$("button.editStyle").click( function (event) {
 			var styleURL = $(event.target).attr("styleURL");

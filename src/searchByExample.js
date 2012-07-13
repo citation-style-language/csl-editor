@@ -64,6 +64,8 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			userBibliographyText = $("#userBibliography").cleditor()[0].doc.body.innerText,
 			result = [],
 			matchQualities = [],
+			citationMatchQuality,
+			bibliographyMatchQuality,
 			index = 0,
 			styleId,
 			exampleCitation,
@@ -88,15 +90,26 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 
 				if (exampleCitation !== null && exampleCitation.statusMessage === "") {
 					formattedCitation = exampleCitation.formattedCitations[0];
-					thisMatchQuality = 0;
 
 					if (userCitation !== "") {
-						thisMatchQuality += CSLEDIT.diff.matchQuality(
+						citationMatchQuality = CSLEDIT.diff.matchQuality(
 							userCitation, formattedCitation);
+					} else {
+						citationMatchQuality = 0;
 					}
 					if (userBibliography !== "") {
-						thisMatchQuality += CSLEDIT.diff.matchQuality(
+						bibliographyMatchQuality = CSLEDIT.diff.matchQuality(
 							userBibliography, exampleCitation.formattedBibliography);
+					} else {
+						bibliographyMatchQuality = 0;
+					}
+
+					thisMatchQuality = 0;
+					if (citationMatchQuality > tolerance) {
+					   thisMatchQuality += citationMatchQuality;
+					}
+			 		if (bibliographyMatchQuality > tolerance) {
+						thisMatchQuality += bibliographyMatchQuality;
 					}
 
 					// give tiny boost to top popular styles
