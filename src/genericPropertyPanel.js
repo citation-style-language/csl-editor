@@ -194,6 +194,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			if ($("#nodeAttribute" + index).length > 0) {
 				value = $("#nodeAttribute" + index).val();
 			} else {
+				assert(index in multiInputs);
 				value = multiInputs[index].val();
 			}
 
@@ -370,7 +371,13 @@ CSLEDIT.genericPropertyPanel = (function () {
 			}
 		}
 
-		if (dropdownValues.length > 1 /* 1 because it includes the default value */) {
+		if (dropdownValues.length === 1) {
+			// if only 1 one value is possible, put it in a label
+			thisRow = $('<tr/>');
+			thisRow.append($('<td/>').append(label(index, attributeName)));
+			thisRow.append($('<td/>').append(
+				'<label id="nodeAttribute' + index + '">' + dropdownValues[0] + '</label>'));
+		} else if (dropdownValues.length > 1) {
 			thisRow = $('<tr></tr>');
 			thisRow.append($('<td></td>').append(label(index, attributeName)));
 			if (schemaAttribute.list) {
