@@ -31,7 +31,8 @@ CSLEDIT.citationEditor = (function () {
 	});
 
 	addReferenceButton.on('click', function () {
-		var jsonData;
+		var jsonData,
+			referenceList;
 	   
 		try {
 			jsonData = JSON.parse(newReferenceInput.val());
@@ -40,7 +41,13 @@ CSLEDIT.citationEditor = (function () {
 			return;
 		}
 
-		CSLEDIT.exampleCitations.addReference(jsonData, citation);
+		debugger;
+		// will accept individual references or a list
+		referenceList = [].concat(jsonData);
+		$.each(referenceList, function (i, reference) {
+			CSLEDIT.exampleCitations.addReference(reference, citation);
+		});
+
 		updateReferenceList();
 		newReferenceInput.val("");
 	});
