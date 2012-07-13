@@ -5,12 +5,10 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.searchResults = (function () {
 
 	var closenessString = function (distance, stringA, stringB) {
-		var editDistance = CSLEDIT.diff.customEditDistance(stringA, stringB),
-			matchQuality = Math.max(0, Math.floor(100 * (1.0 - editDistance /
-				((stringA + stringB).length)))),
+		var matchQuality = CSLEDIT.diff.matchQuality(stringA, stringB),
 			closeness;
 
-		if (editDistance === 0) {
+		if (matchQuality === 100) {
 			closeness = "Perfect match!";
 		} else {
 			closeness = matchQuality + "% match";

@@ -7,7 +7,8 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		styleFormatSearchTimeout,
 		exampleIndex = 0,
 		defaultStyle = "http://www.zotero.org/styles/apa",
-		realTimeSearch = false;
+		realTimeSearch = false,
+		tolerance = 50;
 
 	CSLEDIT.options.setUserOptions(userOptions);
 	mainContainer = $(mainContainer);
@@ -55,8 +56,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	};
 
 	var searchForStyle = function () {
-		var tolerance = 50,
-			bestMatchQuality = 999,
+		var bestMatchQuality = 999,
 			bestMatchIndex = -1,
 			userCitation = cleanInput($("#userCitation").cleditor()[0].doc.body.innerHTML),
 			userCitationText = $("#userCitation").cleditor()[0].doc.body.innerText,
@@ -92,11 +92,11 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 
 					if (userCitation !== "") {
 						thisMatchQuality += CSLEDIT.diff.matchQuality(
-								userCitation, formattedCitation);
+							userCitation, formattedCitation);
 					}
 					if (userBibliography !== "") {
 						thisMatchQuality += CSLEDIT.diff.matchQuality(
-								userBibliography, exampleCitation.formattedBibliography);
+							userBibliography, exampleCitation.formattedBibliography);
 					}
 
 					// give tiny boost to top popular styles
@@ -106,6 +106,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 
 					if (thisMatchQuality > tolerance)
 					{
+						console.log("match quality: " + thisMatchQuality);
 						matchQualities[index++] = {
 							matchQuality : thisMatchQuality,
 							styleId : styleId
