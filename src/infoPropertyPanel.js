@@ -82,7 +82,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 				thisNode,
 				index,
 				parentNode,
-				numNodesInParent;
+				numChildNodes;
 
 			cslId = parseInt($this.attr("cslid"));
 			parentId = parseInt($this.attr("parentcslid"));
@@ -105,7 +105,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 				executeCommand('addNode', [parentId, "last", thisNode]);
 				CSLEDIT.viewController.setSuppressSelectNode(false);
 				parentNode = CSLEDIT.data.getNode(parentId);
-				numNodesInParent = CSLEDIT.data.numNodes(parentNode);
+				numChildNodes = CSLEDIT.data.numNodes(parentNode) - 1;
 
 				// update all cslids
 				$.each(["cslid", "parentcslid"], function (i, attribute) {
@@ -115,7 +115,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 					
 						cslId = parseInt($this.attr(attribute));
 
-						if (cslId >= parentId + numNodesInParent) {
+						if (cslId >= parentId + numChildNodes) {
 							$this.attr(attribute, cslId + 1);
 						}
 					});
@@ -123,7 +123,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 
 				// set added node cslid
 				$this.removeAttr("parentcslid");
-				$this.attr("cslid", parentId + numNodesInParent);
+				$this.attr("cslid", parentId + numChildNodes);
 			} else {
 				executeCommand('amendNode', [cslId, thisNode]);
 			}
