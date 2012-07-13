@@ -15,7 +15,7 @@ CSLEDIT.ViewController = function (
 			{
 				id : "info",
 				name : "Style Info",
-				nodePaths : ["style/info", "style"],
+				nodePaths : ["style/info", "style", "style/locale"],
 				macroLinks : false,
 				leafNodes : ["info", "style"]
 			},
@@ -54,26 +54,27 @@ CSLEDIT.ViewController = function (
 					node : "style/bibliography/sort"
 				}
 				]
-			},/*
+			},
 			{
 				id : "macro",
 				name : "Macros",
 				nodePaths : ["style/macro"],
+				macroLinks : true,
 				buttons : [
 				{
 					type : "custom",
 					text : "Add macro",
 					onClick : function () {
-						// add after the last macro
-						var macroNodes = CSLEDIT.data.getNodesFromPath("style/macro"),
+						// add before the 'style/citation' node
+						var citationNode = CSLEDIT.data.getNodesFromPath("style/citation")[0],
 							position;
 
-						position = CSLEDIT.data.indexOfChild(macroNodes[macroNodes.length - 1],
-							CSLEDIT.data.getNodesFromPath("style")[0]);
+						//position = CSLEDIT.data.indexOfChild(citationNode,
+						//	CSLEDIT.data.getNodesFromPath("style")[0]);
 						
 						CSLEDIT.controller.exec("addNode",
 							[
-								0, position + 1, 
+								citationNode.cslId, "before", 
 								new CSLEDIT.CslNode("macro", [{
 									key: "name",
 									value: "New Macro",
@@ -83,7 +84,7 @@ CSLEDIT.ViewController = function (
 					}
 				}
 				]
-			},*/
+			},
 			{
 				id : "locale",
 				name : "Advanced",

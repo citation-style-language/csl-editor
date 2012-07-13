@@ -424,8 +424,8 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 				if (node.cslId === newNode.cslId) {
 					var newJsTreeNode;
 					newJsTreeNode = jsTreeDataFromCslData_inner(newNode, lastCslId);
-					createSubTree(ranges[ranges.length-1].rootNode, "after", newJsTreeNode);
-
+					createSubTree(-1, "last", newJsTreeNode);
+					
 					var newTreeNode = treeElement.find('li[cslid="' + newNode.cslId + '"]');
 					ranges.push({
 						first : newNode.cslId,
