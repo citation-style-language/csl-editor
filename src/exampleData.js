@@ -1342,7 +1342,7 @@ CSLEDIT.exampleData.jsonDocumentList = [
 		},
 		"page": "737-738",
 		"publisher": "Am Med Assoc",
-		"title": "Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid.",
+		"title": "Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid",
 		"translator": [],
 		"type": "article-journal",
 		"volume": "171"
