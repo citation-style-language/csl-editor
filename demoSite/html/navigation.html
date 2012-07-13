@@ -1,42 +1,73 @@
 
 <style type="text/css">
-div#navigationBar {
-	background-color: black;
-	padding: 3px;
+#navigationBar {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	display: block;
+	background-color: #222;
 	margin: 0px;
+	padding: 0;
+	height: 40px;
+	-webkit-box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+	z-index: 2000;
+	position: relative;
 }
-div#navigationBar table tr td {
-	padding-left: 15px;
-}
-div#navigationBar a {
-	color: #888888;
-	text-decoration: none;
 
-	font-size: 15px;
-	font-family: Helvetica, Arial;
+#navigationBar ul {
+	margin: 0;
+	padding: 0 0 0 6px;
+	list-style-type: none;
 }
+
+#navigationBar li {
+	margin: 0;
+	padding: 0;
+	float: left;
+}
+
+#navigationBar li a {
+	display: block;
+	float: left;
+	padding: 0 8px;
+	line-height: 40px;
+	color: #999;
+	text-decoration: none;
+}
+
+#navigationBar li a:hover {
+	color: #fff;
+	background: #000;
+}
+
 body#homepage        a#nav_home,
 body#searchByName    a#nav_searchByName,
 body#searchByExample a#nav_searchByExample,
 body#visualEditor    a#nav_visualEditor,
 body#codeEditor      a#nav_codeEditor,
 body#about           a#nav_about {
-	color: #ffffff;
+	color: #fff;
 }
+
+.search-box {
+	font-size: 16px;
+	width: 200px;
+	margin-top: 8px;
+	position: absolute;
+	right: 10px;
+}
+
 </style>
 
-<div id=navigationBar>
-<table>
-	<tr>
-		<td><a href="../home" id="nav_home">Home</a></td>
-		<td><a href="../searchByName" id="nav_searchByName">Search by name</a></td>
-		<td><a href="../searchByExample" id="nav_searchByExample">Search by example</a></td>
-		<td><a href="../visualEditor" id="nav_visualEditor">Visual editor</a></td>
-		<td><a href="../codeEditor" id="nav_codeEditor">Code editor</a></td>
-		<td><a href="../about" id="nav_about">About</a></td>
-	</tr>
-</table>
-</div>
+<nav id="navigationBar">
+	<ul>
+		<li><a href="../about" id="nav_about">About</a></li>
+		<li><a href="../searchByName" id="nav_searchByName">Search</a></li>
+		<!--li><a href="../searchByExample" id="nav_searchByExample">Search by example</a></li-->
+		<li><a href="../visualEditor" id="nav_visualEditor">Visual editor</a></li>
+		<li><a href="../codeEditor" id="nav_codeEditor">Code editor</a></li>
+		<li><input type="search" class="search-box" value="" placeholder="Search existing styles..."></li>
+	</ul>
+</nav>
 
 <!-- Feedback pop-out panel -->
 

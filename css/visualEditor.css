@@ -1,4 +1,4 @@
-* { margin: 0; padding: 0; }
+
 html, body {
 	overflow: hidden;
 	position: relative;
@@ -37,8 +37,10 @@ html, body {
 }
 #treeEditorPanel {
 	position: absolute;
-	top: 23px;
+	top: 36px;
 	font-size: 12px;
+	border-left: 0 none;
+	border-bottom: 0 none;
 }
 #treeEditor {
 	position: absolute;
@@ -56,15 +58,31 @@ html, body {
 /* don't show background for focussed trees since it messes up when horizontally scrolling */
 #treeEditor .jstree-default.jstree-focused { background:#ffffff; }
 
-#titlebarContainer{
+#treeEditor h3 {
+	font-size: 12px;
+	margin: 0;
+}
+
+ul.example-citations {
 	position: absolute;
-	right: 0px;
-	left: 150px;
+	right: 0;
+	top: 0;
+}
+
+#titlebarContainer{
+
 }
 #titlebar{
-	position: absolute;
-	right: 20px;
-	margin: 3px;
+
+}
+
+#titlebar h3 {
+	margin: 0;
+	padding: 0;
+	line-height: 36px;
+	font-size: 12px;
+	color: #999;
+	font-weight: normal;
 }
 
 #leftContainer {
@@ -96,12 +114,24 @@ html, body {
 	height: 55%;
 }
 #exampleOutput {
-	top: 23px;
+	top: 36px;
+	padding: 10px;
+	border-right: 0 none;
 }
+
+#exampleOutput h3 {
+	font-size: 11px;
+	text-transform: uppercase;
+	font-weight: normal;
+	color: #8e8e62;
+}
+
 #elementPropertyPanel {
 	font-size: 14px;
 	overflow: auto;
 	padding: 10px;
+	border-right: 0 none;
+	border-bottom: 0 none;
 }
 #elementPropertyPanel [disabled="disabled"] {
 	opacity:0.5;
@@ -125,8 +155,6 @@ html, body {
 	border-width: 1px;*/
 
 	background-color: #EEEEEE;
-
-	width: 
 }
 #elementPropertyPanel div.multiPanel label {
 	padding-right: 15px;
@@ -180,8 +208,15 @@ html, body {
 	color: #777777;
 }
 #nodePathView {
-	margin-bottom: 10px;
+	font-size: 11px;
+	background: #E7E7E7;
+	margin: -10px;
+	padding: 10px;
+	margin-bottom: 20px;
 }
+
+
+
 label.> tr
 {
 	width: 800px;
@@ -241,19 +276,29 @@ visibility: hidden;
 }
 
 ul.dropdown {
+	margin: 0;
+	padding: 0;
 z-index: 30 !important;
 }
 
 /* Highlighting */
 .selected {
-	color : white;
-	background-color : #009900;
+	margin: -1px;
+	background-color : #BEEBFF;
+	border: 1px solid #99DEFD;
 	cursor : default;
 }
+
 .highlighted {
 	color : black;
-	background-color : #bbffbb;
 	cursor : pointer;
+	box-shadow: 0 0 5px 1px rgba(0,136,204,1);
+}
+
+.highlighted {
+	color : black;
+	cursor : pointer;
+	box-shadow: 0 0 5px 1px rgba(0,136,204,1);
 }
 
 #elementPropertyPanel h3 {

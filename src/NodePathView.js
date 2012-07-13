@@ -19,7 +19,7 @@ CSLEDIT.NodePathView.prototype.selectNode = function (nodePath) {
 		nodesHtml.push('<span cslid="' + node.cslId + '">' + node.name + '</span>');
 	});
 
-	this.element.html('<h3>' + nodesHtml.join(" > ") + '</h3>');
+	this.element.html(nodesHtml.join(" > "));
 
 	this.element.find('span[cslid]').css({"cursor" : "pointer"});
 	this.element.find('span[cslid]').on('click', function(event) {

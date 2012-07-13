@@ -1,3 +1,78 @@
 CSL editor client side errors
 -----------------------------
 
+
+Date: 10.07.2012 15:21:35
+Uncaught TypeError: Cannot read property \'attributes\' of undefined
+Url: http://steve.mendeley.com/csl-source/src/schema.js
+Line: 692
+
+Date: 10.07.2012 15:21:47
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 15:31:23
+Uncaught TypeError: Cannot read property \'attributes\' of undefined
+Url: http://steve.mendeley.com/csl-source/src/schema.js
+Line: 692
+
+Date: 10.07.2012 16:44:08
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 16:44:15
+Uncaught TypeError: Cannot read property \'attributes\' of undefined
+Url: http://steve.mendeley.com/csl-source/src/schema.js
+Line: 692
+
+Date: 10.07.2012 16:44:18
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 16:44:19
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 16:44:20
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 16:44:21
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 16:45:00
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 16:46:13
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 16:52:58
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 16:54:20
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 10.07.2012 16:59:42
+Uncaught TypeError: Object #<Document> has no method \'replace\'
+Url: http://steve.mendeley.com/csl-source/src/cslData.js
+Line: 276
+
+Date: 11.07.2012 12:09:38
+Uncaught TypeError: Cannot read property \'attributes\' of undefined
+Url: http://steve.mendeley.com/csl-source/src/schema.js
+Line: 692
