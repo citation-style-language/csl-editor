@@ -21,6 +21,9 @@ CSLEDIT.uiConfig.defaultAttributes = {
 		"form" : "text",
 		"date-parts" : "year-month-day",
 		"variable" : "issued"
+	},
+	"date-part" : {
+		"name" : "year"
 	}
 }
 

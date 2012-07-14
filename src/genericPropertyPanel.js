@@ -198,7 +198,11 @@ CSLEDIT.genericPropertyPanel = (function () {
 				value = multiInputs[index].val();
 			}
 
+			// TODO: check choice attributes here too
 			if (schemaAttributes.hasOwnProperty(key) &&
+					schemaAttributes[key].alwaysOutput === true) {
+				enabled = true;
+			} else if (schemaAttributes.hasOwnProperty(key) &&
 					schemaAttributes[key].hasOwnProperty("defaultValue")) {
 				enabled = (value !== schemaAttributes[key].defaultValue);
 			} else {
