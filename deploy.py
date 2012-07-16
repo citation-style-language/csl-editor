@@ -38,6 +38,7 @@ pages = [
     {
         "page" : "visualEditor", 
         "jsFiles" : [
+            "generated/cslStyles.js",
             "src/citeprocLoadSys.js",
             "src/exampleData.js",
             "src/storage.js",

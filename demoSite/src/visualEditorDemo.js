@@ -35,7 +35,9 @@ var saveCSL = function (cslCode) {
 	dialog.find('#refManagerInstructions').
 			load("../html/fileDialog.html", function () {
 
-		cslEditor.conformStyleToRepoConventions();
+		if (!cslEditor.conformStyleToRepoConventions()) {
+			return;
+		}
 
 		filename = cslEditor.getStyleId().replace(/.*\//g, "").replace(/[\\/:"*?<>| ]+/g, "-") + '.csl';
 
