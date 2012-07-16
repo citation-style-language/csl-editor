@@ -56,27 +56,27 @@ CSLEDIT.exampleData.additionalOptions = [
 		"options" : {}
 	},
 	{
-		"description" : "locator: Pages 244-255",
+		"description" : "Locator: Pages 244-255",
 		"options" : {
 			"locator" : "244-252",
 			"label" : "page"
 		}
 	},
 	{
-		"description" : "locator: Chapter 5",
+		"description" : "Locator: Chapter 5",
 		"options" : {
 			"locator" : "5",
 			"label" : "chapter"
 		}
 	},
 	{
-		"description" : "author-only",
+		"description" : "Author only",
 		"options" : {
 			"author-only" : true
 		}
 	},
 	{
-		"description" : "suppress-author",
+		"description" : "Suppress author",
 		"options" : {
 			"suppress-author" : true
 		}
