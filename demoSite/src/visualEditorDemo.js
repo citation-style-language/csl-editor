@@ -40,7 +40,7 @@ var saveCSL = function (cslCode) {
 		filename = cslEditor.getStyleId().replace(/.*\//g, "").replace(/[\\/:"*?<>| ]+/g, "-") + '.csl';
 
 		// add comment to start
-		cslCode = CSLEDIT.data.getCslCode("This style was created with the Visual CSL Editor (" +
+		cslCode = CSLEDIT.data.getCslCode("This style was edited with the Visual CSL Editor (" +
 			window.location.href + ")");
 
 		dialog.dialog({
