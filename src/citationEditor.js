@@ -31,7 +31,8 @@ CSLEDIT.citationEditor = (function () {
 	});
 
 	addReferenceButton.on('click', function () {
-		var jsonData;
+		var jsonData,
+			referenceList;
 	   
 		try {
 			jsonData = JSON.parse(newReferenceInput.val());
@@ -40,7 +41,12 @@ CSLEDIT.citationEditor = (function () {
 			return;
 		}
 
-		CSLEDIT.exampleCitations.addReference(jsonData, citation);
+		// will accept individual references or a list
+		referenceList = [].concat(jsonData);
+		$.each(referenceList, function (i, reference) {
+			CSLEDIT.exampleCitations.addReference(reference, citation);
+		});
+
 		updateReferenceList();
 		newReferenceInput.val("");
 	});
@@ -140,7 +146,7 @@ CSLEDIT.citationEditor = (function () {
 		// list references
 		dialog.dialog({
 			title : 'Edit Citation ' + (citation + 1),
-			width : "700px"
+			width : 700
 		});
 
 		if (!initialised) {
@@ -149,6 +155,10 @@ CSLEDIT.citationEditor = (function () {
 				active : false
 			});
 			initialised = true;
+		}
+		
+		if (dialog.height() > $(window).height() - 50) {
+			dialog.height($(window).height() - 50);
 		}
 	};
 

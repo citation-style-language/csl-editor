@@ -109,8 +109,8 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		return {};
 	};
 
-	var getCslCode = function () {
-		return CSLEDIT.cslParser.cslCodeFromCslData(get());
+	var getCslCode = function (comment /* optional */) {
+		return CSLEDIT.cslParser.cslCodeFromCslData(get(), comment);
 	};
 
 	var spliceNode = function (id, position, nodesToDelete, newNode) {

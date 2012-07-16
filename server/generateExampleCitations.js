@@ -2,20 +2,34 @@
 
 importPackage(java.io);
 
+load("../external/env.rhino.1.2.js");
+load("http://code.jquery.com/jquery-latest.min.js");
+
 // citeproc includes
 load("../external/citeproc/loadabbrevs.js");
 load("../external/citeproc/xmle4x.js");
 load("../external/citeproc/xmldom.js");
 load("../external/citeproc/citeproc-1.0.336.js");
 load("../external/citeproc/loadlocale.js");
-load("../external/citeproc/loadsys.js");
 load("../external/citeproc/runcites.js");
+
+load("../src/debug.js");
+load("../src/exampleData.js");
+load("../src/options.js");
+load("../src/storage.js");
+load("../src/exampleCitations.js");
+
+load("../src/citeprocLoadSys.js");
 load("../src/citationEngine.js");
 
 load("../external/json/json2.js");
 
 // start
 load("config.js");
+
+CSLEDIT.options.setUserOptions({
+	rootURL : "c:/xampp/htdocs/csl-source"
+});
 
 // loop through the parent (unique) csl-styles generating example citations for
 // each one
@@ -37,7 +51,7 @@ var addCslFileToIndex = function (file) {
 		entries++;
 
 		var fileData = readFile(file.getPath());
-		print( 'parsing ' + file.getName() );
+		print('calculating examples for ' + file.getName());
 		var xmlParser = new CSL_E4X();
 		var xmlDoc;
 
@@ -51,7 +65,7 @@ var addCslFileToIndex = function (file) {
 		if (xmlDoc !== "notSet") {
 			var styleId = xmlParser.getStyleId(xmlDoc);
 			// TODO: find out why this is needed!
-		default xml namespace = "http://purl.org/net/xbiblio/csl";
+			default xml namespace = "http://purl.org/net/xbiblio/csl";
 			with({});
 			var styleTitleNode = xmlDoc.info.title;
 			var styleTitle = "";
@@ -79,28 +93,39 @@ var addCslFileToIndex = function (file) {
 			
 			if (styleId === masterId) {
 				masterStyleFromId[masterId] = fileData;
+				var citeprocResult;
 
-				var citeprocResult = CSLEDIT.citationEngine.formatCitations(
-					fileData, cslServerConfig.jsonDocuments, cslServerConfig.citationsItems);
+				// just need one example citation
+				CSLEDIT.exampleCitations.setCitations([{
+					citationId: "CITATION-1",
+					citationItems: [],
+					properties: {noteIndex:0},
+					schema: "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"			
+				}]);
 
-				// merge bibliography to one string
-				citeprocResult.formattedBibliography =
-					citeprocResult.formattedBibliography.join("<br \/>"); 
+				outputData.exampleCitationsFromMasterId[styleId] = [];
 
-				// clean up citeproc result for display
-				citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.
-				replace(/<second-field-align>/g, "");
+				$.each(CSLEDIT.exampleCitations.getReferences(), function (i, exampleReference) {
+					CSLEDIT.exampleCitations.setReferenceIndexesForCitation(0, [i]);
+					
+					citeprocResult = CSLEDIT.citationEngine.formatCitations(
+						fileData,
+						CSLEDIT.exampleCitations.getCiteprocReferences(),
+						CSLEDIT.exampleCitations.getCitations());
 
-				citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.
-				replace(/<\/second-field-align>/g, " ");
+					// merge bibliography to one string
+					citeprocResult.formattedBibliography =
+						citeprocResult.formattedBibliography.join("<br \/>"); 
 
-				outputData.exampleCitationsFromMasterId[styleId] = citeprocResult;
-				
-				//if (styleTitle.toLowerCase().indexOf("mechanical") > -1) {
-				//	print("mechanical: " + citeprocResult.formattedBibliography);
-				//}
+					// clean up citeproc result for display
+					citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.
+					replace(/<second-field-align>/g, "");
 
-				//print(".");
+					citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.
+					replace(/<\/second-field-align>/g, " ");
+
+					outputData.exampleCitationsFromMasterId[styleId].push(citeprocResult);
+				});
 			}
 		}
 	};
@@ -117,8 +142,13 @@ var processDir = function (dirPath) {
 	}
 };
 
+var startTime;
+startTime = (new Date()).getTime();
+
 processDir('../' + cslServerConfig.cslStylesPath);
 processDir('../' + cslServerConfig.cslStylesPath + '/dependent');
+
+console.log("took " + (((new Date()).getTime() - startTime) / 1000) + "s");
 
 print("num entries = " + entries);
 

@@ -5,12 +5,10 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.searchResults = (function () {
 
 	var closenessString = function (distance, stringA, stringB) {
-		var editDistance = CSLEDIT.diff.customEditDistance(stringA, stringB),
-			matchQuality = Math.max(0, Math.floor(100 * (1.0 - editDistance /
-				(2 * (stringA + stringB).length)))),
+		var matchQuality = CSLEDIT.diff.matchQuality(stringA, stringB),
 			closeness;
 
-		if (editDistance === 0) {
+		if (matchQuality === 100) {
 			closeness = "Perfect match!";
 		} else {
 			closeness = matchQuality + "% match";
@@ -19,7 +17,7 @@ CSLEDIT.searchResults = (function () {
 		return '<td class="closeness match">' + closeness + '</td>';
 	};
 
-	var displaySearchResults = function (styles, outputNode) {
+	var displaySearchResults = function (styles, outputNode, exampleIndex /* optional */) {
 		var index,
 			outputList = [],
 			masterStyleSuffix = "",
@@ -35,6 +33,8 @@ CSLEDIT.searchResults = (function () {
 			featuredStyleClass,
 			featuredStyleText;
 
+		exampleIndex = exampleIndex || 0;
+
 		for (index = 0; index < Math.min(styles.length, 20); index++)
 		{
 			style = styles[index];
@@ -46,9 +46,9 @@ CSLEDIT.searchResults = (function () {
 				masterStyleSuffix = '';
 			}
 
-			citation = exampleCitations.exampleCitationsFromMasterId[style.masterId].
+			citation = exampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
 				formattedCitations[0];
-			bibliography = exampleCitations.exampleCitationsFromMasterId[style.masterId].
+			bibliography = exampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
 				formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&
@@ -90,10 +90,14 @@ CSLEDIT.searchResults = (function () {
 				'</table>');
 		}
 		
-		outputNode.html(
-			'<p>Displaying ' + outputList.length + ' results:</p>' +
-				outputList.join("<p><p>")
-		);
+		if (outputList.length === 0) {
+			outputNode.html('<p>No results found</p>');
+		} else {
+			outputNode.html(
+				'<p>Displaying ' + outputList.length + ' results:</p>' +
+					outputList.join("<p><p>")
+			);
+		}
 
 		$("button.editStyle").click( function (event) {
 			var styleURL = $(event.target).attr("styleURL");

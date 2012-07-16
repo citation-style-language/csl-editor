@@ -4,7 +4,11 @@ var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	var nameSearchTimeout,
-		styleFormatSearchTimeout;
+		styleFormatSearchTimeout,
+		exampleIndex = 0,
+		defaultStyle = "http://www.zotero.org/styles/apa",
+		realTimeSearch = false,
+		tolerance = 50;
 
 	CSLEDIT.options.setUserOptions(userOptions);
 	mainContainer = $(mainContainer);
@@ -26,15 +30,6 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	};
 
 	// --- Functions for formatted style search ---
-	function authorString(authors) {
-		var result = [],
-			index = 0;
-		for (index = 0; index < authors.length; index++) {
-			result.push(authors[index].given + " " + authors[index].family);
-		}
-		return result.join(", ");
-	}
-
 	var clEditorIsEmpty = function (node) {
 		var text = $(node).cleditor()[0].doc.body.innerText;
 
@@ -52,20 +47,25 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		input = CSLEDIT.xmlUtility.stripAttributesFromTags(input, supportedTags);
 		input = input.replace(/&nbsp;/g, " ");
 		input = input.replace("\n", "");
+		input = input.replace(/&amp;/g, "&#38;");
+		input = input.replace(/&lt;/g, "&#60;");
+		input = input.replace(/&gt;/g, "&#62;");
+		input = input.replace(/&quot;/g, "&#34;");
 
 		return input;
 	};
 
 	var searchForStyle = function () {
-		var tolerance = 50,
-			bestMatchQuality = 999,
+		var bestMatchQuality = 999,
 			bestMatchIndex = -1,
-			userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML,
+			userCitation = cleanInput($("#userCitation").cleditor()[0].doc.body.innerHTML),
 			userCitationText = $("#userCitation").cleditor()[0].doc.body.innerText,
-			userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML,
+			userBibliography = cleanInput($("#userBibliography").cleditor()[0].doc.body.innerHTML),
 			userBibliographyText = $("#userBibliography").cleditor()[0].doc.body.innerText,
 			result = [],
 			matchQualities = [],
+			citationMatchQuality,
+			bibliographyMatchQuality,
 			index = 0,
 			styleId,
 			exampleCitation,
@@ -86,19 +86,30 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 
 		for (styleId in exampleCitations.exampleCitationsFromMasterId) {
 			if (exampleCitations.exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
-				exampleCitation = exampleCitations.exampleCitationsFromMasterId[styleId];
+				exampleCitation = exampleCitations.exampleCitationsFromMasterId[styleId][exampleIndex];
 
 				if (exampleCitation !== null && exampleCitation.statusMessage === "") {
 					formattedCitation = exampleCitation.formattedCitations[0];
-					thisMatchQuality = 0;
 
 					if (userCitation !== "") {
-						thisMatchQuality += CSLEDIT.diff.matchQuality(
-								userCitation, formattedCitation);
+						citationMatchQuality = CSLEDIT.diff.matchQuality(
+							userCitation, formattedCitation);
+					} else {
+						citationMatchQuality = 0;
 					}
 					if (userBibliography !== "") {
-						thisMatchQuality += CSLEDIT.diff.matchQuality(
-								userBibliography, exampleCitation.formattedBibliography);
+						bibliographyMatchQuality = CSLEDIT.diff.matchQuality(
+							userBibliography, exampleCitation.formattedBibliography);
+					} else {
+						bibliographyMatchQuality = 0;
+					}
+
+					thisMatchQuality = 0;
+					if (citationMatchQuality > tolerance) {
+					   thisMatchQuality += citationMatchQuality;
+					}
+			 		if (bibliographyMatchQuality > tolerance) {
+						thisMatchQuality += bibliographyMatchQuality;
 					}
 
 					// give tiny boost to top popular styles
@@ -108,6 +119,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 
 					if (thisMatchQuality > tolerance)
 					{
+						console.log("match quality: " + thisMatchQuality);
 						matchQualities[index++] = {
 							matchQuality : thisMatchQuality,
 							styleId : styleId
@@ -133,27 +145,70 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			});
 		}
 		
-		CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"));
+		CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"), exampleIndex);
 		console.timeEnd("searchForStyle");
 	};
 
-	var formatFindByStyleExampleDocument = function () {
-		var jsonDocuments = cslServerConfig.jsonDocuments;
+	function personString(authors) {
+		var result = [],
+			index = 0;
+
+		if (typeof(authors) === "undefined") {
+			return "No authors";
+		}
+
+		for (index = 0; index < authors.length; index++) {
+			result.push(authors[index].given + " " + authors[index].family);
+		}
+		return result.join(", ");
+	}
+
+	var formatExampleDocument = function () {
+		var jsonDocument = CSLEDIT.exampleData.jsonDocumentList[exampleIndex],
+			table,
+			rows = [];
+		
+		table = $("<table/>");
+
+		$.each(jsonDocument, function (key, value) {
+			var order = CSLEDIT.uiConfig.fieldOrder.indexOf(key),
+				valueString;
+
+			if (order === -1) {
+				order = CSLEDIT.uiConfig.fieldOrder.length;
+			}
+
+			if (key === "author" || key === "editor" || key === "translator") {
+				valueString = personString(value);
+			} else if (key === "issued" || key === "accessed") {
+				valueString = value["date-parts"][0].join("/");
+			} else if (typeof(value) === "object") {
+				valueString = JSON.stringify(value);
+			} else {
+				valueString = value;
+			}
+
+			if (valueString === "") {
+				// skip empty field
+				return true;
+			}
+
+			rows.push({
+				html : "<tr><td>" + CSLEDIT.uiConfig.capitaliseFirstLetter(key) + "</td><td>" + valueString + "</td></td>",
+				order : order
+			});
+		});
+
+		rows.sort(function (a,b) {return a.order - b.order;});
+
+		$.each(rows, function (i, row) {
+			table.append(row.html);
+		});
+
 		document.getElementById("explanation").innerHTML = "<i>Please edit this example citation to match the style you are searching for.<br />";
-		document.getElementById("exampleDocument").innerHTML =
-			"<p align=center><strong>Example Article</stong></p>" +
-			"<table>" +
-			"<tr><td>Title:</td><td>" + jsonDocuments["ITEM-1"].title + "</td></tr>" +
-			"<tr><td>Authors:</td><td>" + authorString(jsonDocuments["ITEM-1"].author) + "</td></tr>" + 
-			"<tr><td>Year:</td><td>" + jsonDocuments["ITEM-1"].issued["date-parts"][0][0] + "</td></tr>" +
-			"<tr><td>Publication:</td><td>" + jsonDocuments["ITEM-1"]["container-title"] + "</td></tr>" +
-			"<tr><td>Volume:</td><td>" + jsonDocuments["ITEM-1"]["volume"] + "</td></tr>" +
-			"<tr><td>Issue:</td><td>" + jsonDocuments["ITEM-1"]["issue"] + "</td></tr>" +
-			"<tr><td>Chapter:</td><td>" + jsonDocuments["ITEM-1"]["chapter-number"] + "</td></tr>" +
-			"<tr><td>Pages:</td><td>" + jsonDocuments["ITEM-1"]["page"] + "</td></tr>" +
-			"<tr><td>Publisher:</td><td>" + jsonDocuments["ITEM-1"]["publisher"] + "</td></tr>" +
-			"<tr><td>Document type:</td><td>" + jsonDocuments["ITEM-1"]["type"] + "</td></tr>" +
-			"</table>";
+
+		$("#exampleDocument").children().remove();
+		$("#exampleDocument").append(table);
 	};
 
 	var clearResults = function () {
@@ -162,7 +217,12 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 
 	var formChanged = function () {
 		var userCitation,
-			userBibliography;
+			userBibliography,
+			timeout = 10;
+
+		if (realTimeSearch) {
+			timeout = 400;
+		}		
 
 		clearTimeout(styleFormatSearchTimeout);
 
@@ -173,11 +233,26 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		$("#userCitation").cleditor()[0].doc.body.innerHTML = cleanInput(userCitation);
 		$("#userBibliography").cleditor()[0].doc.body.innerHTML = cleanInput(userBibliography);
 
-		styleFormatSearchTimeout = setTimeout(searchForStyle, 1000);
+		$("#searchResults").html("<p><emp>Searching for styles...</emp></p>");
+
+		styleFormatSearchTimeout = setTimeout(searchForStyle, timeout);
+	};
+
+	var updateExample = function () {
+		var length = exampleCitations.exampleCitationsFromMasterId[defaultStyle].length;
+		exampleIndex = (exampleIndex+length)%length;
+
+		formatExampleDocument();
+		clearResults();
 	};
 
 	var init = function () {
-		formatFindByStyleExampleDocument();
+		if (exampleCitations.exampleCitationsFromMasterId[defaultStyle].length !==
+			CSLEDIT.exampleData.jsonDocumentList.length) {
+				alert("Example citations need re-calculating on server");
+		}
+
+		formatExampleDocument();
 		$("#inputTabs").tabs({
 			show: function (event, ui) {
 				if (ui.panel.id === "styleNameInput") {
@@ -193,7 +268,6 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		$.cleditor.defaultOptions.height = 100;
 		$.cleditor.defaultOptions.controls =
 			"bold italic underline subscript superscript ";
-		//		+ "| undo redo | cut copy paste";
 
 		$('button#searchButton').css({
 			'background-image' :
@@ -203,7 +277,6 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		var userCitationInput = $("#userCitation").cleditor({height: 55})[0];
 		$("#userBibliography").cleditor({height: 85});
 
-		var realTimeSearch = false;
 		if (realTimeSearch) {
 			$("#userCitation").cleditor()[0].change(formChanged);
 			$("#userBibliography").cleditor()[0].change(formChanged);
@@ -219,11 +292,20 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	
 		// prepopulate search by style format with APA example
 		$("#userCitation").cleditor()[0].doc.body.innerHTML =
-			exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].
+			exampleCitations.exampleCitationsFromMasterId[defaultStyle][exampleIndex].
 			formattedCitations[0];
 		$("#userBibliography").cleditor()[0].doc.body.innerHTML =
-			exampleCitations.exampleCitationsFromMasterId["http://www.zotero.org/styles/apa"].
+			exampleCitations.exampleCitationsFromMasterId[defaultStyle][exampleIndex].
 			formattedBibliography;
+
+		$('#nextExample').click(function () {
+			exampleIndex--;
+			updateExample();	
+		});
+		$('#prevExample').click(function () {
+			exampleIndex++;
+			updateExample();
+		});
 
 		formChanged();
 	}

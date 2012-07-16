@@ -2,9 +2,15 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.diff = {
-	dmp : new diff_match_patch(),
+CSLEDIT.diff = (function () {
+	var dmp = new diff_match_patch();
 
+	dmp.Diff_Timeout = 0.003; // Very low, increase if too inaccurate.
+	                          // Unfortunately I couldn't find a way
+							  // to do this which was determinitic,
+							  // this method could produce different
+							  // results depending on the machine speed.
+	
 	/**
 	 * Modified version of the diff-match-patch function which
 	 * doesn't escape the original HTML tags
@@ -14,7 +20,7 @@ CSLEDIT.diff = {
 	 * @param {!Array.<!diff_match_patch.Diff>} diffs Array of diff tuples.
 	 * @return {string} HTML representation.
 	 */
-	prettyHtml : function(diffs) {
+	var prettyHtml = function(diffs) {
 	  var html = [];
 	  var pattern_amp = /&/g;
 	  var pattern_lt = /</g;
@@ -39,35 +45,40 @@ CSLEDIT.diff = {
 		}
 	  }
 	  return html.join('');
-	},
+	};
 
-	prettyHtmlDiff : function (oldString, newString) {
-		var diffs = this.dmp.diff_main(oldString, newString);
-		this.dmp.diff_cleanupSemantic(diffs);
-		return this.prettyHtml(diffs);
-	},
+	var prettyHtmlDiff = function (oldString, newString) {
+		var diffs = dmp.diff_main(oldString, newString);
+		dmp.diff_cleanupSemantic(diffs);
+		return prettyHtml(diffs);
+	};
 
-	customEditDistance : function (oldString, newString) {
-		var diffs = this.dmp.diff_main(oldString, newString);
-		return this.weightedLevenshtein(diffs);
-	},
+	var customEditDistance = function (oldString, newString) {
+		var diffs;
+		console.time("diffs");
+		diffs = dmp.diff_main(oldString, newString);
+		console.timeEnd("diffs");
+		return dmp.diff_levenshtein(diffs);
+	};
 
 	// human friendly value from 0 to 100 to use as a match percentage
-	matchQuality : function (oldString, newString) {
+	var matchQuality = function (oldString, newString) {
 		var editDistance = CSLEDIT.diff.customEditDistance(oldString, newString),
 			matchQuality = Math.max(0, Math.floor(100 * (1.0 - editDistance /
-				(2 * (oldString + newString).length))));
+				Math.max(oldString.length, newString.length))));
 
 		return matchQuality;
-	},
+	};
 
 	/**
 	 * Like levenshtein but gives much more weight to deletions.
 	 * 
 	 * Generally when searching you want everything you've typed to appear
 	 * in the results.
+	 *
+	 * Note: no longer using this
 	 */
-	weightedLevenshtein : function (diffs) {
+	var weightedLevenshtein = function (diffs) {
 	  var levenshtein = 0;
 	  var insertions = 0;
 	  var deletions = 0;
@@ -94,5 +105,13 @@ CSLEDIT.diff = {
 	  }
 	  levenshtein += Math.max(insertions, deletions*deletionWeight);
 	  return levenshtein;
-	}
-};
+	};
+
+	return {
+		prettyHtml : prettyHtml,
+		prettyHtmlDiff : prettyHtmlDiff,
+		customEditDistance : customEditDistance,
+		matchQuality : matchQuality,
+		weightedLevenshtein : weightedLevenshtein
+	};
+}());

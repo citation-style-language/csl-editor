@@ -11,7 +11,9 @@ CSLEDIT.citationEngine = (function () {
 		oldFormattedBibliography = "",
 		newFormattedBibliography = "",
 		diffTimeout,
-		dmp = null; // for diff_match_patch object
+		dmp = null, // for diff_match_patch object
+		previousStyle = "", // to skip initializing citeproc when using the same style
+		citeproc;
 
 	var stripTags = function (html, tag) {
 		var stripRegExp = new RegExp("<" + tag + ".*?>|</\s*" + tag + "\s*?\>", "g");
@@ -29,16 +31,21 @@ CSLEDIT.citationEngine = (function () {
 
 		var result = { "statusMessage":"", "formattedCitations":[], "formattedBibliography": [] };
 		result.statusMessage = "";
-		try
-		{
-			var sys = new Sys(abbreviations);
-			var citeproc = new CSL.Engine(sys, style);
-			citeproc.opt.development_extensions.csl_reverse_lookup_support = true;
-		}
-		catch(err)
-		{
-			result.statusMessage = "Citeproc initialisation exception: " + err;
-			return result;
+		if (style !== previousStyle) {
+			try
+			{
+				var sys = new Sys(abbreviations);
+				citeproc = new CSL.Engine(sys, style);
+				citeproc.opt.development_extensions.csl_reverse_lookup_support = true;
+				previousStyle = style;
+			}
+			catch(err)
+			{
+				result.statusMessage = "Citeproc initialisation exception: " + err;
+				return result;
+			}
+		} else {
+			citeproc.restoreProcessorState([]);
 		}
 		
 		var inLineCitations = "";

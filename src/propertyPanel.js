@@ -42,8 +42,8 @@ CSLEDIT.propertyPanel = (function () {
 					'<ol>' +
 					'<li>1. Use the "Add Node" button at the top left to add an "if" node</li>' +
 					'<li>2. Edit the "if" node to say "The document type is article-journal"</li>' +
-					'<li>3. Within the "if" node, add a "number" node and set its ' +
-					'variale to "volume"</li>' +
+					'<li>3. Within the "if" node, add a "number" node and set it\'s ' +
+					'variable to "volume"</li>' +
 					'</ol>'
 					);
 				break;

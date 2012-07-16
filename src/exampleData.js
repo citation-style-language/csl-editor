@@ -138,8 +138,8 @@ CSLEDIT.exampleData.jsonDocumentList = [
 	},
 	{
 		"author": [{
-			"family": "FODERARO",
-			"given": "LISA W."
+			"family": "Foderaro",
+			"given": "Lisa W."
 		}],
 		"container-title": "New York Times",
 		"issued": {
@@ -1256,9 +1256,10 @@ CSLEDIT.exampleData.jsonDocumentList = [
 			]
 		},
 		"number": "WO2011US30214",
-		"title": "YO-YO HAVING A MODIFIABLE STRING GAP",
+		"title": "Yo-yo having a modifiable string gap",
 		"type": "patent"
 	},
+	/* remove until we get more metadata
 	{
 		"issued": {
 			"date-parts": [
@@ -1266,8 +1267,8 @@ CSLEDIT.exampleData.jsonDocumentList = [
 			]
 		},
 		"title": "Fullilove v. Klutznick",
-		"type": "article"
-	},
+		"type": "legal_case"
+	},*/
 	{
 		"DOI": "10.1038/119558a0",
 		"URL": "http://www.nature.com/doifinder/10.1038/119558a0",
@@ -1342,7 +1343,7 @@ CSLEDIT.exampleData.jsonDocumentList = [
 		},
 		"page": "737-738",
 		"publisher": "Am Med Assoc",
-		"title": "Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid.",
+		"title": "Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid",
 		"translator": [],
 		"type": "article-journal",
 		"volume": "171"

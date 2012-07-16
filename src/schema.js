@@ -62,7 +62,6 @@ CSLEDIT.Schema = function (
 				textNode : false,
 				list : false,
 				choices : [],
-				choiceRefs : [],
 				documentation : ""
 			};
 		} else {
@@ -161,7 +160,7 @@ CSLEDIT.Schema = function (
 			$.each(node.choices, function (i, choice) {
 				var index;
 
-				$.each(choice, function (attributeName) {
+				$.each(choice.attributes, function (attributeName) {
 					if (attributeName in node.attributes) {
 						console.log("WARNING: " + attributeName +
 							" in choice and general attributes for node " + nodeName);
@@ -261,21 +260,30 @@ CSLEDIT.Schema = function (
 	};
 
 	var simplifyChoices = function (node) {
-		$.each (node.choiceRefs, function (i, choiceRef) {
-			var define = defineProperties[choiceRef];
-			$.each(define.attributes, function () {
-				node.choices.push(define.attributes);
-				return false;
+		var index;
+
+		$.each(node.choices, function (i, choice) {
+			$.each(choice.refs, function (i2, ref) {
+				var define = defineProperties[ref];
+				attributesMerge(choice.attributes, define.attributes);
 			});
+			//delete choice.refs;
 		});
-		$.each (node.choices, function (i, choice) {
+		$.each(node.choices, function (i, choice) {
 			var attributeName;
-			for (attributeName in choice) {
+			for (attributeName in choice.attributes) {
 				// already mostly simplified, just need to dereference the attr. values
-				simplifyAttributeValues(choice, attributeName);
+				simplifyAttributeValues(choice.attributes, attributeName);
 			}
 		});
-		delete node.choiceRefs;
+
+		// remove any choices with no attributes
+		for (index=0; index<node.choices.length; index++) {
+			if (Object.keys(node.choices[index].attributes).length === 0) {
+				node.choices.splice(index,1);
+				index--;
+			}
+		}
 	};
 
 	var arrayContains = function (array, element, equalityFunction) {
@@ -371,16 +379,12 @@ CSLEDIT.Schema = function (
 		});
 		attributesMerge(propertiesA.attributes, propertiesB.attributes);
 
-		arrayMerge(propertiesA.choiceRefs, propertiesB.choiceRefs);
 		arrayMerge(propertiesA.choices, propertiesB.choices, function (a, b) {
 			// TODO: if this fails, should check again if a equals b using
 			//       guaranteed deterministic alternative to JSON.stringify
 			return JSON.stringify(a) === JSON.stringify(b);
 		});
 
-		if (propertiesA.choices.length > 8) {
-			debugger;
-		}
 		arrayMerge(propertiesA.refs, propertiesB.refs);
 
 		$.each(propertiesB.refQuantifiers, function (ref, quantifier) {
@@ -466,7 +470,7 @@ CSLEDIT.Schema = function (
 		},
 		attribute : function (node) {
 			var thisNodeProperties = new NodeProperties(),
-				attributeName = node.attributes.item("name").nodeValue,
+				attributeName = node.attributes.item("name").nodeValue.replace(/^xml:/, ""),
 				defaultValue = node.attributes.getNamedItem("a:defaultValue"),
 				values;
 
@@ -523,27 +527,36 @@ CSLEDIT.Schema = function (
 		},
 		choice : function (node) {
 			var choices = [],
-				choiceRefs = [],
 				thisNodeProperties,
 				applyToEachChild = function (childNodeProperties) {
+					var choice = {
+							attributes : {},
+							refs : []
+						},
+						containsChoice = false;
+
 					// nested choices not supported
 					assertEqual(childNodeProperties.choices.length, 0);
 
-					$.each (childNodeProperties.refs, function (i, choiceRef) {
-						choiceRefs.push(choiceRef);
+					$.each(childNodeProperties.refs, function (i, choiceRef) {
+						choice.refs.push(choiceRef);
+						containsChoice = true;
 					});
 
-					$.each(childNodeProperties.attributes, function () {
-						choices.push(childNodeProperties.attributes);
-						return false;
+					$.each(childNodeProperties.attributes, function (attributeName, attribute) {
+						choice.attributes[attributeName] = attribute;
+						containsChoice = true;
 					});
+
+					if (containsChoice) {
+						choices.push(choice);
+					}
 
 					childNodeProperties.attributes = {};
 				};
 
 			thisNodeProperties = parseChildren(node, applyToEachChild);
 			thisNodeProperties.choices = choices;
-			thisNodeProperties.choiceRefs = choiceRefs;
 
 			return thisNodeProperties;
 		},

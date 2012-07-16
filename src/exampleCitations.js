@@ -109,8 +109,8 @@ CSLEDIT.exampleCitations = (function () {
 		CSLEDIT.storage.setItem('CSLEDIT.exampleReferences', JSON.stringify(referenceList));
 
 		suppressUpdate = true;
-		$.each([0, 1], function (i, citation) {
-			limitReferenceIndexesForCitation(citation);
+		$.each(getCitations(), function (i, citation) {
+			limitReferenceIndexesForCitation(i);
 		});
 		suppressUpdate = false;
 
@@ -134,6 +134,7 @@ CSLEDIT.exampleCitations = (function () {
 		var indexes = [],
 			citations = getCitations();
 
+		console.log("index = " + citationIndex);
 		$.each(citations[citationIndex].citationItems, function (i, citationItem) {
 			indexes.push(parseInt(citationItem.id.replace("ITEM-", "")) - 1);
 		});
@@ -177,7 +178,7 @@ CSLEDIT.exampleCitations = (function () {
 	};
 
 	var update = function () {
-		if (!suppressUpdate) {
+		if (!suppressUpdate && "viewController" in CSLEDIT) {
 			CSLEDIT.viewController.styleChanged("formatCitations");
 		}
 	};

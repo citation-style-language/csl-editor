@@ -194,6 +194,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			if ($("#nodeAttribute" + index).length > 0) {
 				value = $("#nodeAttribute" + index).val();
 			} else {
+				assert(index in multiInputs);
 				value = multiInputs[index].val();
 			}
 
@@ -370,7 +371,13 @@ CSLEDIT.genericPropertyPanel = (function () {
 			}
 		}
 
-		if (dropdownValues.length > 1 /* 1 because it includes the default value */) {
+		if (dropdownValues.length === 1) {
+			// if only 1 one value is possible, put it in a label
+			thisRow = $('<tr/>');
+			thisRow.append($('<td/>').append(label(index, attributeName)));
+			thisRow.append($('<td/>').append(
+				'<label id="nodeAttribute' + index + '">' + dropdownValues[0] + '</label>'));
+		} else if (dropdownValues.length > 1) {
 			thisRow = $('<tr></tr>');
 			thisRow.append($('<td></td>').append(label(index, attributeName)));
 			if (schemaAttribute.list) {
@@ -444,17 +451,18 @@ CSLEDIT.genericPropertyPanel = (function () {
 			var definitelySelected = false,
 				possiblySelected = false;
 			
-			$.each(choice, function (attributeName, attribute) {
+			$.each(choice.attributes, function (attributeName, attribute) {
 				definitelySelected = true;
 				return false;
 			});
 
-			$.each(choice, function (attributeName, schemaAttribute) {
+			$.each(choice.attributes, function (attributeName, schemaAttribute) {
 				var attributeIndexes = indexesOfAttribute(attributeName, nodeData.attributes),
 					thisAttribute;
 				
 				$.each(attributeIndexes, function (i, attributeIndex) {
-					if (isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
+					if (nodeData.attributes[attributeIndex].enabled &&
+						isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
 						thisAttribute = nodeData.attributes[attributeIndex];
 						return false;
 					}
@@ -555,11 +563,11 @@ CSLEDIT.genericPropertyPanel = (function () {
 			choicePanel = new CSLEDIT.MultiPanel('multiPanel');
 			panel.append(choicePanel.element);
 
-			$.each(schemaChoices, function (choiceIndex, attributes) {
+			$.each(schemaChoices, function (choiceIndex, choice) {
 				var addedToTab = false;
 				schemaChoiceIndexes[choiceIndex] = [];
 
-				$.each(attributes, function (attributeName, attribute) {
+				$.each(choice.attributes, function (attributeName, attribute) {
 					var editor;
 					if (!addedToTab) {
 						// exception for date-part node
