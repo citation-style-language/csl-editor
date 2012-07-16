@@ -22,8 +22,7 @@ Sys.prototype.retrieveLocale = function(lang){
 			url : localePath,
 			success : function (data) {
 				console.log("fetched locale data for " + lang);
-				thisLocale = $("<div/>").append(data.documentElement).html();
-				locale[lang] = thisLocale;
+				locale[lang] = data;
 			},
 			error : function (jqXHR, textStatus) {
 				console.log("ERROR retrieving locale data for " + lang);
@@ -31,9 +30,7 @@ Sys.prototype.retrieveLocale = function(lang){
 
 				thisLocale = locale["en-US"];
 			},
-			accepts : {
-				xml : "text/xml"
-			},
+			dataType : "text",
 			async : false
 		});
 	}
