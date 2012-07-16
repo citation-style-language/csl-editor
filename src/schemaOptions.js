@@ -42,6 +42,9 @@ CSLEDIT.schemaOptions = {
 			});
 		});
 		
+		// change style node description
+		nodeProperties["root/style"].documentation = "Set global formatting options";
+		
 	/*	var 
 		// can put schema modification code here
 
