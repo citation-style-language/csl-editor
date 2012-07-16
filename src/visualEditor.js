@@ -308,10 +308,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 						});
 
 						CSLEDIT.controller.exec("setCslCode", [newStyle]);
-					} else if (clickedName === "Style Info") {
-						CSLEDIT.viewController.selectNode(CSLEDIT.data.getNodesFromPath("style/info")[0].cslId);
-					} else if (clickedName === "Global Formatting Options") {
-						CSLEDIT.viewController.selectNode(CSLEDIT.data.getNodesFromPath("style")[0].cslId);
 					}
 				} else if (parentNodeName === "Edit") {
 					if (clickedName === "Undo") {
