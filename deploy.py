@@ -220,8 +220,7 @@ demoSiteFilesToCopy = [
     '404page.html',
     'logError.php',
     'sendFeedback.php',
-    'feedbackEmail.txt',
-    'error.log'
+    'feedbackEmail.txt'
 ]
 
 demoSiteDirectoriesToCopy = [
@@ -347,7 +346,9 @@ for dir in demoSiteDirectoriesToCopy:
 for file in demoSiteFilesToCopy:
     shutil.copyfile('demoSite/' + file, demoSiteDir + '/' + file)
 
-    # give write permissions to just the error.log file
-    if (file == "error.log" and platform.system() == 'Linux'):
-        subprocess.call(['chmod', 'o+w', demoSiteDir + '/' + file]);
-
+# create error.log file with write permissions
+logFile = open('testError.log', 'w+')
+logFile.write('CSL edit error log')
+logFile.close()
+if (file == "error.log" and platform.system() == 'Linux'):
+    subprocess.call(['chmod', 'o+w', demoSiteDir + '/testError.log'])
