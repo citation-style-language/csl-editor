@@ -347,8 +347,9 @@ for file in demoSiteFilesToCopy:
     shutil.copyfile('demoSite/' + file, demoSiteDir + '/' + file)
 
 # create error.log file with write permissions
-logFile = open('testError.log', 'w+')
-logFile.write('CSL edit error log')
+logFile = open(demoSiteDir + '/error.log', 'w+')
+logFile.write('CSL edit error log\n')
+logFile.write('------------------\n\n')
 logFile.close()
 if (file == "error.log" and platform.system() == 'Linux'):
-    subprocess.call(['chmod', 'o+w', demoSiteDir + '/testError.log'])
+    subprocess.call(['chmod', 'o+w', demoSiteDir + '/error.log'])
