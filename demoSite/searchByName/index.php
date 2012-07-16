@@ -10,7 +10,8 @@
 	<script type="text/javascript" src="../../src/exampleData.js"></script>
 	<script type="text/javascript" src="../../src/options.js"></script>
 	<script type="text/javascript" src="../../src/storage.js"></script>
-	<script type="text/javascript" src="../../generated/exampleCitationsEnc.js"></script>
+	<script type="text/javascript" src="../../generated/cslStyles.js"></script>
+	<script type="text/javascript" src="../../generated/preGeneratedExampleCitations.js"></script>
 	<script type="text/javascript" src="../../src/cslParser.js"></script>
 	<script type="text/javascript" src="../../src/cslNode.js"></script>
 	<script type="text/javascript" src="../../src/Iterator.js"></script>

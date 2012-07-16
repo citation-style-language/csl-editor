@@ -41,14 +41,14 @@ CSLEDIT.searchResults = (function () {
 			if (style.masterId != style.styleId)
 			{
 				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
-							exampleCitations.styleTitleFromId[style.masterId] + '</a>)';
+							CSLEDIT.cslStyles.styleTitleFromId[style.masterId] + '</a>)';
 			} else {
 				masterStyleSuffix = '';
 			}
 
-			citation = exampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
+			citation = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
 				formattedCitations[0];
-			bibliography = exampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
+			bibliography = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
 				formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&
@@ -77,7 +77,7 @@ CSLEDIT.searchResults = (function () {
 			outputList.push(
 				'<table' + featuredStyleClass + '>' +
 				'<tr><td colspan=3><a href="' + style.styleId + '">' +
-				exampleCitations.styleTitleFromId[style.styleId] + "</a>"
+				CSLEDIT.cslStyles.styleTitleFromId[style.styleId] + "</a>"
 				+ masterStyleSuffix + featuredStyleText + '</td></tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
 				'<td class=match>' +

@@ -84,9 +84,9 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			userBibliography = "";
 		}
 
-		for (styleId in exampleCitations.exampleCitationsFromMasterId) {
-			if (exampleCitations.exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
-				exampleCitation = exampleCitations.exampleCitationsFromMasterId[styleId][exampleIndex];
+		for (styleId in CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId) {
+			if (CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
+				exampleCitation = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[styleId][exampleIndex];
 
 				if (exampleCitation !== null && exampleCitation.statusMessage === "") {
 					formattedCitation = exampleCitation.formattedCitations[0];
@@ -239,7 +239,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	};
 
 	var updateExample = function () {
-		var length = exampleCitations.exampleCitationsFromMasterId[defaultStyle].length;
+		var length = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length;
 		exampleIndex = (exampleIndex+length)%length;
 
 		formatExampleDocument();
@@ -247,7 +247,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	};
 
 	var init = function () {
-		if (exampleCitations.exampleCitationsFromMasterId[defaultStyle].length !==
+		if (CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length !==
 			CSLEDIT.exampleData.jsonDocumentList.length) {
 				alert("Example citations need re-calculating on server");
 		}
@@ -292,10 +292,10 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	
 		// prepopulate search by style format with APA example
 		$("#userCitation").cleditor()[0].doc.body.innerHTML =
-			exampleCitations.exampleCitationsFromMasterId[defaultStyle][exampleIndex].
+			CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle][exampleIndex].
 			formattedCitations[0];
 		$("#userBibliography").cleditor()[0].doc.body.innerHTML =
-			exampleCitations.exampleCitationsFromMasterId[defaultStyle][exampleIndex].
+			CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle][exampleIndex].
 			formattedBibliography;
 
 		$('#nextExample').click(function () {

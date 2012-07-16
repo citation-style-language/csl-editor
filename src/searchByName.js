@@ -39,7 +39,7 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 				styleId = CSLEDIT.exampleData.topStyles[index];
 				result.push({
 					styleId : styleId,
-					masterId : exampleCitations.masterIdFromId[styleId]
+					masterId : CSLEDIT.cslStyles.masterIdFromId[styleId]
 				});
 			}
 			CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"));
@@ -60,16 +60,16 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 		previousQuery = searchQuery;
 		
 		// dumb search, just iterates through all the names
-		for (styleId in exampleCitations.styleTitleFromId) {
-			if (exampleCitations.styleTitleFromId.hasOwnProperty(styleId)) {
-				styleName = exampleCitations.styleTitleFromId[styleId];
+		for (styleId in CSLEDIT.cslStyles.styleTitleFromId) {
+			if (CSLEDIT.cslStyles.styleTitleFromId.hasOwnProperty(styleId)) {
+				styleName = CSLEDIT.cslStyles.styleTitleFromId[styleId];
 
 				if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
 					styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
-					masterId = exampleCitations.masterIdFromId[styleId];
+					masterId = CSLEDIT.cslStyles.masterIdFromId[styleId];
 					if (masterId !== styleId) {
 						masterStyleName = ' (same as <a href="' + masterId + '">' +
-							exampleCitations.styleTitleFromId[masterId] + '</a>)';
+							CSLEDIT.cslStyles.styleTitleFromId[masterId] + '</a>)';
 					} else {
 						masterStyleName = "";
 					}

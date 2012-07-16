@@ -101,7 +101,8 @@ pages = [
             "src/xmlUtility.js",
             "src/citationEngine.js",
             "server/config.js",
-            "generated/exampleCitationsEnc.js",
+            "generated/cslStyles.js",
+            "generated/preGeneratedExampleCitations.js",
 
             "src/debug.js",
             "src/exampleData.js",
@@ -120,7 +121,8 @@ pages = [
         "page" : "searchByName",
         "jsFiles" : [
             "src/debug.js",
-            "generated/exampleCitationsEnc.js",
+            "generated/cslStyles.js",
+            "generated/preGeneratedExampleCitations.js",
 
             "src/exampleData.js",
             "src/options.js",
