@@ -1,4 +1,3 @@
-
 "use strict";
 
 var CSLEDIT = CSLEDIT || {};
@@ -26,15 +25,30 @@ CSLEDIT.citationEngine = (function () {
 	};
 
 	var formatCitations = function (style, documents, citationClusters, taggedOutput) {
+		var bibliography,
+			result,
+			sys,
+			citations,
+			cluster,
+			inLineCitations,
+			inLineCitationArray,
+			i,
+			pos,
+			makeBibliographyArgument,
+			hangingindent,
+			has_bibliography,
+			index,
+			enumerateCitations;
+
 		// TODO: this shouldn't be a global
 		jsonDocuments = documents;
 
-		var result = { "statusMessage":"", "formattedCitations":[], "formattedBibliography": [] };
+		result = { "statusMessage":"", "formattedCitations":[], "formattedBibliography": [] };
 		result.statusMessage = "";
 		if (style !== previousStyle) {
 			try
 			{
-				var sys = new Sys(abbreviations);
+				sys = new Sys(abbreviations);
 				citeproc = new CSL.Engine(sys, style);
 				citeproc.opt.development_extensions.csl_reverse_lookup_support = true;
 				previousStyle = style;
@@ -48,14 +62,14 @@ CSLEDIT.citationEngine = (function () {
 			citeproc.restoreProcessorState([]);
 		}
 		
-		var inLineCitations = "";
-		var inLineCitationArray = new Array();
+		inLineCitations = "";
+		inLineCitationArray = new Array();
 		
-		for (var cluster=0; cluster<citationClusters.length; cluster++)
+		for (cluster=0; cluster<citationClusters.length; cluster++)
 		{
 			try
 			{
-				var citations = citeproc.appendCitationCluster(citationClusters[cluster],false);
+				citations = citeproc.appendCitationCluster(citationClusters[cluster],false);
 			}
 			catch(err)
 			{
@@ -63,9 +77,9 @@ CSLEDIT.citationEngine = (function () {
 				return result;
 			}
 			
-			for (var i = 0; i < citations.length; i++)
+			for (i = 0; i < citations.length; i++)
 			{
-				var pos = citations[i][0];
+				pos = citations[i][0];
 				
 				if (inLineCitations != "")
 				{
@@ -82,10 +96,8 @@ CSLEDIT.citationEngine = (function () {
 		}
 		result.formattedCitations = inLineCitationArray;
 		
-		var makeBibliographyArgument;
-		
-		var enumerateCitations = true;
-		if (enumerateCitations == true) {
+		enumerateCitations = true;
+		if (enumerateCitations === true) {
 			makeBibliographyArgument = undefined;
 		}
 		else {
@@ -94,7 +106,7 @@ CSLEDIT.citationEngine = (function () {
 		
 		try
 		{
-			var bibliography = citeproc.makeBibliography(makeBibliographyArgument);
+			bibliography = citeproc.makeBibliography(makeBibliographyArgument);
 		}
 		catch(err)
 		{
@@ -102,8 +114,8 @@ CSLEDIT.citationEngine = (function () {
 			return result;
 		}
 
-		var hangingindent = false;
-		var has_bibliography = (bibliography !== false);
+		hangingindent = false;
+		has_bibliography = (bibliography !== false);
 
 		if (has_bibliography)
 		{
@@ -116,7 +128,6 @@ CSLEDIT.citationEngine = (function () {
 		}
 
 		if (taggedOutput !== true) {
-			var index;
 			for (index = 0; index < bibliography.length; index++) {
 				bibliography[index] = stripTags(bibliography[index], "span");
 			}

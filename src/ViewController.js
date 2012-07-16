@@ -15,7 +15,7 @@ CSLEDIT.ViewController = function (
 			{
 				id : "info",
 				name : "Style Info",
-				nodePaths : ["style/info", "style", "style/locale"],
+				nodePaths : ["style/info", "style"/*, "style/locale"*/],
 				macroLinks : false,
 				leafNodes : ["info", "style"]
 			},
@@ -55,7 +55,7 @@ CSLEDIT.ViewController = function (
 				}
 				]
 			},
-			{
+			/*{
 				id : "macro",
 				name : "Macros",
 				nodePaths : ["style/macro"],
@@ -84,7 +84,7 @@ CSLEDIT.ViewController = function (
 					}
 				}
 				]
-			},
+			},*/
 			{
 				id : "locale",
 				name : "Advanced",

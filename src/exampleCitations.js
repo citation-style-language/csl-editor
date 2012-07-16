@@ -71,20 +71,28 @@ CSLEDIT.exampleCitations = (function () {
 
 	var setOption = function (citation, reference, option) {
 		var options = getCitationOptions();
+		if (option >= CSLEDIT.exampleData.additionalOptions.length) {
+			option = 0;
+		}
 		options[citation] = options[citation] || {};
 		options[citation][reference] = option;
 		setCitationOptions(options);
 	};
 
 	var getOption = function (citation, reference) {
-		var options = getCitationOptions();
+		var options = getCitationOptions(),
+			option;
 		if (!options.hasOwnProperty(citation)) {
 			return 0;
 		}
 		if (!options[citation].hasOwnProperty(reference)) {
 			return 0;
 		}
-		return options[citation][reference];
+		option = options[citation][reference];
+		if (option >= CSLEDIT.exampleData.additionalOptions.length) {
+			option = 0;
+		}
+		return option;
 	};
 
 	var getCiteprocReferences = function () {
