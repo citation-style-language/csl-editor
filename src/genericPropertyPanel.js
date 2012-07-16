@@ -34,8 +34,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 			},
 			'vertical-align' : {
 				'baseline' : 'default',
-				'sup' : { text : 'x<sup>2</sup>' },
-				'sub' : { text : 'x<sub>2</sub>' }
+				'sup' : { text : '<sup>sup</sup>' },
+				'sub' : { text : '<sub>sub</sub>' }
 			},
 			'quotes' : {
 				'false' : 'default',

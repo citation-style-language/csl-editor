@@ -237,19 +237,20 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 	var setupTreeEditorToolbar = function () {
 		var toolbar = editorElement.find('#treeEditorToolbar'),
-			addNodeButton = toolbar.find('button.add'),
-			deleteNodeButton = toolbar.find('button.delete');
+			addNodeButton = toolbar.find('a.add'),
+			deleteNodeButton = toolbar.find('a.delete');
 
 		assertEqual(addNodeButton.length, 1);
 		assertEqual(deleteNodeButton.length, 1);
 
-		addNodeButton.on('click', function () {
+		addNodeButton.on('click', function (e) {
 			showAddNodeDialog();
-
+			e.preventDefault();
 		});
 
-		deleteNodeButton.on('click', function () {
+		deleteNodeButton.on('click', function (e) {
 			CSLEDIT.controller.exec("deleteNode", [CSLEDIT.viewController.selectedNode()]);
+			e.preventDefault();
 		});
 	};
 
@@ -265,6 +266,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				selectedNodeId = editorElement.find('#treeEditor').jstree('get_selected'),
 				parentNode = $(event.target).parent().parent(),
 				parentNodeName,
+				parentNodeID,
 				position,
 				newStyle,
 				styleURL;
@@ -323,7 +325,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 							CSLEDIT.controller.redo();
 						}
 					}
-				} else if (parentNodeName === "Edit Citations") {
+				} else if (parentNodeName === "Example citations") {
 					if (clickedName === "Citation 1") {
 						CSLEDIT.citationEditor.editCitation(0);
 					} else if (clickedName === "Citation 2") {

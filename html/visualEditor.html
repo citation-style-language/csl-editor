@@ -24,8 +24,7 @@
 	</div>
 		<div id="treeEditorPanel" class="panel">
 			<div id="treeEditorToolbar">
-				<button class='add icon'>Add Node</button>
-				<button class='delete icon'>Delete Node</button>
+				<a class='add' href="#" title="Add node">+</a><a class='delete' href="#" title="Delete node">-</a>
 			</div>
 			<div id="treeEditor"></div>
 		</div>
@@ -39,10 +38,10 @@
 		</div>
 		<ul class="example-citations dropdown">
 			<li>
-				<a>Example citations <span class="disclosure">&#9662;</span></a>
+				<a id="example-citations">Example citations <span class="disclosure">&#9662;</span></a>
 				<ul class="sub_menu">
-					<li><a>Citation 1</a></li>
-					<li><a>Citation 2</a></li>
+					<li><a id="edit-citation-1">Citation 1</a></li>
+					<li id="edit-citation-2"><a>Citation 2</a></li>
 				</ul>
 			</li>
 		</ul>
