@@ -328,7 +328,10 @@ CSLEDIT.genericPropertyPanel = (function () {
 		// add macro dropdown values, they aren't in the schema
 		if (attributeName === "macro") {
 			$.each(CSLEDIT.data.getNodesFromPath("style/macro"), function (i, node) {
-				dropdownValues.push(node.attributes[indexOfAttribute("name", node.attributes)].value);
+				var cslNode = new CSLEDIT.CslNode(node);
+				if (cslNode.hasAttr("name")) {
+					dropdownValues.push(cslNode.getAttr("name"));
+				}
 			});
 		}
 
