@@ -215,14 +215,22 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 			dialogDiv.dialog('destroy');
 
-			// hard coded constraint for conditional
+			position = "last";
+			// override position for certain nodes
 			// TODO: generalise
 			if (nodeName === 'if') {
 				position = "first";
 			} else if (nodeName === 'else-if' && children[children.length-1].name === "else") {
 				position = children.length - 1;
-			} else {
+			} else if (nodeName === 'macro') {
 				position = "last";
+				// put it before the citation node:
+				$.each(children, function (i, child) {
+					if (child.name === "citation") {
+						position = i;
+						return false;
+					}
+				});
 			}
 
 			CSLEDIT.controller.exec("addNode", [
@@ -245,7 +253,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 		addNodeButton.on('click', function () {
 			showAddNodeDialog();
-
 		});
 
 		deleteNodeButton.on('click', function () {
