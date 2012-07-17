@@ -573,7 +573,6 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 					alert(result.error);
 				} else {
 					callback();
-					emit("formatCitations");
 					return;
 				}
 			}
@@ -592,8 +591,6 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 				styleURL = CSLEDIT.options.get("rootURL") + "/external/csl-styles/apa.csl";
 				loadStyleFromURL(styleURL, callback);
 			}
-
-			emit("formatCitations");
 		},
 		numNodes : numNodes,
 		numCslNodes : function () { return numNodes(get()); },

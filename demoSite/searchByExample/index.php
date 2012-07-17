@@ -21,7 +21,8 @@
 	<script type="text/javascript" src="../../src/xmlUtility.js"></script>
 	<script type="text/javascript" src="../../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../../server/config.js"></script>
-	<script type="text/javascript" src="../../generated/exampleCitationsEnc.js"></script>
+	<script type="text/javascript" src="../../generated/cslStyles.js"></script>
+	<script type="text/javascript" src="../../generated/preGeneratedExampleCitations.js"></script>
 
 	<script type="text/javascript" src="../../external/cleditor/jquery.cleditor.js"></script>
 	<link rel="stylesheet" type="text/css" href="../../external/cleditor/jquery.cleditor.css">

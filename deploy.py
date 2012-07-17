@@ -38,6 +38,7 @@ pages = [
     {
         "page" : "visualEditor", 
         "jsFiles" : [
+            "generated/cslStyles.js",
             "src/citeprocLoadSys.js",
             "src/exampleData.js",
             "src/storage.js",
@@ -101,7 +102,8 @@ pages = [
             "src/xmlUtility.js",
             "src/citationEngine.js",
             "server/config.js",
-            "generated/exampleCitationsEnc.js",
+            "generated/cslStyles.js",
+            "generated/preGeneratedExampleCitations.js",
 
             "src/debug.js",
             "src/exampleData.js",
@@ -120,7 +122,8 @@ pages = [
         "page" : "searchByName",
         "jsFiles" : [
             "src/debug.js",
-            "generated/exampleCitationsEnc.js",
+            "generated/cslStyles.js",
+            "generated/preGeneratedExampleCitations.js",
 
             "src/exampleData.js",
             "src/options.js",

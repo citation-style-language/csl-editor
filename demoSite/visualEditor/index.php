@@ -26,6 +26,7 @@
 
 	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
 
+	<script type="text/javascript" src="../../generated/cslStyles.js"></script>
 	<script type="text/javascript" src="../../src/exampleData.js"></script>
 	<script type="text/javascript" src="../../src/exampleCitations.js"></script>
 	<script type="text/javascript" src="../../src/options.js"></script>

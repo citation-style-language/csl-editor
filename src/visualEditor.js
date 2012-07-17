@@ -215,14 +215,22 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 			dialogDiv.dialog('destroy');
 
-			// hard coded constraint for conditional
+			position = "last";
+			// override position for certain nodes
 			// TODO: generalise
 			if (nodeName === 'if') {
 				position = "first";
 			} else if (nodeName === 'else-if' && children[children.length-1].name === "else") {
 				position = children.length - 1;
-			} else {
+			} else if (nodeName === 'macro') {
 				position = "last";
+				// put it before the citation node:
+				$.each(children, function (i, child) {
+					if (child.name === "citation") {
+						position = i;
+						return false;
+					}
+				});
 			}
 
 			CSLEDIT.controller.exec("addNode", [
@@ -443,6 +451,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		CSLEDIT.notificationBar.init(editorElement.find('#notificationBar'));
 	};
 
+	// used to generate the ids in the Zotero style repository
+	var getNormalisedStyleName = function () {
+		return getStyleName().replace(/[\(\)]/g, "").replace(/[\\/:"*?<>| ]+/g, "-").toLowerCase();
+	};
+
+	// returns true to continue, false to cancel
 	var conformStyleToRepoConventions = function () {
 		// checks that the style conforms to repository conventions and
 		// prompts the user to change it if it doesn't
@@ -450,11 +464,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		var generatedStyleId,
 			links,
 			selfLinkNode,
-			selfLink;
+			selfLink,
+			styleName = getStyleName(),
+			cancel = false;
 
 		// check that the styleId and rel self link matches the schema conventions
-		generatedStyleId = "http://www.zotero.org/styles/" +
-				cslEditor.getStyleName().replace(/[\\/:"*?<>| ]+/g, "-").toLowerCase();
+		generatedStyleId = "http://www.zotero.org/styles/" + getNormalisedStyleName();
 		links = CSLEDIT.data.getNodesFromPath("style/info/link");
 		$.each(links, function (i, link) {
 			var link = new CSLEDIT.CslNode(link);
@@ -465,8 +480,26 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			}
 		});
 
+		console.log("generatedStyleId = " + generatedStyleId);
+		$.each(CSLEDIT.cslStyles.styleTitleFromId, function (id, name) {
+			if (id === generatedStyleId || name === styleName) {
+				if (!confirm('The style title matches one that already exists.\n\n' +
+						'You should change it to avoid problems using this style ' +
+						'in your reference manager.\n\n' +
+						'Do you want to save anyway?')) {
+					cancel = true;
+					return false;
+				}
+			}
+		});
+
+		if (cancel) {
+			return false;
+		}
+
 		if (selfLink !== generatedStyleId || cslEditor.getStyleId() !== generatedStyleId) {
-			if (confirm('Change style ID and "self" link to the following?\n\n' + generatedStyleId + "\n\n(the CSL styles repository convention)")) {
+			if (confirm('Change style ID and "self" link to the following?\n\n' +
+					generatedStyleId + "\n\n(the CSL styles repository convention)")) {
 				cslEditor.setStyleId(generatedStyleId);
 				if (typeof(selfLinkNode) !== "undefined") {
 					selfLinkNode.setAttr("href", generatedStyleId);
@@ -480,6 +513,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				}
 			}
 		}
+		return true;
+	};
+
+	var getStyleName = function () {
+		var styleNameNode = CSLEDIT.data.getNodesFromPath('style/info/title')[0];
+		return styleNameNode.textValue;
 	};
 
 	// public API
@@ -490,10 +529,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		getCslCode : function () {
 			return CSLEDIT.data.getCslCode();
 		},
-		getStyleName : function () {
-			var styleNameNode = CSLEDIT.data.getNodesFromPath('style/info/title')[0];
-			return styleNameNode.textValue;
-		},
+		getStyleName : getStyleName,
 		getStyleId : function () {
 			var styleIdNode = CSLEDIT.data.getNodesFromPath('style/info/id')[0];
 			return styleIdNode.textValue;
@@ -503,6 +539,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			styleIdNode.textValue = styleId;
 			CSLEDIT.controller.exec('amendNode', [styleIdNode.cslId, styleIdNode]);
 		},
-		conformStyleToRepoConventions : conformStyleToRepoConventions
+		conformStyleToRepoConventions : conformStyleToRepoConventions,
+		getNormalisedStyleName : getNormalisedStyleName
 	};
 };

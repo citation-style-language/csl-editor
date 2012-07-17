@@ -35,12 +35,12 @@ CSLEDIT.options.setUserOptions({
 // each one
 var masterStyleFromId = {};
 
-var outputData = {
-	masterIdFromId: {},
-
-	// list of dependent styles for each master style ID
-	//dependentStylesFromMasterId : {},
+var exampleCitations = {
 	exampleCitationsFromMasterId: {},
+};
+
+var cslStyles = {
+	masterIdFromId: {},
 	styleTitleFromId: {}
 };
 
@@ -71,7 +71,7 @@ var addCslFileToIndex = function (file) {
 			var styleTitle = "";
 			if (styleTitleNode && styleTitleNode.length()) {
 				styleTitle = styleTitleNode[0].toString();
-				outputData.styleTitleFromId[styleId] = styleTitle;
+				cslStyles.styleTitleFromId[styleId] = styleTitle;
 			} else {
 				//print('no title for ' + file.getName());
 			}
@@ -89,7 +89,7 @@ var addCslFileToIndex = function (file) {
 				}
 			}
 			// TODO: why is this preventing the JSON.stringify() working in jslibs?
-			outputData.masterIdFromId[styleId] = masterId;
+			cslStyles.masterIdFromId[styleId] = masterId;
 			
 			if (styleId === masterId) {
 				masterStyleFromId[masterId] = fileData;
@@ -103,7 +103,7 @@ var addCslFileToIndex = function (file) {
 					schema: "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"			
 				}]);
 
-				outputData.exampleCitationsFromMasterId[styleId] = [];
+				exampleCitations.exampleCitationsFromMasterId[styleId] = [];
 
 				$.each(CSLEDIT.exampleCitations.getReferences(), function (i, exampleReference) {
 					CSLEDIT.exampleCitations.setReferenceIndexesForCitation(0, [i]);
@@ -124,7 +124,7 @@ var addCslFileToIndex = function (file) {
 					citeprocResult.formattedBibliography = citeprocResult.formattedBibliography.
 					replace(/<\/second-field-align>/g, " ");
 
-					outputData.exampleCitationsFromMasterId[styleId].push(citeprocResult);
+					exampleCitations.exampleCitationsFromMasterId[styleId].push(citeprocResult);
 				});
 			}
 		}
@@ -156,21 +156,27 @@ print("num entries = " + entries);
 var outputDir = new File("../" + cslServerConfig.dataPath);
 outputDir.mkdir();
 
-var fileWriter = new FileWriter(outputDir.getPath() + '/exampleCitationsEnc.js');
+var outputToJSFile = function (jsonData, name) {
+	var outputString = JSON.stringify(jsonData, null, "\t");
 
-var outputString = JSON.stringify(outputData, null, "\t");
+	// TODO: may not need to escape all non ASCII chars, this
+	//       was done due to a quotation marks bugs
+	outputString = outputString.replace(/[\u007f-\uffff]/g, function (c) {
+		return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
+	});
 
-// TODO: may not need to escape all non ASCII chars, this
-// was done due to a quotation marks bugs
-outputString = outputString.replace(/[\u007f-\uffff]/g, function (c) {
-	return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
-});
+	// need to convert quotation marks
+	// TODO: investigate why \u201c is converted to 3 characters
+	outputString = outputString.replace(/\\u00e2\\u0080\\u009c/g, "\\u201c");
+	outputString = outputString.replace(/\\u00e2\\u0080\\u009d/g, "\\u201d");
 
-// need to convert quotation marks
-// TODO: investigate why \u201c is converted to 3 characters
-outputString = outputString.replace(/\\u00e2\\u0080\\u009c/g, "\\u201c");
-outputString = outputString.replace(/\\u00e2\\u0080\\u009d/g, "\\u201d");
+	var fileWriter = new FileWriter(outputDir.getPath() + '/' + name + '.js');
+	fileWriter.write('"use strict";\n');
+	fileWriter.write('var CSLEDIT = CSLEDIT || {};\n\n');
+	fileWriter.write("CSLEDIT." + name + " = " + outputString + ';');
+	fileWriter.close();
+};
 
-fileWriter.write('"use strict";\n');
-fileWriter.write("var exampleCitations = " + outputString + ';');
-fileWriter.close();
+outputToJSFile(exampleCitations, "preGeneratedExampleCitations");
+outputToJSFile(cslStyles, "cslStyles");
+

@@ -282,8 +282,8 @@ asyncTest("check invariance when deserializing then serializing repo styles", fu
 		'mla.csl',
 		'mhra.csl',
 		//'chicago-fullnote-bibliography.csl', // has an empty <if></if> over two lines
-		'associacao-brasileira-de-normas-tecnicas.csl',
-		'chicago-note-bibliography.csl',
+		//'associacao-brasileira-de-normas-tecnicas.csl',
+		//'chicago-note-bibliography.csl',
 		'american-chemical-society.csl',
 		'cell.csl',
 		'science.csl',
