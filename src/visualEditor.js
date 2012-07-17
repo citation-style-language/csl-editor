@@ -42,8 +42,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 					toParentNode,
 					index;
 
-				fromId = parseInt(move.o.attr("cslid"));
-				toId = parseInt(move.r.attr("cslid"));
+				fromId = parseInt(move.o.attr("cslid"), 10);
+				toId = parseInt(move.r.attr("cslid"), 10);
 				toParentNode = CSLEDIT.data.getNodeAndParent(toId).parent;
 
 				if (move.last_pos !== false) {
@@ -105,14 +105,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		window.location.href = reloadURL + "?styleURL=" + newURL;
 	};
 
-	var updateCslData = function (cslCode) {
-		// strip comments from style
-		data = data.replace(/<!--.*?-->/g, "");
-
-		CSLEDIT.data.setCslCode(cslCode);
-		createTreeView();
-	};
-
 	var showAddNodeDialog = function () {
 		var dialogDiv = $('<div id="addNodeDialog"></div>'),
 			node = CSLEDIT.data.getNode(CSLEDIT.viewController.selectedNode()),
@@ -147,7 +139,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		$.each(CSLEDIT.schema.childElements(translatedParentName + "/" + translatedNodeInfo.node.name),
 			function (element, quantifier) {
 				possibleElements[element] = quantifier;
-		});
+			}
+		);
 
 		// hard-coded constraint for 'choose' node
 		// TODO: generalise this to more nodes, using the schema if not too difficult
@@ -184,7 +177,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			displayName = 
 				CSLEDIT.uiConfig.displayNameFromNode(new CSLEDIT.CslNode(element));
 
-			console.log("display name = " + displayName );
+			console.log("display name = " + displayName);
 
 			row = $('<tr>' + img + '<td><button class="addNodeType" data-nodeName="' +
 				element + '">' + 
@@ -220,7 +213,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			// TODO: generalise
 			if (nodeName === 'if') {
 				position = "first";
-			} else if (nodeName === 'else-if' && children[children.length-1].name === "else") {
+			} else if (nodeName === 'else-if' && children[children.length - 1].name === "else") {
 				position = children.length - 1;
 			} else if (nodeName === 'macro') {
 				position = "last";
@@ -346,7 +339,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 		if (!$.browser.webkit && !$.browser.mozilla) {
 			$('body').html("<h2>Please use the latest version of " +
-				"Chrome or Firefox to view this page.</h2>").css({margin:50});
+				"Chrome or Firefox to view this page.</h2>").css({margin: 50});
 			return;
 		}
 
@@ -374,19 +367,19 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			}
 		});
 
-		$(function(){
-			editorElement.find("ul.dropdown li").hoverIntent(function(){
+		$(function () {
+			editorElement.find("ul.dropdown li").hoverIntent(function () {
 				$(this).addClass("hover");
-				$('ul:first',this).css('visibility', 'visible');
-			}, function(){
+				$('ul:first', this).css('visibility', 'visible');
+			}, function () {
 				$(this).removeClass("hover");
-				$('ul:first',this).css('visibility', 'hidden');
+				$('ul:first', this).css('visibility', 'hidden');
 			});
 			
 			editorElement.find("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
 		});
 
-		CSLEDIT.data.initPageStyle( function () {
+		CSLEDIT.data.initPageStyle(function () {
 			var userOnChangeCallback = CSLEDIT.options.get("onChange"),
 				citationEditor1,
 				citationEditor2;
@@ -450,7 +443,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 	// used to generate the ids in the Zotero style repository
 	var getNormalisedStyleName = function () {
-		return getStyleName().replace(/[\(\)]/g, "").replace(/[\\/:"*?<>| ]+/g, "-").toLowerCase();
+		return getStyleName().replace(/[\(\)]/g, "").replace(/[\\\/:"*?<>| ]+/g, "-").toLowerCase();
 	};
 
 	// returns true to continue, false to cancel
@@ -469,7 +462,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		generatedStyleId = "http://www.zotero.org/styles/" + getNormalisedStyleName();
 		links = CSLEDIT.data.getNodesFromPath("style/info/link");
 		$.each(links, function (i, link) {
-			var link = new CSLEDIT.CslNode(link);
+			link = new CSLEDIT.CslNode(link);
 
 			if (link.getAttr("rel") === "self") {
 				selfLinkNode = link;
@@ -494,10 +487,10 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			return false;
 		}
 
-		if (selfLink !== generatedStyleId || cslEditor.getStyleId() !== generatedStyleId) {
+		if (selfLink !== generatedStyleId || getStyleId() !== generatedStyleId) {
 			if (confirm('Change style ID and "self" link to the following?\n\n' +
 					generatedStyleId + "\n\n(the CSL styles repository convention)")) {
-				cslEditor.setStyleId(generatedStyleId);
+				setStyleId(generatedStyleId);
 				if (typeof(selfLinkNode) !== "undefined") {
 					selfLinkNode.setAttr("href", generatedStyleId);
 					CSLEDIT.controller.exec("amendNode", [selfLinkNode.cslId, selfLinkNode]);
@@ -518,6 +511,17 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		return styleNameNode.textValue;
 	};
 
+	var getStyleId = function () {
+		var styleIdNode = CSLEDIT.data.getNodesFromPath('style/info/id')[0];
+		return styleIdNode.textValue;
+	};
+		
+	var setStyleId = function (styleId) {
+		var styleIdNode = CSLEDIT.data.getNodesFromPath('style/info/id')[0];
+		styleIdNode.textValue = styleId;
+		CSLEDIT.controller.exec('amendNode', [styleIdNode.cslId, styleIdNode]);
+	};
+
 	// public API
 	return {
 		setCslCode : function (cslCode) {
@@ -527,15 +531,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			return CSLEDIT.data.getCslCode();
 		},
 		getStyleName : getStyleName,
-		getStyleId : function () {
-			var styleIdNode = CSLEDIT.data.getNodesFromPath('style/info/id')[0];
-			return styleIdNode.textValue;
-		},
-		setStyleId : function (styleId) {
-			var styleIdNode = CSLEDIT.data.getNodesFromPath('style/info/id')[0];
-			styleIdNode.textValue = styleId;
-			CSLEDIT.controller.exec('amendNode', [styleIdNode.cslId, styleIdNode]);
-		},
+		getStyleId : getStyleId,
+		setStyleId : setStyleId,
 		conformStyleToRepoConventions : conformStyleToRepoConventions,
 		getNormalisedStyleName : getNormalisedStyleName
 	};
