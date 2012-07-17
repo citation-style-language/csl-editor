@@ -354,5 +354,5 @@ logFile = open(demoSiteDir + '/error.log', 'w+')
 logFile.write('CSL edit error log\n')
 logFile.write('------------------\n\n')
 logFile.close()
-if (file == "error.log" and platform.system() == 'Linux'):
+if (platform.system() == 'Linux'):
     subprocess.call(['chmod', 'o+w', demoSiteDir + '/error.log'])
