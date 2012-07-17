@@ -35,7 +35,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 				setCslCode(CSLEDIT.cslParser.cslCodeFromCslData(cslData));
 				updatedNode = getNodesFromPath('style/info/updated')[0];
 			}
-		 
+			
 			// write timestamp to updated node
 			iter = new CSLEDIT.Iterator(cslData);
 			index = 0;
@@ -59,7 +59,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		
 		try {
 			cslData = CSLEDIT.cslParser.cslDataFromCslCode(cslCode);
-		} catch(err) {
+		} catch (err) {
 			return { error: "Error parsing CSL Code" };
 		}
 
@@ -169,7 +169,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 				return {
 					node : node,
 					parent : iter.parent()
-				}
+				};
 			}
 		}
 
@@ -218,7 +218,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			cslData = get();
 		}
 
-		rootNode = splitPath.splice(0,1);
+		rootNode = splitPath.splice(0, 1);
 
 		if (rootNode[0] === "") {
 			return result;
@@ -271,7 +271,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	
 	// Load new style without reloading page
 	var loadStyleFromURL = function (newURL, callback) {
-		$.get(newURL, {}, function(cslCode) {
+		$.get(newURL, {}, function (cslCode) {
 			var result;
 			cslCode = cslCode.replace(/<!--.*?-->/g, "");
 			result = setCslCode(cslCode);
@@ -304,7 +304,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	};
 
 	var emit = function (event, args) {
-		$.each(viewControllers, function(index, controller) {
+		$.each(viewControllers, function (index, controller) {
 			controller.styleChanged(event, args);
 		});
 	};
@@ -340,7 +340,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			});
 		}
 		return id;
-	}
+	};
 
 	var addNode = function (id, position, newNode, suppressViewUpdate /*optional*/) {
 		var nodeInfo,
@@ -357,7 +357,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		// populate with default attributes
 		if (newNode.attributes.length === 0 && typeof defaultAttributes !== "undefined") {
 			$.each(defaultAttributes, function (attribute, value) {
-				newNode.attributes.push({key:attribute, value:value, enabled:true});
+				newNode.attributes.push({key: attribute, value: value, enabled: true});
 			});
 		}
 
@@ -371,31 +371,28 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			}
 		} else {
 			switch (position) {
-				case "first":
-					// change parent id from macro instances to macro definitions
-					id = macroDefinitionIdFromInstanceId(id);
+			case "first":
+				// change parent id from macro instances to macro definitions
+				id = macroDefinitionIdFromInstanceId(id);
 
-					return addNode(id, 0, newNode);
-					break;
-				case "inside":
-				case "last":
-					// change parent id from macro instances to macro definitions
-					id = macroDefinitionIdFromInstanceId(id);
-					
-					return addNode(id, getNode(id).children.length, newNode);
-					break;
-				case "before":
-				case "after":
-					assert(id !== 0);
-					nodeInfo = getNodeAndParent(id);
-					positionIndex = indexOfChild(nodeInfo.node, nodeInfo.parent);
-					if (position === "after") {
-						positionIndex++;
-					}
-					return addNode(nodeInfo.parent.cslId, positionIndex, newNode);
-					break;
-				case "default":
-					assert(false, "position: " + position + " not recognised");
+				return addNode(id, 0, newNode);
+			case "inside":
+			case "last":
+				// change parent id from macro instances to macro definitions
+				id = macroDefinitionIdFromInstanceId(id);
+				
+				return addNode(id, getNode(id).children.length, newNode);
+			case "before":
+			case "after":
+				assert(id !== 0);
+				nodeInfo = getNodeAndParent(id);
+				positionIndex = indexOfChild(nodeInfo.node, nodeInfo.parent);
+				if (position === "after") {
+					positionIndex++;
+				}
+				return addNode(nodeInfo.parent.cslId, positionIndex, newNode);
+			case "default":
+				assert(false, "position: " + position + " not recognised");
 			}
 		}
 		return newNode.cslId;
@@ -438,7 +435,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			index,
 			result,
 			oldNode;
-	   
+		
 		iter = new CSLEDIT.Iterator(cslData);
 		index = 0;
 
@@ -577,7 +574,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 				}
 			}
 			
-			if (styleURL != "" && typeof styleURL !== 'undefined') {
+			if (styleURL !== "" && typeof styleURL !== 'undefined') {
 				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
 				
 				loadStyleFromURL(styleURL, callback);/*function () {

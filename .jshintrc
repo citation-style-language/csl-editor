@@ -11,10 +11,12 @@
         "waitsFor",
         "runs",
 
-		"$",
+		"unescape",
 		"alert",
 		"confirm",
 		"prompt",
+
+		"$",
 
 		"assert",
 		"assertEqual"
