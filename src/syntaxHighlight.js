@@ -2,8 +2,7 @@
 var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.SyntaxHighlighter = function (editorElement) {
-	var oldSelectedCslId,
-		selectedCslId = -1,
+	var selectedCslId = -1,
 		hoveredNodeStack = [],
 		highlightedCss,
 		selectedCss,
@@ -12,10 +11,15 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		highlightTimeout;
 
 	var selectedNodeChanged = function (newSelectedCslId) {
+		var oldSelectedCslId = selectedCslId;
+		selectedCslId = newSelectedCslId;
+
+		console.log("clearing " + oldSelectedCslId);
+
 		editorElement.find('span[cslid="' + oldSelectedCslId + '"]').removeClass("highlighted");
 		editorElement.find('span[cslid="' + oldSelectedCslId + '"]').removeClass("selected");
-		oldSelectedCslId = selectedCslId;
-		selectedCslId = newSelectedCslId;
+
+		console.log("selected node changed from " + oldSelectedCslId + " to " + selectedCslId);
 
 		editorElement.find('span[cslid="' + selectedCslId + '"]').removeClass("highlighted");
 		editorElement.find('span[cslid="' + selectedCslId + '"]').addClass("selected");
@@ -89,7 +93,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		}
 
 		if (selectedCslId !== cslId) {
-			selectedCslId = cslId;
+			//selectedCslId = cslId;
 			CSLEDIT.viewController.selectNode(cslId, highlightedTreeNodes);
 		}
 	};
