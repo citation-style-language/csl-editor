@@ -93,6 +93,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			"plugins" : ["themes","json_data","ui", "crrm", "dnd", /*"contextmenu",*/
 				"types", "hotkeys"],
 			//"core" : { "initially_open" : [ "node1" ] },
+			"core" : { "animation" : 200 },
 			"ui" : { /*"initially_select" : [ "cslTreeNode0" ],*/ "select_limit" : 1 },
 			"dnd" : {
 				"open_timeout" : 800,
