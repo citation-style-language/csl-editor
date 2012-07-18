@@ -1,6 +1,6 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
+var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.ViewController = function ( 
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
@@ -25,16 +25,16 @@ CSLEDIT.ViewController = function (
 				nodePaths : ["style/citation/layout"],
 				macroLinks : true,
 				buttons : [
-				{
-					type : "cslNode",
-					icon : "/external/famfamfam-icons/cog.png",
-					node : "style/citation"
-				},
-				{
-					type : "cslNode",
-					icon : "/external/fugue-icons/sort-alphabet.png",
-					node : "style/citation/sort"
-				}
+					{
+						type : "cslNode",
+						icon : "/external/famfamfam-icons/cog.png",
+						node : "style/citation"
+					},
+					{
+						type : "cslNode",
+						icon : "/external/fugue-icons/sort-alphabet.png",
+						node : "style/citation/sort"
+					}
 				]
 			},
 			{
@@ -43,16 +43,16 @@ CSLEDIT.ViewController = function (
 				nodePaths : ["style/bibliography/layout"],
 				macroLinks : true,
 				buttons : [
-				{
-					type : "cslNode",
-					icon : "/external/famfamfam-icons/cog.png",
-					node : "style/bibliography"
-				},
-				{
-					type : "cslNode",
-					icon : "/external/fugue-icons/sort-alphabet.png",
-					node : "style/bibliography/sort"
-				}
+					{
+						type : "cslNode",
+						icon : "/external/famfamfam-icons/cog.png",
+						node : "style/bibliography"
+					},
+					{
+						type : "cslNode",
+						icon : "/external/fugue-icons/sort-alphabet.png",
+						node : "style/bibliography/sort"
+					}
 				]
 			},
 			/*{
@@ -112,7 +112,7 @@ CSLEDIT.ViewController = function (
 			}
 			callbacks.formatCitations();
 			callbacks.viewInitialised();
-		};
+		}
 	};
 
 	var newStyle = function () {
@@ -150,37 +150,37 @@ CSLEDIT.ViewController = function (
 				$.each(value.buttons, function (i, button) {
 					var buttonElement;
 					switch (button.type) {
-						case "cslNode":
-							nodes = CSLEDIT.data.getNodesFromPath(button.node, cslData);
-							if (nodes.length > 0) {
-								cslId = nodes[0].cslId;
-							} else {
-								cslId = -1;
-							}
-				
-							buttonElement = $('<div class="cslNodeButton"></div>');
-							views.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
-								CSLEDIT.options.get("rootURL") + button.icon, function (cslId, selectedView) {
-									selectedTree = selectedView;
-									selectedNodeId = cslId;
+					case "cslNode":
+						nodes = CSLEDIT.data.getNodesFromPath(button.node, cslData);
+						if (nodes.length > 0) {
+							cslId = nodes[0].cslId;
+						} else {
+							cslId = -1;
+						}
+			
+						buttonElement = $('<div class="cslNodeButton"></div>');
+						views.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
+							CSLEDIT.options.get("rootURL") + button.icon, function (cslId, selectedView) {
+								selectedTree = selectedView;
+								selectedNodeId = cslId;
 
-									// deselect nodes in trees
-									$.each(views, function (i, view) {
-										if ("deselectAll" in view) {
-											view.deselectAll();
-										}
-									});
+								// deselect nodes in trees
+								$.each(views, function (i, view) {
+									if ("deselectAll" in view) {
+										view.deselectAll();
+									}
+								});
 
-									selectedNodeChanged();
-								}));
-							break;
-						case "custom":
-							buttonElement = $('<button class="customButton">' + 
-									button.text + '</button>');
-							buttonElement.on('click', button.onClick);
-							break;
-						default:
-							assert(false);
+								selectedNodeChanged();
+							}));
+						break;
+					case "custom":
+						buttonElement = $('<button class="customButton">' + 
+								button.text + '</button>');
+						buttonElement.on('click', button.onClick);
+						break;
+					default:
+						assert(false);
 					}
 					buttonElement.appendTo(treeView);
 				});
@@ -215,7 +215,7 @@ CSLEDIT.ViewController = function (
 		});
 	};
 	
-	var selectedNodeChanged = function() {
+	var selectedNodeChanged = function () {
 		var nodeAndParent,
 			node,
 			parentNode,
@@ -323,7 +323,7 @@ CSLEDIT.ViewController = function (
 	};
 
 	var addNode = function (id, position, newNode, nodesAdded) {
-		macroEditNotification (id);	
+		macroEditNotification(id);	
 		$.each(views, function (i, view) {
 			if ("addNode" in view) {
 				view.addNode(id, position, newNode, nodesAdded);
@@ -356,8 +356,8 @@ CSLEDIT.ViewController = function (
 
 	var selectNode = function (id, highlightedNodes) {
 		var treeNode;
-	   
-		if (typeof highlightedNodes === "undefined") {
+		
+		if (typeof(highlightedNodes) === "undefined") {
 			treeNode = treeView.find('li[cslid=' + id + '] > a');
 		} else {
 			treeNode = highlightedNodes.filter('li[cslid=' + id + ']').children('a');
@@ -383,9 +383,6 @@ CSLEDIT.ViewController = function (
 
 		if (treeNode.length > 0) {
 			clickNode(treeNode.first());
-		} else {
-			selectedNodeId = id;
-			selectedNodeChanged();
 		}		
 	};
 
@@ -396,7 +393,7 @@ CSLEDIT.ViewController = function (
 		//expandNode(parseInt(node.parent().attr('cslid')));
 		
 		treeView.scrollTo(node, 200, {
-			offset:{left: -treeView.width() + 80, top: -treeView.height() * 0.4}
+			offset: {left: -treeView.width() + 80, top: -treeView.height() * 0.4}
 		});
 	};
 
@@ -453,6 +450,6 @@ CSLEDIT.ViewController = function (
 		selectNodeFromPath : selectNodeFromPath,
 
 		setSuppressSelectNode : setSuppressSelectNode
-	}
+	};
 };
 
