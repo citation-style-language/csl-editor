@@ -270,6 +270,11 @@ ul.dropdown {
 	z-index: 30 !important;
 }
 
+#exampleOutput {
+	/* override the value in base.css to make space for the title bar */
+	top: 36px;
+}
+
 /* Highlighting */
 #exampleOutput span.selected {
 	margin: -1px;
