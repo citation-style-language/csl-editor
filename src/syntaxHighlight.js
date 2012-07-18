@@ -11,10 +11,11 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		highlightedTreeNodes = $(),
 		highlightTimeout;
 
-	var selectedNodeChanged = function (selectedCslId) {
+	var selectedNodeChanged = function (newSelectedCslId) {
 		editorElement.find('span[cslid="' + oldSelectedCslId + '"]').removeClass("highlighted");
 		editorElement.find('span[cslid="' + oldSelectedCslId + '"]').removeClass("selected");
 		oldSelectedCslId = selectedCslId;
+		selectedCslId = newSelectedCslId;
 
 		editorElement.find('span[cslid="' + selectedCslId + '"]').removeClass("highlighted");
 		editorElement.find('span[cslid="' + selectedCslId + '"]').addClass("selected");
@@ -32,7 +33,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		if (parentNode.length > 0) {
 			addToHoveredNodeStack(parentNode);
 		}
-	}
+	};
 
 	var removeFromHoveredNodeStack = function (removeAll) {
 		// pop one node, or all nodes, from hoveredNodeStack
@@ -43,10 +44,10 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 			unHighlightNode(poppedNode);
 
 			if (removeAll) {
-				removeFromHoveredNodeStack (removeAll);
+				removeFromHoveredNodeStack(removeAll);
 			}
 		}
-	}
+	};
 
 	var highlightNode = function (nodeStack) {
 		var cslId = nodeStack[nodeStack.length - 1];
@@ -75,7 +76,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 
 	var reverseSelectNode = function () {
 		var index,
-			cslId = parseInt(hoveredNodeStack[hoveredNodeStack.length - 1]),
+			cslId = parseInt(hoveredNodeStack[hoveredNodeStack.length - 1], 10),
 			selectedNode;
 
 		assert(hoveredNodeStack.length > 0);
@@ -114,7 +115,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 
 	// highlight node and all parents, stopping at the "style" node
 	var highlightTree = function (nodeStack, node, depth) {
-		var nodeIndex, node, parentNode, parentIndex, highlightedNode;
+		var nodeIndex, parentNode, parentIndex, highlightedNode;
 
 		if (node === null) {
 			nodeIndex = nodeStack.pop();
@@ -134,10 +135,9 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		}
 
 		parentNode = node.parent().closest("li[cslid]");
-		assert(parentNode != false, "no parent node");
 
 		if (parentNode.length !== 0) {
-        		parentIndex = parentNode.attr("cslid");
+			parentIndex = parentNode.attr("cslid");
 			if (nodeStack[nodeStack.length - 1] === parentIndex) {
 				nodeStack.pop();
 			}
@@ -149,7 +149,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 				// instance or the definition
 				var instanceNode;
 				instanceNode = new CSLEDIT.CslNode(
-					CSLEDIT.data.getNode(parseInt(nodeStack[nodeStack.length - 2])));
+					CSLEDIT.data.getNode(parseInt(nodeStack[nodeStack.length - 2], 10)));
 				if (instanceNode.name === "text" && instanceNode.getAttr("macro") !== "") {
 					unHighlightIfNotDescendentOf(editorElement.find('li[cslid=' + instanceNode.cslId + ']'));
 				}
@@ -201,9 +201,9 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		);
 
 		// set up click handling
-		editorElement.find('span[cslid]').click( function (event) {
+		editorElement.find('span[cslid]').click(function (event) {
 			var target = $(event.target).closest("span[cslid]"),
-				cslId = parseInt(target.attr('cslId'));
+				cslId = parseInt(target.attr('cslId'), 10);
 			reverseSelectNode(cslId);
 		});
 
@@ -212,12 +212,12 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		editorElement.find('li[cslid] > a').hover(
 			function (event) {
 				var target = $(event.target).closest("li[cslid]"),
-					cslId = parseInt(target.attr('cslId'));
+					cslId = parseInt(target.attr('cslId'), 10);
 				highlightOutput(cslId);
 			},
 			function (event) {
 				var target = $(event.target).closest("li[cslid]"),
-					cslId = parseInt(target.attr('cslId'));
+					cslId = parseInt(target.attr('cslId'), 10);
 				unHighlightNode(cslId);
 			}
 		);
@@ -225,10 +225,10 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 			function (event) {
 				var target = $(event.target),
 					liElement = target.closest("li[cslid]"),
-					cslId = parseInt(liElement.attr('cslId')),
+					cslId = parseInt(liElement.attr('cslId'), 10),
 					nodeAndParent = CSLEDIT.data.getNodeAndParent(cslId),
 					documentation;
-	   
+				
 				if (nodeAndParent.parent === null) {
 					documentation = CSLEDIT.schema.documentation('root/' + nodeAndParent.node.name);
 				} else {
@@ -240,9 +240,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 					target.attr("title", nodeAndParent.node.name + "\n\n" + documentation);
 				}
 			},
-			function (event) {
-				// no-op
-			}
+			function (event) { /* no-op */ }
 		);
 
 	};
@@ -257,7 +255,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		setupEventHandlers();
 
 		// highlight the selected node if there is one
-		if (CSLEDIT.viewController.selectedNode() != -1) {
+		if (CSLEDIT.viewController.selectedNode() !== -1) {
 			editorElement.find(
 				'span[cslid=' + CSLEDIT.viewController.selectedNode() + ']').addClass('selected');
 		}
