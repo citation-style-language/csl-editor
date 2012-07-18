@@ -253,6 +253,8 @@ CSLEDIT.sortPropertyPanel = (function () {
 					}])]);
 			CSLEDIT.viewController.setSuppressSelectNode(false);
 
+			nodeData = CSLEDIT.data.getNode(nodeData.cslId);
+
 			list.append(sortKeyHtml);
 			selectNodes = list.find('select');
 			selectNodes.on('change', onInput);
