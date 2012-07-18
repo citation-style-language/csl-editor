@@ -160,6 +160,9 @@ CSLEDIT.citationEditor = (function () {
 		if (dialog.height() > $(window).height() - 50) {
 			dialog.height($(window).height() - 50);
 		}
+		if (dialog.offset().top < 80) {
+			dialog.dialog("option", "position", [dialog.offset().left, 80]);
+		}
 	};
 
 	return {
