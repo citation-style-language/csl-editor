@@ -188,7 +188,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 		panel = _panel;
 		executeCommand = _executeCommand;
 		infoNode = CSLEDIT.data.getNodesFromPath("style/info");
-		assertEqual(infoNode.length, 1);
+		assertEqual(infoNode.length, 1); // fail in error.log
 		infoNode = infoNode[0];
 
 		panel.children().remove();
