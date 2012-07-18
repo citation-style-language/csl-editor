@@ -35,5 +35,3 @@ var assert = function (assertion, place) {
 	}
 };
 
-
-
