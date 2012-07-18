@@ -71,22 +71,7 @@ ul.example-citations {
 	position: absolute;
 	right: 0;
 	top: 0;
-}
-
-#titlebarContainer{
-
-}
-#titlebar{
-	padding-left: 0.5em;
-}
-
-#titlebar h3 {
-	margin: 0;
-	padding: 0;
-	line-height: 36px;
-	font-size: 14px;
-	color: #888;
-	font-weight: normal;
+	z-index: 30;
 }
 
 #leftContainer {
@@ -117,31 +102,6 @@ ul.example-citations {
 	left: 0;
 	width: 100%;
 	height: 55%;
-}
-#exampleOutput {
-	top: 36px;
-	padding: 1em;
-	border-right: 0 none;
-}
-
-#exampleOutput h3 {
-	margin: 0;
-	margin-bottom: 1em;
-	margin-left: 0;
-	font-size: 11px;
-	text-transform: uppercase;
-	font-weight: bold;
-	color: #6d8fa2;
-}
-
-#formattedCitations {
-	margin-bottom: 2em;
-	padding-left: 10px;
-}
-
-#formattedBibliography {
-	margin-bottom: 2em;
-	padding-left: 10px;
 }
 
 #elementPropertyPanel {

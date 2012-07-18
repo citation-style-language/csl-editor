@@ -4,7 +4,23 @@ html, body {
 	padding: 0;
 	position: relative;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 13px;
 	color: #222;
+}
+
+a {
+	color: #08C;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #005580;
+	text-decoration: underline;
+}
+
+.lead {
+	font-size: 23px;
+	font-weight: 300;
 }
 
 div.spacer {
@@ -27,9 +43,30 @@ div.panel {
 
 	background: #ffffff;
 }
+
+#titlebarContainer{
+	position: relative;
+	z-index: 20;
+	background: #EEE;
+}
+#titlebar{
+	padding-left: 1.2em;
+}
+
+#titlebar h3 {
+	margin: 0;
+	padding: 0;
+	line-height: 36px;
+	font-size: 15px;
+	font-weight: 300;
+	color: #888;
+}
+
 #exampleOutput {
 	position: absolute;
-	top: 0px;
+	padding: 1em;
+	border-right: 0 none;
+	top: 36px;
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
@@ -45,7 +82,7 @@ div.panel {
 #exampleOutput span {
 	margin: -1px;
 	border: 1px solid rgba(255,255,255,0);
-	-webkit-transition: all 150ms ease-out;
+	-webkit-transition: background 150ms ease-out, border 150ms ease-out, box-shadow 150ms ease-out;
 	border-radius: 3px;
 }
 
@@ -53,4 +90,24 @@ div.panel {
 	margin-top: 0;
 	margin-bottom: 0.5em;
 	line-height: 1.4em;
+}
+
+#exampleOutput h3 {
+	margin: 0;
+	margin-bottom: 1em;
+	margin-left: 0;
+	font-size: 11px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #6d8fa2;
+}
+
+#formattedCitations {
+	margin-bottom: 2em;
+	padding-left: 10px;
+}
+
+#formattedBibliography {
+	margin-bottom: 2em;
+	padding-left: 10px;
 }
