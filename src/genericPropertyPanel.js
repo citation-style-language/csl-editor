@@ -56,7 +56,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		var row, textInput;
 
 		row = $('<tr></tr>');
-		row.append($('<td></td>').append(label(index,attributeName)));
+		row.append($('<td></td>').append(label(index, attributeName)));
 
 		textInput = $('<input class="propertyInput"></input>');
 		textInput.attr('id', inputId(index));
@@ -76,7 +76,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 	var label = function (index, attribute) {
 		var element = $('<label class="propertyLabel"></label>');
-	   	element.attr('for', inputId(index));
+		element.attr('for', inputId(index));
 		element.attr('id', labelId(index));
 		element.html(attribute);
 
@@ -170,7 +170,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			key : attribute,
 			value : value,
 			enabled : true
-		}
+		};
 
 		executeCommand("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
 	};
@@ -186,7 +186,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 	
 	var nodeChanged = function () {
 		// read user data
-		$('[id^="nodeAttributeLabel"]').each( function () {
+		$('[id^="nodeAttributeLabel"]').each(function () {
 			var key, value, index, enabled;
 			index = $(this).attr("id").replace(/^nodeAttributeLabel/, "");
 			key = $(this).html();
@@ -236,7 +236,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			}
 		});
 		return defaultValue;
-	}
+	};
 
 	var createButton = function (attributeName, cslSchemaAttribute, index, attribute) {
 		assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
@@ -389,7 +389,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			thisRow.append($('<td></td>').append(label(index, attributeName)));
 			if (schemaAttribute.list) {
 				multiInput = new CSLEDIT.MultiComboBox(
-						$('<td class="input"></td>'), dropdownValues, function() {nodeChanged();});
+						$('<td class="input"></td>'), dropdownValues, function () {nodeChanged(); });
 				multiInput.val(attribute.value, true);
 				
 				if (!attribute.enabled && !schemaAttribute.hasOwnProperty("defaultValue")) {
@@ -411,7 +411,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 						select.append(option);
 					});
 
-					cell = $('<td class="input"></td>').append(select)
+					cell = $('<td class="input"></td>').append(select);
 					if (!attribute.enabled && !schemaAttribute.hasOwnProperty("defaultValue")) {
 						cell.attr('disabled', true);
 					}
@@ -510,7 +510,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			enableControlsInTab(0);
 		}
 		
-		choicePanel.onChange(function(index) {
+		choicePanel.onChange(function (index) {
 			enableControlsInTab(index);
 			nodeChanged();
 		});
@@ -606,8 +606,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 		if (dataType !== null) {
 			$('<tr><td><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
 				dataType + ' value</label></td>' + 
-				'<td class="input"><input id="textNodeInput" class="propertyInput"></input></td></tr>').
-				appendTo(panel);
+				'<td class="input"><input id="textNodeInput" class="propertyInput"></input></td></tr>'
+			).appendTo(panel);
 		
 			$("#textNodeInput").val(nodeData.textValue);
 		}
@@ -629,7 +629,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 		$(".propertySelect").on("change", function () { nodeChanged(); });
 
-		$('.toggleAttrButton').click( function (buttonEvent) {
+		$('.toggleAttrButton').click(function (buttonEvent) {
 			var index = $(buttonEvent.target).attr("attrIndex");
 
 			if (nodeData.attributes[index].enabled) {
