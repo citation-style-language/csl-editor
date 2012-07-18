@@ -105,7 +105,8 @@ var initVisualEditorDemo = function (rootURL) {
 				url : "../logError.php",
 				type : "POST",
 				data : {
-					message : err + "\nUrl: " + url + "\nLine: " + line
+					message : err + "\nBrowser: " + JSON.stringify($.browser) +
+						"\nUrl: " + url + "\nLine: " + line
 				},
 				success : function (data) {
 					console.log("Logged error: " + data);
