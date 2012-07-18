@@ -4,7 +4,7 @@ CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.ViewController = function ( 
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
-		setupDropdownMenuHandler, syntaxHighlighter) {
+		syntaxHighlighter) {
 	var	// smartTrees display a subset of the proper CSL tree
 		// and allow transformations of the data
 		//
@@ -249,9 +249,6 @@ CSLEDIT.ViewController = function (
 		}
 
 		nodePathView.selectNode(getSelectedNodePath());
-
-		// reregister dropdown handler after changes
-		setupDropdownMenuHandler("#possibleChildNodes a");
 
 		CSLEDIT.propertyPanel.setup(propertyPanelElement, node, parentNodeName + '/' + node.name);
 

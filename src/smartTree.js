@@ -441,10 +441,10 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 		range = ranges[thisRangeIndex];
 
-		parentNode = treeElement.find('li[cslid="' + parentId + '"][macrolink!="true"]');
-		assertEqual(parentNode.length, 1);
 		
 		if (!pathContainsLeafNode(CSLEDIT.data.getNodePath(newNode.cslId))) {
+			parentNode = treeElement.find('li[cslid="' + parentId + '"][macrolink!="true"]');
+			assertEqual(parentNode.length, 1);
 			createSubTree(parentNode, position, jsTreeDataFromCslData_inner(newNode, [id]));
 			macroLinksUpdateNode(newNode.cslId, newNode);
 		}
