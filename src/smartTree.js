@@ -603,6 +603,10 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		getMacroLinks : function () {
 			return macroLinks;
 		},
-		getSelectedNodePath : getSelectedNodePath
+		getSelectedNodePath : getSelectedNodePath,
+
+		collapseAll : function () {
+			treeElement.jstree("close_all");
+		}
 	};
 };

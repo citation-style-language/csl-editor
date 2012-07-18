@@ -417,6 +417,14 @@ CSLEDIT.ViewController = function (
 		console.log("executing view update: " + command + "(" + args.join(", ") + ")");
 		this[command].apply(null, args);
 	};
+	
+	var collapseAll = function () {
+		$.each(views, function (i, view) {
+			if ('collapseAll' in view) {
+				view.collapseAll();
+			}
+		});
+	};
 
 	// public:
 	return {
@@ -431,6 +439,8 @@ CSLEDIT.ViewController = function (
 		selectedNode : selectedNode,
 
 		expandNode : expandNode,
+
+		collapseAll : collapseAll,
 
 		formatCitations : function () {
 			callbacks.formatCitations();
