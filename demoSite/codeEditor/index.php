@@ -53,7 +53,7 @@
 #codeEditorContainer {
 	position: absolute;
 
-	top: 30px;
+	top: 40px;
 	bottom: 0px;
 	left: 0px;
 	right: 0px;

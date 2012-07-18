@@ -2,9 +2,10 @@
 </div>
 <div id="mainContainer">
 	<div id="leftContainer" class="ui-layout-west">
+	<div class="dropdown-container">
 		<ul class="dropdown">
 			<li>
-				<a>Style</a>
+				<a>Style <span class="disclosure">&#9662;</span></a>
 				<ul class="sub_menu">
 					<li><a>New Style</a></li>
 					<li><a class="loadcsl">Load CSL</a></li>
@@ -13,45 +14,46 @@
 				</ul>
 			</li>
 			<li>
-				<a>Edit</a>
+				<a>Edit <span class="disclosure">&#9662;</span></a>
 				<ul class="sub_menu">
 					<li><a>Undo</a></li>
 					<li><a>Redo</a></li>
 				</ul>
 			</li>
 		</ul>
+	</div>
 		<div id="treeEditorPanel" class="panel">
 			<div id="treeEditorToolbar">
-				<button class='add icon'>Add Node</button>
-				<button class='delete icon'>Delete Node</button>
+				<a class='add' href="#" title="Add node">+</a><a class='delete' href="#" title="Delete node">-</a>
 			</div>
 			<div id="treeEditor"></div>
 		</div>
 	</div>
 
 	<div id="rightContainer" class="ui-layout-center">
-		<ul class="dropdown">
+		<div id="titlebarContainer">
+			<div id="titlebar">
+				<h3></h3>
+			</div>
+		</div>
+		<ul class="example-citations dropdown">
 			<li>
-				<a>Edit Citations</a>
+				<a id="example-citations">Example citations <span class="disclosure">&#9662;</span></a>
 				<ul class="sub_menu">
-					<li><a>Citation 1</a></li>
-					<li><a>Citation 2</a></li>
+					<li><a id="edit-citation-1">Citation 1</a></li>
+					<li id="edit-citation-2"><a>Citation 2</a></li>
 				</ul>
 			</li>
 		</ul>
-		<div id="titlebarContainer">
-			<div id="titlebar">
-				<h3>Style Title:</h3>
-			</div>
-		</div>
+
 		<div id="topRightContainer" class="ui-layout-north">
 			<div id="exampleOutput" class="panel">
 				<div id="statusMessage"></div>
 
-				<h3>Formatted Inline Citations</h3>	
+				<h3>Example Citations</h3>
 				<div id="formattedCitations"></div>
 
-				<h3>Formatted Bibliography</h3>
+				<h3>Example Bibliography</h3>
 				<div id="formattedBibliography"></div>
 			</div>
 		</div>

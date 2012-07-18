@@ -74,7 +74,7 @@
 if (isset($_GET['embedded']) && $_GET['embedded'] == "true") {
 			echo("top: 0px;");
 } else {
-			echo("top: 27px;");
+			echo("top: 40px;");
 }
 ?>
 			bottom: 0px;

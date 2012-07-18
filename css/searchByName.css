@@ -1,9 +1,14 @@
 div#styleNameInput {
 	padding: 20px 50px 10px;
 }
-div#styleNameInput input {
-	font-size: 18px;	
+div#styleNameInput input[type=search] {
+	border: 1px solid #999;
+	border-radius: 50px;
+	font-size: 16px;
 	width: 400px;
+	outline: none;
+	padding: 3px 10px;
+	line-height: 18px;
 }
 div#styleNameInput label {
 	font-size: 18px;

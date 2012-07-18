@@ -1,0 +1,83 @@
+
+Date: 16.07.2012 15:40:03
+Uncaught TypeError: Object [object Object] has no method \'id\'
+Url: http://steve.mendeley.com/csl-source/src/visualEditor.js
+Line: 276
+
+Date: 16.07.2012 15:40:19
+Uncaught TypeError: Object [object Object] has no method \'id\'
+Url: http://steve.mendeley.com/csl-source/src/visualEditor.js
+Line: 276
+
+Date: 16.07.2012 15:40:20
+Uncaught TypeError: Object [object Object] has no method \'id\'
+Url: http://steve.mendeley.com/csl-source/src/visualEditor.js
+Line: 276
+
+Date: 16.07.2012 15:40:21
+Uncaught TypeError: Object [object Object] has no method \'id\'
+Url: http://steve.mendeley.com/csl-source/src/visualEditor.js
+Line: 276
+
+Date: 16.07.2012 15:40:43
+Uncaught TypeError: Object [object Object] has no method \'id\'
+Url: http://steve.mendeley.com/csl-source/src/visualEditor.js
+Line: 276
+
+Date: 16.07.2012 15:50:01
+Uncaught TypeError: Cannot read property \'name\' of undefined
+Url: http://steve.mendeley.com/csl-source/src/sortPropertyPanel.js
+Line: 152
+
+Date: 16.07.2012 15:50:13
+Uncaught TypeError: Cannot read property \'name\' of undefined
+Url: http://steve.mendeley.com/csl-source/src/sortPropertyPanel.js
+Line: 152
+
+Date: 16.07.2012 17:06:00
+Uncaught Error: Error: Assert fail: 0 !== 1
+    at assertEqual (http://steve.mendeley.com/csl-source/src/debug.js:16:10)
+    at setupTreeEditorToolbar (http://steve.mendeley.com/csl-source/src/visualEditor.js:243:3)
+    at init (http://steve.mendeley.com/csl-source/src/visualEditor.js:414:3)
+    at init (http://steve.mendeley.com/csl-source/src/schema.js:99:4)
+    at Object.$.ajax.success (http://steve.mendeley.com/csl-source/src/schema.js:699:7)
+    at o (http://code.jquery.com/jquery-latest.min.js:2:14733)
+    at Object.p.fireWith [as resolveWith] (http://code.jquery.com/jquery-latest.min.js:2:15502)
+    at w (http://code.jquery.com/jquery-latest.min.js:4:12472)
+    at XMLHttpRequest.d (http://code.jquery.com/jquery-latest.min.js:4:18318)
+Url: http://steve.mendeley.com/csl-source/src/debug.js
+Line: 20
+
+Date: 17.07.2012 13:58:20
+Script error.
+Url: 
+Line: 0
+
+Date: 17.07.2012 13:58:25
+Script error.
+Url: 
+Line: 0
+
+Date: 17.07.2012 13:58:28
+Script error.
+Url: 
+Line: 0
+
+Date: 17.07.2012 13:58:31
+Script error.
+Url: 
+Line: 0
+
+Date: 17.07.2012 15:23:27
+Uncaught Error: Error: Assert fail: 0 !== 1
+    at assertEqual (http://steve.mendeley.com/csl-source/src/debug.js:16:10)
+    at setupTreeEditorToolbar (http://steve.mendeley.com/csl-source/src/visualEditor.js:251:3)
+    at init (http://steve.mendeley.com/csl-source/src/visualEditor.js:423:3)
+    at init (http://steve.mendeley.com/csl-source/src/schema.js:99:4)
+    at Object.$.ajax.success (http://steve.mendeley.com/csl-source/src/schema.js:699:7)
+    at o (http://code.jquery.com/jquery-latest.min.js:2:14733)
+    at Object.p.fireWith [as resolveWith] (http://code.jquery.com/jquery-latest.min.js:2:15502)
+    at w (http://code.jquery.com/jquery-latest.min.js:4:12472)
+    at XMLHttpRequest.d (http://code.jquery.com/jquery-latest.min.js:4:18318)
+Url: http://steve.mendeley.com/csl-source/src/debug.js
+Line: 20
