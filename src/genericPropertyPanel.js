@@ -50,7 +50,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 		schemaChoices,
 		schemaChoiceIndexes,
 		schemaAttributes,
-		executeCommand;
+		executeCommand,
+		fieldsets;
 
 	var inputAttributeRow = function (index, attributeName, schemaAttribute, enabled) {
 		var row, textInput;
@@ -526,10 +527,55 @@ CSLEDIT.genericPropertyPanel = (function () {
 		});
 	};
 
+	var drawFieldsets = function (attributeEditors) {
+		var groupTables = {},
+			miscTable = $('<table/>'),
+			miscFieldset = $('<fieldset class="float"/>'),
+			groups = CSLEDIT.uiConfig.attributeGroups[nodeData.name] || {};
+
+		$.each(groups, function (name, attributes) {
+			var fieldset;
+
+			groupTables[name] = $('<table/>');
+			fieldset = $('<fieldset class="float"><legend>' + name + '</legend></fieldset>');
+
+			if (attributes.indexOf("checkboxControls") !== -1) {
+				fieldset.append(toolbar);
+			}
+			fieldset.append(groupTables[name]);
+			panel.append(fieldset);
+		});
+
+		miscFieldset = $('<fieldset/>');
+		miscTable = $('<table/>');
+		miscFieldset.append(miscTable);
+		panel.append(miscFieldset);
+		
+		$.each(attributeEditors, function(attributeName, editor) {
+			var foundGroup = false;
+			$.each(groups, function (groupName, attributes) {
+				console.log("checking " + attributeName + " in " + groupName);
+				if (attributes.indexOf(attributeName) !== -1) {
+					console.log("yes");
+					groupTables[groupName].append(editor);
+					foundGroup = true;
+				}
+			});
+			if (!foundGroup) {
+				miscTable.append(editor);
+			}
+		});
+
+		if (miscTable.children().length === 0) {
+			miscFieldset.remove();
+		}
+	};
+
 	var setupPanel = function (_panel, _nodeData, dataType, _schemaAttributes, _schemaChoices,
 			_executeCommand) {
 		var table,
-			attrIndex;
+			attrIndex,
+			attributeEditors = {};
 		
 		schemaChoices = _schemaChoices;
 		schemaAttributes = _schemaAttributes;
@@ -542,7 +588,6 @@ CSLEDIT.genericPropertyPanel = (function () {
 		panel.children().remove();
 
 		toolbar = $('<div class="propertyToolbar"></div>');
-		panel.append(toolbar);
 
 		// TODO: data validation
 		switch (dataType) {
@@ -615,10 +660,10 @@ CSLEDIT.genericPropertyPanel = (function () {
 		// other attribute editors
 		$.each(schemaAttributes, function (attributeName, schemaAttribute) {
 			attrIndex++;
-			table.append(createAttributeEditor(attributeName, schemaAttribute, attrIndex));
+			attributeEditors[attributeName] = createAttributeEditor(attributeName, schemaAttribute, attrIndex);
 		});
 		
-		panel.append(table);
+		drawFieldsets(attributeEditors);
 
 		nodeData.attributes = newAttributes;
 

@@ -25,6 +25,21 @@ CSLEDIT.uiConfig.defaultAttributes = {
 	"date-part" : {
 		"name" : "year"
 	}
+};
+
+CSLEDIT.uiConfig.attributeGroups = {
+	"text" : {
+		"Text formatting" : [
+			"checkboxControls",
+			"display",
+			"text-case"			
+		],
+		"Affixes" : [
+			"prefix",
+			"suffix",
+			"delimiter"
+		]
+	}
 }
 
 CSLEDIT.uiConfig.fieldOrder = [

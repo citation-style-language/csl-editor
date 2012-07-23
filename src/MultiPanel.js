@@ -1,7 +1,6 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
-
+var CSLEDIT = CSLEDIT || {}; 
 CSLEDIT.MultiPanel = function (id) {
 	var that = this;
 
@@ -18,7 +17,7 @@ CSLEDIT.MultiPanel = function (id) {
 	// a non-anonymous function allowing this.update to access the correct 'this'
 	this.updateFunction = function () {
 		that.update.apply(that);
-	}
+	};
 
 	this.typeSelect.on('change', this.updateFunction);
 };
@@ -46,9 +45,9 @@ CSLEDIT.MultiPanel.prototype.update = function () {
 	// display the correct panel
 	$.each(that.contentPanels, function (i, panel) {
 		if (i === selectedIndex) {
-			panel.css({display:""});
+			panel.css({display: ""});
 		} else {
-			panel.css({display:"none"});
+			panel.css({display: "none"});
 		}
 	});
 

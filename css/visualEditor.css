@@ -114,32 +114,12 @@ ul.example-citations {
 #elementPropertyPanel [disabled="disabled"] {
 	opacity:0.5;
 }
-#elementPropertyPanel table tr td.input {
-	background-color: #eeeeee;
-}
 #elementPropertyPanel .propertyToolbar {
 	margin-bottom : 10px;
 }
 #elementPropertyPanel .propertyToolbar .ui-button .ui-button-text
 {
 	line-height: 1.0;
-}
-#elementPropertyPanel div.multiPanel {
-	display: inline-block;
-	padding: 10px;
-	margin-bottom: 10px;
-
-/*	border-style: solid;
-	border-width: 1px;*/
-
-	background-color: #EEEEEE;
-}
-#elementPropertyPanel div.multiPanel label {
-	padding-right: 15px;
-	padding-top: 4px;
-}
-#elementPropertyPanel div.multiPanel .radioButtons {
-	padding-bottom: 10px;
 }
 #elementPropertyPanel table.conditional {
 	table-layout: fixed;
@@ -185,6 +165,37 @@ ul.example-citations {
 #elementPropertyPanel .weak {
 	color: #777777;
 }
+
+#elementPropertyPanel .float {
+	width: 40%;
+	float: left;
+}
+#elementPropertyPanel .reset {
+    position: absolute;
+    right: 10px;
+    top: -4px;
+}
+#elementPropertyPanel fieldset {
+    position: relative;
+    border: 1px solid #999;
+    font-family: Helvetica;
+    font-size: 12px;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+#elementPropertyPanel legend {
+	font-weight: bold;
+}
+
+#elementPropertyPanel label {
+	font-size: 12px;
+}
+
+#elementPropertyPanel .short {
+    width: 30px;
+}
+
 #nodePathView {
 	font-size: 12px;
 	background: #E7E7E7;
@@ -356,3 +367,5 @@ button.icon {
 #addNodeDialog button {
 	width: 100%;
 }
+
+
