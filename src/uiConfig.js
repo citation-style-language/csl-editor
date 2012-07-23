@@ -40,7 +40,7 @@ CSLEDIT.uiConfig.attributeGroups = {
 			"delimiter"
 		]
 	}
-}
+};
 
 CSLEDIT.uiConfig.fieldOrder = [
 	"type",
@@ -59,35 +59,36 @@ CSLEDIT.uiConfig.fieldOrder = [
 
 // for jstree
 CSLEDIT.uiConfig.nodeIcons = {
-		"default" : "/external/famfamfam-icons/bullet_black.png",
-		"text" : "/external/famfamfam-icons/style.png",
-		"macro" : "/external/famfamfam-icons/brick.png",
-		"info" : "/external/famfamfam-icons/information.png",
-		"choose" : "/external/fugue-icons/question-white.png",
-		"date" : "/external/famfamfam-icons/date.png",
-		"style" : "/external/famfamfam-icons/cog.png",
-		"citation" : "/external/famfamfam-icons/page_white_edit.png",
-		"bibliography" : "/external/famfamfam-icons/text_list_numbers.png",
-		"sort" : "/external/fugue-icons/sort-alphabet.png",
-		"number" : "/external/fugue-icons/edit-number.png",
-		"layout" : "/external/famfamfam-icons/page_white_stack.png",
-		"group" : "/external/famfamfam-icons/page_white_stack.png"
-	};
+	"default" : "/external/famfamfam-icons/bullet_black.png",
+	"text" : "/external/famfamfam-icons/style.png",
+	"macro" : "/external/famfamfam-icons/brick.png",
+	"info" : "/external/famfamfam-icons/information.png",
+	"choose" : "/external/fugue-icons/question-white.png",
+	"date" : "/external/famfamfam-icons/date.png",
+	"style" : "/external/famfamfam-icons/cog.png",
+	"citation" : "/external/famfamfam-icons/page_white_edit.png",
+	"bibliography" : "/external/famfamfam-icons/text_list_numbers.png",
+	"sort" : "/external/fugue-icons/sort-alphabet.png",
+	"number" : "/external/fugue-icons/edit-number.png",
+	"layout" : "/external/famfamfam-icons/page_white_stack.png",
+	"group" : "/external/famfamfam-icons/page_white_stack.png"
+};
 
-CSLEDIT.uiConfig.capitaliseFirstLetter = function (string)
-	{
-	    return string.charAt(0).toUpperCase() + string.slice(1);
-	};
+CSLEDIT.uiConfig.capitaliseFirstLetter = function (string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+};
 
 CSLEDIT.uiConfig.displayNameFromNode = function (node) {
-		if (node.name in CSLEDIT.uiConfig.displayNames) {
-			return CSLEDIT.uiConfig.displayNames[node.name](node);
-		}
+	if (node.name in CSLEDIT.uiConfig.displayNames) {
+		return CSLEDIT.uiConfig.displayNames[node.name](node);
+	}
 
-		// fall back to using the node name
-		return CSLEDIT.uiConfig.capitaliseFirstLetter(node.name);
-	};
+	// fall back to using the node name
+	return CSLEDIT.uiConfig.capitaliseFirstLetter(node.name);
+};
 
+// generates display names for 'if' and 'else-if' tree view nodes
+//   e.g. If article OR book
 CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 	var displayName = "",
 		elideLimit = 30,
@@ -102,7 +103,7 @@ CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 
 	$.each(node.attributes, function (i, attribute) {
 		if (attribute.enabled) {
-		   if (attribute.key === "match") {
+			if (attribute.key === "match") {
 				match = attribute.value;
 			} else {
 				$.each(attribute.value.split(" "), function (i, val) {
@@ -129,7 +130,7 @@ CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 	}
 
 	if (displayName.length > elideLimit) {
-		displayName = displayName.substr(0, elideLimit-3) + "...";
+		displayName = displayName.substr(0, elideLimit - 3) + "...";
 	}
 
 	return displayName;
