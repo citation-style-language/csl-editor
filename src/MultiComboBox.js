@@ -62,8 +62,8 @@ CSLEDIT.MultiComboBox.prototype._refresh = function (suppressOnChange) {
 	$.each(this._values, function (i, value) {
 		var row = $('<tr></tr>'),
 			select = $(that._selectHtml).css({"margin-right": 0}),
-			deleteButton = $('<button class="icon delete" data-index="' + i +
-				'">Delete</button>').css({"margin-left": 0});
+			deleteButton = $('<button class="delete" data-index="' + i +
+				'"> - </button>').css({"margin-left": 0});
 
 		select.val(value);
 
@@ -73,7 +73,7 @@ CSLEDIT.MultiComboBox.prototype._refresh = function (suppressOnChange) {
 	});
 
 	(function(){
-		var addButton = $('<button class="icon add">Add</button>');
+		var addButton = $('<button class="add">+</button>');
 		table.append($('<tr></tr>').append($('<td></td>').append(addButton)));
 	}());
 
