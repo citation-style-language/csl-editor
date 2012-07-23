@@ -55,7 +55,8 @@ CSLEDIT.MultiComboBox.prototype._readValues = function () {
 
 CSLEDIT.MultiComboBox.prototype._refresh = function (suppressOnChange) {
 	var that = this,
-		table = $('<table></table>');
+		table = $('<table></table>'),
+		addButton;
 
 	this._element.html('');
 	
@@ -72,10 +73,8 @@ CSLEDIT.MultiComboBox.prototype._refresh = function (suppressOnChange) {
 		table.append(row);
 	});
 
-	(function(){
-		var addButton = $('<button class="add">+</button>');
-		table.append($('<tr></tr>').append($('<td></td>').append(addButton)));
-	}());
+	addButton = $('<button class="add">+</button>');
+	table.append($('<tr></tr>').append($('<td></td>').append(addButton)));
 
 	this._element.append(table);
 
