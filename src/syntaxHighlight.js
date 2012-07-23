@@ -34,16 +34,16 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		}
 	};
 
-	var removeFromHoveredNodeStack = function (removeAll) {
+	var removeFromHoveredNodeStack = function (cslidElements, removeAll) {
 		// pop one node, or all nodes, from hoveredNodeStack
 		var poppedNode;
 
 		if (hoveredNodeStack.length > 0) {
 			poppedNode = hoveredNodeStack.pop();
-			unHighlightNode(poppedNode);
+			unHighlightNode(poppedNode, cslidElements);
 
 			if (removeAll) {
-				removeFromHoveredNodeStack(removeAll);
+				removeFromHoveredNodeStack(cslidElements, removeAll);
 			}
 		}
 	};
@@ -160,8 +160,13 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		}
 	};
 
-	var unHighlightNode = function (nodeIndex) {
-		var	node = editorElement.find('span[cslid="' + nodeIndex + '"]');
+	var unHighlightNode = function (nodeIndex, cslidElements) {
+		var	node;
+		if (typeof(cslidElements) === "undefined") {
+			node = editorElement.find('span[cslid="' + nodeIndex + '"]');
+		} else {
+			node = cslidElements.filter('span[cslid="' + nodeIndex + '"]');
+		}
 
 		if (node.hasClass("selected"))
 		{
@@ -172,10 +177,11 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 	};
 
 	var hover = function (event) {
-		var target = $(event.target).closest("span[cslid]");
+		var cslidElements = $('span[cslid]'),
+			target = $(event.target).closest("span[cslid]");
 		
 		// remove all
-		removeFromHoveredNodeStack(true);
+		removeFromHoveredNodeStack(cslidElements, true);
 
 		// populate hovered node stack
 		addToHoveredNodeStack(target);
@@ -189,7 +195,9 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 	};
 
 	var unhover = function () {
-		removeFromHoveredNodeStack();
+		var cslidElements = $('span[cslid]');
+
+		removeFromHoveredNodeStack(cslidElements);
 		
 		if (hoveredNodeStack.length > 0) {
 			highlightNode(hoveredNodeStack.slice());
