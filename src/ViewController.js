@@ -212,7 +212,7 @@ CSLEDIT.ViewController = function (
 
 		nodePathView = new CSLEDIT.NodePathView(nodePathElement, {
 			selectNodeFromPath : selectNodeFromPath
-		});
+		}, syntaxHighlighter);
 	};
 	
 	var selectedNodeChanged = function () {

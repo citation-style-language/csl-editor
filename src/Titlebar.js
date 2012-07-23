@@ -11,10 +11,11 @@ CSLEDIT.Titlebar = function (element) {
 	} else {
 		this.cslId = this.titleNode.cslId;
 	}
-	this.displayTitle();
+	this.element.html('<h3><span cslid=' + this.cslId + '/></h3>').css({cursor: "default"});
+	this.updateTitle();
 };
 
-CSLEDIT.Titlebar.prototype.displayTitle = function () {
+CSLEDIT.Titlebar.prototype.updateTitle = function () {
 	var title;
 
 	if (this.titleNode === null) {
@@ -23,7 +24,7 @@ CSLEDIT.Titlebar.prototype.displayTitle = function () {
 		title = this.titleNode.textValue;
 		// TODO: Elide text
 	}
-	this.element.html('<h3><span cslid=' + this.cslId + '>' + title + '</span></h3>');
+	this.element.find('span[cslid]').html(title).attr('cslid', this.cslId);
 };
 
 CSLEDIT.Titlebar.prototype.getTitleNode = function () {
@@ -47,13 +48,13 @@ CSLEDIT.Titlebar.prototype.addNode = function (id, position, node, numAdded) {
 	this.titleNode = this.getTitleNode();
 	if (this.titleNode !== null) {
 		this.cslId = this.titleNode.cslId;
-		this.displayTitle();
+		this.updateTitle();
 	}
 };
 
 CSLEDIT.Titlebar.prototype.deleteNode = function (id, numDeleted) {
 	this.titleNode = this.getTitleNode();
-	this.displayTitle();
+	this.updateTitle();
 
 	if (this.titleNode === null) {
 		this.cslId = -1;
@@ -63,6 +64,6 @@ CSLEDIT.Titlebar.prototype.deleteNode = function (id, numDeleted) {
 CSLEDIT.Titlebar.prototype.amendNode = function (id, amendedNode) {
 	if (id === this.cslId) {
 		this.titleNode = amendedNode;
-		this.displayTitle();
+		this.updateTitle();
 	}
 };

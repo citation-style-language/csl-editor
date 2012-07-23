@@ -274,7 +274,7 @@ ul.dropdown {
 }
 
 /* Highlighting */
-#exampleOutput span.selected {
+span.selected {
 	margin: -1px;
 	background-color : #BEEBFF;
 	border: 1px solid #99DEFD;

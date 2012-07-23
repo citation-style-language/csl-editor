@@ -11,15 +11,10 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		highlightTimeout;
 
 	var selectedNodeChanged = function (newSelectedCslId) {
-		var oldSelectedCslId = selectedCslId;
 		selectedCslId = newSelectedCslId;
 
-		console.log("clearing " + oldSelectedCslId);
-
-		editorElement.find('span[cslid="' + oldSelectedCslId + '"]').removeClass("highlighted");
-		editorElement.find('span[cslid="' + oldSelectedCslId + '"]').removeClass("selected");
-
-		console.log("selected node changed from " + oldSelectedCslId + " to " + selectedCslId);
+		editorElement.find('span[cslid].highlighted').removeClass("highlighted");
+		editorElement.find('span[cslid].selected').removeClass("selected");
 
 		editorElement.find('span[cslid="' + selectedCslId + '"]').removeClass("highlighted");
 		editorElement.find('span[cslid="' + selectedCslId + '"]').addClass("selected");
@@ -78,22 +73,23 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		}
 	};
 
-	var reverseSelectNode = function () {
+	var reverseSelectNode = function (clickedCslId) {
 		var index,
 			cslId = parseInt(hoveredNodeStack[hoveredNodeStack.length - 1], 10),
 			selectedNode;
 
-		assert(hoveredNodeStack.length > 0);
-
-		// skip the macro definition nodes, jump to the referencing 'text' node instead
-		selectedNode = CSLEDIT.data.getNode(cslId);
-		if (selectedNode.name === "macro") {
-			assert(hoveredNodeStack.length > 1);
-			cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
+		if (hoveredNodeStack.length === 0) {
+			cslId = clickedCslId;
+		} else {
+			// skip the macro definition nodes, jump to the referencing 'text' node instead
+			selectedNode = CSLEDIT.data.getNode(cslId);
+			if (selectedNode.name === "macro") {
+				assert(hoveredNodeStack.length > 1);
+				cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
+			}
 		}
 
 		if (selectedCslId !== cslId) {
-			//selectedCslId = cslId;
 			CSLEDIT.viewController.selectNode(cslId, highlightedTreeNodes);
 		}
 	};
@@ -175,34 +171,35 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		}
 	};
 
+	var hover = function (event) {
+		var target = $(event.target).closest("span[cslid]");
+		
+		// remove all
+		removeFromHoveredNodeStack(true);
+
+		// populate hovered node stack
+		addToHoveredNodeStack(target);
+
+		var lastNode = hoveredNodeStack[hoveredNodeStack.length - 1];
+		assertEqual(lastNode, target.attr("cslid"), "applySyntax");
+
+		if (hoveredNodeStack.length > 0) {
+			highlightNode(hoveredNodeStack.slice());
+		}
+	};
+
+	var unhover = function () {
+		removeFromHoveredNodeStack();
+		
+		if (hoveredNodeStack.length > 0) {
+			highlightNode(hoveredNodeStack.slice());
+		} else {
+			unHighlightTree();
+		}
+	};
+
 	var setupEventHandlers = function () {
-		editorElement.find('span[cslid]').hover(
-			function (event) {
-				var target = $(event.target).closest("span[cslid]");
-				
-				// remove all
-				removeFromHoveredNodeStack(true);
-
-				// populate hovered node stack
-				addToHoveredNodeStack(target);
-
-				var lastNode = hoveredNodeStack[hoveredNodeStack.length - 1];
-				assertEqual(lastNode, target.attr("cslid"), "applySyntax");
-
-				if (hoveredNodeStack.length > 0) {
-					highlightNode(hoveredNodeStack.slice());
-				}
-			},
-			function () {
-				removeFromHoveredNodeStack();
-				
-				if (hoveredNodeStack.length > 0) {
-					highlightNode(hoveredNodeStack.slice());
-				} else {
-					unHighlightTree();
-				}
-			}
-		);
+		editorElement.find('span[cslid]').hover(hover, unhover);
 
 		// set up click handling
 		editorElement.find('span[cslid]').click(function (event) {
@@ -251,7 +248,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 
 	var setupSyntaxHighlighting = function () {
 		var numCslNodes = CSLEDIT.data.numCslNodes();
-			
+
 		// clear the hovered node stack
 		hoveredNodeStack.length = 0;
 		selectedCslId = -1;
@@ -267,6 +264,9 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 
 	return {
 		selectedNodeChanged : selectedNodeChanged,
-		setupSyntaxHighlighting : setupSyntaxHighlighting
+		setupSyntaxHighlighting : setupSyntaxHighlighting,
+		hover : hover,
+		unhover : unhover,
+		reverseSelectNode : reverseSelectNode
 	};
 };
