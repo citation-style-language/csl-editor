@@ -185,6 +185,9 @@ CSLEDIT.Schema = function (
 				for (element in define.elements) {
 					define.elements[element] = refQuantifier;
 				}
+
+				// move choices to general attrs.
+				removeChoices(define);
 			}
 
 			if ("defaultValue" in ref && ref.defaultValue !== null) {
@@ -442,6 +445,15 @@ CSLEDIT.Schema = function (
 		};
 	};
 
+	// moves the choice refs and attributes to the general node refs and attributes
+	var removeChoices = function (nodeProperties) {
+		$.each(nodeProperties.choices, function (i, choice) {
+			attributesMerge(nodeProperties.attributes, choice.attributes);
+			arrayMerge(nodeProperties.refs, choice.refs);
+		});
+		nodeProperties.choices = [];
+	};
+
 	// a list of functions which attempt to parse a node
 	// return true if parsed, false if not
 	var nodeParsers = {
@@ -569,10 +581,20 @@ CSLEDIT.Schema = function (
 			return parseChildren(node, applyQuantifierToChildren("optional"));
 		},
 		zeroOrMore : function (node) {
-			return parseChildren(node, applyQuantifierToChildren("zeroOrMore"));
+			var thisNodeProperties = parseChildren(node, applyQuantifierToChildren("zeroOrMore"));
+
+			// choices are no longer mutually exclusive
+			removeChoices(thisNodeProperties);
+
+			return thisNodeProperties;
 		},
 		oneOrMore : function (node) {
-			return parseChildren(node, applyQuantifierToChildren("oneOrMore"));
+			var thisNodeProperties = parseChildren(node, applyQuantifierToChildren("oneOrMore"));
+
+			// choices are no longer mutually exclusive
+			removeChoices(thisNodeProperties);
+
+			return thisNodeProperties;
 		},
 		list : function (node) {
 			var thisNodeProperties = parseChildren(node);
@@ -760,6 +782,7 @@ CSLEDIT.Schema = function (
 		},
 		quantity : function (element) {
 			return nodeProperties[element].quantity;
-		}
+		},
+		_nodeProperties : nodeProperties // for debugging
 	};
 };
