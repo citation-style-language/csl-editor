@@ -5,10 +5,13 @@ CSLEDIT = CSLEDIT || {};
 CSLEDIT.MultiPanel = function (id) {
 	var that = this;
 
-	this.element = $('<div class="multiPanel" id="' + id + '"></div>');
-	this.radioButtons = $('<div class="radioButtons"></div>');
-	this.currentContentPanel = $('<div class="contentPanel"></div>');
-	this.element.append(this.radioButtons);
+	this.element = $('<fieldset class="multiPanel" id="' + id + '"></fieldset>');
+	this.typeLegend = $('<legend class="typeLegend">Type:</legend>');
+	this.typeSelect = $('<select class="typeSelect"/>');
+	this.typeLegend.append(this.typeSelect);
+
+	this.currentContentPanel = $('<div class="contentPanel"/>');
+	this.element.append(this.typeLegend);
 	this.element.append(this.currentContentPanel);
 	this.contentPanels = [];
 
@@ -16,6 +19,8 @@ CSLEDIT.MultiPanel = function (id) {
 	this.updateFunction = function () {
 		that.update.apply(that);
 	}
+
+	this.typeSelect.on('change', this.updateFunction);
 };
 
 CSLEDIT.MultiPanel.prototype.onChange = function (callback) {
@@ -24,43 +29,35 @@ CSLEDIT.MultiPanel.prototype.onChange = function (callback) {
 
 CSLEDIT.MultiPanel.prototype.addPanel = function (name) {
 	var that = this,
-		radioId = 'multiPanel' + this.contentPanels.length,
 		newPanel;
 
-	this.radioButtons.append(
-		$('<input id="' + radioId +	'" type="radio" name="multiPanel" />' + 
-			'<label for="' + radioId + '">' + name + '</label>'));
+	this.typeSelect.append($('<option>' + name + '</option>'));
 
-	newPanel = $('<div></div>').css({display: "none"});
+	newPanel = $('<div/>').css({display: "none"});
 	this.contentPanels.push(newPanel);
 	this.currentContentPanel.append(newPanel);
-
-	this.element.find('input[type="radio"]').off('change', this.updateFunction);
-	this.element.find('input[type="radio"]').on('change', this.updateFunction);
 };
 
 CSLEDIT.MultiPanel.prototype.update = function () {
-	var that = this;
+	var that = this,
+		selectedIndex = this.typeSelect.find('option').index(
+			this.typeSelect.find('option:selected'));
 
-	this.element.find('input[type="radio"]').each( function (index) {
-		var $this = $(this);
-		if ($this.is(':checked')) {
-			// display the correct panel
-			$.each(that.contentPanels, function (i, panel) {
-				if (i === index) {
-					panel.css({display:""});
-				} else {
-					panel.css({display:"none"});
-				}
-			});
-
-			if (typeof that.onChangeCallback === "function") {
-				that.onChangeCallback(index);
-			}
+	// display the correct panel
+	$.each(that.contentPanels, function (i, panel) {
+		if (i === selectedIndex) {
+			panel.css({display:""});
+		} else {
+			panel.css({display:"none"});
 		}
 	});
+
+	if (typeof that.onChangeCallback === "function") {
+		that.onChangeCallback(selectedIndex);
+	}
 };
 
 CSLEDIT.MultiPanel.prototype.select = function (index) {
-	this.element.find('input[type="radio"]').eq(index).click();
+	this.typeSelect.val(this.typeSelect.find('option').eq(index).html());
+	this.update();
 };
