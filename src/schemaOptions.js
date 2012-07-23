@@ -45,29 +45,13 @@ CSLEDIT.schemaOptions = {
 		// change style node description
 		nodeProperties["root/style"].documentation = "Set global formatting options";
 		
-	/*	var 
-		// can put schema modification code here
-
-		// change date/date-part choices:
-		// 1. give names to the choices
-		// 2. remove extra items from the "year" choice (TODO: fix in schema parser)
-		nodeProperties["date/date-part"].choices = {
-			day : {
-				name : {
-					defaultValue : "day",
-					documentation : "",
-					list : 0,
-					values : {
-						documentation : "",
-						type : "value",
-						value : "day"
-					}
-				},
-				form : {
-					defaultValue : "numeric",
-					
-						   
-			},
-		};*/
+		// add default for all delimiter attributes
+		$.each(nodeProperties, function (i, node) {
+			if ("delimiter" in node.attributes) {
+				if (!("defaultValue" in node.attributes.delimiter)) {
+					node.attributes.delimiter.defaultValue = ""; 
+				}
+			}
+		});
 	}
 };

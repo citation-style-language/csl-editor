@@ -620,6 +620,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		if (schemaChoices.length > 0) {
 
 			choicePanel = new CSLEDIT.MultiPanel('multiPanel');
+			choicePanel.element.addClass("float");
 			panel.append(choicePanel.element);
 
 			$.each(schemaChoices, function (choiceIndex, choice) {

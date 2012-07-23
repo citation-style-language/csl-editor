@@ -176,9 +176,9 @@ CSLEDIT.Schema = function (
 			return;
 		}
 		
-		if (ref in defineProperties) {
+		if (ref.name in defineProperties) {
 			// deep copy so that original define won't change
-			define = new NodeProperties(defineProperties[ref]);
+			define = new NodeProperties(defineProperties[ref.name]);
 
 			// set quantifier to all child elements within the define
 			if (typeof(refQuantifier) !== "undefined") {
@@ -187,20 +187,25 @@ CSLEDIT.Schema = function (
 				}
 			}
 
-			joinProperties(node, define);			
+			if ("defaultValue" in ref && ref.defaultValue !== null) {
+				$.each(define.attributes, function (name, attribute) {
+					attribute.defaultValue = ref.defaultValue;
+				});
+			}
+			joinProperties(node, define);
 			simplifyNode(nodeName, node);
 		
 			assert(elementName(nodeName).indexOf("def:") === -1, "define parent");
 
-			if (ref in refParents) {
-				if (refParents[ref].indexOf(elementName(nodeName)) === -1) {
-					refParents[ref].push(elementName(nodeName));
+			if (ref.name in refParents) {
+				if (refParents[ref.name].indexOf(elementName(nodeName)) === -1) {
+					refParents[ref.name].push(elementName(nodeName));
 				}
 			} else {
-				refParents[ref] = [ elementName(nodeName) ];
+				refParents[ref.name] = [ elementName(nodeName) ];
 			}
 		} else {
-			assert(false, "Couldn't find define: " + ref);
+			assert(false, "Couldn't find define: " + ref.name);
 		}
 	};
 
@@ -228,8 +233,8 @@ CSLEDIT.Schema = function (
 			return;
 		}
 
-		if (ref in defineProperties) {
-			define = defineProperties[ref];
+		if (ref.name in defineProperties) {
+			define = defineProperties[ref.name];
 			
 			arrayMerge(attributes[attributeName].values,
 				define.attributeValues);
@@ -238,12 +243,12 @@ CSLEDIT.Schema = function (
 
 			simplifyAttributeValues(attributes, attributeName);
 		} else {
-			assert(false, "Couldn't find attr value define: " + ref);
+			assert(false, "Couldn't find attr value define: " + ref.name);
 		}
 	};
 
 	var attributeNamesFromRef = function (ref) {
-		var define = defineProperties[ref],
+		var define = defineProperties[ref.name],
 			attributeNames = [];
 
 		assert(typeof define !== 'undefined');
@@ -264,7 +269,7 @@ CSLEDIT.Schema = function (
 
 		$.each(node.choices, function (i, choice) {
 			$.each(choice.refs, function (i2, ref) {
-				var define = defineProperties[ref];
+				var define = defineProperties[ref.name];
 				attributesMerge(choice.attributes, define.attributes);
 			});
 			//delete choice.refs;
@@ -580,8 +585,16 @@ CSLEDIT.Schema = function (
 		},
 		ref : function (node) {
 			var thisNodeProperties = new NodeProperties(),
-				nodeName = node.attributes.item("name").nodeValue;
-			thisNodeProperties.refs.push(nodeName);
+				nodeName = node.attributes.item("name").nodeValue,
+				defaultValue = node.attributes.getNamedItem("a:defaultValue"),
+				ref = {};
+
+			ref.name = nodeName;
+			if (defaultValue !== null) {
+				ref.defaultValue = defaultValue.value;
+			}
+
+			thisNodeProperties.refs.push(ref);
 			return thisNodeProperties;
 		},
 		parentRef : function (node) {
