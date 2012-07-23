@@ -161,7 +161,7 @@ CSLEDIT.uiConfig.displayNames = {
 				displayName = "Label";
 
 			if (variable !== "") {
-				displayName = variable + " (Label)";
+				displayName = variable + " (label)";
 			}
 			return displayName;
 		},
