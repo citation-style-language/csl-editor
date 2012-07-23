@@ -577,11 +577,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			if (styleURL !== "" && typeof styleURL !== 'undefined') {
 				styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
 				
-				loadStyleFromURL(styleURL, callback);/*function () {
-					// reload page without the styleURL query string, to avoid the user
-					// refreshing the page triggering a re-load of the style
-					window.location.href = window.location.href.replace(/\?.*$/, "");
-				});*/
+				loadStyleFromURL(styleURL, callback);
 			} else if (cslData !== null && cslData !== "") {
 				callback();
 			} else {
