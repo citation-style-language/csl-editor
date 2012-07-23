@@ -529,31 +529,32 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 	var drawFieldsets = function (attributeEditors) {
 		var groupTables = {},
+			fieldsets = [],
 			miscTable = $('<table/>'),
-			groups = CSLEDIT.uiConfig.attributeGroups[nodeData.name] || {};
+			miscFieldset = $('<fieldset class="float"><legend>' +
+				CSLEDIT.uiConfig.displayNameFromNode(nodeData) +
+				'</legend></fieldset>');
 
-		$.each(groups, function (name, attributes) {
+		$.each(CSLEDIT.uiConfig.attributeGroups, function (name, attributes) {
 			var fieldset;
 
 			groupTables[name] = $('<table/>');
 			fieldset = $('<fieldset class="float"><legend>' + name + '</legend></fieldset>');
 
-			if (attributes.indexOf("checkboxControls") !== -1) {
+			if (attributes.indexOf("fontFormattingControls") !== -1) {
 				fieldset.append(toolbar);
 			}
 			fieldset.append(groupTables[name]);
-			panel.append(fieldset);
+
+			fieldsets.push(fieldset);
 		});
 
 		miscTable = $('<table/>');
-		panel.append(miscTable);
 		
-		$.each(attributeEditors, function(attributeName, editor) {
+		$.each(attributeEditors, function (attributeName, editor) {
 			var foundGroup = false;
-			$.each(groups, function (groupName, attributes) {
-				console.log("checking " + attributeName + " in " + groupName);
+			$.each(CSLEDIT.uiConfig.attributeGroups, function (groupName, attributes) {
 				if (attributes.indexOf(attributeName) !== -1) {
-					console.log("yes");
 					groupTables[groupName].append(editor);
 					foundGroup = true;
 				}
@@ -562,6 +563,18 @@ CSLEDIT.genericPropertyPanel = (function () {
 				miscTable.append(editor);
 			}
 		});
+
+		// only display fieldsets with non-empty tables
+		$.each(fieldsets, function (i, fieldset) {
+			if (fieldset.find('tr').length > 0) {
+				panel.append(fieldset);
+			}
+		});
+
+		if (miscTable.find('tr').length > 0) {
+			miscFieldset.append(miscTable);
+			panel.append(miscFieldset);
+		}
 	};
 
 	var setupPanel = function (_panel, _nodeData, dataType, _schemaAttributes, _schemaChoices,
@@ -581,6 +594,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		panel.children().remove();
 
 		toolbar = $('<div class="propertyToolbar"></div>');
+		panel.append(toolbar);
 
 		// TODO: data validation
 		switch (dataType) {

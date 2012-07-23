@@ -28,18 +28,16 @@ CSLEDIT.uiConfig.defaultAttributes = {
 };
 
 CSLEDIT.uiConfig.attributeGroups = {
-	"text" : {
-		"Text formatting" : [
-			"checkboxControls",
-			"display",
-			"text-case"			
-		],
-		"Affixes" : [
-			"prefix",
-			"suffix",
-			"delimiter"
-		]
-	}
+	"Text formatting" : [
+		"fontFormattingControls",
+		"display",
+		"text-case"
+	],
+	"Affixes" : [
+		"prefix",
+		"suffix",
+		"delimiter"
+	]
 };
 
 CSLEDIT.uiConfig.fieldOrder = [
