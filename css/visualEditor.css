@@ -167,7 +167,6 @@ ul.example-citations {
 }
 
 #elementPropertyPanel .float {
-	width: 40%;
 	float: left;
 }
 #elementPropertyPanel .reset {
@@ -182,6 +181,7 @@ ul.example-citations {
     font-size: 12px;
     border-radius: 4px;
     padding: 10px;
+	margin: 4px;
 }
 
 #elementPropertyPanel legend {
@@ -213,19 +213,6 @@ ul.example-citations {
 
 #nodePathView .selected  { background:#beebff; border:1px solid #6ab9e1; border-radius: 3px; margin: 4px; }
 
-
-
-label.> tr
-{
-	width: 800px;
-}
-input.propertyInput {
-	min-width: 250px;
-}
-label.propertyLabel {
-	min-width: 150px;
-	display: block;
-}
 button {
 	line-height: 1.3;
 }

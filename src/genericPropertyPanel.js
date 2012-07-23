@@ -57,7 +57,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		var row, textInput;
 
 		row = $('<tr></tr>');
-		row.append($('<td></td>').append(label(index, attributeName)));
+		row.append($('<td align="right"></td>').append(label(index, attributeName)));
 
 		textInput = $('<input class="propertyInput"></input>');
 		textInput.attr('id', inputId(index));
@@ -382,12 +382,12 @@ CSLEDIT.genericPropertyPanel = (function () {
 		if (dropdownValues.length === 1) {
 			// if only 1 one value is possible, put it in a label
 			thisRow = $('<tr/>');
-			thisRow.append($('<td/>').append(label(index, attributeName)));
+			thisRow.append($('<td align="right"/>').append(label(index, attributeName)));
 			thisRow.append($('<td/>').append(
 				'<label id="nodeAttribute' + index + '">' + dropdownValues[0] + '</label>'));
 		} else if (dropdownValues.length > 1) {
 			thisRow = $('<tr></tr>');
-			thisRow.append($('<td></td>').append(label(index, attributeName)));
+			thisRow.append($('<td align="right"></td>').append(label(index, attributeName)));
 			if (schemaAttribute.list) {
 				multiInput = new CSLEDIT.MultiComboBox(
 						$('<td class="input"></td>'), dropdownValues, function () {nodeChanged(); });
@@ -530,7 +530,6 @@ CSLEDIT.genericPropertyPanel = (function () {
 	var drawFieldsets = function (attributeEditors) {
 		var groupTables = {},
 			miscTable = $('<table/>'),
-			miscFieldset = $('<fieldset class="float"/>'),
 			groups = CSLEDIT.uiConfig.attributeGroups[nodeData.name] || {};
 
 		$.each(groups, function (name, attributes) {
@@ -546,10 +545,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 			panel.append(fieldset);
 		});
 
-		miscFieldset = $('<fieldset/>');
 		miscTable = $('<table/>');
-		miscFieldset.append(miscTable);
-		panel.append(miscFieldset);
+		panel.append(miscTable);
 		
 		$.each(attributeEditors, function(attributeName, editor) {
 			var foundGroup = false;
@@ -565,10 +562,6 @@ CSLEDIT.genericPropertyPanel = (function () {
 				miscTable.append(editor);
 			}
 		});
-
-		if (miscTable.children().length === 0) {
-			miscFieldset.remove();
-		}
 	};
 
 	var setupPanel = function (_panel, _nodeData, dataType, _schemaAttributes, _schemaChoices,
@@ -649,7 +642,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		table = $('<table></table>');
 		// create value editor (if a text or data element)
 		if (dataType !== null) {
-			$('<tr><td><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
+			$('<tr><td align="right"><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
 				dataType + ' value</label></td>' + 
 				'<td class="input"><input id="textNodeInput" class="propertyInput"></input></td></tr>'
 			).appendTo(panel);
