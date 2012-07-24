@@ -2,6 +2,8 @@
 
 CSLEDIT = CSLEDIT || {};
 
+// TODO: share code with SmartTreeHeading.js
+
 CSLEDIT.Titlebar = function (element) {
 	this.element = element;
 
@@ -22,7 +24,6 @@ CSLEDIT.Titlebar.prototype.updateTitle = function () {
 		title = "No title";
 	} else {
 		title = this.titleNode.textValue;
-		// TODO: Elide text
 	}
 	this.element.find('span[cslid]').html(title).attr('cslid', this.cslId);
 };
@@ -42,6 +43,8 @@ CSLEDIT.Titlebar.prototype.getTitleNode = function () {
 
 CSLEDIT.Titlebar.prototype.addNode = function (id, position, node, numAdded) {
 	if (this.cslId > -1) {
+		// TODO: this looks dodgy, shouldn't this cslId be shifted
+		//       if a node is added before it
 		return;
 	}
 

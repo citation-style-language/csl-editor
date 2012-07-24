@@ -5,16 +5,18 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.ViewController = function ( 
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
 		syntaxHighlighter) {
-	var	// smartTrees display a subset of the proper CSL tree
-		// and allow transformations of the data
-		//
-		// name : visible name
-		// nodeData : displayed in property panel
-		// children : displayed in tree view as children
-		smartTreeSchema = [
+	
+	// smartTrees display a subset of the proper CSL tree
+	// and allow transformations of the data
+	//
+	// name : visible name
+	// nodeData : displayed in property panel
+	// children : displayed in tree view as children
+	var smartTreeSchema = [
 			{
 				id : "info",
 				name : "Style Info",
+				headingNodePath : "",
 				nodePaths : ["style/info", "style"/*, "style/locale"*/],
 				macroLinks : false,
 				leafNodes : ["info", "style"]
@@ -22,44 +24,26 @@ CSLEDIT.ViewController = function (
 			{
 				id : "citations",
 				name : "Inline Citations",
-				nodePaths : ["style/citation/layout"],
+				headingNodePath : "style/citation",
+				nodePaths : ["style/citation/layout", "style/citation/sort"],
 				macroLinks : true,
-				buttons : [
-					{
-						type : "cslNode",
-						icon : "/external/famfamfam-icons/cog.png",
-						node : "style/citation"
-					},
-					{
-						type : "cslNode",
-						icon : "/external/fugue-icons/sort-alphabet.png",
-						node : "style/citation/sort"
-					}
-				]
+				leafNodes : ["sort"]
 			},
 			{
 				id : "bibliography",
 				name : "Bibliography",
-				nodePaths : ["style/bibliography/layout"],
+				headingNodePath : "style/bibliography",
+				nodePaths : ["style/bibliography/layout", "style/bibliography/sort"],
 				macroLinks : true,
-				buttons : [
-					{
-						type : "cslNode",
-						icon : "/external/famfamfam-icons/cog.png",
-						node : "style/bibliography"
-					},
-					{
-						type : "cslNode",
-						icon : "/external/fugue-icons/sort-alphabet.png",
-						node : "style/bibliography/sort"
-					}
-				]
+				leafNodes : ["sort"]
 			},
-			/*{
+			{
 				id : "macro",
 				name : "Macros",
+				headingNodePath : "",
 				nodePaths : ["style/macro"],
 				macroLinks : true,
+				/*
 				buttons : [
 				{
 					type : "custom",
@@ -84,10 +68,12 @@ CSLEDIT.ViewController = function (
 					}
 				}
 				]
-			},*/
+				*/
+			},
 			{
 				id : "locale",
 				name : "Advanced",
+				headingNodePath : "",
 				macroLinks : false,
 				nodePaths : ["style"]
 			}
@@ -127,7 +113,6 @@ CSLEDIT.ViewController = function (
 			citationTree,
 			cslId,
 			nodes,
-			table,
 			row;
 
 		treesLoaded = 0;
@@ -144,9 +129,9 @@ CSLEDIT.ViewController = function (
 		
 		treeView.html('');
 		$.each(smartTreeSchema, function (index, value) {
-			table = $('');//<table></table>');
 			row = $('');//<tr></tr>');
 			if (typeof value.buttons !== "undefined") {
+				// TODO: remove dead code related to buttons
 				$.each(value.buttons, function (i, button) {
 					var buttonElement;
 					switch (button.type) {
@@ -185,23 +170,32 @@ CSLEDIT.ViewController = function (
 					buttonElement.appendTo(treeView);
 				});
 			}
-			$('<h3>%1</h3>'.replace('%1', value.name)).appendTo(treeView);
-			row = $('<div id="%1"></div>'.replace('%1', value.id));
+			row = $('<div id="%1"><div class="heading"/><div class="tree"/></div>'.replace(
+				'%1', value.id));
 			row.appendTo(treeView);
 			treeView.append($('<div class=spacer></div>'));
 		});
 
 		$.each(smartTreeSchema, function (index, value) {
-			var tree;
+			var tree, heading;
 			treesToLoad++;
-			tree = CSLEDIT.SmartTree(treeView.children("#" + value.id), value.nodePaths, 
+			
+			heading = new CSLEDIT.SmartTreeHeading(
+				treeView.find('#' + value.id + ' .heading'), value.headingNodePath,
+				value.name);
+			heading.setCallbacks({
+				selectNode : selectNodeInView(heading)
+			});
+			views.push(heading);
+
+			tree = CSLEDIT.SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
 				value.macroLinks, value.leafNodes);
 
 			// Use this for debugging if you're not sure the view accurately reflects the data
 			//tree.setVerifyAllChanges(true);
 			tree.setCallbacks({
 				loaded : treeLoaded,
-				selectNode : selectNodeInTree(tree),
+				selectNode : selectNodeInView(tree),
 				moveNode : callbacks.moveNode,
 				deleteNode : callbacks.deleteNode,
 				checkMove : callbacks.checkMove
@@ -255,19 +249,19 @@ CSLEDIT.ViewController = function (
 		syntaxHighlighter.selectedNodeChanged(node.cslId);		
 	};
 
-	var selectNodeInTree = function (tree) {
+	var selectNodeInView = function (selectedView) {
 		return function (event, ui) {
-			// deselect nodes in other trees
+			// deselect nodes in other views
 			$.each(views, function (i, view) {
-				if (view !== tree) {
+				if (view !== selectedView) {
 					if ("deselectAll" in view) {
 						view.deselectAll();
 					}
 				}
 			});
 
-			selectedTree = tree;
-			selectedNodeId = tree.selectedNode();
+			selectedTree = selectedView;
+			selectedNodeId = selectedView.selectedNode();
 	
 			selectedNodeChanged();
 		};
@@ -355,15 +349,18 @@ CSLEDIT.ViewController = function (
 	};
 
 	var selectNode = function (id, highlightedNodes) {
-		var treeNode;
+		var treeNode,
+			headingNode;
 		
+		headingNode = treeView.find('span[cslid=' + id + ']');
+
 		if (typeof(highlightedNodes) === "undefined") {
 			treeNode = treeView.find('li[cslid=' + id + '] > a');
 		} else {
 			treeNode = highlightedNodes.filter('li[cslid=' + id + ']').children('a');
 		}
 
-		if (treeNode.length > 0) {
+		if (headingNode.length === 0 && treeNode.length > 0) {
 			clickNode(treeNode.first());
 		} else {
 			selectedNodeId = id;
@@ -375,6 +372,7 @@ CSLEDIT.ViewController = function (
 		var treeNode = treeView,
 			cslId;
 
+		console.log("select node from path");
 		$.each(nodePath, function (i, cslId) {
 			treeNode = treeNode.find('li[cslId="' + cslId + '"]');
 		});
@@ -383,15 +381,12 @@ CSLEDIT.ViewController = function (
 
 		if (treeNode.length > 0) {
 			clickNode(treeNode.first());
-		}		
+		}
 	};
 
 	var clickNode = function (node) {
 		node.click();
 
-		// to ensure the node isn't toggled closed if already open
-		//expandNode(parseInt(node.parent().attr('cslid')));
-		
 		treeView.scrollTo(node, 200, {
 			offset: {left: -treeView.width() + 80, top: -treeView.height() * 0.4}
 		});

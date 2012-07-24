@@ -507,6 +507,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			enableControlsInTab(possibleSelectedChoices[0]);
 		} else {
 			// just select the first one
+			// TODO: this select triggers a command, it shouldn't
 			choicePanel.select(0);
 			enableControlsInTab(0);
 		}
