@@ -5,10 +5,12 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	var nameSearchTimeout,
 		styleFormatSearchTimeout,
-		exampleIndex = 0,
+		exampleIndex = -1,
 		defaultStyle = "http://www.zotero.org/styles/apa",
 		realTimeSearch = false,
-		tolerance = 50;
+		tolerance = 50,
+		userCitations,
+		userBibliographies;
 
 	CSLEDIT.options.setUserOptions(userOptions);
 	mainContainer = $(mainContainer);
@@ -29,7 +31,6 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		return $('<pre>').text(string).html();
 	};
 
-	// --- Functions for formatted style search ---
 	var clEditorIsEmpty = function (node) {
 		var text = $(node).cleditor()[0].doc.body.innerText;
 
@@ -238,12 +239,21 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		styleFormatSearchTimeout = setTimeout(searchForStyle, timeout);
 	};
 
-	var updateExample = function () {
+	var updateExample = function (newExampleIndex) {
 		var length = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length;
-		exampleIndex = (exampleIndex+length)%length;
+
+		if (exampleIndex !== -1) {
+			userCitations[exampleIndex] = $("#userCitation").cleditor()[0].doc.body.innerHTML;
+			userBibliographies[exampleIndex] = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
+		}
+
+		exampleIndex = (newExampleIndex+length)%length;
 
 		formatExampleDocument();
 		clearResults();
+
+		$("#userCitation").cleditor()[0].doc.body.innerHTML = userCitations[exampleIndex];
+		$("#userBibliography").cleditor()[0].doc.body.innerHTML = userBibliographies[exampleIndex];
 	};
 
 	var init = function () {
@@ -252,7 +262,6 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 				alert("Example citations need re-calculating on server");
 		}
 
-		formatExampleDocument();
 		$("#inputTabs").tabs({
 			show: function (event, ui) {
 				if (ui.panel.id === "styleNameInput") {
@@ -289,22 +298,23 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 				formChanged();
 			});
 		}
-	
-		// prepopulate search by style format with APA example
-		$("#userCitation").cleditor()[0].doc.body.innerHTML =
-			CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle][exampleIndex].
-			formattedCitations[0];
-		$("#userBibliography").cleditor()[0].doc.body.innerHTML =
-			CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle][exampleIndex].
-			formattedBibliography;
+
+		// prepopulate with APA example	citations
+		userCitations = [];
+		userBibliographies = [];
+		$.each(CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle],
+				function (i, exampleCitation) {
+			userCitations.push(exampleCitation.formattedCitations[0]);
+			userBibliographies.push(exampleCitation.formattedBibliography);
+		});
+
+		updateExample(0);
 
 		$('#nextExample').click(function () {
-			exampleIndex--;
-			updateExample();	
+			updateExample(exampleIndex - 1);	
 		});
 		$('#prevExample').click(function () {
-			exampleIndex++;
-			updateExample();
+			updateExample(exampleIndex + 1);
 		});
 
 		formChanged();
