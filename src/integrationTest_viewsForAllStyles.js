@@ -21,7 +21,6 @@ asyncTest("setup views for all popular styles", function () {
 
 		CSLEDIT.viewController = CSLEDIT.ViewController(
 			$('<div/>'), $('<div/>'), $('<div/>'), $('<div/>'),
-			fakeDropdownMenuHandler,
 			fakeSyntaxHighlighter
 		);
 		

@@ -182,6 +182,7 @@ pages = [
             "src/cslNode.js",
             "src/cslData.js",
             "src/xmlUtility.js",
+            "src/SmartTreeHeading.js",
             "src/smartTree.js",
             "src/editNodeButton.js",
             "src/schemaOptions.js",
