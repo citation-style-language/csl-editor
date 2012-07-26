@@ -20,8 +20,8 @@
 	padding : 10px;
 }
 #searchResults table.featuredStyle {
-	border : solid;
-	background-color : #fff2aa;
+	background-color : #BEEBFF;
+	border: 1px solid #99DEFD;
 }
 #searchResults table.featuredStyle td.match {
 	background-color : #ffdd88;

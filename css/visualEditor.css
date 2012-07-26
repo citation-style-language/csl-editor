@@ -277,7 +277,7 @@ ul.dropdown {
 span.selected {
 	margin: -1px;
 	background-color : #BEEBFF;
-	border: 1px solid #99DEFD;
+	border: 1px solid #99DEFD !important;
 	cursor : default;
 	padding: 0;
 }
@@ -355,4 +355,25 @@ button.icon {
 	width: 100%;
 }
 
+#elementProperties fieldset {
+	margin: 0;
+	margin-bottom: 1em;
+	box-sizing: border-box;
+	float: left;
+	clear: left;
+	width: 100%;
+}
+
+#elementProperties .propertyLabel {
+	display: inline-block;
+	min-width: 80px;
+}
+
+.propertyInput {
+	width: 30em;
+}
+
+.propertyInput.tiny {
+	width: 5em;
+}
 
