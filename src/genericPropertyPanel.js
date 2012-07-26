@@ -247,6 +247,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		return defaultValue;
 	};
 
+	// TODO: Use buttons in the style of the +/- add/delete node ones
 	var createButton = function (attributeName, cslSchemaAttribute, index, attribute) {
 		assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
 
