@@ -23,19 +23,19 @@ div#mainContainer {
 <div id="mainContainer">
 	<h2>Know the name of the style you want?</h2>
 	<p>
-	Search for a style with <a href="/csl/searchByName">Search by Name</a>.
+	Search for a style with <a href="../searchByName">Search by Name</a>.
 	</p>
 
 	<h2>Know what the style should look like?</h2>
 	<p>
-	Search for a style by its output with <a href="/csl/searchByExample">Search by Example</a>. If you don't find an <strong>exact</strong> match you will have the option to edit a similar style.
+	Search for a style by its output with <a href="../searchByExample">Search by Example</a>. If you don't find an <strong>exact</strong> match you will have the option to edit a similar style.
 	</p>
 
 	<h2>Want to create a new style from scratch?</h2>
-	<p>This is <strong>not recommended</strong>. It's much easier to <a href="/csl/searchByExample">Search by Example</a> to find a similar style first, which you can then edit.
+	<p>This is <strong>not recommended</strong>. It's much easier to <a href="../searchByExample">Search by Example</a> to find a similar style first, which you can then edit.
 	</p>
 	<p>
-	If you really want to start a new style, you can create a new one by clicking <strong>Style->New Style</strong> in the <a href="/csl/visualEditor/" >Visual Editor</a>.
+	If you really want to start a new style, you can create a new one by clicking <strong>Style->New Style</strong> in the <a href="../visualEditor/" >Visual Editor</a>.
 </div>
 </body>
 </html>

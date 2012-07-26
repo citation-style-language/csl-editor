@@ -56,10 +56,11 @@ CSLEDIT.uiConfig.fieldOrder = [
 	"publisher"
 ];
 
-// these attributes only require short text input controls
-CSLEDIT.uiConfig.shortAttributes = [
-	"delimiter"
-];
+// add classes to the <input> or <select> elements for various attributes
+CSLEDIT.uiConfig.attributeClasses = {
+	"delimiter" : "short",
+	"display" : "exampleClass1 exampleClass2"
+};
 
 // for jstree
 CSLEDIT.uiConfig.nodeIcons = {
