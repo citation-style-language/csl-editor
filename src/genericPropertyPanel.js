@@ -61,6 +61,9 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 		textInput = $('<input class="propertyInput"></input>');
 		textInput.attr('id', inputId(index));
+		if (CSLEDIT.uiConfig.shortAttributes.indexOf(attributeName) !== -1) {
+			textInput.addClass('short');
+		}
 
 		if (schemaAttribute.documentation !== "") {
 			textInput.attr('title', schemaAttribute.documentation);
@@ -403,7 +406,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 					var select, cell;
 					select = $('<select id="' + inputId(index) + '" class="propertySelect" attr="' + 
 						index + '"></select>');
-
+					
 					$.each(dropdownValues, function (i, value) {
 						var option = $("<option>" + value + "</option>");
 						if (value in dropdownDocumentation) {
