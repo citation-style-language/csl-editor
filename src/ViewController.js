@@ -40,7 +40,11 @@ CSLEDIT.ViewController = function (
 			{
 				id : "macro",
 				name : "Macros",
-				headingNodePath : "",
+				headingNodePath : "style",
+				headingNodePossibleChildren : {
+					"macro" : "zeroOrMore"
+				},
+				headingNodeShowPropertyPanel : false,
 				nodePaths : ["style/macro"],
 				macroLinks : true,
 				/*
@@ -182,7 +186,7 @@ CSLEDIT.ViewController = function (
 			
 			heading = new CSLEDIT.SmartTreeHeading(
 				treeView.find('#' + value.id + ' .heading'), value.headingNodePath,
-				value.name);
+				value.name, value.headingNodePossibleChildren, value.headingNodeShowPropertyPanel);
 			heading.setCallbacks({
 				selectNode : selectNodeInView(heading)
 			});
@@ -244,7 +248,11 @@ CSLEDIT.ViewController = function (
 
 		nodePathView.selectNode(getSelectedNodePath());
 
-		CSLEDIT.propertyPanel.setup(propertyPanelElement, node, parentNodeName + '/' + node.name);
+		if (selectedViewProperty("showPropertyPanel") === false) {
+			propertyPanelElement.children().remove();
+		} else {
+			CSLEDIT.propertyPanel.setup(propertyPanelElement, node, parentNodeName + '/' + node.name);
+		}
 
 		syntaxHighlighter.selectedNodeChanged(node.cslId);		
 	};
@@ -396,6 +404,16 @@ CSLEDIT.ViewController = function (
 		return selectedNodeId;
 	};
 
+	var selectedViewProperty = function (property) {
+		if (selectedTree === null) {
+			return null;
+		}
+		if (property in selectedTree) {
+			return selectedTree[property];
+		}
+		return null;
+	};
+
 	var expandNode = function (id) {
 		$.each(views, function (i, view) {
 			if ('expandNode' in view) {
@@ -444,7 +462,9 @@ CSLEDIT.ViewController = function (
 
 		selectNodeFromPath : selectNodeFromPath,
 
-		setSuppressSelectNode : setSuppressSelectNode
+		setSuppressSelectNode : setSuppressSelectNode,
+
+		selectedViewProperty : selectedViewProperty
 	};
 };
 

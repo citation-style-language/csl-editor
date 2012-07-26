@@ -135,12 +135,16 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			translatedParentName = translatedNodeInfo.parent.name;
 		}
 
-		possibleElements = {};
-		$.each(CSLEDIT.schema.childElements(translatedParentName + "/" + translatedNodeInfo.node.name),
-			function (element, quantifier) {
-				possibleElements[element] = quantifier;
-			}
-		);
+		possibleElements = CSLEDIT.viewController.selectedViewProperty("possibleChildren");
+		if (possibleElements === null) {
+			possibleElements = {};
+
+			$.each(CSLEDIT.schema.childElements(translatedParentName + "/" + translatedNodeInfo.node.name),
+				function (element, quantifier) {
+					possibleElements[element] = quantifier;
+				}
+			);
+		}
 
 		// hard-coded constraint for 'choose' node
 		// TODO: generalise this to more nodes, using the schema if not too difficult

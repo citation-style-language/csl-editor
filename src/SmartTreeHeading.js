@@ -3,13 +3,17 @@
 CSLEDIT = CSLEDIT || {};
 
 // TODO: refactor into NodeView to be used by this and the title node.
+//       and add unit tests
 
-CSLEDIT.SmartTreeHeading = function (element, nodePath, title) {
+CSLEDIT.SmartTreeHeading = function (element, nodePath, title, possibleChildren, showPropertyPanel) {
 	var that = this;
 		
 	this.element = element;
 	this.nodePath = nodePath;
 	this.title = title;
+
+	this.possibleChildren = possibleChildren;
+	this.showPropertyPanel = showPropertyPanel;
 
 	console.log("creating smart tree heading " + title + ": " + this.nodePath);
 
@@ -64,7 +68,7 @@ CSLEDIT.SmartTreeHeading.prototype.selectedNode = function () {
 
 CSLEDIT.SmartTreeHeading.prototype.addNode = function (id, position, node, numAdded) {
 	if (this.nodeData !== null) {
-		if (id <= this.nodeData.cslId) {
+		if (node.cslId <= this.nodeData.cslId) {
 			// shift the nodeData forward
 			this.nodeData.cslId += numAdded;
 		}

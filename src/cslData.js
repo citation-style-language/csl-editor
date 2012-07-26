@@ -601,6 +601,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 
 // global instance, this is overwritten for unit tests
 CSLEDIT.data = CSLEDIT.Data("CSLEDIT.cslData", [
+		"style",
 		"style/info",
 		"style/info/title",
 		"style/info/id",
