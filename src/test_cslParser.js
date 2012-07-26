@@ -253,7 +253,7 @@ asyncTest("check invariance when deserializing then serializing repo styles", fu
 			});
 			initialXmlString = '<?xml version="1.0" encoding="utf-8"?>\n' + initialXmlElement.html();
 			// remove any lines with comments
-			initialXmlString = initialXmlString.replace(/.*<!--.*-->.*/g, "") + "\n";
+			initialXmlString = initialXmlString.replace(/.*<!--[\s\S]*?-->.*/g, "") + "\n";
 
 			// remove whitespace from start of every line to normalise
 			initialXmlString = initialXmlString.replace(/\n\s*/g, "\n");

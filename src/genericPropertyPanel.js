@@ -61,6 +61,9 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 		textInput = $('<input class="propertyInput"></input>');
 		textInput.attr('id', inputId(index));
+		if (CSLEDIT.uiConfig.shortAttributes.indexOf(attributeName) !== -1) {
+			textInput.addClass('short');
+		}
 
 		if (schemaAttribute.documentation !== "") {
 			textInput.attr('title', schemaAttribute.documentation);
@@ -403,7 +406,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 					var select, cell;
 					select = $('<select id="' + inputId(index) + '" class="propertySelect" attr="' + 
 						index + '"></select>');
-
+					
 					$.each(dropdownValues, function (i, value) {
 						var option = $("<option>" + value + "</option>");
 						if (value in dropdownDocumentation) {
@@ -448,7 +451,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		var possibleSelectedChoices = [], // choices with some attributes enabled
 			definiteSelectedChoices = []; // choices with all attributes enabled
 
-		if (typeof choicePanel === "undefined") {
+		if (typeof choicePanel === "undefined" || choicePanel === null) {
 			return;
 		}
 
@@ -615,6 +618,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 		checkboxControlIndex = 0;
 
+		choicePanel = null;
+
 		// start with attribute editors in choice tabs
 		attrIndex = -1;
 		if (schemaChoices.length > 0) {
@@ -624,7 +629,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 			panel.append(choicePanel.element);
 
 			$.each(schemaChoices, function (choiceIndex, choice) {
-				var addedToTab = false;
+				var addedToTab = false,
+					table = $('<table/>');
 				schemaChoiceIndexes[choiceIndex] = [];
 
 				$.each(choice.attributes, function (attributeName, attribute) {
@@ -645,10 +651,12 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 					editor.find('button.toggleAttrButton').remove();
 					editor.find('*').removeAttr('disabled');
-					choicePanel.contentPanels[choiceIndex].append(editor);
+					table.append(editor);
 				});
 
-				if (!addedToTab) {
+				if (addedToTab) {
+					choicePanel.contentPanels[choiceIndex].append(table);
+				} else {
 					choicePanel.addPanel("No attributes for this option");
 				}
 			});

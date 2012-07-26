@@ -1,15 +1,10 @@
 "use strict";
 var CSLEDIT = CSLEDIT || {};
 
-module("Property panels for all nodes in top styles");
-
-asyncTest("load schema", function () {
-	ok("schemaOptions" in CSLEDIT);
-	CSLEDIT.schema = CSLEDIT.Schema(CSLEDIT.schemaOptions);
-	CSLEDIT.schema.callWhenReady( function () {
-		ok(true, "schema loaded");
-		start();
-	});
+module("Property panels for all nodes in top styles", {
+	setup : function () {
+		CSLEDIT.schema = CSLEDIT.Schema(CSLEDIT.schemaOptions);
+	}
 });
 
 CSLEDIT.test_propertyPanel = {};
@@ -39,21 +34,24 @@ CSLEDIT.test_propertyPanel.generateAllPropertyPanels = function (cslData) {
 };
 CSLEDIT.test_propertyPanel.times = {};
 
-test("property panels", function () {
-	var styles = CSLEDIT.testUtils.getStyles(2);
+asyncTest("property panels", function () {
+	CSLEDIT.schema.callWhenReady( function () {
+		var styles = CSLEDIT.testUtils.getStyles(2);
 
-	CSLEDIT.data = CSLEDIT.Data("CSLEDIT.testData");
-	ok("schema" in CSLEDIT, "CSLEDIT.schema is there");
-	$.each(styles, function (url, cslCode) {
-		var result;
+		CSLEDIT.data = CSLEDIT.Data("CSLEDIT.testData");
+		ok("schema" in CSLEDIT, "CSLEDIT.schema is there");
+		$.each(styles, function (url, cslCode) {
+			var result;
 
-		result = CSLEDIT.data.setCslCode(cslCode);
+			result = CSLEDIT.data.setCslCode(cslCode);
 
-		if ("error" in result) {
-			// should only get dependent style errors in repo styles
-			ok(result.error.indexOf("dependent style") !== -1, "dependent style: " + url);
-		} else {
-			CSLEDIT.test_propertyPanel.generateAllPropertyPanels(CSLEDIT.data.get());
-		}
+			if ("error" in result) {
+				// should only get dependent style errors in repo styles
+				ok(result.error.indexOf("dependent style") !== -1, "dependent style: " + url);
+			} else {
+				CSLEDIT.test_propertyPanel.generateAllPropertyPanels(CSLEDIT.data.get());
+			}
+		});
+		start();
 	});
 });

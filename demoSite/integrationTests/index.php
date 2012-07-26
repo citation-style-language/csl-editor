@@ -5,13 +5,6 @@
 	<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
 	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 
-	<script type="text/javascript">
-		// Need to force order for now because I'm using
-		// an async test to initialize things at the start
-		// of some modules
-		QUnit.config.reorder = false;
-	</script>
-
 	<script type="text/javascript" src="../../external/jstree/_lib/jquery.hotkeys.js"></script>
 	<script type="text/javascript" src="../../external/jstree/jquery.jstree-patch1.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../external/jstree/themes/default/style.css" />	
@@ -33,6 +26,7 @@
 	<script type="text/javascript" src="../../src/cslNode.js"></script>
 	<script type="text/javascript" src="../../src/cslData.js"></script>
 	<script type="text/javascript" src="../../src/xmlUtility.js"></script>
+	<script type="text/javascript" src="../../src/SmartTreeHeading.js"></script>
 	<script type="text/javascript" src="../../src/smartTree.js"></script>
 	<script type="text/javascript" src="../../src/editNodeButton.js"></script>
 	<script type="text/javascript" src="../../src/schemaOptions.js"></script>

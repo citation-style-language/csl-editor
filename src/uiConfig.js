@@ -40,6 +40,7 @@ CSLEDIT.uiConfig.attributeGroups = {
 	]
 };
 
+// for displaying the example metadata in Search by Example page
 CSLEDIT.uiConfig.fieldOrder = [
 	"type",
 	"title",
@@ -53,6 +54,11 @@ CSLEDIT.uiConfig.fieldOrder = [
 	"chapter",
 	"page",
 	"publisher"
+];
+
+// these attributes only require short text input controls
+CSLEDIT.uiConfig.shortAttributes = [
+	"delimiter"
 ];
 
 // for jstree
