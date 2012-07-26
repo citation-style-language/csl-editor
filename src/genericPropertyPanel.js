@@ -448,7 +448,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		var possibleSelectedChoices = [], // choices with some attributes enabled
 			definiteSelectedChoices = []; // choices with all attributes enabled
 
-		if (typeof choicePanel === "undefined") {
+		if (typeof choicePanel === "undefined" || choicePanel === null) {
 			return;
 		}
 
@@ -507,7 +507,6 @@ CSLEDIT.genericPropertyPanel = (function () {
 			enableControlsInTab(possibleSelectedChoices[0]);
 		} else {
 			// just select the first one
-			// TODO: this select triggers a command, it shouldn't
 			choicePanel.select(0);
 			enableControlsInTab(0);
 		}
@@ -616,6 +615,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 		checkboxControlIndex = 0;
 
+		choicePanel = null;
+
 		// start with attribute editors in choice tabs
 		attrIndex = -1;
 		if (schemaChoices.length > 0) {
@@ -625,7 +626,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 			panel.append(choicePanel.element);
 
 			$.each(schemaChoices, function (choiceIndex, choice) {
-				var addedToTab = false;
+				var addedToTab = false,
+					table = $('<table/>');
 				schemaChoiceIndexes[choiceIndex] = [];
 
 				$.each(choice.attributes, function (attributeName, attribute) {
@@ -646,10 +648,12 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 					editor.find('button.toggleAttrButton').remove();
 					editor.find('*').removeAttr('disabled');
-					choicePanel.contentPanels[choiceIndex].append(editor);
+					table.append(editor);
 				});
 
-				if (!addedToTab) {
+				if (addedToTab) {
+					choicePanel.contentPanels[choiceIndex].append(table);
+				} else {
 					choicePanel.addPanel("No attributes for this option");
 				}
 			});
