@@ -1319,7 +1319,7 @@ CSLEDIT.exampleData.jsonDocumentList = [
 		"container-title": "Varieties of Capitalism. The Institutional Foundations of Comparative Advantage",
 		"publisher": "Oxford University Press",
 		"publisher-place": "New York",
-		"page": "184–213",
+		"page": "184-213",
 		"event-place": "New York",
 		"note": "undefined\nbring the firms back into the center of analysis\" p. 4 \"two institutions can be said to be complementary if the presence (or efficiency) of one increases the returns from (or efficiency) of the other.\" p. 17\nDate of Input: 29.01.2006\nDate Modified: 08.06.2006\nPriority: Normal",
 		"author": [
@@ -1395,7 +1395,7 @@ CSLEDIT.exampleData.jsonDocumentList = [
 		"shortTitle": "Beyond varieties of capitalism",
 		"editor": [
 			{
-				"family": "Hancke´",
+				"family": "Hanck\u00e9",
 				"given": "Bob"
 			},
 			{
