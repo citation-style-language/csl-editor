@@ -24,6 +24,9 @@ CSLEDIT.uiConfig.defaultAttributes = {
 	},
 	"date-part" : {
 		"name" : "year"
+	},
+	"key" : {
+		"variable" : "author"
 	}
 };
 

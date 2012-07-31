@@ -30,8 +30,8 @@ CSLEDIT.ViewController = function (
 					"sort" : "one"
 				},
 				nodePaths : ["style/citation/layout", "style/citation/sort"],
-				macroLinks : true,
-				leafNodes : ["sort"]
+				//leafNodes : ["sort"],
+				macroLinks : true
 			},
 			{
 				id : "bibliography",
@@ -42,8 +42,8 @@ CSLEDIT.ViewController = function (
 					"sort" : "one"
 				},
 				nodePaths : ["style/bibliography/layout", "style/bibliography/sort"],
-				macroLinks : true,
-				leafNodes : ["sort"]
+				//leafNodes : ["sort"],
+				macroLinks : true
 			},
 			{
 				id : "macro",
