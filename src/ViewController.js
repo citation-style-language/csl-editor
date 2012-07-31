@@ -25,6 +25,10 @@ CSLEDIT.ViewController = function (
 				id : "citations",
 				name : "Inline Citations",
 				headingNodePath : "style/citation",
+				headingNodePossibleChildren : {
+					"layout" : "one",
+					"sort" : "one"
+				},
 				nodePaths : ["style/citation/layout", "style/citation/sort"],
 				macroLinks : true,
 				leafNodes : ["sort"]
@@ -33,6 +37,10 @@ CSLEDIT.ViewController = function (
 				id : "bibliography",
 				name : "Bibliography",
 				headingNodePath : "style/bibliography",
+				headingNodePossibleChildren : {
+					"layout" : "one",
+					"sort" : "one"
+				},
 				nodePaths : ["style/bibliography/layout", "style/bibliography/sort"],
 				macroLinks : true,
 				leafNodes : ["sort"]
