@@ -710,5 +710,7 @@ CSLEDIT.data = CSLEDIT.Data("CSLEDIT.cslData", [
 		"style/info/title",
 		"style/info/id",
 		"style/citation",
-		"style/citation/layout"
+		"style/citation/layout",
+		"style/bibliography",
+		"style/bibliography/layout"
 	], true);
