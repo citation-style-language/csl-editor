@@ -154,28 +154,6 @@ CSLEDIT.exampleData.jsonDocumentList = [
 		"type": "article-newspaper"
 	},
 	{
-		"DOI": "10.1103/PhysRev.107.13",
-		"author": [{
-			"family": "Cohen",
-			"given": "Michael"
-		},
-		{
-			"family": "Feynman",
-			"given": "Richard"
-		}],
-		"container-title": "Physical Review",
-		"issue": "1",
-		"issued": {
-			"date-parts": [
-				["1957", "7"]
-			]
-		},
-		"page": "13-24",
-		"title": "Theory of Inelastic Scattering of Cold Neutrons from Liquid Helium",
-		"type": "article-journal",
-		"volume": "107"
-	},
-	{
 		"DOI": "10.1088/1748-0221/7/03/P03012",
 		"abstract": "This paper presents a complete description of Virgo, the French-Italian gravitational wave detector.\n The detector, built at Cascina, near Pisa (Italy), is a very large Michelson interferometer, with 3\n km-long arms. In this paper, following a presentation of the physics requirements, leading to the\n specifications for the construction of the detector, a detailed description of all its different\n elements is given. These include civil engineering infrastructures, a huge ultra-high vacuum (UHV)\n chamber (about 6000 cubic metres), all of the optical components, including high quality mirrors and\n their seismic isolating suspensions, all of the electronics required to control the interferometer\n and for signal detection. The expected performances of these different elements are given, leading\n to an overall sensitivity curve as a function of the incoming gravitational wave frequency. This\n description represents the detector as built and used in the first data-taking runs. Improvements in\n different parts have been and continue to be performed, leading to better sensitivities. These will\n be detailed in a forthcoming paper.",
 		"author": [{
@@ -1259,45 +1237,6 @@ CSLEDIT.exampleData.jsonDocumentList = [
 		"title": "Yo-yo having a modifiable string gap",
 		"type": "patent"
 	},
-	/* remove until we get more metadata
-	{
-		"issued": {
-			"date-parts": [
-				["2010"]
-			]
-		},
-		"title": "Fullilove v. Klutznick",
-		"type": "legal_case"
-	},*/
-	{
-		"DOI": "10.1038/119558a0",
-		"URL": "http://www.nature.com/doifinder/10.1038/119558a0",
-		"accessed": {
-			"date-parts": [
-				["2011", "6", "7"]
-			]
-		},
-		"author": [{
-			"family": "Davisson",
-			"given": "C."
-		}, {
-			"family": "Germer",
-			"given": "L. H."
-		}],
-		"container-title": "Nature",
-		"editor": [],
-		"issue": "2998",
-		"issued": {
-			"date-parts": [
-				["1927", "4", "16"]
-			]
-		},
-		"page": "558-560",
-		"title": "The Scattering of Electrons by a Single Crystal of Nickel",
-		"translator": [],
-		"type": "article-journal",
-		"volume": "119"
-	},
 	{
 		"DOI": "10.1088/0143-0807/27/4/007",
 		"URL": "http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf",
@@ -1347,6 +1286,134 @@ CSLEDIT.exampleData.jsonDocumentList = [
 		"translator": [],
 		"type": "article-journal",
 		"volume": "171"
+	},
+ 	{
+		"type": "report",
+		"title": "Country Clustering in Comparative Political Economy",
+		"publisher": "Max-Planck Institute for the Study of Societies",
+		"publisher-place": "Cologne",
+		"page": "32",
+		"genre": "MPIfG Discussion Paper 09-5",
+		"event-place": "Cologne",
+		"author": [
+			{
+				"family": "Ahlquist",
+				"given": "John S."
+			},
+			{
+				"family": "Breunig",
+				"given": "Christian"
+			}
+		],
+		"issued": {
+			"date-parts": [
+				[
+					2009
+				]
+			]
+		}
+	},
+	{
+		"type": "chapter",
+		"title": "Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?",
+		"container-title": "Varieties of Capitalism. The Institutional Foundations of Comparative Advantage",
+		"publisher": "Oxford University Press",
+		"publisher-place": "New York",
+		"page": "184–213",
+		"event-place": "New York",
+		"note": "undefined\nbring the firms back into the center of analysis\" p. 4 \"two institutions can be said to be complementary if the presence (or efficiency) of one increases the returns from (or efficiency) of the other.\" p. 17\nDate of Input: 29.01.2006\nDate Modified: 08.06.2006\nPriority: Normal",
+		"author": [
+			{
+				"family": "Mares",
+				"given": "Isabela"
+			}
+		],
+		"editor": [
+			{
+				"family": "Hall",
+				"given": "Peter A"
+			},
+			{
+				"family": "Soskice",
+				"given": "David"
+			}
+		],
+		"issued": {
+			"date-parts": [
+				[
+					2001
+				]
+			]
+		}
+	},
+	{
+		"type": "article-journal",
+		"title": "The Varieties of Capitalism and Hybrid Success",
+		"container-title": "Comparative Political Studies",
+		"page": "307-332",
+		"volume": "40",
+		"issue": "3",
+		"abstract": "The varieties of capitalism literature maintains that advanced capitalist countries whose institutions best fit either the liberal or coordinated market economy types will perform better than countries whose institutions are mixed. This is because hybrids are less likely to yield functionally beneficial institutional complementarities. The authors challenge this assertion. Denmark has performed as well as many purer cases during the 1990s. And Denmark has recently developed a more hybrid form than is generally recognized by (a) increasing the exposure of actors to market forces and (b) decentralizing collective learning and decision making. The institutional complementarities associated with such hybridization have contributed to its success; however, these complementarities are based on institutional heterogeneity rather than homogeneity. This is demonstrated by analyses of three cases: Danish labor markets, vocational training, and industrial policy. The implication of the authors’ argument is that the varieties of capitalism theory is logically flawed.",
+		"URL": "http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract",
+		"DOI": "10.1177/0010414006286542",
+		"author": [
+			{
+				"family": "Campbell",
+				"given": "John L."
+			},
+			{
+				"family": "Pedersen",
+				"given": "Ove K."
+			}
+		],
+		"issued": {
+			"date-parts": [
+				[
+					"2007",
+					3,
+					1
+				]
+			]
+		},
+		"accessed": {
+			"date-parts": [
+				[
+					2010,
+					7,
+					26
+				]
+			]
+		}
+	},
+	{
+		"type": "book",
+		"title": "Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy",
+		"publisher": "Oxford University Press",
+		"publisher-place": "Oxford and New York",
+		"event-place": "Oxford and New York",
+		"ISBN": "9780199206483",
+		"shortTitle": "Beyond varieties of capitalism",
+		"editor": [
+			{
+				"family": "Hancke´",
+				"given": "Bob"
+			},
+			{
+				"family": "Rhodes",
+				"given": "Martin"
+			},
+			{
+				"family": "Thatcher",
+				"given": "Mark"
+			}
+		],
+		"issued": {
+			"date-parts": [
+				[
+					2007
+				]
+			]
+		}
 	}
 ]
 
