@@ -344,6 +344,10 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		editorElement.find('#menuEditCitation2').click(function () {
 			CSLEDIT.citationEditor.editCitation(1);
 		});
+
+		editorElement.find('#menuEditCitation3').click(function () {
+			CSLEDIT.citationEditor.editCitation(2);
+		});
 	};
 
 	var init = function () {
