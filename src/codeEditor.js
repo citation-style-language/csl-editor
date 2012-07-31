@@ -37,10 +37,17 @@ CSLEDIT.CodeEditor = function (containerElement, userOptions) {
 		{
 			clearTimeout(codeTimeout);
 			codeTimeout = setTimeout( function () {
-				CSLEDIT.data.setCslCode(editor.getValue());
-				CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
-					$("#statusMessage"), $("#exampleOutput"),
-					$("#formattedCitations"), $("#formattedBibliography"));
+				var result = CSLEDIT.data.setCslCode(editor.getValue());
+
+				if ("error" in result) {
+					$("#statusMessage").html(result.error);
+					$("#formattedCitations").html("");
+					$("#formattedBibliography").html("");
+				} else {
+					CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
+						$("#statusMessage"), $("#exampleOutput"),
+						$("#formattedCitations"), $("#formattedBibliography"));
+				}
 			}, 500);
 		};
 
