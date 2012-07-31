@@ -55,32 +55,6 @@ CSLEDIT.ViewController = function (
 				headingNodeShowPropertyPanel : false,
 				nodePaths : ["style/macro"],
 				macroLinks : true,
-				/*
-				buttons : [
-				{
-					type : "custom",
-					text : "Add macro",
-					onClick : function () {
-						// add before the 'style/citation' node
-						var citationNode = CSLEDIT.data.getNodesFromPath("style/citation")[0],
-							position;
-
-						//position = CSLEDIT.data.indexOfChild(citationNode,
-						//	CSLEDIT.data.getNodesFromPath("style")[0]);
-						
-						CSLEDIT.controller.exec("addNode",
-							[
-								citationNode.cslId, "before", 
-								new CSLEDIT.CslNode("macro", [{
-									key: "name",
-									value: "New Macro",
-									enabled: true
-								}])
-							]);
-					}
-				}
-				]
-				*/
 			},
 			{
 				id : "locale",
