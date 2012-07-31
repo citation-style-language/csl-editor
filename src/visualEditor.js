@@ -8,21 +8,29 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		syntaxHighlighter,
 		nodePathView;
 
-	CSLEDIT.options.setUserOptions(userOptions);
+	$(document).ready(function () {
+		if (!$.browser.webkit && !$.browser.mozilla) {
+			$('body').html("<h2>Please use the latest version of " +
+				"Chrome or Firefox to view this page.</h2>").css({margin: 50});
+			return;
+		}
 
-	editorElement = $(editorElement);
+		CSLEDIT.options.setUserOptions(userOptions);
 
-	$.ajax({
-		url: CSLEDIT.options.get("rootURL") + "/html/visualEditor.html",
-		success : function (data) {
-			editorElement.html(data);
-			CSLEDIT.schema = CSLEDIT.Schema(CSLEDIT.schemaOptions);
-			CSLEDIT.schema.callWhenReady(init);
-		},
-		error : function (jaXHR, textStatus, errorThrown) {
-			alert("Couldn't fetch page: " + textStatus);
-		},
-		cache : false
+		editorElement = $(editorElement);
+
+		$.ajax({
+			url: CSLEDIT.options.get("rootURL") + "/html/visualEditor.html",
+			success : function (data) {
+				editorElement.html(data);
+				CSLEDIT.schema = CSLEDIT.Schema(CSLEDIT.schemaOptions);
+				CSLEDIT.schema.callWhenReady(init);
+			},
+			error : function (jaXHR, textStatus, errorThrown) {
+				alert("Couldn't fetch page: " + textStatus);
+			},
+			cache : false
+		});
 	});
 
 	var createTreeView = function () {
@@ -340,12 +348,6 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 	var init = function () {
 		var reloadingPage = false;
-
-		if (!$.browser.webkit && !$.browser.mozilla) {
-			$('body').html("<h2>Please use the latest version of " +
-				"Chrome or Firefox to view this page.</h2>").css({margin: 50});
-			return;
-		}
 
 		// create storage with callback funciton which gets called if inconsistencies
 		// are found between the localStorage data (shared between tabs) and this session
