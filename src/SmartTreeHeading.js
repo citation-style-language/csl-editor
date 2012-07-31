@@ -15,8 +15,6 @@ CSLEDIT.SmartTreeHeading = function (element, nodePath, title, possibleChildren,
 	this.possibleChildren = possibleChildren;
 	this.showPropertyPanel = showPropertyPanel;
 
-	console.log("creating smart tree heading " + title + ": " + this.nodePath);
-
 	this.updateNodeData();
 	this.updateHtml();
 

@@ -98,13 +98,11 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		}
 		
 		if (typeof(attributeName) !== "undefined" && !cslNode.hasAttr(attributeName)) {
-			console.log("has attr = " + cslNode.hasAttr(attributeName));
 			return false;
 		}
 
 		if (typeof(attributeValue) !== "undefined" &&
 				cslNode.getAttr(attributeName) !== attributeValue) {
-			console.log("wrong attr value: " + cslNode.getAttr(attributeName));
 			return false;
 		}
 

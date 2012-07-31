@@ -179,12 +179,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				nodeIcon = CSLEDIT.uiConfig.nodeIcons[element],
 				documentation = CSLEDIT.schema.documentation(
 					translatedNodeInfo.node.name + "/" + element),
-				row;
+				row,
+				displayName;
 
 			if (typeof nodeIcon !== "undefined") {
 				img = '<td><img src="' + CSLEDIT.options.get('rootURL') + nodeIcon + '"></img></td>';
 			}
-			var displayName;
 
 			displayName = 
 				CSLEDIT.uiConfig.displayNameFromNode(new CSLEDIT.CslNode(element));
