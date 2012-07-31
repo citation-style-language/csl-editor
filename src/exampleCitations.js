@@ -6,6 +6,15 @@ var CSLEDIT = CSLEDIT || {};
 CSLEDIT.exampleCitations = (function () {
 	var suppressUpdate = false;
 
+	var newCitation = function (citationIndex) {
+		return {
+			citationId: "CITATION-" + citationIndex,
+			citationItems:[],
+			properties: {noteIndex:0},
+			schema: "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
+		}
+	};
+
 	var getCitations = function () {
 		var citations;
 		if (CSLEDIT.storage.getItemJson('CSLEDIT.exampleCitations') === null) {
@@ -13,12 +22,7 @@ CSLEDIT.exampleCitations = (function () {
 			// create empty reference lists for each citation
 			citations = [];
 			$.each(CSLEDIT.options.get("exampleCitations"), function (citation) {
-				citations.push({
-					citationId: "CITATION-" + citation,
-					citationItems:[],
-					properties: {noteIndex:0},
-					schema: "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
-				});
+				citations.push(newCitation(citation));
 			});
 			setCitations(citations);
 
@@ -142,7 +146,10 @@ CSLEDIT.exampleCitations = (function () {
 		var indexes = [],
 			citations = getCitations();
 
-		console.log("index = " + citationIndex);
+		if (citationIndex >= citations.length) {
+			return [];
+		}
+
 		$.each(citations[citationIndex].citationItems, function (i, citationItem) {
 			indexes.push(parseInt(citationItem.id.replace("ITEM-", "")) - 1);
 		});
@@ -153,6 +160,7 @@ CSLEDIT.exampleCitations = (function () {
 	var setReferenceIndexesForCitation = function (citationIndex, references) {
 		var citations = getCitations();
 		
+		citations[citationIndex] = citations[citationIndex] || newCitation(citationIndex);
 		citations[citationIndex].citationItems = [];
 
 		$.each(references, function (i, referenceIndex) {

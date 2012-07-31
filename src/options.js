@@ -21,7 +21,7 @@ CSLEDIT.options = (function () {
 					"For implementers: You need to add an editStyle_func to the options.");
 			},
 			exampleReferences : CSLEDIT.exampleData.jsonDocumentList,
-			exampleCitations : [[0],[10]]
+			exampleCitations : [[0],[10],[]]
 		};
 
 	// create the default options which are a function of user options
