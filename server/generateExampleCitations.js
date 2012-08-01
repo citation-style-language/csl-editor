@@ -130,6 +130,12 @@ var addCslFileToIndex = function (file) {
 		}
 	};
 
+// These styles cause errors with the example generation
+var styleBlacklist = [
+	"acm-siggraph.csl",
+	"association-for-computing-machinery.csl"
+];
+
 var processDir = function (dirPath) {
 	var dirContents = new File(dirPath).listFiles(),
 		index;
@@ -137,7 +143,11 @@ var processDir = function (dirPath) {
 	for (var index = 0; index < dirContents.length; index++) {
 		var file = dirContents[index];
 		if (!file.isDirectory() && /.csl$/.test(file.getName())) {
-			addCslFileToIndex(file);
+			if (styleBlacklist.indexOf(String(file.getName())) === -1) {
+				addCslFileToIndex(file);
+			} else {
+				console.log("skipping blacklisted style: " + file.getName());
+			}
 		}
 	}
 };
