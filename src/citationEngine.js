@@ -91,7 +91,10 @@ CSLEDIT.citationEngine = (function () {
 				}
 
 				inLineCitations += citations[i][1];
-				inLineCitationArray.push(citations[i][1]);
+
+				if (citations[i][1] !== "") {
+					inLineCitationArray.push(citations[i][1]);
+				}
 			}
 		}
 		result.formattedCitations = inLineCitationArray;
