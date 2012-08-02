@@ -53,6 +53,7 @@ pages = [
             "src/cslData.js",
             "src/schemaOptions.js",
             "src/schema.js",
+            "src/NodeWatcher.js",
 
             "src/citationEditor.js",
             "src/uiConfig.js",
@@ -164,6 +165,8 @@ pages = [
             "src/test_smartTree.js",
             "src/editNodeButton.js",
             "src/test_editNodeButton.js"
+            "src/NodeWatcher.js",
+            "src/test_NodeWatcher.js"
         ]
     },
     {

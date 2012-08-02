@@ -44,6 +44,9 @@
 	<script type="text/javascript" src="../../src/editNodeButton.js"></script>
 	<script type="text/javascript" src="../../src/test_editNodeButton.js"></script>
 
+	<script type="text/javascript" src="../../src/NodeWatcher.js"></script>
+	<script type="text/javascript" src="../../src/test_NodeWatcher.js"></script>
+
 	<script type="text/javascript">
 	CSLEDIT.options.setUserOptions({
 		rootURL : "../.."
