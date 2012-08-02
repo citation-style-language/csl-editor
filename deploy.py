@@ -164,7 +164,7 @@ pages = [
             "src/smartTree.js",
             "src/test_smartTree.js",
             "src/editNodeButton.js",
-            "src/test_editNodeButton.js"
+            "src/test_editNodeButton.js",
             "src/NodeWatcher.js",
             "src/test_NodeWatcher.js"
         ]
