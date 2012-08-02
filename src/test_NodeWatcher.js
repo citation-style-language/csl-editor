@@ -72,7 +72,7 @@ test("add/delete nodes", function () {
 		{
 			name: "new-node-before",
 			cslId: 1,
-	   		children : [
+			children : [
 				{name: "new-node-before-within", cslId: 2}
 			]
 		}, 2);
@@ -128,7 +128,7 @@ test("Delete and recreate node", function () {
 
 	description = "Recreate node";
 	fakeData.nodes["style/info"] = {name: "info", cslId: 1};
-	nodeView.addNode(0, 0, {name:"info", cslId: 1});
+	nodeView.addNode(0, 0, {name: "info", cslId: 1});
 	equal(currentNode.name, "info");
 	equal(currentNode.cslId, 1);
 });
@@ -151,7 +151,7 @@ test("Create and delete node", function () {
 
 	description = "Recreate node";
 	fakeData.nodes["style/citation"] = {name: "citation", cslId: 2};
-	nodeView.addNode(0, 1, {name:"citation", cslId: 2});
+	nodeView.addNode(0, 1, {name: "citation", cslId: 2});
 	equal(currentNode.name, "citation");
 	equal(currentNode.cslId, 2);
 });

@@ -1,6 +1,6 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
+var CSLEDIT = CSLEDIT || {};
 
 // Uses a NodeWatcher to monitor the style/info/title node for changes
 // and updates the titlebar

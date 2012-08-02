@@ -47,6 +47,8 @@
     "sub": true,
     "strict": false,
     "white": true,
+	"smarttabs": true,
+	"loopfunc": true,
 
 	"globalstrict": true
 }

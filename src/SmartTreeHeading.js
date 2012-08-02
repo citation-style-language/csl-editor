@@ -1,6 +1,6 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
+var CSLEDIT = CSLEDIT || {};
 
 // Heading for a smart tree
 //
@@ -19,7 +19,7 @@ CSLEDIT.SmartTreeHeading = function (element, nodePath, title, possibleChildren,
 		this.updateHtml(null);
 	} else {
 		this.nodeWatcher = new CSLEDIT.NodeWatcher(nodePath, CSLEDIT.data, function (nodeData) {
-			that.updateHtml(nodeData)
+			that.updateHtml(nodeData);
 		});
 
 		this.addNode = function (id, position, nodeData, numNodes) {
@@ -39,7 +39,7 @@ CSLEDIT.SmartTreeHeading = function (element, nodePath, title, possibleChildren,
 			}
 		});
 	}
-}
+};
 
 CSLEDIT.SmartTreeHeading.prototype.updateHtml = function (nodeData) {
 	var cslidAttribute;
@@ -72,7 +72,7 @@ CSLEDIT.SmartTreeHeading.prototype.getSelectedNodePath = function () {
 		nodes;
 
 	while (splitNodePath.length > 0) {
-		nodePath.push(splitNodePath.splice(0,1));
+		nodePath.push(splitNodePath.splice(0, 1));
 		nodes = CSLEDIT.data.getNodesFromPath(nodePath.join("/"));
 		assertEqual(nodes.length, 1);
 		cslIdPath.push(nodes[0].cslId);

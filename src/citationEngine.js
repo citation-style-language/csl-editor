@@ -176,7 +176,7 @@ CSLEDIT.citationEngine = (function () {
 		// add syntax highlighting at highest level
 		if (citationNode.length > 0) {
 			citationTagStart = '<p><span cslid="' + citationNode[0].cslId + '">';
-		    citationTagEnd = '</span></p>';
+			citationTagEnd = '</span></p>';
 		}
 		if (bibliographyNode.length > 0) {
 			bibliographyTagStart = '<p><span cslid="' + bibliographyNode[0].cslId + '">';

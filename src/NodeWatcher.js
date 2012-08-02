@@ -18,7 +18,7 @@ CSLEDIT.NodeWatcher = function (nodePath, cslData, onChange) {
 
 	this.updateNodeData();
 	this.nodeUpdated();
-}
+};
 
 CSLEDIT.NodeWatcher.prototype.nodeUpdated = function () {
 	this.onChange(this.nodeData);
@@ -31,7 +31,7 @@ CSLEDIT.NodeWatcher.prototype.getSelectedNodePath = function () {
 		nodes;
 
 	while (splitNodePath.length > 0) {
-		nodePath.push(splitNodePath.splice(0,1));
+		nodePath.push(splitNodePath.splice(0, 1));
 		nodes = this.cslData.getNodesFromPath(nodePath.join("/"));
 		assertEqual(nodes.length, 1);
 		cslIdPath.push(nodes[0].cslId);
