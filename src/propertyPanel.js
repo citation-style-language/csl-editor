@@ -27,7 +27,7 @@ CSLEDIT.propertyPanel = (function () {
 				propertyPanelElement.append(
 					"<p>This node allows you to sort your references depending on their " +
 					"metadata.</p>" +
-					'<p>Create sort keys using the "+" add node button at the top left.</p>'
+					'<p>Create new sort keys using the "+" add node button at the top left.</p>'
 					);
 
 			/* TODO: Re-enable sort property panel if:

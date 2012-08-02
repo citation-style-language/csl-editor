@@ -156,7 +156,7 @@ CSLEDIT.uiConfig.displayNames = {
 				variable = cslNode.getAttr("variable");
 
 			if (macro !== "") {
-				return  macro + " (macro)";
+				return macro + " (macro)";
 			} else if (term !== "") {
 				return term + " (term)";
 			} else if (value !== "") {
@@ -196,5 +196,17 @@ CSLEDIT.uiConfig.displayNames = {
 		},
 		"style" : function () {
 			return "Global Formatting Options";
+		},
+		"key" : function (node) {
+			var variable = new CSLEDIT.CslNode(node).getAttr("variable"),
+				macro = new CSLEDIT.CslNode(node).getAttr("macro");
+
+			if (macro !== "") {
+				return "Sort by " + macro;
+			} else if (variable !== "") {
+				return "Sort by " + variable;
+			}
+
+			return "Sort key";
 		}
 	};
