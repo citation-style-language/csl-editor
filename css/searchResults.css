@@ -13,7 +13,7 @@
 #searchResults td.closeness {
 	width : 160px;
 	font-weight: bold;
-	color: green;
+	color: #0D3785;
 }
 #searchResults td.match {
 	background-color : #eeeeee;
@@ -24,7 +24,7 @@
 	border: 1px solid #99DEFD;
 }
 #searchResults table.featuredStyle td.match {
-	background-color : #ffdd88;
+	background-color : #99DEFD;
 }
 
 #searchResults span.featuredStyle {

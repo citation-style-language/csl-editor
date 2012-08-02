@@ -19,7 +19,6 @@ h1
 	right: 4px;
 	top: 5px;
 	bottom: 0px;
-
 }
 #exampleDocumentContainer h3 {
 	padding: 0;
@@ -40,6 +39,9 @@ h1
 	border-width: 2px;
 
 	overflow: auto;
+}
+#exampleDocument table {
+	font-size: 13px;
 }
 #nextExample {
 	position: relative;
