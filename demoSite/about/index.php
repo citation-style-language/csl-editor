@@ -35,7 +35,24 @@
 <strong>Current CSL Editor version: </strong> <a href="https://github.com/citation-style-editor/csl-editor/commit/$GIT_COMMIT">$GIT_COMMIT</a>
 </div>
 
-<h2>Attributions</h2>
+<h1>Getting Started</h1>
+<h2>Know the name of the style you want?</h2>
+<p>
+Search for a style with <a href="../searchByName">Search by Name</a>.
+</p>
+
+<h2>Know what the style should look like?</h2>
+<p>
+Search for a style by its output with <a href="../searchByExample">Search by Example</a>. If you don't find an <strong>exact</strong> match you will have the option to edit a similar style.
+</p>
+
+<h2>Want to create a new style from scratch?</h2>
+<p>This is <strong>not recommended</strong>. It's much easier to <a href="../searchByExample">Search by Example</a> to find a similar style first, which you can then edit.
+</p>
+<p>
+If you really want to start a new style, you can create a new one by clicking <strong>Style->New Style</strong> in the <a href="../visualEditor/" >Visual Editor</a>.
+
+<h1>Attributions</h1>
 
 <ul>
 <li><a href="http://citationstyles.org/">Citation Style Language</a></li>
