@@ -2,6 +2,7 @@
 
 # generate example citations
 cd server
+./installNodeModules.sh
 node generateExampleCitations.js
 cd ..
 
