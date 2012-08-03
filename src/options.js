@@ -1,5 +1,18 @@
 "use strict";
+
+console.log("csledit before = " + CSLEDIT);
+
 var CSLEDIT = CSLEDIT || {};
+
+console.log("csledit after = " + CSLEDIT);
+console.log("in options.js");
+
+
+(function () {
+	$.each(["hello", "world"], function (i, string) {
+		console.log(string);
+	});
+}());
 
 CSLEDIT.options = (function () {
 	var userOptions = {};

@@ -1,35 +1,69 @@
-"use strict";
+//importPackage(java.io);
 
-importPackage(java.io);
+var jQuery = require('jQuery');
+var $ = jQuery;
 
-load("../external/env.rhino.1.2.js");
-load("http://code.jquery.com/jquery-latest.min.js");
+var fs = require('fs');
+var vm = require('vm');
+var includeInThisContext = function(path) {
+    var code = fs.readFileSync(path);
+    vm.runInThisContext(code, path);
+}.bind(this);
+
+(function () {
+	$.each(["hello", "world"], function (i, string) {
+		console.log(string);
+	});
+}());
+
+//eval(fs.readFileSync("../server/test.js");
+
+//eval(fs.readFileSync("../external/env.rhino.1.2.js");
+//eval(fs.readFileSync("../external/jquery.min.js");
 
 // citeproc includes
-load("../external/citeproc/loadabbrevs.js");
-load("../external/citeproc/xmle4x.js");
-load("../external/citeproc/xmldom.js");
-load("../external/citeproc/citeproc-1.0.336.js");
-load("../external/citeproc/loadlocale.js");
-load("../external/citeproc/runcites.js");
+eval(fs.readFileSync("../external/citeproc/loadabbrevs.js").toString());
+//eval(fs.readFileSync("../external/citeproc/xmle4x.js").toString());
+eval(fs.readFileSync("../external/citeproc/xmldom.js").toString());
+eval(fs.readFileSync("../external/citeproc/citeproc-1.0.336.js").toString());
+eval(fs.readFileSync("../external/citeproc/loadlocale.js").toString());
+eval(fs.readFileSync("../external/citeproc/runcites.js").toString());
 
-load("../src/debug.js");
-load("../src/exampleData.js");
-load("../src/options.js");
-load("../src/storage.js");
-load("../src/exampleCitations.js");
+"use strict";
 
-load("../src/citeprocLoadSys.js");
-load("../src/citationEngine.js");
+var getFile = function (filePath) {
+	console.log("getting file: " + filePath);
+	var source = fs.readFileSync(filePath).toString().replace('"use strict";', '');
+	//console.log(source);
+	return source;
+}
 
-load("../external/json/json2.js");
+var CSLEDIT = {};
+console.log("CSLEDIT = " + CSLEDIT);
+
+eval(getFile("./test.js"));
+
+eval(getFile("../src/debug.js"));
+eval(getFile("../src/xmlUtility.js"));
+eval(getFile("../src/exampleData.js"));
+//console.log("top style 0 = " + CSLEDIT.exampleData.topStyles[0]);
+eval(getFile("../src/options.js"));
+eval(getFile("../src/storage.js"));
+eval(getFile("../src/exampleCitations.js"));
+
+eval(getFile("../src/citeprocLoadSys.js"));
+eval(getFile("../src/citationEngine.js"));
+
+eval(getFile("../external/json/json2.js"));
 
 // start
-load("config.js");
+eval(getFile("config.js"));
 
 CSLEDIT.options.setUserOptions({
 	rootURL : "c:/xampp/htdocs/csl-source"
 });
+
+console.log('here');
 
 // loop through the parent (unique) csl-styles generating example citations for
 // each one
@@ -50,44 +84,46 @@ var addCslFileToIndex = function (file) {
 		//Print( entry + '\n');
 		entries++;
 
-		var fileData = readFile(file.getPath());
-		print('calculating examples for ' + file.getName());
-		var xmlParser = new CSL_E4X();
+		var fileData = CSLEDIT.xmlUtility.stripComments(fs.readFileSync(file, "utf-8"));
+		console.log('calculating examples for ' + file);
+		var xmlParser = new CSL_NODEJS();
 		var xmlDoc;
 
 		xmlDoc = "notSet";
 		try {
 			xmlDoc = xmlParser.makeXml(fileData);
 		} catch (err) {
-			print('FAILED to parse ' + file.getName());
+			console.log('FAILED to parse ' + file);
+			console.log(err);
 		}
 
 		if (xmlDoc !== "notSet") {
 			var styleId = xmlParser.getStyleId(xmlDoc);
 			// TODO: find out why this is needed!
-			default xml namespace = "http://purl.org/net/xbiblio/csl";
-			with({});
-			var styleTitleNode = xmlDoc.info.title;
-			var styleTitle = "";
+			//default xml namespace = "http://purl.org/net/xbiblio/csl";
+			//with({});
+			var styleTitle = xmlDoc.getElementsByTagName("title").item(0).textContent;
+			cslStyles.styleTitleFromId[styleId] = styleTitle;
+			/*
 			if (styleTitleNode && styleTitleNode.length()) {
 				styleTitle = styleTitleNode[0].toString();
 				cslStyles.styleTitleFromId[styleId] = styleTitle;
 			} else {
-				//print('no title for ' + file.getName());
-			}
+				//console.log('no title for ' + file.getName());
+			}*/
 
 			// check if this is a dependent style and find it's parent ID if so
-			var linkNodes = xmlDoc.info.children();
-			var node;
+			var linkNodes = $(xmlDoc).find('info link[rel="independent-parent"]');
 			var masterId;
 			masterId = styleId;
-			for (node in linkNodes) {
-				if (linkNodes[node].localName() === "link") {
-					if (linkNodes[node].attribute("rel") == "independent-parent" && linkNodes[node].attribute("href") != "") {
-						masterId = linkNodes[node].attribute("href").toString();
-					}
-				}
-			}
+			console.log("styleId = " + styleId);
+
+			console.log("link nodes = " + linkNodes.length);
+			linkNodes.each(function () {
+				masterId = $(this).attr("href");
+				console.log("parent id = " + masterId);
+			});
+			
 			// TODO: why is this preventing the JSON.stringify() working in jslibs?
 			cslStyles.masterIdFromId[styleId] = masterId;
 			
@@ -125,6 +161,10 @@ var addCslFileToIndex = function (file) {
 					replace(/<\/second-field-align>/g, " ");
 
 					exampleCitations.exampleCitationsFromMasterId[styleId].push(citeprocResult);
+
+					if (citeprocResult.statusMessage !== "") {
+						console.log("CITEPROC ERROR: " + citeprocResult.statusMessage);
+					}
 				});
 			}
 		}
@@ -137,20 +177,25 @@ var styleBlacklist = [
 ];
 
 var processDir = function (dirPath) {
-	var dirContents = new File(dirPath).listFiles(),
+	var dirContents = fs.readdirSync(dirPath),
 		index;
 
-	for (var index = 0; index < dirContents.length; index++) {
+	console.log("processing dir " + dirPath);
+	console.log("files = " + dirContents.length);
+
+	for (var index = 0; index < dirContents.length && index < 10; index++) {
 		var file = dirContents[index];
-		if (!file.isDirectory() && /.csl$/.test(file.getName())) {
-			if (styleBlacklist.indexOf(String(file.getName())) === -1) {
-				addCslFileToIndex(file);
-			} else {
-				console.log("skipping blacklisted style: " + file.getName());
-			}
+		if (!fs.statSync(dirPath + '/' + file).isDirectory() && /.csl$/.test(file)) {
+			//if (styleBlacklist.indexOf(String(file.getName())) === -1) {
+			addCslFileToIndex(dirPath + '/' + file);
+			//} else {
+			//	console.log("skipping blacklisted style: " + file.getName());
+			//}
 		}
 	}
 };
+
+console.log('here');
 
 var startTime;
 startTime = (new Date()).getTime();
@@ -160,11 +205,11 @@ processDir('../' + cslServerConfig.cslStylesPath + '/dependent');
 
 console.log("took " + (((new Date()).getTime() - startTime) / 1000) + "s");
 
-print("num entries = " + entries);
+console.log("num entries = " + entries);
 
 // output results to JSON file:
-var outputDir = new File("../" + cslServerConfig.dataPath);
-outputDir.mkdir();
+var outputDir = "../" + cslServerConfig.dataPath;
+fs.mkdir(outputDir);
 
 var outputToJSFile = function (jsonData, name) {
 	var outputString = JSON.stringify(jsonData, null, "\t");
@@ -180,11 +225,12 @@ var outputToJSFile = function (jsonData, name) {
 	outputString = outputString.replace(/\\u00e2\\u0080\\u009c/g, "\\u201c");
 	outputString = outputString.replace(/\\u00e2\\u0080\\u009d/g, "\\u201d");
 
-	var fileWriter = new FileWriter(outputDir.getPath() + '/' + name + '.js');
-	fileWriter.write('"use strict";\n');
-	fileWriter.write('var CSLEDIT = CSLEDIT || {};\n\n');
-	fileWriter.write("CSLEDIT." + name + " = " + outputString + ';');
-	fileWriter.close();
+	var outputData;
+	outputData = '"use strict";\n' +
+		'var CSLEDIT = CSLEDIT || {};\n\n' +
+		"CSLEDIT." + name + " = " + outputString + ';';
+
+	fs.writeFileSync(outputDir + '/' + name + '.js', outputData);
 };
 
 outputToJSFile(exampleCitations, "preGeneratedExampleCitations");

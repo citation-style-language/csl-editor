@@ -1,5 +1,6 @@
 "use strict";
 
+/*
 if (typeof(console) === "undefined") {
 	var console = {
 		log : function (message) {
@@ -8,7 +9,7 @@ if (typeof(console) === "undefined") {
 			}		
 		}
 	};
-}
+}*/
 
 var assertEqual = function (actual, expected, place) {
 	if (actual !== expected) {
