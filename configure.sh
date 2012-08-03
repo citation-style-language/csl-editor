@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # generate example citations
-cd server
+cd exampleCitationsGenerator
 ./installNodeModules.sh
 node generateExampleCitations.js
 cd ..

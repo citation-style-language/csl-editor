@@ -9,6 +9,9 @@ var jQuery = require('jQuery');
 var $ = jQuery;
 var fs = require('fs');
 
+// decrease this for testing
+var STYLES_LIMIT = 500000;
+
 // citeproc includes
 eval(fs.readFileSync("../external/citeproc/loadabbrevs.js").toString());
 eval(fs.readFileSync("../external/citeproc/xmldom.js").toString());
@@ -36,9 +39,20 @@ eval(getFile("../external/json/json2.js"));
 // start
 eval(getFile("config.js"));
 
-CSLEDIT.options.setUserOptions({
-	rootURL : "c:/xampp/htdocs/csl-source"
-});
+// alter this defined in ../src/citeprocLoadSys.js to read locales from disk
+Sys.prototype.retrieveLocale = function (lang) {
+	var thisLocale = locale[lang];
+
+	if (typeof(thisLocale) === "undefined") {
+		// try to fetch from disk
+		try {
+			thisLocale = fs.readFileSync("../external/locales/locales-" + lang + ".xml").toString();
+		} catch (err) {
+			console.log("couldn't fetch locale: " + lang);
+		}
+	}
+	return thisLocale;
+}
 
 // loop through the parent (unique) csl-styles generating example citations for
 // each one
@@ -81,12 +95,9 @@ var addCslFileToIndex = function (file) {
 		// check if this is a dependent style and find it's parent ID if so
 		linkNodes = $(xmlDoc).find('info link[rel="independent-parent"]');
 		masterId = styleId;
-		console.log("styleId = " + styleId);
 
-		console.log("link nodes = " + linkNodes.length);
 		linkNodes.each(function () {
 			masterId = $(this).attr("href");
-			console.log("parent id = " + masterId);
 		});
 		
 		// TODO: why is this preventing the JSON.stringify() working in jslibs?
@@ -137,8 +148,7 @@ var addCslFileToIndex = function (file) {
 var processDir = function (dirPath) {
 	var dirContents = fs.readdirSync(dirPath),
 		index,
-		file,
-		STYLES_LIMIT = 10000;
+		file;
 
 	console.log("processing dir " + dirPath);
 	console.log("files = " + dirContents.length);

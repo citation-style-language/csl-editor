@@ -103,7 +103,7 @@ pages = [
             "src/storage.js",
             "src/xmlUtility.js",
             "src/citationEngine.js",
-            "server/config.js",
+            "exampleCitationsGenerator/config.js",
             "generated/cslStyles.js",
             "generated/preGeneratedExampleCitations.js",
 
