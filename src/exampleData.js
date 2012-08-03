@@ -1,8 +1,6 @@
 "use strict";
 
-console.log("csledit before = " + CSLEDIT);
-//var CSLEDIT = CSLEDIT || {};
-console.log("csledit after = " + CSLEDIT);
+var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.exampleData = {};
 
