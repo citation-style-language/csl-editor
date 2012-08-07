@@ -35,7 +35,7 @@ CSLEDIT.schemaOptions = {
 		$.each(nodeProperties["date/date-part"].choices, function (i, choice) {
 			$.each(choice.attributes, function (attributeName, attribute) {
 				if (attribute.values.length === 2 && attribute.values[0].type === "novalue") {
-					attribute.values.splice(0,1);
+					attribute.values.splice(0, 1);
 					attribute.defaultValue = attribute.values[0].value;
 					attribute.alwaysOutput = true;
 				}

@@ -43,7 +43,7 @@ CSLEDIT.xmlUtility = {
 		return xml;
 	},
 	stripComments : function (xml) {
-		return xml.replace(/<!--[\s\S]*?-->/g,"");
+		return xml.replace(/<!--[\s\S]*?-->/g, "");
 	}
 };
 

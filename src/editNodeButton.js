@@ -1,6 +1,6 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
+var CSLEDIT = CSLEDIT || {};
 
 // A button which opens the property panel for a given CSL node,
 // or if the node doesn't yet exist, creates it
@@ -30,7 +30,7 @@ CSLEDIT.EditNodeButton.prototype.getSelectedNodePath = function () {
 	return [this.cslId];
 };
 
-CSLEDIT.EditNodeButton.prototype.updateButton = function (){
+CSLEDIT.EditNodeButton.prototype.updateButton = function () {
 	this._element.html('<img class="cslPropertyButton" src="' + this.icon + '" />');
 };
 

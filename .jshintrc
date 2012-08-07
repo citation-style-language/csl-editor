@@ -16,8 +16,6 @@
 		"confirm",
 		"prompt",
 
-		"$",
-
 		"assert",
 		"assertEqual"
     ],
@@ -25,6 +23,8 @@
     "node" : true,
     "es5" : true,
     "browser" : true,
+
+	"jquery" : true,
 
     "boss" : false,
     "curly": false,

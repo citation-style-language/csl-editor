@@ -38,7 +38,7 @@ CSLEDIT.searchResults = (function () {
 		for (index = 0; index < Math.min(styles.length, 20); index++)
 		{
 			style = styles[index];
-			if (style.masterId != style.styleId)
+			if (style.masterId !== style.styleId)
 			{
 				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
 							CSLEDIT.cslStyles.styleTitleFromId[style.masterId] + '</a>)';
@@ -46,10 +46,8 @@ CSLEDIT.searchResults = (function () {
 				masterStyleSuffix = '';
 			}
 
-			citation = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
-				formattedCitations[0];
-			bibliography = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].
-				formattedBibliography;
+			citation = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedCitations[0];
+			bibliography = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&
 				style.userCitation !== "" &&
@@ -77,8 +75,8 @@ CSLEDIT.searchResults = (function () {
 			outputList.push(
 				'<table' + featuredStyleClass + '>' +
 				'<tr><td colspan=3><a href="' + style.styleId + '">' +
-				CSLEDIT.cslStyles.styleTitleFromId[style.styleId] + "</a>"
-				+ masterStyleSuffix + featuredStyleText + '</td></tr>' +
+				CSLEDIT.cslStyles.styleTitleFromId[style.styleId] + "</a>" +
+				masterStyleSuffix + featuredStyleText + '</td></tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
 				'<td class=match>' +
 				citation + '</td>' + citationCloseness + '</tr>' +
@@ -99,7 +97,7 @@ CSLEDIT.searchResults = (function () {
 			);
 		}
 
-		$("button.editStyle").click( function (event) {
+		$("button.editStyle").click(function (event) {
 			var styleURL = $(event.target).attr("styleURL");
 			CSLEDIT.options.get("editStyle_func")(styleURL);
 		});

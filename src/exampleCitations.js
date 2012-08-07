@@ -9,10 +9,10 @@ CSLEDIT.exampleCitations = (function () {
 	var newCitation = function (citationIndex) {
 		return {
 			citationId: "CITATION-" + citationIndex,
-			citationItems:[],
-			properties: {noteIndex:0},
+			citationItems: [],
+			properties: {noteIndex: 0},
 			schema: "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
-		}
+		};
 	};
 
 	var getCitations = function () {
@@ -41,7 +41,7 @@ CSLEDIT.exampleCitations = (function () {
 	
 	var getCitationOptions = function () {
 		if (CSLEDIT.storage.getItemJson('CSLEDIT.exampleCitationOptions') === null) {
-		   return {};
+			return {};
 		}
 		return CSLEDIT.storage.getItemJson('CSLEDIT.exampleCitationOptions');
 	};
@@ -57,19 +57,19 @@ CSLEDIT.exampleCitations = (function () {
 		// apply options
 		$.each(citations, function (citationIndex, citation) {
 			var index;
-			for (index=0; index<citation.citationItems.length; index++) {
+			for (index = 0; index < citation.citationItems.length; index++) {
 				var citationItem = citation.citationItems[index],
-					referenceIndex = parseInt(citationItem.id.replace("ITEM-", "")) - 1,
+					referenceIndex = parseInt(citationItem.id.replace("ITEM-", ""), 10) - 1,
 					optionIndex = getOption(citationIndex, referenceIndex),
 					options = CSLEDIT.exampleData.additionalOptions[optionIndex];
 			
 				// replace all options
 				citationItem = { id : citationItem.id };
-				$.each (options.options, function (key, value) {
+				$.each(options.options, function (key, value) {
 					citationItem[key] = value;
 				});
 				citation.citationItems[index] = citationItem;
-			};
+			}
 		});
 	};
 
@@ -113,7 +113,7 @@ CSLEDIT.exampleCitations = (function () {
 
 	var getReferences = function () {
 		if (CSLEDIT.storage.getItemJson('CSLEDIT.exampleReferences') === null) {
-		   setReferences(CSLEDIT.options.get('exampleReferences'));
+			setReferences(CSLEDIT.options.get('exampleReferences'));
 		}
 		return CSLEDIT.storage.getItemJson('CSLEDIT.exampleReferences');
 	};
@@ -151,7 +151,7 @@ CSLEDIT.exampleCitations = (function () {
 		}
 
 		$.each(citations[citationIndex].citationItems, function (i, citationItem) {
-			indexes.push(parseInt(citationItem.id.replace("ITEM-", "")) - 1);
+			indexes.push(parseInt(citationItem.id.replace("ITEM-", ""), 10) - 1);
 		});
 
 		return indexes;

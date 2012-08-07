@@ -1,6 +1,6 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
+var CSLEDIT = CSLEDIT || {};
 
 CSLEDIT.CslNode = function (nameOrNode, attributes, children, cslId) {
 	assert(this instanceof CSLEDIT.CslNode);
@@ -53,7 +53,8 @@ CSLEDIT.CslNode.prototype.setAttrEnabled = function (attr, enabled, defaultValue
 			this.attributes.push({
 				key: attr,
 				value: defaultValue, /* TODO: get default value */
-				enabled: true});
+				enabled: true
+			});
 			return;
 		} else {
 			// a non-existant attribute is equivalent to a disabled one
