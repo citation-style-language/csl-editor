@@ -1,6 +1,17 @@
 "use strict";
 
-define(['src/visualEditor'], function (CSLEDIT_VisualEditor) {
+require.config({
+	baseUrl: "../.."
+});
+
+requirejs(
+		[
+			'src/VisualEditor',
+			'demoSite/external/downloadify/swfobject',
+			'demoSite/external/downloadify/downloadify.min'
+		],
+		function (CSLEDIT_VisualEditor) {
+
 	var cslEditor;
 
 	// Use FileAPI to read files from local file system
@@ -156,8 +167,10 @@ define(['src/visualEditor'], function (CSLEDIT_VisualEditor) {
 		});
 	};
 
-	return {
-		init : initVisualEditorDemo,
-		cslEditor : cslEditor
-	};
+	initVisualEditorDemo("../..");
+
+//	return {
+//		init : initVisualEditorDemo,
+//		cslEditor : cslEditor
+//	};
 });

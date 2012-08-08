@@ -24,39 +24,14 @@
 	<script type="text/javascript" src="../../external/jquery.hoverIntent.minified.js"></script>
 	<script type="text/javascript" src="../../external/jquery.scrollTo-1.4.2-min.js"></script>
 
-	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
+
+	<script type="text/javascript" src="../../src/debug.js"></script>
 
 	<script type="text/javascript" src="../../generated/cslStyles.js"></script>
-	<script type="text/javascript" src="../../src/exampleData.js"></script>
-	<script type="text/javascript" src="../../src/exampleCitations.js"></script>
-	<script type="text/javascript" src="../../src/options.js"></script>
-	<script type="text/javascript" src="../../src/storage.js"></script>
-	<script type="text/javascript" src="../../src/citationEngine.js"></script>
-	<script type="text/javascript" src="../../src/diff.js"></script>
-	<script type="text/javascript" src="../../src/debug.js"></script>
-	<script type="text/javascript" src="../../src/cslParser.js"></script>
-	<script type="text/javascript" src="../../src/Iterator.js"></script>
-	<script type="text/javascript" src="../../src/cslNode.js"></script>
-	<script type="text/javascript" src="../../src/cslData.js"></script>
-	<script type="text/javascript" src="../../src/schemaOptions.js"></script>
-	<script type="text/javascript" src="../../src/schema.js"></script>
-	<script type="text/javascript" src="../../src/NodeWatcher.js"></script>
 
-	<script type="text/javascript" src="../../src/citationEditor.js"></script>
-	<script type="text/javascript" src="../../src/syntaxHighlight.js"></script>
-	<script type="text/javascript" src="../../src/MultiPanel.js"></script>
-	<script type="text/javascript" src="../../src/uiConfig.js"></script>
-	<script type="text/javascript" src="../../src/notificationBar.js"></script>
-	<script type="text/javascript" src="../../src/NodePathView.js"></script>
-	<script type="text/javascript" src="../../src/MultiComboBox.js"></script>
-	<script type="text/javascript" src="../../src/genericPropertyPanel.js"></script>
-	<script type="text/javascript" src="../../src/sortPropertyPanel.js"></script>
-	<script type="text/javascript" src="../../src/infoPropertyPanel.js"></script>
-	<script type="text/javascript" src="../../src/conditionalPropertyPanel.js"></script>
-	<script type="text/javascript" src="../../src/propertyPanel.js"></script>
+	<script type="text/javascript" data-main="../src/visualEditorDemo.js" src="../../external/require.js"></script>
 
-	<script type="text/javascript" data-main="../src/main.js" src="../../external/require.js"></script>
-	<!--script type="text/javascript" src="../src/main-built.js"></script-->
+	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
 
 	<link type="text/css" rel="stylesheet" href="../../css/dropdown.css" />
 

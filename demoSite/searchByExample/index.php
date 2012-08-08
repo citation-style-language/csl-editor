@@ -17,9 +17,6 @@
 	<script type="text/javascript" src="../../external/citeproc/runcites.js"></script>
 
 	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
-	<script type="text/javascript" src="../../src/storage.js"></script>
-	<script type="text/javascript" src="../../src/xmlUtility.js"></script>
-	<script type="text/javascript" src="../../src/citationEngine.js"></script>
 	<script type="text/javascript" src="../../exampleCitationsGenerator/config.js"></script>
 	<script type="text/javascript" src="../../generated/cslStyles.js"></script>
 	<script type="text/javascript" src="../../generated/preGeneratedExampleCitations.js"></script>
@@ -28,35 +25,34 @@
 	<link rel="stylesheet" type="text/css" href="../../external/cleditor/jquery.cleditor.css">
 
 	<script type="text/javascript" src="../../src/debug.js"></script>
-	<script type="text/javascript" src="../../src/exampleData.js"></script>
-	<script type="text/javascript" src="../../src/options.js"></script>
-	<script type="text/javascript" src="../../src/uiConfig.js"></script>
-	<script type="text/javascript" src="../../src/diff.js"></script>
-	<script type="text/javascript" src="../../src/cslParser.js"></script>
-	<script type="text/javascript" src="../../src/cslNode.js"></script>
-	<script type="text/javascript" src="../../src/Iterator.js"></script>
-	<script type="text/javascript" src="../../src/cslData.js"></script>
-	<script type="text/javascript" src="../../src/searchResults.js"></script>
-	<script type="text/javascript" src="../../src/searchByExample.js"></script>
+
+	<script type="text/javascript" src="../../external/require.js"></script>
+
+<script type="text/javascript">
+	require.config({
+		baseUrl: "../.."
+	});
+	requirejs(['src/SearchByExample', 'src/cslData'], function (CSLEDIT_SearchByExample, CSLEDIT_data) {
+		$(document).ready(function () {
+			CSLEDIT.searchByExample = new CSLEDIT_SearchByExample($('#mainContainer'), {
+				rootURL : "../..",
+				editStyle_func : function (styleURL) {
+					styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
+					CSLEDIT_data.loadStyleFromURL(styleURL, function () {
+						window.location.href = "../visualEditor";
+					});
+				}
+			});
+		});
+	});
+	</script>
+
 	<script type="text/javascript" src="../src/analytics.js"></script>
 	
 	<link rel="stylesheet" href="../../css/base.css" />
 	<link rel="stylesheet" href="../../css/searchByExample.css" />
 	<link rel="stylesheet" href="../../css/searchResults.css" />
 
-	<script type="text/javascript">
-		$(document).ready(function () {
-			CSLEDIT.searchByExample = new CSLEDIT.SearchByExample($('#mainContainer'), {
-				rootURL : "../..",
-				editStyle_func : function (styleURL) {
-					styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-					CSLEDIT.data.loadStyleFromURL(styleURL, function () {
-						window.location.href = "../visualEditor";
-					});
-				}
-			});
-		});
-	</script>
 </head>
 <body id="searchByExample">
 <?php include '../html/navigation.html'; ?>

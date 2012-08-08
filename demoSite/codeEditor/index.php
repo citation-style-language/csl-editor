@@ -22,30 +22,25 @@
 	<script type="text/javascript" src="../../external/citeproc/runcites.js"></script>
 	<script type="text/javascript" src="../../external/diff-match-patch/diff_match_patch.js"></script>
 
-	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
 	<script type="text/javascript" src="../../src/debug.js"></script>
-	<script type="text/javascript" src="../../src/storage.js"></script>
-	<script type="text/javascript" src="../../src/exampleData.js"></script>
-	<script type="text/javascript" src="../../src/options.js"></script>
-	<script type="text/javascript" src="../../src/exampleCitations.js"></script>
-	<script type="text/javascript" src="../../src/citationEngine.js"></script>
-	<script type="text/javascript" src="../../src/uiConfig.js"></script>
-	<script type="text/javascript" src="../../src/diff.js"></script>
-	<script type="text/javascript" src="../../src/cslParser.js"></script>
-	<script type="text/javascript" src="../../src/cslNode.js"></script>
-	<script type="text/javascript" src="../../src/Iterator.js"></script>
-	<script type="text/javascript" src="../../src/cslData.js"></script>
+	<script type="text/javascript" src="../../external/require.js"></script>
+
+	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
 
 	<link rel="stylesheet" href="../../css/base.css" />
-	<script type="text/javascript" src="../../src/codeEditor.js"></script>
 
-	<script type="text/javascript">
+<script type="text/javascript">
+	require.config({
+		baseUrl: "../.."
+	});
+	requirejs(['src/CodeEditor'], function (CSLEDIT_CodeEditor) {
 		$(document).ready(function () {
-			CSLEDIT.codeEditor = new CSLEDIT.CodeEditor('#codeEditorContainer', {
+			CSLEDIT.codeEditor = new CSLEDIT_CodeEditor('#codeEditorContainer', {
 				rootURL : "../.."
 			});
 		});
-	</script>
+	});
+</script>
 
 	<script type="text/javascript" src="../src/analytics.js"></script>
 
