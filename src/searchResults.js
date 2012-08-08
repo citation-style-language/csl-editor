@@ -1,11 +1,11 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.searchResults = (function () {
+
+var CSLEDIT_searchResults = (function () {
 
 	var closenessString = function (distance, stringA, stringB) {
-		var matchQuality = CSLEDIT.diff.matchQuality(stringA, stringB),
+		var matchQuality = CSLEDIT_diff.matchQuality(stringA, stringB),
 			closeness;
 
 		if (matchQuality === 100) {
@@ -41,18 +41,18 @@ CSLEDIT.searchResults = (function () {
 			if (style.masterId !== style.styleId)
 			{
 				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
-							CSLEDIT.cslStyles.styleTitleFromId[style.masterId] + '</a>)';
+							CSLEDIT_cslStyles.styleTitleFromId[style.masterId] + '</a>)';
 			} else {
 				masterStyleSuffix = '';
 			}
 
-			citation = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedCitations[0];
-			bibliography = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography;
+			citation = CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedCitations[0];
+			bibliography = CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&
 				style.userCitation !== "" &&
 				citation !== "") {
-				citationDiff = CSLEDIT.diff.prettyHtmlDiff(style.userCitation, citation);
+				citationDiff = CSLEDIT_diff.prettyHtmlDiff(style.userCitation, citation);
 				citationCloseness = closenessString(citationDistance, style.userCitation, citation);
 			}
 
@@ -60,14 +60,14 @@ CSLEDIT.searchResults = (function () {
 				style.userBibliography !== "" &&
 				bibliography !== "") {
 				bibliographyDiff =
-					CSLEDIT.diff.prettyHtmlDiff(style.userBibliography, bibliography);
+					CSLEDIT_diff.prettyHtmlDiff(style.userBibliography, bibliography);
 				bibliographyCloseness = closenessString(
 						bibliographyDistance, style.userBibliography, bibliography);
 			}
 
 			featuredStyleClass = '';
 			featuredStyleText = '';
-			if (CSLEDIT.exampleData.topStyles.indexOf(style.styleId) !== -1) {
+			if (CSLEDIT_exampleData.topStyles.indexOf(style.styleId) !== -1) {
 				featuredStyleClass = ' class="featuredStyle" ';
 				featuredStyleText = '<span class=featuredStyle>Popular Style<span>';
 			}
@@ -75,7 +75,7 @@ CSLEDIT.searchResults = (function () {
 			outputList.push(
 				'<table' + featuredStyleClass + '>' +
 				'<tr><td colspan=3><a href="' + style.styleId + '">' +
-				CSLEDIT.cslStyles.styleTitleFromId[style.styleId] + "</a>" +
+				CSLEDIT_cslStyles.styleTitleFromId[style.styleId] + "</a>" +
 				masterStyleSuffix + featuredStyleText + '</td></tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
 				'<td class=match>' +
@@ -99,7 +99,7 @@ CSLEDIT.searchResults = (function () {
 
 		$("button.editStyle").click(function (event) {
 			var styleURL = $(event.target).attr("styleURL");
-			CSLEDIT.options.get("editStyle_func")(styleURL);
+			CSLEDIT_options.get("editStyle_func")(styleURL);
 		});
 	};
 

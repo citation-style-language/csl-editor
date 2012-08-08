@@ -1,12 +1,12 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
+
 
 /* provides a way to edit space-delimited list of stings,
  * each of which must be one of the supplied values
  */
 
-CSLEDIT.MultiComboBox = function (element, possibleValues, onChange, unique) {
+var CSLEDIT_MultiComboBox = function (element, possibleValues, onChange, unique) {
 	this._element = element;
 	this._values = [];
 	this._onChange = onChange;
@@ -19,15 +19,15 @@ CSLEDIT.MultiComboBox = function (element, possibleValues, onChange, unique) {
 	this._refresh(true);
 };
 
-CSLEDIT.MultiComboBox.prototype.getElement = function () {
+CSLEDIT_MultiComboBox.prototype.getElement = function () {
 	return this._element;
 };
 
-CSLEDIT.MultiComboBox.prototype.setTooltip = function (tooltip) {
+CSLEDIT_MultiComboBox.prototype.setTooltip = function (tooltip) {
 	this._element.attr("title", tooltip);
 };
 
-CSLEDIT.MultiComboBox.prototype.val = function (val, suppressOnChange) {
+CSLEDIT_MultiComboBox.prototype.val = function (val, suppressOnChange) {
 	if (typeof val === "undefined") {
 		this._readValues();
 		return this._values.join(" ");
@@ -44,7 +44,7 @@ CSLEDIT.MultiComboBox.prototype.val = function (val, suppressOnChange) {
 	}
 };
 
-CSLEDIT.MultiComboBox.prototype._readValues = function () {
+CSLEDIT_MultiComboBox.prototype._readValues = function () {
 	var that = this;
 	// repopulate _values from current combo box values
 	that._values = [];
@@ -53,7 +53,7 @@ CSLEDIT.MultiComboBox.prototype._readValues = function () {
 	});
 };
 
-CSLEDIT.MultiComboBox.prototype._refresh = function (suppressOnChange) {
+CSLEDIT_MultiComboBox.prototype._refresh = function (suppressOnChange) {
 	var that = this,
 		table = $('<table></table>'),
 		addButton;
@@ -100,7 +100,7 @@ CSLEDIT.MultiComboBox.prototype._refresh = function (suppressOnChange) {
 	}
 };
 
-CSLEDIT.MultiComboBox.prototype._changed = function () {
+CSLEDIT_MultiComboBox.prototype._changed = function () {
 	if (typeof this._onChange !== "undefined") {
 		this._readValues();
 		this._onChange(this._values.join(' '));

@@ -1,21 +1,21 @@
 "use strict";
-var CSLEDIT = CSLEDIT || {};
+
 
 module("Property panels for all nodes in top styles", {
 	setup : function () {
-		CSLEDIT.schema = CSLEDIT.Schema(CSLEDIT.schemaOptions);
+		window.CSLEDIT_schema = CSLEDIT_Schema(CSLEDIT_schemaOptions);
 	}
 });
 
-CSLEDIT.test_propertyPanel = {};
-CSLEDIT.test_propertyPanel.generateAllPropertyPanels = function (cslData) {
+var CSLEDIT_test_propertyPanel = {};
+CSLEDIT_test_propertyPanel.generateAllPropertyPanels = function (cslData) {
 	var propertyPanelElement = $("<div/>"),
 		iterator,
 		node,
 		parent,
 		elementName;
 
-	iterator = new CSLEDIT.Iterator(cslData);
+	iterator = new CSLEDIT_Iterator(cslData);
 
 	while (iterator.hasNext()) {
 		node = iterator.next();
@@ -28,28 +28,28 @@ CSLEDIT.test_propertyPanel.generateAllPropertyPanels = function (cslData) {
 			elementName = parent.name + '/' + node.name;
 		}
 
-		CSLEDIT.propertyPanel.setup(propertyPanelElement, node, elementName);
+		CSLEDIT_propertyPanel.setup(propertyPanelElement, node, elementName);
 		ok(true, "set up property panel for " + elementName);
 	}
 };
-CSLEDIT.test_propertyPanel.times = {};
+CSLEDIT_test_propertyPanel.times = {};
 
 asyncTest("property panels", function () {
-	CSLEDIT.schema.callWhenReady( function () {
-		var styles = CSLEDIT.testUtils.getStyles(2);
+	CSLEDIT_schema.callWhenReady( function () {
+		var styles = CSLEDIT_testUtils.getStyles(2);
 
-		CSLEDIT.data = CSLEDIT.Data("CSLEDIT.testData");
-		ok("schema" in CSLEDIT, "CSLEDIT.schema is there");
+		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_testData");
+		ok("schema" in CSLEDIT, "CSLEDIT_schema is there");
 		$.each(styles, function (url, cslCode) {
 			var result;
 
-			result = CSLEDIT.data.setCslCode(cslCode);
+			result = CSLEDIT_data.setCslCode(cslCode);
 
 			if ("error" in result) {
 				// should only get dependent style errors in repo styles
 				ok(result.error.indexOf("dependent style") !== -1, "dependent style: " + url);
 			} else {
-				CSLEDIT.test_propertyPanel.generateAllPropertyPanels(CSLEDIT.data.get());
+				CSLEDIT_test_propertyPanel.generateAllPropertyPanels(CSLEDIT_data.get());
 			}
 		});
 		start();

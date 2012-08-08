@@ -1,7 +1,7 @@
 "use strict";
 
 var CSLEDIT = CSLEDIT || {}; 
-CSLEDIT.MultiPanel = function (id) {
+var CSLEDIT_MultiPanel = function (id) {
 	var that = this;
 
 	this.element = $('<fieldset class="multiPanel" id="' + id + '"></fieldset>');
@@ -22,11 +22,11 @@ CSLEDIT.MultiPanel = function (id) {
 	this.typeSelect.on('change', this.updateFunction);
 };
 
-CSLEDIT.MultiPanel.prototype.onChange = function (callback) {
+CSLEDIT_MultiPanel.prototype.onChange = function (callback) {
 	this.onChangeCallback = callback;
 };
 
-CSLEDIT.MultiPanel.prototype.addPanel = function (name) {
+CSLEDIT_MultiPanel.prototype.addPanel = function (name) {
 	var that = this,
 		newPanel;
 
@@ -37,7 +37,7 @@ CSLEDIT.MultiPanel.prototype.addPanel = function (name) {
 	this.currentContentPanel.append(newPanel);
 };
 
-CSLEDIT.MultiPanel.prototype.update = function () {
+CSLEDIT_MultiPanel.prototype.update = function () {
 	var that = this,
 		selectedIndex = this.typeSelect.find('option').index(
 			this.typeSelect.find('option:selected'));
@@ -56,7 +56,7 @@ CSLEDIT.MultiPanel.prototype.update = function () {
 	}
 };
 
-CSLEDIT.MultiPanel.prototype.select = function (index) {
+CSLEDIT_MultiPanel.prototype.select = function (index) {
 	this.typeSelect.val(this.typeSelect.find('option').eq(index).html());
 	this.update();
 };

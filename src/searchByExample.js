@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
+
+var CSLEDIT_SearchByExample = function (mainContainer, userOptions) {
 	var nameSearchTimeout,
 		styleFormatSearchTimeout,
 		exampleIndex = -1,
@@ -12,10 +12,10 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		userCitations,
 		userBibliographies;
 
-	CSLEDIT.options.setUserOptions(userOptions);
+	CSLEDIT_options.setUserOptions(userOptions);
 	mainContainer = $(mainContainer);
 	$.ajax({
-		url: CSLEDIT.options.get("rootURL") + "/html/searchByExample.html",
+		url: CSLEDIT_options.get("rootURL") + "/html/searchByExample.html",
 		success : function (data) {
 			mainContainer.html(data);
 			init();
@@ -41,11 +41,11 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		var supportedTags = [ 'b', 'i', 'u', 'sup', 'sub' ],
 			invisibleTags = [ 'p', 'span', 'div', 'second-field-align' ]; // we want the contents of these but not the actual tags
 
-		input = CSLEDIT.xmlUtility.stripComments(input);
-		input = CSLEDIT.xmlUtility.stripUnsupportedTagsAndContents(
+		input = CSLEDIT_xmlUtility.stripComments(input);
+		input = CSLEDIT_xmlUtility.stripUnsupportedTagsAndContents(
 			input, supportedTags.concat(invisibleTags));
-		input = CSLEDIT.xmlUtility.stripUnsupportedTags(input, supportedTags);
-		input = CSLEDIT.xmlUtility.stripAttributesFromTags(input, supportedTags);
+		input = CSLEDIT_xmlUtility.stripUnsupportedTags(input, supportedTags);
+		input = CSLEDIT_xmlUtility.stripAttributesFromTags(input, supportedTags);
 		input = input.replace(/&nbsp;/g, " ");
 		input = input.replace("\n", "");
 		input = input.replace(/&amp;/g, "&#38;");
@@ -85,21 +85,21 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			userBibliography = "";
 		}
 
-		for (styleId in CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId) {
-			if (CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
-				exampleCitation = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[styleId][exampleIndex];
+		for (styleId in CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId) {
+			if (CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
+				exampleCitation = CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[styleId][exampleIndex];
 
 				if (exampleCitation !== null && exampleCitation.statusMessage === "") {
 					formattedCitation = exampleCitation.formattedCitations[0];
 
 					if (userCitation !== "") {
-						citationMatchQuality = CSLEDIT.diff.matchQuality(
+						citationMatchQuality = CSLEDIT_diff.matchQuality(
 							userCitation, formattedCitation);
 					} else {
 						citationMatchQuality = 0;
 					}
 					if (userBibliography !== "") {
-						bibliographyMatchQuality = CSLEDIT.diff.matchQuality(
+						bibliographyMatchQuality = CSLEDIT_diff.matchQuality(
 							userBibliography, exampleCitation.formattedBibliography);
 					} else {
 						bibliographyMatchQuality = 0;
@@ -114,7 +114,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 					}
 
 					// give tiny boost to top popular styles
-					if (CSLEDIT.exampleData.topStyles.indexOf(styleId) !== -1) {
+					if (CSLEDIT_exampleData.topStyles.indexOf(styleId) !== -1) {
 						thisMatchQuality += 0.1;
 					}
 
@@ -146,7 +146,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			});
 		}
 		
-		CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"), exampleIndex);
+		CSLEDIT_searchResults.displaySearchResults(result, $("#searchResults"), exampleIndex);
 		console.timeEnd("searchForStyle");
 	};
 
@@ -165,18 +165,18 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	}
 
 	var formatExampleDocument = function () {
-		var jsonDocument = CSLEDIT.exampleData.jsonDocumentList[exampleIndex],
+		var jsonDocument = CSLEDIT_exampleData.jsonDocumentList[exampleIndex],
 			table,
 			rows = [];
 		
 		table = $("<table/>");
 
 		$.each(jsonDocument, function (key, value) {
-			var order = CSLEDIT.uiConfig.fieldOrder.indexOf(key),
+			var order = CSLEDIT_uiConfig.fieldOrder.indexOf(key),
 				valueString;
 
 			if (order === -1) {
-				order = CSLEDIT.uiConfig.fieldOrder.length;
+				order = CSLEDIT_uiConfig.fieldOrder.length;
 			}
 
 			if (key === "author" || key === "editor" || key === "translator") {
@@ -195,7 +195,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			}
 
 			rows.push({
-				html : "<tr><td>" + CSLEDIT.uiConfig.capitaliseFirstLetter(key) + "</td><td>" + valueString + "</td></td>",
+				html : "<tr><td>" + CSLEDIT_uiConfig.capitaliseFirstLetter(key) + "</td><td>" + valueString + "</td></td>",
 				order : order
 			});
 		});
@@ -240,7 +240,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	};
 
 	var updateExample = function (newExampleIndex) {
-		var length = CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length;
+		var length = CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length;
 
 		if (exampleIndex !== -1) {
 			userCitations[exampleIndex] = $("#userCitation").cleditor()[0].doc.body.innerHTML;
@@ -257,8 +257,8 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 	};
 
 	var init = function () {
-		if (CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length !==
-				CSLEDIT.exampleData.jsonDocumentList.length) {
+		if (CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length !==
+				CSLEDIT_exampleData.jsonDocumentList.length) {
 			alert("Example citations need re-calculating on server");
 		}
 
@@ -280,7 +280,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 
 		$('button#searchButton').css({
 			'background-image' :
-				"url(" + CSLEDIT.options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
+				"url(" + CSLEDIT_options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
 		});
 
 		var userCitationInput = $("#userCitation").cleditor({height: 55})[0];
@@ -302,7 +302,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		// prepopulate with APA example	citations
 		userCitations = [];
 		userBibliographies = [];
-		$.each(CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle],
+		$.each(CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle],
 				function (i, exampleCitation) {
 			userCitations.push(exampleCitation.formattedCitations[0]);
 			userBibliographies.push(exampleCitation.formattedBibliography);

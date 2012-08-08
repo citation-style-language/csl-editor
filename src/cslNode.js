@@ -1,9 +1,9 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.CslNode = function (nameOrNode, attributes, children, cslId) {
-	assert(this instanceof CSLEDIT.CslNode);
+
+var CSLEDIT_CslNode = function (nameOrNode, attributes, children, cslId) {
+	assert(this instanceof CSLEDIT_CslNode);
 
 	if (nameOrNode.hasOwnProperty("name")) {
 		this.copy(nameOrNode);
@@ -21,7 +21,7 @@ CSLEDIT.CslNode = function (nameOrNode, attributes, children, cslId) {
 };
 
 // performs a shallow copy of source
-CSLEDIT.CslNode.prototype.copy = function (source) {
+CSLEDIT_CslNode.prototype.copy = function (source) {
 	this.name = source.name;
 	this.attributes = source.attributes;
 	this.children = source.children;
@@ -29,7 +29,7 @@ CSLEDIT.CslNode.prototype.copy = function (source) {
 	this.cslId = source.cslId;
 };
 
-CSLEDIT.CslNode.prototype.setAttr = function (attr, value) {
+CSLEDIT_CslNode.prototype.setAttr = function (attr, value) {
 	var index;
 
 	index = this._indexOfAttr(attr);
@@ -42,7 +42,7 @@ CSLEDIT.CslNode.prototype.setAttr = function (attr, value) {
 	}
 };
 
-CSLEDIT.CslNode.prototype.setAttrEnabled = function (attr, enabled, defaultValue) {
+CSLEDIT_CslNode.prototype.setAttrEnabled = function (attr, enabled, defaultValue) {
 	var index;
 
 	defaultValue = defaultValue || "";
@@ -64,12 +64,12 @@ CSLEDIT.CslNode.prototype.setAttrEnabled = function (attr, enabled, defaultValue
 	this.attributes[index].enabled = enabled;
 };
 
-CSLEDIT.CslNode.prototype.hasAttr = function (attr) {
+CSLEDIT_CslNode.prototype.hasAttr = function (attr) {
 	var index = this._indexOfAttr(attr);
 	return index !== -1 && this.attributes[index].enabled;
 };
 
-CSLEDIT.CslNode.prototype.getAttr = function (attr) {
+CSLEDIT_CslNode.prototype.getAttr = function (attr) {
 	var index;
 
 	index = this._indexOfAttr(attr);
@@ -85,7 +85,7 @@ CSLEDIT.CslNode.prototype.getAttr = function (attr) {
 // private methods
 
 // returns -1 if can't find
-CSLEDIT.CslNode.prototype._indexOfAttr = function (attrName) {
+CSLEDIT_CslNode.prototype._indexOfAttr = function (attrName) {
 	var index = -1;
 	$.each(this.attributes, function (i, attr) {
 		if (attr.key === attrName) {

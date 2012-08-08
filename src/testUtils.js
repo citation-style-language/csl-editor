@@ -1,18 +1,18 @@
 "use strict";
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.testUtils = {};
+
+var CSLEDIT_testUtils = {};
 
 /*global ok:true*/
 
 // returns a list of complete CSL styles from the repository
 //
 // returns only top styles at present
-CSLEDIT.testUtils.getStyles = function (maxNumberOfStyles) {
+CSLEDIT_testUtils.getStyles = function (maxNumberOfStyles) {
 	var styles = {};
 
-	$.each(CSLEDIT.exampleData.topStyles, function (i, style) {
-		var url = CSLEDIT.options.get("rootURL") + '/external/csl-styles/' +
+	$.each(CSLEDIT_exampleData.topStyles, function (i, style) {
+		var url = CSLEDIT_options.get("rootURL") + '/external/csl-styles/' +
 				style.replace(/^.*\//, "") + ".csl",
 			cslCode;
 
@@ -34,7 +34,7 @@ CSLEDIT.testUtils.getStyles = function (maxNumberOfStyles) {
 
 		if (typeof(cslCode) === "undefined") {
 			// try dependent style
-			url = CSLEDIT.options.get("rootURL") + '/external/csl-styles/dependent/' +
+			url = CSLEDIT_options.get("rootURL") + '/external/csl-styles/dependent/' +
 				style.replace(/^.*\//, "") + ".csl";
 	
 			$.ajax({

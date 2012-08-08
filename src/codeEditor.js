@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.CodeEditor = function (containerElement, userOptions) {
+
+var CSLEDIT_CodeEditor = function (containerElement, userOptions) {
 	var codeTimeout,
 		editor,
 		diffTimeout,
@@ -15,10 +15,10 @@ CSLEDIT.CodeEditor = function (containerElement, userOptions) {
 
 	containerElement = $(containerElement);
 
-	CSLEDIT.options.setUserOptions(userOptions);
+	CSLEDIT_options.setUserOptions(userOptions);
 
 	$.ajax({
-		url: CSLEDIT.options.get("rootURL") + "/html/codeEditor.html",
+		url: CSLEDIT_options.get("rootURL") + "/html/codeEditor.html",
 		success : function (data) {
 			containerElement.html(data);
 			init();
@@ -37,14 +37,14 @@ CSLEDIT.CodeEditor = function (containerElement, userOptions) {
 		{
 			clearTimeout(codeTimeout);
 			codeTimeout = setTimeout( function () {
-				var result = CSLEDIT.data.setCslCode(editor.getValue());
+				var result = CSLEDIT_data.setCslCode(editor.getValue());
 
 				if ("error" in result) {
 					$("#statusMessage").html(result.error);
 					$("#formattedCitations").html("");
 					$("#formattedBibliography").html("");
 				} else {
-					CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
+					CSLEDIT_citationEngine.runCiteprocAndDisplayOutput(
 						$("#statusMessage"), $("#exampleOutput"),
 						$("#formattedCitations"), $("#formattedBibliography"));
 				}
@@ -56,8 +56,8 @@ CSLEDIT.CodeEditor = function (containerElement, userOptions) {
 				lineNumbers: true
 		});
 
-		CSLEDIT.data.initPageStyle( function () {
-			editor.setValue(CSLEDIT.data.getCslCode());
+		CSLEDIT_data.initPageStyle( function () {
+			editor.setValue(CSLEDIT_data.getCslCode());
 		});
 
 		codeMirrorScroll = $('.CodeMirror-scroll');

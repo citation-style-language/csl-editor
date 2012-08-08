@@ -1,20 +1,20 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.NodePathView = function (element, callbacks, syntaxHighlighter) {
+
+var CSLEDIT_NodePathView = function (element, callbacks, syntaxHighlighter) {
 	this.element = 	element;
 	this.callbacks = callbacks;
 	this.syntaxHighlighter = syntaxHighlighter;
 };
 
-CSLEDIT.NodePathView.prototype.selectNode = function (nodePath) {
+CSLEDIT_NodePathView.prototype.selectNode = function (nodePath) {
 	var that = this,
 		nodesHtml = [],
-		cslData = CSLEDIT.data.get();
+		cslData = CSLEDIT_data.get();
 
 	$.each(nodePath, function (i, cslId) {
-		var node = CSLEDIT.data.getNode(cslId, cslData);
+		var node = CSLEDIT_data.getNode(cslId, cslData);
 		nodesHtml.push('<span cslid="' + node.cslId + '">' + node.name + '</span>');
 	});
 

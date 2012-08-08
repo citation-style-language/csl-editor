@@ -1,15 +1,15 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.SearchByName = function (mainContainer, userOptions) {
+
+var CSLEDIT_SearchByName = function (mainContainer, userOptions) {
 	var nameSearchTimeout,
 		previousQuery;
 
-	CSLEDIT.options.setUserOptions(userOptions);
+	CSLEDIT_options.setUserOptions(userOptions);
 	mainContainer = $(mainContainer);
 	$.ajax({
-		url: CSLEDIT.options.get("rootURL") + "/html/searchByName.html",
+		url: CSLEDIT_options.get("rootURL") + "/html/searchByName.html",
 		success : function (data) {
 			mainContainer.html(data);
 			init();
@@ -36,13 +36,13 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 		if (searchQuery.length === 0) {
 			$("#message").html("<h2>Popular Styles</h2>");
 			for (index = 0; index < 20; index++) {
-				styleId = CSLEDIT.exampleData.topStyles[index];
+				styleId = CSLEDIT_exampleData.topStyles[index];
 				result.push({
 					styleId : styleId,
-					masterId : CSLEDIT.cslStyles.masterIdFromId[styleId]
+					masterId : CSLEDIT_cslStyles.masterIdFromId[styleId]
 				});
 			}
-			CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"));
+			CSLEDIT_searchResults.displaySearchResults(result, $("#searchResults"));
 			previousQuery = "";
 			return;
 		}
@@ -60,23 +60,23 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 		previousQuery = searchQuery;
 		
 		// dumb search, just iterates through all the names
-		for (styleId in CSLEDIT.cslStyles.styleTitleFromId) {
-			if (CSLEDIT.cslStyles.styleTitleFromId.hasOwnProperty(styleId)) {
-				styleName = CSLEDIT.cslStyles.styleTitleFromId[styleId];
+		for (styleId in CSLEDIT_cslStyles.styleTitleFromId) {
+			if (CSLEDIT_cslStyles.styleTitleFromId.hasOwnProperty(styleId)) {
+				styleName = CSLEDIT_cslStyles.styleTitleFromId[styleId];
 
 				if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
 					styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
-					masterId = CSLEDIT.cslStyles.masterIdFromId[styleId];
+					masterId = CSLEDIT_cslStyles.masterIdFromId[styleId];
 					if (masterId !== styleId) {
 						masterStyleName = ' (same as <a href="' + masterId + '">' +
-							CSLEDIT.cslStyles.styleTitleFromId[masterId] + '</a>)';
+							CSLEDIT_cslStyles.styleTitleFromId[masterId] + '</a>)';
 					} else {
 						masterStyleName = "";
 					}
 					result.push({
 							styleId : styleId,
 							masterId : masterId,
-							popular : CSLEDIT.exampleData.topStyles.indexOf(styleId)
+							popular : CSLEDIT_exampleData.topStyles.indexOf(styleId)
 						});
 				}
 			}
@@ -113,14 +113,14 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 			return 0;
 		});
 
-		CSLEDIT.searchResults.displaySearchResults(result, $("#searchResults"));
+		CSLEDIT_searchResults.displaySearchResults(result, $("#searchResults"));
 	};
 
 	var init = function () {
 		// add icon
 		$('button#searchButton').css({
 			'background-image' :
-				"url(" + CSLEDIT.options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
+				"url(" + CSLEDIT_options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
 		});
 
 		// delayed search after typing

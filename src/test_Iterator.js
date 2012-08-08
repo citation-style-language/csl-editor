@@ -1,6 +1,6 @@
 "use strict";
 
-module("CSLEDIT.Iterator");
+module("CSLEDIT_Iterator");
 
 test("iterate tree", function () {
 	var testTree,
@@ -22,7 +22,7 @@ test("iterate tree", function () {
 		]	
 	}
 	
-	iterator = new CSLEDIT.Iterator(testTree);
+	iterator = new CSLEDIT_Iterator(testTree);
 
 	id = 0;
 	while (iterator.hasNext()) {

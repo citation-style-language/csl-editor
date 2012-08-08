@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.sortPropertyPanel = (function () {
+
+var CSLEDIT_sortPropertyPanel = (function () {
 	var onChangeTimeout, setupPanel, list, nodeData, panel, executeCommand,
 		namesAttributeNames = [
 			"names-min",
@@ -80,10 +80,10 @@ CSLEDIT.sortPropertyPanel = (function () {
 			fromId = nodeData.children[index].cslId;
 		}
 
-		CSLEDIT.viewController.setSuppressSelectNode(true);
+		CSLEDIT_viewController.setSuppressSelectNode(true);
 		executeCommand("moveNode", [fromId, nodeData.cslId, toPosition]);
-		CSLEDIT.viewController.setSuppressSelectNode(false);
-		nodeData = CSLEDIT.data.getNode(nodeData.cslId);
+		CSLEDIT_viewController.setSuppressSelectNode(false);
+		nodeData = CSLEDIT_data.getNode(nodeData.cslId);
 	};
 
 	var visibleFieldName = function (macro, variable) {
@@ -133,7 +133,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 	};
 
 	var getKeyNodeData = function (index) {
-		var keyNode = new CSLEDIT.CslNode("key");
+		var keyNode = new CSLEDIT_CslNode("key");
 
 		keyNode.attributes = attributesFromVisibleFieldName(
 			list.find('select.sortKey').eq(index).val());
@@ -162,7 +162,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		
 		childIndex = listElements.index($(this).parent());
 
-		cslId = CSLEDIT.data.getNode(nodeData.cslId).children[childIndex].cslId;
+		cslId = CSLEDIT_data.getNode(nodeData.cslId).children[childIndex].cslId;
 		listElements.eq(childIndex).remove();
 		executeCommand('deleteNode', [cslId]);
 	};
@@ -185,12 +185,12 @@ CSLEDIT.sortPropertyPanel = (function () {
 		});
 
 		variables = [];
-		$.each(CSLEDIT.schema.choices("sort/key")[0].attributes.variable.values, function (i, variable) {
+		$.each(CSLEDIT_schema.choices("sort/key")[0].attributes.variable.values, function (i, variable) {
 			variables.push(variable.value);
 		});
 
 		macros = [];
-		$.each(CSLEDIT.data.getNodesFromPath("style/macro"), function (i, node) {
+		$.each(CSLEDIT_data.getNodesFromPath("style/macro"), function (i, node) {
 			assertEqual(node.attributes[0].key, "name");
 			macros.push(node.attributes[0].value);
 		});
@@ -243,18 +243,18 @@ CSLEDIT.sortPropertyPanel = (function () {
 		addKeyButton.on('click', function () {
 			var selectNodes;
 
-			CSLEDIT.viewController.setSuppressSelectNode(true);
+			CSLEDIT_viewController.setSuppressSelectNode(true);
 			executeCommand('addNode', [nodeData.cslId, "last",
-				new CSLEDIT.CslNode('key', [
+				new CSLEDIT_CslNode('key', [
 					{
 						key : "variable",
 						value : "author",
 						enabled : true
 					}
 				])]);
-			CSLEDIT.viewController.setSuppressSelectNode(false);
+			CSLEDIT_viewController.setSuppressSelectNode(false);
 
-			nodeData = CSLEDIT.data.getNode(nodeData.cslId);
+			nodeData = CSLEDIT_data.getNode(nodeData.cslId);
 
 			list.append(sortKeyHtml);
 			selectNodes = list.find('select');

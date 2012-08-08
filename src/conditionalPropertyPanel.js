@@ -1,11 +1,11 @@
 "use strict";
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.ConditionalPropertyPanel = function (element, node, executeCommand) {
+
+var CSLEDIT_ConditionalPropertyPanel = function (element, node, executeCommand) {
 	var that = this;
 
 	this.element = element;
-	this.node = new CSLEDIT.CslNode(node);
+	this.node = new CSLEDIT_CslNode(node);
 	this.node.children = []; // not interested in the children
 	this.executeCommand = executeCommand;
 
@@ -13,7 +13,7 @@ CSLEDIT.ConditionalPropertyPanel = function (element, node, executeCommand) {
 
 	// any / none / all selector
 	this.matchSelect = $('<select></select>');
-	$.each(CSLEDIT.schema.attributes('choose/if').match.values, function (i, value) {
+	$.each(CSLEDIT_schema.attributes('choose/if').match.values, function (i, value) {
 		that.matchSelect.append('<option>' + value.value + '</option>');
 	});
 
@@ -32,7 +32,7 @@ CSLEDIT.ConditionalPropertyPanel = function (element, node, executeCommand) {
 	this.setup();
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.attributeValue = function (attribute) {
+CSLEDIT_ConditionalPropertyPanel.prototype.attributeValue = function (attribute) {
 	var that = this,
 		values = [];
 
@@ -45,7 +45,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.attributeValue = function (attribute)
 	return values.join(" ");
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.removeDuplicateOptions = function () {
+CSLEDIT_ConditionalPropertyPanel.prototype.removeDuplicateOptions = function () {
 	var that = this;
 
 	$.each(that.node.attributes, function (attrIndex, attribute) {
@@ -109,7 +109,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.removeDuplicateOptions = function () 
 	});
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.attributeUI = {
+CSLEDIT_ConditionalPropertyPanel.prototype.attributeUI = {
 	"type" : {
 		mainOption: "The document type is"
 	},
@@ -137,10 +137,10 @@ CSLEDIT.ConditionalPropertyPanel.prototype.attributeUI = {
 	}	
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.possibleValues = function (attribute) {
+CSLEDIT_ConditionalPropertyPanel.prototype.possibleValues = function (attribute) {
 	// get possible values from schema
 	var possibleValues = [];
-	$.each(CSLEDIT.schema.choices("choose/if"), function (i, choice) {
+	$.each(CSLEDIT_schema.choices("choose/if"), function (i, choice) {
 		if (choice.attributes.hasOwnProperty(attribute)) {
 			$.each(choice.attributes[attribute].values, function (i2, possibleValue) {
 				if (possibleValue.type === "value") {
@@ -152,8 +152,8 @@ CSLEDIT.ConditionalPropertyPanel.prototype.possibleValues = function (attribute)
 	});
 
 	// for MLZ schema which doesn't put the values in choices
-	if (possibleValues.length === 0 && attribute in CSLEDIT.schema.attributes("choose/if")) {
-		$.each(CSLEDIT.schema.attributes("choose/if")[attribute].values, function (i, possibleValue) {
+	if (possibleValues.length === 0 && attribute in CSLEDIT_schema.attributes("choose/if")) {
+		$.each(CSLEDIT_schema.attributes("choose/if")[attribute].values, function (i, possibleValue) {
 			if (possibleValue.type === "value") {
 				possibleValues.push(possibleValue.value);
 			}
@@ -163,7 +163,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.possibleValues = function (attribute)
 	return possibleValues;
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.availableValues = function (attribute) {
+CSLEDIT_ConditionalPropertyPanel.prototype.availableValues = function (attribute) {
 	var availableValues = this.possibleValues(attribute),
 		selectedValues = this.attributeValue();
 
@@ -177,7 +177,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.availableValues = function (attribute
 	return availableValues;
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.createConditionControls = function (i, condition) {
+CSLEDIT_ConditionalPropertyPanel.prototype.createConditionControls = function (i, condition) {
 	var that = this,
 		mainOption,
 		mainOptionControl,
@@ -229,7 +229,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.createConditionControls = function (i
 };
 
 // for adding or amending
-CSLEDIT.ConditionalPropertyPanel.prototype.setCondition = function (index, newCondition) {
+CSLEDIT_ConditionalPropertyPanel.prototype.setCondition = function (index, newCondition) {
 	var that = this,
 		oldCondition = that.conditions[index],
 		value;
@@ -256,7 +256,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setCondition = function (index, newCo
 	that.executeCommand('amendNode', [that.node.cslId, that.node]);
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.removeCondition = function (index) {
+CSLEDIT_ConditionalPropertyPanel.prototype.removeCondition = function (index) {
 	var that = this,
 		attribute = that.conditions[index].attribute,
 		i;
@@ -284,7 +284,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.removeCondition = function (index) {
 	that.executeCommand('amendNode', [that.node.cslId, that.node]);
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.setupEventHandlers = function () {
+CSLEDIT_ConditionalPropertyPanel.prototype.setupEventHandlers = function () {
 	var that = this;
 
 	// event handlers
@@ -386,7 +386,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setupEventHandlers = function () {
 	});
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.setup = function () {
+CSLEDIT_ConditionalPropertyPanel.prototype.setup = function () {
 	var that = this;
 
 	this.conditions = [];
@@ -404,7 +404,7 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setup = function () {
 	
 	// set matchSelect value
 	this.matchSelect.val(this.node.getAttr('match') || 
-			CSLEDIT.schema.attributes("choose/if").match.defaultValue);
+			CSLEDIT_schema.attributes("choose/if").match.defaultValue);
 
 	if (this.conditions.length === 0) {
 		// should show at least one attribute value, so create one
@@ -429,19 +429,19 @@ CSLEDIT.ConditionalPropertyPanel.prototype.setup = function () {
 	this.refresh();
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.refresh = function () {
+CSLEDIT_ConditionalPropertyPanel.prototype.refresh = function () {
 	this.drawControls();
 	this.removeDuplicateOptions();
 	this.setupEventHandlers();
 };
 
-CSLEDIT.ConditionalPropertyPanel.prototype.drawControls = function () {
+CSLEDIT_ConditionalPropertyPanel.prototype.drawControls = function () {
 	var that = this,
 		table = $('<table class="conditional"><col class="c1" /><col class="c2" />' + 
 				'<col class="c3" /><col class="c4" /><col class="c5" /></table>'),
 		valueSeparator,
 		matchValue = this.node.getAttr('match') ||
-			CSLEDIT.schema.attributes("choose/if").match.defaultValue;
+			CSLEDIT_schema.attributes("choose/if").match.defaultValue;
 	
 	this.element.children().remove();
 

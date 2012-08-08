@@ -1,19 +1,19 @@
 "use strict";
 
-module("CSLEDIT.cslNode");
+module("CSLEDIT_cslNode");
 
 test("constructor", function () {
 	var testNode,
 		description;
 
 	description = "construct with args";
-	testNode = new CSLEDIT.CslNode("test", [{key:"attr1", value:"attr1_val"}]);
+	testNode = new CSLEDIT_CslNode("test", [{key:"attr1", value:"attr1_val"}]);
 
 	equal(testNode.name, "test", description);
 	equal(testNode.attributes[0].key, "attr1", description);
 
 	description = "construct with object";
-	testNode = new CSLEDIT.CslNode({name: "test2", attributes : [{key: "one", value: "1"}]});
+	testNode = new CSLEDIT_CslNode({name: "test2", attributes : [{key: "one", value: "1"}]});
 
 	equal(testNode.name, "test2", description);
 	equal(testNode.getAttr("one"), "1", description);
@@ -22,7 +22,7 @@ test("constructor", function () {
 test("get/set attrs", function () {
 	var testNode;
 
-	testNode = new CSLEDIT.CslNode("test", [{key:"attr1", value:"attr1_val"}]);
+	testNode = new CSLEDIT_CslNode("test", [{key:"attr1", value:"attr1_val"}]);
 
 	equal(testNode.getAttr("attr1"), "attr1_val");
 	equal(testNode.getAttr("attr2"), "");

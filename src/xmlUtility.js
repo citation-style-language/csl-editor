@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.xmlUtility = {
+
+var CSLEDIT_xmlUtility = {
 	stripUnsupportedTagsAndContents : function (html, supportedTags) {
 		var element;
 

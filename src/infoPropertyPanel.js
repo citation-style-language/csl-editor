@@ -1,8 +1,8 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.infoPropertyPanel = (function () {
+
+var CSLEDIT_infoPropertyPanel = (function () {
 	var panel, infoNode, inputTimeout, executeCommand;
 
 	var layout = [
@@ -43,7 +43,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 			var input, attributeValue;
 			thisRow.append(' <label>' + name + '</label> ');
 
-			attributeValue = new CSLEDIT.CslNode(node).getAttr(name);
+			attributeValue = new CSLEDIT_CslNode(node).getAttr(name);
 
 			input = createInput(item.node, node, name, attributeValue);
 			thisRow.append(input);
@@ -89,9 +89,9 @@ CSLEDIT.infoPropertyPanel = (function () {
 			type = $this.attr("type");
 			nodeName = $this.attr("nodename");
 
-			thisNode = new CSLEDIT.CslNode(nodeName);
+			thisNode = new CSLEDIT_CslNode(nodeName);
 			if (!isNaN(cslId)) {
-				thisNode.copy(CSLEDIT.data.getNode(cslId));
+				thisNode.copy(CSLEDIT_data.getNode(cslId));
 			}
 
 			if (type === "textValue") {
@@ -101,11 +101,11 @@ CSLEDIT.infoPropertyPanel = (function () {
 			}
 
 			if (isNaN(cslId)) {
-				CSLEDIT.viewController.setSuppressSelectNode(true);
+				CSLEDIT_viewController.setSuppressSelectNode(true);
 				executeCommand('addNode', [parentId, "last", thisNode]);
-				CSLEDIT.viewController.setSuppressSelectNode(false);
-				parentNode = CSLEDIT.data.getNode(parentId);
-				numChildNodes = CSLEDIT.data.numNodes(parentNode) - 1;
+				CSLEDIT_viewController.setSuppressSelectNode(false);
+				parentNode = CSLEDIT_data.getNode(parentId);
+				numChildNodes = CSLEDIT_data.numNodes(parentNode) - 1;
 
 				// update all cslids
 				$.each(["cslid", "parentcslid"], function (i, attribute) {
@@ -147,7 +147,7 @@ CSLEDIT.infoPropertyPanel = (function () {
 		var thisRow, children, input, cslChildren;
 	   
 		thisRow = $('<div></div>');
-		children = CSLEDIT.schema.childElements("info/author");
+		children = CSLEDIT_schema.childElements("info/author");
 
 		cslChildren = {};
 		$.each(cslNode.children, function (i, actualChild) {
@@ -187,28 +187,28 @@ CSLEDIT.infoPropertyPanel = (function () {
 	var setupPanel = function (_panel, _executeCommand) {
 		panel = _panel;
 		executeCommand = _executeCommand;
-		infoNode = CSLEDIT.data.getNodesFromPath("style/info");
+		infoNode = CSLEDIT_data.getNodesFromPath("style/info");
 		assertEqual(infoNode.length, 1); // fail in error.log
 		infoNode = infoNode[0];
 
 		panel.children().remove();
 
 		$.each(layout, function (i, item) {
-			var nodes = CSLEDIT.data.getNodesFromPath("info/" + item.node, infoNode),
+			var nodes = CSLEDIT_data.getNodesFromPath("info/" + item.node, infoNode),
 				schemaAttributes, deleteButton, addButton, value, thisRow,
 				table,
 				titleRow, inputRow;
 			
 			if (multipleNodes.indexOf(item.node) >= 0) {
 				schemaAttributes = {};
-				$.each(CSLEDIT.schema.attributes("info/" + item.node), function (attrName, attr) {
+				$.each(CSLEDIT_schema.attributes("info/" + item.node), function (attrName, attr) {
 					schemaAttributes[attrName] = attr;
 				});
 				
 				// add choices to attributes
 				// TODO: correct this to treat choices as mutaully exclusive
 				//       as they should be
-				$.each(CSLEDIT.schema.choices("info/" + item.node), function (i, choice) {
+				$.each(CSLEDIT_schema.choices("info/" + item.node), function (i, choice) {
 					$.each(choice.attributes, function (attrName, attr) {
 						schemaAttributes[attrName] = attr;
 					});
@@ -250,10 +250,10 @@ CSLEDIT.infoPropertyPanel = (function () {
 				panel.append(addButton);
 
 				addButton.on('click', function () {
-					CSLEDIT.viewController.setSuppressSelectNode(true);
+					CSLEDIT_viewController.setSuppressSelectNode(true);
 					executeCommand("addNode",
-						[infoNode.cslId, "last", new CSLEDIT.CslNode(item.node)]);
-					CSLEDIT.viewController.setSuppressSelectNode(false);
+						[infoNode.cslId, "last", new CSLEDIT_CslNode(item.node)]);
+					CSLEDIT_viewController.setSuppressSelectNode(false);
 					setupPanel(panel, executeCommand);
 				});
 				panel.append('<br /><br />');

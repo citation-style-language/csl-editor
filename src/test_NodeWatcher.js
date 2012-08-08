@@ -1,19 +1,19 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-module("CSLEDIT.NodeWatcher", {
+
+module("CSLEDIT_NodeWatcher", {
 	setup : function () {
-		console.log("typeof NodeWatcher = " + typeof(CSLEDIT.NodeWatcher));
+		console.log("typeof NodeWatcher = " + typeof(CSLEDIT_NodeWatcher));
 
-		CSLEDIT.NodeWatcher.FakeData = function () {
+		CSLEDIT_NodeWatcher.FakeData = function () {
 			this.nodes = {
 				"style":      {name: "style", cslId: 0},
 				"style/info": {name: "info", cslId: 1}
 			};
 		};
 
-		CSLEDIT.NodeWatcher.FakeData.prototype.getNodesFromPath = function (nodePath) {
+		CSLEDIT_NodeWatcher.FakeData.prototype.getNodesFromPath = function (nodePath) {
 			var result = [];
 			if (nodePath in this.nodes) {
 				result.push(this.nodes[nodePath]);
@@ -30,10 +30,10 @@ test("create & amend node", function () {
 		currentNode,
 		viewUpdated = false,
 		description,
-		fakeData = new CSLEDIT.NodeWatcher.FakeData();
+		fakeData = new CSLEDIT_NodeWatcher.FakeData();
 
 	description = "Create NodeWatcher";
-	nodeView = new CSLEDIT.NodeWatcher("style/info", fakeData,
+	nodeView = new CSLEDIT_NodeWatcher("style/info", fakeData,
 		function (nodeData) {
 			currentNode = nodeData;
 			viewUpdated = true;
@@ -55,10 +55,10 @@ test("add/delete nodes", function () {
 		currentNode,
 		viewUpdated = false,
 		description,
-		fakeData = new CSLEDIT.NodeWatcher.FakeData();
+		fakeData = new CSLEDIT_NodeWatcher.FakeData();
 
 	description = "Create NodeWatcher";
-	nodeView = new CSLEDIT.NodeWatcher("style/info", fakeData,
+	nodeView = new CSLEDIT_NodeWatcher("style/info", fakeData,
 		// fake update function
 		function (nodeData) {
 			currentNode = nodeData;
@@ -109,10 +109,10 @@ test("Delete and recreate node", function () {
 		currentNode,
 		viewUpdated = false,
 		description,
-		fakeData = new CSLEDIT.NodeWatcher.FakeData();
+		fakeData = new CSLEDIT_NodeWatcher.FakeData();
 
 	description = "Create NodeWatcher";
-	nodeView = new CSLEDIT.NodeWatcher("style/info", fakeData,
+	nodeView = new CSLEDIT_NodeWatcher("style/info", fakeData,
 		// fake update function
 		function (nodeData) {
 			currentNode = nodeData;
@@ -138,10 +138,10 @@ test("Create and delete node", function () {
 		currentNode,
 		viewUpdated = false,
 		description,
-		fakeData = new CSLEDIT.NodeWatcher.FakeData();
+		fakeData = new CSLEDIT_NodeWatcher.FakeData();
 
 	description = "Create NodeWatcher for non-existant style/citation node";
-	nodeView = new CSLEDIT.NodeWatcher("style/citation", fakeData,
+	nodeView = new CSLEDIT_NodeWatcher("style/citation", fakeData,
 		// fake update function
 		function (nodeData) {
 			currentNode = nodeData;

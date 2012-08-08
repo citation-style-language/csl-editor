@@ -26,6 +26,7 @@
 	<script type="text/javascript" src="../../src/cslNode.js"></script>
 	<script type="text/javascript" src="../../src/cslData.js"></script>
 	<script type="text/javascript" src="../../src/xmlUtility.js"></script>
+	<script type="text/javascript" src="../../src/NodeWatcher.js"></script>
 	<script type="text/javascript" src="../../src/SmartTreeHeading.js"></script>
 	<script type="text/javascript" src="../../src/smartTree.js"></script>
 	<script type="text/javascript" src="../../src/editNodeButton.js"></script>
@@ -45,7 +46,7 @@
 	<script type="text/javascript" src="../../src/integrationTest_propertyPanels.js"></script>
 
 	<script type="text/javascript">
-	CSLEDIT.options.setUserOptions({
+	CSLEDIT_options.setUserOptions({
 		rootURL : "../.."
 	});
 	</script>

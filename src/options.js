@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.options = (function () {
+
+var CSLEDIT_options = (function () {
 	var userOptions = {};
 	var defaultOptions = {
 			loadCSLName : "Load CSL",
@@ -21,7 +21,7 @@ CSLEDIT.options = (function () {
 				alert("Edit style not avaiable.\n\n" +
 					"For implementers: You need to add an editStyle_func to the options.");
 			},
-			exampleReferences : CSLEDIT.exampleData.jsonDocumentList,
+			exampleReferences : CSLEDIT_exampleData.jsonDocumentList,
 			exampleCitations : [[0],[10],[]]
 		};
 

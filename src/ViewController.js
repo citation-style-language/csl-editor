@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.ViewController = function ( 
+
+var CSLEDIT_ViewController = function ( 
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
 		syntaxHighlighter) {
 	
@@ -80,7 +80,7 @@ CSLEDIT.ViewController = function (
 
 		if (treesLoaded === treesToLoad) {
 			if (selectedNode() === -1) {
-				selectNode(CSLEDIT.data.getNodesFromPath('style/info')[0].cslId);
+				selectNode(CSLEDIT_data.getNodesFromPath('style/info')[0].cslId);
 			}
 			callbacks.formatCitations();
 			callbacks.viewInitialised();
@@ -88,7 +88,7 @@ CSLEDIT.ViewController = function (
 	};
 
 	var newStyle = function () {
-		init(CSLEDIT.data.get(), callbacks);
+		init(CSLEDIT_data.get(), callbacks);
 	};
 
 	var init = function (cslData, _callbacks) {
@@ -107,7 +107,7 @@ CSLEDIT.ViewController = function (
 		selectedNodeId = -1;
 		views = [];
 
-		views.push(new CSLEDIT.Titlebar(titlebarElement));
+		views.push(new CSLEDIT_Titlebar(titlebarElement));
 
 		callbacks = _callbacks;
 
@@ -122,7 +122,7 @@ CSLEDIT.ViewController = function (
 					var buttonElement;
 					switch (button.type) {
 					case "cslNode":
-						nodes = CSLEDIT.data.getNodesFromPath(button.node, cslData);
+						nodes = CSLEDIT_data.getNodesFromPath(button.node, cslData);
 						if (nodes.length > 0) {
 							cslId = nodes[0].cslId;
 						} else {
@@ -130,8 +130,8 @@ CSLEDIT.ViewController = function (
 						}
 			
 						buttonElement = $('<div class="cslNodeButton"></div>');
-						views.push(new CSLEDIT.EditNodeButton(buttonElement, button.node, cslId,
-							CSLEDIT.options.get("rootURL") + button.icon, function (cslId, selectedView) {
+						views.push(new CSLEDIT_EditNodeButton(buttonElement, button.node, cslId,
+							CSLEDIT_options.get("rootURL") + button.icon, function (cslId, selectedView) {
 								selectedTree = selectedView;
 								selectedNodeId = cslId;
 
@@ -166,7 +166,7 @@ CSLEDIT.ViewController = function (
 			var tree, heading;
 			treesToLoad++;
 			
-			heading = new CSLEDIT.SmartTreeHeading(
+			heading = new CSLEDIT_SmartTreeHeading(
 				treeView.find('#' + value.id + ' .heading'), value.headingNodePath,
 				value.name, value.headingNodePossibleChildren, value.headingNodeShowPropertyPanel);
 			heading.setCallbacks({
@@ -174,7 +174,7 @@ CSLEDIT.ViewController = function (
 			});
 			views.push(heading);
 
-			tree = CSLEDIT.SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
+			tree = CSLEDIT_SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
 				value.macroLinks, value.leafNodes);
 
 			// Use this for debugging if you're not sure the view accurately reflects the data
@@ -190,7 +190,7 @@ CSLEDIT.ViewController = function (
 			views.push(tree);
 		});
 
-		nodePathView = new CSLEDIT.NodePathView(nodePathElement, {
+		nodePathView = new CSLEDIT_NodePathView(nodePathElement, {
 			selectNodeFromPath : selectNodeFromPath
 		}, syntaxHighlighter);
 	};
@@ -215,7 +215,7 @@ CSLEDIT.ViewController = function (
 			return;
 		}
 
-		nodeAndParent = CSLEDIT.data.getNodeAndParent(selectedNode());
+		nodeAndParent = CSLEDIT_data.getNodeAndParent(selectedNode());
 		node = nodeAndParent.node;
 		parentNode = nodeAndParent.parent;
 
@@ -233,7 +233,7 @@ CSLEDIT.ViewController = function (
 		if (selectedViewProperty("showPropertyPanel") === false) {
 			propertyPanelElement.children().remove();
 		} else {
-			CSLEDIT.propertyPanel.setup(propertyPanelElement, node, parentNodeName + '/' + node.name);
+			CSLEDIT_propertyPanel.setup(propertyPanelElement, node, parentNodeName + '/' + node.name);
 		}
 
 		syntaxHighlighter.selectedNodeChanged(node.cslId);		
@@ -266,7 +266,7 @@ CSLEDIT.ViewController = function (
 	};
 
 	var macroEditNotification = function (id) {
-		var nodeStack = CSLEDIT.data.getNodeStack(id),
+		var nodeStack = CSLEDIT_data.getNodeStack(id),
 			node,
 			iter,
 			next,
@@ -276,24 +276,24 @@ CSLEDIT.ViewController = function (
 		while (nodeStack.length > 0) {
 			node = nodeStack.pop();
 			if (node.name === "macro" && recentlyEditedMacro !== node.cslId) {
-				macroName = new CSLEDIT.CslNode(node).getAttr("name");
+				macroName = new CSLEDIT_CslNode(node).getAttr("name");
 				if (macroName === "") {
 					return;
 				}
 
 				// check how many places this macro is used
-				iter = new CSLEDIT.Iterator(CSLEDIT.data.get());
+				iter = new CSLEDIT_Iterator(CSLEDIT_data.get());
 				timesUsed = 0;
 
 				while (iter.hasNext()) {
-					next = new CSLEDIT.CslNode(iter.next());
+					next = new CSLEDIT_CslNode(iter.next());
 
 					if (next.name === "text" && next.getAttr("macro") === macroName) {
 						timesUsed++;
 
 						if (timesUsed > 1) {
 							recentlyEditedMacro = node.cslId;
-							CSLEDIT.notificationBar.showMessage(
+							CSLEDIT_notificationBar.showMessage(
 								'You just edited a macro which is used in multiple places');
 						}
 					}

@@ -1,10 +1,10 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.exampleData = {};
 
-CSLEDIT.exampleData.topStyles = [
+var CSLEDIT_exampleData = {};
+
+CSLEDIT_exampleData.topStyles = [
 	'http://www.zotero.org/styles/apa',
 	'http://www.zotero.org/styles/ieee',
 	'http://www.zotero.org/styles/harvard1',
@@ -31,7 +31,7 @@ CSLEDIT.exampleData.topStyles = [
 	'http://www.zotero.org/styles/pnas'
 ];
 
-CSLEDIT.exampleData.citationsItems = [
+CSLEDIT_exampleData.citationsItems = [
 	{
 		"citationId": "CITATION-1",
 		"citationItems": [{id:"ITEM-1"}],
@@ -50,7 +50,7 @@ CSLEDIT.exampleData.citationsItems = [
 	}
 ];
 
-CSLEDIT.exampleData.additionalOptions = [
+CSLEDIT_exampleData.additionalOptions = [
 	{
 		"description" : "Normal citation",
 		"options" : {}
@@ -83,10 +83,10 @@ CSLEDIT.exampleData.additionalOptions = [
 	}
 ];
 
-CSLEDIT.exampleData.getJsonDocuments = function () {
+CSLEDIT_exampleData.getJsonDocuments = function () {
 	var jsonDocuments = {};
 
-	$.each(CSLEDIT.exampleData.jsonDocumentList, function (i, jsonDocument) {
+	$.each(CSLEDIT_exampleData.jsonDocumentList, function (i, jsonDocument) {
 		var itemString = "ITEM-" + (i + 1);
 		jsonDocument.id = itemString;
 		jsonDocuments[itemString] = jsonDocument;
@@ -95,7 +95,7 @@ CSLEDIT.exampleData.getJsonDocuments = function () {
 	return jsonDocuments;
 };
 
-CSLEDIT.exampleData.jsonDocumentList = [
+CSLEDIT_exampleData.jsonDocumentList = [
 	{
 		"ISBN": "0813931029",
 		"abstract": "Traditional narratives imply that art in early America was severely limited in scope. By contrast, these essays collectively argue that visual arts played a critical role in shaping an early American understanding of the body politic. American artists in the late colonial and early national periods enlisted the arts to explore and exploit their visions of the relationship of the American colonies to the mother country and, later, to give material shape to the ideals of modern republican nationhood. Taking a uniquely broad view of both politics and art, Shaping the Body Politic ranges in topic from national politics to the politics of national identity, and from presidential portraits to the architectures of the ordinary. The book covers subject matter from the 1760s to the 1820s, ranging from Patience Wright's embodiment of late colonial political tension to Thomas Jefferson's designs for the entry hall at Monticello as a museum. Paul Staiti, Maurie McInnis, and Roger Stein offer new readings of canonical presidential images and spaces: Jean-Antoine Houdon's George Washington, Gilbert Stuart's the Lansdowne portrait of Washington, and Thomas Jefferson's Monticello. In essays that engage print and painting, portraiture and landscape, Wendy Bellion, David Steinberg, and John Crowley explore the formation of national identity. The volume's concluding essays, by Susan Rather and Bernard Herman, examine the politics of the everyday. The accompanying eighty-five illustrations and color plates demonstrate the broad range of politically resonant visual material in early America. ContributorsWendy Bellion, University of Delaware * John E. Crowley, Dalhousie University * Bernard L. Herman, University of North Carolina, Chapel Hill * Maurie D. McInnis, University of Virginia * Louis P. Nelson, University of Virginia * Susan Rather, University of Texas, Austin * Paul Staiti, Mount Holyoke College * Roger B. Stein, emeritus, University of Virginia * David Steinberg, Independent Scholar Thomas Jefferson Foundation Distinguished Lecture Series",

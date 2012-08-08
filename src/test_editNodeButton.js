@@ -1,24 +1,24 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
 
-module("CSLEDIT.editNodeButton");
 
-// replace CSLEDIT.data with test version
-CSLEDIT.data = CSLEDIT.Data("CSLEDIT.test_cslData");
+module("CSLEDIT_editNodeButton");
+
+// replace CSLEDIT_data with test version
+var CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData");
 
 test("object test", function () {
 	var button;
 
 	// need to use new
 	raises(function () {
-		button = CSLEDIT.EditNodeButton($("<div></div"), "style", 4, "noicon");
+		button = CSLEDIT_EditNodeButton($("<div></div"), "style", 4, "noicon");
 	});
-	button = new CSLEDIT.EditNodeButton($("<div></div"), "style", 4, "noicon");
+	button = new CSLEDIT_EditNodeButton($("<div></div"), "style", 4, "noicon");
 });
 
 test("add / delete nodes", function () {
-	var button = new CSLEDIT.EditNodeButton($("<div></div"), "style", 4, "noicon");
+	var button = new CSLEDIT_EditNodeButton($("<div></div"), "style", 4, "noicon");
 
 	equal(button.cslId, 4);
 	button.addNode("", "", {cslId:4}, 2);

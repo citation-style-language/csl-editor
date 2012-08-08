@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-module("CSLEDIT.storage");
+
+module("CSLEDIT_storage");
 
 test("clear/set/get/remove items", function () {
 
@@ -23,13 +23,13 @@ test("clear/set/get/remove items", function () {
 		equal(storage.getItem("item2"), null, description);
 	};
 
-	doTests(new CSLEDIT.Storage(false), "with simple storage");
-	doTests(new CSLEDIT.Storage(true), "with local storage");
+	doTests(new CSLEDIT_Storage(false), "with simple storage");
+	doTests(new CSLEDIT_Storage(true), "with local storage");
 });
 
 test("sync checking", function () {
 	var message = "",
-		storage = new CSLEDIT.Storage(true, function () {
+		storage = new CSLEDIT_Storage(true, function () {
 			message = "out of sync";
 		});
 

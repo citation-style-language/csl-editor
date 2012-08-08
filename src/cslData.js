@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-/* Uses CSLEDIT.storage to store current csl data object
+
+/* Uses CSLEDIT_storage to store current csl data object
  *
  * Supports the following actions:
  * - New style
@@ -13,7 +13,7 @@ var CSLEDIT = CSLEDIT || {};
  * - Move node
  */
 
-CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
+var CSLEDIT_Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
 	var viewControllers = [],
 		callbacksEnabled = true,
 		requiredNodes = _requiredNodes || [],
@@ -42,7 +42,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		];
 
 	var get = function () {
-		return CSLEDIT.storage.getItemJson(CSL_DATA);
+		return CSLEDIT_storage.getItemJson(CSL_DATA);
 	};
 
 	var set = function (cslData) {
@@ -56,12 +56,12 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			updatedNode = getNodesFromPath('style/info/updated', cslData)[0];
 			if (typeof(updatedNode) === "undefined") {
 				console.log("no style/info/updated node: resetting CSL code");
-				setCslCode(CSLEDIT.cslParser.cslCodeFromCslData(cslData));
+				setCslCode(CSLEDIT_cslParser.cslCodeFromCslData(cslData));
 				updatedNode = getNodesFromPath('style/info/updated')[0];
 			}
 			
 			// write timestamp to updated node
-			iter = new CSLEDIT.Iterator(cslData);
+			iter = new CSLEDIT_Iterator(cslData);
 			index = 0;
 			while (iter.hasNext()) {
 				node = iter.next();
@@ -73,7 +73,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			}
 		}
 
-		CSLEDIT.storage.setItem(CSL_DATA, JSON.stringify(cslData));
+		CSLEDIT_storage.setItem(CSL_DATA, JSON.stringify(cslData));
 		return cslData;
 	};
 
@@ -83,7 +83,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			attribute,
 			attributeName,
 			attributeValue,
-			cslNode = new CSLEDIT.CslNode(nodeData);
+			cslNode = new CSLEDIT_CslNode(nodeData);
 
 		if (nodeInfo.length > 1) {
 			attribute = nodeInfo[1].split("=");
@@ -139,7 +139,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			});
 
 			// set cslIds
-			iterator = new CSLEDIT.Iterator(infoNode);
+			iterator = new CSLEDIT_Iterator(infoNode);
 			while (iterator.hasNext()) {
 				iterator.next().cslId = cslId;
 				cslId++;
@@ -156,14 +156,14 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			error;
 		
 		try {
-			cslData = CSLEDIT.cslParser.cslDataFromCslCode(cslCode);
+			cslData = CSLEDIT_cslParser.cslDataFromCslCode(cslCode);
 		} catch (err) {
 			return { error: "Error parsing CSL Code" };
 		}
 
 		// check if this is a dependent style:
 		$.each(getNodesFromPath('style/info/link', cslData), function (i, node) {
-			var linkNode = new CSLEDIT.CslNode(node);
+			var linkNode = new CSLEDIT_CslNode(node);
 			if (linkNode.getAttr("rel") === "independent-parent") {
 				error = "Editing of dependent styles not yet supported.\n\n" + 
 					"Please find and edit this master style instead:\n\n" +
@@ -191,13 +191,13 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			// add a style/info/updated node if not present
 			// (this will be written to on every edit, create here
 			//  to avoid doing on every change which would complicate
-			//  undo/redo code in CSLEDIT.controller)
+			//  undo/redo code in CSLEDIT_controller)
 			updateTime = false;
 			set(cslData);
 			if (getNodesFromPath('style/info/updated').length === 0) {
 				console.log("creating required updated node");
 				addNode(getNodesFromPath('style/info')[0].cslId, "last",
-						new CSLEDIT.CslNode("updated", [], [], -1), true);
+						new CSLEDIT_CslNode("updated", [], [], -1), true);
 			}
 			cslData = get();
 			updateTime = true;
@@ -212,7 +212,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	var getCslCode = function (comment /* optional */) {
 		var cslData = get();
 		reorderStyleInfoNode(cslData);
-		return CSLEDIT.cslParser.cslCodeFromCslData(cslData, comment);
+		return CSLEDIT_cslParser.cslCodeFromCslData(cslData, comment);
 	};
 
 	var spliceNode = function (id, position, nodesToDelete, newNode) {
@@ -227,7 +227,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		nodesBefore = numNodes(cslData);
 
 		// Find the id of the node to add
-		iter = new CSLEDIT.Iterator(cslData);
+		iter = new CSLEDIT_Iterator(cslData);
 
 		index = 0;
 		while (iter.hasNext()) {
@@ -247,7 +247,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		}
 
 		// correct the cslId numbering
-		iter = new CSLEDIT.Iterator(cslData);
+		iter = new CSLEDIT_Iterator(cslData);
 		index = 0;
 		while (iter.hasNext()) {
 			node = iter.next();
@@ -261,7 +261,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	};
 
 	var getNodeAndParent = function (id) {
-		var iter = new CSLEDIT.Iterator(get()),
+		var iter = new CSLEDIT_Iterator(get()),
 			node;
 
 		while (iter.hasNext()) {
@@ -280,7 +280,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	};
 
 	var getNodeStack = function (id) {
-		var iter = new CSLEDIT.Iterator(get()),
+		var iter = new CSLEDIT_Iterator(get()),
 			nodeStack,
 			node;
 
@@ -394,7 +394,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	};
 
 	var numNodes = function (tree) {
-		var iter = new CSLEDIT.Iterator(tree),
+		var iter = new CSLEDIT_Iterator(tree),
 			index = 0;
 
 		while (iter.hasNext()) {
@@ -424,7 +424,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	// if 'id' is a macro instance, returns the corresponding macro definition
 	// if not, returns 'id' 
 	var macroDefinitionIdFromInstanceId = function (id) {
-		var node = new CSLEDIT.CslNode(getNode(id)),
+		var node = new CSLEDIT_CslNode(getNode(id)),
 			macroName,
 			macroNodes,
 			macroNode;
@@ -434,7 +434,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			macroNodes = getNodesFromPath("style/macro");
 
 			$.each(macroNodes, function (i, macroNode) {
-				var thisMacroNode = new CSLEDIT.CslNode(macroNode);
+				var thisMacroNode = new CSLEDIT_CslNode(macroNode);
 				if (thisMacroNode.getAttr("name") === macroName) {
 					id = thisMacroNode.cslId;
 					return false;
@@ -454,7 +454,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		newNode.children = newNode.children || [];
 		newNode.attributes = newNode.attributes || [];
 
-		defaultAttributes = CSLEDIT.uiConfig.defaultAttributes[newNode.name];
+		defaultAttributes = CSLEDIT_uiConfig.defaultAttributes[newNode.name];
 
 		// populate with default attributes
 		if (newNode.attributes.length === 0 && typeof defaultAttributes !== "undefined") {
@@ -501,7 +501,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	};
 
 	var deleteNode = function (id) {
-		var iter = new CSLEDIT.Iterator(get()),
+		var iter = new CSLEDIT_Iterator(get()),
 			index,
 			node,
 			parentNode,
@@ -538,7 +538,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			result,
 			oldNode;
 		
-		iter = new CSLEDIT.Iterator(cslData);
+		iter = new CSLEDIT_Iterator(cslData);
 		index = 0;
 
 		while (iter.hasNext()) {
@@ -546,7 +546,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			if (index === id) {
 				assertEqual(node.cslId, id);
 				
-				oldNode = new CSLEDIT.CslNode(node.name, node.attributes, [], node.cslId);
+				oldNode = new CSLEDIT_CslNode(node.name, node.attributes, [], node.cslId);
 				oldNode.textValue = node.textValue;
 
 				node.name = amendedNode.name;
@@ -666,8 +666,8 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			console.log("url from url: " + styleURL);
 
 			// try loading style specified in options
-			if (typeof CSLEDIT.options.get("initialCslCode") !== "undefined") {
-				result = setCslCode(CSLEDIT.options.get("initialCslCode"));
+			if (typeof CSLEDIT_options.get("initialCslCode") !== "undefined") {
+				result = setCslCode(CSLEDIT_options.get("initialCslCode"));
 				if (result.hasOwnProperty('error')) {
 					alert(result.error);
 				} else {
@@ -683,7 +683,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			} else if (cslData !== null && cslData !== "") {
 				callback();
 			} else {
-				styleURL = CSLEDIT.options.get("rootURL") + "/external/csl-styles/apa.csl";
+				styleURL = CSLEDIT_options.get("rootURL") + "/external/csl-styles/apa.csl";
 				loadStyleFromURL(styleURL, callback);
 			}
 		},
@@ -702,7 +702,7 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 };
 
 // global instance, this is overwritten for unit tests
-CSLEDIT.data = CSLEDIT.Data("CSLEDIT.cslData", [
+var CSLEDIT_data = CSLEDIT_Data("CSLEDIT_cslData", [
 		"style",
 		"style/info",
 		"style/info/title",

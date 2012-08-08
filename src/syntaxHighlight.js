@@ -1,7 +1,7 @@
 "use strict";
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.SyntaxHighlighter = function (editorElement) {
+
+var CSLEDIT_SyntaxHighlighter = function (editorElement) {
 	var selectedCslId = -1,
 		hoveredNodeStack = [],
 		highlightedCss,
@@ -82,7 +82,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 			cslId = clickedCslId;
 		} else {
 			// skip the macro definition nodes, jump to the referencing 'text' node instead
-			selectedNode = CSLEDIT.data.getNode(cslId);
+			selectedNode = CSLEDIT_data.getNode(cslId);
 			if (selectedNode.name === "macro") {
 				assert(hoveredNodeStack.length > 1);
 				cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
@@ -90,7 +90,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		}
 
 		if (selectedCslId !== cslId) {
-			CSLEDIT.viewController.selectNode(cslId, highlightedTreeNodes);
+			CSLEDIT_viewController.selectNode(cslId, highlightedTreeNodes);
 		}
 	};
 
@@ -148,8 +148,8 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 				// if found, clear the highlighting for all macros not within this
 				// instance or the definition
 				var instanceNode;
-				instanceNode = new CSLEDIT.CslNode(
-					CSLEDIT.data.getNode(parseInt(nodeStack[nodeStack.length - 2], 10)));
+				instanceNode = new CSLEDIT_CslNode(
+					CSLEDIT_data.getNode(parseInt(nodeStack[nodeStack.length - 2], 10)));
 				if (instanceNode.name === "text" && instanceNode.getAttr("macro") !== "") {
 					unHighlightIfNotDescendentOf(editorElement.find('li[cslid=' + instanceNode.cslId + ']'));
 				}
@@ -235,13 +235,13 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 				var target = $(event.target),
 					liElement = target.closest("li[cslid]"),
 					cslId = parseInt(liElement.attr('cslId'), 10),
-					nodeAndParent = CSLEDIT.data.getNodeAndParent(cslId),
+					nodeAndParent = CSLEDIT_data.getNodeAndParent(cslId),
 					documentation;
 				
 				if (nodeAndParent.parent === null) {
-					documentation = CSLEDIT.schema.documentation('root/' + nodeAndParent.node.name);
+					documentation = CSLEDIT_schema.documentation('root/' + nodeAndParent.node.name);
 				} else {
-					documentation = CSLEDIT.schema.documentation(
+					documentation = CSLEDIT_schema.documentation(
 						nodeAndParent.parent.name + '/' + nodeAndParent.node.name);
 				}
 
@@ -255,7 +255,7 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 	};
 
 	var setupSyntaxHighlighting = function () {
-		var numCslNodes = CSLEDIT.data.numCslNodes();
+		var numCslNodes = CSLEDIT_data.numCslNodes();
 
 		// clear the hovered node stack
 		hoveredNodeStack.length = 0;
@@ -264,9 +264,9 @@ CSLEDIT.SyntaxHighlighter = function (editorElement) {
 		setupEventHandlers();
 
 		// highlight the selected node if there is one
-		if (CSLEDIT.viewController.selectedNode() !== -1) {
+		if (CSLEDIT_viewController.selectedNode() !== -1) {
 			editorElement.find(
-				'span[cslid=' + CSLEDIT.viewController.selectedNode() + ']').addClass('selected');
+				'span[cslid=' + CSLEDIT_viewController.selectedNode() + ']').addClass('selected');
 		}
 	};
 

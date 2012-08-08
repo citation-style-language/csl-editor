@@ -13,9 +13,9 @@
 
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.Schema = function (
+
+var CSLEDIT_Schema = function (
 		schemaOptions /* used to apply modifications appropriate to Visual Editor */ ) {
 	var mainSchemaData,
 		schemas = [],
@@ -29,12 +29,12 @@ CSLEDIT.Schema = function (
 		refParents = {},
 		lastAttributeValue = null, // needed because the documentation for an attribute value
 		                           // comes after, instead of within, and attribute
-		mainSchemaURL = CSLEDIT.options.get("cslSchema_mainURL"),
-		includeSchemaURLs = CSLEDIT.options.get("cslSchema_childURLs");
+		mainSchemaURL = CSLEDIT_options.get("cslSchema_mainURL"),
+		includeSchemaURLs = CSLEDIT_options.get("cslSchema_childURLs");
 
 	var readSchemaFromStorage = function () {
-		var mainSchema = JSON.parse(CSLEDIT.storage.getItem("CSLEDIT.mainSchema")),
-			subSchemas = JSON.parse(CSLEDIT.storage.getItem("CSLEDIT.subSchemas"));
+		var mainSchema = JSON.parse(CSLEDIT_storage.getItem("CSLEDIT_mainSchema")),
+			subSchemas = JSON.parse(CSLEDIT_storage.getItem("CSLEDIT_subSchemas"));
 
 		if (mainSchema !== null) {
 			$.each(mainSchema, function (name, data) {

@@ -1,8 +1,8 @@
 "use strict";
 
-module("CSLEDIT.cslParser");
+module("CSLEDIT_cslParser");
 
-CSLEDIT.test_cslJSON = {
+var CSLEDIT_test_cslJSON = {
 	cslFragment : '<?xml version=\"1.0\" encoding=\"utf-8\"?><style><citation et-al-min="6" et-al-use-first="1" et-al-subsequent-min="3" et-al-subsequent-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name"><sort><key macro="author"></key><key macro="issued-sort"></key></sort><layout prefix="(" suffix=")" delimiter="; "><group delimiter=", "><text macro="author-short"></text><text macro="issued-year"></text><text macro="citation-locator"></text></group></layout></citation></style>',
 	jsTreeData : {
 		"data": "style",
@@ -215,7 +215,7 @@ test("parse CSL fragment", function () {
 		jsTreeData,
 		cslXml;
 
-	cslData = CSLEDIT.cslParser.cslDataFromCslCode(CSLEDIT.test_cslJSON.cslFragment, {index : 0});
+	cslData = CSLEDIT_cslParser.cslDataFromCslCode(CSLEDIT_test_cslJSON.cslFragment, {index : 0});
 
 	equal(cslData.name, "style");
 	equal(cslData.children.length, 1);
@@ -226,23 +226,23 @@ test("parse CSL fragment", function () {
 	equal(cslData.children[0].attributes[0].enabled, true);
 
 	// check that it converts back to CSL XML without changes
-	cslXml = CSLEDIT.cslParser.cslCodeFromCslData(cslData, null, true);
+	cslXml = CSLEDIT_cslParser.cslCodeFromCslData(cslData, null, true);
 
 	// remove whitespace after closing tags
 	cslXml = cslXml.replace(/>[\n\r\s]*/g, ">");
-	equal(cslXml, CSLEDIT.test_cslJSON.cslFragment);
+	equal(cslXml, CSLEDIT_test_cslJSON.cslFragment);
 });
 
 asyncTest("check invariance when deserializing then serializing repo styles", function () {
 	var parseStyleList = function (styleList) {
 		var style = styleList.pop();
 
-		$.get(CSLEDIT.options.get("rootURL") + "/external/csl-styles/" + style, {}, function(cslCode) {
+		$.get(CSLEDIT_options.get("rootURL") + "/external/csl-styles/" + style, {}, function(cslCode) {
 			var domParser = new DOMParser,
 				xmlDom = domParser.parseFromString(cslCode, "application/xml"),
 				initialXmlElement = $('<div/>').append(xmlDom.documentElement),
-				cslData = CSLEDIT.cslParser.cslDataFromCslCode(cslCode),
-				processedCslCode = CSLEDIT.cslParser.cslCodeFromCslData(cslData, null, true),
+				cslData = CSLEDIT_cslParser.cslDataFromCslCode(cslCode),
+				processedCslCode = CSLEDIT_cslParser.cslCodeFromCslData(cslData, null, true),
 				initialXmlString;
 
 			// strip comments from inital XML (node type 8)

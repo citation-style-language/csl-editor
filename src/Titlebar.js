@@ -1,17 +1,17 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
+
 
 // Uses a NodeWatcher to monitor the style/info/title node for changes
 // and updates the titlebar
 
-CSLEDIT.Titlebar = function (element) {
+var CSLEDIT_Titlebar = function (element) {
 	var that = this;
 
 	this.element = element;
 	this.element.html('<h3><span cslid="-1"/></h3>').css({cursor: "default"});
 
-	this.nodeWatcher = new CSLEDIT.NodeWatcher("style/info/title", CSLEDIT.data, function (nodeData) {
+	this.nodeWatcher = new CSLEDIT_NodeWatcher("style/info/title", CSLEDIT_data, function (nodeData) {
 		that.updateTitle(nodeData);
 	});
 	
@@ -26,7 +26,7 @@ CSLEDIT.Titlebar = function (element) {
 	};
 };
 
-CSLEDIT.Titlebar.prototype.updateTitle = function (nodeData) {
+CSLEDIT_Titlebar.prototype.updateTitle = function (nodeData) {
 	var title;
 	if (nodeData === null) {
 		title = "No title";

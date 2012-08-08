@@ -1,13 +1,13 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
+
 
 // A button which opens the property panel for a given CSL node,
 // or if the node doesn't yet exist, creates it
 
-CSLEDIT.EditNodeButton = function (element, nodePath, cslId, icon, selectNodeCallback) {
+var CSLEDIT_EditNodeButton = function (element, nodePath, cslId, icon, selectNodeCallback) {
 	var that = this;
-	assert(this instanceof CSLEDIT.EditNodeButton);
+	assert(this instanceof CSLEDIT_EditNodeButton);
 
 	this._element = element;
 	this.nodePath = nodePath;
@@ -18,7 +18,7 @@ CSLEDIT.EditNodeButton = function (element, nodePath, cslId, icon, selectNodeCal
 
 	element.click(function () {
 		if (that.cslId === -1) {
-			CSLEDIT.controller.exec("addPath", [nodePath]);
+			CSLEDIT_controller.exec("addPath", [nodePath]);
 		} else {
 			selectNodeCallback(that.cslId, that);
 		}
@@ -26,15 +26,15 @@ CSLEDIT.EditNodeButton = function (element, nodePath, cslId, icon, selectNodeCal
 	this.updateButton();
 };
 
-CSLEDIT.EditNodeButton.prototype.getSelectedNodePath = function () {
+CSLEDIT_EditNodeButton.prototype.getSelectedNodePath = function () {
 	return [this.cslId];
 };
 
-CSLEDIT.EditNodeButton.prototype.updateButton = function () {
+CSLEDIT_EditNodeButton.prototype.updateButton = function () {
 	this._element.html('<img class="cslPropertyButton" src="' + this.icon + '" />');
 };
 
-CSLEDIT.EditNodeButton.prototype.addNode = function (parentId, position, newNode, nodesAdded) {
+CSLEDIT_EditNodeButton.prototype.addNode = function (parentId, position, newNode, nodesAdded) {
 	var pathNodes;
 
 	// shift the id if neccessary
@@ -42,7 +42,7 @@ CSLEDIT.EditNodeButton.prototype.addNode = function (parentId, position, newNode
 		this.cslId += nodesAdded;
 	} else if (this.cslId === -1) {
 		// check if this node has been added and if so link it
-		pathNodes = CSLEDIT.data.getNodesFromPath(this.nodePath);
+		pathNodes = CSLEDIT_data.getNodesFromPath(this.nodePath);
 		if (pathNodes.length > 0) {
 			assertEqual(pathNodes.length, 1);
 			this.cslId = pathNodes[0].cslId;
@@ -54,7 +54,7 @@ CSLEDIT.EditNodeButton.prototype.addNode = function (parentId, position, newNode
 	this.updateButton();
 };
 
-CSLEDIT.EditNodeButton.prototype.deleteNode = function (id, nodesDeleted) {
+CSLEDIT_EditNodeButton.prototype.deleteNode = function (id, nodesDeleted) {
 	if (this.cslId >= id + nodesDeleted) {
 		// shift the id 
 		this.cslId -= nodesDeleted;

@@ -1,14 +1,14 @@
 "use strict";
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.propertyPanel = (function () {
+
+var CSLEDIT_propertyPanel = (function () {
 	var suppressUpdates = false; // used to prevent panel updates triggered the panel itself
 
-	// property panels should use this instead of calling CSLEDIT.controller.exec
+	// property panels should use this instead of calling CSLEDIT_controller.exec
 	// directly to prevent updates to the panel
 	var executeCommand = function (command, args) {
 		suppressUpdates = true;
-		CSLEDIT.controller.exec(command, args);
+		CSLEDIT_controller.exec(command, args);
 		suppressUpdates = false;
 	};
 
@@ -34,15 +34,15 @@ CSLEDIT.propertyPanel = (function () {
 		 *         1. bug is fixed where re-ordering the sort keys causes crash
 		 *         2. ascending/descending option is added for each sort key
 		 *
-			CSLEDIT.sortPropertyPanel.setupPanel(propertyPanelElement, node, executeCommand);
+			CSLEDIT_sortPropertyPanel.setupPanel(propertyPanelElement, node, executeCommand);
 		*/
 			break;
 		case "info":
-			CSLEDIT.infoPropertyPanel.setupPanel(propertyPanelElement, executeCommand);
+			CSLEDIT_infoPropertyPanel.setupPanel(propertyPanelElement, executeCommand);
 			break;
 		case "if":
 		case "else-if":
-			new CSLEDIT.ConditionalPropertyPanel(propertyPanelElement, node, executeCommand);
+			new CSLEDIT_ConditionalPropertyPanel(propertyPanelElement, node, executeCommand);
 			break;
 		case "choose":
 			propertyPanelElement.children().remove();
@@ -60,12 +60,12 @@ CSLEDIT.propertyPanel = (function () {
 				);
 			break;
 		default:
-			dataType = CSLEDIT.schema.elementDataType(elementString);
-			schemaAttributes = CSLEDIT.schema.attributes(elementString);
+			dataType = CSLEDIT_schema.elementDataType(elementString);
+			schemaAttributes = CSLEDIT_schema.attributes(elementString);
 
-			CSLEDIT.genericPropertyPanel.setupPanel(
+			CSLEDIT_genericPropertyPanel.setupPanel(
 				propertyPanelElement, node, dataType, schemaAttributes,
-				CSLEDIT.schema.choices(elementString), executeCommand);
+				CSLEDIT_schema.choices(elementString), executeCommand);
 		}
 	};
 

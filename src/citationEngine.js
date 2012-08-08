@@ -1,10 +1,10 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
+
 
 var jsonDocuments;
 
-CSLEDIT.citationEngine = (function () {
+var CSLEDIT_citationEngine = (function () {
 	var oldFormattedCitation = "",
 		newFormattedCitation = "",
 		oldFormattedBibliography = "",
@@ -145,7 +145,7 @@ CSLEDIT.citationEngine = (function () {
 
 		console.time("runCiteprocAndDisplayOutput");
 
-		var style = CSLEDIT.data.getCslCode(),
+		var style = CSLEDIT_data.getCslCode(),
 			inLineCitations = "",
 			citations = [],
 			formattedResult,
@@ -158,16 +158,16 @@ CSLEDIT.citationEngine = (function () {
 			bibliographyDiffs,
 			diffFormattedCitation,
 			diffFormattedBibliography,
-			cslData = CSLEDIT.data.get(),
-			citationNode = CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData),
-			bibliographyNode = CSLEDIT.data.getNodesFromPath("style/bibliography/layout", cslData);
+			cslData = CSLEDIT_data.get(),
+			citationNode = CSLEDIT_data.getNodesFromPath("style/citation/layout", cslData),
+			bibliographyNode = CSLEDIT_data.getNodesFromPath("style/bibliography/layout", cslData);
 
 		statusOut.html("<i>Re-formatting citations...</i>");
 	
 		console.time("formatCitations");
 
 		formattedResult = formatCitations(
-			style, CSLEDIT.exampleCitations.getCiteprocReferences(), CSLEDIT.exampleCitations.getCitations(), true);
+			style, CSLEDIT_exampleCitations.getCiteprocReferences(), CSLEDIT_exampleCitations.getCitations(), true);
 		
 		console.timeEnd("formatCitations");
 
@@ -216,12 +216,12 @@ CSLEDIT.citationEngine = (function () {
 		citationDiffs =
 			dmp.diff_main(stripTags(oldFormattedCitation, "span"), stripTags(newFormattedCitation, "span"));
 		dmp.diff_cleanupSemantic(citationDiffs);
-		diffFormattedCitation = unescape(CSLEDIT.diff.prettyHtml(citationDiffs));
+		diffFormattedCitation = unescape(CSLEDIT_diff.prettyHtml(citationDiffs));
 
 		bibliographyDiffs =
 			dmp.diff_main(stripTags(oldFormattedBibliography, "span"), stripTags(newFormattedBibliography, "span"));
 		dmp.diff_cleanupSemantic(bibliographyDiffs);
-		diffFormattedBibliography = unescape(CSLEDIT.diff.prettyHtml(bibliographyDiffs));
+		diffFormattedBibliography = unescape(CSLEDIT_diff.prettyHtml(bibliographyDiffs));
 
 		if (dmp.diff_levenshtein(citationDiffs) === 0 && dmp.diff_levenshtein(bibliographyDiffs) === 0) {
 			citationsOut.html(newFormattedCitation);
@@ -230,7 +230,7 @@ CSLEDIT.citationEngine = (function () {
 				callback();
 			}
 		} else {
-			if (CSLEDIT.storage.getItem('CSLEDIT.options.visualEditorDiffs') === "true") {
+			if (CSLEDIT_storage.getItem('CSLEDIT_options.visualEditorDiffs') === "true") {
 				// display the diff
 				citationsOut.html(diffFormattedCitation);
 				bibliographyOut.html(diffFormattedBibliography);

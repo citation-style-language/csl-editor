@@ -1,13 +1,13 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
+
 
 // Watches a CSL node represented by nodePath and calls onChange whenever it changes
 //
 // It's OK if no node exists at nodePath
 // It's not OK if > 1 node exists at nodePath
 
-CSLEDIT.NodeWatcher = function (nodePath, cslData, onChange) {
+var CSLEDIT_NodeWatcher = function (nodePath, cslData, onChange) {
 	var that = this;
 	
 	this.nodeData = null;
@@ -20,11 +20,11 @@ CSLEDIT.NodeWatcher = function (nodePath, cslData, onChange) {
 	this.nodeUpdated();
 };
 
-CSLEDIT.NodeWatcher.prototype.nodeUpdated = function () {
+CSLEDIT_NodeWatcher.prototype.nodeUpdated = function () {
 	this.onChange(this.nodeData);
 };
 
-CSLEDIT.NodeWatcher.prototype.getSelectedNodePath = function () {
+CSLEDIT_NodeWatcher.prototype.getSelectedNodePath = function () {
 	var splitNodePath = this.nodePath.split("/"),
 		nodePath = [],
 		cslIdPath = [],
@@ -40,7 +40,7 @@ CSLEDIT.NodeWatcher.prototype.getSelectedNodePath = function () {
 	return cslIdPath;
 };
 
-CSLEDIT.NodeWatcher.prototype.updateNodeData = function () {
+CSLEDIT_NodeWatcher.prototype.updateNodeData = function () {
 	var nodes;
 
 	this.nodeData = null;
@@ -56,7 +56,7 @@ CSLEDIT.NodeWatcher.prototype.updateNodeData = function () {
 	}
 };
 
-CSLEDIT.NodeWatcher.prototype.addNode = function (id, position, node, numAdded) {
+CSLEDIT_NodeWatcher.prototype.addNode = function (id, position, node, numAdded) {
 	if (this.nodeData !== null) {
 		if (node.cslId <= this.nodeData.cslId) {
 			// shift the nodeData forward
@@ -69,7 +69,7 @@ CSLEDIT.NodeWatcher.prototype.addNode = function (id, position, node, numAdded) 
 	}
 };
 
-CSLEDIT.NodeWatcher.prototype.deleteNode = function (id, numDeleted) {
+CSLEDIT_NodeWatcher.prototype.deleteNode = function (id, numDeleted) {
 	if (this.nodeData === null) {
 		return;
 	}
@@ -87,7 +87,7 @@ CSLEDIT.NodeWatcher.prototype.deleteNode = function (id, numDeleted) {
 	}
 };
 
-CSLEDIT.NodeWatcher.prototype.amendNode = function (id, amendedNode) {
+CSLEDIT_NodeWatcher.prototype.amendNode = function (id, amendedNode) {
 	if (this.nodeData === null) {
 		return;
 	}

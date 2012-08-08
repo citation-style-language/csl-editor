@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.Storage = function (useLocalStorageIfAvailable, outOfSyncCallback) {
+
+var CSLEDIT_Storage = function (useLocalStorageIfAvailable, outOfSyncCallback) {
 	// Use localStorage for persistance if available, otherwise use a simple
 	// session based dictionary
 	var simpleStorage = {},
@@ -11,7 +11,7 @@ CSLEDIT.Storage = function (useLocalStorageIfAvailable, outOfSyncCallback) {
 		finalAPI;
 
 	var outOfSync = function () {
-		console.log("CSLEDIT.storage out of sync with local storage");
+		console.log("CSLEDIT_storage out of sync with local storage");
 		if (typeof(outOfSyncCallback) === "function") {
 			outOfSyncCallback();
 		}
@@ -105,4 +105,4 @@ CSLEDIT.Storage = function (useLocalStorageIfAvailable, outOfSyncCallback) {
 };
 
 // basic implementation for unit tests using localStorage with no callback function
-CSLEDIT.storage = new CSLEDIT.Storage(true);
+var CSLEDIT_storage = new CSLEDIT_Storage(true);

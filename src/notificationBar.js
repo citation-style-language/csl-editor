@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.notificationBar = (function () {
+
+var CSLEDIT_notificationBar = (function () {
 	var element, messageElement;
 
 	return {

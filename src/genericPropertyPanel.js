@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.genericPropertyPanel = (function () {
+
+var CSLEDIT_genericPropertyPanel = (function () {
 	var onChangeTimeout,
 		multiInputs,
 		nodeData,
@@ -54,7 +54,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		fieldsets;
 
 	var addCustomClasses = function (element, attributeName) {
-		var classes = CSLEDIT.uiConfig.attributeClasses[attributeName];
+		var classes = CSLEDIT_uiConfig.attributeClasses[attributeName];
 		if (typeof(classes) !== "undefined") {
 			element.addClass(classes);
 		}
@@ -337,8 +337,8 @@ CSLEDIT.genericPropertyPanel = (function () {
 
 		// add macro dropdown values, they aren't in the schema
 		if (attributeName === "macro") {
-			$.each(CSLEDIT.data.getNodesFromPath("style/macro"), function (i, node) {
-				var cslNode = new CSLEDIT.CslNode(node);
+			$.each(CSLEDIT_data.getNodesFromPath("style/macro"), function (i, node) {
+				var cslNode = new CSLEDIT_CslNode(node);
 				if (cslNode.hasAttr("name")) {
 					dropdownValues.push(cslNode.getAttr("name"));
 				}
@@ -398,7 +398,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 			thisRow = $('<tr></tr>');
 			thisRow.append($('<td align="right"></td>').append(label(index, attributeName)));
 			if (schemaAttribute.list) {
-				multiInput = new CSLEDIT.MultiComboBox(
+				multiInput = new CSLEDIT_MultiComboBox(
 						$('<td class="input"></td>'), dropdownValues, function () {nodeChanged(); });
 				multiInput.val(attribute.value, true);
 				
@@ -542,10 +542,10 @@ CSLEDIT.genericPropertyPanel = (function () {
 			fieldsets = [],
 			miscTable = $('<table/>'),
 			miscFieldset = $('<fieldset class="float"><legend>' +
-				CSLEDIT.uiConfig.displayNameFromNode(nodeData) +
+				CSLEDIT_uiConfig.displayNameFromNode(nodeData) +
 				'</legend></fieldset>');
 
-		$.each(CSLEDIT.uiConfig.attributeGroups, function (name, attributes) {
+		$.each(CSLEDIT_uiConfig.attributeGroups, function (name, attributes) {
 			var fieldset;
 
 			groupTables[name] = $('<table/>');
@@ -563,7 +563,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		
 		$.each(attributeEditors, function (attributeName, editor) {
 			var foundGroup = false;
-			$.each(CSLEDIT.uiConfig.attributeGroups, function (groupName, attributes) {
+			$.each(CSLEDIT_uiConfig.attributeGroups, function (groupName, attributes) {
 				if (attributes.indexOf(attributeName) !== -1) {
 					groupTables[groupName].append(editor);
 					foundGroup = true;
@@ -631,7 +631,7 @@ CSLEDIT.genericPropertyPanel = (function () {
 		attrIndex = -1;
 		if (schemaChoices.length > 0) {
 
-			choicePanel = new CSLEDIT.MultiPanel('multiPanel');
+			choicePanel = new CSLEDIT_MultiPanel('multiPanel');
 			choicePanel.element.addClass("float");
 			panel.append(choicePanel.element);
 

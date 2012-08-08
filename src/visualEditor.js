@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.VisualEditor = function (editorElement, userOptions) {
+
+var CSLEDIT_VisualEditor = function (editorElement, userOptions) {
 	var editTimeout,
 		styleURL,
 		syntaxHighlighter,
@@ -15,16 +15,16 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			return;
 		}
 
-		CSLEDIT.options.setUserOptions(userOptions);
+		CSLEDIT_options.setUserOptions(userOptions);
 
 		editorElement = $(editorElement);
 
 		$.ajax({
-			url: CSLEDIT.options.get("rootURL") + "/html/visualEditor.html",
+			url: CSLEDIT_options.get("rootURL") + "/html/visualEditor.html",
 			success : function (data) {
 				editorElement.html(data);
-				CSLEDIT.schema = CSLEDIT.Schema(CSLEDIT.schemaOptions);
-				CSLEDIT.schema.callWhenReady(init);
+				window.CSLEDIT_schema = CSLEDIT_Schema(CSLEDIT_schemaOptions);
+				CSLEDIT_schema.callWhenReady(init);
 			},
 			error : function (jaXHR, textStatus, errorThrown) {
 				alert("Couldn't fetch page: " + textStatus);
@@ -35,13 +35,13 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 	var createTreeView = function () {
 		var nodeIndex = { index : 0 };
-		var cslData = CSLEDIT.data.get(); 
+		var cslData = CSLEDIT_data.get(); 
 
-		CSLEDIT.viewController.init(cslData,
+		CSLEDIT_viewController.init(cslData,
 		{
 			formatCitations : formatExampleCitations,
 			deleteNode : function () {
-				CSLEDIT.controller.exec("deleteNode", [CSLEDIT.viewController.selectedNode()]);
+				CSLEDIT_controller.exec("deleteNode", [CSLEDIT_viewController.selectedNode()]);
 			},
 			moveNode : function (move) {
 				var temp,
@@ -52,15 +52,15 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 				fromId = parseInt(move.o.attr("cslid"), 10);
 				toId = parseInt(move.r.attr("cslid"), 10);
-				toParentNode = CSLEDIT.data.getNodeAndParent(toId).parent;
+				toParentNode = CSLEDIT_data.getNodeAndParent(toId).parent;
 
 				if (move.last_pos !== false) {
-					CSLEDIT.controller.exec("moveNode", [fromId, toId, move.last_pos]);
+					CSLEDIT_controller.exec("moveNode", [fromId, toId, move.last_pos]);
 				}
 			},
 			checkMove : function (fromId, toId, position) {
-				var fromNode = CSLEDIT.data.getNode(fromId),
-					toNodeInfo = CSLEDIT.data.getNodeAndParent(toId),
+				var fromNode = CSLEDIT_data.getNode(fromId),
+					toNodeInfo = CSLEDIT_data.getNodeAndParent(toId),
 					parentNodeName,
 					result,
 					toCslId;
@@ -70,15 +70,15 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 						return false;
 					}
 					// go up a level
-					toNodeInfo = CSLEDIT.data.getNodeAndParent(toNodeInfo.parent.cslId);
+					toNodeInfo = CSLEDIT_data.getNodeAndParent(toNodeInfo.parent.cslId);
 				}
 
 				// for moving to a macro instance, note that if the move goes ahead,
-				// this translation is done in CSLEDIT.data.addNode, so it's fine to
+				// this translation is done in CSLEDIT_data.addNode, so it's fine to
 				// give the macro instance id to the addNode controller command
-				toCslId = CSLEDIT.data.macroDefinitionIdFromInstanceId(toNodeInfo.node.cslId);
+				toCslId = CSLEDIT_data.macroDefinitionIdFromInstanceId(toNodeInfo.node.cslId);
 				if (toCslId !== toNodeInfo.node.cslId) {
-					toNodeInfo = CSLEDIT.data.getNodeAndParent(toCslId);
+					toNodeInfo = CSLEDIT_data.getNodeAndParent(toCslId);
 				}
 
 				if (toNodeInfo.parent === null) {
@@ -87,11 +87,11 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 					parentNodeName = toNodeInfo.parent.name;
 				}
 				result = (fromNode.name in 
-					CSLEDIT.schema.childElements(parentNodeName + "/" + toNodeInfo.node.name));
+					CSLEDIT_schema.childElements(parentNodeName + "/" + toNodeInfo.node.name));
 				return result;
 			},
 			viewInitialised : function () {
-				var loaded = CSLEDIT.options.get("onLoaded");
+				var loaded = CSLEDIT_options.get("onLoaded");
 				if (typeof(loaded) !== "undefined") {
 					loaded();
 				}
@@ -100,7 +100,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	};
 
 	var formatExampleCitations = function () {
-		CSLEDIT.citationEngine.runCiteprocAndDisplayOutput(
+		CSLEDIT_citationEngine.runCiteprocAndDisplayOutput(
 			editorElement.find("#statusMessage"), editorElement.find("#exampleOutput"),
 			editorElement.find("#formattedCitations"), editorElement.find("#formattedBibliography"),
 			syntaxHighlighter.setupSyntaxHighlighting);
@@ -115,7 +115,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 	var showAddNodeDialog = function () {
 		var dialogDiv = $('<div id="addNodeDialog"></div>'),
-			node = CSLEDIT.data.getNode(CSLEDIT.viewController.selectedNode()),
+			node = CSLEDIT_data.getNode(CSLEDIT_viewController.selectedNode()),
 			translatedCslId,
 			translatedNodeInfo,
 			translatedParentName,
@@ -129,13 +129,13 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			return;
 		}
 
-		dialogDiv.attr('title', 'Add node within ' + CSLEDIT.uiConfig.displayNameFromNode(node));
+		dialogDiv.attr('title', 'Add node within ' + CSLEDIT_uiConfig.displayNameFromNode(node));
 
 		// populate with possible child elements based on schema
 		
 		// in case the user is selecting a macro instance:
-		translatedCslId = CSLEDIT.data.macroDefinitionIdFromInstanceId(node.cslId);
-		translatedNodeInfo = CSLEDIT.data.getNodeAndParent(translatedCslId);
+		translatedCslId = CSLEDIT_data.macroDefinitionIdFromInstanceId(node.cslId);
+		translatedNodeInfo = CSLEDIT_data.getNodeAndParent(translatedCslId);
 	
 		if (translatedNodeInfo.parent === null) {
 			translatedParentName = "root";
@@ -143,11 +143,11 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			translatedParentName = translatedNodeInfo.parent.name;
 		}
 
-		possibleElements = CSLEDIT.viewController.selectedViewProperty("possibleChildren");
+		possibleElements = CSLEDIT_viewController.selectedViewProperty("possibleChildren");
 		if (possibleElements === null) {
 			possibleElements = {};
 
-			$.each(CSLEDIT.schema.childElements(translatedParentName + "/" + translatedNodeInfo.node.name),
+			$.each(CSLEDIT_schema.childElements(translatedParentName + "/" + translatedNodeInfo.node.name),
 				function (element, quantifier) {
 					possibleElements[element] = quantifier;
 				}
@@ -176,18 +176,18 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 		$.each(possibleElements, function (element) {
 			var img = '<td></td>',
-				nodeIcon = CSLEDIT.uiConfig.nodeIcons[element],
-				documentation = CSLEDIT.schema.documentation(
+				nodeIcon = CSLEDIT_uiConfig.nodeIcons[element],
+				documentation = CSLEDIT_schema.documentation(
 					translatedNodeInfo.node.name + "/" + element),
 				row,
 				displayName;
 
 			if (typeof nodeIcon !== "undefined") {
-				img = '<td><img src="' + CSLEDIT.options.get('rootURL') + nodeIcon + '"></img></td>';
+				img = '<td><img src="' + CSLEDIT_options.get('rootURL') + nodeIcon + '"></img></td>';
 			}
 
 			displayName = 
-				CSLEDIT.uiConfig.displayNameFromNode(new CSLEDIT.CslNode(element));
+				CSLEDIT_uiConfig.displayNameFromNode(new CSLEDIT_CslNode(element));
 
 			console.log("display name = " + displayName);
 
@@ -206,7 +206,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		});
 
 		if (!possibleElementsExist) {
-			alert("You can't create nodes within " + CSLEDIT.uiConfig.displayNameFromNode(node) + ".");
+			alert("You can't create nodes within " + CSLEDIT_uiConfig.displayNameFromNode(node) + ".");
 			return;
 		}
 
@@ -216,7 +216,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			var target = $(event.target),
 				nodeName = target.attr('data-nodeName'),
 				position,
-				children = CSLEDIT.data.getNode(CSLEDIT.viewController.selectedNode()).children;
+				children = CSLEDIT_data.getNode(CSLEDIT_viewController.selectedNode()).children;
 
 			dialogDiv.dialog('destroy');
 
@@ -238,8 +238,8 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				});
 			}
 
-			CSLEDIT.controller.exec("addNode", [
-				CSLEDIT.viewController.selectedNode(), position, { name : nodeName, attributes : []}
+			CSLEDIT_controller.exec("addNode", [
+				CSLEDIT_viewController.selectedNode(), position, { name : nodeName, attributes : []}
 			]);
 		});
 		dialogDiv.dialog({
@@ -262,7 +262,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		});
 
 		deleteNodeButton.on('click', function (e) {
-			CSLEDIT.controller.exec("deleteNode", [CSLEDIT.viewController.selectedNode()]);
+			CSLEDIT_controller.exec("deleteNode", [CSLEDIT_viewController.selectedNode()]);
 			e.preventDefault();
 		});
 	};
@@ -271,30 +271,30 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		var dropdown = $(selector),
 			loadCsl;
 
-		dropdown.filter('a.menuLoadcsl').html(CSLEDIT.options.get('loadCSLName'));
-		dropdown.filter('a.menuSavecsl').html(CSLEDIT.options.get('saveCSLName'));
+		dropdown.filter('a.menuLoadcsl').html(CSLEDIT_options.get('loadCSLName'));
+		dropdown.filter('a.menuSavecsl').html(CSLEDIT_options.get('saveCSLName'));
 
 		editorElement.find('#menuNewStyle').click(function () {
 			// fetch the URL
 			$.ajax({
-				url : CSLEDIT.options.get("rootURL") + "/content/newStyle.csl",
+				url : CSLEDIT_options.get("rootURL") + "/content/newStyle.csl",
 				dataType : "text",
 				success : function (cslCode) {
 					console.log("csl code received: " + cslCode);
-					CSLEDIT.controller.exec('setCslCode', [cslCode]);
+					CSLEDIT_controller.exec('setCslCode', [cslCode]);
 				},
 				error : function () {
 					throw new Error("Couldn't fetch new style");
 				},
 				async : false
 			});
-//			CSLEDIT.controller.exec('setCslCode', [newStyle]);
+//			CSLEDIT_controller.exec('setCslCode', [newStyle]);
 		});
 
 		editorElement.find('#menuLoadCsl').click(function () {
-			var csl = CSLEDIT.options.get('loadCSLFunc')();
+			var csl = CSLEDIT_options.get('loadCSLFunc')();
 			if (csl !== null && typeof csl !== "undefined") {
-				CSLEDIT.controller.exec('setCslCode', [csl]);
+				CSLEDIT_controller.exec('setCslCode', [csl]);
 			}
 		});
 		
@@ -307,7 +307,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 					url : '../getFromOtherWebsite.php?url=' + encodeURIComponent(styleURL),
 					dataType : "text",
 					success : function (newStyle) {
-						CSLEDIT.controller.exec("setCslCode", [newStyle]);
+						CSLEDIT_controller.exec("setCslCode", [newStyle]);
 					},
 					error : function () {
 						console.log("ajax error: style not loaded");
@@ -318,35 +318,35 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		});
 		
 		editorElement.find('#menuSaveCsl').click(function () {
-			CSLEDIT.options.get('saveCSLFunc')(CSLEDIT.data.getCslCode());
+			CSLEDIT_options.get('saveCSLFunc')(CSLEDIT_data.getCslCode());
 		});
 		
 		editorElement.find('#menuUndo').click(function () {
-			if (CSLEDIT.controller.commandHistory.length === 0) {
+			if (CSLEDIT_controller.commandHistory.length === 0) {
 				alert("No commands to undo");
 			} else {
-				CSLEDIT.controller.undo();
+				CSLEDIT_controller.undo();
 			}
 		});
 		
 		editorElement.find('#menuRedo').click(function () {
-			if (CSLEDIT.controller.undoCommandHistory.length === 0) {
+			if (CSLEDIT_controller.undoCommandHistory.length === 0) {
 				alert("No commands to redo");
 			} else {
-				CSLEDIT.controller.redo();
+				CSLEDIT_controller.redo();
 			}
 		});
 		
 		editorElement.find('#menuEditCitation1').click(function () {
-			CSLEDIT.citationEditor.editCitation(0);
+			CSLEDIT_citationEditor.editCitation(0);
 		});
 		
 		editorElement.find('#menuEditCitation2').click(function () {
-			CSLEDIT.citationEditor.editCitation(1);
+			CSLEDIT_citationEditor.editCitation(1);
 		});
 
 		editorElement.find('#menuEditCitation3').click(function () {
-			CSLEDIT.citationEditor.editCitation(2);
+			CSLEDIT_citationEditor.editCitation(2);
 		});
 	};
 
@@ -356,7 +356,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		// create storage with callback funciton which gets called if inconsistencies
 		// are found between the localStorage data (shared between tabs) and this session
 		// data
-		CSLEDIT.storage = new CSLEDIT.Storage(true, function () {
+		CSLEDIT_storage = new CSLEDIT_Storage(true, function () {
 			if (confirm("Your style has changed in a different tab.\n" +
 					"Do you want to load the new version into this tab?")) {
 				// reload page
@@ -364,7 +364,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				window.location.reload();
 			} else {
 				// use existing data
-				CSLEDIT.storage.recreateLocalStorage();
+				CSLEDIT_storage.recreateLocalStorage();
 			}
 		});
 
@@ -373,7 +373,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		console.log("window length = " + $(window).length);
 		$(window).focus(function () {
 			if (!reloadingPage) {
-				CSLEDIT.data.get();
+				CSLEDIT_data.get();
 			}
 		});
 
@@ -389,25 +389,25 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			editorElement.find("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
 		});
 
-		CSLEDIT.data.initPageStyle(function () {
-			var userOnChangeCallback = CSLEDIT.options.get("onChange"),
+		CSLEDIT_data.initPageStyle(function () {
+			var userOnChangeCallback = CSLEDIT_options.get("onChange"),
 				citationEditor1,
 				citationEditor2;
 			
-			syntaxHighlighter = CSLEDIT.SyntaxHighlighter(editorElement);
+			syntaxHighlighter = CSLEDIT_SyntaxHighlighter(editorElement);
 
-			CSLEDIT.viewController = CSLEDIT.ViewController(
+			window.CSLEDIT_viewController = CSLEDIT_ViewController(
 				editorElement.find("#treeEditor"),
 				editorElement.find("#titlebar"),
 				editorElement.find("#elementProperties"),
 				editorElement.find("#nodePathView"),
 				syntaxHighlighter);
 
-			CSLEDIT.controller.setCslData(CSLEDIT.data);
-			CSLEDIT.data.addViewController(CSLEDIT.viewController);
+			CSLEDIT_controller.setCslData(CSLEDIT_data);
+			CSLEDIT_data.addViewController(CSLEDIT_viewController);
 
 			if (typeof userOnChangeCallback === "function") {
-				CSLEDIT.data.addViewController({
+				CSLEDIT_data.addViewController({
 					styleChanged : function (command) {
 						if (command === "formatCitations") {
 							userOnChangeCallback();
@@ -426,11 +426,11 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			closable : false,
 			resizable : true,
 			livePaneResizing : true,
-			west__size : CSLEDIT.storage.getItem("CSLEDIT.geometry.leftPaneWidth") || 240,
+			west__size : CSLEDIT_storage.getItem("CSLEDIT_geometry.leftPaneWidth") || 240,
 			west__minSize : 200,
 			onresize : function (paneName, paneElement, paneState) {
 				if (paneState.edge === "west") {
-					CSLEDIT.storage.setItem("CSLEDIT.geometry.leftPaneWidth", paneState.size);
+					CSLEDIT_storage.setItem("CSLEDIT_geometry.leftPaneWidth", paneState.size);
 				}
 			}
 		});
@@ -439,15 +439,15 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			closable : false,
 			resizable : true,
 			livePaneResizing : true,
-			north__size : CSLEDIT.storage.getItem("CSLEDIT.geometry.topPaneWidth") || 300,
+			north__size : CSLEDIT_storage.getItem("CSLEDIT_geometry.topPaneWidth") || 300,
 			onresize : function (paneName, paneElement, paneState) {
 				if (paneState.edge === "north") {
-					CSLEDIT.storage.setItem("CSLEDIT.geometry.topPaneWidth", paneState.size);
+					CSLEDIT_storage.setItem("CSLEDIT_geometry.topPaneWidth", paneState.size);
 				}
 			}
 		});
 
-		CSLEDIT.notificationBar.init(editorElement.find('#notificationBar'));
+		CSLEDIT_notificationBar.init(editorElement.find('#notificationBar'));
 	};
 
 	// used to generate the ids in the Zotero style repository
@@ -469,9 +469,9 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 
 		// check that the styleId and rel self link matches the schema conventions
 		generatedStyleId = "http://www.zotero.org/styles/" + getNormalisedStyleName();
-		links = CSLEDIT.data.getNodesFromPath("style/info/link");
+		links = CSLEDIT_data.getNodesFromPath("style/info/link");
 		$.each(links, function (i, link) {
-			link = new CSLEDIT.CslNode(link);
+			link = new CSLEDIT_CslNode(link);
 
 			if (link.getAttr("rel") === "self") {
 				selfLinkNode = link;
@@ -480,7 +480,7 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		});
 
 		console.log("generatedStyleId = " + generatedStyleId);
-		$.each(CSLEDIT.cslStyles.styleTitleFromId, function (id, name) {
+		$.each(CSLEDIT_cslStyles.styleTitleFromId, function (id, name) {
 			if (id === generatedStyleId || name === styleName) {
 				if (!confirm('The style title matches one that already exists.\n\n' +
 						'You should change it to avoid problems using this style ' +
@@ -502,10 +502,10 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				setStyleId(generatedStyleId);
 				if (typeof(selfLinkNode) !== "undefined") {
 					selfLinkNode.setAttr("href", generatedStyleId);
-					CSLEDIT.controller.exec("amendNode", [selfLinkNode.cslId, selfLinkNode]);
+					CSLEDIT_controller.exec("amendNode", [selfLinkNode.cslId, selfLinkNode]);
 				} else {
-					CSLEDIT.controller.exec("addNode", [CSLEDIT.data.getNodesFromPath("style/info")[0].cslId, "last",
-						new CSLEDIT.CslNode("link", [
+					CSLEDIT_controller.exec("addNode", [CSLEDIT_data.getNodesFromPath("style/info")[0].cslId, "last",
+						new CSLEDIT_CslNode("link", [
 							{key: "rel", value: "self", enabled: true},
 							{key: "href", value: generatedStyleId, enabled: true}
 						])]);
@@ -516,28 +516,28 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 	};
 
 	var getStyleName = function () {
-		var styleNameNode = CSLEDIT.data.getNodesFromPath('style/info/title')[0];
+		var styleNameNode = CSLEDIT_data.getNodesFromPath('style/info/title')[0];
 		return styleNameNode.textValue;
 	};
 
 	var getStyleId = function () {
-		var styleIdNode = CSLEDIT.data.getNodesFromPath('style/info/id')[0];
+		var styleIdNode = CSLEDIT_data.getNodesFromPath('style/info/id')[0];
 		return styleIdNode.textValue;
 	};
 		
 	var setStyleId = function (styleId) {
-		var styleIdNode = CSLEDIT.data.getNodesFromPath('style/info/id')[0];
+		var styleIdNode = CSLEDIT_data.getNodesFromPath('style/info/id')[0];
 		styleIdNode.textValue = styleId;
-		CSLEDIT.controller.exec('amendNode', [styleIdNode.cslId, styleIdNode]);
+		CSLEDIT_controller.exec('amendNode', [styleIdNode.cslId, styleIdNode]);
 	};
 
 	// public API
 	return {
 		setCslCode : function (cslCode) {
-			CSLEDIT.controller.exec('setCslCode', [cslCode]);
+			CSLEDIT_controller.exec('setCslCode', [cslCode]);
 		},
 		getCslCode : function () {
-			return CSLEDIT.data.getCslCode();
+			return CSLEDIT_data.getCslCode();
 		},
 		getStyleName : getStyleName,
 		getStyleId : getStyleId,

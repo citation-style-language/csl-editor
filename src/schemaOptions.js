@@ -1,10 +1,10 @@
 "use strict";
-var CSLEDIT = CSLEDIT || {};
+
 
 /* Options for modifying the Schema for use in the CSL Editor
  */
 
-CSLEDIT.schemaOptions = {
+var CSLEDIT_schemaOptions = {
 	defaultDefaultAttribute : {
 		documentation: "No value",
 		type: "novalue",

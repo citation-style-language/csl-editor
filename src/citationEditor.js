@@ -1,8 +1,8 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.citationEditor = (function () {
+
+var CSLEDIT_citationEditor = (function () {
 	var dialog = $('<div/>'),
 		advanced = $('<div/>', {id:"accordion"}).css({"padding-top":"10px", width: "100%"}),
 		advancedContents = $('<div/>'),
@@ -26,7 +26,7 @@ CSLEDIT.citationEditor = (function () {
 	advancedContents.append(addReferenceButton);
 
 	resetReferencesButton.on('click', function () {
-		CSLEDIT.exampleCitations.resetToDefault();
+		CSLEDIT_exampleCitations.resetToDefault();
 		updateReferenceList();
 	});
 
@@ -44,7 +44,7 @@ CSLEDIT.citationEditor = (function () {
 		// will accept individual references or a list
 		referenceList = [].concat(jsonData);
 		$.each(referenceList, function (i, reference) {
-			CSLEDIT.exampleCitations.addReference(reference, citation);
+			CSLEDIT_exampleCitations.addReference(reference, citation);
 		});
 
 		updateReferenceList();
@@ -56,7 +56,7 @@ CSLEDIT.citationEditor = (function () {
 
 		referencePanel.children().remove();
 
-		$.each(CSLEDIT.exampleCitations.getReferences(), function (i, reference) {
+		$.each(CSLEDIT_exampleCitations.getReferences(), function (i, reference) {
 			var row = $('<tr/>'),
 				input,
 				label1,
@@ -74,12 +74,12 @@ CSLEDIT.citationEditor = (function () {
 				for : "citationEditorReference" + i
 			}).append(reference.title);
 			select = $('<select/>');
-			$.each(CSLEDIT.exampleData.additionalOptions, function (i, option) {
+			$.each(CSLEDIT_exampleData.additionalOptions, function (i, option) {
 				select.append('<option>' + option.description + '</option>');
 			});
 			var desc;
-			desc = CSLEDIT.exampleData.additionalOptions[
-				CSLEDIT.exampleCitations.getOption(citation, i)].description;
+			desc = CSLEDIT_exampleData.additionalOptions[
+				CSLEDIT_exampleCitations.getOption(citation, i)].description;
 			console.log(desc);
 			select.val(desc);
 
@@ -94,9 +94,9 @@ CSLEDIT.citationEditor = (function () {
 		table.find('td').css({"padding-right": "8px"});
 
 		console.log("checked = " +
-				JSON.stringify(CSLEDIT.exampleCitations.getReferenceIndexesForCitation(citation)));
+				JSON.stringify(CSLEDIT_exampleCitations.getReferenceIndexesForCitation(citation)));
 
-		$.each(CSLEDIT.exampleCitations.getReferenceIndexesForCitation(citation), function (i, refIndex) {
+		$.each(CSLEDIT_exampleCitations.getReferenceIndexesForCitation(citation), function (i, refIndex) {
 			referencePanel.find('input[type=checkbox]').eq(refIndex).attr('checked', true);
 		});
 		referencePanel.find('input[type=checkbox]').on('change', function () {
@@ -107,7 +107,7 @@ CSLEDIT.citationEditor = (function () {
 				optionIndex = $(this).children('option').index(
 					$(this).children('option[value="' + $(this).val() + '"]'));
 
-			CSLEDIT.exampleCitations.setOption(citation, reference, optionIndex);
+			CSLEDIT_exampleCitations.setOption(citation, reference, optionIndex);
 		});
 	};
 
@@ -121,7 +121,7 @@ CSLEDIT.citationEditor = (function () {
 			if ($(this).is(':checked')) {
 				//citationItem = {id:"ITEM-" + (index + 1)};
 				/* TODO: additional options
-				additionalOptions = CSLEDIT.exampleData.additionalOptions[index];
+				additionalOptions = CSLEDIT_exampleData.additionalOptions[index];
 				if (typeof additionalOptions !== "undefined") {
 					// add options to citationItem
 					$.each (additionalOptions.options, function (key, value) {
@@ -136,7 +136,7 @@ CSLEDIT.citationEditor = (function () {
 		
 		console.log("setting " + citation + " to " + JSON.stringify(checked));
 
-		CSLEDIT.exampleCitations.setReferenceIndexesForCitation(citation, checked);
+		CSLEDIT_exampleCitations.setReferenceIndexesForCitation(citation, checked);
 	};
 
 	var editCitation = function (_citation) {

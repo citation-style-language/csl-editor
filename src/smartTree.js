@@ -1,13 +1,13 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optional*/, leafNodes /*optional*/) {
+
+var CSLEDIT_SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optional*/, leafNodes /*optional*/) {
 	var ranges,
 		macroLinks, // like symlinks for macros
 		            // [{ instanceCslId: ?, macroRange: ?}]
 		callbacks,
-		verifyAllChanges = false, // does a complete check against CSLEDIT.data after
+		verifyAllChanges = false, // does a complete check against CSLEDIT_data after
 		                          // every change for debugging
 		oldSelectedNode = -1;
 
@@ -33,17 +33,17 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 
 	// Check the tree matches the data - for testing and debugging
 	var verifyTree = function () {
-		var cslData = CSLEDIT.data.get();
+		var cslData = CSLEDIT_data.get();
 
 		if (verifyAllChanges) {
 			console.time("verifyTree");
-			// Check for inconsistencies with CSLEDIT.data
+			// Check for inconsistencies with CSLEDIT_data
 			treeElement.find('li[cslid]').each(function () {
 				var $this = $(this),
 					cslId;
 
 				cslId = parseInt($this.attr('cslid'), 10);
-				assertEqual(CSLEDIT.data.getNode(cslId, cslData).name, $this.attr('rel'));
+				assertEqual(CSLEDIT_data.getNode(cslId, cslData).name, $this.attr('rel'));
 			});
 
 			// Can't have non-macrolink nodes as children of a text node
@@ -84,8 +84,8 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		
 		// build the node types from the uiConfig data		
 		nodeTypes = {};
-		$.each(CSLEDIT.uiConfig.nodeIcons, function (type, icon) {
-			nodeTypes[type] = { icon : { image : CSLEDIT.options.get("rootURL") + icon } };
+		$.each(CSLEDIT_uiConfig.nodeIcons, function (type, icon) {
+			nodeTypes[type] = { icon : { image : CSLEDIT_options.get("rootURL") + icon } };
 		});
 
 		treeElement.jstree({
@@ -121,13 +121,13 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 	var jsTreeDataFromCslData = function (nodePaths) {
 		var cslNodes = [],
 			jsTreeData = [],
-			cslData = CSLEDIT.data.get();
+			cslData = CSLEDIT_data.get();
 
 		ranges = [];
 		macroLinks = [];
 
 		$.each(nodePaths, function (i, path) {
-			var nodes = CSLEDIT.data.getNodesFromPath(path, cslData);
+			var nodes = CSLEDIT_data.getNodesFromPath(path, cslData);
 			cslNodes = cslNodes.concat(nodes);
 		});
 
@@ -168,7 +168,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 
 		var jsTreeData = {
-			data : CSLEDIT.uiConfig.displayNameFromNode(cslData),
+			data : CSLEDIT_uiConfig.displayNameFromNode(cslData),
 			attr : {
 				rel : cslData.name,
 				cslid : cslData.cslId
@@ -182,7 +182,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 
 		if (enableMacroLinks) {
 			// Add 'symlink' to Macro
-			macro = new CSLEDIT.CslNode(cslData).getAttr("macro");
+			macro = new CSLEDIT_CslNode(cslData).getAttr("macro");
 			if (cslData.name === "text" && macro !== "") {
 				addMacro(jsTreeData, cslData, macro);
 			}
@@ -206,10 +206,10 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		}
 
 		// find the macro node:
-		macroNodes = CSLEDIT.data.getNodesFromPath("style/macro");
+		macroNodes = CSLEDIT_data.getNodesFromPath("style/macro");
 
 		$.each(macroNodes, function (i, node) {
-			if (new CSLEDIT.CslNode(node).getAttr("name") === macroName) {
+			if (new CSLEDIT_CslNode(node).getAttr("name") === macroName) {
 				macroNode = node;
 				return false;
 			}
@@ -358,7 +358,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 	};
 
 	var macroLinksUpdateNode = function (id, _amendedNode) {
-		var amendedNode = new CSLEDIT.CslNode(_amendedNode),
+		var amendedNode = new CSLEDIT_CslNode(_amendedNode),
 			macroName,
 			jsTreeData = {children: [], attr: [], data: ""},
 			removeChildren = false,
@@ -421,7 +421,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			matchingCslNodes = [];
 			// check if the new node belongs to this smartTree
 			$.each(nodePaths, function (i, path) {
-				matchingCslNodes = matchingCslNodes.concat(CSLEDIT.data.getNodesFromPath(path));
+				matchingCslNodes = matchingCslNodes.concat(CSLEDIT_data.getNodesFromPath(path));
 			});
 
 			$.each(matchingCslNodes, function (i, node) {
@@ -434,7 +434,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 					var newTreeNode = treeElement.find('li[cslid="' + newNode.cslId + '"]');
 					ranges.push({
 						first : newNode.cslId,
-						last : newNode.cslId + CSLEDIT.data.numNodes(newNode) - 1,
+						last : newNode.cslId + CSLEDIT_data.numNodes(newNode) - 1,
 						rootNode : newTreeNode
 					});
 					
@@ -447,7 +447,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 		range = ranges[thisRangeIndex];
 
 		
-		if (!pathContainsLeafNode(CSLEDIT.data.getNodePath(newNode.cslId))) {
+		if (!pathContainsLeafNode(CSLEDIT_data.getNodePath(newNode.cslId))) {
 			parentNode = treeElement.find('li[cslid="' + parentId + '"][macrolink!="true"]');
 			assertEqual(parentNode.length, 1);
 			createSubTree(parentNode, position, jsTreeDataFromCslData_inner(newNode, [id]));
@@ -551,7 +551,7 @@ CSLEDIT.SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optiona
 			nodes = treeElement.find('li[cslid="' + id + '"]');
 
 		nodes.each(function () {
-			treeElement.jstree('rename_node', $(this), CSLEDIT.uiConfig.displayNameFromNode(amendedNode));
+			treeElement.jstree('rename_node', $(this), CSLEDIT_uiConfig.displayNameFromNode(amendedNode));
 		});
 		
 		if (thisRangeIndex === -1) {

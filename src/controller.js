@@ -1,13 +1,13 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
+
 
 // Sends commands to the data module, and maintains the command history used by
 // the undo function
 //
 // ** Any action which affects the data should go through the controller **
 // 
-CSLEDIT.controller = (function () {
+var CSLEDIT_controller = (function () {
 	var commands = [
 			"addNode",
 			"deleteNode",
@@ -42,7 +42,7 @@ CSLEDIT.controller = (function () {
 					currentPath += "/";
 				}
 				currentPath += splitPath[index];
-				nodes = CSLEDIT.data.getNodesFromPath(currentPath)
+				nodes = CSLEDIT_data.getNodesFromPath(currentPath)
 				if (nodes.length === 0) {
 					if (index === 0) {
 						// add root node

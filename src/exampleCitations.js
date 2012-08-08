@@ -1,9 +1,9 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-// use this instead of accessing CSLEDIT.exampleData
-CSLEDIT.exampleCitations = (function () {
+
+// use this instead of accessing CSLEDIT_exampleData
+var CSLEDIT_exampleCitations = (function () {
 	var suppressUpdate = false;
 
 	var newCitation = function (citationIndex) {
@@ -17,37 +17,37 @@ CSLEDIT.exampleCitations = (function () {
 
 	var getCitations = function () {
 		var citations;
-		if (CSLEDIT.storage.getItemJson('CSLEDIT.exampleCitations') === null) {
+		if (CSLEDIT_storage.getItemJson('CSLEDIT_exampleCitations') === null) {
 
 			// create empty reference lists for each citation
 			citations = [];
-			$.each(CSLEDIT.options.get("exampleCitations"), function (citation) {
+			$.each(CSLEDIT_options.get("exampleCitations"), function (citation) {
 				citations.push(newCitation(citation));
 			});
 			setCitations(citations);
 
 			// populate the reference lists
-			$.each(CSLEDIT.options.get("exampleCitations"), function (citation, referenceList) {
+			$.each(CSLEDIT_options.get("exampleCitations"), function (citation, referenceList) {
 				setReferenceIndexesForCitation(citation, referenceList);
 			});
 		}
-		return CSLEDIT.storage.getItemJson('CSLEDIT.exampleCitations');
+		return CSLEDIT_storage.getItemJson('CSLEDIT_exampleCitations');
 	};
 	var setCitations = function (citations) {
 		applyCitationOptions(citations, getCitationOptions());
-		CSLEDIT.storage.setItem('CSLEDIT.exampleCitations', JSON.stringify(citations));
+		CSLEDIT_storage.setItem('CSLEDIT_exampleCitations', JSON.stringify(citations));
 		update();
 	};
 	
 	var getCitationOptions = function () {
-		if (CSLEDIT.storage.getItemJson('CSLEDIT.exampleCitationOptions') === null) {
+		if (CSLEDIT_storage.getItemJson('CSLEDIT_exampleCitationOptions') === null) {
 			return {};
 		}
-		return CSLEDIT.storage.getItemJson('CSLEDIT.exampleCitationOptions');
+		return CSLEDIT_storage.getItemJson('CSLEDIT_exampleCitationOptions');
 	};
 	var setCitationOptions = function (citationOptions) {
 		var citations = getCitations();
-		CSLEDIT.storage.setItem('CSLEDIT.exampleCitationOptions', JSON.stringify(citationOptions));
+		CSLEDIT_storage.setItem('CSLEDIT_exampleCitationOptions', JSON.stringify(citationOptions));
 		
 		applyCitationOptions(citations, citationOptions);
 		setCitations(citations);
@@ -61,7 +61,7 @@ CSLEDIT.exampleCitations = (function () {
 				var citationItem = citation.citationItems[index],
 					referenceIndex = parseInt(citationItem.id.replace("ITEM-", ""), 10) - 1,
 					optionIndex = getOption(citationIndex, referenceIndex),
-					options = CSLEDIT.exampleData.additionalOptions[optionIndex];
+					options = CSLEDIT_exampleData.additionalOptions[optionIndex];
 			
 				// replace all options
 				citationItem = { id : citationItem.id };
@@ -75,7 +75,7 @@ CSLEDIT.exampleCitations = (function () {
 
 	var setOption = function (citation, reference, option) {
 		var options = getCitationOptions();
-		if (option >= CSLEDIT.exampleData.additionalOptions.length) {
+		if (option >= CSLEDIT_exampleData.additionalOptions.length) {
 			option = 0;
 		}
 		options[citation] = options[citation] || {};
@@ -93,7 +93,7 @@ CSLEDIT.exampleCitations = (function () {
 			return 0;
 		}
 		option = options[citation][reference];
-		if (option >= CSLEDIT.exampleData.additionalOptions.length) {
+		if (option >= CSLEDIT_exampleData.additionalOptions.length) {
 			option = 0;
 		}
 		return option;
@@ -112,13 +112,13 @@ CSLEDIT.exampleCitations = (function () {
 	};		
 
 	var getReferences = function () {
-		if (CSLEDIT.storage.getItemJson('CSLEDIT.exampleReferences') === null) {
-			setReferences(CSLEDIT.options.get('exampleReferences'));
+		if (CSLEDIT_storage.getItemJson('CSLEDIT_exampleReferences') === null) {
+			setReferences(CSLEDIT_options.get('exampleReferences'));
 		}
-		return CSLEDIT.storage.getItemJson('CSLEDIT.exampleReferences');
+		return CSLEDIT_storage.getItemJson('CSLEDIT_exampleReferences');
 	};
 	var setReferences = function (referenceList) {
-		CSLEDIT.storage.setItem('CSLEDIT.exampleReferences', JSON.stringify(referenceList));
+		CSLEDIT_storage.setItem('CSLEDIT_exampleReferences', JSON.stringify(referenceList));
 
 		suppressUpdate = true;
 		$.each(getCitations(), function (i, citation) {
@@ -188,14 +188,14 @@ CSLEDIT.exampleCitations = (function () {
 	};
 
 	var setJsonDocumentList = function (jsonDocumentList) {
-		CSLEDIT.exampleData.jsonDocumentList = jsonDocumentList;
+		CSLEDIT_exampleData.jsonDocumentList = jsonDocumentList;
 
 		update();
 	};
 
 	var update = function () {
 		if (!suppressUpdate && "viewController" in CSLEDIT) {
-			CSLEDIT.viewController.styleChanged("formatCitations");
+			CSLEDIT_viewController.styleChanged("formatCitations");
 		}
 	};
 
@@ -220,9 +220,9 @@ CSLEDIT.exampleCitations = (function () {
 		addReference : addReference,
 
 		resetToDefault : function () {
-			CSLEDIT.storage.removeItem("CSLEDIT.exampleCitations");
-			CSLEDIT.storage.removeItem("CSLEDIT.exampleReferences");
-			CSLEDIT.storage.removeItem("CSLEDIT.exampleCitationOptions");
+			CSLEDIT_storage.removeItem("CSLEDIT_exampleCitations");
+			CSLEDIT_storage.removeItem("CSLEDIT_exampleReferences");
+			CSLEDIT_storage.removeItem("CSLEDIT_exampleCitationOptions");
 			update();
 		}
 	};

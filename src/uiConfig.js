@@ -1,11 +1,11 @@
 "use strict";
 
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.uiConfig = {};
+
+var CSLEDIT_uiConfig = {};
 
 // if creating an empty node, populate with these attributes
-CSLEDIT.uiConfig.defaultAttributes = {
+CSLEDIT_uiConfig.defaultAttributes = {
 	"text" : {
 		"value" : ""
 	},
@@ -30,7 +30,7 @@ CSLEDIT.uiConfig.defaultAttributes = {
 	}
 };
 
-CSLEDIT.uiConfig.attributeGroups = {
+CSLEDIT_uiConfig.attributeGroups = {
 	"Text formatting" : [
 		"fontFormattingControls",
 		"display",
@@ -44,7 +44,7 @@ CSLEDIT.uiConfig.attributeGroups = {
 };
 
 // for displaying the example metadata in Search by Example page
-CSLEDIT.uiConfig.fieldOrder = [
+CSLEDIT_uiConfig.fieldOrder = [
 	"type",
 	"title",
 	"author",
@@ -60,13 +60,13 @@ CSLEDIT.uiConfig.fieldOrder = [
 ];
 
 // add classes to the <input> or <select> elements for various attributes
-CSLEDIT.uiConfig.attributeClasses = {
+CSLEDIT_uiConfig.attributeClasses = {
 	"delimiter" : "short",
 	"display" : "exampleClass1 exampleClass2"
 };
 
 // for jstree
-CSLEDIT.uiConfig.nodeIcons = {
+CSLEDIT_uiConfig.nodeIcons = {
 	"default" : "/external/famfamfam-icons/bullet_black.png",
 	"text" : "/external/famfamfam-icons/style.png",
 	"macro" : "/external/famfamfam-icons/brick.png",
@@ -82,29 +82,29 @@ CSLEDIT.uiConfig.nodeIcons = {
 	"group" : "/external/famfamfam-icons/page_white_stack.png"
 };
 
-CSLEDIT.uiConfig.capitaliseFirstLetter = function (string) {
+CSLEDIT_uiConfig.capitaliseFirstLetter = function (string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-CSLEDIT.uiConfig.displayNameFromNode = function (node) {
-	if (node.name in CSLEDIT.uiConfig.displayNames) {
-		return CSLEDIT.uiConfig.displayNames[node.name](node);
+CSLEDIT_uiConfig.displayNameFromNode = function (node) {
+	if (node.name in CSLEDIT_uiConfig.displayNames) {
+		return CSLEDIT_uiConfig.displayNames[node.name](node);
 	}
 
 	// fall back to using the node name
-	return CSLEDIT.uiConfig.capitaliseFirstLetter(node.name);
+	return CSLEDIT_uiConfig.capitaliseFirstLetter(node.name);
 };
 
 // generates display names for 'if' and 'else-if' tree view nodes
 //   e.g. If article OR book
-CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
+CSLEDIT_uiConfig.conditionalDisplayName = function (node) {
 	var displayName = "",
 		elideLimit = 30,
 		match,
 		terms = [],
 		join = "";
 
-	match = CSLEDIT.schema.attributes("choose/if").match.defaultValue;
+	match = CSLEDIT_schema.attributes("choose/if").match.defaultValue;
 	if (match === "") {
 		match = "all"; // becuase it's not specified in MLZ schema, TODO: ask Frank
 	}
@@ -144,12 +144,12 @@ CSLEDIT.uiConfig.conditionalDisplayName = function (node) {
 	return displayName;
 };
 
-CSLEDIT.uiConfig.displayNames = {
+CSLEDIT_uiConfig.displayNames = {
 		"macro" : function (node) {
-			return "Macro: " + new CSLEDIT.CslNode(node).getAttr("name");
+			return "Macro: " + new CSLEDIT_CslNode(node).getAttr("name");
 		},
 		"text" : function (node) {
-			var cslNode = new CSLEDIT.CslNode(node),
+			var cslNode = new CSLEDIT_CslNode(node),
 				macro = cslNode.getAttr("macro"),
 				term = cslNode.getAttr("term"),
 				value = cslNode.getAttr("value"),
@@ -167,7 +167,7 @@ CSLEDIT.uiConfig.displayNames = {
 			return "Text";
 		},
 		"label" : function (node) {
-			var variable = new CSLEDIT.CslNode(node).getAttr("variable"),
+			var variable = new CSLEDIT_CslNode(node).getAttr("variable"),
 				displayName = "Label";
 
 			if (variable !== "") {
@@ -176,15 +176,15 @@ CSLEDIT.uiConfig.displayNames = {
 			return displayName;
 		},
 		"number" : function (node) {
-			var variable = new CSLEDIT.CslNode(node).getAttr("variable");
+			var variable = new CSLEDIT_CslNode(node).getAttr("variable");
 
 			if (variable !== "") {
 				return variable;
 			}
 			return "Number";
 		},
-		"if" : CSLEDIT.uiConfig.conditionalDisplayName,
-		"else-if" : CSLEDIT.uiConfig.conditionalDisplayName,
+		"if" : CSLEDIT_uiConfig.conditionalDisplayName,
+		"else-if" : CSLEDIT_uiConfig.conditionalDisplayName,
 		"citation" : function () {
 			return "Inline Citations";
 		},
@@ -198,8 +198,8 @@ CSLEDIT.uiConfig.displayNames = {
 			return "Global Formatting Options";
 		},
 		"key" : function (node) {
-			var variable = new CSLEDIT.CslNode(node).getAttr("variable"),
-				macro = new CSLEDIT.CslNode(node).getAttr("macro");
+			var variable = new CSLEDIT_CslNode(node).getAttr("variable"),
+				macro = new CSLEDIT_CslNode(node).getAttr("macro");
 
 			if (macro !== "") {
 				return "Sort by " + macro;

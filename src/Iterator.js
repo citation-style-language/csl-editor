@@ -1,6 +1,6 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
+
 
 /* Iterates through a tree in depth first order
  *
@@ -8,8 +8,8 @@ CSLEDIT = CSLEDIT || {};
  * 
  * Can retrieve the parent node of each child in the tree
  */
-CSLEDIT.Iterator = function (rootNode) {
-	assert(this instanceof CSLEDIT.Iterator);
+var CSLEDIT_Iterator = function (rootNode) {
+	assert(this instanceof CSLEDIT_Iterator);
 
 	this.rootNode = rootNode;
 	this.nodeStack = [];
@@ -17,7 +17,7 @@ CSLEDIT.Iterator = function (rootNode) {
 	this.nextNode = null;
 };
 
-CSLEDIT.Iterator.prototype.next = function () {
+CSLEDIT_Iterator.prototype.next = function () {
 	var topNode,
 		nextNode,
 		currentNode;
@@ -56,7 +56,7 @@ CSLEDIT.Iterator.prototype.next = function () {
 	}
 };
 
-CSLEDIT.Iterator.prototype.hasNext = function () {
+CSLEDIT_Iterator.prototype.hasNext = function () {
 	if (this.nextNode !== null) {
 		return true;
 	} else {
@@ -69,7 +69,7 @@ CSLEDIT.Iterator.prototype.hasNext = function () {
 	}
 };
 
-CSLEDIT.Iterator.prototype.parent = function () {
+CSLEDIT_Iterator.prototype.parent = function () {
 	if (this.nodeStack.length > 1) {
 		return this.nodeStack[this.nodeStack.length - 2].node;
 	} else {
@@ -77,7 +77,7 @@ CSLEDIT.Iterator.prototype.parent = function () {
 	}
 };
 
-CSLEDIT.Iterator.prototype.stack = function () {
+CSLEDIT_Iterator.prototype.stack = function () {
 	var stack = [];
 
 	$.each(this.nodeStack, function(i, node) {

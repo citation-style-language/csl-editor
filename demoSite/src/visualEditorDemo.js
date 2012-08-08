@@ -43,7 +43,7 @@ var saveCSL = function (cslCode) {
 		filename = cslEditor.getStyleId().replace(/.*\//g, "").replace(/[\\\/:"*?<>| ]+/g, "-") + '.csl';
 
 		// add comment to start
-		cslCode = CSLEDIT.data.getCslCode("This style was edited with the Visual CSL Editor (" +
+		cslCode = CSLEDIT_data.getCslCode("This style was edited with the Visual CSL Editor (" +
 			window.location.href + ")");
 
 		dialog.dialog({
@@ -124,7 +124,7 @@ var initVisualEditorDemo = function (rootURL) {
 
 			dialog.append($('<p/>').append(resetButton).append(" unsaved work will be lost"));
 			resetButton.on("click", function () {
-				CSLEDIT.storage.clear();
+				CSLEDIT_storage.clear();
 				window.location.reload();
 			});
 
@@ -145,7 +145,7 @@ var initVisualEditorDemo = function (rootURL) {
 			});
 		};
 
-		cslEditor = new CSLEDIT.VisualEditor('#visualEditorContainer',	
+		cslEditor = new CSLEDIT_VisualEditor('#visualEditorContainer',	
 			{
 				loadCSLName : "Load Style",
 				loadCSLFunc : loadCSL,

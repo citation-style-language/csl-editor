@@ -16,7 +16,7 @@ Sys.prototype.retrieveLocale = function(lang){
 
 	if (typeof(thisLocale) === "undefined") {
 		// try to fetch from server
-		localePath = CSLEDIT.options.get("rootURL") + "/external/locales/locales-" + lang + ".xml";
+		localePath = CSLEDIT_options.get("rootURL") + "/external/locales/locales-" + lang + ".xml";
 
 		$.ajax({
 			url : localePath,
