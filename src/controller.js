@@ -1,13 +1,11 @@
 "use strict";
 
-
-
 // Sends commands to the data module, and maintains the command history used by
 // the undo function
 //
 // ** Any action which affects the data should go through the controller **
 // 
-var CSLEDIT_controller = (function () {
+define(function () {
 	var commands = [
 			"addNode",
 			"deleteNode",
@@ -112,5 +110,4 @@ var CSLEDIT_controller = (function () {
 			commandHistory.length = 0;
 		}
 	};
-}());
-
+});

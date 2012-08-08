@@ -1,6 +1,7 @@
 "use strict";
 
-define(/*['src/options'],*/ function () {
+define(['src/controller', 'src/viewController'],
+		function (CSLEDIT_controller, CSLEDIT_ViewController) {
 	return function VisualEditor(editorElement, userOptions) {
 		var editTimeout,
 			styleURL,

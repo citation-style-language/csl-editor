@@ -54,29 +54,9 @@
 	<script type="text/javascript" src="../../src/infoPropertyPanel.js"></script>
 	<script type="text/javascript" src="../../src/conditionalPropertyPanel.js"></script>
 	<script type="text/javascript" src="../../src/propertyPanel.js"></script>
-	<script type="text/javascript" src="../../src/editNodeButton.js"></script>
-	<script type="text/javascript" src="../../src/SmartTreeHeading.js"></script>
-	<script type="text/javascript" src="../../src/smartTree.js"></script>
-	<script type="text/javascript" src="../../src/Titlebar.js"></script>
-	<script type="text/javascript" src="../../src/ViewController.js"></script>
-	<script type="text/javascript" src="../../src/controller.js"></script>
-	<!--script type="text/javascript" src="../../src/visualEditor.js"></script-->
 
-	<script type="text/javascript" src="../../external/require.js"></script>
-
-	<script type="text/javascript">
-		require.config({
-			baseUrl: "../.."
-		});
-		requirejs(
-			[
-				'demoSite/src/visualEditorDemo',
-				'demoSite/external/downloadify/swfobject',
-				'demoSite/external/downloadify/downloadify.min'
-			], function (visualEditorDemo) {
-			visualEditorDemo.init("../..");
-		});
-	</script>
+	<script type="text/javascript" data-main="../src/main.js" src="../../external/require.js"></script>
+	<!--script type="text/javascript" src="../src/main-built.js"></script-->
 
 	<link type="text/css" rel="stylesheet" href="../../css/dropdown.css" />
 
