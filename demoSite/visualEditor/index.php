@@ -60,7 +60,23 @@
 	<script type="text/javascript" src="../../src/Titlebar.js"></script>
 	<script type="text/javascript" src="../../src/ViewController.js"></script>
 	<script type="text/javascript" src="../../src/controller.js"></script>
-	<script type="text/javascript" src="../../src/visualEditor.js"></script>
+	<!--script type="text/javascript" src="../../src/visualEditor.js"></script-->
+
+	<script type="text/javascript" src="../../external/require.js"></script>
+
+	<script type="text/javascript">
+		require.config({
+			baseUrl: "../.."
+		});
+		requirejs(
+			[
+				'demoSite/src/visualEditorDemo',
+				'demoSite/external/downloadify/swfobject',
+				'demoSite/external/downloadify/downloadify.min'
+			], function (visualEditorDemo) {
+			visualEditorDemo.init("../..");
+		});
+	</script>
 
 	<link type="text/css" rel="stylesheet" href="../../css/dropdown.css" />
 
@@ -84,20 +100,6 @@ if (isset($_GET['embedded']) && $_GET['embedded'] == "true") {
 			right: 0px;
 		}
 	</style>
-
-<?php
-if (!isset($_GET['embedded']) || $_GET['embedded'] != "true") {
-	echo("<script type=\"text/javascript\" src=\"../external/downloadify/swfobject.js\"></script>\n");
-	echo("<script type=\"text/javascript\" src=\"../external/downloadify/downloadify.min.js\"></script>\n");
-	echo("<script type=\"text/javascript\">\n");
-
-	// including this way for now to avoid cache problems without having to version
-	include '../src/visualEditorDemo.js';
-	echo("initVisualEditorDemo(\"../..\");\n");
-	echo("</script>\n");
-}
-?>
-
 </head>
 <body id="visualEditor">
 <?php

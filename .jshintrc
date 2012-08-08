@@ -17,7 +17,9 @@
 		"prompt",
 
 		"assert",
-		"assertEqual"
+		"assertEqual",
+
+		"define"
     ],
 
     "node" : true,

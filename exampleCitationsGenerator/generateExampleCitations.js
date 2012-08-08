@@ -75,7 +75,7 @@ var addCslFileToIndex = function (file) {
 
 	entries++;
 
-	fileData = CSLEDIT.xmlUtility.stripComments(fs.readFileSync(file, "utf-8"));
+	fileData = CSLEDIT_xmlUtility.stripComments(fs.readFileSync(file, "utf-8"));
 	console.log('calculating examples for ' + file);
 	xmlParser = new CSL_NODEJS();
 
@@ -107,7 +107,7 @@ var addCslFileToIndex = function (file) {
 			masterStyleFromId[masterId] = fileData;
 
 			// just need one example citation
-			CSLEDIT.exampleCitations.setCitations([{
+			CSLEDIT_exampleCitations.setCitations([{
 				citationId: "CITATION-1",
 				citationItems: [],
 				properties: {noteIndex: 0},
@@ -116,13 +116,13 @@ var addCslFileToIndex = function (file) {
 
 			exampleCitations.exampleCitationsFromMasterId[styleId] = [];
 
-			$.each(CSLEDIT.exampleCitations.getReferences(), function (i, exampleReference) {
-				CSLEDIT.exampleCitations.setReferenceIndexesForCitation(0, [i]);
+			$.each(CSLEDIT_exampleCitations.getReferences(), function (i, exampleReference) {
+				CSLEDIT_exampleCitations.setReferenceIndexesForCitation(0, [i]);
 				
-				citeprocResult = CSLEDIT.citationEngine.formatCitations(
+				citeprocResult = CSLEDIT_citationEngine.formatCitations(
 					fileData,
-					CSLEDIT.exampleCitations.getCiteprocReferences(),
-					CSLEDIT.exampleCitations.getCitations());
+					CSLEDIT_exampleCitations.getCiteprocReferences(),
+					CSLEDIT_exampleCitations.getCitations());
 
 				// merge bibliography to one string
 				citeprocResult.formattedBibliography =
@@ -170,7 +170,7 @@ processDir('../' + cslServerConfig.cslStylesPath + '/dependent');
 console.log("took " + (((new Date()).getTime() - startTime) / 1000) + "s");
 console.log("num entries = " + entries);
 
-// output results to CSLEDIT.* objects within a javascript file:
+// output results to CSLEDIT_* objects within a javascript file:
 var outputDir;
 outputDir = "../" + cslServerConfig.dataPath;
 fs.mkdir(outputDir);
@@ -192,8 +192,7 @@ var outputToJSFile = function (jsonData, name) {
 	var outputData;
 	outputData = 
 		'"use strict";\n' +
-		'var CSLEDIT = CSLEDIT || {};\n\n' +
-		"CSLEDIT." + name + " = " + outputString + ';';
+		"var CSLEDIT_" + name + " = " + outputString + ';';
 
 	fs.writeFileSync(outputDir + '/' + name + '.js', outputData);
 };

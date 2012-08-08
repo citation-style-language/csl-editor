@@ -194,7 +194,7 @@ var CSLEDIT_exampleCitations = (function () {
 	};
 
 	var update = function () {
-		if (!suppressUpdate && "viewController" in CSLEDIT) {
+		if (!suppressUpdate && typeof(CSLEDIT_viewController) !== "undefined") {
 			CSLEDIT_viewController.styleChanged("formatCitations");
 		}
 	};

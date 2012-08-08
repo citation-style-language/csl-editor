@@ -13,8 +13,6 @@
 
 "use strict";
 
-
-
 var CSLEDIT_Schema = function (
 		schemaOptions /* used to apply modifications appropriate to Visual Editor */ ) {
 	var mainSchemaData,

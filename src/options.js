@@ -1,7 +1,5 @@
 "use strict";
 
-
-
 var CSLEDIT_options = (function () {
 	var userOptions = {};
 	var defaultOptions = {
