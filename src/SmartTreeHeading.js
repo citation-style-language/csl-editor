@@ -4,7 +4,7 @@
 //
 // Can use a NodeWatcher to associate the heading with a specific CSL node path
 
-define(function () {
+define(['src/NodeWatcher', 'src/cslData'], function (CSLEDIT_NodeWatcher, CSLEDIT_data) {
 	var CSLEDIT_SmartTreeHeading = function (element, nodePath, title, possibleChildren, showPropertyPanel) {
 		var that = this;
 			
@@ -79,5 +79,6 @@ define(function () {
 
 		return cslIdPath;
 	};
+
 	return CSLEDIT_SmartTreeHeading;
 });

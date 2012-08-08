@@ -1,8 +1,6 @@
 "use strict";
 
-
-
-var CSLEDIT_xmlUtility = {
+define({
 	stripUnsupportedTagsAndContents : function (html, supportedTags) {
 		var element;
 
@@ -45,5 +43,5 @@ var CSLEDIT_xmlUtility = {
 	stripComments : function (xml) {
 		return xml.replace(/<!--[\s\S]*?-->/g, "");
 	}
-};
+});
 

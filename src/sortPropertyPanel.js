@@ -1,8 +1,6 @@
 "use strict";
 
-
-
-var CSLEDIT_sortPropertyPanel = (function () {
+define(['src/CslNode', 'src/cslData'], function (CSLEDIT_CslNode, CSLEDIT_data) {
 	var onChangeTimeout, setupPanel, list, nodeData, panel, executeCommand,
 		namesAttributeNames = [
 			"names-min",
@@ -314,4 +312,4 @@ var CSLEDIT_sortPropertyPanel = (function () {
 	return {
 		setupPanel : setupPanel
 	};
-}());
+});

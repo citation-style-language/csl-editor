@@ -1,6 +1,6 @@
 "use strict";
 
-var CSLEDIT_options = (function () {
+define(['src/exampleData'], function (CSLEDIT_exampleData) {
 	var userOptions = {};
 	var defaultOptions = {
 			loadCSLName : "Load CSL",
@@ -53,5 +53,5 @@ var CSLEDIT_options = (function () {
 			createExtraDefaults();
 		}
 	}
-}());
+});
 

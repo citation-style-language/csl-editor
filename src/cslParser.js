@@ -1,8 +1,6 @@
 "use strict";
 
-
-
-var CSLEDIT_cslParser = (function () {
+define(function () {
 	// Private functions:
 	var jsonNodeFromXml = function (node, nodeIndex) {
 		var children = [],

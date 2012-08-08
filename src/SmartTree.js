@@ -1,6 +1,15 @@
 "use strict";
 
-define(function () {
+define([	'src/uiConfig',
+			'src/CslNode',
+			'src/options',
+			'src/cslData'
+		], function (
+			CSLEDIT_uiConfig,
+			CSLEDIT_CslNode,
+			CSLEDIT_options,
+			CSLEDIT_data
+		) {
 	var CSLEDIT_SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optional*/, leafNodes /*optional*/) {
 		var ranges,
 			macroLinks, // like symlinks for macros

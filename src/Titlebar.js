@@ -3,7 +3,7 @@
 // Uses a NodeWatcher to monitor the style/info/title node for changes
 // and updates the titlebar
 
-define(function () {
+define(['src/NodeWatcher', 'src/cslData'], function (CSLEDIT_NodeWatcher, CSLEDIT_data) {
 	var CSLEDIT_Titlebar = function (element) {
 		var that = this;
 

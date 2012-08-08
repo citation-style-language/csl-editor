@@ -1,10 +1,9 @@
 "use strict";
 
-
 /* Options for modifying the Schema for use in the CSL Editor
  */
 
-var CSLEDIT_schemaOptions = {
+define({
 	defaultDefaultAttribute : {
 		documentation: "No value",
 		type: "novalue",
@@ -54,4 +53,4 @@ var CSLEDIT_schemaOptions = {
 			}
 		});
 	}
-};
+});

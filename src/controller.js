@@ -5,7 +5,7 @@
 //
 // ** Any action which affects the data should go through the controller **
 // 
-define(function () {
+define(['src/cslData'], function (CSLEDIT_data) {
 	var commands = [
 			"addNode",
 			"deleteNode",

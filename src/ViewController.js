@@ -1,8 +1,28 @@
 "use strict";
 
-define(['src/Titlebar', 'src/SmartTree', 'src/SmartTreeHeading'],
-		function (CSLEDIT_Titlebar, CSLEDIT_SmartTree, CSLEDIT_SmartTreeHeading) {
-   return function CSLEDIT_ViewController ( 
+define(
+		[	'src/Titlebar',
+			'src/SmartTree',
+			'src/SmartTreeHeading',
+			'src/propertyPanel',
+			'src/NodePathView',
+			'src/notificationBar',
+			'src/CslNode',
+			'src/Iterator',
+			'src/cslData'
+		],
+		function (
+			CSLEDIT_Titlebar,
+			CSLEDIT_SmartTree,
+			CSLEDIT_SmartTreeHeading,
+			CSLEDIT_propertyPanel,
+			CSLEDIT_NodePathView,
+			CSLEDIT_notificationBar,
+			CSLEDIT_CslNode,
+			CSLEDIT_Iterator,
+			CSLEDIT_data
+		) {
+	return function CSLEDIT_ViewController ( 
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
 		syntaxHighlighter) {
 	

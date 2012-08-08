@@ -1,7 +1,19 @@
 "use strict";
 
-
-var CSLEDIT_propertyPanel = (function () {
+define(
+		[	'src/genericPropertyPanel',
+			'src/ConditionalPropertyPanel',
+			'src/infoPropertyPanel',
+			'src/sortPropertyPanel',
+			'src/controller'
+		],
+		function (
+			CSLEDIT_genericPropertyPanel,
+			CSLEDIT_ConditionalPropertyPanel,
+			CSLEDIT_infoPropertyPanel,
+			CSLEDIT_sortPropertyPanel,
+			CSLEDIT_controller
+		) {
 	var suppressUpdates = false; // used to prevent panel updates triggered the panel itself
 
 	// property panels should use this instead of calling CSLEDIT_controller.exec
@@ -72,4 +84,4 @@ var CSLEDIT_propertyPanel = (function () {
 	return {
 		setup : setup
 	};
-}());
+});

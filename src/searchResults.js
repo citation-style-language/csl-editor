@@ -1,9 +1,15 @@
 "use strict";
 
-
-
-var CSLEDIT_searchResults = (function () {
-
+define(
+		[	'src/options',
+			'src/exampleData',
+			'src/diff'
+		],
+		function (
+			CSLEDIT_options,
+			CSLEDIT_exampleData,
+			CSLEDIT_diff
+		) {
 	var closenessString = function (distance, stringA, stringB) {
 		var matchQuality = CSLEDIT_diff.matchQuality(stringA, stringB),
 			closeness;
@@ -106,4 +112,4 @@ var CSLEDIT_searchResults = (function () {
 	return {
 		displaySearchResults : displaySearchResults
 	};
-}());
+});

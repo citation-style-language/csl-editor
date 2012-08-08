@@ -1,9 +1,16 @@
 "use strict";
 
-
-
 // use this instead of accessing CSLEDIT_exampleData
-var CSLEDIT_exampleCitations = (function () {
+define(
+		[	'src/storage',
+			'src/options',
+			'src/exampleData'
+		],
+		function (
+			CSLEDIT_storage,
+			CSLEDIT_options,
+			CSLEDIT_exampleData
+		) {
 	var suppressUpdate = false;
 
 	var newCitation = function (citationIndex) {
@@ -226,4 +233,4 @@ var CSLEDIT_exampleCitations = (function () {
 			update();
 		}
 	};
-}());
+});

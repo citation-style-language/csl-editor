@@ -1,8 +1,6 @@
 "use strict";
 
-
-
-var CSLEDIT_citationEditor = (function () {
+define(['src/exampleCitations', 'src/exampleData'], function (CSLEDIT_exampleCitations, CSLEDIT_exampleData) {
 	var dialog = $('<div/>'),
 		advanced = $('<div/>', {id:"accordion"}).css({"padding-top":"10px", width: "100%"}),
 		advancedContents = $('<div/>'),

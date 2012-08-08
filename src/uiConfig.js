@@ -1,150 +1,149 @@
 "use strict";
 
+define(['src/CslNode'], function (CSLEDIT_CslNode) {
+	var CSLEDIT_uiConfig = {};
 
-
-var CSLEDIT_uiConfig = {};
-
-// if creating an empty node, populate with these attributes
-CSLEDIT_uiConfig.defaultAttributes = {
-	"text" : {
-		"value" : ""
-	},
-	"if" : {
-		"type" : "article",
-		"match" : "any"
-	},
-	"else-if" : {
-		"type" : "article",
-		"match" : "any"
-	},
-	"date" : {
-		"form" : "text",
-		"date-parts" : "year-month-day",
-		"variable" : "issued"
-	},
-	"date-part" : {
-		"name" : "year"
-	},
-	"key" : {
-		"variable" : "author"
-	}
-};
-
-CSLEDIT_uiConfig.attributeGroups = {
-	"Text formatting" : [
-		"fontFormattingControls",
-		"display",
-		"text-case"
-	],
-	"Affixes" : [
-		"prefix",
-		"suffix",
-		"delimiter"
-	]
-};
-
-// for displaying the example metadata in Search by Example page
-CSLEDIT_uiConfig.fieldOrder = [
-	"type",
-	"title",
-	"author",
-	"editor",
-	"translator",
-	"issued",
-	"container-title",
-	"volume",
-	"issue",
-	"chapter",
-	"page",
-	"publisher"
-];
-
-// add classes to the <input> or <select> elements for various attributes
-CSLEDIT_uiConfig.attributeClasses = {
-	"delimiter" : "short",
-	"display" : "exampleClass1 exampleClass2"
-};
-
-// for jstree
-CSLEDIT_uiConfig.nodeIcons = {
-	"default" : "/external/famfamfam-icons/bullet_black.png",
-	"text" : "/external/famfamfam-icons/style.png",
-	"macro" : "/external/famfamfam-icons/brick.png",
-	"info" : "/external/famfamfam-icons/information.png",
-	"choose" : "/external/fugue-icons/question-white.png",
-	"date" : "/external/famfamfam-icons/date.png",
-	"style" : "/external/famfamfam-icons/cog.png",
-	"citation" : "/external/famfamfam-icons/page_white_edit.png",
-	"bibliography" : "/external/famfamfam-icons/text_list_numbers.png",
-	"sort" : "/external/fugue-icons/sort-alphabet.png",
-	"number" : "/external/fugue-icons/edit-number.png",
-	"layout" : "/external/famfamfam-icons/page_white_stack.png",
-	"group" : "/external/famfamfam-icons/page_white_stack.png"
-};
-
-CSLEDIT_uiConfig.capitaliseFirstLetter = function (string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
-CSLEDIT_uiConfig.displayNameFromNode = function (node) {
-	if (node.name in CSLEDIT_uiConfig.displayNames) {
-		return CSLEDIT_uiConfig.displayNames[node.name](node);
-	}
-
-	// fall back to using the node name
-	return CSLEDIT_uiConfig.capitaliseFirstLetter(node.name);
-};
-
-// generates display names for 'if' and 'else-if' tree view nodes
-//   e.g. If article OR book
-CSLEDIT_uiConfig.conditionalDisplayName = function (node) {
-	var displayName = "",
-		elideLimit = 30,
-		match,
-		terms = [],
-		join = "";
-
-	match = CSLEDIT_schema.attributes("choose/if").match.defaultValue;
-	if (match === "") {
-		match = "all"; // becuase it's not specified in MLZ schema, TODO: ask Frank
-	}
-
-	$.each(node.attributes, function (i, attribute) {
-		if (attribute.enabled) {
-			if (attribute.key === "match") {
-				match = attribute.value;
-			} else {
-				$.each(attribute.value.split(" "), function (i, val) {
-					terms.push(val);
-				});
-			}
+	// if creating an empty node, populate with these attributes
+	CSLEDIT_uiConfig.defaultAttributes = {
+		"text" : {
+			"value" : ""
+		},
+		"if" : {
+			"type" : "article",
+			"match" : "any"
+		},
+		"else-if" : {
+			"type" : "article",
+			"match" : "any"
+		},
+		"date" : {
+			"form" : "text",
+			"date-parts" : "year-month-day",
+			"variable" : "issued"
+		},
+		"date-part" : {
+			"name" : "year"
+		},
+		"key" : {
+			"variable" : "author"
 		}
-	});
+	};
 
-	if (node.name === "if") {
-		displayName = "If ";
-	} else {
-		displayName = "Else-If ";
-	}
+	CSLEDIT_uiConfig.attributeGroups = {
+		"Text formatting" : [
+			"fontFormattingControls",
+			"display",
+			"text-case"
+		],
+		"Affixes" : [
+			"prefix",
+			"suffix",
+			"delimiter"
+		]
+	};
 
-	if (match === "any") {
-		displayName += terms.join(" OR ");
-	} else if (match === "all") {
-		displayName += terms.join(" AND ");
-	} else if (match === "none") {
-		displayName += "NOT (" + terms.join(" OR ") + ")";
-	} else {
-		assert(false);
-	}
+	// for displaying the example metadata in Search by Example page
+	CSLEDIT_uiConfig.fieldOrder = [
+		"type",
+		"title",
+		"author",
+		"editor",
+		"translator",
+		"issued",
+		"container-title",
+		"volume",
+		"issue",
+		"chapter",
+		"page",
+		"publisher"
+	];
 
-	if (displayName.length > elideLimit) {
-		displayName = displayName.substr(0, elideLimit - 3) + "...";
-	}
+	// add classes to the <input> or <select> elements for various attributes
+	CSLEDIT_uiConfig.attributeClasses = {
+		"delimiter" : "short",
+		"display" : "exampleClass1 exampleClass2"
+	};
 
-	return displayName;
-};
+	// for jstree
+	CSLEDIT_uiConfig.nodeIcons = {
+		"default" : "/external/famfamfam-icons/bullet_black.png",
+		"text" : "/external/famfamfam-icons/style.png",
+		"macro" : "/external/famfamfam-icons/brick.png",
+		"info" : "/external/famfamfam-icons/information.png",
+		"choose" : "/external/fugue-icons/question-white.png",
+		"date" : "/external/famfamfam-icons/date.png",
+		"style" : "/external/famfamfam-icons/cog.png",
+		"citation" : "/external/famfamfam-icons/page_white_edit.png",
+		"bibliography" : "/external/famfamfam-icons/text_list_numbers.png",
+		"sort" : "/external/fugue-icons/sort-alphabet.png",
+		"number" : "/external/fugue-icons/edit-number.png",
+		"layout" : "/external/famfamfam-icons/page_white_stack.png",
+		"group" : "/external/famfamfam-icons/page_white_stack.png"
+	};
 
-CSLEDIT_uiConfig.displayNames = {
+	CSLEDIT_uiConfig.capitaliseFirstLetter = function (string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	};
+
+	CSLEDIT_uiConfig.displayNameFromNode = function (node) {
+		if (node.name in CSLEDIT_uiConfig.displayNames) {
+			return CSLEDIT_uiConfig.displayNames[node.name](node);
+		}
+
+		// fall back to using the node name
+		return CSLEDIT_uiConfig.capitaliseFirstLetter(node.name);
+	};
+
+	// generates display names for 'if' and 'else-if' tree view nodes
+	//   e.g. If article OR book
+	CSLEDIT_uiConfig.conditionalDisplayName = function (node) {
+		var displayName = "",
+			elideLimit = 30,
+			match,
+			terms = [],
+			join = "";
+
+		match = CSLEDIT_schema.attributes("choose/if").match.defaultValue;
+		if (match === "") {
+			match = "all"; // becuase it's not specified in MLZ schema, TODO: ask Frank
+		}
+
+		$.each(node.attributes, function (i, attribute) {
+			if (attribute.enabled) {
+				if (attribute.key === "match") {
+					match = attribute.value;
+				} else {
+					$.each(attribute.value.split(" "), function (i, val) {
+						terms.push(val);
+					});
+				}
+			}
+		});
+
+		if (node.name === "if") {
+			displayName = "If ";
+		} else {
+			displayName = "Else-If ";
+		}
+
+		if (match === "any") {
+			displayName += terms.join(" OR ");
+		} else if (match === "all") {
+			displayName += terms.join(" AND ");
+		} else if (match === "none") {
+			displayName += "NOT (" + terms.join(" OR ") + ")";
+		} else {
+			assert(false);
+		}
+
+		if (displayName.length > elideLimit) {
+			displayName = displayName.substr(0, elideLimit - 3) + "...";
+		}
+
+		return displayName;
+	};
+
+	CSLEDIT_uiConfig.displayNames = {
 		"macro" : function (node) {
 			return "Macro: " + new CSLEDIT_CslNode(node).getAttr("name");
 		},
@@ -210,3 +209,5 @@ CSLEDIT_uiConfig.displayNames = {
 			return "Sort key";
 		}
 	};
+	return CSLEDIT_uiConfig;
+});

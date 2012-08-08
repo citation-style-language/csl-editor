@@ -1,7 +1,35 @@
 "use strict";
 
-define(['src/controller', 'src/viewController'],
-		function (CSLEDIT_controller, CSLEDIT_ViewController) {
+define(
+		[	'src/controller',
+			'src/viewController',
+			'src/notificationBar',
+			'src/uiConfig',
+			'src/SyntaxHighlighter',
+			'src/citationEditor',
+			'src/Schema',
+			'src/schemaOptions',
+			'src/CslNode',
+			'src/citationEngine',
+			'src/options',
+			'src/storage',
+			'src/cslData'
+		],
+		function (
+			CSLEDIT_controller,
+			CSLEDIT_ViewController,
+			CSLEDIT_notificationBar,
+			CSLEDIT_uiConfig,
+			CSLEDIT_SyntaxHighlighter,
+			CSLEDIT_citationEditor,
+			CSLEDIT_Schema,
+			CSLEDIT_schemaOptions,
+			CSLEDIT_CslNode,
+			CSLEDIT_citationEngine,
+			CSLEDIT_options,
+			CSLEDIT_storage,
+			CSLEDIT_data
+		) {
 	return function VisualEditor(editorElement, userOptions) {
 		var editTimeout,
 			styleURL,
@@ -353,10 +381,10 @@ define(['src/controller', 'src/viewController'],
 		var init = function () {
 			var reloadingPage = false;
 
-			// create storage with callback funciton which gets called if inconsistencies
+			// set function which gets called if inconsistencies
 			// are found between the localStorage data (shared between tabs) and this session
 			// data
-			CSLEDIT_storage = new CSLEDIT_Storage(true, function () {
+			CSLEDIT_storage.onDataInconsistency(function () {
 				if (confirm("Your style has changed in a different tab.\n" +
 						"Do you want to load the new version into this tab?")) {
 					// reload page

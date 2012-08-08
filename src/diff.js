@@ -5,7 +5,7 @@
 /*global diff_match_patch:true, DIFF_INSERT:true, DIFF_DELETE:true, DIFF_EQUAL:true */
 /*jshint newcap:false */
 
-var CSLEDIT_diff = (function () {
+define(function () {
 	var dmp = new diff_match_patch();
 
 	dmp.Diff_Timeout = 0.003; // Very low, increase if too inaccurate.
@@ -66,7 +66,7 @@ var CSLEDIT_diff = (function () {
 
 	// human friendly value from 0 to 100 to use as a match percentage
 	var matchQuality = function (oldString, newString) {
-		var editDistance = CSLEDIT_diff.customEditDistance(oldString, newString),
+		var editDistance = customEditDistance(oldString, newString),
 			matchQuality = Math.max(0, Math.floor(100 * (1.0 - editDistance /
 				Math.max(oldString.length, newString.length))));
 
@@ -117,4 +117,4 @@ var CSLEDIT_diff = (function () {
 		matchQuality : matchQuality,
 		weightedLevenshtein : weightedLevenshtein
 	};
-}());
+});

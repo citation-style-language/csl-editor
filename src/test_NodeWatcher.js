@@ -1,7 +1,5 @@
 "use strict";
 
-
-
 module("CSLEDIT_NodeWatcher", {
 	setup : function () {
 		console.log("typeof NodeWatcher = " + typeof(CSLEDIT_NodeWatcher));

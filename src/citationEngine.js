@@ -1,10 +1,20 @@
 "use strict";
 
-
-
 var jsonDocuments;
 
-var CSLEDIT_citationEngine = (function () {
+define([	'src/storage',
+			'src/options',
+			'src/cslData',
+			'src/exampleCitations',
+			'src/diff'
+		],
+		function (
+			CSLEDIT_storage,
+			CSLEDIT_options,
+			CSLEDIT_data,
+			CSLEDIT_exampleCitations,
+			CSLEDIT_diff
+		) {
 	var oldFormattedCitation = "",
 		newFormattedCitation = "",
 		oldFormattedBibliography = "",
@@ -265,4 +275,4 @@ var CSLEDIT_citationEngine = (function () {
 		runCiteprocAndDisplayOutput : runCiteprocAndDisplayOutput
 	};
 
-}());
+});

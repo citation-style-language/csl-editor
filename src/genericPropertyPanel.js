@@ -1,8 +1,17 @@
 "use strict";
 
-
-
-var CSLEDIT_genericPropertyPanel = (function () {
+define([	'src/MultiPanel',
+			'src/MultiComboBox',
+			'src/uiConfig',
+			'src/CslNode',
+			'src/cslData'
+		], function (
+			CSLEDIT_MultiPanel,
+			CSLEDIT_MultiComboBox,
+			CSLEDIT_uiConfig,
+			CSLEDIT_CslNode,
+			CSLEDIT_data
+		) {
 	var onChangeTimeout,
 		multiInputs,
 		nodeData,
@@ -739,4 +748,4 @@ var CSLEDIT_genericPropertyPanel = (function () {
 	return {
 		setupPanel : setupPanel
 	};
-}());
+});

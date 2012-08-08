@@ -1,8 +1,6 @@
 "use strict";
 
-
-
-var CSLEDIT_infoPropertyPanel = (function () {
+define(['src/CslNode', 'src/cslData'], function (CSLEDIT_CslNode, CSLEDIT_data) {
 	var panel, infoNode, inputTimeout, executeCommand;
 
 	var layout = [
@@ -275,4 +273,4 @@ var CSLEDIT_infoPropertyPanel = (function () {
 	return {
 		setupPanel : setupPanel
 	};
-}());
+});

@@ -1,8 +1,6 @@
 "use strict";
 
-
-
-var CSLEDIT_notificationBar = (function () {
+define(function () {
 	var element, messageElement;
 
 	return {
@@ -28,4 +26,4 @@ var CSLEDIT_notificationBar = (function () {
 			element.slideDown();
 		}
 	}
-}());
+});

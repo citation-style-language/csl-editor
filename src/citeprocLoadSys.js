@@ -2,6 +2,7 @@
 
 "use strict";
 
+//define(['src/options'], function (CSLEDIT_options)
 var Sys = function(abbreviations){
 	this.abbreviations = abbreviations;
 };
@@ -15,9 +16,11 @@ Sys.prototype.retrieveLocale = function(lang){
 		localePath;
 
 	if (typeof(thisLocale) === "undefined") {
-		// try to fetch from server
-		localePath = CSLEDIT_options.get("rootURL") + "/external/locales/locales-" + lang + ".xml";
+		require(['src/options'], function (CSLEDIT_options) {
+			localePath = CSLEDIT_options.get("rootURL") + "/external/locales/locales-" + lang + ".xml";
+		});
 
+		// try to fetch from server
 		$.ajax({
 			url : localePath,
 			success : function (data) {
