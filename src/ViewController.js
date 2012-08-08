@@ -70,7 +70,6 @@ define(['src/Titlebar', 'src/SmartTree', 'src/SmartTreeHeading'],
 			callbacks,
 			selectedTree = null,
 			selectedNodeId = -1,
-			nodeButtons,
 			recentlyEditedMacro = -1,
 			nodePathView,
 			suppressSelectNode = false;
@@ -111,51 +110,9 @@ define(['src/Titlebar', 'src/SmartTree', 'src/SmartTreeHeading'],
 
 			callbacks = _callbacks;
 
-			nodeButtons = [];
-			
 			treeView.html('');
 			$.each(smartTreeSchema, function (index, value) {
-				row = $('');//<tr></tr>');
-				if (typeof value.buttons !== "undefined") {
-					// TODO: remove dead code related to buttons
-					$.each(value.buttons, function (i, button) {
-						var buttonElement;
-						switch (button.type) {
-						case "cslNode":
-							nodes = CSLEDIT_data.getNodesFromPath(button.node, cslData);
-							if (nodes.length > 0) {
-								cslId = nodes[0].cslId;
-							} else {
-								cslId = -1;
-							}
-				
-							buttonElement = $('<div class="cslNodeButton"></div>');
-							views.push(new CSLEDIT_EditNodeButton(buttonElement, button.node, cslId,
-								CSLEDIT_options.get("rootURL") + button.icon, function (cslId, selectedView) {
-									selectedTree = selectedView;
-									selectedNodeId = cslId;
-
-									// deselect nodes in trees
-									$.each(views, function (i, view) {
-										if ("deselectAll" in view) {
-											view.deselectAll();
-										}
-									});
-
-									selectedNodeChanged();
-								}));
-							break;
-						case "custom":
-							buttonElement = $('<button class="customButton">' + 
-									button.text + '</button>');
-							buttonElement.on('click', button.onClick);
-							break;
-						default:
-							assert(false);
-						}
-						buttonElement.appendTo(treeView);
-					});
-				}
+				row = $('');
 				row = $('<div id="%1"><div class="heading"/><div class="tree"/></div>'.replace(
 					'%1', value.id));
 				row.appendTo(treeView);
