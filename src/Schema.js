@@ -13,7 +13,7 @@
 
 "use strict";
 
-define(['src/options', 'src/storage'], function (CSLEDIT_options, CSLEDIT_storage) {
+define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, CSLEDIT_storage, debug) {
 	var CSLEDIT_Schema = function (
 			schemaOptions /* used to apply modifications appropriate to Visual Editor */ ) {
 		var mainSchemaData,

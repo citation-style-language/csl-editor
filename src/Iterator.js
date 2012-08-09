@@ -6,9 +6,9 @@
  * 
  * Can retrieve the parent node of each child in the tree
  */
-define(function () {
+define(['src/debug'], function (debug) {
 	var CSLEDIT_Iterator = function (rootNode) {
-		assert(this instanceof CSLEDIT_Iterator);
+		debug.assert(this instanceof CSLEDIT_Iterator);
 
 		this.rootNode = rootNode;
 		this.nodeStack = [];

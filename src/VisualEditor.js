@@ -2,7 +2,7 @@
 
 define(
 		[	'src/controller',
-			'src/viewController',
+			'src/ViewController',
 			'src/notificationBar',
 			'src/uiConfig',
 			'src/SyntaxHighlighter',
@@ -13,7 +13,10 @@ define(
 			'src/citationEngine',
 			'src/options',
 			'src/storage',
-			'src/cslData'
+			'src/cslData',
+			'src/debug',
+			'jquery.hoverIntent',
+			'jquery.layout'
 		],
 		function (
 			CSLEDIT_controller,
@@ -28,7 +31,10 @@ define(
 			CSLEDIT_citationEngine,
 			CSLEDIT_options,
 			CSLEDIT_storage,
-			CSLEDIT_data
+			CSLEDIT_data,
+			debug,
+			jquery_hoverIntent,
+			jquery_layout
 		) {
 	return function VisualEditor(editorElement, userOptions) {
 		var editTimeout,
@@ -281,8 +287,8 @@ define(
 				addNodeButton = toolbar.find('a.add'),
 				deleteNodeButton = toolbar.find('a.delete');
 
-			assertEqual(addNodeButton.length, 1);
-			assertEqual(deleteNodeButton.length, 1);
+			debug.assertEqual(addNodeButton.length, 1);
+			debug.assertEqual(deleteNodeButton.length, 1);
 
 			addNodeButton.on('click', function (e) {
 				showAddNodeDialog();
@@ -424,6 +430,7 @@ define(
 				
 				syntaxHighlighter = new CSLEDIT_SyntaxHighlighter(editorElement);
 
+				// TODO: remove this global
 				window.CSLEDIT_viewController = new CSLEDIT_ViewController(
 					editorElement.find("#treeEditor"),
 					editorElement.find("#titlebar"),

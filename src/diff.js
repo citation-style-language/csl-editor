@@ -1,11 +1,9 @@
 "use strict";
 
-
-
 /*global diff_match_patch:true, DIFF_INSERT:true, DIFF_DELETE:true, DIFF_EQUAL:true */
 /*jshint newcap:false */
 
-define(function () {
+define(['external/diff-match-patch/diff_match_patch'], function (diff_match_patch) {
 	var dmp = new diff_match_patch();
 
 	dmp.Diff_Timeout = 0.003; // Very low, increase if too inaccurate.

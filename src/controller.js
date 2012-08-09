@@ -5,7 +5,7 @@
 //
 // ** Any action which affects the data should go through the controller **
 // 
-define(['src/cslData'], function (CSLEDIT_data) {
+define(['src/cslData', 'src/debug'], function (CSLEDIT_data, debug) {
 	var commands = [
 			"addNode",
 			"deleteNode",
@@ -19,7 +19,7 @@ define(['src/cslData'], function (CSLEDIT_data) {
 
 	var setCslData = function (_cslData) {
 		$.each(commands, function (index, command) {
-			assertEqual(typeof _cslData[command], "function", "cslData must contain: " + command);
+			debug.assertEqual(typeof _cslData[command], "function", "cslData must contain: " + command);
 		});
 		
 		cslData = _cslData;
@@ -75,7 +75,7 @@ define(['src/cslData'], function (CSLEDIT_data) {
 		if (command in macros) {
 			macros[command].apply(null, args);
 		} else {
-			assert(commands.indexOf(command) !== -1, "command doesn't exist");
+			debug.assert(commands.indexOf(command) !== -1, "command doesn't exist");
 			_exec(command, args, commandHistory);
 		}
 	};

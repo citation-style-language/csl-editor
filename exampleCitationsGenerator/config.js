@@ -1,6 +1,6 @@
 "use strict";
 
-var cslServerConfig = (function(){
+define(function(){
 	// private members
 	
 	return {
@@ -15,5 +15,5 @@ var cslServerConfig = (function(){
 	//		{ "citationId" : "CITATION-1", "citationItems" : [ { "id" : "ITEM-1", "uris" : [] },  { "id" : "ITEM-2", "uris" : [] } ], "properties" : { "noteIndex" : 0 }, "schema" : "https://github.com/citation-style-language/schema/raw/master/csl-citation.json" }
 		]
 	};
-}());
+});
 

@@ -414,3 +414,5 @@ CSL_CHROME.prototype.flagDateMacros = function(myxml) {
         }
     }
 };
+
+this.CSL_CHROME = CSL_CHROME;

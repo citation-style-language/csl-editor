@@ -9,7 +9,8 @@ define(
 			'src/notificationBar',
 			'src/CslNode',
 			'src/Iterator',
-			'src/cslData'
+			'src/cslData',
+			'jquery.scrollTo'
 		],
 		function (
 			CSLEDIT_Titlebar,
@@ -20,7 +21,8 @@ define(
 			CSLEDIT_notificationBar,
 			CSLEDIT_CslNode,
 			CSLEDIT_Iterator,
-			CSLEDIT_data
+			CSLEDIT_data,
+			jquery_scrollTo
 		) {
 	return function CSLEDIT_ViewController ( 
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,

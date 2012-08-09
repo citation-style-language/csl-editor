@@ -5,7 +5,7 @@
 // It's OK if no node exists at nodePath
 // It's not OK if > 1 node exists at nodePath
 
-define(function () {
+define(['src/debug'], function (debug) {
 	var CSLEDIT_NodeWatcher = function (nodePath, cslData, onChange) {
 		var that = this;
 		
@@ -32,7 +32,7 @@ define(function () {
 		while (splitNodePath.length > 0) {
 			nodePath.push(splitNodePath.splice(0, 1));
 			nodes = this.cslData.getNodesFromPath(nodePath.join("/"));
-			assertEqual(nodes.length, 1);
+			debug.assertEqual(nodes.length, 1);
 			cslIdPath.push(nodes[0].cslId);
 		}
 

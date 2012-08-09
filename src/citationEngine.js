@@ -1,19 +1,21 @@
 "use strict";
 
-var jsonDocuments;
-
 define([	'src/storage',
 			'src/options',
 			'src/cslData',
 			'src/exampleCitations',
-			'src/diff'
+			'src/diff',
+			'external/citeproc/citeproc',
+			'src/citeprocLoadSys'
 		],
 		function (
 			CSLEDIT_storage,
 			CSLEDIT_options,
 			CSLEDIT_data,
 			CSLEDIT_exampleCitations,
-			CSLEDIT_diff
+			CSLEDIT_diff,
+			CSL,
+			citeprocSys
 		) {
 	var oldFormattedCitation = "",
 		newFormattedCitation = "",
@@ -37,7 +39,6 @@ define([	'src/storage',
 	var formatCitations = function (style, documents, citationClusters, taggedOutput) {
 		var bibliography,
 			result,
-			sys,
 			citations,
 			cluster,
 			inLineCitations,
@@ -50,16 +51,14 @@ define([	'src/storage',
 			index,
 			enumerateCitations;
 
-		// TODO: this shouldn't be a global
-		jsonDocuments = documents;
+		citeprocSys.setJsonDocuments(documents);
 
 		result = { "statusMessage":"", "formattedCitations":[], "formattedBibliography": [] };
 		result.statusMessage = "";
 		if (style !== previousStyle) {
 			try
 			{
-				sys = new Sys(abbreviations);
-				citeproc = new CSL.Engine(sys, style);
+				citeproc = new CSL.Engine(citeprocSys, style);
 				citeproc.opt.development_extensions.csl_reverse_lookup_support = true;
 				previousStyle = style;
 			}

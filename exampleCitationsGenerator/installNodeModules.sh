@@ -13,3 +13,4 @@ installModule () {
 installModule jQuery
 installModule jsdom
 installModule xmlhttprequest
+installModule requirejs

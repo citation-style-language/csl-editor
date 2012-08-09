@@ -4,13 +4,15 @@ define([	'src/MultiPanel',
 			'src/MultiComboBox',
 			'src/uiConfig',
 			'src/CslNode',
-			'src/cslData'
+			'src/cslData',
+			'src/debug'
 		], function (
 			CSLEDIT_MultiPanel,
 			CSLEDIT_MultiComboBox,
 			CSLEDIT_uiConfig,
 			CSLEDIT_CslNode,
-			CSLEDIT_data
+			CSLEDIT_data,
+			debug
 		) {
 	var onChangeTimeout,
 		multiInputs,

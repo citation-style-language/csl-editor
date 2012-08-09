@@ -2,11 +2,13 @@
 
 // use this instead of accessing CSLEDIT_exampleData
 define(
-		[	'src/storage',
+		[	'jquery',
+			'src/storage',
 			'src/options',
 			'src/exampleData'
 		],
 		function (
+			$,
 			CSLEDIT_storage,
 			CSLEDIT_options,
 			CSLEDIT_exampleData

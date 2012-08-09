@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/CslNode'], function (CSLEDIT_CslNode) {
+define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 	var CSLEDIT_ConditionalPropertyPanel = function (element, node, executeCommand) {
 		var that = this;
 
@@ -321,7 +321,7 @@ define(['src/CslNode'], function (CSLEDIT_CslNode) {
 				}
 			});
 
-			assert(typeof(attribute) !== "undefined");
+			debug.assert(typeof(attribute) !== "undefined");
 
 			newCondition.attribute = attribute;
 

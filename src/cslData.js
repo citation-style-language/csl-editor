@@ -16,7 +16,8 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			'src/Iterator',
 			'src/cslParser',
 			'src/storage',
-			'src/options'
+			'src/options',
+			'src/debug'
 		],
 		function (
 			CSLEDIT_uiConfig,
@@ -24,7 +25,8 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			CSLEDIT_Iterator,
 			CSLEDIT_cslParser,
 			CSLEDIT_storage,
-			CSLEDIT_options
+			CSLEDIT_options,
+			debug
 		) {
 	var CSLEDIT_Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
 		var viewControllers = [],

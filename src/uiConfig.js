@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/CslNode'], function (CSLEDIT_CslNode) {
+define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 	var CSLEDIT_uiConfig = {};
 
 	// if creating an empty node, populate with these attributes

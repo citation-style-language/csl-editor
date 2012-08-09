@@ -1,6 +1,6 @@
 "use strict";
 
-define(function () {
+define(['src/debug'], function (debug) {
 	var CSLEDIT_CslNode = function (nameOrNode, attributes, children, cslId) {
 		assert(this instanceof CSLEDIT_CslNode);
 

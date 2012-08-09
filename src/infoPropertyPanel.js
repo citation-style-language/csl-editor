@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/CslNode', 'src/cslData'], function (CSLEDIT_CslNode, CSLEDIT_data) {
+define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
 	var panel, infoNode, inputTimeout, executeCommand;
 
 	var layout = [

@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/exampleData'], function (CSLEDIT_exampleData) {
+define(['jquery', 'src/exampleData'], function ($, CSLEDIT_exampleData) {
 	var userOptions = {};
 	var defaultOptions = {
 			loadCSLName : "Load CSL",

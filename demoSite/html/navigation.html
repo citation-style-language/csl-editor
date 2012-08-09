@@ -132,46 +132,53 @@ body#about           a#nav_about {
 
 <script type="text/javascript">
 "use strict";
-var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.feedback = {
-	init : function (feedbackTab, feedbackPanel) {
-		feedbackTab.on('click', function () {
-			feedbackPanel.removeClass('hidden');
-		});
-
-		feedbackPanel.find('button.cancel').on('click', function () {
-			feedbackPanel.addClass('hidden');
-		});
-
-		feedbackPanel.find('input:submit').on('click', function () {
-			var message, email;
-
-			feedbackPanel.addClass('hidden');
-
-			message = feedbackPanel.find('.message').val();
-			email = feedbackPanel.find('.email').val();
-
-			var url = "../sendFeedback.php?subject=" + encodeURIComponent("CSL editor feedback") +
-				"&message=" + encodeURIComponent(message) +
-				"&email=" + encodeURIComponent(email);
-
-			$.ajax({
-			  url: url
-			}).done(function ( data ) {
-				$('<div title="Feedback Sent"><\/div>').append(data).dialog();
-				if (/Thanks for your feedback!\s*$/.test(data)) {
-					feedbackPanel.find('.message').val("");
-				}
-			}).fail(function () {
-				alert("Error, feedback not sent.");
-			});
-			
-		});
+requirejs.config({
+	baseUrl: "../..",
+	paths: {
+		'jquery' : 'external/jquery-1.7.2.min',
 	}
-};
-$('document').ready( function() {
-	CSLEDIT.feedback.init($('#feedbackTab'), $('#feedbackPanel'));
+});
+require(['jquery'], function () {
+	var CSLEDIT_feedback = {
+		init : function (feedbackTab, feedbackPanel) {
+			feedbackTab.on('click', function () {
+				feedbackPanel.removeClass('hidden');
+			});
+
+			feedbackPanel.find('button.cancel').on('click', function () {
+				feedbackPanel.addClass('hidden');
+			});
+
+			feedbackPanel.find('input:submit').on('click', function () {
+				var message, email;
+
+				feedbackPanel.addClass('hidden');
+
+				message = feedbackPanel.find('.message').val();
+				email = feedbackPanel.find('.email').val();
+
+				var url = "../sendFeedback.php?subject=" + encodeURIComponent("CSL editor feedback") +
+					"&message=" + encodeURIComponent(message) +
+					"&email=" + encodeURIComponent(email);
+
+				$.ajax({
+				  url: url
+				}).done(function ( data ) {
+					$('<div title="Feedback Sent"><\/div>').append(data).dialog();
+					if (/Thanks for your feedback!\s*$/.test(data)) {
+						feedbackPanel.find('.message').val("");
+					}
+				}).fail(function () {
+					alert("Error, feedback not sent.");
+				});
+				
+			});
+		}
+	};
+	$('document').ready( function() {
+		CSLEDIT_feedback.init($('#feedbackTab'), $('#feedbackPanel'));
+	});
 });
 
 </script>

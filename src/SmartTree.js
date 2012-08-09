@@ -3,12 +3,17 @@
 define([	'src/uiConfig',
 			'src/CslNode',
 			'src/options',
-			'src/cslData'
+			'src/cslData',
+			'src/debug',
+			'jquery.jstree-patched',
+			'jquery.hotkeys'
 		], function (
 			CSLEDIT_uiConfig,
 			CSLEDIT_CslNode,
 			CSLEDIT_options,
-			CSLEDIT_data
+			CSLEDIT_data,
+			debug,
+			jstree
 		) {
 	var CSLEDIT_SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optional*/, leafNodes /*optional*/) {
 		var ranges,

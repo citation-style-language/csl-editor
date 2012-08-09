@@ -4,14 +4,14 @@
  * each of which must be one of the supplied values
  */
 
-define(function () {
+define(['src/debug'], function (debug) {
 	var CSLEDIT_MultiComboBox = function (element, possibleValues, onChange, unique) {
 		this._element = element;
 		this._values = [];
 		this._onChange = onChange;
 		this._unique = unique;
 
-		assert(possibleValues.length > 0);
+		debug.assert(possibleValues.length > 0);
 		this._selectHtml = '<select><option>' +	possibleValues.join('</option><option>') +
 			'</option></select>';
 

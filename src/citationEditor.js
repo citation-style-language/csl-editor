@@ -1,11 +1,20 @@
 "use strict";
 
-define(['src/exampleCitations', 'src/exampleData'], function (CSLEDIT_exampleCitations, CSLEDIT_exampleData) {
+define(
+		[	'src/exampleCitations',
+			'src/exampleData',
+			'jquery.ui'
+		],
+		function (
+			CSLEDIT_exampleCitations,
+			CSLEDIT_exampleData,
+			jquery_ui
+		) {
 	var dialog = $('<div/>'),
-		advanced = $('<div/>', {id:"accordion"}).css({"padding-top":"10px", width: "100%"}),
+		advanced = $('<div/>', {id: "accordion"}).css({"padding-top": "10px", width: "100%"}),
 		advancedContents = $('<div/>'),
 		referencePanel = $('<div class="refrenceList" />'),
-		newReferenceInput = $('<textarea class="addReference" /><br />').css({width:"100%", height: "100px"}),
+		newReferenceInput = $('<textarea class="addReference" /><br />').css({width: "100%", height: "100px"}),
 		addReferenceButton = $('<button>Add new reference</button>'),
 		resetReferencesButton = $('<button>Reset <strong>all</strong> citations to default</button>'),
 		citation,
@@ -115,7 +124,7 @@ define(['src/exampleCitations', 'src/exampleData'], function (CSLEDIT_exampleCit
 			checked = [],
 			additionalOptions;
 
-		referencePanel.find('input').each( function (index) {
+		referencePanel.find('input').each(function (index) {
 			if ($(this).is(':checked')) {
 				//citationItem = {id:"ITEM-" + (index + 1)};
 				/* TODO: additional options
@@ -166,4 +175,4 @@ define(['src/exampleCitations', 'src/exampleData'], function (CSLEDIT_exampleCit
 	return {
 		editCitation : editCitation 
 	};
-}());
+});

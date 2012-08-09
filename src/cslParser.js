@@ -1,6 +1,6 @@
 "use strict";
 
-define(function () {
+define(['src/debug'], function (debug) {
 	// Private functions:
 	var jsonNodeFromXml = function (node, nodeIndex) {
 		var children = [],
