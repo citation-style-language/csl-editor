@@ -21,7 +21,7 @@ CSLEDIT_testUtils.getStyles = function (maxNumberOfStyles) {
 			return false;
 		}
 
-		console.log("style url = " + url);
+		debug.log("style url = " + url);
 
 		$.ajax({
 			url : url,

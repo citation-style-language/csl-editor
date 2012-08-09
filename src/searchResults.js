@@ -3,12 +3,14 @@
 define(
 		[	'src/options',
 			'src/exampleData',
-			'src/diff'
+			'src/diff',
+			'src/cslStyles'
 		],
 		function (
 			CSLEDIT_options,
 			CSLEDIT_exampleData,
-			CSLEDIT_diff
+			CSLEDIT_diff,
+			CSLEDIT_cslStyles
 		) {
 	var closenessString = function (distance, stringA, stringB) {
 		var matchQuality = CSLEDIT_diff.matchQuality(stringA, stringB),
@@ -47,13 +49,13 @@ define(
 			if (style.masterId !== style.styleId)
 			{
 				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
-							CSLEDIT_cslStyles.styleTitleFromId[style.masterId] + '</a>)';
+							CSLEDIT_cslStyles.styles().styleTitleFromId[style.masterId] + '</a>)';
 			} else {
 				masterStyleSuffix = '';
 			}
 
-			citation = CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedCitations[0];
-			bibliography = CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography;
+			citation = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedCitations[0];
+			bibliography = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&
 				style.userCitation !== "" &&
@@ -81,7 +83,7 @@ define(
 			outputList.push(
 				'<table' + featuredStyleClass + '>' +
 				'<tr><td colspan=3><a href="' + style.styleId + '">' +
-				CSLEDIT_cslStyles.styleTitleFromId[style.styleId] + "</a>" +
+				CSLEDIT_cslStyles.styles().styleTitleFromId[style.styleId] + "</a>" +
 				masterStyleSuffix + featuredStyleText + '</td></tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
 				'<td class=match>' +

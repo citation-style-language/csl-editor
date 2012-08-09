@@ -2,7 +2,7 @@
 
 define(['src/debug'], function (debug) {
 	var CSLEDIT_CslNode = function (nameOrNode, attributes, children, cslId) {
-		assert(this instanceof CSLEDIT_CslNode);
+	debug.assert(this instanceof CSLEDIT_CslNode);
 
 		if (nameOrNode.hasOwnProperty("name")) {
 			this.copy(nameOrNode);

@@ -42,7 +42,7 @@ define(
 
 			this.element.click(function () {
 				if (that.nodeData !== null) {
-					console.log("selecting node " + that.nodeWatcher.nodeData.cslId);
+					debug.log("selecting node " + that.nodeWatcher.nodeData.cslId);
 					that.callbacks.selectNode(that.nodeWatcher.nodeData.cslId);
 				}
 			});
@@ -58,7 +58,7 @@ define(
 		this.element.html('<h3 class="smartTreeHeading"><span ' + cslidAttribute + '>' +
 		   this.title + '</span></h3>');
 
-		console.log("updated smart tree to " + this.element.html());
+		debug.log("updated smart tree to " + this.element.html());
 	};
 
 	CSLEDIT_SmartTreeHeading.prototype.setCallbacks = function (callbacks) {
@@ -82,7 +82,7 @@ define(
 		while (splitNodePath.length > 0) {
 			nodePath.push(splitNodePath.splice(0, 1));
 			nodes = CSLEDIT_data.getNodesFromPath(nodePath.join("/"));
-			assertEqual(nodes.length, 1);
+		debug.assertEqual(nodes.length, 1);
 			cslIdPath.push(nodes[0].cslId);
 		}
 

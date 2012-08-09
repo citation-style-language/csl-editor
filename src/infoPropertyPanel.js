@@ -186,7 +186,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 		panel = _panel;
 		executeCommand = _executeCommand;
 		infoNode = CSLEDIT_data.getNodesFromPath("style/info");
-		assertEqual(infoNode.length, 1); // fail in error.log
+	debug.assertEqual(infoNode.length, 1); // fail in error.log
 		infoNode = infoNode[0];
 
 		panel.children().remove();
@@ -256,7 +256,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 				});
 				panel.append('<br /><br />');
 			} else {
-				assert(nodes.length < 2);
+			debug.assert(nodes.length < 2);
 				thisRow = editorRow(item, nodes[0], null);
 
 				// TODO: do this in less hacky way

@@ -3,12 +3,14 @@
 define(
 		[	'src/options',
 			'src/exampleData',
-			'src/searchResults'
+			'src/searchResults',
+			'src/cslStyles'
 		],
 		function (
 			CSLEDIT_options,
 			CSLEDIT_exampleData,
-			CSLEDIT_searchResults
+			CSLEDIT_searchResults,
+			CSLEDIT_cslStyles
 		) {
 	var CSLEDIT_SearchByName = function (mainContainer, userOptions) {
 		var nameSearchTimeout,
@@ -47,7 +49,7 @@ define(
 					styleId = CSLEDIT_exampleData.topStyles[index];
 					result.push({
 						styleId : styleId,
-						masterId : CSLEDIT_cslStyles.masterIdFromId[styleId]
+						masterId : CSLEDIT_cslStyles.styles().masterIdFromId[styleId]
 					});
 				}
 				CSLEDIT_searchResults.displaySearchResults(result, $("#searchResults"));
@@ -68,16 +70,16 @@ define(
 			previousQuery = searchQuery;
 			
 			// dumb search, just iterates through all the names
-			for (styleId in CSLEDIT_cslStyles.styleTitleFromId) {
-				if (CSLEDIT_cslStyles.styleTitleFromId.hasOwnProperty(styleId)) {
-					styleName = CSLEDIT_cslStyles.styleTitleFromId[styleId];
+			for (styleId in CSLEDIT_cslStyles.styles().styleTitleFromId) {
+				if (CSLEDIT_cslStyles.styles().styleTitleFromId.hasOwnProperty(styleId)) {
+					styleName = CSLEDIT_cslStyles.styles().styleTitleFromId[styleId];
 
 					if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
 						styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
-						masterId = CSLEDIT_cslStyles.masterIdFromId[styleId];
+						masterId = CSLEDIT_cslStyles.styles().masterIdFromId[styleId];
 						if (masterId !== styleId) {
 							masterStyleName = ' (same as <a href="' + masterId + '">' +
-								CSLEDIT_cslStyles.styleTitleFromId[masterId] + '</a>)';
+								CSLEDIT_cslStyles.styles().styleTitleFromId[masterId] + '</a>)';
 						} else {
 							masterStyleName = "";
 						}

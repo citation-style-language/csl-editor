@@ -27,7 +27,7 @@ define(['src/debug'], function (debug) {
 			}
 		}
 
-		assert(typeof textValue === "undefined" || children.length === 0, "textValue = " + textValue + " children.length = " + children.length);
+	debug.assert(typeof textValue === "undefined" || children.length === 0, "textValue = " + textValue + " children.length = " + children.length);
 
 		var attributesString = "";
 		var attributesStringList = [];
@@ -155,10 +155,10 @@ define(['src/debug'], function (debug) {
 				xmlDoc = parser.parseFromString(xmlData, "application/xml"),
 				errors;
 			errors = xmlDoc.getElementsByTagName('parsererror');
-			assertEqual(errors.length, 0, "xml parser error");
+		debug.assertEqual(errors.length, 0, "xml parser error");
 
 			var styleNode = xmlDoc.childNodes[0];
-			assertEqual(styleNode.localName, "style", "Invalid style - no style node");
+		debug.assertEqual(styleNode.localName, "style", "Invalid style - no style node");
 
 			var jsonData = jsonNodeFromXml(styleNode, { index: 0 });
 		
@@ -186,4 +186,4 @@ define(['src/debug'], function (debug) {
 
 		updateCslIds : updateCslIds
 	};
-}());
+});

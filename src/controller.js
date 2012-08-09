@@ -83,7 +83,7 @@ define(['src/cslData', 'src/debug'], function (CSLEDIT_data, debug) {
 	var _exec = function(command, args, history) {
 		var inverseCommand;
 
-		console.log("executing command " + command + "(" + JSON.stringify(args) + ")");
+		debug.log("executing command " + command + "(" + JSON.stringify(args) + ")");
 		inverseCommand = cslData[command].apply(null, args);
 		
 		if (typeof inverseCommand !== "undefined" && inverseCommand.hasOwnProperty("error")) {

@@ -2,12 +2,18 @@
 
 define([	'src/citationEngine',
 			'src/options',
-			'src/cslData'
+			'src/cslData',
+			'external/codemirror',
+			'external/codemirrorXmlMode',
+			'jquery.layout'
 		],
 		function (
 			CSLEDIT_citationEngine,
 			CSLEDIT_options,
-			CSLEDIT_data
+			CSLEDIT_data,
+			CodeMirror,
+			CodeMirrorXmlMode,
+			jquery_layout
 		) {
 	var CSLEDIT_codeEditor = function (containerElement, userOptions) {
 		var codeTimeout,

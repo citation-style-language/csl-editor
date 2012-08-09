@@ -1,4 +1,3 @@
-
 <style type="text/css">
 #navigationBar {
 	font-family: Helvetica, Arial, sans-serif;
@@ -133,13 +132,7 @@ body#about           a#nav_about {
 <script type="text/javascript">
 "use strict";
 
-requirejs.config({
-	baseUrl: "../..",
-	paths: {
-		'jquery' : 'external/jquery-1.7.2.min',
-	}
-});
-require(['jquery'], function () {
+require(['jquery', 'jquery.ui'], function () {
 	var CSLEDIT_feedback = {
 		init : function (feedbackTab, feedbackPanel) {
 			feedbackTab.on('click', function () {

@@ -4,51 +4,15 @@
 
 	<title>CSL Search by Example</title>
 
-	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
-
-	<script type="text/javascript" src="../../external/diff-match-patch/diff_match_patch.js"></script>
-
-	<script type="text/javascript" src="../../external/citeproc/loadabbrevs.js"></script>
-	<script type="text/javascript" src="../../external/citeproc/xmldom.js"></script>
-	<script type="text/javascript" src="../../external/citeproc/citeproc-1.0.336.js"></script>
-	<script type="text/javascript" src="../../external/citeproc/loadlocale.js"></script>
-	<script type="text/javascript" src="../../external/citeproc/runcites.js"></script>
-
-	<script type="text/javascript" src="../../src/citeprocLoadSys.js"></script>
-	<script type="text/javascript" src="../../exampleCitationsGenerator/config.js"></script>
-	<script type="text/javascript" src="../../generated/cslStyles.js"></script>
-	<script type="text/javascript" src="../../generated/preGeneratedExampleCitations.js"></script>
-
-	<script type="text/javascript" src="../../external/cleditor/jquery.cleditor.js"></script>
-	<link rel="stylesheet" type="text/css" href="../../external/cleditor/jquery.cleditor.css">
-
-	<script type="text/javascript" src="../../src/debug.js"></script>
-
-	<script type="text/javascript" src="../../external/require.js"></script>
-
-<script type="text/javascript">
-	require.config({
-		baseUrl: "../.."
-	});
-	requirejs(['src/SearchByExample', 'src/cslData'], function (CSLEDIT_SearchByExample, CSLEDIT_data) {
-		$(document).ready(function () {
-			CSLEDIT.searchByExample = new CSLEDIT_SearchByExample($('#mainContainer'), {
-				rootURL : "../..",
-				editStyle_func : function (styleURL) {
-					styleURL = "../getFromOtherWebsite.php?url=" + encodeURIComponent(styleURL);
-					CSLEDIT_data.loadStyleFromURL(styleURL, function () {
-						window.location.href = "../visualEditor";
-					});
-				}
-			});
-		});
-	});
+	<script>
+		var CSLEDIT_pageModule = 'searchByExamplePage';
 	</script>
-
+	<script type="text/javascript" data-main="../src/main.js" src="../../external/require.js"></script>
 	<script type="text/javascript" src="../src/analytics.js"></script>
 	
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="../../external/cleditor/jquery.cleditor.css">
+
 	<link rel="stylesheet" href="../../css/base.css" />
 	<link rel="stylesheet" href="../../css/searchByExample.css" />
 	<link rel="stylesheet" href="../../css/searchResults.css" />

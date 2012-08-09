@@ -1,25 +1,14 @@
 <html>
 <head>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-	<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
-	<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
-
-	<script type="text/javascript" src="../../external/jstree/_lib/jquery.hotkeys.js"></script>
-	<script type="text/javascript" src="../../external/jstree/jquery.jstree-patch1.js"></script>
+	<link rel="stylesheet" href="../../external/qunit/qunit-1.9.0.css" type="text/css" media="screen" />
 	<link type="text/css" rel="stylesheet" href="../../external/jstree/themes/default/style.css" />	
 
-	<script type="text/javascript" src="../../src/exampleData.js"></script>
-	<script type="text/javascript" src="../../src/options.js"></script>
+	<script>
+		var CSLEDIT_pageModule = 'unitTestsPage';
+	</script>
+	<script type="text/javascript" data-main="../src/main.js" src="../../external/require.js"></script>
 
-	<script type="text/javascript" src="../../src/storage.js"></script>
-	<script type="text/javascript" src="../../src/test_storage.js"></script>
-
-	<script type="text/javascript" src="../../src/uiConfig.js"></script>
-	<script type="text/javascript" src="../../src/debug.js"></script>
-
-	<script type="text/javascript" src="../../src/schema.js"></script>
-	<script type="text/javascript" src="../../src/test_schema.js"></script>
-	
+<!--
 	<script type="text/javascript" src="../../src/controller.js"></script>
 	<script type="text/javascript" src="../../src/test_controller.js"></script>
 
@@ -52,6 +41,7 @@
 		rootURL : "../.."
 	});
 	</script>
+-->
 </head>
 <body>
 	<h1 id="qunit-header">CSL Editor Unit Tests</h1>

@@ -2,7 +2,7 @@
 
 module("CSLEDIT_NodeWatcher", {
 	setup : function () {
-		console.log("typeof NodeWatcher = " + typeof(CSLEDIT_NodeWatcher));
+		debug.log("typeof NodeWatcher = " + typeof(CSLEDIT_NodeWatcher));
 
 		CSLEDIT_NodeWatcher.FakeData = function () {
 			this.nodes = {
@@ -19,7 +19,7 @@ module("CSLEDIT_NodeWatcher", {
 			return result;
 		};
 
-		console.log("created FakeData");
+		debug.log("created FakeData");
 	}
 });
 

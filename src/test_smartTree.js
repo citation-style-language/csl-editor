@@ -224,7 +224,7 @@ var CSLEDIT_FakeViewController = function () {
 			},
 		styleChanged : function (command, args) {
 
-			console.log("Fake view exec: " + command + ": " + JSON.stringify(args));
+			debug.log("Fake view exec: " + command + ": " + JSON.stringify(args));
 			if (command === "formatCitations") {
 				return;
 			}

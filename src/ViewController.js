@@ -313,7 +313,7 @@ define(
 					view.amendNode(id, amendedNode);
 				}
 			});
-			console.log("amendNode - calling selectedNodeChanged");
+			debug.log("amendNode - calling selectedNodeChanged");
 			selectedNodeChanged();
 		};
 
@@ -341,7 +341,7 @@ define(
 			var treeNode = treeView,
 				cslId;
 
-			console.log("select node from path");
+			debug.log("select node from path");
 			$.each(nodePath, function (i, cslId) {
 				treeNode = treeNode.find('li[cslId="' + cslId + '"]');
 			});
@@ -385,7 +385,7 @@ define(
 
 		var styleChanged = function (command, args) {
 			args = args || [];
-			console.log("executing view update: " + command + "(" + args.join(", ") + ")");
+			debug.log("executing view update: " + command + "(" + args.join(", ") + ")");
 			this[command].apply(null, args);
 		};
 		

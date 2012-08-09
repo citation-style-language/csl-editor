@@ -5,6 +5,7 @@ define([	'src/storage',
 			'src/cslData',
 			'src/exampleCitations',
 			'src/diff',
+			'src/debug',
 			'external/citeproc/citeproc',
 			'src/citeprocLoadSys'
 		],
@@ -14,6 +15,7 @@ define([	'src/storage',
 			CSLEDIT_data,
 			CSLEDIT_exampleCitations,
 			CSLEDIT_diff,
+			debug,
 			CSL,
 			citeprocSys
 		) {

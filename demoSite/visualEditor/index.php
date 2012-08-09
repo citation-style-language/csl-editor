@@ -5,9 +5,10 @@
 
 	<title>Visual CSL Editor</title>
 
-	<!--script type="text/javascript" src="../../src/debug.js"></script-->
-
-	<script type="text/javascript" data-main="../src/visualEditorDemo.js" src="../../external/require.js"></script>
+	<script>
+		var CSLEDIT_pageModule = 'visualEditorPage';
+	</script>
+	<script type="text/javascript" data-main="../src/main.js" src="../../external/require.js"></script>
 
 	<script type="text/javascript" src="../src/analytics.js"></script>
 

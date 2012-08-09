@@ -32,14 +32,14 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 			var variable, macro, childNode, visibleKey;
 
 			if (index >= nodeData.children.length) {
-				assertEqual(dragDirection, "down");
+			debug.assertEqual(dragDirection, "down");
 				toPosition = nodeData.children.length - 1;
 				return false;
 			}
 
 			visibleKey = $(this).find('select.sortKey').val();
 			childNode = nodeData.children[index];
-			assertEqual(childNode.name, "key");
+		debug.assertEqual(childNode.name, "key");
 
 			if (visibleFieldName(
 					getAttr("macro", childNode.attributes),
@@ -147,7 +147,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 	
 		childIndex = listElements.index($(this).parent());
 		keyNode = nodeData.children[childIndex];
-		assertEqual(keyNode.name, "key");
+	debug.assertEqual(keyNode.name, "key");
 
 		executeCommand("amendNode", [keyNode.cslId, 
 			getKeyNodeData(childIndex)]);
@@ -189,7 +189,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 
 		macros = [];
 		$.each(CSLEDIT_data.getNodesFromPath("style/macro"), function (i, node) {
-			assertEqual(node.attributes[0].key, "name");
+		debug.assertEqual(node.attributes[0].key, "name");
 			macros.push(node.attributes[0].value);
 		});
 
@@ -213,7 +213,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 				variable;
 			
 			select = row.find("select.sortKey");
-			assertEqual(select.length, 1);
+		debug.assertEqual(select.length, 1);
 
 			select.val(visibleFieldName(
 				getAttr("macro", child.attributes),
@@ -231,7 +231,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 		
 			childIndex = listElements.index($(this).parent());
 			keyNode = nodeData.children[childIndex];
-			assertEqual(keyNode.name, "key");
+		debug.assertEqual(keyNode.name, "key");
 
 			executeCommand("amendNode", [keyNode.cslId, 
 				getKeyNodeData(childIndex)]);
@@ -302,7 +302,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 				}
 
 				$.each(nodeData.children, function (index, keyNode) {
-					assertEqual(keyNode.name, "key");
+				debug.assertEqual(keyNode.name, "key");
 					executeCommand("amendNode", [keyNode.cslId, getKeyNodeData(index)]);
 				});
 			});

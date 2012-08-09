@@ -37,13 +37,13 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 
 			if (mainSchema !== null) {
 				$.each(mainSchema, function (name, data) {
-					console.log("WARNING: Using custom schema: " + name);
+					debug.log("WARNING: Using custom schema: " + name);
 					mainSchemaData = data;
 				});
 
 				if (subSchemas !== null) {
 					$.each(subSchemas, function (name, data) {
-						console.log("Adding custom sub schema: " + name);
+						debug.log("Adding custom sub schema: " + name);
 						schemas.push(data);
 					});
 				}
@@ -161,9 +161,9 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 
 					$.each(choice.attributes, function (attributeName) {
 						if (attributeName in node.attributes) {
-							console.log("WARNING: " + attributeName +
+							debug.log("WARNING: " + attributeName +
 								" in choice and general attributes for node " + nodeName);
-							console.log("Deleting the general attribute");
+							debug.log("Deleting the general attribute");
 							delete node.attributes[attributeName];
 							index--;
 						}
@@ -197,7 +197,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 				joinProperties(node, define);
 				simplifyNode(nodeName, node);
 			
-				assert(elementName(nodeName).indexOf("def:") === -1, "define parent");
+			debug.assert(elementName(nodeName).indexOf("def:") === -1, "define parent");
 
 				if (ref.name in refParents) {
 					if (refParents[ref.name].indexOf(elementName(nodeName)) === -1) {
@@ -207,7 +207,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 					refParents[ref.name] = [ elementName(nodeName) ];
 				}
 			} else {
-				assert(false, "Couldn't find define: " + ref.name);
+			debug.assert(false, "Couldn't find define: " + ref.name);
 			}
 		};
 
@@ -245,7 +245,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 
 				simplifyAttributeValues(attributes, attributeName);
 			} else {
-				assert(false, "Couldn't find attr value define: " + ref.name);
+			debug.assert(false, "Couldn't find attr value define: " + ref.name);
 			}
 		};
 
@@ -253,7 +253,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 			var define = defineProperties[ref.name],
 				attributeNames = [];
 
-			assert(typeof define !== 'undefined');
+		debug.assert(typeof define !== 'undefined');
 
 			$.each(define.refs, function (i, ref) {
 				attributeNames = attributeNames.concat(attributeNamesFromRef(ref));
@@ -480,7 +480,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 					return thisNodeProperties;
 				} else {
 					// ignore non cs: elements/
-					assert(false);
+				debug.assert(false);
 					return null;
 				}
 			},
@@ -552,7 +552,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 							containsChoice = false;
 
 						// nested choices not supported
-						assertEqual(childNodeProperties.choices.length, 0);
+					debug.assertEqual(childNodeProperties.choices.length, 0);
 
 						$.each(childNodeProperties.refs, function (i, choiceRef) {
 							choice.refs.push(choiceRef);
@@ -620,7 +620,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 			},
 			parentRef : function (node) {
 				// not used in the CSL schema
-				assert(false, "parentRef not supported");
+			debug.assert(false, "parentRef not supported");
 				return null;
 			},
 			empty : function (node) {
@@ -756,7 +756,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 				if (nodeProperties[element].textNode) {
 					return "text";
 				}
-				assert(node.attributeValues.length < 2);
+			debug.assert(node.attributeValues.length < 2);
 				if (node.attributeValues.length === 0 || node.attributeValues[0].type !== "data") {
 					return null;
 				} else {

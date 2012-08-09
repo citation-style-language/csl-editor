@@ -56,11 +56,11 @@ define([	'src/uiConfig',
 						cslId;
 
 					cslId = parseInt($this.attr('cslid'), 10);
-					assertEqual(CSLEDIT_data.getNode(cslId, cslData).name, $this.attr('rel'));
+				debug.assertEqual(CSLEDIT_data.getNode(cslId, cslData).name, $this.attr('rel'));
 				});
 
 				// Can't have non-macrolink nodes as children of a text node
-				assertEqual(treeElement.find('li[cslid][rel=text] li[macrolink!=true]').length, 0);
+			debug.assertEqual(treeElement.find('li[cslid][rel=text] li[macrolink!=true]').length, 0);
 				console.timeEnd("verifyTree");
 			}
 		};
@@ -76,7 +76,7 @@ define([	'src/uiConfig',
 				$.each(ranges, function (index, range) {
 					range.rootNode = treeElement.children('ul').children(
 						'li[cslid=' + range.first + ']');
-					assertEqual(range.rootNode.length, 1);
+				debug.assertEqual(range.rootNode.length, 1);
 				});
 				callbacks.loaded();
 
@@ -229,7 +229,7 @@ define([	'src/uiConfig',
 			});
 
 			if (typeof macroNode === "undefined") {
-				console.log('WARNING: macro "' + macroName + '" doesn\'t exist');
+				debug.log('WARNING: macro "' + macroName + '" doesn\'t exist');
 				return;
 			}
 			
@@ -318,7 +318,7 @@ define([	'src/uiConfig',
 				if (macroLink.first === parentId) {
 					parentNodes = parentNodes.add(
 						treeElement.find('li[cslid=' + macroLink.instanceCslId + ']'));
-					assert(parentNodes.length > 0);
+				debug.assert(parentNodes.length > 0);
 				}
 			});
 
@@ -346,7 +346,7 @@ define([	'src/uiConfig',
 					break;
 				}
 				if (macroLink.first === nodeId) {
-					console.log("WARNING: macro deleted, leaving broken instance links");
+					debug.log("WARNING: macro deleted, leaving broken instance links");
 					// remove all children
 					treeElement.find('li[cslid=' + macroLink.instanceCslId + '][macrolink!=true]').each(
 						function () {
@@ -462,7 +462,7 @@ define([	'src/uiConfig',
 			
 			if (!pathContainsLeafNode(CSLEDIT_data.getNodePath(newNode.cslId))) {
 				parentNode = treeElement.find('li[cslid="' + parentId + '"][macrolink!="true"]');
-				assertEqual(parentNode.length, 1);
+			debug.assertEqual(parentNode.length, 1);
 				createSubTree(parentNode, position, jsTreeDataFromCslData_inner(newNode, [id]));
 				macroLinksUpdateNode(newNode.cslId, newNode);
 			}
@@ -497,7 +497,7 @@ define([	'src/uiConfig',
 				range.rootNode.attr("cslid", parseInt(range.rootNode.attr("cslid"), 10) + amount);
 				range.rootNode.find('li[cslid][macroLink!="true"]').each(function () {
 					cslId = parseInt($(this).attr("cslid"), 10);
-					assert(cslId <= range.last);
+				debug.assert(cslId <= range.last);
 					if (cslId >= range.first) {
 						$(this).attr("cslid", cslId + amount);
 					}
@@ -508,7 +508,7 @@ define([	'src/uiConfig',
 			} else if (range.last >= fromId) {
 				range.rootNode.find('li[cslid][macroLink!="true"]').each(function () {
 					cslId = parseInt($(this).attr("cslid"), 10);
-					assert(cslId <= range.last);
+				debug.assert(cslId <= range.last);
 					if (cslId >= fromId) {
 						$(this).attr("cslid", cslId + amount);
 					}
@@ -547,8 +547,8 @@ define([	'src/uiConfig',
 
 			} else { // update range
 				node = treeElement.find('li[cslid="' + id + '"][macrolink!="true"]');
-				assert(node.length > 0);
-				assert(id !== 0);
+			debug.assert(node.length > 0);
+			debug.assert(id !== 0);
 
 				treeElement.jstree("remove", node);
 

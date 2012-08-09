@@ -214,7 +214,7 @@ define([	'src/MultiPanel',
 			if ($("#nodeAttribute" + index).length > 0) {
 				value = $("#nodeAttribute" + index).val();
 			} else {
-				assert(index in multiInputs);
+			debug.assert(index in multiInputs);
 				value = multiInputs[index].val();
 			}
 
@@ -260,7 +260,7 @@ define([	'src/MultiPanel',
 
 	// TODO: Use buttons in the style of the +/- add/delete node ones
 	var createButton = function (attributeName, cslSchemaAttribute, index, attribute) {
-		assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
+	debug.assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
 
 		$.each(checkboxControlSchema[attributeName], function (attributeValue, control) {
 			var button, buttonLabel, checkboxControlId;
@@ -389,12 +389,12 @@ define([	'src/MultiPanel',
 						dropdownValues.push("(TODO: find proper list");*/
 						break;
 					default:
-						console.log("WARNING: data type not recognised: " + 
+						debug.log("WARNING: data type not recognised: " + 
 							schemaValues[valueIndex].type);
 					}
 					break;
 				default:
-					assert(false, "attribute value type not recognised");
+				debug.assert(false, "attribute value type not recognised");
 				}
 			}
 		}
@@ -514,7 +514,7 @@ define([	'src/MultiPanel',
 
 		if (definiteSelectedChoices.length > 0) {
 			if (definiteSelectedChoices.length > 1) {
-				console.log("WARNING: not clear which mode the node is in.\n" + 
+				debug.log("WARNING: not clear which mode the node is in.\n" + 
 					"more than 1 definite selected choice");
 			}
 
@@ -522,7 +522,7 @@ define([	'src/MultiPanel',
 			enableControlsInTab(definiteSelectedChoices[0]);
 		} else if (possibleSelectedChoices.length > 0) {
 			if (possibleSelectedChoices.length > 1) {
-				console.log('WARNING: not clear which mode this node is in');
+				debug.log('WARNING: not clear which mode this node is in');
 			}
 			choicePanel.select(possibleSelectedChoices[0]);
 			enableControlsInTab(possibleSelectedChoices[0]);

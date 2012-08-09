@@ -133,7 +133,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		} else if (match === "none") {
 			displayName += "NOT (" + terms.join(" OR ") + ")";
 		} else {
-			assert(false);
+		debug.assert(false);
 		}
 
 		if (displayName.length > elideLimit) {

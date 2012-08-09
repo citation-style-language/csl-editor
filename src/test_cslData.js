@@ -12,7 +12,7 @@ test("set code", function () {
 		result;
 
 	result = CSLEDIT_data.setCslCode("<needs_to_start_with_style_node></needs_to_start_with_style_node>");
-	console.log(result.error);
+	debug.log(result.error);
 	ok(result.error.length > 0);
 
 	result = CSLEDIT_data.setCslCode("<style><mis></match></style>");
@@ -213,7 +213,7 @@ test("required nodes", function () {
 	
 	result = CSLEDIT_data.setCslCode("<style><parent1></parent1></style>");
 	ok(result.error.length > 0);
-	console.log(result.error);
+	debug.log(result.error);
 
 	result = CSLEDIT_data.setCslCode("<style><parent1></parent1>" +
 		"<parent2><child1></child1></parent2></style>");

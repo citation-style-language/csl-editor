@@ -6,7 +6,11 @@ define(
 			'src/uiConfig',
 			'src/xmlUtility',
 			'src/diff',
-			'src/searchResults'
+			'src/searchResults',
+			'src/cslStyles',
+			'src/debug',
+			'jquery.ui',
+			'jquery.cleditor'
 		],
 		function (
 			CSLEDIT_options,
@@ -14,7 +18,11 @@ define(
 			CSLEDIT_uiConfig,
 			CSLEDIT_xmlUtility,
 			CSLEDIT_diff,
-			CSLEDIT_searchResults
+			CSLEDIT_searchResults,
+			CSLEDIT_cslStyles,
+			debug,
+			jquery_ui,
+			jquery_cleditor
 		) {
 	var CSLEDIT_SearchByExample = function (mainContainer, userOptions) {
 		var nameSearchTimeout,
@@ -99,9 +107,9 @@ define(
 				userBibliography = "";
 			}
 
-			for (styleId in CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId) {
-				if (CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
-					exampleCitation = CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[styleId][exampleIndex];
+			for (styleId in CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId) {
+				if (CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
+					exampleCitation = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[styleId][exampleIndex];
 
 					if (exampleCitation !== null && exampleCitation.statusMessage === "") {
 						formattedCitation = exampleCitation.formattedCitations[0];
@@ -134,7 +142,7 @@ define(
 
 						if (thisMatchQuality > tolerance)
 						{
-							console.log("match quality: " + thisMatchQuality);
+							debug.log("match quality: " + thisMatchQuality);
 							matchQualities[index++] = {
 								matchQuality : thisMatchQuality,
 								styleId : styleId
@@ -254,7 +262,7 @@ define(
 		};
 
 		var updateExample = function (newExampleIndex) {
-			var length = CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length;
+			var length = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[defaultStyle].length;
 
 			if (exampleIndex !== -1) {
 				userCitations[exampleIndex] = $("#userCitation").cleditor()[0].doc.body.innerHTML;
@@ -271,7 +279,7 @@ define(
 		};
 
 		var init = function () {
-			if (CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length !==
+			if (CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[defaultStyle].length !==
 					CSLEDIT_exampleData.jsonDocumentList.length) {
 				alert("Example citations need re-calculating on server");
 			}
@@ -316,7 +324,7 @@ define(
 			// prepopulate with APA example	citations
 			userCitations = [];
 			userBibliographies = [];
-			$.each(CSLEDIT_preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle],
+			$.each(CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[defaultStyle],
 					function (i, exampleCitation) {
 				userCitations.push(exampleCitation.formattedCitations[0]);
 				userBibliographies.push(exampleCitation.formattedBibliography);

@@ -1,53 +1,6 @@
 "use strict";
 
-requirejs.config({
-	baseUrl: "../..",
-	paths: {
-		'jquery' : 'external/jquery-1.7.2.min',
-		'jquery.ui' : 'external/jquery-ui-1.8.22.custom.min',
-		'jquery.hotkeys' : 'external/jstree/_lib/jquery.hotkeys',
-		'jquery.jstree-patched' : 'external/jstree/jquery.jstree-patch1',
-		'jquery.layout' : 'external/jquery.layout-latest-min',
-		'jquery.hoverIntent' : 'external/jquery.hoverIntent.minified',
-		'jquery.scrollTo' : 'external/jquery.scrollTo-1.4.2-min',
-		'external/citeproc/citeproc' : 'external/citeproc/citeproc-1.0.336'
-	},
-	shim: {
-		'jquery.ui': {
-			deps : ['jquery']
-		},
-		'jquery.hotkeys': {
-			deps : ['jquery']
-		},
-		'jquery.jstree-patched': {
-			deps : ['jquery']
-		},
-		'jquery.layout': {
-			deps : ['jquery']
-		},
-		'jquery.hoverIntent': {
-			deps : ['jquery']
-		},
-		'jquery.scrollTo': {
-			deps : ['jquery']
-		},
-		'external/diff-match-patch/diff_match_patch': {
-			exports: 'diff_match_patch'
-		},
-		'external/citeproc/xmldom' : {
-			exports: 'CSL_CHROME'
-		},
-		'external/citeproc/citeproc' : {
-			deps: [
-				'external/citeproc/xmldom',
-				'src/citeprocLoadSys'
-			],
-			exports: 'CSL'
-		}
-	}
-});
-
-requirejs(
+define(
 		[
 			'src/VisualEditor',
 			'demoSite/external/downloadify/swfobject',
@@ -213,8 +166,7 @@ requirejs(
 
 	initVisualEditorDemo("../..");
 
-//	return {
-//		init : initVisualEditorDemo,
-//		cslEditor : cslEditor
-//	};
+	return {
+		cslEditor : cslEditor
+	};
 });

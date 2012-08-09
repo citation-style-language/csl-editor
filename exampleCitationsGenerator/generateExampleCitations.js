@@ -1,7 +1,7 @@
 // NOTE: can't "use strict" whole file because of shimDefine()
 
 // decrease this for testing
-var STYLES_LIMIT = 5;
+var STYLES_LIMIT = 50000;
 
 var fs = require('fs');
 var requirejs = require('requirejs');

@@ -84,7 +84,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 				// skip the macro definition nodes, jump to the referencing 'text' node instead
 				selectedNode = CSLEDIT_data.getNode(cslId);
 				if (selectedNode.name === "macro") {
-					assert(hoveredNodeStack.length > 1);
+				debug.assert(hoveredNodeStack.length > 1);
 					cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
 				}
 			}
@@ -126,7 +126,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 			}
 
 			depth++;
-			assert(depth < 150, "stack overflow!");
+		debug.assert(depth < 150, "stack overflow!");
 
 			if (node.is('li')) {
 				highlightedNode = node.children('a');
@@ -187,7 +187,7 @@ define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, C
 			addToHoveredNodeStack(target);
 
 			var lastNode = hoveredNodeStack[hoveredNodeStack.length - 1];
-			assertEqual(lastNode, target.attr("cslid"), "applySyntax");
+		debug.assertEqual(lastNode, target.attr("cslid"), "applySyntax");
 
 			if (hoveredNodeStack.length > 0) {
 				highlightNode(hoveredNodeStack.slice());

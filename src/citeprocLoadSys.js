@@ -1,9 +1,11 @@
 "use strict";
 
-define([	'src/options'
+define([	'src/options',
+			'src/debug'
 		],
 		function (
-			CSLEDIT_options
+			CSLEDIT_options,
+			debug
 		) {
 
 	var Sys = function () {
@@ -24,13 +26,13 @@ define([	'src/options'
 			$.ajax({
 				url : localePath,
 				success : function (data) {
-					console.log("fetched locale data for " + lang);
+					debug.log("fetched locale data for " + lang);
 					that.locale[lang] = data;
 					locale = data;
 				},
 				error : function (jqXHR, textStatus) {
-					console.log("ERROR retrieving locale data for " + lang);
-					console.log("Falling back to en-US");
+					debug.log("ERROR retrieving locale data for " + lang);
+					debug.log("Falling back to en-US");
 
 					locale = that.retrieveLocale("en-US");
 				},

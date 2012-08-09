@@ -4,10 +4,10 @@
 
 	<title>About</title>
 
-	<link rel="stylesheet" href="../../css/base.css" />
-	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+	<script type="text/javascript" data-main="../src/main.js" src="../../external/require.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
+	<link rel="stylesheet" href="../../css/base.css" />
 <style>
 #mainContent {
 	padding-left: 20px;

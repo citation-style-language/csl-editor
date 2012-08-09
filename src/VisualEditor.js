@@ -223,7 +223,7 @@ define(
 				displayName = 
 					CSLEDIT_uiConfig.displayNameFromNode(new CSLEDIT_CslNode(element));
 
-				console.log("display name = " + displayName);
+				debug.log("display name = " + displayName);
 
 				row = $('<tr>' + img + '<td><button class="addNodeType" data-nodeName="' +
 					element + '">' + 
@@ -314,7 +314,7 @@ define(
 					url : CSLEDIT_options.get("rootURL") + "/content/newStyle.csl",
 					dataType : "text",
 					success : function (cslCode) {
-						console.log("csl code received: " + cslCode);
+						debug.log("csl code received: " + cslCode);
 						CSLEDIT_controller.exec('setCslCode', [cslCode]);
 					},
 					error : function () {
@@ -344,7 +344,7 @@ define(
 							CSLEDIT_controller.exec("setCslCode", [newStyle]);
 						},
 						error : function () {
-							console.log("ajax error: style not loaded");
+							debug.log("ajax error: style not loaded");
 						},
 						async : false
 					});
@@ -404,7 +404,7 @@ define(
 
 			// check consistency of data on window focus
 			// to detect changes in different tabs
-			console.log("window length = " + $(window).length);
+			debug.log("window length = " + $(window).length);
 			$(window).focus(function () {
 				if (!reloadingPage) {
 					CSLEDIT_data.get();
@@ -514,7 +514,7 @@ define(
 				}
 			});
 
-			console.log("generatedStyleId = " + generatedStyleId);
+			debug.log("generatedStyleId = " + generatedStyleId);
 			$.each(CSLEDIT_cslStyles.styleTitleFromId, function (id, name) {
 				if (id === generatedStyleId || name === styleName) {
 					if (!confirm('The style title matches one that already exists.\n\n' +

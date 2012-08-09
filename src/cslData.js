@@ -70,7 +70,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				// update 'style/info/updated'
 				updatedNode = getNodesFromPath('style/info/updated', cslData)[0];
 				if (typeof(updatedNode) === "undefined") {
-					console.log("no style/info/updated node: resetting CSL code");
+					debug.log("no style/info/updated node: resetting CSL code");
 					setCslCode(CSLEDIT_cslParser.cslCodeFromCslData(cslData));
 					updatedNode = getNodesFromPath('style/info/updated')[0];
 				}
@@ -170,11 +170,11 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			var cslData,
 				error;
 			
-			try {
+			//try {
 				cslData = CSLEDIT_cslParser.cslDataFromCslCode(cslCode);
-			} catch (err) {
-				return { error: "Error parsing CSL Code" };
-			}
+			//} catch (err) {
+			//	return { error: "Error parsing CSL Code" };
+			//}
 
 			// check if this is a dependent style:
 			$.each(getNodesFromPath('style/info/link', cslData), function (i, node) {
@@ -210,7 +210,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				updateTime = false;
 				set(cslData);
 				if (getNodesFromPath('style/info/updated').length === 0) {
-					console.log("creating required updated node");
+					debug.log("creating required updated node");
 					addNode(getNodesFromPath('style/info')[0].cslId, "last",
 							new CSLEDIT_CslNode("updated", [], [], -1), true);
 				}
@@ -249,8 +249,8 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				node = iter.next();
 				
 				if (index === id) {
-					assertEqual(node.cslId, index);
-					assert(position + nodesToDelete <= node.children.length);
+				debug.assertEqual(node.cslId, index);
+				debug.assert(position + nodesToDelete <= node.children.length);
 
 					if (typeof newNode === "undefined") {
 						node.children.splice(position, nodesToDelete);
@@ -356,7 +356,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			}
 
 			rootNode = path.splice(0, 1);
-			assertEqual(rootNode.length, 1);
+		debug.assertEqual(rootNode.length, 1);
 
 			// convert '*' wildcard to regexp equivalent
 			regExp = new RegExp("^" + rootNode[0].replace("*", ".*") + "$");
@@ -501,7 +501,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 					return addNode(id, getNode(id).children.length, newNode);
 				case "before":
 				case "after":
-					assert(id !== 0);
+				debug.assert(id !== 0);
 					nodeInfo = getNodeAndParent(id);
 					positionIndex = indexOfChild(nodeInfo.node, nodeInfo.parent);
 					if (position === "after") {
@@ -509,7 +509,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 					}
 					return addNode(nodeInfo.parent.cslId, positionIndex, newNode);
 				case "default":
-					assert(false, "position: " + position + " not recognised");
+				debug.assert(false, "position: " + position + " not recognised");
 				}
 			}
 			return newNode.cslId;
@@ -522,7 +522,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				parentNode,
 				nodesDeleted;
 
-			assert(id !== 0); // can't delete the style node
+		debug.assert(id !== 0); // can't delete the style node
 
 			index = 0;
 			while (iter.hasNext()) {
@@ -535,9 +535,9 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				index++;
 			}
 
-			assert(typeof parentNode !== "undefined");
+		debug.assert(typeof parentNode !== "undefined");
 			nodesDeleted = -spliceNode(parentNode.cslId, indexOfChild(node, parentNode), 1);
-			assertEqual(node.cslId, id);
+		debug.assertEqual(node.cslId, id);
 			
 			emit("deleteNode", [id, nodesDeleted]);
 			
@@ -559,7 +559,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			while (iter.hasNext()) {
 				node = iter.next();
 				if (index === id) {
-					assertEqual(node.cslId, id);
+				debug.assertEqual(node.cslId, id);
 					
 					oldNode = new CSLEDIT_CslNode(node.name, node.attributes, [], node.cslId);
 					oldNode.textValue = node.textValue;
@@ -572,7 +572,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				}
 				index++;
 			}
-			assert(typeof node !== "undefined");
+		debug.assert(typeof node !== "undefined");
 			set(cslData);
 			emit("amendNode", [id, node]);
 			emit("formatCitations");
@@ -646,7 +646,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 
 				deletedNode = deleteNode(fromId);
 
-				console.log("deletedNode = " + deletedNode.cslId);
+				debug.log("deletedNode = " + deletedNode.cslId);
 				if (toId > fromId) {
 					toId -= numNodes(deletedNode);
 				}
@@ -678,7 +678,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				cslData = get(); 
 				
 				styleURL = getUrlVar("styleURL");
-				console.log("url from url: " + styleURL);
+				debug.log("url from url: " + styleURL);
 
 				// try loading style specified in options
 				if (typeof CSLEDIT_options.get("initialCslCode") !== "undefined") {

@@ -87,7 +87,7 @@ define(
 			var desc;
 			desc = CSLEDIT_exampleData.additionalOptions[
 				CSLEDIT_exampleCitations.getOption(citation, i)].description;
-			console.log(desc);
+			debug.log(desc);
 			select.val(desc);
 
 			row.append($('<td/>').append(input));
@@ -100,7 +100,7 @@ define(
 
 		table.find('td').css({"padding-right": "8px"});
 
-		console.log("checked = " +
+		debug.log("checked = " +
 				JSON.stringify(CSLEDIT_exampleCitations.getReferenceIndexesForCitation(citation)));
 
 		$.each(CSLEDIT_exampleCitations.getReferenceIndexesForCitation(citation), function (i, refIndex) {
@@ -141,7 +141,7 @@ define(
 			}
 		});
 		
-		console.log("setting " + citation + " to " + JSON.stringify(checked));
+		debug.log("setting " + citation + " to " + JSON.stringify(checked));
 
 		CSLEDIT_exampleCitations.setReferenceIndexesForCitation(citation, checked);
 	};

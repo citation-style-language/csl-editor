@@ -1,6 +1,6 @@
 "use strict";
 
-define(function () {
+define(['src/debug'], function (debug) {
 	var CSLEDIT_Storage = function (useLocalStorageIfAvailable) {
 		// Use localStorage for persistance if available, otherwise use a simple
 		// session based dictionary
@@ -11,7 +11,7 @@ define(function () {
 			outOfSyncCallback;
 
 		var outOfSync = function () {
-			console.log("CSLEDIT_storage out of sync with local storage");
+			debug.log("CSLEDIT_storage out of sync with local storage");
 			if (typeof(outOfSyncCallback) === "function") {
 				outOfSyncCallback();
 			}
@@ -53,7 +53,7 @@ define(function () {
 
 		if (typeof(localStorage) === "undefined" || localStorage === null ||
 				useLocalStorageIfAvailable !== true) {
-			console.log("Not using localStorage");
+			debug.log("Not using localStorage");
 			finalAPI = simpleStorageAPI;
 		} else {
 			// use local storage, with simple storage to verify that nothing has changed

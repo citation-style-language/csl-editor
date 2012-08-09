@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/options', function (CSLEDIT_options) {
+define(['src/options', 'src/debug'], function (CSLEDIT_options, debug) {
 	var cache = {};
 
 	var getJSONData = function (path) {
@@ -12,10 +12,11 @@ define(['src/options', function (CSLEDIT_options) {
 				dataType : "json",
 				async : false,
 				success : function (data) {
+					console.log("fetched json: " + path);
 					cache[path] = data;
 				},
 				error : function () {
-					console.log("WARNING: error fetching " + url);
+					debug.log("WARNING: error fetching " + url);
 				}
 			});
 		}

@@ -1,18 +1,16 @@
 "use strict";
 
 define(function () {
-	var log;
+	var log, time, timeEnd;
 
 	if (typeof(console) === "undefined" && typeof(window) !== "undefined") {
-		log = {
-			log : function (message) {
-				if (typeof(print) === "function") {
-					print(message);
-				}
-			}
-		};
+		log = function () {};
+		time = function () {};
+		timeEnd = function () {};
 	} else {
-		log = console.log;
+		log = function (message) { console.log(message); };
+		time = function (message) { console.time(message); };
+		timeEnd = function (message) { console.timeEnd(message); };
 	}
 
 	var assertEqual = function (actual, expected, place) {

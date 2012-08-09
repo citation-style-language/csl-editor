@@ -88,7 +88,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 					}
 				});
 
-				console.log("removing selected values from " + that.valueControls.length);
+				debug.log("removing selected values from " + that.valueControls.length);
 				// remove currently selected values from other controls options
 				$.each(that.valueControls, function (i, valueControl) {
 					if (that.conditions[i].attribute === attribute.key) {
@@ -97,7 +97,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 						// remove all except current val
 						$this.find('option[value!="' + $this.val() + '"]').remove();
 
-						//console.log("adding available options: " + availableOptions.length);
+						//debug.log("adding available options: " + availableOptions.length);
 
 						// add back the other available options
 						$.each(availableValues, function (i, option) {
