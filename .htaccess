@@ -1,0 +1,13 @@
+RewriteEngine on
+
+# Remove all trailing slashes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} (.*)/$
+RewriteRule ^(.*)/$ %1 [L,R=301]
+
+RewriteRule ^(.*)visualEditor$ $1demoSite/visualEditor/index.php [L]
+RewriteRule ^(.*)searchByExample$ $1demoSite/searchByExample/index.php [L]
+RewriteRule ^(.*)searchByName$ $1demoSite/searchByName/index.php [L]
+RewriteRule ^(.*)*about$ $1demoSite/about/index.php [L]
+RewriteRule ^(.*)*home$ $1demoSite/about/index.php [L]
+

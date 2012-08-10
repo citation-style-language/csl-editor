@@ -5,10 +5,10 @@
 
 	<title>Visual CSL Editor</title>
 
-	<script type="text/javascript" src="../../external/require.js"></script>
+	<script type="text/javascript" src="external/require.js"></script>
 	<script>
 		require.config({
-			baseUrl: "../..",
+			baseUrl: ".",
 			urlArgs : "bust=$GIT_COMMIT"
 		});
 		requirejs(['src/config'], function (config) {
@@ -16,14 +16,14 @@
 		});
 	</script>
 
-	<script type="text/javascript" src="../src/analytics.js"></script>
+	<script type="text/javascript" src="demoSite/src/analytics.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.22/themes/ui-lightness/jquery-ui.css">
-	<link rel="stylesheet" type="text/css" href="../../external/jstree/themes/default/style.css" />
+	<link rel="stylesheet" type="text/css" href="external/jstree/themes/default/style.css" />
 
-	<link rel="stylesheet" type="text/css" href="../../css/base.css?bust=$GIT_COMMIT" />
-	<link rel="stylesheet" type="text/css" href="../../css/dropdown.css?bust=$GIT_COMMIT" />
-	<link rel="stylesheet" type="text/css" href="../../css/visualEditor.css?bust=$GIT_COMMIT" />
+	<link rel="stylesheet" type="text/css" href="css/base.css?bust=$GIT_COMMIT" />
+	<link rel="stylesheet" type="text/css" href="css/dropdown.css?bust=$GIT_COMMIT" />
+	<link rel="stylesheet" type="text/css" href="css/visualEditor.css?bust=$GIT_COMMIT" />
 
 	<style>
 		#visualEditorContainer {

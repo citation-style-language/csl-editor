@@ -4,7 +4,7 @@
 "use strict";
 // javascript redirect
 // (this is not permentantly cached like 301 redirects)
-window.location.href = "../about";
+window.location.href = "about";
 </script>
 </head>
 <body>

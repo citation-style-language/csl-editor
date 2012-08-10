@@ -45,7 +45,7 @@ define(
 			nodePathView;
 
 		$(document).ready(function () {
-			if (!$.browser.webkit && !$.browser.mozilla) {
+			if (!$.browser.webkit && !$.browser.mozilla && !$.browser.chrome) {
 				$('body').html("<h2>Please use the latest version of " +
 					"Chrome or Firefox to view this page.</h2>").css({margin: 50});
 				return;
