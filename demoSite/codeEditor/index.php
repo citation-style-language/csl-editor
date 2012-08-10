@@ -5,7 +5,7 @@
 
 	<title>CSL Code Editor</title>
 
-	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+	<script src="http://code.jquery.com/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
 

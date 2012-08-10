@@ -1,6 +1,6 @@
 <html>
 <head>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
 	<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
 	<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
 	<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
