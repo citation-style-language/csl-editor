@@ -698,7 +698,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				} else if (cslData !== null && cslData !== "") {
 					callback();
 				} else {
-					styleURL = CSLEDIT_options.get("rootURL") + "/external/csl-styles/apa.csl";
+					styleURL = CSLEDIT_options.getUrl("external/csl-styles/apa.csl");
 					loadStyleFromURL(styleURL, callback);
 				}
 			},

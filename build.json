@@ -1,0 +1,26 @@
+({
+	baseUrl: ".",
+	mainConfigFile: "src/config.js",
+	optimize: "none",
+
+	appDir: ".",
+	dir: "../csl-build",
+	paths: {
+		jquery: "empty:"
+	},
+
+	modules: [
+		{
+			name: 'src/VisualEditor'
+		},
+		{
+			name: 'src/SearchByExample'
+		},
+		{
+			name: 'src/SearchByName'
+		},
+		{
+			name: 'src/CodeEditor'
+		}
+	]
+})

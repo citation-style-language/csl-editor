@@ -3,9 +3,6 @@
 define(['src/options', 'src/schema', 'jquery.qunit'], function (CSLEDIT_options, CSLEDIT_Schema) {
 	module("CSLEDIT_schema", {
 		setup : function () {
-			CSLEDIT_options.setUserOptions({
-				rootURL : "../.."
-			});
 			window.CSLEDIT_schema = new CSLEDIT_Schema();
 		},
 		teardown : function () {

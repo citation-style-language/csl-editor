@@ -6,7 +6,7 @@ define(['src/options', 'src/debug'], function (CSLEDIT_options, debug) {
 	var getJSONData = function (path) {
 		var url;
 		if (!(path in cache)) {
-			url = CSLEDIT_options.get('rootURL') + '/' + path;
+			url = CSLEDIT_options.getUrl(path);
 			$.ajax({
 				url : url,
 				dataType : "json",

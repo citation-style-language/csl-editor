@@ -3,11 +3,13 @@
 define(
 		[	'src/exampleCitations',
 			'src/exampleData',
+			'src/debug',
 			'jquery.ui'
 		],
 		function (
 			CSLEDIT_exampleCitations,
 			CSLEDIT_exampleData,
+			debug,
 			jquery_ui
 		) {
 	var dialog = $('<div/>'),

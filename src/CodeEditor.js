@@ -31,7 +31,7 @@ define([	'src/citationEngine',
 		CSLEDIT_options.setUserOptions(userOptions);
 
 		$.ajax({
-			url: CSLEDIT_options.get("rootURL") + "/html/codeEditor.html",
+			url: CSLEDIT_options.getUrl("html/codeEditor.html"),
 			success : function (data) {
 				containerElement.html(data);
 				init();

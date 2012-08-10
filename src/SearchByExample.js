@@ -37,7 +37,7 @@ define(
 		CSLEDIT_options.setUserOptions(userOptions);
 		mainContainer = $(mainContainer);
 		$.ajax({
-			url: CSLEDIT_options.get("rootURL") + "/html/searchByExample.html",
+			url: CSLEDIT_options.getUrl("html/searchByExample.html"),
 			success : function (data) {
 				mainContainer.html(data);
 				init();
@@ -302,7 +302,7 @@ define(
 
 			$('button#searchButton').css({
 				'background-image' :
-					"url(" + CSLEDIT_options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
+					"url(" + CSLEDIT_options.getUrl('external/famfamfam-icons/magnifier.png') + ')'
 			});
 
 			var userCitationInput = $("#userCitation").cleditor({height: 55})[0];

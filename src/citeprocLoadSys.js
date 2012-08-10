@@ -20,7 +20,7 @@ define([	'src/options',
 			localePath;
 
 		if (typeof(locale) === "undefined") {
-			localePath = CSLEDIT_options.get("rootURL") + "/external/locales/locales-" + lang + ".xml";
+			localePath = CSLEDIT_options.getUrl("external/locales/locales-" + lang + ".xml");
 
 			// try to fetch from server
 			$.ajax({

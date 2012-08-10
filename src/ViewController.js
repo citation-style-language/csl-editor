@@ -10,6 +10,7 @@ define(
 			'src/CslNode',
 			'src/Iterator',
 			'src/cslData',
+			'src/debug',
 			'jquery.scrollTo'
 		],
 		function (
@@ -22,6 +23,7 @@ define(
 			CSLEDIT_CslNode,
 			CSLEDIT_Iterator,
 			CSLEDIT_data,
+			debug,
 			jquery_scrollTo
 		) {
 	return function CSLEDIT_ViewController ( 

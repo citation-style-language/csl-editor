@@ -5,16 +5,21 @@
 
 	<title>CSL Code Editor</title>
 
+	<script type="text/javascript" src="../../external/require.js"></script>
 	<script>
-		var CSLEDIT_pageModule = 'codeEditorPage';
+		require.config({
+			baseUrl: "../..",
+			urlArgs : "bust=$GIT_COMMIT"
+		});
+		requirejs(['src/config'], function (config) {
+			require(['demoSite/src/codeEditorPage'], function () {});
+		});
 	</script>
-	<script type="text/javascript" data-main="../src/main.js" src="../../external/require.js"></script>
+	<script type="text/javascript" src="../src/analytics.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
 	<link rel="stylesheet" href="../../css/codemirror.css" />
-
-	<link rel="stylesheet" href="../../css/base.css" />
-	<script type="text/javascript" src="../src/analytics.js"></script>
+	<link rel="stylesheet" href="../../css/base.css?bust=$GIT_COMMIT" />
 
 <style type="text/css">
 #codeEditorContainer {

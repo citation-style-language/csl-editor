@@ -98,7 +98,7 @@ define([	'src/uiConfig',
 			// build the node types from the uiConfig data		
 			nodeTypes = {};
 			$.each(CSLEDIT_uiConfig.nodeIcons, function (type, icon) {
-				nodeTypes[type] = { icon : { image : CSLEDIT_options.get("rootURL") + icon } };
+				nodeTypes[type] = { icon : { image : CSLEDIT_options.getUrl(icon) } };
 			});
 
 			treeElement.jstree({

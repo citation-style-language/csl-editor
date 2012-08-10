@@ -12,8 +12,8 @@ CSLEDIT_testUtils.getStyles = function (maxNumberOfStyles) {
 	var styles = {};
 
 	$.each(CSLEDIT_exampleData.topStyles, function (i, style) {
-		var url = CSLEDIT_options.get("rootURL") + '/external/csl-styles/' +
-				style.replace(/^.*\//, "") + ".csl",
+		var url = CSLEDIT_options.getUrl('/external/csl-styles/' +
+				style.replace(/^.*\//, "") + ".csl"),
 			cslCode;
 
 		if (i >= maxNumberOfStyles) {
@@ -34,8 +34,8 @@ CSLEDIT_testUtils.getStyles = function (maxNumberOfStyles) {
 
 		if (typeof(cslCode) === "undefined") {
 			// try dependent style
-			url = CSLEDIT_options.get("rootURL") + '/external/csl-styles/dependent/' +
-				style.replace(/^.*\//, "") + ".csl";
+			url = CSLEDIT_options.getUrl('external/csl-styles/dependent/' +
+				style.replace(/^.*\//, "") + ".csl");
 	
 			$.ajax({
 				url : url,

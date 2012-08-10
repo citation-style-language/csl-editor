@@ -19,7 +19,7 @@ define(
 		CSLEDIT_options.setUserOptions(userOptions);
 		mainContainer = $(mainContainer);
 		$.ajax({
-			url: CSLEDIT_options.get("rootURL") + "/html/searchByName.html",
+			url: CSLEDIT_options.getUrl("html/searchByName.html"),
 			success : function (data) {
 				mainContainer.html(data);
 				init();
@@ -130,7 +130,7 @@ define(
 			// add icon
 			$('button#searchButton').css({
 				'background-image' :
-					"url(" + CSLEDIT_options.get('rootURL') + '/external/famfamfam-icons/magnifier.png)'
+					"url(" + CSLEDIT_options.getUrl('external/famfamfam-icons/magnifier.png') + ')'
 			});
 
 			// delayed search after typing

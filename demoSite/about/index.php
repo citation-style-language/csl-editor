@@ -4,18 +4,24 @@
 
 	<title>About</title>
 
-	<script type="text/javascript" data-main="../src/main.js" src="../../external/require.js"></script>
+	<script type="text/javascript" src="../../external/require.js"></script>
+	<script>
+		require.config({
+			baseUrl: "../.."
+		});
+		// load the appropriate page
+		requirejs(['src/config'], function () {});
+	</script>
+	<script type="text/javascript" src="../src/analytics.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
-	<link rel="stylesheet" href="../../css/base.css" />
+	<link rel="stylesheet" href="../../css/base.css?bust=$GIT_COMMIT" />
 <style>
 #mainContent {
 	padding-left: 20px;
 	padding-right: 20px;
 }
 </style>
-<!-- google analytics -->
-<script type="text/javascript" src="../src/analytics.js"></script>
 </head>
 <body id="about">
 <?php include '../html/navigation.html'; ?>

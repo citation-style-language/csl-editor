@@ -237,7 +237,7 @@ asyncTest("check invariance when deserializing then serializing repo styles", fu
 	var parseStyleList = function (styleList) {
 		var style = styleList.pop();
 
-		$.get(CSLEDIT_options.get("rootURL") + "/external/csl-styles/" + style, {}, function(cslCode) {
+		$.get(CSLEDIT_options.getUrl('/external/csl-styles/' + style), {}, function(cslCode) {
 			var domParser = new DOMParser,
 				xmlDom = domParser.parseFromString(cslCode, "application/xml"),
 				initialXmlElement = $('<div/>').append(xmlDom.documentElement),

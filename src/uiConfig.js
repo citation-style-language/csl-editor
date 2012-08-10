@@ -66,19 +66,19 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 
 	// for jstree
 	CSLEDIT_uiConfig.nodeIcons = {
-		"default" : "/external/famfamfam-icons/bullet_black.png",
-		"text" : "/external/famfamfam-icons/style.png",
-		"macro" : "/external/famfamfam-icons/brick.png",
-		"info" : "/external/famfamfam-icons/information.png",
-		"choose" : "/external/fugue-icons/question-white.png",
-		"date" : "/external/famfamfam-icons/date.png",
-		"style" : "/external/famfamfam-icons/cog.png",
-		"citation" : "/external/famfamfam-icons/page_white_edit.png",
-		"bibliography" : "/external/famfamfam-icons/text_list_numbers.png",
-		"sort" : "/external/fugue-icons/sort-alphabet.png",
-		"number" : "/external/fugue-icons/edit-number.png",
-		"layout" : "/external/famfamfam-icons/page_white_stack.png",
-		"group" : "/external/famfamfam-icons/page_white_stack.png"
+		"default" : "external/famfamfam-icons/bullet_black.png",
+		"text" : "external/famfamfam-icons/style.png",
+		"macro" : "external/famfamfam-icons/brick.png",
+		"info" : "external/famfamfam-icons/information.png",
+		"choose" : "external/fugue-icons/question-white.png",
+		"date" : "external/famfamfam-icons/date.png",
+		"style" : "external/famfamfam-icons/cog.png",
+		"citation" : "external/famfamfam-icons/page_white_edit.png",
+		"bibliography" : "external/famfamfam-icons/text_list_numbers.png",
+		"sort" : "external/fugue-icons/sort-alphabet.png",
+		"number" : "external/fugue-icons/edit-number.png",
+		"layout" : "external/famfamfam-icons/page_white_stack.png",
+		"group" : "external/famfamfam-icons/page_white_stack.png"
 	};
 
 	CSLEDIT_uiConfig.capitaliseFirstLetter = function (string) {
