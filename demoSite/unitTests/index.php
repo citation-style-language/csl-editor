@@ -1,12 +1,12 @@
 <html>
 <head>
-	<link rel="stylesheet" href="../../external/qunit/qunit-1.9.0.css" type="text/css" media="screen" />
-	<link type="text/css" rel="stylesheet" href="../../external/jstree/themes/default/style.css" />	
+	<link rel="stylesheet" href="external/qunit/qunit-1.9.0.css" type="text/css" media="screen" />
+	<link type="text/css" rel="stylesheet" href="external/jstree/themes/default/style.css" />
 
 	<script>
 		var CSLEDIT_pageModule = 'unitTestsPage';
 	</script>
-	<script type="text/javascript" data-main="../src/main.js" src="../../external/require.js"></script>
+	<script type="text/javascript" data-main="src/main.js" src="external/require.js"></script>
 
 <!--
 	<script type="text/javascript" src="../../src/controller.js"></script>

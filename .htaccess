@@ -5,9 +5,21 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} (.*)/$
 RewriteRule ^(.*)/$ %1 [L,R=301]
 
+RewriteCond %{REQUEST_URI} ^(.*)visualEditor$
 RewriteRule ^(.*)visualEditor$ $1demoSite/visualEditor/index.php [L]
+
+RewriteCond %{REQUEST_URI} ^(.*)searchByExample$
 RewriteRule ^(.*)searchByExample$ $1demoSite/searchByExample/index.php [L]
+
+RewriteCond %{REQUEST_URI} ^(.*)searchByName$
 RewriteRule ^(.*)searchByName$ $1demoSite/searchByName/index.php [L]
+
+RewriteCond %{REQUEST_URI} ^(.*)codeEditor$
+RewriteRule ^(.*)codeEditor$ $1demoSite/codeEditor/index.php [L]
+
+RewriteCond %{REQUEST_URI} ^(.*)about$
 RewriteRule ^(.*)*about$ $1demoSite/about/index.php [L]
+
+RewriteCond %{REQUEST_URI} ^(.*)home$
 RewriteRule ^(.*)*home$ $1demoSite/about/index.php [L]
 

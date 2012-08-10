@@ -6,13 +6,18 @@
 	<title>Visual CSL Editor</title>
 
 	<script type="text/javascript" src="external/require.js"></script>
+	<!--script type="text/javascript" src="src/VisualEditor-built.js"></script-->
+
 	<script>
 		require.config({
 			baseUrl: ".",
 			urlArgs : "bust=$GIT_COMMIT"
 		});
 		requirejs(['src/config'], function (config) {
-			require(['demoSite/src/visualEditorPage'], function () {});
+			// load jquery first due to plugin errors ('hoverIntent' was undefined)
+			require(['jquery'], function () {
+				require(['demoSite/src/visualEditorPage'], function () {});
+			});
 		});
 	</script>
 

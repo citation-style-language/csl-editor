@@ -1,6 +1,6 @@
 "use strict";
 
-define(['jquery', 'src/exampleData', 'src/getUrl'], function ($, CSLEDIT_exampleData, getUrlPlugin) {
+define(['jquery', 'src/exampleData', 'src/getUrl'], function (jq, CSLEDIT_exampleData, getUrlPlugin) {
 	var userOptions = {};
 	var defaultOptions = {
 			loadCSLName : "Load CSL",

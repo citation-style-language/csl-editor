@@ -8,7 +8,7 @@ define(
 			'src/exampleData'
 		],
 		function (
-			$,
+			jq,
 			CSLEDIT_storage,
 			CSLEDIT_options,
 			CSLEDIT_exampleData

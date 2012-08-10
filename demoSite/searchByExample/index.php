@@ -11,7 +11,10 @@
 			urlArgs : "bust=$GIT_COMMIT"
 		});
 		requirejs(['src/config'], function (config) {
-			require(['demoSite/src/searchByExamplePage'], function () {});
+			requirejs(['jquery'], function () {
+				// load jquery first due to plugin errors ('hoverIntent' was undefined)
+				require(['demoSite/src/searchByExamplePage'], function () {});
+			});
 		});
 	</script>
 	<script type="text/javascript" src="demoSite/src/analytics.js"></script>

@@ -4,9 +4,13 @@
 	optimize: "none",
 
 	appDir: ".",
-	dir: "../csl-build",
+/*	
+ *	TODO: try to get this working, we shouldn't include a different jquery on
+ *	      every page
+ */
 	paths: {
-		jquery: "empty:"
+		'jquery': 'empty:',
+		'jquery.ui': 'empty:'
 	},
 
 	modules: [
