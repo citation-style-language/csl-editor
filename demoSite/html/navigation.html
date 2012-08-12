@@ -59,11 +59,11 @@ body#about           a#nav_about {
 
 <nav id="navigationBar">
 	<ul>
-		<li><a href="about" id="nav_about">About</a></li>
-		<li><a href="searchByName" id="nav_searchByName">Search by name</a></li>
-		<li><a href="searchByExample" id="nav_searchByExample">Search by example</a></li>
-		<li><a href="visualEditor" id="nav_visualEditor">Visual editor</a></li>
-		<li><a href="codeEditor" id="nav_codeEditor">Code editor</a></li>
+		<li><a href="../about/" id="nav_about">About</a></li>
+		<li><a href="../searchByName/" id="nav_searchByName">Search by name</a></li>
+		<li><a href="../searchByExample/" id="nav_searchByExample">Search by example</a></li>
+		<li><a href="../visualEditor/" id="nav_visualEditor">Visual editor</a></li>
+		<li><a href="../codeEditor/" id="nav_codeEditor">Code editor</a></li>
 		<!-- disable search box for now
 		<li><input type="search" class="search-box" value="" placeholder="Search existing styles..."></li>
 		-->
@@ -151,7 +151,7 @@ require(['jquery', 'jquery.ui'], function () {
 				message = feedbackPanel.find('.message').val();
 				email = feedbackPanel.find('.email').val();
 
-				var url = "sendFeedback.php?subject=" + encodeURIComponent("CSL editor feedback") +
+				var url = "../demoSite/sendFeedback.php?subject=" + encodeURIComponent("CSL editor feedback") +
 					"&message=" + encodeURIComponent(message) +
 					"&email=" + encodeURIComponent(email);
 

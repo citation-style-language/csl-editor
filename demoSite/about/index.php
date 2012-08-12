@@ -4,18 +4,18 @@
 
 	<title>About</title>
 
-	<script type="text/javascript" src="external/require.js"></script>
+	<script type="text/javascript" src="../external/require.js"></script>
 	<script>
 		require.config({
-			baseUrl: "."
+			baseUrl: ".."
 		});
 		// load the appropriate page
 		requirejs(['src/config'], function () {});
 	</script>
-	<script type="text/javascript" src="demoSite/src/analytics.js"></script>
+	<script type="text/javascript" src="../demoSite/src/analytics.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/ui-lightness/jquery-ui.css">
-	<link rel="stylesheet" href="css/base.css?bust=$GIT_COMMIT" />
+	<link rel="stylesheet" href="../css/base.css?bust=$GIT_COMMIT" />
 <style>
 #mainContent {
 	padding-left: 20px;
@@ -44,19 +44,19 @@
 <h2>Getting Started</h2>
 <h3>Know the name of the style you want?</h3>
 <p>
-Search for a style with <a href="searchByName">Search by Name</a>.
+Search for a style with <a href="../searchByName/">Search by Name</a>.
 </p>
 
 <h3>Know what the style should look like?</h3>
 <p>
-Search for a style by its output with <a href="searchByExample">Search by Example</a>. If you don't find an <strong>exact</strong> match you will have the option to edit a similar style.
+Search for a style by its output with <a href="../searchByExample/">Search by Example</a>. If you don't find an <strong>exact</strong> match you will have the option to edit a similar style.
 </p>
 
 <h3>Want to create a new style from scratch?</h3>
-<p>This is <strong>not recommended</strong>. It's much easier to <a href="searchByExample">Search by Example</a> to find a similar style first, which you can then edit.
+<p>This is <strong>not recommended</strong>. It's much easier to <a href="../searchByExample/">Search by Example</a> to find a similar style first, which you can then edit.
 </p>
 <p>
-If you really want to start a new style, you can create a new one by clicking <strong>Style->New Style</strong> in the <a href="visualEditor/" >Visual Editor</a>.
+If you really want to start a new style, you can create a new one by clicking <strong>Style->New Style</strong> in the <a href="../visualEditor/" >Visual Editor</a>.
 
 <h2>Attributions</h2>
 <ul>
