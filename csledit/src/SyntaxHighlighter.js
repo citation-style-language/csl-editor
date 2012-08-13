@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/CslNode', 'src/cslData', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
+define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
 	return function (editorElement) {
 		var selectedCslId = -1,
 			hoveredNodeStack = [],

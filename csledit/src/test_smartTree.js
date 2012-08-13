@@ -1,13 +1,25 @@
 "use strict";
 
-define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_SmartTree, CSLEDIT_data) {
+define(
+		[	'src/SmartTree',
+			'src/Data',
+			'src/CslNode',
+			'src/debug',
+			'jquery.qunit'
+		],
+		function (
+			CSLEDIT_SmartTree,
+			CSLEDIT_Data,
+			CSLEDIT_CslNode,
+			debug
+		) {
 	module("CSLEDIT_SmartTree");
 
 	asyncTest("create style tree", function () {
 		var styleTree,
-			treeElement = $("<div></div>");
+			treeElement = $("<div></div>"),
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 		CSLEDIT_data.setCslCode (
 			"<style>" +
 			"<info><author></author></info>" +
@@ -16,7 +28,7 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			"<macro><text></text></macro>" +
 			"</style>");
 
-		styleTree = CSLEDIT_SmartTree(treeElement, ["style"]);
+		styleTree = CSLEDIT_SmartTree(treeElement, ["style"], { data: CSLEDIT_data });
 		styleTree.setCallbacks({
 			loaded : function () {
 				equal(treeElement.find('li[cslid=0]').length, 1); 
@@ -33,9 +45,8 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 	asyncTest("create macros tree", function () {
 		var cslData,
 			macroTree,
-			treeElement = $("<div></div>");
-
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
+			treeElement = $("<div></div>"),
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 
 		cslData = CSLEDIT_data.setCslCode (
 			"<style>" +
@@ -45,7 +56,7 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			"<macro><text></text></macro>" +
 			"</style>");
 
-		macroTree = CSLEDIT_SmartTree(treeElement, ["style/macro"]);
+		macroTree = CSLEDIT_SmartTree(treeElement, ["style/macro"], {data: CSLEDIT_data});
 		macroTree.setCallbacks({
 			loaded : function () {
 				equal(treeElement.find('li[cslid=0]').length, 0);
@@ -63,9 +74,8 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 	asyncTest("add/delete nodes", function () {
 		var cslData,
 			macroTree,
-			treeElement = $("<div></div>");
-
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
+			treeElement = $("<div></div>"),
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 
 		cslData = CSLEDIT_data.setCslCode (
 			"<style>" +
@@ -76,7 +86,7 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			"<macro><inLastMacro></inLastMacro></macro>" +
 			"</style>");
 
-		macroTree = CSLEDIT_SmartTree(treeElement, ["style/macro"]);
+		macroTree = CSLEDIT_SmartTree(treeElement, ["style/macro"], {data: CSLEDIT_data});
 		macroTree.setCallbacks({
 			loaded : function () {
 				equal(treeElement.find('li[cslid=0]').length, 0);
@@ -125,9 +135,9 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			citationTreeElement = $("<div></div>"),
 			bibliographyTreeElement = $("<div></div>"),
 			fakeViewController = new CSLEDIT_FakeViewController(),
-			description;
+			description,
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 		CSLEDIT_data.addViewController(fakeViewController);
 
 		cslData = CSLEDIT_data.setCslCode (
@@ -137,8 +147,8 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			"<bibliography><layout></layout></bibliography>" +
 			"</style>");
 
-		citationTree = CSLEDIT_SmartTree(citationTreeElement, ["style/citation/layout"]);
-		bibliographyTree = CSLEDIT_SmartTree(bibliographyTreeElement, ["style/bibliography/layout"]);
+		citationTree = CSLEDIT_SmartTree(citationTreeElement, ["style/citation/layout"], {data: CSLEDIT_data});
+		bibliographyTree = CSLEDIT_SmartTree(bibliographyTreeElement, ["style/bibliography/layout"], {data: CSLEDIT_data});
 		
 		fakeViewController.addView(citationTree);
 		fakeViewController.addView(bibliographyTree);
@@ -181,13 +191,12 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 	asyncTest("add node with children", function () {
 		var cslData,
 			macroTree,
-			treeElement = $("<div></div>");
-
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
+			treeElement = $("<div></div>"),
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 
 		cslData = CSLEDIT_data.setCslCode("<style><bibliography></bibliography></style>");
 
-		macroTree = CSLEDIT_SmartTree(treeElement, ["style"]);
+		macroTree = CSLEDIT_SmartTree(treeElement, ["style"], {data: CSLEDIT_data});
 		macroTree.setCallbacks({
 			loaded : function () {
 				equal(treeElement.find('li[cslid=0]').attr("rel"), "style");
@@ -245,9 +254,8 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			styleTreeElement = $("<div></div>"),
 			styleTree,
 			treesToLoad,
-			fakeViewController = new CSLEDIT_FakeViewController();
-
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", ["style/citation/layout"]);
+			fakeViewController = new CSLEDIT_FakeViewController(),
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", ["style/citation/layout"]);
 
 		var treeLoaded = function () {
 			treesToLoad--;
@@ -393,11 +401,11 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			'<macro name="macro2"><label></label></macro>' +
 			"</style>");
 
-		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], true);
+		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
 		styleTree.setVerifyAllChanges(true);
 		
-		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], true);
+		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
 		citationTree.setVerifyAllChanges(true);
 		
@@ -410,7 +418,6 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 
 		styleTree.createTree();
 		citationTree.createTree();
-
 	});
 
 	asyncTest("add to instance after macro", function () {
@@ -425,9 +432,8 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			treesToLoad,
 			newNode,
 			description,
-			fakeViewController = new CSLEDIT_FakeViewController();
-
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
+			fakeViewController = new CSLEDIT_FakeViewController(),
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 
 		var treeLoaded = function () {
 			treesToLoad--;
@@ -542,11 +548,11 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			'<citation><layout><text macro="macro1"></text></layout></citation>' +
 			"</style>");
 
-		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], true);
+		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
 		styleTree.setVerifyAllChanges(true);
 		
-		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], true);
+		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
 		citationTree.setVerifyAllChanges(true);
 		
@@ -574,9 +580,8 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			treesToLoad,
 			newNode,
 			description,
-			fakeViewController = new CSLEDIT_FakeViewController();
-
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
+			fakeViewController = new CSLEDIT_FakeViewController(),
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 
 		var treeLoaded = function () {
 			treesToLoad--;
@@ -703,11 +708,11 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			'<citation><layout><text macro="macro1"></text></layout></citation>' +
 			"</style>");
 
-		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], true);
+		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
 		styleTree.setVerifyAllChanges(true);
 		
-		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], true);
+		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
 		citationTree.setVerifyAllChanges(true);
 		
@@ -732,9 +737,8 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			treesToLoad,
 			newNode,
 			description,
-			fakeViewController = new CSLEDIT_FakeViewController();
-
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
+			fakeViewController = new CSLEDIT_FakeViewController(),
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 
 		var treeLoaded = function () {
 			treesToLoad--;
@@ -804,11 +808,11 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			'</layout></citation>' +
 			"</style>");
 
-		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], true);
+		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
 		styleTree.setVerifyAllChanges(true);
 		
-		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], true);
+		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
 		citationTree.setVerifyAllChanges(true);
 		
@@ -836,9 +840,8 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			treesToLoad,
 			newNode,
 			description,
-			fakeViewController = new CSLEDIT_FakeViewController();
-
-		CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
+			fakeViewController = new CSLEDIT_FakeViewController(),
+			CSLEDIT_data = CSLEDIT_Data("CSLEDIT_test_cslData", []);
 
 		var treeLoaded = function () {
 			treesToLoad--;
@@ -888,11 +891,11 @@ define(['src/SmartTree', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_Smart
 			'<citation><layout><text macro="macro1"></text></layout></citation>' +
 			"</style>");
 
-		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], true);
+		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
 		styleTree.setVerifyAllChanges(true);
 		
-		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], true);
+		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
 		citationTree.setVerifyAllChanges(true);
 		

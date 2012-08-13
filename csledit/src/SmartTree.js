@@ -3,7 +3,7 @@
 define([	'src/uiConfig',
 			'src/CslNode',
 			'src/options',
-			'src/cslData',
+			'src/dataInstance',
 			'src/debug',
 			'jquery.jstree-patched',
 			'jquery.hotkeys'
@@ -15,16 +15,22 @@ define([	'src/uiConfig',
 			debug,
 			jstree
 		) {
-	var CSLEDIT_SmartTree = function (treeElement, nodePaths, enableMacroLinks /*optional*/, leafNodes /*optional*/) {
+	var CSLEDIT_SmartTree = function (treeElement, nodePaths, options) {
 		var ranges,
 			macroLinks, // like symlinks for macros
 						// [{ instanceCslId: ?, macroRange: ?}]
 			callbacks,
 			verifyAllChanges = false, // does a complete check against CSLEDIT_data after
 									  // every change for debugging
-			oldSelectedNode = -1;
+			oldSelectedNode = -1,
+			leafNodes = [];
 
-		leafNodes = leafNodes || [];
+		if (options && options.data) {
+			CSLEDIT_data = options.data;
+		}
+		if (options && options.leafNodes) {
+			leafNodes = options.leafNodes;
+		}
 
 		var setCallbacks = function (_callbacks) {
 			callbacks = _callbacks;
@@ -193,7 +199,7 @@ define([	'src/uiConfig',
 				jsTreeData.attr.macrolink = macroLink;
 			}
 
-			if (enableMacroLinks) {
+			if (options && options.enableMacroLinks) {
 				// Add 'symlink' to Macro
 				macro = new CSLEDIT_CslNode(cslData).getAttr("macro");
 				if (cslData.name === "text" && macro !== "") {
@@ -426,7 +432,7 @@ define([	'src/uiConfig',
 				}
 			});
 
-			if (enableMacroLinks) {
+			if (options && options.enableMacroLinks) {
 				macroLinksAddNode(parentId, position, newNode, nodesAdded);
 			}
 
@@ -531,7 +537,7 @@ define([	'src/uiConfig',
 				}
 			});
 
-			if (enableMacroLinks) {
+			if (options && options.enableMacroLinks) {
 				macroLinksDeleteNode(id, nodesDeleted);
 			}
 
@@ -571,7 +577,7 @@ define([	'src/uiConfig',
 				return;
 			}
 
-			if (enableMacroLinks) {
+			if (options && options.enableMacroLinks) {
 				macroLinksUpdateNode(amendedNode.cslId, amendedNode);
 			}
 			

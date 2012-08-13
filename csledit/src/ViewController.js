@@ -9,7 +9,7 @@ define(
 			'src/notificationBar',
 			'src/CslNode',
 			'src/Iterator',
-			'src/cslData',
+			'src/dataInstance',
 			'src/debug',
 			'jquery.scrollTo'
 		],

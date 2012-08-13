@@ -1,4 +1,4 @@
-define(['src/SearchByExample', 'src/cslData'], function (CSLEDIT_SearchByExample, CSLEDIT_data) {
+define(['src/SearchByExample', 'src/dataInstance'], function (CSLEDIT_SearchByExample, CSLEDIT_data) {
 	$(document).ready(function () {
 		var searchByExample = new CSLEDIT_SearchByExample($('#mainContainer'), {
 			editStyle_func : function (styleURL) {

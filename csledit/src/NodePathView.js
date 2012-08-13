@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/cslData'], function (CSLEDIT_data) {
+define(['src/dataInstance'], function (CSLEDIT_data) {
 	var CSLEDIT_NodePathView = function (element, callbacks, syntaxHighlighter) {
 		this.element = 	element;
 		this.callbacks = callbacks;

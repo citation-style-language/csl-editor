@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/controller', 'src/cslData', 'jquery.qunit'], function (CSLEDIT_controller, CSLEDIT_data) {
+define(['src/controller', 'src/dataInstance', 'jquery.qunit'], function (CSLEDIT_controller, CSLEDIT_data) {
 	module("CSLEDIT_controller", {
 		setup : function () {
 			CSLEDIT_controller.clearHistory();

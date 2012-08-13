@@ -5,7 +5,7 @@
 //
 // ** Any action which affects the data should go through the controller **
 // 
-define(['src/cslData', 'src/debug'], function (CSLEDIT_data, debug) {
+define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 	var commands = [
 			"addNode",
 			"deleteNode",

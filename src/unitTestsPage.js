@@ -5,7 +5,7 @@ define(
 			'src/test_cslParser',
 			'src/test_Iterator',
 			'src/test_cslNode',
-			'src/test_cslData',
+			'src/test_Data',
 			'src/test_xmlUtility',
 			'src/test_smartTree',
 			'src/test_NodeWatcher'

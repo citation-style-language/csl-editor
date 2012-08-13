@@ -4,7 +4,7 @@ define([	'src/MultiPanel',
 			'src/MultiComboBox',
 			'src/uiConfig',
 			'src/CslNode',
-			'src/cslData',
+			'src/dataInstance',
 			'src/debug'
 		], function (
 			CSLEDIT_MultiPanel,

@@ -11,8 +11,7 @@
  * - Move node
  */
 
-define('CSLEDIT_Data',
-		[	'src/uiConfig', // TODO: remove this dependency
+define([	'src/uiConfig', // TODO: remove this dependency
 			'src/CslNode',
 			'src/Iterator',
 			'src/cslParser',
@@ -29,7 +28,7 @@ define('CSLEDIT_Data',
 			CSLEDIT_options,
 			debug
 		) {
-	function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
+	return function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
 		var viewControllers = [],
 			callbacksEnabled = true,
 			requiredNodes = _requiredNodes || [],
@@ -171,11 +170,11 @@ define('CSLEDIT_Data',
 			var cslData,
 				error;
 			
-			//try {
+			try {
 				cslData = CSLEDIT_cslParser.cslDataFromCslCode(cslCode);
-			//} catch (err) {
-			//	return { error: "Error parsing CSL Code" };
-			//}
+			} catch (err) {
+				return { error: "Error parsing CSL Code" };
+			}
 
 			// check if this is a dependent style:
 			$.each(getNodesFromPath('style/info/link', cslData), function (i, node) {
@@ -250,8 +249,8 @@ define('CSLEDIT_Data',
 				node = iter.next();
 				
 				if (index === id) {
-				debug.assertEqual(node.cslId, index);
-				debug.assert(position + nodesToDelete <= node.children.length);
+					debug.assertEqual(node.cslId, index);
+					debug.assert(position + nodesToDelete <= node.children.length);
 
 					if (typeof newNode === "undefined") {
 						node.children.splice(position, nodesToDelete);
@@ -357,7 +356,7 @@ define('CSLEDIT_Data',
 			}
 
 			rootNode = path.splice(0, 1);
-		debug.assertEqual(rootNode.length, 1);
+			debug.assertEqual(rootNode.length, 1);
 
 			// convert '*' wildcard to regexp equivalent
 			regExp = new RegExp("^" + rootNode[0].replace("*", ".*") + "$");
@@ -502,7 +501,7 @@ define('CSLEDIT_Data',
 					return addNode(id, getNode(id).children.length, newNode);
 				case "before":
 				case "after":
-				debug.assert(id !== 0);
+					debug.assert(id !== 0);
 					nodeInfo = getNodeAndParent(id);
 					positionIndex = indexOfChild(nodeInfo.node, nodeInfo.parent);
 					if (position === "after") {
@@ -510,7 +509,7 @@ define('CSLEDIT_Data',
 					}
 					return addNode(nodeInfo.parent.cslId, positionIndex, newNode);
 				case "default":
-				debug.assert(false, "position: " + position + " not recognised");
+					debug.assert(false, "position: " + position + " not recognised");
 				}
 			}
 			return newNode.cslId;
@@ -523,7 +522,7 @@ define('CSLEDIT_Data',
 				parentNode,
 				nodesDeleted;
 
-		debug.assert(id !== 0); // can't delete the style node
+			debug.assert(id !== 0); // can't delete the style node
 
 			index = 0;
 			while (iter.hasNext()) {
@@ -536,9 +535,9 @@ define('CSLEDIT_Data',
 				index++;
 			}
 
-		debug.assert(typeof parentNode !== "undefined");
+			debug.assert(typeof parentNode !== "undefined");
 			nodesDeleted = -spliceNode(parentNode.cslId, indexOfChild(node, parentNode), 1);
-		debug.assertEqual(node.cslId, id);
+			debug.assertEqual(node.cslId, id);
 			
 			emit("deleteNode", [id, nodesDeleted]);
 			
@@ -560,7 +559,7 @@ define('CSLEDIT_Data',
 			while (iter.hasNext()) {
 				node = iter.next();
 				if (index === id) {
-				debug.assertEqual(node.cslId, id);
+					debug.assertEqual(node.cslId, id);
 					
 					oldNode = new CSLEDIT_CslNode(node.name, node.attributes, [], node.cslId);
 					oldNode.textValue = node.textValue;
@@ -573,7 +572,7 @@ define('CSLEDIT_Data',
 				}
 				index++;
 			}
-		debug.assert(typeof node !== "undefined");
+			debug.assert(typeof node !== "undefined");
 			set(cslData);
 			emit("amendNode", [id, node]);
 			emit("formatCitations");
@@ -715,6 +714,5 @@ define('CSLEDIT_Data',
 			indexOfChild : indexOfChild,
 			macroDefinitionIdFromInstanceId : macroDefinitionIdFromInstanceId
 		};
-	}
-
+	};
 });

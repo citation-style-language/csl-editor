@@ -2,7 +2,7 @@
 
 define([	'src/citationEngine',
 			'src/options',
-			'src/cslData',
+			'src/dataInstance',
 			'external/codemirror',
 			'external/codemirrorXmlMode',
 			'jquery.layout'

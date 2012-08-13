@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/SearchByName', 'src/cslData'], function (CSLEDIT_SearchByName, CSLEDIT_data) {
+define(['src/SearchByName', 'src/dataInstance'], function (CSLEDIT_SearchByName, CSLEDIT_data) {
 	$(document).ready(function () {
 		var searchByName = new CSLEDIT_SearchByName($('#mainContainer'), {
 			editStyle_func : function (styleURL) {

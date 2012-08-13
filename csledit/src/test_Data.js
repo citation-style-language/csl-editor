@@ -1,10 +1,12 @@
 "use strict";
 
-define(['src/cslData', 'jquery.qunit'], function (CSLEDIT_data) {
+define(['src/Data', 'src/debug', 'jquery.qunit'], function (CSLEDIT_Data, debug) {
+	var CSLEDIT_data;
+
 	module("CSLEDIT_cslData", {
 		setup : function () {
-			// TODO: replace CSLEDIT_data with test version
-			//CSLEDIT_data = new CSLEDIT_Data("CSLEDIT_test_cslData", []);
+			// replace CSLEDIT_data with test version
+			CSLEDIT_data = new CSLEDIT_Data("CSLEDIT_test_cslData", []);
 		}
 	});
 

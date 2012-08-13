@@ -6,7 +6,7 @@
 
 define(
 		[	'src/NodeWatcher',
-			'src/cslData',
+			'src/dataInstance',
 			'src/debug'
 		],
 		function (

@@ -2,7 +2,7 @@
 
 define([	'src/storage',
 			'src/options',
-			'src/cslData',
+			'src/dataInstance',
 			'src/exampleCitations',
 			'src/diff',
 			'src/debug',
