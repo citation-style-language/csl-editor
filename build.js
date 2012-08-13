@@ -3,9 +3,8 @@
 	mainConfigFile: "csledit/src/config.js",
 	optimize: "none",
 
-	appDir: "..",
-
-	dir: "../../csl-build",
+	appDir: ".",
+	dir: "../csl",
 
 	fileExclusionRegExp: /^\.git$/,
 
