@@ -1,9 +1,14 @@
 ({
-	baseUrl: ".",
-	mainConfigFile: "src/config.js",
+	baseUrl: "csledit",
+	mainConfigFile: "csledit/src/config.js",
 	optimize: "none",
 
-	appDir: ".",
+	appDir: "..",
+
+	dir: "../../csl-build",
+
+	fileExclusionRegExp: /^\.git$/,
+
 /*	
  *	TODO: try to get this working, we shouldn't include a different jquery on
  *	      every page
