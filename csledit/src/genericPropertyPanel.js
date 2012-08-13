@@ -5,14 +5,16 @@ define([	'src/MultiPanel',
 			'src/uiConfig',
 			'src/CslNode',
 			'src/dataInstance',
-			'src/debug'
+			'src/debug',
+			'jquery.ui'
 		], function (
 			CSLEDIT_MultiPanel,
 			CSLEDIT_MultiComboBox,
 			CSLEDIT_uiConfig,
 			CSLEDIT_CslNode,
 			CSLEDIT_data,
-			debug
+			debug,
+			jquery_ui
 		) {
 	var onChangeTimeout,
 		multiInputs,
