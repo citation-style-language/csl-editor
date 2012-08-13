@@ -23,6 +23,7 @@ Sys.prototype.retrieveLocale = function(lang){
 			success : function (data) {
 				console.log("fetched locale data for " + lang);
 				locale[lang] = data;
+				thisLocale = data;
 			},
 			error : function (jqXHR, textStatus) {
 				console.log("ERROR retrieving locale data for " + lang);

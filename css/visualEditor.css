@@ -360,7 +360,7 @@ button.icon {
 	padding: 5px;
 }
 #addNodeDialog button {
-	width: 100%;
+	width: 90px;
 }
 
 #elementProperties fieldset {

@@ -2,7 +2,7 @@
 
 var CSLEDIT = CSLEDIT || {};
 
-CSLEDIT.cslParser = (function() {
+CSLEDIT.cslParser = (function () {
 	// Private functions:
 	var jsonNodeFromXml = function (node, nodeIndex) {
 		var children = [],
@@ -23,7 +23,7 @@ CSLEDIT.cslParser = (function() {
 				children.push(jsonNodeFromXml(node.childNodes[index], nodeIndex));
 			} else {
 				if (childNode.nodeType === TEXT_NODE && typeof childNode.data !== "undefined" && 
-						childNode.data.trim() != "") {
+						childNode.data.trim() !== "") {
 					textValue = childNode.data;
 				}
 			}
@@ -92,7 +92,7 @@ CSLEDIT.cslParser = (function() {
 			innerString;
 
 		if (jsonData.attributes.length > 0) {
-		  	for (index = 0; index < jsonData.attributes.length; index++) {
+			for (index = 0; index < jsonData.attributes.length; index++) {
 				if (jsonData.attributes[index].enabled) {
 					// TODO: the key probably shouldn't have characters needing escaping anyway,
 					//       should not allow to input them in the first place
@@ -142,7 +142,7 @@ CSLEDIT.cslParser = (function() {
 
 	// public:
 	return {
-		isCslValid : function(xmlData) {
+		isCslValid : function (xmlData) {
 			var parser = new DOMParser();
 			var xmlDoc = parser.parseFromString(xmlData, "application/xml");
 
@@ -156,13 +156,13 @@ CSLEDIT.cslParser = (function() {
 			var parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(xmlData, "application/xml"),
 				errors;
-			errors = xmlDoc.getElementsByTagName( 'parsererror' );
+			errors = xmlDoc.getElementsByTagName('parsererror');
 			assertEqual(errors.length, 0, "xml parser error");
 
 			var styleNode = xmlDoc.childNodes[0];
 			assertEqual(styleNode.localName, "style", "Invalid style - no style node");
 
-			var jsonData = jsonNodeFromXml(styleNode, { index: 0 } );
+			var jsonData = jsonNodeFromXml(styleNode, { index: 0 });
 		
 			return jsonData;
 		},
@@ -178,7 +178,7 @@ CSLEDIT.cslParser = (function() {
 				lines = cslXml.split("\n");
 
 				// comment needs to go on line no. 3, after the style node
-				lines.splice(2,0,"<!-- " + comment + " -->");
+				lines.splice(2, 0, "<!-- " + comment + " -->");
 
 				cslXml = lines.join("\n");
 			}

@@ -107,9 +107,9 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 
 					thisMatchQuality = 0;
 					if (citationMatchQuality > tolerance) {
-					   thisMatchQuality += citationMatchQuality;
+						thisMatchQuality += citationMatchQuality;
 					}
-			 		if (bibliographyMatchQuality > tolerance) {
+					if (bibliographyMatchQuality > tolerance) {
 						thisMatchQuality += bibliographyMatchQuality;
 					}
 
@@ -133,16 +133,16 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 				}
 			}
 		}
-		matchQualities.sort(function (a, b) {return b.matchQuality - a.matchQuality});
+		matchQualities.sort(function (a, b) {return b.matchQuality - a.matchQuality; });
 
 		// top results
-		for (index=0; index < Math.min(5, matchQualities.length); index++) {
+		for (index = 0; index < Math.min(5, matchQualities.length); index++) {
 			result.push({
-					styleId : matchQualities[index].styleId,
-					masterId : matchQualities[index].styleId,
-					userCitation : userCitation,
-					userBibliography : userBibliography,
-					matchQuality : Math.min(1, matchQualities[index].matchQuality)
+				styleId : matchQualities[index].styleId,
+				masterId : matchQualities[index].styleId,
+				userCitation : userCitation,
+				userBibliography : userBibliography,
+				matchQuality : Math.min(1, matchQualities[index].matchQuality)
 			});
 		}
 		
@@ -200,7 +200,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			});
 		});
 
-		rows.sort(function (a,b) {return a.order - b.order;});
+		rows.sort(function (a, b) {return a.order - b.order; });
 
 		$.each(rows, function (i, row) {
 			table.append(row.html);
@@ -247,7 +247,7 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 			userBibliographies[exampleIndex] = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
 		}
 
-		exampleIndex = (newExampleIndex+length)%length;
+		exampleIndex = (newExampleIndex + length) % length;
 
 		formatExampleDocument();
 		clearResults();
@@ -258,8 +258,8 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 
 	var init = function () {
 		if (CSLEDIT.preGeneratedExampleCitations.exampleCitationsFromMasterId[defaultStyle].length !==
-			CSLEDIT.exampleData.jsonDocumentList.length) {
-				alert("Example citations need re-calculating on server");
+				CSLEDIT.exampleData.jsonDocumentList.length) {
+			alert("Example citations need re-calculating on server");
 		}
 
 		$("#inputTabs").tabs({
@@ -318,5 +318,5 @@ CSLEDIT.SearchByExample = function (mainContainer, userOptions) {
 		});
 
 		formChanged();
-	}
+	};
 };

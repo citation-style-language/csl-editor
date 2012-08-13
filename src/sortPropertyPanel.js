@@ -55,8 +55,8 @@ CSLEDIT.sortPropertyPanel = (function () {
 					toPosition = index - 1;
 					return false;
 				} else if (visibleFieldName(
-					getAttr("macro", nodeData.children[index+1].attributes),
-					getAttr("variable", nodeData.children[index+1].attributes)) ===
+					getAttr("macro", nodeData.children[index + 1].attributes),
+					getAttr("variable", nodeData.children[index + 1].attributes)) ===
 					visibleKey)
 				{
 					// The next data element matches, so this is an deletion,
@@ -157,14 +157,14 @@ CSLEDIT.sortPropertyPanel = (function () {
 
 	var onDelete = function () {
 		var listElements = list.find('li'),
-				childIndex,
-				cslId;
+			childIndex,
+			cslId;
 		
-			childIndex = listElements.index($(this).parent());
+		childIndex = listElements.index($(this).parent());
 
-			cslId = CSLEDIT.data.getNode(nodeData.cslId).children[childIndex].cslId;
-			listElements.eq(childIndex).remove();
-			executeCommand('deleteNode', [cslId]);
+		cslId = CSLEDIT.data.getNode(nodeData.cslId).children[childIndex].cslId;
+		listElements.eq(childIndex).remove();
+		executeCommand('deleteNode', [cslId]);
 	};
 
 	setupPanel = function (_panel, _nodeData, _executeCommand) {
@@ -185,12 +185,12 @@ CSLEDIT.sortPropertyPanel = (function () {
 		});
 
 		variables = [];
-		$.each(CSLEDIT.schema.choices("sort/key")[0].attributes.variable.values, function(i, variable) {
+		$.each(CSLEDIT.schema.choices("sort/key")[0].attributes.variable.values, function (i, variable) {
 			variables.push(variable.value);
 		});
 
 		macros = [];
-		$.each(CSLEDIT.data.getNodesFromPath("style/macro"), function(i, node) {
+		$.each(CSLEDIT.data.getNodesFromPath("style/macro"), function (i, node) {
 			assertEqual(node.attributes[0].key, "name");
 			macros.push(node.attributes[0].value);
 		});
@@ -208,7 +208,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 		sortKeyHtml += ' <button class="deleteSortKey">Delete</button>';
 		sortKeyHtml += '</li>';
 
-		$.each(nodeData.children, function(i, child) {
+		$.each(nodeData.children, function (i, child) {
 			var row = $(sortKeyHtml),
 				select,
 				macro,
@@ -245,12 +245,13 @@ CSLEDIT.sortPropertyPanel = (function () {
 
 			CSLEDIT.viewController.setSuppressSelectNode(true);
 			executeCommand('addNode', [nodeData.cslId, "last",
-				new CSLEDIT.CslNode('key', 
-					[{
+				new CSLEDIT.CslNode('key', [
+					{
 						key : "variable",
 						value : "author",
 						enabled : true
-					}])]);
+					}
+				])]);
 			CSLEDIT.viewController.setSuppressSelectNode(false);
 
 			nodeData = CSLEDIT.data.getNode(nodeData.cslId);
@@ -270,7 +271,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 
 			// TODO: only enable if sort keys contain a names element
 			select = $('<select class="names-min"></select>');
-			for(index = 0; index < 20; index++) {
+			for (index = 0; index < 20; index++) {
 				$('<option>' + index + '</option>').appendTo(select);
 			}
 			$('<label>Names-min: </label>').appendTo(panel);
@@ -278,7 +279,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 			panel.append(' ');
 
 			select = $('<select class="names-use-first"></select>');
-			for(index = 0; index < 20; index++) {
+			for (index = 0; index < 20; index++) {
 				$('<option>' + index + '</option>').appendTo(select);
 			}
 			$('<label>Names-use-first: </label>').appendTo(panel);
@@ -286,7 +287,7 @@ CSLEDIT.sortPropertyPanel = (function () {
 			panel.append(' ');
 			
 			select = $('<select class="names-use-last"></select>');
-			for(index = 0; index < 20; index++) {
+			for (index = 0; index < 20; index++) {
 				$('<option>' + index + '</option>').appendTo(select);
 			}
 			$('<label>Names-use-last: </label>').appendTo(panel);

@@ -53,6 +53,7 @@ pages = [
             "src/cslData.js",
             "src/schemaOptions.js",
             "src/schema.js",
+            "src/NodeWatcher.js",
 
             "src/citationEditor.js",
             "src/uiConfig.js",
@@ -102,7 +103,7 @@ pages = [
             "src/storage.js",
             "src/xmlUtility.js",
             "src/citationEngine.js",
-            "server/config.js",
+            "exampleCitationsGenerator/config.js",
             "generated/cslStyles.js",
             "generated/preGeneratedExampleCitations.js",
 
@@ -163,7 +164,9 @@ pages = [
             "src/smartTree.js",
             "src/test_smartTree.js",
             "src/editNodeButton.js",
-            "src/test_editNodeButton.js"
+            "src/test_editNodeButton.js",
+            "src/NodeWatcher.js",
+            "src/test_NodeWatcher.js"
         ]
     },
     {

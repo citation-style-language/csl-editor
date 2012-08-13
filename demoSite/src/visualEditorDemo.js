@@ -2,6 +2,8 @@
 
 var cslEditor;
 
+/*global CSLEDIT:true */
+
 // Use FileAPI to read files from local file system
 var loadCSL = function () {
 	var dialog = $('<div title="Load CSL Style">' + 
@@ -32,14 +34,13 @@ var saveCSL = function (cslCode) {
 		filename,
 		styleId = cslEditor.getStyleId();
 	
-	dialog.find('#refManagerInstructions').
-			load("../html/fileDialog.html", function () {
+	dialog.find('#refManagerInstructions').load("../html/fileDialog.html", function () {
 
 		if (!cslEditor.conformStyleToRepoConventions()) {
 			return;
 		}
 
-		filename = cslEditor.getStyleId().replace(/.*\//g, "").replace(/[\\/:"*?<>| ]+/g, "-") + '.csl';
+		filename = cslEditor.getStyleId().replace(/.*\//g, "").replace(/[\\\/:"*?<>| ]+/g, "-") + '.csl';
 
 		// add comment to start
 		cslCode = CSLEDIT.data.getCslCode("This style was edited with the Visual CSL Editor (" +
@@ -66,17 +67,17 @@ var saveCSL = function (cslCode) {
 					filename : filename,
 					data : cslCode,
 					transparent : true,
-					onComplete: function(){
+					onComplete: function () {
 						alert('Your CSL Style Has Been Saved!');
 						dialog.dialog('destroy');
 					},
-					onCancel: function(){ },
-					onError: function(){ alert('Error saving file.'); }
+					onCancel: function () { },
+					onError: function () { alert('Error saving file.'); }
 				});
 
 				// if it failed, show instructions to install flash player
 				if (saveButton.find('object').length === 0) {
-					dialog.find('#refManagerInstructions').css({display:"none"});
+					dialog.find('#refManagerInstructions').css({display: "none"});
 					dialog.find('#installFlash').html(
 						'<h2>Flash Player not found</h2><br/>' + 
 						'<h3>To save to disk, you need to:' +
@@ -85,7 +86,7 @@ var saveCSL = function (cslCode) {
 						'<li>Reload this page and try again</li>' + 
 						'</ul></h3>');
 				} else {
-					dialog.find('#refManagerInstructions').css({display:"block"});
+					dialog.find('#refManagerInstructions').css({display: "block"});
 					dialog.find('#installFlash').html('');
 				}
 			}
@@ -94,9 +95,9 @@ var saveCSL = function (cslCode) {
 };
 
 var initVisualEditorDemo = function (rootURL) {
-	$("document").ready( function () {
+	$("document").ready(function () {
 		window.onerror = function (err, url, line) {
-			var dialog = $('<div title="An Error Occurred"></div>').css({overflow:"auto"}),
+			var dialog = $('<div title="An Error Occurred"></div>').css({overflow: "auto"}),
 				errLines = err.split("\n"),
 				refreshPage = $('<button>Refresh Page</button>'),
 				resetButton = $('<button>Reset Everything</button>');

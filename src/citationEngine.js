@@ -91,7 +91,10 @@ CSLEDIT.citationEngine = (function () {
 				}
 
 				inLineCitations += citations[i][1];
-				inLineCitationArray.push(citations[i][1]);
+
+				if (citations[i][1] !== "") {
+					inLineCitationArray.push(citations[i][1]);
+				}
 			}
 		}
 		result.formattedCitations = inLineCitationArray;
@@ -156,8 +159,8 @@ CSLEDIT.citationEngine = (function () {
 			diffFormattedCitation,
 			diffFormattedBibliography,
 			cslData = CSLEDIT.data.get(),
-			citationNodeCslId = CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData)[0].cslId,
-			bibliographyNodeCslId = CSLEDIT.data.getNodesFromPath("style/bibliography/layout", cslData)[0].cslId;
+			citationNode = CSLEDIT.data.getNodesFromPath("style/citation/layout", cslData),
+			bibliographyNode = CSLEDIT.data.getNodesFromPath("style/bibliography/layout", cslData);
 
 		statusOut.html("<i>Re-formatting citations...</i>");
 	
@@ -171,12 +174,12 @@ CSLEDIT.citationEngine = (function () {
 		statusOut.html(formattedResult.statusMessage);
 
 		// add syntax highlighting at highest level
-		if (typeof citationNodeCslId !== "undefined") {
-			citationTagStart = '<p><span cslid="' + citationNodeCslId + '">';
-		    citationTagEnd = '</span></p>';
+		if (citationNode.length > 0) {
+			citationTagStart = '<p><span cslid="' + citationNode[0].cslId + '">';
+			citationTagEnd = '</span></p>';
 		}
-		if (typeof bibliographyNodeCslId !== "undefined") {
-			bibliographyTagStart = '<p><span cslid="' + bibliographyNodeCslId + '">';
+		if (bibliographyNode.length > 0) {
+			bibliographyTagStart = '<p><span cslid="' + bibliographyNode[0].cslId + '">';
 			bibliographyTagEnd = '</span></p>';
 		}
 

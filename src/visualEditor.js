@@ -8,21 +8,29 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		syntaxHighlighter,
 		nodePathView;
 
-	CSLEDIT.options.setUserOptions(userOptions);
+	$(document).ready(function () {
+		if (!$.browser.webkit && !$.browser.mozilla) {
+			$('body').html("<h2>Please use the latest version of " +
+				"Chrome or Firefox to view this page.</h2>").css({margin: 50});
+			return;
+		}
 
-	editorElement = $(editorElement);
+		CSLEDIT.options.setUserOptions(userOptions);
 
-	$.ajax({
-		url: CSLEDIT.options.get("rootURL") + "/html/visualEditor.html",
-		success : function (data) {
-			editorElement.html(data);
-			CSLEDIT.schema = CSLEDIT.Schema(CSLEDIT.schemaOptions);
-			CSLEDIT.schema.callWhenReady(init);
-		},
-		error : function (jaXHR, textStatus, errorThrown) {
-			alert("Couldn't fetch page: " + textStatus);
-		},
-		cache : false
+		editorElement = $(editorElement);
+
+		$.ajax({
+			url: CSLEDIT.options.get("rootURL") + "/html/visualEditor.html",
+			success : function (data) {
+				editorElement.html(data);
+				CSLEDIT.schema = CSLEDIT.Schema(CSLEDIT.schemaOptions);
+				CSLEDIT.schema.callWhenReady(init);
+			},
+			error : function (jaXHR, textStatus, errorThrown) {
+				alert("Couldn't fetch page: " + textStatus);
+			},
+			cache : false
+		});
 	});
 
 	var createTreeView = function () {
@@ -135,12 +143,16 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 			translatedParentName = translatedNodeInfo.parent.name;
 		}
 
-		possibleElements = {};
-		$.each(CSLEDIT.schema.childElements(translatedParentName + "/" + translatedNodeInfo.node.name),
-			function (element, quantifier) {
-				possibleElements[element] = quantifier;
-			}
-		);
+		possibleElements = CSLEDIT.viewController.selectedViewProperty("possibleChildren");
+		if (possibleElements === null) {
+			possibleElements = {};
+
+			$.each(CSLEDIT.schema.childElements(translatedParentName + "/" + translatedNodeInfo.node.name),
+				function (element, quantifier) {
+					possibleElements[element] = quantifier;
+				}
+			);
+		}
 
 		// hard-coded constraint for 'choose' node
 		// TODO: generalise this to more nodes, using the schema if not too difficult
@@ -167,12 +179,12 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 				nodeIcon = CSLEDIT.uiConfig.nodeIcons[element],
 				documentation = CSLEDIT.schema.documentation(
 					translatedNodeInfo.node.name + "/" + element),
-				row;
+				row,
+				displayName;
 
 			if (typeof nodeIcon !== "undefined") {
 				img = '<td><img src="' + CSLEDIT.options.get('rootURL') + nodeIcon + '"></img></td>';
 			}
-			var displayName;
 
 			displayName = 
 				CSLEDIT.uiConfig.displayNameFromNode(new CSLEDIT.CslNode(element));
@@ -332,16 +344,14 @@ CSLEDIT.VisualEditor = function (editorElement, userOptions) {
 		editorElement.find('#menuEditCitation2').click(function () {
 			CSLEDIT.citationEditor.editCitation(1);
 		});
+
+		editorElement.find('#menuEditCitation3').click(function () {
+			CSLEDIT.citationEditor.editCitation(2);
+		});
 	};
 
 	var init = function () {
 		var reloadingPage = false;
-
-		if (!$.browser.webkit && !$.browser.mozilla) {
-			$('body').html("<h2>Please use the latest version of " +
-				"Chrome or Firefox to view this page.</h2>").css({margin: 50});
-			return;
-		}
 
 		// create storage with callback funciton which gets called if inconsistencies
 		// are found between the localStorage data (shared between tabs) and this session

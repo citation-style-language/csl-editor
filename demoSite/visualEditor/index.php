@@ -40,6 +40,7 @@
 	<script type="text/javascript" src="../../src/cslData.js"></script>
 	<script type="text/javascript" src="../../src/schemaOptions.js"></script>
 	<script type="text/javascript" src="../../src/schema.js"></script>
+	<script type="text/javascript" src="../../src/NodeWatcher.js"></script>
 
 	<script type="text/javascript" src="../../src/citationEditor.js"></script>
 	<script type="text/javascript" src="../../src/syntaxHighlight.js"></script>

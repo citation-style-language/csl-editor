@@ -10,12 +10,36 @@ var CSLEDIT = CSLEDIT || {};
  * - Add node
  * - Delete node
  * - Amend node
+ * - Move node
  */
 
 CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
 	var viewControllers = [],
 		callbacksEnabled = true,
-		requiredNodes = _requiredNodes || [];
+		requiredNodes = _requiredNodes || [],
+		
+		// TODO: decide better place to put styleInfoOrder.
+		//       Maybe add this general functionality to the schema for
+		//       other nodes too and place the hard-coded list(s) in schemaOptions.
+		//
+		//       Currently only used when converting to/from CSL code, not as a
+		//       constraint while using the editor, due to difficulty of
+		//       implementation.
+		styleInfoOrder = [
+			"title",
+			"id",
+			'link rel="self"',
+			'link rel="template"',
+			'link rel="documentation"',
+			"author",
+			"contributor",
+			"category citation-format",
+			"category field",
+			"issn",
+			"summary",
+			"updated",
+			"rights"
+		];
 
 	var get = function () {
 		return CSLEDIT.storage.getItemJson(CSL_DATA);
@@ -53,6 +77,80 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 		return cslData;
 	};
 
+	var nodeMatch = function (nodeData, nodeString) {
+		var nodeInfo = nodeString.split(" "),
+			nodeName = nodeInfo[0],
+			attribute,
+			attributeName,
+			attributeValue,
+			cslNode = new CSLEDIT.CslNode(nodeData);
+
+		if (nodeInfo.length > 1) {
+			attribute = nodeInfo[1].split("=");
+			attributeName = attribute[0];
+			if (attribute.length > 1) {
+				attributeValue = attribute[1].replace(/"/g, "");
+			}
+		}
+
+		if (nodeName !== nodeData.name) {
+			return false;
+		}
+		
+		if (typeof(attributeName) !== "undefined" && !cslNode.hasAttr(attributeName)) {
+			return false;
+		}
+
+		if (typeof(attributeValue) !== "undefined" &&
+				cslNode.getAttr(attributeName) !== attributeValue) {
+			return false;
+		}
+
+		return true;
+	};
+
+	var reorderStyleInfoNode = function (cslData /*optional*/) {
+		var styleInfoNode;
+
+		cslData = cslData || get();
+
+		// re-order the style/info child nodes:
+		$.each(getNodesFromPath('style/info', cslData), function (i, infoNode) {
+			var iterator,
+				cslId = infoNode.cslId;
+
+			styleInfoNode = infoNode;
+
+			// re-order
+			infoNode.children.sort(function (a, b) {
+				var orderA = styleInfoOrder.length,
+					orderB = styleInfoOrder.length;
+
+				$.each(styleInfoOrder, function (i, nodeString) {
+					if (nodeMatch(a, nodeString)) {
+						orderA = i;
+					}
+					if (nodeMatch(b, nodeString)) {
+						orderB = i;
+					}
+				});
+
+				return orderA - orderB;
+			});
+
+			// set cslIds
+			iterator = new CSLEDIT.Iterator(infoNode);
+			while (iterator.hasNext()) {
+				iterator.next().cslId = cslId;
+				cslId++;
+			}
+
+			return false;
+		});
+
+		return styleInfoNode;
+	};
+
 	var setCslCode = function (cslCode) {
 		var cslData,
 			error;
@@ -83,6 +181,8 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 			});
 		}
 
+		reorderStyleInfoNode(cslData);
+
 		if (error) {
 			return { error: error };
 		}
@@ -110,7 +210,9 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 	};
 
 	var getCslCode = function (comment /* optional */) {
-		return CSLEDIT.cslParser.cslCodeFromCslData(get(), comment);
+		var cslData = get();
+		reorderStyleInfoNode(cslData);
+		return CSLEDIT.cslParser.cslCodeFromCslData(cslData, comment);
 	};
 
 	var spliceNode = function (id, position, nodesToDelete, newNode) {
@@ -601,9 +703,12 @@ CSLEDIT.Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*opt
 
 // global instance, this is overwritten for unit tests
 CSLEDIT.data = CSLEDIT.Data("CSLEDIT.cslData", [
+		"style",
 		"style/info",
 		"style/info/title",
 		"style/info/id",
+		"style/citation",
 		"style/citation/layout",
+		"style/bibliography",
 		"style/bibliography/layout"
 	], true);

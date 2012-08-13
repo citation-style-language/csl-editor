@@ -1,72 +1,40 @@
 "use strict";
 
-CSLEDIT = CSLEDIT || {};
+var CSLEDIT = CSLEDIT || {};
 
-// TODO: share code with SmartTreeHeading.js
+// Uses a NodeWatcher to monitor the style/info/title node for changes
+// and updates the titlebar
 
 CSLEDIT.Titlebar = function (element) {
-	this.element = element;
+	var that = this;
 
-	this.titleNode = this.getTitleNode();
-	if (this.titleNode === null) {
-		this.cslId = -1;
-	} else {
-		this.cslId = this.titleNode.cslId;
-	}
-	this.element.html('<h3><span cslid=' + this.cslId + '/></h3>').css({cursor: "default"});
-	this.updateTitle();
+	this.element = element;
+	this.element.html('<h3><span cslid="-1"/></h3>').css({cursor: "default"});
+
+	this.nodeWatcher = new CSLEDIT.NodeWatcher("style/info/title", CSLEDIT.data, function (nodeData) {
+		that.updateTitle(nodeData);
+	});
+	
+	this.addNode = function (id, position, nodeData, numNodes) {
+		that.nodeWatcher.addNode(id, position, nodeData, numNodes);
+	};
+	this.deleteNode = function (id, numNodes) {
+		that.nodeWatcher.deleteNode(id, numNodes);
+	};
+	this.amendNode = function (id, nodeData) {
+		that.nodeWatcher.amendNode(id, nodeData);
+	};
 };
 
-CSLEDIT.Titlebar.prototype.updateTitle = function () {
+CSLEDIT.Titlebar.prototype.updateTitle = function (nodeData) {
 	var title;
-
-	if (this.titleNode === null) {
+	if (nodeData === null) {
 		title = "No title";
 	} else {
-		title = this.titleNode.textValue;
+		title = nodeData.textValue;
 	}
-	this.element.find('span[cslid]').html(title).attr('cslid', this.cslId);
+	this.element.find('span[cslid]').html(title).attr('cslid', nodeData.cslId);
+
+	console.log("updated title to " + this.element.html());
 };
 
-CSLEDIT.Titlebar.prototype.getTitleNode = function () {
-	var titleNode;
-
-	titleNode = CSLEDIT.data.getNodesFromPath("style/info/title");
-
-	if (titleNode.length > 0) {
-		assert (titleNode.length < 2);
-		return titleNode[0];
-	}
-	
-	return null;
-};
-
-CSLEDIT.Titlebar.prototype.addNode = function (id, position, node, numAdded) {
-	if (this.cslId > -1) {
-		// TODO: this looks dodgy, shouldn't this cslId be shifted
-		//       if a node is added before it
-		return;
-	}
-
-	this.titleNode = this.getTitleNode();
-	if (this.titleNode !== null) {
-		this.cslId = this.titleNode.cslId;
-		this.updateTitle();
-	}
-};
-
-CSLEDIT.Titlebar.prototype.deleteNode = function (id, numDeleted) {
-	this.titleNode = this.getTitleNode();
-	this.updateTitle();
-
-	if (this.titleNode === null) {
-		this.cslId = -1;
-	}
-};
-
-CSLEDIT.Titlebar.prototype.amendNode = function (id, amendedNode) {
-	if (id === this.cslId) {
-		this.titleNode = amendedNode;
-		this.updateTitle();
-	}
-};

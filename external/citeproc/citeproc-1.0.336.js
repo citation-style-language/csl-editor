@@ -81,7 +81,7 @@ var CSL = {
         "chapter": "ch.",
         "Chapter": "Ch.",
         "subchapter": "subch.",
-        "page": "p.",
+        //"page": "p.",
         "page": "pp.",
         "paragraph": "para.",
         "subparagraph": "subpara.",

@@ -12,6 +12,8 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 - Java runtime (doesn't have to be on server, just for pre-processing)
 
+- Node.js 0.8.4 or later
+
 - Mail server (for sending feedback emails)
 
 - Python 2.6.5 or 2.7

@@ -35,7 +35,7 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 
 		if (searchQuery.length === 0) {
 			$("#message").html("<h2>Popular Styles</h2>");
-			for (index=0; index<20; index++) {
+			for (index = 0; index < 20; index++) {
 				styleId = CSLEDIT.exampleData.topStyles[index];
 				result.push({
 					styleId : styleId,
@@ -124,18 +124,18 @@ CSLEDIT.SearchByName = function (mainContainer, userOptions) {
 		});
 
 		// delayed search after typing
-		$("#styleNameQuery").on("input", function(){
+		$("#styleNameQuery").on("input", function () {
 			clearTimeout(nameSearchTimeout);
 			nameSearchTimeout = setTimeout(searchForStyleName, 500);
 		});
 			
 		// instant search after typing enter
-		$("#styleNameQuery").on("change", function(){
+		$("#styleNameQuery").on("change", function () {
 			searchForStyleName();
 		});
 
 		// instant search after clicking button
-		$("#searchButton").on("click", function(){
+		$("#searchButton").on("click", function () {
 			searchForStyleName();
 		});
 

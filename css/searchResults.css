@@ -21,7 +21,7 @@
 #searchResults td.closeness {
 	width : 160px;
 	font-weight: bold;
-	color: green;
+	color: #0D3785;
 }
 #searchResults td {
 	padding : 5px 5px;
@@ -30,6 +30,7 @@
 	background-color : #eaf8ff;
 	border: 1px solid #99DEFD;
 }
+
 #searchResults table.featuredStyle td {
 	vertical-align: top;
 }

@@ -109,7 +109,7 @@ CSLEDIT.Schema = function (
 
 		// replace all def: references in node names with the appropriate child nodes, expanding
 		// out the as neccessary
-		defRegExp = new RegExp("def:([\\w-\.]+)/(.*)$");
+		defRegExp = new RegExp("def:([\\w-\\.]+)/(.*)$");
 
 		for (node in nodeProperties) {
 			originalNodes.push(node);
@@ -286,9 +286,9 @@ CSLEDIT.Schema = function (
 		});
 
 		// remove any choices with no attributes
-		for (index=0; index<node.choices.length; index++) {
+		for (index = 0; index < node.choices.length; index++) {
 			if (Object.keys(node.choices[index].attributes).length === 0) {
-				node.choices.splice(index,1);
+				node.choices.splice(index, 1);
 				index--;
 			}
 		}
@@ -296,7 +296,7 @@ CSLEDIT.Schema = function (
 
 	var arrayContains = function (array, element, equalityFunction) {
 		if (typeof equalityFunction === "undefined") {
-			equalityFunction = (function (a, b) {return a === b;});
+			equalityFunction = function (a, b) {return a === b; };
 		}
 
 		var index;
@@ -314,7 +314,7 @@ CSLEDIT.Schema = function (
 			return;
 		}
 
-		$.each(arrayB, function(i, eleB) {
+		$.each(arrayB, function (i, eleB) {
 			if (!arrayContains(arrayA, eleB, equalityFunction)) {
 				arrayA.push(eleB);
 			}
@@ -524,7 +524,7 @@ CSLEDIT.Schema = function (
 					
 						if (thisNodeProperties.attributes[attributeName].values.length > 0) {
 							thisNodeProperties.attributes[attributeName].values.splice(
-									0,0,schemaOptions.defaultDefaultAttribute);
+									0, 0, schemaOptions.defaultDefaultAttribute);
 						}
 					}
 				}
@@ -657,7 +657,7 @@ CSLEDIT.Schema = function (
 			return null;
 		},
 		grammar : function (node) {
-			return parseChildren(node);;
+			return parseChildren(node);
 		},
 		param : function (node) {
 			return null;
@@ -719,12 +719,12 @@ CSLEDIT.Schema = function (
 				}
 			},
 			error : function () {
-				throw new Error("Couldn't fetch main schema from: " + url);
+				throw new Error("Couldn't fetch main schema from: " + mainSchemaURL);
 			},
 			dataType : "text"
 		});
 
-		$.each(includeSchemaURLs, function(i, url) {
+		$.each(includeSchemaURLs, function (i, url) {
 			$.ajax({
 				url : url,
 				success : function (data) {

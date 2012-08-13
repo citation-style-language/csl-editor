@@ -1,11 +1,11 @@
 "use strict";
 
-if (typeof(console) === "undefined") {
-	var console = {
+if (typeof(console) === "undefined" && typeof(window) !== "undefined") {
+	window.console = {
 		log : function (message) {
 			if (typeof(print) === "function") {
-		  		print(message);
-			}		
+				print(message);
+			}
 		}
 	};
 }
