@@ -11,7 +11,8 @@
  * - Move node
  */
 
-define([	'src/uiConfig', // TODO: remove this dependency
+define('CSLEDIT_Data',
+		[	'src/uiConfig', // TODO: remove this dependency
 			'src/CslNode',
 			'src/Iterator',
 			'src/cslParser',
@@ -28,7 +29,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			CSLEDIT_options,
 			debug
 		) {
-	var CSLEDIT_Data = function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
+	function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
 		var viewControllers = [],
 			callbacksEnabled = true,
 			requiredNodes = _requiredNodes || [],
@@ -714,19 +715,6 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			indexOfChild : indexOfChild,
 			macroDefinitionIdFromInstanceId : macroDefinitionIdFromInstanceId
 		};
-	};
+	}
 
-	// global instance, this is overwritten for unit tests
-	var CSLEDIT_data = new CSLEDIT_Data("CSLEDIT_cslData", [
-			"style",
-			"style/info",
-			"style/info/title",
-			"style/info/id",
-			"style/citation",
-			"style/citation/layout",
-			"style/bibliography",
-			"style/bibliography/layout"
-		], true);
-	
-	return CSLEDIT_data;
 });
