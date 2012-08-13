@@ -1,7 +1,9 @@
-div#styleNameInput {
-	padding: 20px 50px 10px;
+#styleNameInput {
+	padding: 20px 30px 10px;
+	background: #eeeeee;
+	border-bottom: 1px solid #c3c3c3;
 }
-div#styleNameInput input[type=search] {
+#styleNameInput input[type=search] {
 	border: 1px solid #999;
 	border-radius: 50px;
 	font-size: 16px;
@@ -10,20 +12,25 @@ div#styleNameInput input[type=search] {
 	padding: 3px 10px;
 	line-height: 18px;
 }
-div#styleNameInput label {
+#styleNameInput label {
 	font-size: 18px;
 	font-family: Arial, Helvetica;
 }
-div#mainContainer{
-	width: 800px;
-}
-div#searchResults {
+
+#searchResults {
 	padding: 0 30px 0 30px;
 	width: 600px;
 }
+
 .faint
 {
-	color: #888888;
+	margin: 0;
+	margin-bottom: 1em;
+	margin-left: 0;
+	font-size: 11px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #6d8fa2;
 }
 #styleFormatInputControls
 {

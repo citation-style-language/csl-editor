@@ -1,6 +1,6 @@
 #mainContainer {
 	position: relative;
-	padding: 8px;
+	padding: 20px;
 /*	width: 800px;*/
 }
 input, textarea
@@ -34,15 +34,20 @@ h1
 	top: 30;
 	bottom: 0;
 
-	background-color: #F5F5DC;
-	border-style: solid;
-	border-width: 2px;
+	background-color: #eeeeee;
+	border: 1px solid #c3c3c3;
 
 	overflow: auto;
 }
+
 #exampleDocument table {
 	font-size: 13px;
 }
+
+#exampleDocument table td {
+	padding: 5px;
+}
+
 #nextExample {
 	position: relative;
 	left: 20px;
@@ -53,7 +58,13 @@ h1
 }
 .faint
 {
-	color: #888888;
+	margin: 0;
+	margin-bottom: 1em;
+	margin-left: 0;
+	font-size: 11px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #6d8fa2;
 }
 #styleFormatInputControls
 {

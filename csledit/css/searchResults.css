@@ -1,12 +1,18 @@
 #searchResults {
+	font-size: 13px;
 	position : absolute;
 	width : 800px;
 }
 
 #searchResults table {
 	width : 100%;
+	border: 1px solid #DDDDDD;
+	border-radius: 4px;
+	font-size: 13px;
+}
 
-	font-size : 14px;
+.style-title {
+	font-size: 16px;
 }
 
 #searchResults td {
@@ -17,20 +23,38 @@
 	font-weight: bold;
 	color: #0D3785;
 }
-#searchResults td.match {
-	background-color : #eeeeee;
-	padding : 10px;
+#searchResults td {
+	padding : 5px 5px;
 }
 #searchResults table.featuredStyle {
-	background-color : #BEEBFF;
+	background-color : #eaf8ff;
 	border: 1px solid #99DEFD;
 }
-#searchResults table.featuredStyle td.match {
-	background-color : #99DEFD;
+
+#searchResults table.featuredStyle td {
+	vertical-align: top;
 }
 
 #searchResults span.featuredStyle {
+	padding: 3px 5px;
+	display: block;
+	color: #fff;
 	float : right;
-	margin-right : 5px;
-	font-style : italic;
+	margin-left: 5px;
+	font-size: 11px;
+	line-height: 11px;
+	font-weight: bold;
+	text-transform: uppercase;
+	background: #00aeff;
+	border-radius: 3px;
+}
+
+.editStyle {
+
+}
+
+.help {
+	color: #999;
+	font-size: 11px;
+	padding: 3px 12px;
 }

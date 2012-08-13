@@ -77,27 +77,31 @@ define(
 			featuredStyleText = '';
 			if (CSLEDIT_exampleData.topStyles.indexOf(style.styleId) !== -1) {
 				featuredStyleClass = ' class="featuredStyle" ';
-				featuredStyleText = '<span class=featuredStyle>Popular Style<span>';
+				featuredStyleText = '<span class="featuredStyle">Popular Style</span>';
 			}
 
 			outputList.push(
 				'<table' + featuredStyleClass + '>' +
-				'<tr><td colspan=3><a href="' + style.styleId + '">' +
-				CSLEDIT_cslStyles.styles().styleTitleFromId[style.styleId] + "</a>" +
-				masterStyleSuffix + featuredStyleText + '</td></tr>' +
+				'<tr><td colspan=3>'+ featuredStyleText +'<a class="style-title" href="' + style.styleId + '">' +
+				CSLEDIT.cslStyles.styleTitleFromId[style.styleId] + "</a>"
+				+ masterStyleSuffix + '</td></tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
 				'<td class=match>' +
 				citation + '</td>' + citationCloseness + '</tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Bibliography</span></td>' +
 				'<td class=match>' +
 				bibliography + '</td>' + bibliographyCloseness + "</tr>" +
-				'<tr><td></td><td><button class="editStyle" styleURL="' +
-				style.styleId + '">Edit style</a></td></tr>' +
+				'<tr><td></td><td><button class="editStyle" styleURL="' + style.styleId + '">Edit style</button><button class="editStyle" styleURL="' + style.styleId + '">View CSL</button><button class="editStyle" styleURL="' + style.styleId + '">Use this style</button></td></tr>' +
 				'</table>');
 		}
 		
 		if (outputList.length === 0) {
 			outputNode.html('<p>No results found</p>');
+		} else if (outputList.length === 0 && searchQuery.length === 0) {
+			outputNode.html(
+				'<p>Popular styles:</p>' +
+					outputList.join("<p><p>")
+			);
 		} else {
 			outputNode.html(
 				'<p>Displaying ' + outputList.length + ' results:</p>' +
