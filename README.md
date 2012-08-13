@@ -18,23 +18,29 @@ Play with it here: [Citation Style Editor](http://steveridout.com/csl/)
 
 - Python 2.6.5 or 2.7
 
-### To Deploy Website
+### To Setup Development Version
 
-- Checkout repo into a directory *outside* of the root path you want the webapp installed to.
+- Run `git clone https://github.com/citation-style-editor/csl-editor.git csl-source` to checkout repo into the directory `csl-source` within your `public\_html` (or equivalent) directory
 
 - Run `git submodule update --init` from checked out directory to fetch submodules
 
 - Run configure.sh
 
-(For developing with the original js source files, you can now point your browser to /csl-source/demoSite/)
+- Point your browser to `$BASE_URL/csl-source/unitTests/` to run the unit tests
 
-- Create the file feedbackEmail.txt within the demoSite directory containing a single email address that you want the feedback widget to send to
+- Point your browser to `$BASE_URL/csl-source/` to view the site
 
-- Run `python deploy.py $SERVER_ROOT_DIRECTORY/$SITE_PATH`, where `$SERVER_ROOT_DIRECTORY` is typically `public_html` and `$SITE_PATH` can be an empty string to install to the domain root or a subdirectory of the server root directory. Note that anything in the directory `$SERVER_ROOT_DIRECTORY/$SITE_PATH` will be removed!
+### To Deploy
 
-- Point your browser to `DOMAIN_NAME/$SITE_PATH` to access the site (uses concatenated js files and renamed css files)
+- Follow above steps for Development version (but if you want to deploy directly to `public_html` you'll have to checkout to a `csl-source/` somewhere else, since the deploy directory will be erased by the deploy script)
 
-- Point your browser to either /csl-source/demoSite/test or /csl/test/ to run unit tests
+- Within `csl-source/` create the file feedbackEmail.txt within containing a single email address that you want the feedback widget to send to
+
+- Run `./deploy.sh $DEPLOY_PATH`, where `$DEPLOY_PATH` is the path you wish to deploy to. **All current contents of `$DEPLOY_PATH` will be removed!**
+
+- Point your browser to `$BASE_URL/unitTests/` to run the unit tests
+
+- Point your browser to `$BASE_URL/` to view the deployed site
 
 ### To Embed Website in a web pane in your reference manager
 
@@ -109,7 +115,6 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 - [citeproc-js](http://gsl-nagoya-u.net/http/pub/citeproc-doc.html) (Citation formatting engine)
 - [CodeMirror](http://codemirror.net/) (text editor on codeEditor page)
 - [diff\_match\_patch](http://code.google.com/p/google-diff-match-patch/) (for showing highlighted differences in formatted output)
-- [Rhino](http://www.mozilla.org/rhino/) js interpreter (for pre-calculating example citations on server)
 - [Trang](http://www.thaiopensource.com/relaxng/trang.html) (for converting schema files from .rnc to .rng)
 - [FamFamFam Silk icons](http://www.famfamfam.com/lab/icons/silk/)
 - [Fugue icons](http://p.yusukekamiyamane.com/)
@@ -119,4 +124,6 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 - [jQuery UI Layout Plugin](http://layout.jquery-dev.net)
 - [jQuery hoverIntent Plugin](http://cherne.net/brian/resources/jquery.hoverIntent.html)
 - [jQuery scrollTo Plugin](http://demos.flesler.com/jquery/scrollTo/)
+- [require.js](http://requirejs.org/)
+- [node.js](http://node.js.org) (for running scripts on the server)
 
