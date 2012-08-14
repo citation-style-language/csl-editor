@@ -1,6 +1,6 @@
 "use strict";
 
-define('src/VisualEditor',
+define(
 		[	'src/controller',
 			'src/ViewController',
 			'src/notificationBar',
@@ -307,8 +307,8 @@ define('src/VisualEditor',
 			var dropdown = $(selector),
 				loadCsl;
 
-			dropdown.filter('a.menuLoadcsl').html(CSLEDIT_options.get('loadCSLName'));
-			dropdown.filter('a.menuSavecsl').html(CSLEDIT_options.get('saveCSLName'));
+			dropdown.filter('#menuLoadCsl').html(CSLEDIT_options.get('loadCSLName'));
+			dropdown.filter('#menuSaveCsl').html(CSLEDIT_options.get('saveCSLName'));
 
 			editorElement.find('#menuNewStyle').click(function () {
 				// fetch the URL
