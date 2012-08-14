@@ -17,7 +17,8 @@ define(['src/options', 'src/debug'], function (CSLEDIT_options, debug) {
 				},
 				error : function () {
 					debug.log("WARNING: error fetching " + url);
-				}
+				},
+				cache : true
 			});
 		}
 		return cache[path];
