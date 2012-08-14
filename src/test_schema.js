@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/options', 'src/schema', 'jquery.qunit'], function (CSLEDIT_options, CSLEDIT_Schema) {
+define(['src/options', 'src/Schema', 'jquery.qunit'], function (CSLEDIT_options, CSLEDIT_Schema) {
 	module("CSLEDIT_schema", {
 		setup : function () {
 			window.CSLEDIT_schema = new CSLEDIT_Schema();
