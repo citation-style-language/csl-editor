@@ -53,14 +53,13 @@ define(
 			if (style.masterId !== style.styleId)
 			{
 				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
-							CSLEDIT_cslStyles.styles().styleTitleFromId[style.masterId] + '</a>)';
+					CSLEDIT_cslStyles.styles().styleTitleFromId[style.masterId] + '</a>)';
 			} else {
 				masterStyleSuffix = '';
 			}
 
 			citation = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedCitations[0];
-			bibliography = CSLEDIT_xmlUtility.cleanInput(
-				CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography);
+			bibliography = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&
 					style.userCitation !== "" &&
@@ -73,9 +72,9 @@ define(
 					style.userBibliography !== "" &&
 					bibliography !== "") {
 				bibliographyDiff =
-					CSLEDIT_diff.prettyHtmlDiff(style.userBibliography, bibliography);
+					CSLEDIT_diff.prettyHtmlDiff(style.userBibliography, CSLEDIT_xmlUtility.cleanInput(bibliography));
 				bibliographyCloseness = closenessString(
-						bibliographyDistance, style.userBibliography, bibliography);
+						bibliographyDistance, style.userBibliography, CSLEDIT_xmlUtility.cleanInput(bibliography));
 
 				debug.log("b: " + bibliography);
 				debug.log("u: " + style.userBibliography);

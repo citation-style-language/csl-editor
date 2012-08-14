@@ -111,3 +111,11 @@ div.panel {
 	margin-bottom: 2em;
 	padding-left: 10px;
 }
+
+/* citeproc formatting */
+.csl-left-margin {
+	float: left;
+}
+.csl-right-inline {
+	margin-left: 35px;
+}
