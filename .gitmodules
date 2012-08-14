@@ -16,6 +16,3 @@
 [submodule "external/locales"]
 	path = external/locales
 	url = git://github.com/citation-style-language/locales.git
-[submodule "locales"]
-	path = locales
-	url = git://github.com/citation-style-language/locales.git
