@@ -56,9 +56,7 @@ define(['external/diff-match-patch/diff_match_patch'], function (diff_match_patc
 
 	var customEditDistance = function (oldString, newString) {
 		var diffs;
-		console.time("diffs");
 		diffs = dmp.diff_main(oldString, newString);
-		console.timeEnd("diffs");
 		return dmp.diff_levenshtein(diffs);
 	};
 

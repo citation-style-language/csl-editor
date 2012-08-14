@@ -1,16 +1,16 @@
 "use strict";
 
-define({
-	stripUnsupportedTagsAndContents : function (html, supportedTags) {
+define(function () {
+	var stripUnsupportedTagsAndContents = function (html, supportedTags) {
 		var element;
 
 		element = $("<all>" + html + "</all>");		
 		element.find("*").not(supportedTags.join(", ")).remove();
 
 		return element.html();
-	},
+	};
 
-	stripUnsupportedTags : function (xml, supportedTags) {
+	var stripUnsupportedTags = function (xml, supportedTags) {
 		var regExpText = "</?(?:" + supportedTags.join("|") + ")[^<>]*>|(</?[^<>]*>)",
 			stripUnsupportedTags,
 			match,
@@ -32,16 +32,44 @@ define({
 		});
 
 		return xml;
-	},
-	stripAttributesFromTags : function (xml, tags) {
+	};
+
+	var stripAttributesFromTags = function (xml, tags) {
 		var regExp = new RegExp("<(" + tags.join("|") + ")[^<>]*>", "g");
 
 		// remove any attributes the tags may have
 		xml = xml.replace(regExp, "<$1>");
 		return xml;
-	},
-	stripComments : function (xml) {
+	};
+
+	var stripComments = function (xml) {
 		return xml.replace(/<!--[\s\S]*?-->/g, "");
 	}
+
+	var cleanInput = function (input) {
+		var supportedTags = [ 'b', 'i', 'u', 'sup', 'sub' ],
+			invisibleTags = [ 'p', 'span', 'div', 'second-field-align' ]; // we want the contents of these but not the actual tags
+
+		input = stripComments(input);
+		input = stripUnsupportedTagsAndContents(input, supportedTags.concat(invisibleTags));
+		input = stripUnsupportedTags(input, supportedTags);
+		input = stripAttributesFromTags(input, supportedTags);
+		input = input.replace(/&nbsp;/g, " ");
+		input = input.replace("\n", "");
+		input = input.replace(/&amp;/g, "&#38;");
+		input = input.replace(/&lt;/g, "&#60;");
+		input = input.replace(/&gt;/g, "&#62;");
+		input = input.replace(/&quot;/g, "&#34;");
+
+		return input;
+	};
+
+	return {
+		stripUnsupportedTagsAndContents : stripUnsupportedTagsAndContents,
+		stripUnsupportedTags : stripUnsupportedTags,
+		stripAttributesFromTags : stripAttributesFromTags,
+		stripComments : stripComments,
+		cleanInput : cleanInput
+	};	
 });
 

@@ -41,6 +41,8 @@ define(function () {
 	return {
 		assert : assert,
 		assertEqual : assertEqual,
-		log : log
+		log : log,
+		time : time,
+		timeEnd : timeEnd
 	};
 });

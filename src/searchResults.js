@@ -4,13 +4,17 @@ define(
 		[	'src/options',
 			'src/exampleData',
 			'src/diff',
-			'src/cslStyles'
+			'src/cslStyles',
+			'src/xmlUtility',
+			'src/debug'
 		],
 		function (
 			CSLEDIT_options,
 			CSLEDIT_exampleData,
 			CSLEDIT_diff,
-			CSLEDIT_cslStyles
+			CSLEDIT_cslStyles,
+			CSLEDIT_xmlUtility,
+			debug
 		) {
 	var closenessString = function (distance, stringA, stringB) {
 		var matchQuality = CSLEDIT_diff.matchQuality(stringA, stringB),
@@ -55,22 +59,26 @@ define(
 			}
 
 			citation = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedCitations[0];
-			bibliography = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography;
+			bibliography = CSLEDIT_xmlUtility.cleanInput(
+				CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography);
 			
 			if (typeof style.userCitation !== "undefined" &&
-				style.userCitation !== "" &&
-				citation !== "") {
+					style.userCitation !== "" &&
+					citation !== "") {
 				citationDiff = CSLEDIT_diff.prettyHtmlDiff(style.userCitation, citation);
 				citationCloseness = closenessString(citationDistance, style.userCitation, citation);
 			}
 
 			if (typeof style.userBibliography !== "undefined" &&
-				style.userBibliography !== "" &&
-				bibliography !== "") {
+					style.userBibliography !== "" &&
+					bibliography !== "") {
 				bibliographyDiff =
 					CSLEDIT_diff.prettyHtmlDiff(style.userBibliography, bibliography);
 				bibliographyCloseness = closenessString(
 						bibliographyDistance, style.userBibliography, bibliography);
+
+				debug.log("b: " + bibliography);
+				debug.log("u: " + style.userBibliography);
 			}
 
 			featuredStyleClass = '';
@@ -82,9 +90,9 @@ define(
 
 			outputList.push(
 				'<table' + featuredStyleClass + '>' +
-				'<tr><td colspan=3>'+ featuredStyleText +'<a class="style-title" href="' + style.styleId + '">' +
-				CSLEDIT_cslStyles.styles().styleTitleFromId[style.styleId] + "</a>"
-				+ masterStyleSuffix + '</td></tr>' +
+				'<tr><td colspan=3>' + featuredStyleText + '<a class="style-title" href="' + style.styleId + '">' +
+				CSLEDIT_cslStyles.styles().styleTitleFromId[style.styleId] + "</a>" +
+				masterStyleSuffix + '</td></tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
 				'<td class=match>' +
 				citation + '</td>' + citationCloseness + '</tr>' +

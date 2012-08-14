@@ -59,31 +59,12 @@ define(
 			return text === "" || text === "\n";
 		};
 
-		var cleanInput = function (input) {
-			var supportedTags = [ 'b', 'i', 'u', 'sup', 'sub' ],
-				invisibleTags = [ 'p', 'span', 'div', 'second-field-align' ]; // we want the contents of these but not the actual tags
-
-			input = CSLEDIT_xmlUtility.stripComments(input);
-			input = CSLEDIT_xmlUtility.stripUnsupportedTagsAndContents(
-				input, supportedTags.concat(invisibleTags));
-			input = CSLEDIT_xmlUtility.stripUnsupportedTags(input, supportedTags);
-			input = CSLEDIT_xmlUtility.stripAttributesFromTags(input, supportedTags);
-			input = input.replace(/&nbsp;/g, " ");
-			input = input.replace("\n", "");
-			input = input.replace(/&amp;/g, "&#38;");
-			input = input.replace(/&lt;/g, "&#60;");
-			input = input.replace(/&gt;/g, "&#62;");
-			input = input.replace(/&quot;/g, "&#34;");
-
-			return input;
-		};
-
 		var searchForStyle = function () {
 			var bestMatchQuality = 999,
 				bestMatchIndex = -1,
-				userCitation = cleanInput($("#userCitation").cleditor()[0].doc.body.innerHTML),
+				userCitation = CSLEDIT_xmlUtility.cleanInput($("#userCitation").cleditor()[0].doc.body.innerHTML),
 				userCitationText = $("#userCitation").cleditor()[0].doc.body.innerText,
-				userBibliography = cleanInput($("#userBibliography").cleditor()[0].doc.body.innerHTML),
+				userBibliography = CSLEDIT_xmlUtility.cleanInput($("#userBibliography").cleditor()[0].doc.body.innerHTML),
 				userBibliographyText = $("#userBibliography").cleditor()[0].doc.body.innerText,
 				result = [],
 				matchQualities = [],
@@ -98,7 +79,7 @@ define(
 					return "<tr><td><span class=faint>" + title + "</span></td><td>" + value + "</td></tr>";
 				};
 
-			console.time("searchForStyle");
+			debug.time("searchForStyle");
 
 			if (clEditorIsEmpty("#userCitation")) {
 				userCitation = "";
@@ -122,7 +103,7 @@ define(
 						}
 						if (userBibliography !== "") {
 							bibliographyMatchQuality = CSLEDIT_diff.matchQuality(
-								userBibliography, exampleCitation.formattedBibliography);
+								userBibliography, CSLEDIT_xmlUtility.cleanInput(exampleCitation.formattedBibliography));
 						} else {
 							bibliographyMatchQuality = 0;
 						}
@@ -142,7 +123,6 @@ define(
 
 						if (thisMatchQuality > tolerance)
 						{
-							debug.log("match quality: " + thisMatchQuality);
 							matchQualities[index++] = {
 								matchQuality : thisMatchQuality,
 								styleId : styleId
@@ -169,7 +149,7 @@ define(
 			}
 			
 			CSLEDIT_searchResults.displaySearchResults(result, $("#searchResults"), exampleIndex);
-			console.timeEnd("searchForStyle");
+			debug.timeEnd("searchForStyle");
 		};
 
 		function personString(authors) {
@@ -253,8 +233,8 @@ define(
 			userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML;
 			userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
 
-			$("#userCitation").cleditor()[0].doc.body.innerHTML = cleanInput(userCitation);
-			$("#userBibliography").cleditor()[0].doc.body.innerHTML = cleanInput(userBibliography);
+			$("#userCitation").cleditor()[0].doc.body.innerHTML = CSLEDIT_xmlUtility.cleanInput(userCitation);
+			$("#userBibliography").cleditor()[0].doc.body.innerHTML = CSLEDIT_xmlUtility.cleanInput(userBibliography);
 
 			$("#searchResults").html("<p><emp>Searching for styles...</emp></p>");
 
