@@ -77,7 +77,6 @@ define([	'src/citationEngine',
 			codeMirrorContainer = $('#codeMirrorContainer');
 			
 			var resizeCodeEditor = function () {
-				console.log("resize");
 				codeMirrorScroll.css({
 					position: "absolute",
 					top: 0,
