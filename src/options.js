@@ -33,13 +33,13 @@ define(['jquery', 'src/exampleData', 'src/getUrl'], function ($, CSLEDIT_example
 
 	// create the default options which are a function of user options
 	var createExtraDefaults = function () {
-		defaultOptions.cslSchema_mainURL = getUrl("external/csl-schema/csl.rng");
+		defaultOptions.cslSchema_mainURL = getUrl("generated/csl-schema/csl.rng");
 		defaultOptions.cslSchema_childURLs = [];
 		$.each([
-				"external/csl-schema/csl-categories.rng",
-				"external/csl-schema/csl-terms.rng",
-				"external/csl-schema/csl-types.rng",
-				"external/csl-schema/csl-variables.rng"
+				"generated/csl-schema/csl-categories.rng",
+				"generated/csl-schema/csl-terms.rng",
+				"generated/csl-schema/csl-types.rng",
+				"generated/csl-schema/csl-variables.rng"
 			], function (i, path) {
 				defaultOptions.cslSchema_childURLs.push(getUrl(path));
 			}
