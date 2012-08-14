@@ -10,7 +10,7 @@ installModule () {
 	fi
 }
 
-installModule jQuery
 installModule jsdom
 installModule xmlhttprequest
+installModule jquery
 installModule requirejs
