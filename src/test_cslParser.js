@@ -252,7 +252,7 @@ define(['src/cslParser', 'src/options', 'jquery.qunit'], function (CSLEDIT_cslPa
 						$(this).remove();
 					}
 				});
-				initialXmlString = '<?xml version="1.0" encoding="utf-8"?>\n' + initialXmlElement.html();
+				initialXmlString = '<?xml version="1.0" encoding="utf-8"?>\n' + initialXmlElement.html().replace(/locale lang/g, "locale xml:lang");
 				// remove any lines with comments
 				initialXmlString = initialXmlString.replace(/.*<!--[\s\S]*?-->.*/g, "") + "\n";
 
