@@ -1,18 +1,16 @@
 <html>
 <head>
-	<link rel="stylesheet" href="../csledit/external/qunit/qunit-1.9.0.css" type="text/css" media="screen" />
-	<link type="text/css" rel="stylesheet" href="../csledit/external/jstree/themes/default/style.css" />
+	<link rel="stylesheet" href="../external/qunit/qunit-1.9.0.css" type="text/css" media="screen" />
+	<link type="text/css" rel="stylesheet" href="../external/jstree/themes/default/style.css" />
 
-	<script type="text/javascript" src="../csledit/external/require.js"></script>
+	<script type="text/javascript" src="../external/require.js"></script>
 	<script>
 		require.config({
-			baseUrl: "../csledit",
+			baseUrl: "..",
 			urlArgs : "bust=$GIT_COMMIT"
 		});
 		requirejs(['src/config'], function (config) {
-			require(['jquery'], function () {
-				require(['../src/integrationTestsPage'], function () {});
-			});
+			require(['src/integrationTestsPage'], function () {});
 		});
 	</script>
 </head>

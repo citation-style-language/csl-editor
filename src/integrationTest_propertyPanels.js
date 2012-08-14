@@ -5,7 +5,7 @@ define([	'src/Schema',
 			'src/propertyPanel',
 			'src/schemaOptions',
 			'src/testUtils',
-			'src/Data'
+			'src/dataInstance'
 		],
 		function (
 			CSLEDIT_Schema,
@@ -13,7 +13,7 @@ define([	'src/Schema',
 			CSLEDIT_propertyPanel,
 			CSLEDIT_schemaOptions,
 			CSLEDIT_testUtils,
-			CSLEDIT_Data
+			CSLEDIT_data
 		) {
 	module("Property panels for all nodes in top styles", {
 		setup : function () {
@@ -52,7 +52,6 @@ define([	'src/Schema',
 		CSLEDIT_schema.callWhenReady( function () {
 			var styles = CSLEDIT_testUtils.getStyles(2);
 
-			var CSLEDIT_data = CSLEDIT_Data("CSLEDIT_testData");
 			$.each(styles, function (url, cslCode) {
 				var result;
 

@@ -6,7 +6,7 @@ define(
 			'src/propertyPanel',
 			'src/Schema',
 			'src/schemaOptions',
-			'src/Data',
+			'src/dataInstance',
 			'src/ViewController'
 		],
 		function (
@@ -15,7 +15,7 @@ define(
 			CSLEDIT_propertyPanel,
 			CSLEDIT_Schema,
 			CSLEDIT_schemaOptions,
-			CSLEDIT_Data,
+			CSLEDIT_data,
 			CSLEDIT_ViewController
 		) {
 	module("Create view for all nodes in top styles");
@@ -32,7 +32,6 @@ define(
 		CSLEDIT_schema.callWhenReady( function () {
 			ok(true, "schema loaded");
 
-			window.CSLEDIT_data = CSLEDIT_Data("CSLEDIT_testData");
 			CSLEDIT_data.setCslCode(styles[Object.keys(styles)[0]]);
 
 			window.CSLEDIT_viewController = CSLEDIT_ViewController(
