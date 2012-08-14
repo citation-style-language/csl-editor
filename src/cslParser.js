@@ -27,10 +27,8 @@ define(['src/debug'], function (debug) {
 			}
 		}
 
-	debug.assert(typeof textValue === "undefined" || children.length === 0, "textValue = " + textValue + " children.length = " + children.length);
+		debug.assert(typeof textValue === "undefined" || children.length === 0, "textValue = " + textValue + " children.length = " + children.length);
 
-		var attributesString = "";
-		var attributesStringList = [];
 		var attributesList = [];
 		var thisNodeData;
 		
@@ -38,15 +36,11 @@ define(['src/debug'], function (debug) {
 			for (index = 0; index < node.attributes.length; index++) {
 				attributesList.push(
 					{
-						key : node.attributes.item(index).localName,
+						key : node.attributes.item(index).nodeName,
 						value : node.attributes.item(index).nodeValue,
 						enabled : true
 					});
-				attributesStringList.push(
-					node.attributes.item(index).localName + '="' +
-					node.attributes.item(index).nodeValue + '"');
 			}
-			attributesString = ": " + attributesStringList.join(", ");
 		}
 
 		thisNodeData = {

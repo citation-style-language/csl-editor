@@ -486,7 +486,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 			},
 			attribute : function (node) {
 				var thisNodeProperties = new NodeProperties(),
-					attributeName = node.attributes.item("name").nodeValue.replace(/^xml:/, ""),
+					attributeName = node.attributes.item("name").nodeValue,
 					defaultValue = node.attributes.getNamedItem("a:defaultValue"),
 					values;
 
