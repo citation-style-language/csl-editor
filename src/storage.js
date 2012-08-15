@@ -97,7 +97,11 @@ define(['src/debug'], function (debug) {
 			if (data === null) {
 				return null;
 			} else {
-				return JSON.parse(data);
+				try {
+					return JSON.parse(data);
+				} catch (err) {
+					return null;
+				}
 			}
 		};
 

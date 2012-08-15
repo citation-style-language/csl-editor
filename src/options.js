@@ -18,6 +18,10 @@ define(['jquery', 'src/exampleData', 'src/urlUtils', 'src/getUrl'], function ($,
 				alert("Edit style not avaiable.\n\n" +
 					"For implementers: You need to add an editStyle_func to the options.");
 			},
+			loadStyleFromUrlName : "Load Style From URL",
+			loadStyleFromUrlFunc : function () {
+				alert("load from url not implemented");
+			},
 			exampleReferences : CSLEDIT_exampleData.jsonDocumentList,
 			exampleCitations : [[0], [10], []]
 		};

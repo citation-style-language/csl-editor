@@ -388,22 +388,6 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			return -1;
 		};
 		
-		// Load new style without reloading page
-		var loadStyleFromURL = function (newURL, callback) {
-			$.get(newURL, {}, function (cslCode) {
-				var result;
-				cslCode = cslCode.replace(/<!--.*?-->/g, "");
-				result = setCslCode(cslCode);
-				if (result.hasOwnProperty('error')) {
-					alert(result.error);
-					//return;
-				}
-				if (typeof callback !== "undefined") {
-					callback();
-				}
-			}, "text");
-		};
-
 		var numNodes = function (tree) {
 			var iter = new CSLEDIT_Iterator(tree),
 				index = 0;
@@ -667,36 +651,40 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			getNodePath : getNodePath,
 			getFirstCslId : getFirstCslId,
 
-			loadStyleFromURL : loadStyleFromURL,
-
 			initPageStyle : function (callback) {
 				var cslData, styleURL, result;
 				cslData = get(); 
 				
-				styleURL = CSLEDIT_urlUtils.getUrlVar("styleURL");
-				debug.log("url from url: " + styleURL);
-
 				// try loading style specified in options
 				if (typeof CSLEDIT_options.get("initialCslCode") !== "undefined") {
 					result = setCslCode(CSLEDIT_options.get("initialCslCode"));
 					if (result.hasOwnProperty('error')) {
 						alert(result.error);
 					} else {
-						callback();
+						if (typeof callback !== "undefined") {
+							callback();
+						}
 						return;
 					}
 				}
 				
-				if (styleURL !== "" && typeof styleURL !== 'undefined') {
-					styleURL = CSLEDIT_urlUtils.getResourceUrl("../getFromOtherWebsite.php", {url : encodeURIComponent(styleURL)});
-					window.history.replaceState({}, window.document.title,
-						CSLEDIT_urlUtils.removeQueryParam(window.location.pathname, "styleURL"));
-					loadStyleFromURL(styleURL, callback);
-				} else if (cslData !== null && cslData !== "") {
-					callback();
-				} else {
+				if (cslData === null || cslData === "") {
 					styleURL = CSLEDIT_urlUtils.getResourceUrl("external/csl-styles/apa.csl");
-					loadStyleFromURL(styleURL, callback);
+					$.get(styleURL, {}, function (cslCode) {
+						var result;
+						cslCode = cslCode.replace(/<!--.*?-->/g, "");
+						result = setCslCode(cslCode);
+						if (result.hasOwnProperty('error')) {
+							alert(result.error);
+						}
+						if (typeof callback !== "undefined") {
+							callback();
+						}
+					}, "text");
+				} else {
+					if (typeof callback !== "undefined") {
+						callback();
+					}
 				}
 			},
 			numNodes : numNodes,

@@ -21,7 +21,7 @@ define(
 		var styles = {};
 
 		$.each(CSLEDIT_exampleData.topStyles, function (i, style) {
-			var url = CSLEDIT_urlUtils.getUrl('external/csl-styles/' +
+			var url = CSLEDIT_urlUtils.getResourceUrl('external/csl-styles/' +
 					style.replace(/^.*\//, "") + ".csl"),
 				cslCode;
 
@@ -43,7 +43,7 @@ define(
 
 			if (typeof(cslCode) === "undefined") {
 				// try dependent style
-				url = CSLEDIT_urlUtils.getUrl('external/csl-styles/dependent/' +
+				url = CSLEDIT_urlUtils.getResourceUrl('external/csl-styles/dependent/' +
 					style.replace(/^.*\//, "") + ".csl");
 		
 				$.ajax({

@@ -300,12 +300,34 @@ define(
 			});
 		};
 
+		var setCustomMenuItem = function (element, name, onClick) {
+			if (typeof(name) === "undefined" || name === "") {
+				element.parent('li').remove();
+			} else {
+				element.html(name);
+				element.click(onClick);
+			}
+		};
+
 		var setupDropdownMenuHandler = function (selector) {
 			var dropdown = $(selector),
 				loadCsl;
 
-			dropdown.filter('#menuLoadCsl').html(CSLEDIT_options.get('loadCSLName'));
-			dropdown.filter('#menuSaveCsl').html(CSLEDIT_options.get('saveCSLName'));
+			setCustomMenuItem(dropdown.filter('#menuLoadCsl'), CSLEDIT_options.get('loadCSLName'), function () {
+				var csl = CSLEDIT_options.get('loadCSLFunc')();
+				if (csl !== null && typeof csl !== "undefined") {
+					CSLEDIT_controller.exec('setCslCode', [csl]);
+				}
+			});
+			setCustomMenuItem(dropdown.filter('#menuLoadStyleFromUrl'), CSLEDIT_options.get('loadStyleFromUrlName'), function () {
+				var csl = CSLEDIT_options.get('loadStyleFromUrlFunc')();
+				if (csl !== null && typeof csl !== "undefined") {
+					CSLEDIT_controller.exec('setCslCode', [csl]);
+				}
+			});
+			setCustomMenuItem(dropdown.filter('#menuSaveCsl'), CSLEDIT_options.get('saveCSLName'), function () {
+				CSLEDIT_options.get('saveCSLFunc')(CSLEDIT_data.getCslCode());
+			});
 
 			editorElement.find('#menuNewStyle').click(function () {
 				// fetch the URL
@@ -321,39 +343,8 @@ define(
 					},
 					async : false
 				});
-	//			CSLEDIT_controller.exec('setCslCode', [newStyle]);
 			});
 
-			editorElement.find('#menuLoadCsl').click(function () {
-				var csl = CSLEDIT_options.get('loadCSLFunc')();
-				if (csl !== null && typeof csl !== "undefined") {
-					CSLEDIT_controller.exec('setCslCode', [csl]);
-				}
-			});
-			
-			editorElement.find('#menuLoadStyleFromUrl').click(function () {
-				var styleURL = prompt("Please enter the URL of the style you want to load");
-
-				if (typeof(styleURL) === "string" && styleURL !== "") {
-					// fetch the URL
-					$.ajax({
-						url : CSLEDIT_urlUtils.getResourceUrl('../getFromOtherWebsite.php', {url : encodeURIComponent(styleURL)}),
-						dataType : "text",
-						success : function (newStyle) {
-							CSLEDIT_controller.exec("setCslCode", [newStyle]);
-						},
-						error : function () {
-							debug.log("ajax error: style not loaded");
-						},
-						async : false
-					});
-				}
-			});
-			
-			editorElement.find('#menuSaveCsl').click(function () {
-				CSLEDIT_options.get('saveCSLFunc')(CSLEDIT_data.getCslCode());
-			});
-			
 			editorElement.find('#menuUndo').click(function () {
 				if (CSLEDIT_controller.commandHistory.length === 0) {
 					alert("No commands to undo");
