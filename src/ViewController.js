@@ -156,7 +156,10 @@ define(
 				views.push(heading);
 
 				tree = CSLEDIT_SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
-					value.macroLinks, value.leafNodes);
+					{
+						enableMacroLinks : value.macroLinks,
+					 	leafNodes : value.leafNodes
+					});
 
 				// Use this for debugging if you're not sure the view accurately reflects the data
 				//tree.setVerifyAllChanges(true);
