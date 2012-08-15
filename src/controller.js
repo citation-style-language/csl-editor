@@ -25,6 +25,9 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 		cslData = _cslData;
 	};
 
+	// set the default data instance (can be changed by the unit tests):
+	setCslData(CSLEDIT_data);
+
 	// These can be called like regular commands, but can't be subscribed to.
 	// They use the regular commands to perform more complicated tasks.
 	var macros = {
@@ -40,7 +43,7 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 					currentPath += "/";
 				}
 				currentPath += splitPath[index];
-				nodes = CSLEDIT_data.getNodesFromPath(currentPath)
+				nodes = cslData.getNodesFromPath(currentPath)
 				if (nodes.length === 0) {
 					if (index === 0) {
 						// add root node

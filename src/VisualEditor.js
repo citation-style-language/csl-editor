@@ -335,7 +335,7 @@ define(
 				if (typeof(styleURL) === "string" && styleURL !== "") {
 					// fetch the URL
 					$.ajax({
-						url : '../getFromOtherWebsite.php?url=' + encodeURIComponent(styleURL),
+						url : CSLEDIT_options.getUrl('../getFromOtherWebsite.php', {url : encodeURIComponent(styleURL)}),
 						dataType : "text",
 						success : function (newStyle) {
 							CSLEDIT_controller.exec("setCslCode", [newStyle]);
@@ -435,7 +435,6 @@ define(
 					editorElement.find("#nodePathView"),
 					syntaxHighlighter);
 
-				CSLEDIT_controller.setCslData(CSLEDIT_data);
 				CSLEDIT_data.addViewController(CSLEDIT_viewController);
 
 				if (typeof userOnChangeCallback === "function") {

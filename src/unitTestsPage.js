@@ -8,7 +8,8 @@ define(
 			'src/test_Data',
 			'src/test_xmlUtility',
 			'src/test_smartTree',
-			'src/test_NodeWatcher'
+			'src/test_NodeWatcher',
+			'src/test_urlUtils'
 			],
 		function () {}
 );

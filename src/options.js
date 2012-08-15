@@ -23,11 +23,17 @@ define(['jquery', 'src/exampleData', 'src/getUrl'], function ($, CSLEDIT_example
 		};
 
 	// TODO: doesn't really belong here, move to other module
-	var getUrl = function (resourcePath) {
+	var getUrl = function (resourcePath, data) {
 		var url;
 		require(['src/getUrl!' + resourcePath], function (newUrl) {
 			url = newUrl;
 		});
+		// TODO: fix in case of no initial query string (would need '?' instead of '&')
+		if (typeof(data) != "undefined") {
+			$.each(data, function (key, value) {
+				url += "&" + key + "=" + value;
+			});
+		}
 		return url;
 	};
 
