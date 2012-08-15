@@ -15,6 +15,7 @@ define(
 			'src/storage',
 			'src/dataInstance',
 			'src/cslStyles',
+			'src/urlUtils',
 			'src/browserCheck',
 			'src/debug',
 			'jquery.hoverIntent',
@@ -35,6 +36,7 @@ define(
 			CSLEDIT_storage,
 			CSLEDIT_data,
 			CSLEDIT_cslStyles,
+			CSLEDIT_urlUtils,
 			CSLEDIT_browserCheck,
 			debug,
 			jquery_hoverIntent,
@@ -51,7 +53,7 @@ define(
 			editorElement = $(editorElement);
 
 			$.ajax({
-				url: CSLEDIT_options.getUrl("html/visualEditor.html"),
+				url: CSLEDIT_urlUtils.getResourceUrl("html/visualEditor.html"),
 				success : function (data) {
 					editorElement.html(data);
 					window.CSLEDIT_schema = new CSLEDIT_Schema(CSLEDIT_schemaOptions);
@@ -214,7 +216,7 @@ define(
 					displayName;
 
 				if (typeof nodeIcon !== "undefined") {
-					img = '<td><img src="' + CSLEDIT_options.getUrl(nodeIcon) + '"></img></td>';
+					img = '<td><img src="' + CSLEDIT_urlUtils.getResourceUrl(nodeIcon) + '"></img></td>';
 				}
 
 				displayName = 
@@ -308,7 +310,7 @@ define(
 			editorElement.find('#menuNewStyle').click(function () {
 				// fetch the URL
 				$.ajax({
-					url : CSLEDIT_options.getUrl("/content/newStyle.csl"),
+					url : CSLEDIT_urlUtils.getResourceUrl("/content/newStyle.csl"),
 					dataType : "text",
 					success : function (cslCode) {
 						debug.log("csl code received: " + cslCode);
@@ -335,7 +337,7 @@ define(
 				if (typeof(styleURL) === "string" && styleURL !== "") {
 					// fetch the URL
 					$.ajax({
-						url : CSLEDIT_options.getUrl('../getFromOtherWebsite.php', {url : encodeURIComponent(styleURL)}),
+						url : CSLEDIT_urlUtils.getResourceUrl('../getFromOtherWebsite.php', {url : encodeURIComponent(styleURL)}),
 						dataType : "text",
 						success : function (newStyle) {
 							CSLEDIT_controller.exec("setCslCode", [newStyle]);

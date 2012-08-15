@@ -4,6 +4,7 @@ define([	'src/uiConfig',
 			'src/CslNode',
 			'src/options',
 			'src/dataInstance',
+			'src/urlUtils',
 			'src/debug',
 			'jquery.jstree-patched',
 			'jquery.hotkeys'
@@ -12,6 +13,7 @@ define([	'src/uiConfig',
 			CSLEDIT_CslNode,
 			CSLEDIT_options,
 			CSLEDIT_data,
+			CSLEDIT_urlUtils,
 			debug,
 			jstree
 		) {
@@ -104,7 +106,7 @@ define([	'src/uiConfig',
 			// build the node types from the uiConfig data		
 			nodeTypes = {};
 			$.each(CSLEDIT_uiConfig.nodeIcons, function (type, icon) {
-				nodeTypes[type] = { icon : { image : CSLEDIT_options.getUrl(icon) } };
+				nodeTypes[type] = { icon : { image : CSLEDIT_urlUtils.getResourceUrl(icon) } };
 			});
 
 			treeElement.jstree({

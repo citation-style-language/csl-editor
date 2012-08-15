@@ -688,14 +688,14 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				}
 				
 				if (styleURL !== "" && typeof styleURL !== 'undefined') {
-					styleURL = CSLEDIT_options.getUrl("../getFromOtherWebsite.php", {url : encodeURIComponent(styleURL)});
+					styleURL = CSLEDIT_urlUtils.getResourceUrl("../getFromOtherWebsite.php", {url : encodeURIComponent(styleURL)});
 					window.history.replaceState({}, window.document.title,
 						CSLEDIT_urlUtils.removeQueryParam(window.location.pathname, "styleURL"));
 					loadStyleFromURL(styleURL, callback);
 				} else if (cslData !== null && cslData !== "") {
 					callback();
 				} else {
-					styleURL = CSLEDIT_options.getUrl("external/csl-styles/apa.csl");
+					styleURL = CSLEDIT_urlUtils.getResourceUrl("external/csl-styles/apa.csl");
 					loadStyleFromURL(styleURL, callback);
 				}
 			},

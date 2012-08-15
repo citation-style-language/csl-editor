@@ -1,6 +1,6 @@
 "use strict";
 
-define(['src/cslParser', 'src/options', 'jquery.qunit'], function (CSLEDIT_cslParser, CSLEDIT_options) {
+define(['src/cslParser', 'src/urlUtils', 'jquery.qunit'], function (CSLEDIT_cslParser, CSLEDIT_urlUtils) {
 	module("CSLEDIT_cslParser");
 
 	var CSLEDIT_test_cslJSON = {
@@ -238,7 +238,7 @@ define(['src/cslParser', 'src/options', 'jquery.qunit'], function (CSLEDIT_cslPa
 		var parseStyleList = function (styleList) {
 			var style = styleList.pop();
 
-			$.get(CSLEDIT_options.getUrl('external/csl-styles/' + style), {}, function(cslCode) {
+			$.get(CSLEDIT_urlUtils.getResourceUrl('external/csl-styles/' + style), {}, function(cslCode) {
 				var domParser = new DOMParser,
 					xmlDom = domParser.parseFromString(cslCode, "application/xml"),
 					initialXmlElement = $('<div/>').append(xmlDom.documentElement),

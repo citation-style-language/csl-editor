@@ -1,12 +1,12 @@
 "use strict";
 
-define(['src/options', 'src/debug'], function (CSLEDIT_options, debug) {
+define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 	var cache = {};
 
 	var getJSONData = function (path) {
 		var url;
 		if (!(path in cache)) {
-			url = CSLEDIT_options.getUrl(path);
+			url = CSLEDIT_urlUtils.getUrl(path);
 			$.ajax({
 				url : url,
 				dataType : "json",

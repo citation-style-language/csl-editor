@@ -1,6 +1,6 @@
 "use strict";
 
-define(['jquery', 'src/exampleData', 'src/getUrl'], function ($, CSLEDIT_exampleData, getUrlPlugin) {
+define(['jquery', 'src/exampleData', 'src/urlUtils', 'src/getUrl'], function ($, CSLEDIT_exampleData, CSLEDIT_urlUtils, getUrlPlugin) {
 	var userOptions = {};
 	var defaultOptions = {
 			loadCSLName : "Load CSL",
@@ -22,24 +22,9 @@ define(['jquery', 'src/exampleData', 'src/getUrl'], function ($, CSLEDIT_example
 			exampleCitations : [[0], [10], []]
 		};
 
-	// TODO: doesn't really belong here, move to other module
-	var getUrl = function (resourcePath, data) {
-		var url;
-		require(['src/getUrl!' + resourcePath], function (newUrl) {
-			url = newUrl;
-		});
-		// TODO: fix in case of no initial query string (would need '?' instead of '&')
-		if (typeof(data) != "undefined") {
-			$.each(data, function (key, value) {
-				url += "&" + key + "=" + value;
-			});
-		}
-		return url;
-	};
-
 	// create the default options which are a function of user options
 	var createExtraDefaults = function () {
-		defaultOptions.cslSchema_mainURL = getUrl("generated/csl-schema/csl.rng");
+		defaultOptions.cslSchema_mainURL = CSLEDIT_urlUtils.getResourceUrl("generated/csl-schema/csl.rng");
 		defaultOptions.cslSchema_childURLs = [];
 		$.each([
 				"generated/csl-schema/csl-categories.rng",
@@ -47,7 +32,7 @@ define(['jquery', 'src/exampleData', 'src/getUrl'], function ($, CSLEDIT_example
 				"generated/csl-schema/csl-types.rng",
 				"generated/csl-schema/csl-variables.rng"
 			], function (i, path) {
-				defaultOptions.cslSchema_childURLs.push(getUrl(path));
+				defaultOptions.cslSchema_childURLs.push(CSLEDIT_urlUtils.getResourceUrl(path));
 			}
 		);
 	};
@@ -63,7 +48,6 @@ define(['jquery', 'src/exampleData', 'src/getUrl'], function ($, CSLEDIT_example
 	createExtraDefaults();
 
 	return {
-		getUrl : getUrl,
 		get : get,
 		setUserOptions : function (_userOptions) {
 			userOptions = _userOptions;

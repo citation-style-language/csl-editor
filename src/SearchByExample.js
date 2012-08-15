@@ -8,6 +8,7 @@ define(
 			'src/diff',
 			'src/searchResults',
 			'src/cslStyles',
+			'src/urlUtils',
 			'src/debug',
 			'jquery.ui',
 			'jquery.cleditor'
@@ -20,6 +21,7 @@ define(
 			CSLEDIT_diff,
 			CSLEDIT_searchResults,
 			CSLEDIT_cslStyles,
+			CSLEDIT_urlUtils,
 			debug,
 			jquery_ui,
 			jquery_cleditor
@@ -37,7 +39,7 @@ define(
 		CSLEDIT_options.setUserOptions(userOptions);
 		mainContainer = $(mainContainer);
 		$.ajax({
-			url: CSLEDIT_options.getUrl("html/searchByExample.html"),
+			url: CSLEDIT_urlUtils.getResourceUrl("html/searchByExample.html"),
 			success : function (data) {
 				mainContainer.html(data);
 				init();
@@ -282,7 +284,7 @@ define(
 
 			$('button#searchButton').css({
 				'background-image' :
-					"url(" + CSLEDIT_options.getUrl('external/famfamfam-icons/magnifier.png') + ')'
+					"url(" + CSLEDIT_urlUtils.getResourceUrl('external/famfamfam-icons/magnifier.png') + ')'
 			});
 
 			var userCitationInput = $("#userCitation").cleditor({height: 55})[0];

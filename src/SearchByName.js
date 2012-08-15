@@ -4,13 +4,15 @@ define(
 		[	'src/options',
 			'src/exampleData',
 			'src/searchResults',
-			'src/cslStyles'
+			'src/cslStyles',
+			'src/urlUtils'
 		],
 		function (
 			CSLEDIT_options,
 			CSLEDIT_exampleData,
 			CSLEDIT_searchResults,
-			CSLEDIT_cslStyles
+			CSLEDIT_cslStyles,
+			CSLEDIT_urlUtils
 		) {
 	var CSLEDIT_SearchByName = function (mainContainer, userOptions) {
 		var nameSearchTimeout,
@@ -19,7 +21,7 @@ define(
 		CSLEDIT_options.setUserOptions(userOptions);
 		mainContainer = $(mainContainer);
 		$.ajax({
-			url: CSLEDIT_options.getUrl("html/searchByName.html"),
+			url: CSLEDIT_urlUtils.getResourceUrl("html/searchByName.html"),
 			success : function (data) {
 				mainContainer.html(data);
 				init();
@@ -130,7 +132,7 @@ define(
 			// add icon
 			$('button#searchButton').css({
 				'background-image' :
-					"url(" + CSLEDIT_options.getUrl('external/famfamfam-icons/magnifier.png') + ')'
+					"url(" + CSLEDIT_urlUtils.getResourceUrl('external/famfamfam-icons/magnifier.png') + ')'
 			});
 
 			// delayed search after typing

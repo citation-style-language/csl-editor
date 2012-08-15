@@ -1,10 +1,10 @@
 "use strict";
 
-define([	'src/options',
+define([	'src/urlUtils',
 			'src/debug'
 		],
 		function (
-			CSLEDIT_options,
+			CSLEDIT_urlUtils,
 			debug
 		) {
 
@@ -20,7 +20,7 @@ define([	'src/options',
 			localePath;
 
 		if (typeof(locale) === "undefined") {
-			localePath = CSLEDIT_options.getUrl("external/locales/locales-" + lang + ".xml");
+			localePath = CSLEDIT_urlUtils.getResourceUrl("external/locales/locales-" + lang + ".xml");
 
 			// try to fetch from server
 			$.ajax({

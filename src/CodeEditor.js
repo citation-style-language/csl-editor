@@ -3,6 +3,7 @@
 define([	'src/citationEngine',
 			'src/options',
 			'src/dataInstance',
+			'src/urlUtils',
 			'external/codemirror',
 			'external/codemirrorXmlMode',
 			'jquery.layout'
@@ -11,6 +12,7 @@ define([	'src/citationEngine',
 			CSLEDIT_citationEngine,
 			CSLEDIT_options,
 			CSLEDIT_data,
+			CSLEDIT_urlUtils,
 			CodeMirror,
 			CodeMirrorXmlMode,
 			jquery_layout
@@ -31,7 +33,7 @@ define([	'src/citationEngine',
 		CSLEDIT_options.setUserOptions(userOptions);
 
 		$.ajax({
-			url: CSLEDIT_options.getUrl("html/codeEditor.html"),
+			url: CSLEDIT_urlUtils.getResourceUrl("html/codeEditor.html"),
 			success : function (data) {
 				containerElement.html(data);
 				init();
