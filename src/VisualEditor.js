@@ -15,6 +15,7 @@ define(
 			'src/storage',
 			'src/dataInstance',
 			'src/cslStyles',
+			'src/browserCheck',
 			'src/debug',
 			'jquery.hoverIntent',
 			'jquery.layout'
@@ -34,6 +35,7 @@ define(
 			CSLEDIT_storage,
 			CSLEDIT_data,
 			CSLEDIT_cslStyles,
+			CSLEDIT_browserCheck,
 			debug,
 			jquery_hoverIntent,
 			jquery_layout
@@ -45,14 +47,7 @@ define(
 			nodePathView;
 
 		$(document).ready(function () {
-			if (!$.browser.webkit && !$.browser.mozilla && !$.browser.chrome) {
-				$('body').html("<h2>Please use the latest version of " +
-					"Chrome or Firefox to view this page.</h2>").css({margin: 50});
-				return;
-			}
-
 			CSLEDIT_options.setUserOptions(userOptions);
-
 			editorElement = $(editorElement);
 
 			$.ajax({
