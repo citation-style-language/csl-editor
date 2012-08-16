@@ -38,6 +38,14 @@ define(function () {
 		}
 	};
 
+	// puts a module in global window object, handy for debugging
+	window.CSLEDIT_expose = function (moduleName, varName) {
+		varName = varName || 'CSLEDIT_' + moduleName;
+		require(['src/' + moduleName], function (module) {
+			window[varName] = module;
+		});
+	};
+
 	return {
 		assert : assert,
 		assertEqual : assertEqual,

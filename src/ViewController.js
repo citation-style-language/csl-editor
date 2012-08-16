@@ -423,13 +423,9 @@ define(
 			},
 				
 			styleChanged : styleChanged,
-
 			getSelectedNodePath : getSelectedNodePath,
-
 			selectNodeFromPath : selectNodeFromPath,
-
 			setSuppressSelectNode : setSuppressSelectNode,
-
 			selectedViewProperty : selectedViewProperty
 		};
 	};
