@@ -24,10 +24,10 @@ define(
 		this.showPropertyPanel = showPropertyPanel;
 
 		if (typeof(nodePath) === "undefined" || nodePath === "") {
-			this.updateHtml(null);
+			this.updateHtml(false);
 		} else {
 			this.nodeWatcher = new CSLEDIT_NodeWatcher(nodePath, CSLEDIT_data, function (nodeData) {
-				that.updateHtml(nodeData);
+				that.updateHtml(true, nodeData);
 			});
 
 			this.addNode = function (id, position, nodeData, numNodes) {
@@ -41,7 +41,7 @@ define(
 			};
 
 			this.element.click(function () {
-				if (that.nodeData !== null) {
+				if (that.nodeWatcher.nodeData !== null) {
 					debug.log("selecting node " + that.nodeWatcher.nodeData.cslId);
 					that.callbacks.selectNode(that.nodeWatcher.nodeData.cslId);
 				}
@@ -49,14 +49,27 @@ define(
 		}
 	};
 
-	CSLEDIT_SmartTreeHeading.prototype.updateHtml = function (nodeData) {
-		var cslidAttribute;
+	CSLEDIT_SmartTreeHeading.prototype.updateHtml = function (dynamicNode, nodeData) {
+		var that = this,
+			cslidAttribute,
+			span;
 
-		if (nodeData !== null) {
-			cslidAttribute = 'cslid="' + nodeData.cslId + '"';
+		span = $('<span/>').html(this.title);
+
+		if (dynamicNode) {
+			if (nodeData === null) {
+				span.addClass('missingNode').removeAttr('cslid');
+				span.click(function () {
+					CSLEDIT_viewController.selectNode(-1, [], that.nodeWatcher.nodePath);
+					span.addClass('selected');
+				});
+			} else {
+				span.removeClass('missingNode').attr('cslid', nodeData.cslId);
+			}
 		}
-		this.element.html('<h3 class="smartTreeHeading"><span ' + cslidAttribute + '>' +
-		   this.title + '</span></h3>');
+
+		this.element.html('');
+		this.element.append($('<h3 class="smartTreeHeading"/>').append(span));
 
 		debug.log("updated smart tree to " + this.element.html());
 	};
@@ -79,10 +92,14 @@ define(
 			cslIdPath = [],
 			nodes;
 
+		if (this.nodeWatcher.nodeData === null) {
+			return [];
+		}
+
 		while (splitNodePath.length > 0) {
 			nodePath.push(splitNodePath.splice(0, 1));
 			nodes = CSLEDIT_data.getNodesFromPath(nodePath.join("/"));
-		debug.assertEqual(nodes.length, 1);
+			debug.assertEqual(nodes.length, 1);
 			cslIdPath.push(nodes[0].cslId);
 		}
 

@@ -10,6 +10,7 @@ define(
 			'src/CslNode',
 			'src/Iterator',
 			'src/dataInstance',
+			'external/Mustache',
 			'src/debug',
 			'jquery.scrollTo'
 		],
@@ -23,6 +24,7 @@ define(
 			CSLEDIT_CslNode,
 			CSLEDIT_Iterator,
 			CSLEDIT_data,
+			Mustache,
 			debug,
 			jquery_scrollTo
 		) {
@@ -94,6 +96,7 @@ define(
 			callbacks,
 			selectedTree = null,
 			selectedNodeId = -1,
+			selectedMissingNodePath,
 			recentlyEditedMacro = -1,
 			nodePathView,
 			suppressSelectNode = false;
@@ -179,7 +182,7 @@ define(
 			}, syntaxHighlighter);
 		};
 		
-		var selectedNodeChanged = function () {
+		var selectedNodeChanged = function (missingNodePath) {
 			var nodeAndParent,
 				node,
 				parentNode,
@@ -193,9 +196,15 @@ define(
 				translatedNodeInfo,
 				translatedParentName;
 
+			selectedMissingNodePath = missingNodePath;
+
 			if (selectedNode() === -1) {
-				// clear property panel if nothing selected
-				propertyPanelElement.children().remove();
+				propertyPanelElement.html(Mustache.to_html(
+					'<h3>The {{missingNode}} node doesn\'t exist</h3>' + 
+					'<p>Use the "+" Add Node button at the top left to add it.</p>',
+					{ missingNode : missingNodePath }
+				));
+				nodePathView.nodeMissing(missingNodePath);
 				return;
 			}
 
@@ -322,10 +331,20 @@ define(
 			selectedNodeChanged();
 		};
 
-		var selectNode = function (id, highlightedNodes) {
+		var selectNode = function (
+				id,
+				highlightedNodes,
+				missingNodePath // optional: if selection represents a missing node
+				) {
 			var treeNode,
 				headingNode;
 			
+			if (id === -1) {
+				selectedNodeId = id;
+				selectedNodeChanged(missingNodePath);
+				return;
+			}
+
 			headingNode = treeView.find('span[cslid=' + id + ']');
 
 			if (typeof(highlightedNodes) === "undefined") {
@@ -413,6 +432,9 @@ define(
 
 			selectNode : selectNode,
 			selectedNode : selectedNode,
+			selectedMissingNodePath : function () {
+				return selectedMissingNodePath
+			},
 
 			expandNode : expandNode,
 

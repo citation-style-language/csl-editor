@@ -31,7 +31,7 @@ define(
 		var numSuccesses = 0,
 			failures = [],
 			successRate,
-			tolerance = 1; //0.86;
+			tolerance = 0.86;
 
 		// check that we generate titles the same as the existing repo ones
 		$.each(CSLEDIT_cslStyles.styles().styleTitleFromId, function (id, title) {

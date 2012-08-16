@@ -8,8 +8,6 @@ define(['src/Data'], function (CSLEDIT_Data) {
 		"style/info/title",
 		"style/info/id",
 		"style/citation",
-		"style/citation/layout",
-		"style/bibliography",
-		"style/bibliography/layout"
+		"style/citation/layout"
 	], true);
 });

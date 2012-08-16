@@ -447,15 +447,15 @@ define([	'src/uiConfig',
 
 				$.each(matchingCslNodes, function (i, node) {
 					var lastCslId = [-1];
-					if (node.cslId === newNode.cslId) {
+					if (node.cslId >= newNode.cslId && node.cslId < newNode.cslId + nodesAdded) {
 						var newJsTreeNode;
-						newJsTreeNode = jsTreeDataFromCslData_inner(newNode, lastCslId);
+						newJsTreeNode = jsTreeDataFromCslData_inner(node, lastCslId);
 						createSubTree(-1, "last", newJsTreeNode);
 						
-						var newTreeNode = treeElement.find('li[cslid="' + newNode.cslId + '"]');
+						var newTreeNode = treeElement.find('li[cslid="' + node.cslId + '"]');
 						ranges.push({
-							first : newNode.cslId,
-							last : newNode.cslId + CSLEDIT_data.numNodes(newNode) - 1,
+							first : node.cslId,
+							last : node.cslId + CSLEDIT_data.numNodes(node) - 1,
 							rootNode : newTreeNode
 						});
 						
@@ -525,12 +525,35 @@ define([	'src/uiConfig',
 			}
 		};
 
+		var removeTreesWithin = function (firstId, lastId) {
+			var rangesToRemove = {};
+			
+			// TODO: write unit test for this
+			$.each(ranges, function (index, range) {
+				if (range.first >= firstId && range.first <= lastId) {
+					rangesToRemove[index] = range;
+				}
+			});
+			
+			$.each(rangesToRemove, function (index, range) {
+				console.log("deleting range " + index);
+				ranges.splice(index, 1);
+				treeElement.jstree("remove", range.rootNode);
+			});
+		};
+
 		var deleteNode = function (id, nodesDeleted) {
 			var node,
-				thisRangeIndex = rangeIndex(id),
+				thisRangeIndex,
 				allNodes,
 				currentCslId,
 				range;
+
+			console.log("delete node " + id + ", amount = " + nodesDeleted);
+
+			removeTreesWithin(id, id + nodesDeleted - 1);
+		
+			thisRangeIndex = rangeIndex(id),
 
 			// shift ranges, except for ones containing the deleted node
 			$.each(ranges, function (index, range) {
@@ -544,6 +567,7 @@ define([	'src/uiConfig',
 			}
 
 			if (thisRangeIndex === -1) {
+
 				return;
 			}
 			range = ranges[thisRangeIndex];
@@ -555,8 +579,8 @@ define([	'src/uiConfig',
 
 			} else { // update range
 				node = treeElement.find('li[cslid="' + id + '"][macrolink!="true"]');
-			debug.assert(node.length > 0);
-			debug.assert(id !== 0);
+				debug.assert(node.length > 0);
+				debug.assert(id !== 0);
 
 				treeElement.jstree("remove", node);
 

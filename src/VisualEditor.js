@@ -281,6 +281,30 @@ define(
 			});
 		};
 
+		var addMissingNode = function (missingNodePath) {
+			var rootPath,
+				nodeName,
+				rootNode,
+				newNode;
+
+			console.log("add missing node " + missingNodePath);
+
+			if (typeof(missingNodePath) === "undefined" || missingNodePath === null) {
+				return;
+			}
+			
+			rootPath = missingNodePath.replace(/\/[^\/]+$/, "");
+			nodeName = missingNodePath.replace(rootPath + "/", "");
+
+			console.log("adding missing node: " + nodeName + " to " + rootPath);
+
+			rootNode = CSLEDIT_data.getNodesFromPath(rootPath);
+			debug.assert(rootNode.length > 0);
+			rootNode = rootNode[0];
+
+			CSLEDIT_controller.exec('addNode', [rootNode.cslId, "last", { name: nodeName } ]);
+		};
+
 		var setupTreeEditorToolbar = function () {
 			var toolbar = editorElement.find('#treeEditorToolbar'),
 				addNodeButton = toolbar.find('a.add'),
@@ -290,7 +314,11 @@ define(
 			debug.assertEqual(deleteNodeButton.length, 1);
 
 			addNodeButton.on('click', function (e) {
-				showAddNodeDialog();
+				if (CSLEDIT_viewController.selectedNode() === -1) {
+					addMissingNode(CSLEDIT_viewController.selectedMissingNodePath());
+				} else {
+					showAddNodeDialog();
+				}
 				e.preventDefault();
 			});
 

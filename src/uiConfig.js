@@ -29,6 +29,17 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		}
 	};
 
+	// if creating an empty node, populate with these children
+	CSLEDIT_uiConfig.defaultChildren = {
+		"bibliography" : [
+			{
+				name: "layout",
+				attributes: [],
+				children: []
+			}
+		]
+	};
+
 	CSLEDIT_uiConfig.attributeGroups = {
 		"Text formatting" : [
 			"fontFormattingControls",

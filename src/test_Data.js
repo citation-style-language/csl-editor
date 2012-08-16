@@ -69,6 +69,24 @@ define(['src/Data', 'src/debug', 'jquery.qunit'], function (CSLEDIT_Data, debug)
 		equal(typeof cslData.children[0].arbitraryKey, "undefined"); // not allowed to add arbitrary keys
 	});
 
+	test("add bibliography to end", function () {
+		var testCsl = "<style><info><author></author></info><citation><layout></layout></citation></style>";
+		
+		// move info to last in style 
+		CSLEDIT_data.setCslCode(testCsl);
+		CSLEDIT_data.addNode(0, "last", {
+			name : "bibliography",
+			attributes : []
+			,
+			children : [
+ 				{ name: "layout", attributes: [], children: [] }
+			]
+		});
+		equal(CSLEDIT_data.get().children[0].name, "info");
+		equal(CSLEDIT_data.get().children[1].name, "citation");
+		equal(CSLEDIT_data.get().children[2].name, "bibliography");
+	});
+
 	test("move nodes", function () {
 		var testCsl = "<style><info><author></author></info><citation><layout></layout></citation></style>";
 
@@ -102,12 +120,11 @@ define(['src/Data', 'src/debug', 'jquery.qunit'], function (CSLEDIT_Data, debug)
 		equal(CSLEDIT_data.get().children[0].name, "citation");
 		equal(CSLEDIT_data.get().children[0].children[1].name, "info");
 
-		// move citation to before info 
+		// move info to last in style 
 		CSLEDIT_data.setCslCode(testCsl);
-		CSLEDIT_data.moveNode(3, 1, "before");
+		CSLEDIT_data.moveNode(1, 0, "last");
 		equal(CSLEDIT_data.get().children[0].name, "citation");
 		equal(CSLEDIT_data.get().children[1].name, "info");
-
 	});
 
 	test("find nodes", function () {

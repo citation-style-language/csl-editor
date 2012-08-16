@@ -7,6 +7,10 @@ define(['src/dataInstance'], function (CSLEDIT_data) {
 		this.syntaxHighlighter = syntaxHighlighter;
 	};
 
+	CSLEDIT_NodePathView.prototype.nodeMissing = function (missingNodePath) {
+		this.element.html(missingNodePath.replace(/\//g, " > "));
+	};
+
 	CSLEDIT_NodePathView.prototype.selectNode = function (nodePath) {
 		var that = this,
 			nodesHtml = [],

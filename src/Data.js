@@ -446,7 +446,8 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			var nodeInfo,
 				positionIndex,
 				nodesAdded,
-				defaultAttributes;
+				defaultAttributes,
+				defaultChildren;
 			
 			newNode.cslId = -1;
 			newNode.children = newNode.children || [];
@@ -459,6 +460,13 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				$.each(defaultAttributes, function (attribute, value) {
 					newNode.attributes.push({key: attribute, value: value, enabled: true});
 				});
+			}
+
+			defaultChildren = CSLEDIT_uiConfig.defaultChildren[newNode.name];
+
+			// populate with default children
+			if (newNode.children.length === 0 && typeof defaultChildren !== "undefined") {
+				newNode.children = defaultChildren;
 			}
 
 			if (typeof position === "number") {
