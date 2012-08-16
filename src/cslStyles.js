@@ -51,7 +51,7 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 
 	var localURLFromZoteroId = function (styleId) {
 		return CSLEDIT_urlUtils.getResourceUrl(
-			styleId.replace("http://www.zotero.org/styles/", "external/csl-styles/"));
+			styleId.replace("http://www.zotero.org/styles/", "external/csl-styles/") + ".csl");
 	};
 
 	return {
@@ -62,7 +62,9 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 			return getJSONData('generated/preGeneratedExampleCitations.json');
 		},
 		defaultStyleId : defaultStyleId,
-		defaultStyleURL : localURLFromZoteroId(defaultStyleId),
+		defaultStyleURL : function () {
+			return localURLFromZoteroId(defaultStyleId)
+		},
 		generateStyleId : generateStyleId
 	};
 });

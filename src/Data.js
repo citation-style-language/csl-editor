@@ -18,6 +18,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			'src/storage',
 			'src/options',
 			'src/urlUtils',
+			'src/cslStyles',
 			'src/debug'
 		],
 		function (
@@ -28,6 +29,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			CSLEDIT_storage,
 			CSLEDIT_options,
 			CSLEDIT_urlUtils,
+			CSLEDIT_cslStyles,
 			debug
 		) {
 	return function (CSL_DATA, _requiredNodes /*optional*/, updateTime /*optional*/) {
@@ -229,6 +231,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 		var getCslCode = function (comment /* optional */) {
 			var cslData = get();
 			reorderStyleInfoNode(cslData);
+		
 			return CSLEDIT_cslParser.cslCodeFromCslData(cslData, comment);
 		};
 
@@ -669,7 +672,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				}
 				
 				if (cslData === null || cslData === "") {
-					styleURL = CSLEDIT_cslStyles.defaultStyleURL;
+					styleURL = CSLEDIT_cslStyles.defaultStyleURL();
 					$.get(styleURL, {}, function (cslCode) {
 						var result;
 						cslCode = cslCode.replace(/<!--.*?-->/g, "");
