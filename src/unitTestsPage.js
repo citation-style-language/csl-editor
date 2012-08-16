@@ -9,7 +9,8 @@ define(
 			'src/test_xmlUtility',
 			'src/test_smartTree',
 			'src/test_NodeWatcher',
-			'src/test_urlUtils'
+			'src/test_urlUtils',
+			'src/test_cslStyles'
 			],
 		function () {}
 );

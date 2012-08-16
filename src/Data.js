@@ -669,7 +669,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				}
 				
 				if (cslData === null || cslData === "") {
-					styleURL = CSLEDIT_urlUtils.getResourceUrl("external/csl-styles/apa.csl");
+					styleURL = CSLEDIT_cslStyles.defaultStyleURL;
 					$.get(styleURL, {}, function (cslCode) {
 						var result;
 						cslCode = cslCode.replace(/<!--.*?-->/g, "");

@@ -474,11 +474,6 @@ define(
 			CSLEDIT_notificationBar.init(editorElement.find('#notificationBar'));
 		};
 
-		// used to generate the ids in the Zotero style repository
-		var getNormalisedStyleName = function () {
-			return getStyleName().replace(/[\(\)]/g, "").replace(/[\\\/:"*?<>| ]+/g, "-").toLowerCase();
-		};
-
 		// returns true to continue, false to cancel
 		var conformStyleToRepoConventions = function () {
 			// checks that the style conforms to repository conventions and
@@ -492,7 +487,7 @@ define(
 				cancel = false;
 
 			// check that the styleId and rel self link matches the schema conventions
-			generatedStyleId = "http://www.zotero.org/styles/" + getNormalisedStyleName();
+			generatedStyleId = CSLEDIT_cslStyles.generateStyleId(getStyleName());
 			links = CSLEDIT_data.getNodesFromPath("style/info/link");
 			$.each(links, function (i, link) {
 				link = new CSLEDIT_CslNode(link);
@@ -504,7 +499,7 @@ define(
 			});
 
 			debug.log("generatedStyleId = " + generatedStyleId);
-			$.each(CSLEDIT_cslStyles.styleTitleFromId, function (id, name) {
+			$.each(CSLEDIT_cslStyles.styles().styleTitleFromId, function (id, name) {
 				if (id === generatedStyleId || name === styleName) {
 					if (!confirm('The style title matches one that already exists.\n\n' +
 							'You should change it to avoid problems using this style ' +
@@ -566,8 +561,7 @@ define(
 			getStyleName : getStyleName,
 			getStyleId : getStyleId,
 			setStyleId : setStyleId,
-			conformStyleToRepoConventions : conformStyleToRepoConventions,
-			getNormalisedStyleName : getNormalisedStyleName
+			conformStyleToRepoConventions : conformStyleToRepoConventions
 		};
 	};
 });

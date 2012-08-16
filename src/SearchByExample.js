@@ -30,7 +30,7 @@ define(
 		var nameSearchTimeout,
 			styleFormatSearchTimeout,
 			exampleIndex = -1,
-			defaultStyle = "http://www.zotero.org/styles/apa",
+			defaultStyle = CSLEDIT_cslStyles.defaultStyleId,
 			realTimeSearch = false,
 			tolerance = 50,
 			userCitations,
