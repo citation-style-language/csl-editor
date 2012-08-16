@@ -41,12 +41,18 @@ define(
 			};
 
 			this.element.click(function () {
-				if (that.nodeWatcher.nodeData !== null) {
-					debug.log("selecting node " + that.nodeWatcher.nodeData.cslId);
+				if (that.nodeWatcher.nodeData === null) {
+					that.element.find('span').addClass('selected');
+					that.callbacks.selectNode(-1, [], that.nodeWatcher.nodePath);
+				} else {
 					that.callbacks.selectNode(that.nodeWatcher.nodeData.cslId);
 				}
 			});
 		}
+	};
+
+	CSLEDIT_SmartTreeHeading.prototype.deselectAll = function () {
+		this.element.find('span').removeClass('selected');
 	};
 
 	CSLEDIT_SmartTreeHeading.prototype.updateHtml = function (dynamicNode, nodeData) {
@@ -59,10 +65,6 @@ define(
 		if (dynamicNode) {
 			if (nodeData === null) {
 				span.addClass('missingNode').removeAttr('cslid');
-				span.click(function () {
-					CSLEDIT_viewController.selectNode(-1, [], that.nodeWatcher.nodePath);
-					span.addClass('selected');
-				});
 			} else {
 				span.removeClass('missingNode').attr('cslid', nodeData.cslId);
 			}
@@ -82,9 +84,14 @@ define(
 		if (this.nodeWatcher.nodeData !== null) {
 			return this.nodeWatcher.nodeData.cslId;
 		} else {
-			return null;
+			return -1;
 		}
 	};
+
+	CSLEDIT_SmartTreeHeading.prototype.getMissingNodePath = function () {
+		debug.assertEqual(this.nodeWatcher.nodeData, null);
+		return this.nodeWatcher.nodePath;
+	};		
 
 	CSLEDIT_SmartTreeHeading.prototype.getSelectedNodePath = function () {
 		var splitNodePath = this.nodeWatcher.nodePath.split("/"),

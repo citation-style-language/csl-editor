@@ -96,7 +96,6 @@ define(
 			callbacks,
 			selectedTree = null,
 			selectedNodeId = -1,
-			selectedMissingNodePath,
 			recentlyEditedMacro = -1,
 			nodePathView,
 			suppressSelectNode = false;
@@ -182,7 +181,7 @@ define(
 			}, syntaxHighlighter);
 		};
 		
-		var selectedNodeChanged = function (missingNodePath) {
+		var selectedNodeChanged = function () {
 			var nodeAndParent,
 				node,
 				parentNode,
@@ -196,15 +195,15 @@ define(
 				translatedNodeInfo,
 				translatedParentName;
 
-			selectedMissingNodePath = missingNodePath;
-
-			if (selectedNode() === -1) {
+			if (selectedTree !== null &&
+					selectedNode() === -1 && "getMissingNodePath" in selectedTree) {
 				propertyPanelElement.html(Mustache.to_html(
 					'<h3>The {{missingNode}} node doesn\'t exist</h3>' + 
 					'<p>Use the "+" Add Node button at the top left to add it.</p>',
-					{ missingNode : missingNodePath }
+					{ missingNode : selectedTree.getMissingNodePath() }
 				));
-				nodePathView.nodeMissing(missingNodePath);
+				nodePathView.nodeMissing(selectedTree.getMissingNodePath());
+				syntaxHighlighter.selectedNodeChanged(selectedNode());		
 				return;
 			}
 
@@ -312,6 +311,9 @@ define(
 		};
 
 		var deleteNode = function (id, nodesDeleted) {
+			propertyPanelElement.html('');
+			nodePathView.selectNode([]);
+
 			macroEditNotification(id - 1);
 			$.each(views, function (i, view) {
 				if ("deleteNode" in view) {
@@ -433,7 +435,9 @@ define(
 			selectNode : selectNode,
 			selectedNode : selectedNode,
 			selectedMissingNodePath : function () {
-				return selectedMissingNodePath
+				if (selectedTree !== null && "getMissingNodePath" in selectedTree) {
+					return selectedTree.getMissingNodePath();
+				}
 			},
 
 			expandNode : expandNode,
