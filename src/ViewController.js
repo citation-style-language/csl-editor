@@ -10,7 +10,7 @@ define(
 			'src/CslNode',
 			'src/Iterator',
 			'src/dataInstance',
-			'external/Mustache',
+			'external/mustache',
 			'src/debug',
 			'jquery.scrollTo'
 		],
