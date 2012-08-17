@@ -290,7 +290,8 @@ span.selected {
 	padding: 0;
 }
 
-.highlighted {
+.highlighted,
+.smartTreeHeading .missingNode:hover {
 	color : black;
 	cursor : pointer;
 	box-shadow: 0 0 5px 1px rgba(0,136,204,1);

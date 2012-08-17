@@ -323,7 +323,11 @@ define(
 			});
 
 			deleteNodeButton.on('click', function (e) {
-				CSLEDIT_controller.exec("deleteNode", [CSLEDIT_viewController.selectedNode()]);
+				if (CSLEDIT_viewController.selectedNode() === -1) {
+					alert("No node selected to delete");
+				} else {
+					CSLEDIT_controller.exec("deleteNode", [CSLEDIT_viewController.selectedNode()]);
+				}
 				e.preventDefault();
 			});
 		};
