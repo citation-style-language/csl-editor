@@ -1,6 +1,6 @@
 #searchResults {
 	font-size: 13px;
-	position : absolute;
+	/*position : relative;*/
 }
 
 #searchResults table {

@@ -199,7 +199,8 @@ define(
 				}
 
 				rows.push({
-					html : "<tr><td>" + CSLEDIT_uiConfig.capitaliseFirstLetter(key) + "</td><td>" + valueString + "</td></td>",
+					html : "<tr><td><span class=fieldTitle>" + CSLEDIT_uiConfig.capitaliseFirstLetter(key) +
+						"</span></td><td><span class=fieldValue>" + valueString + "</span></td></td>",
 					order : order
 				});
 			});
@@ -303,7 +304,7 @@ define(
 				});
 			}
 
-			// prepopulate with APA example	citations
+			// prepopulate with example	citations
 			userCitations = [];
 			userBibliographies = [];
 			$.each(CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[defaultStyle],

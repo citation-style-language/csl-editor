@@ -1,19 +1,33 @@
 <div id="styleFormatInput">
-	<div id=exampleDocumentContainer>
-		<h3>Example Reference</h3>
-		<button id="prevExample">Previous</button>
-		<button id="nextExample">&nbsp;&nbsp;Next&nbsp;&nbsp;</button>
-		<div id=exampleDocument>
+	<div id=topPane class=topPaneHeight></div>
+	<div id=leftColumn>
+		<div class=padding>
+			<h2><strong>1.</strong> Using the details below...</h2>
+			<div id=exampleDocumentContainer>
+				<h3>Example Reference</h3>
+				<button id="prevExample">Previous</button>
+				<button id="nextExample">&nbsp;&nbsp;Next&nbsp;&nbsp;</button>
+				<div id=exampleDocument>
+				</div>
+			</div>
 		</div>
 	</div>
-	<div id="styleFormatInputControls">
-		<p id=explanation></p>
-		Edit in-line citation:
-		<textarea type="text" id="userCitation" placeholder="Type inline citation here" ></textarea>
-		<br />
-		Edit bibliography entry:
-		<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
-		<button id="searchButton">Search</button>
+	<div id=rightColumn>
+		<div class=padding>
+			<div id=styleFormatInputControls class="topPaneHeight">
+				<h2><strong>2.</strong> Type a citation in the style you require</h2>
+				<div  class=topPaneHeight>
+					<p id=explanation></p>
+					Edit in-line citation:
+					<textarea type="text" id="userCitation" placeholder="Type inline citation here" ></textarea>
+					<br />
+					Edit bibliography entry:
+					<textarea type="text" id="userBibliography" placeholder="Type bibliography entry here" ></textarea>
+					<button id="searchButton">Search</button>
+				</div>
+			</div>
+			<h2><strong>3.</strong> And we'll show you the closest matches.</h2>
+			<div id=searchResults></div>
+		</div>
 	</div>
 </div>
-<div id="searchResults"></div>

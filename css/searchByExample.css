@@ -1,24 +1,60 @@
+/* overall layout */
+
 #mainContainer {
 	position: relative;
-	padding: 20px;
-/*	width: 800px;*/
+	min-width: 800px;
 }
-input, textarea
-{
+input, textarea {
 	width: 100%;
 }
-h1
-{
+h1 {
 	text-align: center;
 	font-family: sans-serif;
 }
-#exampleDocumentContainer
-{
+h2 {
+	font-weight: normal;
+}
+h2 strong {
+	font-weight: bold;
+}
+#topPane {
 	position: absolute;
-	left: 420px;
-	right: 4px;
-	top: 5px;
-	bottom: 0px;
+
+	top: 0px;
+	left: 0px;
+	right: 0px;
+
+	background-color: #EEEEEE;
+
+	border-bottom-style: solid;
+	border-bottom-color: #C3C3C3;
+	border-bottom-width: 1px;
+}
+.topPaneHeight {
+	height: 340px;
+}
+#rightColumn {
+	position: relative;
+	float: right;
+	width: 60%;
+}
+#leftColumn {
+	position: relative;
+	float: left;
+	width: 40%;
+}
+.padding {
+	position: absolute;
+	left: 10px;
+	right: 10px;
+	top: 10px;
+}
+
+/* example document */
+
+#exampleDocumentContainer {
+	position: relative;
+
 }
 #exampleDocumentContainer h3 {
 	padding: 0;
@@ -27,21 +63,19 @@ h1
 	display: inline;
 }
 #exampleDocument {
-	position: absolute;
-
-	left: 0;
-	right: 0;
-	top: 30;
-	bottom: 0;
-
-	background-color: #eeeeee;
+	background-color: #FCF8C9;
 	border: 1px solid #c3c3c3;
 
-	overflow: auto;
+	overflow-x: auto;
 }
 
-#exampleDocument table {
+#exampleDocument span.fieldTitle {
+	font-size: 12px;
+	font-weight: bold;
+}
+#exampleDocument span.fieldValue {
 	font-size: 13px;
+	font-family: monospace;
 }
 
 #exampleDocument table td {
@@ -66,19 +100,17 @@ h1
 	font-weight: bold;
 	color: #6d8fa2;
 }
+
+/* input controls */
+
 #styleFormatInputControls
 {
 	position: relative;
-	width: 400px;
-}
-div#styleFormatResult {
-	padding: 0 22px 0;
-	width: 600px;
 }
 button#searchButton {
 	background-position: left center;
 	background-repeat: no-repeat;
 	padding-left: 18px;
 /*	background-image defined in searchByExample.js.
- *	This lets us use rootURL to get the correct path. */
+ *	This lets us use the correct base URL path. */
 }
