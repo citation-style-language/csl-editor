@@ -236,7 +236,8 @@ define(
 				table,
 				rows = [],
 				fieldsNotToPartialMatch = ["abstract"],
-				userWords;
+				userWords,
+				elideLimit = 500;
 			
 			if (typeof(userInput) !== "undefined") {
 				userWords = userInput.toLowerCase().split(/\W/g);
@@ -264,6 +265,10 @@ define(
 					valueString = JSON.stringify(value);
 				} else {
 					valueString = value;
+				}
+				
+				if (valueString.length > elideLimit) {
+					valueString = valueString.substring(0, elideLimit) + "...";
 				}
 
 				if (valueString === "") {
