@@ -4,20 +4,20 @@
 	position: relative;
 	min-width: 800px;
 }
-input, textarea {
+#mainContainer input, textarea {
 	width: 100%;
 }
-h1 {
+#mainContainer h1 {
 	text-align: center;
 	font-family: sans-serif;
 }
-h2 {
+#mainContainer h2 {
 	font-weight: normal;
 }
-h2 strong {
+#mainContainer h2 strong {
 	font-weight: bold;
 }
-h3 {
+#mainContainer h3 {
 	margin: 2px;
 	font-size: 11px;
 	text-transform: uppercase;
