@@ -38,7 +38,8 @@ define(
 			citationClEditFrame,
 			bibliographyClEditFrame,
 			oldCitation = "",
-			oldBibliography = "";
+			oldBibliography = "",
+			formChangedTimeout;
 
 		CSLEDIT_options.setUserOptions(userOptions);
 		mainContainer = $(mainContainer);
@@ -63,7 +64,8 @@ define(
 				inputControlsElement.removeClass("citationSelected");
 				inputControlsElement.addClass("bibliographySelected");
 			}
-			formChanged();
+			clearTimeout(formChangedTimeout);
+			formChangedTimeout = setTimeout(formChanged, 50);
 		};
 		var getSelectedControl = function () {
 			if (inputControlsElement.hasClass("citationSelected")) {
