@@ -17,6 +17,16 @@ h2 {
 h2 strong {
 	font-weight: bold;
 }
+h3 {
+	margin: 2px;
+	font-size: 11px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #6C8FA2;
+	height: 21px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
 #topPane {
 	position: absolute;
 
@@ -31,7 +41,7 @@ h2 strong {
 	border-bottom-width: 1px;
 }
 .topPaneHeight {
-	height: 340px;
+	height: 323px;
 }
 #rightColumn {
 	position: relative;
@@ -51,20 +61,22 @@ h2 strong {
 }
 
 /* example document */
-
 #exampleDocumentContainer {
 	position: relative;
-
+}
+#exampleDocumentContainer button {
+	font-size: 12px;
+	margin: 2px;
+	padding-top: 1px;
+	padding-bottom: 1px;
 }
 #exampleDocumentContainer h3 {
-	padding: 0;
-	margin : 0;
-
 	display: inline;
 }
 #exampleDocument {
 	background-color: #FCF8C9;
 	border: 1px solid #c3c3c3;
+	border-radius: 3px;
 
 	overflow-x: auto;
 }
@@ -101,16 +113,54 @@ h2 strong {
 	color: #6d8fa2;
 }
 
+span.match {
+	background-color: white;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #DDDDDD;
+}
+
 /* input controls */
 
 #styleFormatInputControls
 {
 	position: relative;
+	padding: 0px;
+	margin: 0px;
+}
+#citationContainer,
+#bibliographyContainer {
+	position: relative;
+}
+#styleFormatInputControls.citationSelected #citationContainer .cleditorMain {
+	box-shadow: 0 0 5px 1px rgba(0,136,204,1);
+}
+#styleFormatInputControls.bibliographySelected #bibliographyContainer .cleditorMain {
+	box-shadow: 0 0 5px 1px rgba(0,136,204,1);
+}
+#styleFormatInputControls.citationSelected #citationContainer .arrow {
+	position: absolute;
+	left: -20px;
+	top: 19px;
+	border-color: transparent #CDCBAC;
+	border-style: solid;
+	border-width: 16px 0px 16px 16px;
+	height: 0px;
+	width: 0px;
+}
+#styleFormatInputControls.bibliographySelected #bibliographyContainer .arrow {
+	position: absolute;
+	left: -20px;
+	top: 39px;
+	border-color: transparent #CDCBAC;
+	border-style: solid;
+	border-width: 16px 0px 16px 16px;
+	height: 0px;
+	width: 0px;
 }
 button#searchButton {
-	background-position: left center;
-	background-repeat: no-repeat;
-	padding-left: 18px;
-/*	background-image defined in searchByExample.js.
- *	This lets us use the correct base URL path. */
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 8px;
+	margin-left: 0px;
 }

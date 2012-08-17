@@ -31,10 +31,14 @@ define(
 			styleFormatSearchTimeout,
 			exampleIndex = -1,
 			defaultStyle = CSLEDIT_cslStyles.defaultStyleId,
-			realTimeSearch = false,
 			tolerance = 50,
 			userCitations,
-			userBibliographies;
+			userBibliographies,
+			inputControlsElement,
+			citationClEditFrame,
+			bibliographyClEditFrame,
+			oldCitation = "",
+			oldBibliography = "";
 
 		CSLEDIT_options.setUserOptions(userOptions);
 		mainContainer = $(mainContainer);
@@ -49,6 +53,25 @@ define(
 			},
 			cache : false
 		});
+
+		var setSelectedControl = function (selected) {
+			if (selected === "citation") {
+				inputControlsElement.addClass("citationSelected");
+				inputControlsElement.removeClass("bibliographySelected");
+			} else {
+				debug.assertEqual(selected, "bibliography");
+				inputControlsElement.removeClass("citationSelected");
+				inputControlsElement.addClass("bibliographySelected");
+			}
+			formChanged();
+		};
+		var getSelectedControl = function () {
+			if (inputControlsElement.hasClass("citationSelected")) {
+				return "citation";
+			} 
+			debug.assert(inputControlsElement.hasClass("bibliographySelected"));
+			return "bibliography";
+		};
 
 		// used to display HTML tags for debugging
 		var escapeHTML = function (string) {
@@ -168,16 +191,64 @@ define(
 			return result.join(", ");
 		}
 
-		var formatExampleDocument = function () {
+		var tagMatches = function (string, matches) {
+			var from = null,
+				to = null,
+				result = "";
+
+			var getTagged = function () {
+				return "<span class=match>" + string.substring(from, to + 1) + "</span>";
+			};
+
+			$.each(string, function (i, char) {
+				if (from === null) {
+					if (matches[i]) {
+						from = i;
+						to = i;
+					} else {
+						// TODO: could be optimised if needed
+						result += char;
+					}
+				} else {
+					if (matches[i]) {
+						to = i;
+					} else if (char === " " && matches[i + 1]) {
+						to = i + 1;
+					} else {
+						result += getTagged();
+						result += char;
+						from = null;
+					}
+				}
+			});
+
+			if (from !== null) {
+				result += getTagged();
+			}
+
+			return result;
+		};
+
+		var formatExampleDocument = function (userInput) {
 			var jsonDocument = CSLEDIT_exampleData.jsonDocumentList[exampleIndex],
 				table,
-				rows = [];
+				rows = [],
+				fieldsNotToPartialMatch = ["abstract"],
+				userWords;
 			
+			if (typeof(userInput) !== "undefined") {
+				userWords = userInput.toLowerCase().split(/\W/g);
+				userWords.sort(function (a, b) { return b.length - a.length; });
+			}
+
 			table = $("<table/>");
 
 			$.each(jsonDocument, function (key, value) {
 				var order = CSLEDIT_uiConfig.fieldOrder.indexOf(key),
-					valueString;
+					valueString,
+					valueStringLower,
+					newValueString,
+					matchingChars = [];
 
 				if (order === -1) {
 					order = CSLEDIT_uiConfig.fieldOrder.length;
@@ -196,7 +267,34 @@ define(
 				if (valueString === "") {
 					// skip empty field
 					return true;
+				} else if (typeof(userWords) !== "undefined")  {
+					// check for a complete match
+					if (new RegExp(valueString, "i").test(userInput)) {
+						// All chars match
+						$.each(valueString, function (i, char) {
+							matchingChars[i] = true;
+						});
+					} else if (fieldsNotToPartialMatch.indexOf(key) === -1) {
+						valueStringLower = valueString.toLowerCase();
+						// highlight matches
+						$.each(userWords, function (i, word) {
+							var index,
+								index2;
+
+							if (word.length > 2) {
+								index = valueStringLower.indexOf(word);
+								while (index !== -1) {
+									for (index2 = index; index2 < index + word.length; index2++) {
+										matchingChars[index2] = true;
+									}
+									index = valueStringLower.indexOf(word, index + 1);
+								}
+							}
+						});
+					}
 				}
+			
+				valueString = tagMatches(valueString, matchingChars);
 
 				rows.push({
 					html : "<tr><td><span class=fieldTitle>" + CSLEDIT_uiConfig.capitaliseFirstLetter(key) +
@@ -211,40 +309,67 @@ define(
 				table.append(row.html);
 			});
 
-			document.getElementById("explanation").innerHTML = "<i>Please edit this example citation to match the style you are searching for.<br />";
-
 			$("#exampleDocument").children().remove();
 			$("#exampleDocument").append(table);
 		};
 
-		var clearResults = function () {
-			$("#searchResults").html("<i>Click search to find similar styles</i>");
+		var hasChanged = function () {
+			var newCitation = CSLEDIT_xmlUtility.cleanInput(
+					$("#userCitation").cleditor()[0].doc.body.innerHTML),
+				newBibliography = CSLEDIT_xmlUtility.cleanInput(
+					$("#userBibliography").cleditor()[0].doc.body.innerHTML);
+
+			if (newCitation !== oldCitation || newBibliography !== oldBibliography) {
+				return true;
+			} else {
+				return false;
+			}
 		};
 
 		var formChanged = function () {
+			var userInput,
+				words;
+
+			if (hasChanged()) {
+				$("#searchResults").html("<i>Click search to find similar styles</i>");
+			}
+
+			if (getSelectedControl() === "citation") {
+				userInput = $("#userCitation").cleditor()[0].doc.body.innerHTML;
+			} else {
+				userInput = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
+			}
+			userInput = CSLEDIT_xmlUtility.cleanInput(userInput);
+			
+			formatExampleDocument(userInput);
+		};
+
+		var search = function () {
 			var userCitation,
 				userBibliography,
 				timeout = 10;
 
-			if (realTimeSearch) {
-				timeout = 400;
-			}		
-
-			clearTimeout(styleFormatSearchTimeout);
+			$("#styleFormatResult").html("<i>Searching...</i>");
 
 			// clean the input in the editors
 			userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML;
 			userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
 
-			$("#userCitation").cleditor()[0].doc.body.innerHTML = CSLEDIT_xmlUtility.cleanInput(userCitation);
-			$("#userBibliography").cleditor()[0].doc.body.innerHTML = CSLEDIT_xmlUtility.cleanInput(userBibliography);
+			userCitation = CSLEDIT_xmlUtility.cleanInput(userCitation);
+			userBibliography = CSLEDIT_xmlUtility.cleanInput(userBibliography);
+
+			$("#userCitation").cleditor()[0].doc.body.innerHTML = userCitation;
+			$("#userBibliography").cleditor()[0].doc.body.innerHTML = userBibliography;
+
+			oldCitation = userCitation;
+			oldBibliography = userBibliography;
 
 			$("#searchResults").html("<p><emp>Searching for styles...</emp></p>");
 
 			styleFormatSearchTimeout = setTimeout(searchForStyle, timeout);
 		};
 
-		var updateExample = function (newExampleIndex) {
+		var updateExample = function (newExampleIndex, initialising) {
 			var length = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[defaultStyle].length;
 
 			if (exampleIndex !== -1) {
@@ -255,13 +380,37 @@ define(
 			exampleIndex = (newExampleIndex + length) % length;
 
 			formatExampleDocument();
-			clearResults();
 
 			$("#userCitation").cleditor()[0].doc.body.innerHTML = userCitations[exampleIndex];
 			$("#userBibliography").cleditor()[0].doc.body.innerHTML = userBibliographies[exampleIndex];
+			
+			if (initialising !== true) {
+				formChanged();
+			}
+		};
+
+		var getClEditFrame = function (element, frameId) {
+			var clEditFrame,
+				cledit = $("#inputcledit").cleditor()[0];
+
+			$(element.$frame[0]).attr("id", frameId);
+			if(!document.frames)
+			{
+				clEditFrame = $('#' + frameId)[0].contentWindow.document;
+			}
+			else
+			{
+				clEditFrame = document.frames[frameId].document;
+			}
+			return clEditFrame;
 		};
 
 		var init = function () {
+			var citationInput,
+				bibliographyInput;
+
+			inputControlsElement = $('#styleFormatInputControls');
+
 			if (CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[defaultStyle].length !==
 					CSLEDIT_exampleData.jsonDocumentList.length) {
 				alert("Example citations need re-calculating on server");
@@ -278,31 +427,32 @@ define(
 					}
 				}
 			});
-			$.cleditor.defaultOptions.width = 390;
+			$.cleditor.defaultOptions.width = 440;
 			$.cleditor.defaultOptions.height = 100;
 			$.cleditor.defaultOptions.controls =
 				"bold italic underline subscript superscript ";
-
+/*
 			$('button#searchButton').css({
 				'background-image' :
 					"url(" + CSLEDIT_urlUtils.getResourceUrl('external/famfamfam-icons/magnifier.png') + ')'
 			});
+*/
+			citationInput = $("#userCitation").cleditor({height: 55})[0];
+			bibliographyInput = $("#userBibliography").cleditor({height: 85})[0];
 
-			var userCitationInput = $("#userCitation").cleditor({height: 55})[0];
-			$("#userBibliography").cleditor({height: 85});
+			$(getClEditFrame(citationInput, "citationInputFrame")).keyup(function () {
+				setSelectedControl("citation");
+			}).click(function () {
+				setSelectedControl("citation");
+			});
 
-			if (realTimeSearch) {
-				$("#userCitation").cleditor()[0].change(formChanged);
-				$("#userBibliography").cleditor()[0].change(formChanged);
-				$('#searchButton').hide();
-			} else {
-				$("#userCitation").cleditor()[0].change(clearResults);
-				$("#userBibliography").cleditor()[0].change(clearResults);
-				$('#searchButton').on("click", function () {
-					$("#styleFormatResult").html("<i>Searching...</i>");
-					formChanged();
-				});
-			}
+			$(getClEditFrame(bibliographyInput, "bibliographyInputFrame")).keyup(function () {
+				setSelectedControl("bibliography");
+			}).click(function () {
+				setSelectedControl("bibliography");
+			});
+
+			$('#searchButton').on("click", search);
 
 			// prepopulate with example	citations
 			userCitations = [];
@@ -313,7 +463,7 @@ define(
 				userBibliographies.push(exampleCitation.formattedBibliography);
 			});
 
-			updateExample(0);
+			updateExample(0, true);
 
 			$('#nextExample').click(function () {
 				updateExample(exampleIndex - 1);	
@@ -322,7 +472,9 @@ define(
 				updateExample(exampleIndex + 1);
 			});
 
-			formChanged();
+			setSelectedControl("citation");
+
+			search();
 		};
 	};
 
