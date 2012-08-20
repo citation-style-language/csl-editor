@@ -110,7 +110,7 @@ define(function () {
 					["2011"]
 				]
 			},
-			"page": "313",
+			"number-of-pages": "313",
 			"publisher": "University of Virginia Press",
 			"title": "Shaping the Body Politic: Art and Political Formation in Early America",
 			"type": "book"
