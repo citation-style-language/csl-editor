@@ -13,7 +13,7 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 				dataType : "json",
 				async : false,
 				success : function (data) {
-					console.log("fetched json: " + path);
+					debug.log("fetched json: " + path);
 					cache[path] = data;
 				},
 				error : function () {

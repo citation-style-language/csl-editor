@@ -17,13 +17,13 @@ define(
 		ok(numStyles > 2000, "enough styles");
 		equal(numStyles, Object.keys(CSLEDIT_cslStyles.styles().styleTitleFromId).length, "enough titles");
 		
-		console.log("Total number of styles: " + numStyles);
+		debug.log("Total number of styles: " + numStyles);
 	});
 
 	test('examples', function () {
 		ok(Object.keys(CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId).length > 500);
 
-		console.log("Number of example citations: " +
+		debug.log("Number of example citations: " +
 			CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId.length);
 	});
 
@@ -49,7 +49,7 @@ define(
 		});
 
 		successRate = numSuccesses / (numSuccesses + failures.length);
-		console.log("success rate = " + successRate);
+		debug.log("success rate = " + successRate);
 		ok(successRate > tolerance, "success rate = " + Math.round(successRate * 100) +
 				"% (minimum tolerance = " + Math.round(100 * tolerance) + "%)");
 

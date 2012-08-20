@@ -57,7 +57,7 @@ define([	'src/uiConfig',
 			var cslData = CSLEDIT_data.get();
 
 			if (verifyAllChanges) {
-				console.time("verifyTree");
+				debug.time("verifyTree");
 				// Check for inconsistencies with CSLEDIT_data
 				treeElement.find('li[cslid]').each(function () {
 					var $this = $(this),
@@ -69,7 +69,7 @@ define([	'src/uiConfig',
 
 				// Can't have non-macrolink nodes as children of a text node
 			debug.assertEqual(treeElement.find('li[cslid][rel=text] li[macrolink!=true]').length, 0);
-				console.timeEnd("verifyTree");
+				debug.timeEnd("verifyTree");
 			}
 		};
 		
@@ -536,7 +536,7 @@ define([	'src/uiConfig',
 			});
 			
 			$.each(rangesToRemove, function (index, range) {
-				console.log("deleting range " + index);
+				debug.log("deleting range " + index);
 				ranges.splice(index, 1);
 				treeElement.jstree("remove", range.rootNode);
 			});
@@ -549,7 +549,7 @@ define([	'src/uiConfig',
 				currentCslId,
 				range;
 
-			console.log("delete node " + id + ", amount = " + nodesDeleted);
+			debug.log("delete node " + id + ", amount = " + nodesDeleted);
 
 			removeTreesWithin(id, id + nodesDeleted - 1);
 		

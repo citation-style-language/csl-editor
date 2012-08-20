@@ -1,7 +1,6 @@
 requirejs.config({
 	// we don't know where the page is so we must rely on it for a base url
 	paths: {
-		'jquery' : 'external/jquery-1.7.2.min',
 		'jquery.ui' : 'external/jquery-ui-1.8.22.custom.min',
 		'jquery.hotkeys' : 'external/jstree/_lib/jquery.hotkeys',
 		'jquery.jstree-patched' : 'external/jstree/jquery.jstree-patch1',

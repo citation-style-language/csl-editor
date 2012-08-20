@@ -287,16 +287,12 @@ define(
 				rootNode,
 				newNode;
 
-			console.log("add missing node " + missingNodePath);
-
 			if (typeof(missingNodePath) === "undefined" || missingNodePath === null) {
 				return;
 			}
 			
 			rootPath = missingNodePath.replace(/\/[^\/]+$/, "");
 			nodeName = missingNodePath.replace(rootPath + "/", "");
-
-			console.log("adding missing node: " + nodeName + " to " + rootPath);
 
 			rootNode = CSLEDIT_data.getNodesFromPath(rootPath);
 			debug.assert(rootNode.length > 0);

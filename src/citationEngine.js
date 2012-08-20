@@ -154,7 +154,7 @@ define([	'src/storage',
 	var runCiteprocAndDisplayOutput = function (
 			statusOut, exampleOut, citationsOut, bibliographyOut, callback) {
 
-		console.time("runCiteprocAndDisplayOutput");
+		debug.time("runCiteprocAndDisplayOutput");
 
 		var style = CSLEDIT_data.getCslCode(),
 			inLineCitations = "",
@@ -175,12 +175,12 @@ define([	'src/storage',
 
 		statusOut.html("<i>Re-formatting citations...</i>");
 	
-		console.time("formatCitations");
+		debug.time("formatCitations");
 
 		formattedResult = formatCitations(
 			style, CSLEDIT_exampleCitations.getCiteprocReferences(), CSLEDIT_exampleCitations.getCitations(), true);
 		
-		console.timeEnd("formatCitations");
+		debug.timeEnd("formatCitations");
 
 		statusOut.html(formattedResult.statusMessage);
 
@@ -267,7 +267,7 @@ define([	'src/storage',
 			}
 		}
 		
-		console.timeEnd("runCiteprocAndDisplayOutput");
+		debug.timeEnd("runCiteprocAndDisplayOutput");
 	}
 
 	// Return public members:
