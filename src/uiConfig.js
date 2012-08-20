@@ -66,6 +66,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		"issue",
 		"chapter",
 		"page",
+		"number-of-pages",
 		"publisher"
 	];
 
