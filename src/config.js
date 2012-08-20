@@ -4,7 +4,7 @@ requirejs.config({
 		'jquery.ui' : 'external/jquery-ui-1.8.22.custom.min',
 		'jquery.hotkeys' : 'external/jstree/_lib/jquery.hotkeys',
 		'jquery.jstree-patched' : 'external/jstree/jquery.jstree-patch1',
-		'jquery.layout' : 'external/jquery.layout-latest.min',
+		'jquery.layout' : 'external/jquery.layout-1.3.0.rc30.7.min',
 		'jquery.hoverIntent' : 'external/jquery.hoverIntent.minified',
 		'jquery.scrollTo' : 'external/jquery.scrollTo-1.4.2-min',
 		'jquery.cleditor' : 'external/cleditor/jquery.cleditor',
