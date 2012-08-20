@@ -102,7 +102,10 @@ define(
 				'<tr><td nowrap="nowrap"><span class="faint">Bibliography</span></td>' +
 				'<td class=match>' +
 				bibliography + '</td>' + bibliographyCloseness + "</tr>" +
-				'<tr><td></td><td><button class="editStyle" styleURL="' + style.styleId + '">Edit style</button><button class="editStyle" styleURL="' + style.styleId + '">View CSL</button><button class="editStyle" styleURL="' + style.styleId + '">Use this style</button></td></tr>' +
+				'<tr><td></td><td>' + 
+				'<button class="editStyle" styleURL="' + style.styleId + '">Edit style</button>' +
+				//'<button class="editStyle" styleURL="' + style.styleId + '">View CSL</button>' +
+				//'<button class="editStyle" styleURL="' + style.styleId + '">Use this style</button></td></tr>' +
 				'</table>');
 		}
 		
