@@ -47,13 +47,12 @@ define(
 
 			if (searchQuery.length === 0) {
 				$("#message").html("<h2>Popular Styles</h2>");
-				for (index = 0; index < 20; index++) {
-					styleId = CSLEDIT_exampleData.topStyles[index];
+				$.each(CSLEDIT_exampleData.topStyles, function (i, styleId) {
 					result.push({
 						styleId : styleId,
 						masterId : CSLEDIT_cslStyles.styles().masterIdFromId[styleId]
 					});
-				}
+				});
 				CSLEDIT_searchResults.displaySearchResults(result, $("#searchResults"));
 				previousQuery = "";
 				return;

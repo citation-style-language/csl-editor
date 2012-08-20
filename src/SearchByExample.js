@@ -167,7 +167,7 @@ define(
 			matchQualities.sort(function (a, b) {return b.matchQuality - a.matchQuality; });
 
 			// top results
-			for (index = 0; index < Math.min(5, matchQualities.length); index++) {
+			for (index = 0; index < matchQualities.length; index++) {
 				result.push({
 					styleId : matchQualities[index].styleId,
 					masterId : matchQualities[index].styleId,

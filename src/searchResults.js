@@ -15,7 +15,9 @@ define(
 			CSLEDIT_cslStyles,
 			CSLEDIT_xmlUtility,
 			debug
-		) {
+		) {	
+	var outputNode;
+
 	var closenessString = function (distance, stringA, stringB) {
 		var matchQuality = CSLEDIT_diff.matchQuality(stringA, stringB),
 			closeness;
@@ -29,7 +31,7 @@ define(
 		return '<td class="closeness match">' + closeness + '</td>';
 	};
 
-	var displaySearchResults = function (styles, outputNode, exampleIndex /* optional */) {
+	var displaySearchResults = function (styles, _outputNode, exampleIndex /* optional */) {
 		var index,
 			outputList = [],
 			masterStyleSuffix = "",
@@ -43,11 +45,16 @@ define(
 			bibliographyDiff,
 			bibliographyDistance,
 			featuredStyleClass,
-			featuredStyleText;
+			featuredStyleText,
+			resultsLimit = 30;
+
+		outputNode = outputNode || _outputNode;
+		
+		outputNode.html("");
 
 		exampleIndex = exampleIndex || 0;
 
-		for (index = 0; index < Math.min(styles.length, 20); index++)
+		for (index = 0; index < Math.min(styles.length, resultsLimit); index++)
 		{
 			style = styles[index];
 			if (style.masterId !== style.styleId)
@@ -100,18 +107,18 @@ define(
 		}
 		
 		if (outputList.length === 0) {
-			outputNode.html('<p>No results found</p>');
-		} else if (outputList.length === 0 && searchQuery.length === 0) {
-			outputNode.html(
-				'<p>Popular styles:</p>' +
-					outputList.join("<p><p>")
-			);
+			outputNode.append('<p>No results found</p>');
 		} else {
-			outputNode.html(
-				'<p>Displaying ' + outputList.length + ' results:</p>' +
-					outputList.join("<p><p>")
-			);
-		}
+			if (outputList.length === 0 && searchQuery.length === 0) {
+				outputNode.append('<p>Popular styles:</p>');
+			} else {
+				outputNode.append('<p>Displaying ' + outputList.length + ' results:</p>');
+			}
+			
+			$.each(outputList, function (i, entry) {
+				outputNode.append(entry + "<p/>");
+			});
+		} 
 
 		$("button.editStyle").click(function (event) {
 			var styleURL = $(event.target).attr("styleURL");
