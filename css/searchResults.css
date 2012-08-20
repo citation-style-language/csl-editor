@@ -18,7 +18,7 @@
 	position : relative;
 }
 #searchResults td.closeness {
-	width : 160px;
+	width : 100px;
 	font-weight: bold;
 	color: #0D3785;
 }
