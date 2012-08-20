@@ -14,13 +14,9 @@ requirejs.config({
 		'external/codemirror' : 'external/codemirror2/lib/codemirror',
 		'external/codemirrorXmlMode' : 'external/codemirror2/mode/xml/xml',
 		
-		'external/citeproc/citeproc' : 'external/citeproc/citeproc-1.0.336'
+		'external/citeproc/citeproc' : 'external/citeproc/citeproc-1.0.336',
 
-		// use optimized versions if available
-		//'src/VisualEditor' : [
-		//	'build/VisualEditor-built',
-		//	'src/VisualEditor'
-		//]
+		'external/xregexp' : 'external/xregexp/xregexp-with-unicode-base-min',
 	},
 	shim: {
 		'jquery.ui': {
@@ -47,9 +43,6 @@ requirejs.config({
 		'jquery.qunit': {
 			deps : ['jquery']
 		},
-		'external/codemirror': {
-			exports: 'CodeMirror'
-		},
 		'external/codemirrorXmlMode': {
 			deps : ['external/codemirror'],
 			exports: 'CodeMirror'
@@ -66,6 +59,12 @@ requirejs.config({
 				'src/citeprocLoadSys'
 			],
 			exports: 'CSL'
+		},
+		'external/xregexp' : {
+			exports : 'XRegExp'
+		},
+		'external/codemirror': {
+			exports: 'CodeMirror'
 		}
 	}
 });

@@ -10,6 +10,7 @@ define(
 			'src/cslStyles',
 			'src/urlUtils',
 			'src/debug',
+			'external/xregexp',
 			'jquery.ui',
 			'jquery.cleditor'
 		],
@@ -23,6 +24,7 @@ define(
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils,
 			debug,
+			XRegExp,
 			jquery_ui,
 			jquery_cleditor
 		) {
@@ -240,11 +242,18 @@ define(
 				elideLimit = 500;
 			
 			if (typeof(userInput) !== "undefined") {
-				userWords = userInput.toLowerCase().split(/\W/g);
+				userWords = userInput.toLowerCase().split(XRegExp('\\P{L}', 'g'));
 				userWords.sort(function (a, b) { return b.length - a.length; });
 			}
 
 			table = $("<table/>");
+
+			debug.log("user input = " + userInput);
+			if ("editor" in jsonDocument) {
+				var editor;
+				editor = personString(jsonDocument["editor"]);
+				debug.log("editor = " + editor);
+			}
 
 			$.each(jsonDocument, function (key, value) {
 				var order = CSLEDIT_uiConfig.fieldOrder.indexOf(key),
