@@ -1,12 +1,14 @@
 define(
 		[	'src/VisualEditor',
-			'src/cslStyles'
+			'src/cslStyles',
+			'src/debug'
 		],
 		function (
 			CSLEDIT_VisualEditor,
-			CSLEDIT_cslStyles
+			CSLEDIT_cslStyles,
+			debug
 		) {
-	module('CSLEDIT_VisualEditor');
+	module('CSLEDIT_cslStyles');
 
 	test('styles', function () {
 		var defaultMasterId = CSLEDIT_cslStyles.styles().masterIdFromId[CSLEDIT_cslStyles.defaultStyleId],
