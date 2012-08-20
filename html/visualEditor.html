@@ -2,26 +2,26 @@
 </div>
 <div id="mainContainer">
 	<div id="leftContainer" class="ui-layout-west">
-	<div class="dropdown-container">
-		<ul class="dropdown">
-			<li>
-				<a>Style <span class="disclosure">&#9662;</span></a>
-				<ul class="sub_menu">
-					<li><a id="menuNewStyle">New Style</a></li>
-					<li><a id="menuLoadCsl">Load CSL</a></li>
-					<li><a id="menuLoadStyleFromUrl">Load Style from URL</a></li>
-					<li><a id="menuSaveCsl">Save CSL</a></li>
-				</ul>
-			</li>
-			<li>
-				<a>Edit <span class="disclosure">&#9662;</span></a>
-				<ul class="sub_menu">
-					<li><a id="menuUndo">Undo</a></li>
-					<li><a id="menuRedo">Redo</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
+		<div class="dropdown-container">
+			<ul class="dropdown">
+				<li>
+					<a>Style <span class="disclosure">&#9662;</span></a>
+					<ul class="sub_menu">
+						<li><a id="menuNewStyle">New Style</a></li>
+						<li><a id="menuLoadCsl">Load CSL</a></li>
+						<li><a id="menuLoadStyleFromUrl">Load Style from URL</a></li>
+						<li><a id="menuSaveCsl">Save CSL</a></li>
+					</ul>
+				</li>
+				<li>
+					<a>Edit <span class="disclosure">&#9662;</span></a>
+					<ul class="sub_menu">
+						<li><a id="menuUndo">Undo</a></li>
+						<li><a id="menuRedo">Redo</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
 		<div id="treeEditorPanel" class="panel">
 			<div id="treeEditorToolbar">
 				<a class='add' href="#" title="Add node">+</a><a class='delete' href="#" title="Delete node">-</a>
@@ -46,22 +46,23 @@
 				</ul>
 			</li>
 		</ul>
+		<div id=rightSplitterLayout>
+			<div id="topRightContainer" class="ui-layout-north">
+				<div id="exampleOutput" class="panel">
+					<div id="statusMessage"></div>
 
-		<div id="topRightContainer" class="ui-layout-north">
-			<div id="exampleOutput" class="panel">
-				<div id="statusMessage"></div>
+					<h3>Example Citations</h3>
+					<div id="formattedCitations"></div>
 
-				<h3>Example Citations</h3>
-				<div id="formattedCitations"></div>
-
-				<h3>Example Bibliography</h3>
-				<div id="formattedBibliography"></div>
+					<h3>Example Bibliography</h3>
+					<div id="formattedBibliography"></div>
+				</div>
 			</div>
-		</div>
-		<div id="bottomRightContainer" class="ui-layout-center">
-			<div id="elementPropertyPanel" class="panel">
-				<div id="nodePathView"></div>
-				<div id="elementProperties"></div>
+			<div id="bottomRightContainer" class="ui-layout-center">
+				<div id="elementPropertyPanel" class="panel">
+					<div id="nodePathView"></div>
+					<div id="elementProperties"></div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -487,7 +487,11 @@ define(
 				}
 			});
 
-			editorElement.find("#rightContainer").layout({
+			// workaround for apparent bug where jquery.layout sets overflow to auto
+			// TODO: investigate why
+			editorElement.find('#mainContainer').css("overflow", "hidden");
+
+			editorElement.find("#rightSplitterLayout").layout({
 				closable : false,
 				resizable : true,
 				livePaneResizing : true,
@@ -497,7 +501,7 @@ define(
 						CSLEDIT_storage.setItem("CSLEDIT_geometry.topPaneWidth", paneState.size);
 					}
 				}
-			});
+			});			
 
 			CSLEDIT_notificationBar.init(editorElement.find('#notificationBar'));
 		};

@@ -97,6 +97,13 @@ ul.example-citations {
 	width: 75%;
 	height: 100%;
 }
+#rightSplitterLayout {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 36px;
+	bottom: 0;
+}
 #topRightContainer {
 	position: absolute;
 	left: 0;
@@ -274,11 +281,6 @@ ul.dropdown {
 	margin: 0;
 	padding: 0;
 	z-index: 30 !important;
-}
-
-#exampleOutput {
-	/* override the value in base.css to make space for the title bar */
-	top: 36px;
 }
 
 /* Highlighting */
