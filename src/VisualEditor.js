@@ -360,7 +360,7 @@ define(
 			editorElement.find('#menuNewStyle').click(function () {
 				// fetch the URL
 				$.ajax({
-					url : CSLEDIT_urlUtils.getResourceUrl("/content/newStyle.csl"),
+					url : CSLEDIT_urlUtils.getResourceUrl("content/newStyle.csl"),
 					dataType : "text",
 					success : function (cslCode) {
 						debug.log("csl code received: " + cslCode);
