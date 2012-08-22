@@ -3,11 +3,9 @@
 define(['jquery', 'src/exampleData', 'src/urlUtils', 'src/getUrl'], function ($, CSLEDIT_exampleData, CSLEDIT_urlUtils, getUrlPlugin) {
 	var userOptions = {};
 	var defaultOptions = {
-			loadCSLName : "Load CSL",
 			loadCSLFunc : function () {
 				alert("load CSL function not implemented");
 			},
-			saveCSLName : "Save CSL",
 			saveCSLFunc : function (cslCode) {			
 				window.location.href =
 					"data:application/xml;charset=utf-8," +
@@ -18,7 +16,6 @@ define(['jquery', 'src/exampleData', 'src/urlUtils', 'src/getUrl'], function ($,
 				alert("Edit style not avaiable.\n\n" +
 					"For implementers: You need to add an editStyle_func to the options.");
 			},
-			loadStyleFromUrlName : "Load Style From URL",
 			loadStyleFromUrlFunc : function () {
 				alert("load from url not implemented");
 			},
