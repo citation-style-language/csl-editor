@@ -503,11 +503,12 @@ define(
 
 			if (CSLEDIT_urlUtils.getUrlVar("advanced") === "true") {
 				$('#alternateSearch').css("display", "inline").click(function () {
-					search();
+					oldCitation = "";
+					oldBibliography = "";
+					formChanged();
 				});
 				$('#alternateSearchLabel').css('display', 'inline');
 			}
-
 			
 			search();
 		};

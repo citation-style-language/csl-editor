@@ -80,6 +80,9 @@ define(
 					CSLEDIT_diff.prettyHtmlDiff(style.userBibliography, CSLEDIT_xmlUtility.cleanInput(bibliography));
 				bibliographyCloseness = closenessString(
 						style.userBibliography, CSLEDIT_xmlUtility.cleanInput(bibliography));
+
+				debug.log("user: " + style.userBibliography);
+				debug.log("form: " + CSLEDIT_xmlUtility.cleanInput(bibliography));
 			}
 
 			featuredStyleClass = '';

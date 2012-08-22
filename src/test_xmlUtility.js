@@ -36,4 +36,14 @@ define(['src/xmlUtility', 'jquery.qunit'], function (CSLEDIT_xmlUtility) {
 
 		equal(xml, ' hello ');
 	});
+
+	test("clean", function () {
+		var bibliography = '<div class="csl-entry">' +
+			'    <div class="csl-left-margin">[1]</div>' +
+			'<div class="csl-right-inline"> M. D. McInnis and L. P. Nelson, <i>Shaping the Body Politic: Art and Political Formation in Early America</i>. University of Virginia Press, 2011.</div>' +
+			'</div>';
+
+		equal(CSLEDIT_xmlUtility.cleanInput(bibliography),
+			'[1] M. D. McInnis and L. P. Nelson, <i>Shaping the Body Politic: Art and Political Formation in Early America</i>. University of Virginia Press, 2011.');
+	});
 });

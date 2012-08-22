@@ -60,6 +60,7 @@ define(function () {
 		input = input.replace(/&lt;/g, "&#60;");
 		input = input.replace(/&gt;/g, "&#62;");
 		input = input.replace(/&quot;/g, "&#34;");
+		input = $.trim(input);
 
 		return input;
 	};
