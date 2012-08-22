@@ -18,7 +18,7 @@ define(
 		) {	
 	var outputNode;
 
-	var closenessString = function (distance, stringA, stringB) {
+	var closenessString = function (stringA, stringB) {
 		var matchQuality = CSLEDIT_diff.matchQuality(stringA, stringB),
 			closeness;
 
@@ -41,9 +41,7 @@ define(
 			citationCloseness = "",
 			bibliographyCloseness = "",
 			citationDiff,
-			citationDistance,
 			bibliographyDiff,
-			bibliographyDistance,
 			featuredStyleClass,
 			featuredStyleText,
 			resultsLimit = 30;
@@ -72,7 +70,7 @@ define(
 					style.userCitation !== "" &&
 					citation !== "") {
 				citationDiff = CSLEDIT_diff.prettyHtmlDiff(style.userCitation, citation);
-				citationCloseness = closenessString(citationDistance, style.userCitation, citation);
+				citationCloseness = closenessString(style.userCitation, citation);
 			}
 
 			if (typeof style.userBibliography !== "undefined" &&
@@ -81,7 +79,7 @@ define(
 				bibliographyDiff =
 					CSLEDIT_diff.prettyHtmlDiff(style.userBibliography, CSLEDIT_xmlUtility.cleanInput(bibliography));
 				bibliographyCloseness = closenessString(
-						bibliographyDistance, style.userBibliography, CSLEDIT_xmlUtility.cleanInput(bibliography));
+						style.userBibliography, CSLEDIT_xmlUtility.cleanInput(bibliography));
 			}
 
 			featuredStyleClass = '';

@@ -4,7 +4,7 @@
 	position: relative;
 	min-width: 800px;
 }
-#mainContainer input, textarea {
+#mainContainer textarea {
 	width: 100%;
 }
 #mainContainer h1 {
@@ -163,4 +163,11 @@ button#searchButton {
 	font-weight: bold;
 	margin-top: 8px;
 	margin-left: 0px;
+}
+#alternateSearch,
+#alternateSearchLabel {	
+	margin-top: 12px;
+	float: right;
+
+	display: none;
 }

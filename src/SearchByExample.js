@@ -41,7 +41,8 @@ define(
 			bibliographyClEditFrame,
 			oldCitation = "",
 			oldBibliography = "",
-			formChangedTimeout;
+			formChangedTimeout,
+			exampleCitationsFromMasterId = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId;
 
 		CSLEDIT_options.setUserOptions(userOptions);
 		mainContainer = $(mainContainer);
@@ -104,6 +105,7 @@ define(
 				exampleCitation,
 				formattedCitation,
 				thisMatchQuality,
+				cleanFormattedBibliography,
 				row = function (title, value) {
 					return "<tr><td><span class=faint>" + title + "</span></td><td>" + value + "</td></tr>";
 				};
@@ -117,12 +119,13 @@ define(
 				userBibliography = "";
 			}
 
-			for (styleId in CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId) {
-				if (CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
-					exampleCitation = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[styleId][exampleIndex];
+			for (styleId in exampleCitationsFromMasterId) {
+				if (exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
+					exampleCitation = exampleCitationsFromMasterId[styleId][exampleIndex];
 
 					if (exampleCitation !== null && exampleCitation.statusMessage === "") {
 						formattedCitation = exampleCitation.formattedCitations[0];
+						cleanFormattedBibliography = CSLEDIT_xmlUtility.cleanInput(exampleCitation.formattedBibliography);
 
 						if (userCitation !== "") {
 							citationMatchQuality = CSLEDIT_diff.matchQuality(
@@ -132,16 +135,20 @@ define(
 						}
 						if (userBibliography !== "") {
 							bibliographyMatchQuality = CSLEDIT_diff.matchQuality(
-								userBibliography, CSLEDIT_xmlUtility.cleanInput(exampleCitation.formattedBibliography));
+								userBibliography, cleanFormattedBibliography);
 						} else {
 							bibliographyMatchQuality = 0;
 						}
 
 						thisMatchQuality = 0;
-						if (citationMatchQuality > tolerance) {
-							thisMatchQuality += citationMatchQuality;
+						if (perCharacterOrdering()) {
+							thisMatchQuality += citationMatchQuality * 
+								Math.max(userCitation.length, formattedCitation.length);
+							thisMatchQuality += bibliographyMatchQuality *
+								Math.max(userBibliography.length, cleanFormattedBibliography.length);
 						}
-						if (bibliographyMatchQuality > tolerance) {
+						else {
+							thisMatchQuality += citationMatchQuality;
 							thisMatchQuality += bibliographyMatchQuality;
 						}
 
@@ -181,7 +188,11 @@ define(
 			debug.timeEnd("searchForStyle");
 		};
 
-		function personString(authors) {
+		var perCharacterOrdering = function () {
+			return $('#alternateSearch').is(":checked");
+		};
+
+		var personString = function (authors) {
 			var result = [],
 				index = 0;
 
@@ -193,7 +204,7 @@ define(
 				result.push(authors[index].given + " " + authors[index].family);
 			}
 			return result.join(", ");
-		}
+		};
 
 		var tagMatches = function (string, matches) {
 			var from = null,
@@ -386,7 +397,7 @@ define(
 		};
 
 		var updateExample = function (newExampleIndex, initialising) {
-			var length = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[defaultStyle].length;
+			var length = exampleCitationsFromMasterId[defaultStyle].length;
 
 			if (exampleIndex !== -1) {
 				userCitations[exampleIndex] = $("#userCitation").cleditor()[0].doc.body.innerHTML;
@@ -427,7 +438,7 @@ define(
 
 			inputControlsElement = $('#styleFormatInputControls');
 
-			if (CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[defaultStyle].length !==
+			if (exampleCitationsFromMasterId[defaultStyle].length !==
 					CSLEDIT_exampleData.jsonDocumentList.length) {
 				alert("Example citations need re-calculating on server");
 			}
@@ -473,7 +484,7 @@ define(
 			// prepopulate with example	citations
 			userCitations = [];
 			userBibliographies = [];
-			$.each(CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[defaultStyle],
+			$.each(exampleCitationsFromMasterId[defaultStyle],
 					function (i, exampleCitation) {
 				userCitations.push(exampleCitation.formattedCitations[0]);
 				userBibliographies.push(exampleCitation.formattedBibliography);
@@ -490,6 +501,14 @@ define(
 
 			setSelectedControl("citation");
 
+			if (CSLEDIT_urlUtils.getUrlVar("advanced") === "true") {
+				$('#alternateSearch').css("display", "inline").click(function () {
+					search();
+				});
+				$('#alternateSearchLabel').css('display', 'inline');
+			}
+
+			
 			search();
 		};
 	};
