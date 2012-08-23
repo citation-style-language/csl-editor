@@ -41,7 +41,8 @@ define([	'src/citationEngine',
 			error : function (jaXHR, textStatus, errorThrown) {
 				alert("Couldn't fetch page: " + textStatus);
 			},
-			cache : false
+			cache : false,
+			dataType : "text"
 		});
 
 		var init = function () {
