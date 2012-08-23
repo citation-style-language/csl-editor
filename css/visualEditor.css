@@ -43,6 +43,11 @@ html, body {
 	border-left: 0 none;
 	border-bottom: 0 none;
 }
+#treeEditorToolbar {
+	position: absolute;
+	top: 5px;
+	right: 22px;
+}
 #treeEditor {
 	position: absolute;
 	top: 0px;
@@ -320,37 +325,6 @@ li.sidePadding {
 
 li[cslid][macrolink="true"] {
 	/* style macrolink here */
-}
-
-#treeEditorToolbar {
-	position: absolute;
-	top: 5px;
-	right: 22px;
-	z-index: 3;
-	padding: 0;
-	border: 1px solid #A5A5A5;
-	border-radius: 3px;
-	background: #e9eaec;
-	background: -webkit-linear-gradient(top, #f7f7f7 0%, #eaeaea 100%);
-	background: linear-gradient(to bottom, #f7f7f7 0%, #eaeaea 100%);
-	text-shadow: 0 1px 0 rgba(255,255,255,1);
-}
-
-#treeEditorToolbar a {
-	display: inline-block;
-	margin: 0;
-	font-weight: bold;
-	font-size: 14px;
-	line-height: 22px;
-	padding: 0;
-	width: 25px;
-	text-align: center;
-	color: #333;
-	text-decoration: none;
-}
-
-#treeEditorToolbar a:first-child {
-	border-right: 1px solid #d4d5d7;
 }
 
 button.icon {

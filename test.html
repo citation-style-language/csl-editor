@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+
+		<title>CSL rich editor test</title>
+
+		<link rel="stylesheet" href="css/base.css?bust=$GIT_COMMIT" />
+		<link rel="stylesheet" href="css/searchByExample.css?bust=$GIT_COMMIT" />
+		<link rel="stylesheet" href="css/searchResults.css?bust=$GIT_COMMIT" />
+
+		<script type="text/javascript" src="external/require-jquery.js"></script>
+		<script>
+			"use strict";
+
+			require.config({
+				baseUrl: ".",
+				urlArgs : "bust=$GIT_COMMIT"
+			});
+			requirejs(['src/config'], function (config) {
+				require(['src/richTextEditor'], function (CSLEDIT_RichTextEditor) {
+					$(document).ready(function () {
+						var editor = new CSLEDIT_RichTextEditor($('#myRichTextEditor'),
+							function (value) {
+								var escaped = value.replace(/[&<>"'`]/g, function (chr) {
+									return '&#' + chr.charCodeAt(0) + ';';
+								});
+
+								$('#contents').html(escaped);
+							});
+
+						console.log("the contents are " + editor.value());
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Rich text editor test</h1>
+		<div id=myRichTextEditor>
+			bunch of text<br/>
+			hello, <b>this is bold</b>
+		</div>
+
+		<h2>Contents</h2>
+		<pre id=contents>
+		</pre>
+	</body>
+		
+</html>
