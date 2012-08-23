@@ -13,8 +13,7 @@ define(
 	var blurTimer;
 	var clicking = false;
 	var buttons = [];
-	var callbacks = {};
-	var currentEditor = null;
+	var currentCallback = null;
 
 	$(document).ready(function () {
 		toolbarElement = $('<div class="toolbar richText">');
@@ -52,8 +51,8 @@ define(
 		
 			updateButtonStates();
 
-			if (currentEditor in callbacks) {
-				callbacks[currentEditor]();
+			if (currentCallback !== null) {
+				currentCallback();
 			}
 
 			event.preventDefault();
@@ -78,23 +77,21 @@ define(
 	};
 
 	var hideToolbar = function () {
-		toolbarElement.fadeTo(150, 0);
-		currentEditor = null;
+		toolbarElement.css("visibility", "hidden");
+		currentCallback = null;
 	};
 
 	// Attach to an element
 	var attachTo = function (container, editor, callback) {
-		callbacks[container] = callback;
-
 		editor.focus(function () {
 			toolbarElement.css({
 				"display" : "inline-block",
 				"top" : -35
 			});
 
-			currentEditor = editor;
+			currentCallback = callback;
 			container.prepend(toolbarElement);
-			toolbarElement.fadeTo(150, 1);
+			toolbarElement.css("visibility", "visible");
 		});
 
 		editor.blur(function () {

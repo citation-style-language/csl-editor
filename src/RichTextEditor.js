@@ -1,10 +1,19 @@
 "use strict";
 
-define(['src/richTextToolbar'], function (CSLEDIT_richTextToolbar) {
+define(
+		[	'src/richTextToolbar',
+			'src/xmlUtility'
+		], function (
+			CSLEDIT_richTextToolbar,
+			CSLEDIT_xmlUtility
+		) {
 	var CSLEDIT_RichTextEditor = function (containerElement, onChange) {
 		var that = this;
 
-		this.editor = $('<div>').attr('contenteditable', 'true');
+		this.editor = $('<div>')
+			.attr('contenteditable', 'true')
+			.addClass('editor')
+			.css("cursor", "text");
 
 		if (containerElement.css("position") !== "absolute" &&
 				containerElement.css("position") !== "relative") {
@@ -15,7 +24,7 @@ define(['src/richTextToolbar'], function (CSLEDIT_richTextToolbar) {
 		var changed = function () {
 			CSLEDIT_richTextToolbar.updateButtonStates();
 			if (onChange) {
-				onChange(that.value(containerElement));
+				onChange(that.value());
 			}
 		};
 
@@ -28,8 +37,12 @@ define(['src/richTextToolbar'], function (CSLEDIT_richTextToolbar) {
 		this.editor.keyup(changed);
 	};
 
-	CSLEDIT_RichTextEditor.prototype.value = function () {
-		return this.editor.html();
+	CSLEDIT_RichTextEditor.prototype.value = function (newValue) {
+		if (typeof(newValue) === "undefined") {
+			return CSLEDIT_xmlUtility.cleanInput(this.editor.html());
+		} else {
+			this.editor.html(CSLEDIT_xmlUtility.cleanInput(newValue));
+		}
 	};
 
 	return CSLEDIT_RichTextEditor;

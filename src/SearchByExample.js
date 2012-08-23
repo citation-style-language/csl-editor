@@ -9,10 +9,10 @@ define(
 			'src/searchResults',
 			'src/cslStyles',
 			'src/urlUtils',
+			'src/RichTextEditor',
 			'src/debug',
 			'external/xregexp',
-			'jquery.ui',
-			'jquery.cleditor'
+			'jquery.ui'
 		],
 		function (
 			CSLEDIT_options,
@@ -23,10 +23,10 @@ define(
 			CSLEDIT_searchResults,
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils,
+			CSLEDIT_RichTextEditor,
 			debug,
 			XRegExp,
-			jquery_ui,
-			jquery_cleditor
+			jquery_ui
 		) {
 	var CSLEDIT_SearchByExample = function (mainContainer, userOptions) {
 		var nameSearchTimeout,
@@ -37,8 +37,10 @@ define(
 			userCitations,
 			userBibliographies,
 			inputControlsElement,
-			citationClEditFrame,
-			bibliographyClEditFrame,
+
+			citationEditor,
+			bibliographyEditor,
+
 			oldCitation = "",
 			oldBibliography = "",
 			formChangedTimeout,
@@ -83,19 +85,11 @@ define(
 			return $('<pre>').text(string).html();
 		};
 
-		var clEditorIsEmpty = function (node) {
-			var text = $(node).cleditor()[0].doc.body.innerText;
-
-			return text === "" || text === "\n";
-		};
-
 		var searchForStyle = function () {
 			var bestMatchQuality = 999,
 				bestMatchIndex = -1,
-				userCitation = CSLEDIT_xmlUtility.cleanInput($("#userCitation").cleditor()[0].doc.body.innerHTML),
-				userCitationText = $("#userCitation").cleditor()[0].doc.body.innerText,
-				userBibliography = CSLEDIT_xmlUtility.cleanInput($("#userBibliography").cleditor()[0].doc.body.innerHTML),
-				userBibliographyText = $("#userBibliography").cleditor()[0].doc.body.innerText,
+				userCitation = citationEditor.value(),
+				userBibliography = bibliographyEditor.value(),
 				result = [],
 				matchQualities = [],
 				citationMatchQuality,
@@ -111,13 +105,6 @@ define(
 				};
 
 			debug.time("searchForStyle");
-
-			if (clEditorIsEmpty("#userCitation")) {
-				userCitation = "";
-			}
-			if (clEditorIsEmpty("#userBibliography")) {
-				userBibliography = "";
-			}
 
 			for (styleId in exampleCitationsFromMasterId) {
 				if (exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
@@ -341,10 +328,8 @@ define(
 		};
 
 		var hasChanged = function () {
-			var newCitation = CSLEDIT_xmlUtility.cleanInput(
-					$("#userCitation").cleditor()[0].doc.body.innerHTML),
-				newBibliography = CSLEDIT_xmlUtility.cleanInput(
-					$("#userBibliography").cleditor()[0].doc.body.innerHTML);
+			var newCitation = citationEditor.value();
+			var newBibliography = bibliographyEditor.value();
 
 			if (newCitation !== oldCitation || newBibliography !== oldBibliography) {
 				return true;
@@ -362,11 +347,10 @@ define(
 			}
 
 			if (getSelectedControl() === "citation") {
-				userInput = $("#userCitation").cleditor()[0].doc.body.innerHTML;
+				userInput = citationEditor.value();
 			} else {
-				userInput = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
+				userInput = bibliographyEditor.value();
 			}
-			userInput = CSLEDIT_xmlUtility.cleanInput(userInput);
 			
 			formatExampleDocument(userInput);
 		};
@@ -378,18 +362,8 @@ define(
 
 			$("#styleFormatResult").html("<i>Searching...</i>");
 
-			// clean the input in the editors
-			userCitation = $("#userCitation").cleditor()[0].doc.body.innerHTML;
-			userBibliography = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
-
-			userCitation = CSLEDIT_xmlUtility.cleanInput(userCitation);
-			userBibliography = CSLEDIT_xmlUtility.cleanInput(userBibliography);
-
-			$("#userCitation").cleditor()[0].doc.body.innerHTML = userCitation;
-			$("#userBibliography").cleditor()[0].doc.body.innerHTML = userBibliography;
-
-			oldCitation = userCitation;
-			oldBibliography = userBibliography;
+			oldCitation = citationEditor.value();
+			oldBibliography = bibliographyEditor.value();
 
 			$("#searchResults").html("<p><emp>Searching for styles...</emp></p>");
 
@@ -400,42 +374,23 @@ define(
 			var length = exampleCitationsFromMasterId[defaultStyle].length;
 
 			if (exampleIndex !== -1) {
-				userCitations[exampleIndex] = $("#userCitation").cleditor()[0].doc.body.innerHTML;
-				userBibliographies[exampleIndex] = $("#userBibliography").cleditor()[0].doc.body.innerHTML;
+				userCitations[exampleIndex] = citationEditor.value();
+				userBibliographies[exampleIndex] = bibliographyEditor.value();
 			}
 
 			exampleIndex = (newExampleIndex + length) % length;
 
 			formatExampleDocument();
 
-			$("#userCitation").cleditor()[0].doc.body.innerHTML = userCitations[exampleIndex];
-			$("#userBibliography").cleditor()[0].doc.body.innerHTML = userBibliographies[exampleIndex];
+			citationEditor.value(userCitations[exampleIndex]);
+			bibliographyEditor.value(userBibliographies[exampleIndex]);
 			
 			if (initialising !== true) {
 				formChanged();
 			}
 		};
 
-		var getClEditFrame = function (element, frameId) {
-			var clEditFrame,
-				cledit = $("#inputcledit").cleditor()[0];
-
-			$(element.$frame[0]).attr("id", frameId);
-			if(!document.frames)
-			{
-				clEditFrame = $('#' + frameId)[0].contentWindow.document;
-			}
-			else
-			{
-				clEditFrame = document.frames[frameId].document;
-			}
-			return clEditFrame;
-		};
-
 		var init = function () {
-			var citationInput,
-				bibliographyInput;
-
 			inputControlsElement = $('#styleFormatInputControls');
 
 			if (exampleCitationsFromMasterId[defaultStyle].length !==
@@ -454,28 +409,11 @@ define(
 					}
 				}
 			});
-			$.cleditor.defaultOptions.width = 440;
-			$.cleditor.defaultOptions.height = 100;
-			$.cleditor.defaultOptions.controls =
-				"bold italic underline subscript superscript ";
-/*
-			$('button#searchButton').css({
-				'background-image' :
-					"url(" + CSLEDIT_urlUtils.getResourceUrl('external/famfamfam-icons/magnifier.png') + ')'
-			});
-*/
-			citationInput = $("#userCitation").cleditor({height: 55})[0];
-			bibliographyInput = $("#userBibliography").cleditor({height: 85})[0];
 
-			$(getClEditFrame(citationInput, "citationInputFrame")).keyup(function () {
-				setSelectedControl("citation");
-			}).click(function () {
+			citationEditor = new CSLEDIT_RichTextEditor($("#userCitation"), function () {
 				setSelectedControl("citation");
 			});
-
-			$(getClEditFrame(bibliographyInput, "bibliographyInputFrame")).keyup(function () {
-				setSelectedControl("bibliography");
-			}).click(function () {
+			bibliographyEditor = new CSLEDIT_RichTextEditor($("#userBibliography"), function () {
 				setSelectedControl("bibliography");
 			});
 

@@ -84,15 +84,15 @@ var cslEditor = new CSLEDIT.VisualEditor("#visualEditorContainer", {
 - [CodeMirror](http://codemirror.net/) (text editor on codeEditor page)
 - [diff\_match\_patch](http://code.google.com/p/google-diff-match-patch/) (for showing highlighted differences in formatted output)
 - [Trang](http://www.thaiopensource.com/relaxng/trang.html) (for converting schema files from .rnc to .rng)
+- [node.js](http://node.js.org) (for javascript run in the build process)
+- [Rhino](http://www.mozilla.org/rhino/) (for javascript run in the build process)</li>
 - [FamFamFam Silk icons](http://www.famfamfam.com/lab/icons/silk/)
 - [Fugue icons](http://p.yusukekamiyamane.com/)
 - [jQuery](http://jquery.com/)
 - [jQuery jsTree Plugin](http://www.jstree.com/) (tree view on visualEditor page)
-- [jQuery CLEditor Plugin](http://premiumsoftware.net/cleditor/) (rich text input on searchByExample page)
 - [jQuery UI Layout Plugin](http://layout.jquery-dev.net)
 - [jQuery hoverIntent Plugin](http://cherne.net/brian/resources/jquery.hoverIntent.html)
 - [jQuery scrollTo Plugin](http://demos.flesler.com/jquery/scrollTo/)
 - [require.js](http://requirejs.org/)
-- [node.js](http://node.js.org) (for running scripts on the server)
 
 
