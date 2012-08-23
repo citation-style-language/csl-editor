@@ -30,7 +30,7 @@ define(
 		};
 
 		addButton("bold", "Bold", "<b>B</b>");
-		addButton("italic", "Italic", "<i>i</i>");
+		addButton("italic", "Italic", "<i>I</i>");
 		addButton("underline", "Underline", "<u>U</u>");
 		addButton("superscript", "Superscript", "<sup>sup</sup>");
 		addButton("subscript", "Subscript", "<sub>sub</sub>");

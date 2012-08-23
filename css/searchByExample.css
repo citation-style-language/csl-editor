@@ -132,10 +132,10 @@ span.match {
 #bibliographyContainer {
 	position: relative;
 }
-#styleFormatInputControls.citationSelected #citationContainer .cleditorMain {
+#styleFormatInputControls.citationSelected #userCitation {
 	box-shadow: 0 0 5px 1px rgba(0,136,204,1);
 }
-#styleFormatInputControls.bibliographySelected #bibliographyContainer .cleditorMain {
+#styleFormatInputControls.bibliographySelected #userBibliography {
 	box-shadow: 0 0 5px 1px rgba(0,136,204,1);
 }
 #styleFormatInputControls.citationSelected #citationContainer .arrow {
@@ -158,6 +158,21 @@ span.match {
 	height: 0px;
 	width: 0px;
 }
+#userCitation .toolbar,
+#userBibliography .toolbar {
+	right: 0;
+}
+#userCitation .editor,
+#userBibliography .editor {
+	background-color: white;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #c3c3c3;
+
+	outline: 0;
+
+	padding: 6px;
+}
 button#searchButton {
 	font-size: 14px;
 	font-weight: bold;
@@ -170,17 +185,4 @@ button#searchButton {
 	float: right;
 
 	display: none;
-}
-#userCitation .toolbar,
-#userBibliography .toolbar {
-	right: 0;
-}
-#userCitation .editor,
-#userBibliography .editor {
-	background-color: white;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #c3c3c3;
-
-	padding: 6px;
 }
