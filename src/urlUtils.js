@@ -1,6 +1,6 @@
 "use strict";
 
-define(function () {
+define(['src/getUrl'], function (getUrlPlugin) {
 	// from https://gist.github.com/1771618
 	var getUrlVar = function (key) {
 		var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
