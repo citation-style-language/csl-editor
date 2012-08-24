@@ -36,7 +36,9 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 				index,
 				currentPath = "",
 				nodes,
-				parentCslId;
+				parentCslId,
+				result,
+				errors = [];
 
 			for (index = 0; index < splitPath.length; index++) {
 				if (index > 0) {
@@ -47,16 +49,32 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 				if (nodes.length === 0) {
 					if (index === 0) {
 						// add root node
-						_exec("addNode", [0, "before", {name: splitPath[index]}], commandHistory);
+						result = _exec("addNode", [0, "before", {name: splitPath[index]}], commandHistory);
+						if ("error" in result) {
+							errors.push(result.error);
+						}
 						parentCslId = 0;
 					} else {
-						_exec("addNode",
+						result = _exec("addNode",
 							[parentCslId, "first", {name: splitPath[index]}], commandHistory);
+						if ("error" in result) {
+							errors.push(result.error);
+						}
 						parentCslId++;
 					}
 				} else {
 					parentCslId = nodes[0].cslId;
 				}
+			}
+
+			if (errors.length > 0) {
+				return {
+					error:
+					{
+						type: "macroError",
+						message: "These errors occurred: " + JSON.stringify(errors)
+					}
+				};
 			}
 		}
 	};
@@ -76,7 +94,7 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 	var exec = function (command, args) {
 		undoCommandHistory.length = 0;
 		if (command in macros) {
-			macros[command].apply(null, args);
+			return macros[command].apply(null, args);
 		} else {
 			debug.assert(commands.indexOf(command) !== -1, "command doesn't exist");
 			return _exec(command, args, commandHistory);

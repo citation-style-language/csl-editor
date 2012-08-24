@@ -74,21 +74,19 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				// update 'style/info/updated'
 				updatedNode = getNodesFromPath('style/info/updated', cslData)[0];
 				if (typeof(updatedNode) === "undefined") {
-					debug.log("no style/info/updated node: resetting CSL code");
-					setCslCode(CSLEDIT_cslParser.cslCodeFromCslData(cslData));
-					updatedNode = getNodesFromPath('style/info/updated')[0];
-				}
-				
-				// write timestamp to updated node
-				iter = new CSLEDIT_Iterator(cslData);
-				index = 0;
-				while (iter.hasNext()) {
-					node = iter.next();
-					if (index === updatedNode.cslId) {	
-						node.textValue = (new Date()).toISOString().replace(/\.[0-9]{3}Z$/, "+00:00");
-						break;
+					debug.log("WARNING: no style/info/updated node");
+				} else {
+					// write timestamp to updated node
+					iter = new CSLEDIT_Iterator(cslData);
+					index = 0;
+					while (iter.hasNext()) {
+						node = iter.next();
+						if (index === updatedNode.cslId) {	
+							node.textValue = (new Date()).toISOString().replace(/\.[0-9]{3}Z$/, "+00:00");
+							break;
+						}
+						index++;
 					}
-					index++;
 				}
 			}
 
@@ -494,13 +492,13 @@ define([	'src/uiConfig', // TODO: remove this dependency
 					// change parent id from macro instances to macro definitions
 					id = macroDefinitionIdFromInstanceId(id);
 
-					return addNode(id, 0, newNode);
+					return addNode(id, 0, newNode, suppressViewUpdate);
 				case "inside":
 				case "last":
 					// change parent id from macro instances to macro definitions
 					id = macroDefinitionIdFromInstanceId(id);
 					
-					return addNode(id, getNode(id).children.length, newNode);
+					return addNode(id, getNode(id).children.length, newNode, suppressViewUpdate);
 				case "before":
 				case "after":
 					debug.assert(id !== 0);
@@ -509,7 +507,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 					if (position === "after") {
 						positionIndex++;
 					}
-					return addNode(nodeInfo.parent.cslId, positionIndex, newNode);
+					return addNode(nodeInfo.parent.cslId, positionIndex, newNode, suppressViewUpdate);
 				case "default":
 					debug.assert(false, "position: " + position + " not recognised");
 				}
@@ -618,6 +616,15 @@ define([	'src/uiConfig', // TODO: remove this dependency
 						return false;
 					}
 				});
+
+				// can't delete the updated node
+				// (this isn't in requiredNodes because it's OK to load a style without it)
+				if (nodePath === "style/info/updated") {
+					error = {
+						type: "requiredNode",
+						message: "Cannot delete required node: " + nodePath
+					};
+				}
 
 				if (error) {
 					return { error : error };
