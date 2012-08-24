@@ -91,14 +91,22 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 		_exec(command.inverse.command, command.inverse.args, commandHistory);
 	};
 
-	var exec = function (command, args) {
+	var exec = function (command, args, silent /* optional, default is false */) {
+		var result;
+
 		undoCommandHistory.length = 0;
 		if (command in macros) {
-			return macros[command].apply(null, args);
+			result = macros[command].apply(null, args);
 		} else {
 			debug.assert(commands.indexOf(command) !== -1, "command doesn't exist");
-			return _exec(command, args, commandHistory);
+			result = _exec(command, args, commandHistory);
 		}
+		
+		if (silent !== true && "error" in result) {
+			alert(result.error.message);
+		}
+
+		return result;
 	};
 
 	var _exec = function(command, args, history) {
