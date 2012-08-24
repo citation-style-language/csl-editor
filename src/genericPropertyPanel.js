@@ -262,7 +262,7 @@ define([	'src/MultiPanel',
 
 	// TODO: Use buttons in the style of the +/- add/delete node ones
 	var createButton = function (attributeName, cslSchemaAttribute, index, attribute) {
-	debug.assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
+		debug.assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
 
 		$.each(checkboxControlSchema[attributeName], function (attributeValue, control) {
 			var button, buttonLabel, checkboxControlId;
@@ -589,7 +589,7 @@ define([	'src/MultiPanel',
 
 		// only display fieldsets with non-empty tables
 		$.each(fieldsets, function (i, fieldset) {
-			if (fieldset.find('tr').length > 0) {
+			if (fieldset.find('tr').length > 0 || fieldset.find('input').length > 0) {
 				panel.append(fieldset);
 			}
 		});
@@ -698,7 +698,24 @@ define([	'src/MultiPanel',
 			attrIndex++;
 			attributeEditors[attributeName] = createAttributeEditor(attributeName, schemaAttribute, attrIndex);
 		});
-		
+
+		checkboxControls.sort(function (a, b) {
+			return a.position - b.position;
+		});
+
+		$.each(checkboxControls, function (i, control) {
+			if (control.hasOwnProperty('control')) {
+				toolbar.append(control.control);
+				toolbar.append(control.label);
+				
+				control.control.button();
+
+				if (typeof control.control.attr("title") !== "undefined") {
+					control.control.button('widget').attr("title", control.control.attr("title"));
+				}
+			}
+		});
+
 		drawFieldsets(attributeEditors);
 
 		nodeData.attributes = newAttributes;
@@ -725,23 +742,6 @@ define([	'src/MultiPanel',
 				executeCommand);
 			clearTimeout(onChangeTimeout);
 			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 10);
-		});
-
-		checkboxControls.sort(function (a, b) {
-			return a.position - b.position;
-		});
-
-		$.each(checkboxControls, function (i, control) {
-			if (control.hasOwnProperty('control')) {
-				toolbar.append(control.control);
-				toolbar.append(control.label);
-				
-				control.control.button();
-
-				if (typeof control.control.attr("title") !== "undefined") {
-					control.control.button('widget').attr("title", control.control.attr("title"));
-				}
-			}
 		});
 
 		toolbar.find('input[id^=checkboxControl]').on('change', checkboxChanged);
