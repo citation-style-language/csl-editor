@@ -75,7 +75,7 @@ define(
 
 			if ("error" in result) {
 				// should only get dependent style errors in repo styles
-				ok(result.error.indexOf("dependent style") !== -1, "dependent style: " + styleUrl);
+				equal(result.error.type, "dependentStyle", "dependent style: " + styleUrl);
 				processNextStyle();
 			} else {
 				title = CSLEDIT_data.getNodesFromPath("style/info/title")[0].textValue;
