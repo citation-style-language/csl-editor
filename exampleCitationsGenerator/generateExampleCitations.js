@@ -14,9 +14,6 @@ var getFile = function (filePath) {
 var requireConfig = {
 	nodeRequire: require,
 	baseUrl: "..",
-	paths: {
-		'external/citeproc/citeproc' : 'external/citeproc/citeproc-1.0.336'
-	},
 	shim: {
 		'external/diff-match-patch/diff_match_patch': {
 			exports: 'diff_match_patch'
@@ -38,7 +35,7 @@ var shimDefine = function (path, dependencies, exports) {
 	requirejs.define(path, dependencies, function () {
 		var actualPath = path;
 
-		if (path in requireConfig.paths) {
+		if ("path" in requireConfig && path in requireConfig.paths) {
 			console.log(path + " in paths");
 			actualPath = requireConfig.paths[path];
 		}
@@ -73,14 +70,16 @@ requirejs(
 			'exampleCitationsGenerator/config',
 			'src/xmlUtility',
 			'src/citationEngine',
-			'src/exampleCitations'
+			'src/exampleCitations',
+			'src/debug'
 		],
 		function (
 			$,
 			cslServerConfig,
 			CSLEDIT_xmlUtility,
 			CSLEDIT_citationEngine,
-			CSLEDIT_exampleCitations
+			CSLEDIT_exampleCitations,
+			debug
 		) {
 
 	"use strict";
@@ -163,10 +162,22 @@ requirejs(
 
 					// clean up citeproc result for display
 					citeprocResult.formattedBibliography =
-						citeprocResult.formattedBibliography.replace(/<second-field-align>/g, "");
+						citeprocResult.formattedBibliography
+						.replace(/<second-field-align>/g, "")
+						.trim();
 
-					citeprocResult.formattedBibliography =
-						citeprocResult.formattedBibliography.replace(/<\/second-field-align>/g, " ");
+					var bibliographyElement = $('<div/>').html(citeprocResult.formattedBibliography);
+					var cslEntry = bibliographyElement.find(".csl-entry");
+
+					if (cslEntry.length === 0) {
+						citeprocResult.formattedBibliography = citeprocResult.formattedBibliography;
+					} else {
+						citeprocResult.formattedBibliography = cslEntry.html();
+					}
+					citeprocResult.formattedBibliography = citeprocResult.formattedBibliography
+						.replace(/<\/div class="csl>/g, " ")
+						.replace(/^[\n ]*/g, "")
+						.replace(/[\n ]*$/g, "");
 
 					exampleCitations.exampleCitationsFromMasterId[styleId].push(citeprocResult);
 

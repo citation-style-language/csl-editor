@@ -29,7 +29,7 @@ define([	'src/storage',
 		citeproc;
 
 	var stripTags = function (html, tag) {
-		var stripRegExp = new RegExp("<" + tag + ".*?>|</\s*" + tag + "\s*?\>", "g");
+		var stripRegExp = new RegExp("<" + tag + ".*?>|</\\s*" + tag + "\\s*?>", "g");
 
 		// creating new string because of bug where some html from generateExampleCitations.js
 		// was type object instead of string and didn't have the replace() function
@@ -55,7 +55,7 @@ define([	'src/storage',
 
 		citeprocSys.setJsonDocuments(documents);
 
-		result = { "statusMessage":"", "formattedCitations":[], "formattedBibliography": [] };
+		result = { "statusMessage": "", "formattedCitations": [], "formattedBibliography": [] };
 		result.statusMessage = "";
 		if (style !== previousStyle) {
 			try
@@ -64,7 +64,7 @@ define([	'src/storage',
 				citeproc.opt.development_extensions.csl_reverse_lookup_support = true;
 				previousStyle = style;
 			}
-			catch(err)
+			catch (err)
 			{
 				result.statusMessage = "Citeproc initialisation exception: " + err;
 				return result;
@@ -74,15 +74,15 @@ define([	'src/storage',
 		}
 		
 		inLineCitations = "";
-		inLineCitationArray = new Array();
+		inLineCitationArray = [];
 		
-		for (cluster=0; cluster<citationClusters.length; cluster++)
+		for (cluster = 0; cluster < citationClusters.length; cluster++)
 		{
 			try
 			{
-				citations = citeproc.appendCitationCluster(citationClusters[cluster],false);
+				citations = citeproc.appendCitationCluster(citationClusters[cluster], false);
 			}
-			catch(err)
+			catch (err)
 			{
 				result.statusMessage = "Citeproc exception: " + err;
 				return result;
@@ -92,7 +92,7 @@ define([	'src/storage',
 			{
 				pos = citations[i][0];
 				
-				if (inLineCitations != "")
+				if (inLineCitations !== "")
 				{
 					inLineCitations += "<br>";
 				}
@@ -122,7 +122,7 @@ define([	'src/storage',
 		{
 			bibliography = citeproc.makeBibliography(makeBibliographyArgument);
 		}
-		catch(err)
+		catch (err)
 		{
 			result.statusMessage = "Citeproc exception: " + err;
 			return result;
@@ -268,7 +268,7 @@ define([	'src/storage',
 		}
 		
 		debug.timeEnd("runCiteprocAndDisplayOutput");
-	}
+	};
 
 	// Return public members:
 	return {
