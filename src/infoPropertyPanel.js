@@ -156,7 +156,6 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			var value = "";
 
 			thisRow.append(' <label>' + child + '</label> ');
-			//input = $('<input class="' + item.node + '-' + child + '"></input>');
 
 			if (child in cslChildren) {
 				value = cslChildren[child].textValue;
@@ -183,13 +182,17 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 	// It's assumed that infoNode will always refer to the correct node
 	// while the panel is visible
 	var setupPanel = function (_panel, _executeCommand) {
+		var simpleTextNodesTable = $('<table>');
+		
 		panel = _panel;
 		executeCommand = _executeCommand;
 		infoNode = CSLEDIT_data.getNodesFromPath("style/info");
-	debug.assertEqual(infoNode.length, 1); // fail in error.log
+		debug.assertEqual(infoNode.length, 1); // fail in error.log
 		infoNode = infoNode[0];
 
 		panel.children().remove();
+
+		panel.append(simpleTextNodesTable);
 
 		$.each(layout, function (i, item) {
 			var nodes = CSLEDIT_data.getNodesFromPath("info/" + item.node, infoNode),
@@ -256,15 +259,14 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 				});
 				panel.append('<br /><br />');
 			} else {
-			debug.assert(nodes.length < 2);
+				debug.assert(nodes.length < 2);
 				thisRow = editorRow(item, nodes[0], null);
 
-				// TODO: do this in less hacky way
-				panel.css("position", "relative");
-				thisRow.children('input').eq(0).css("position", "absolute");
-				thisRow.children('input').eq(0).css("left", "100px");
-				thisRow.children('label').eq(0).css("line-height", "1.5");
 				panel.append(thisRow);
+
+				simpleTextNodesTable.append($('<tr>')
+					.append($('<td>').append(thisRow.children('label')))
+					.append($('<td>').append(thisRow.children('input'))));
 			}
 		});
 
