@@ -16,10 +16,10 @@ define(['src/Data', 'src/debug', 'jquery.qunit'], function (CSLEDIT_Data, debug)
 
 		result = CSLEDIT_data.setCslCode("<needs_to_start_with_style_node></needs_to_start_with_style_node>");
 		debug.log(result.error);
-		ok(result.error.length > 0);
+		ok("error" in result);
 
 		result = CSLEDIT_data.setCslCode("<style><mis></match></style>");
-		ok(result.error.length > 0);
+		ok("error" in result);
 
 		result = CSLEDIT_data.setCslCode("<style><citation><layout /></citation>" +
 			"<bibliography><layout /></bibliography></style>");
@@ -232,7 +232,7 @@ define(['src/Data', 'src/debug', 'jquery.qunit'], function (CSLEDIT_Data, debug)
 		CSLEDIT_data = new CSLEDIT_Data("CSLEDIT_test_cslData", ["style/parent1", "style/parent2/child1"]);
 		
 		result = CSLEDIT_data.setCslCode("<style><parent1></parent1></style>");
-		ok(result.error.length > 0);
+		ok("error" in result);
 		debug.log(result.error);
 
 		result = CSLEDIT_data.setCslCode("<style><parent1></parent1>" +
