@@ -79,7 +79,7 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 			macros[command].apply(null, args);
 		} else {
 			debug.assert(commands.indexOf(command) !== -1, "command doesn't exist");
-			_exec(command, args, commandHistory);
+			return _exec(command, args, commandHistory);
 		}
 	};
 
@@ -90,8 +90,7 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 		inverseCommand = cslData[command].apply(null, args);
 		
 		if (typeof inverseCommand !== "undefined" && inverseCommand.hasOwnProperty("error")) {
-			alert(inverseCommand.error);
-			return;
+			return inverseCommand;
 		}
 
 		if (command === "setCslCode") {
@@ -100,6 +99,7 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 		} else {
 			history.push({command:command, args:args, inverse:inverseCommand});
 		}
+		return {};
 	};
 
 	return {

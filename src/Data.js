@@ -177,16 +177,23 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			try {
 				cslData = CSLEDIT_cslParser.cslDataFromCslCode(cslCode);
 			} catch (err) {
-				return { error: "Error parsing CSL Code" };
+				return { error: {
+					type: "cslParsing",
+					message: "Error parsing CSL Code"
+				}};
 			}
 
 			// check if this is a dependent style:
 			$.each(getNodesFromPath('style/info/link', cslData), function (i, node) {
 				var linkNode = new CSLEDIT_CslNode(node);
 				if (linkNode.getAttr("rel") === "independent-parent") {
-					error = "Editing of dependent styles not yet supported.\n\n" + 
-						"Please find and edit this master style instead:\n\n" +
-						linkNode.getAttr("href");
+					error = {
+						type: "dependentStyle",
+						parentURL: linkNode.getAttr("href"),
+						message: "Editing of dependent styles not yet supported.\n\n" + 
+							"Please find and edit this master style instead:\n\n" +
+							linkNode.getAttr("href")
+					};
 				}
 			});
 
@@ -194,7 +201,11 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			if (typeof error === "undefined") {
 				$.each(requiredNodes, function (i, requiredNode) {
 					if (getNodesFromPath(requiredNode, cslData).length === 0) {
-						error = "CSL code is missing essential node: " + requiredNode;
+						error = {
+							type: "nodeMissing",
+							node: requiredNode,
+							message: "CSL code is missing essential node: " + requiredNode
+						};
 						return false;
 					}
 				});
@@ -600,7 +611,10 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				// can't delete required nodes
 				$.each(requiredNodes, function (i, requiredNodePath) {
 					if (nodePath === requiredNodePath) {
-						error = "Cannot delete required node: " + nodePath;
+						error = {
+							type: "requiredNode",
+							message: "Cannot delete required node: " + nodePath
+						};
 						return false;
 					}
 				});

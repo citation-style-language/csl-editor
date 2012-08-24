@@ -585,7 +585,7 @@ define(
 		// public API
 		return {
 			setCslCode : function (cslCode) {
-				CSLEDIT_controller.exec('setCslCode', [cslCode]);
+				return CSLEDIT_controller.exec('setCslCode', [cslCode]);
 			},
 			getCslCode : function () {
 				return CSLEDIT_data.getCslCode();
