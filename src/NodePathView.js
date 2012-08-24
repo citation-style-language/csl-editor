@@ -1,6 +1,13 @@
 "use strict";
 
-define(['src/dataInstance'], function (CSLEDIT_data) {
+define(
+		[	'src/dataInstance',
+			'src/uiConfig'
+		],
+		function (
+			CSLEDIT_data,
+			CSLEDIT_uiConfig
+		) {
 	var CSLEDIT_NodePathView = function (element, callbacks, syntaxHighlighter) {
 		this.element = 	element;
 		this.callbacks = callbacks;
@@ -18,7 +25,8 @@ define(['src/dataInstance'], function (CSLEDIT_data) {
 
 		$.each(nodePath, function (i, cslId) {
 			var node = CSLEDIT_data.getNode(cslId, cslData);
-			nodesHtml.push('<span cslid="' + node.cslId + '">' + node.name + '</span>');
+			nodesHtml.push('<span cslid="' + node.cslId + '">' +
+				CSLEDIT_uiConfig.displayNameFromNode(node) + '</span>');
 		});
 
 		this.element.html(nodesHtml.join(" > "));
@@ -39,10 +47,6 @@ define(['src/dataInstance'], function (CSLEDIT_data) {
 			that.callbacks.selectNodeFromPath(thisNodePath);
 		});
 		this.element.find('span[cslid]').hover(this.syntaxHighlighter.hover, this.syntaxHighlighter.unhover);
-
-		//$.each(nodePath, function (i, cslId) {
-		//	that.callbacks.setupSyntaxHighlightForNode(cslId);
-		//});
 	};
 	return CSLEDIT_NodePathView;
 });
