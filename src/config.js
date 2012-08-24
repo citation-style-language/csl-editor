@@ -13,8 +13,6 @@ requirejs.config({
 		'external/codemirror' : 'external/codemirror2/lib/codemirror',
 		'external/codemirrorXmlMode' : 'external/codemirror2/mode/xml/xml',
 		
-		'external/citeproc/citeproc' : 'external/citeproc/citeproc-1.0.336',
-
 		'external/xregexp' : 'external/xregexp/xregexp-with-unicode-base-min',
 	},
 	shim: {
