@@ -22,9 +22,9 @@ define([	'src/MultiPanel',
 		newAttributes,
 		toolbar,
 		panel,
-		checkboxControlIndex,
-		checkboxControls,
-		checkboxControlSchema = {
+		toolbarButtonIndex,
+		toolbarButtons,
+		toolbarButtonSchema = {
 			'font-weight' : {
 				'normal' : 'default',
 				'bold' : { text : '<strong>B</strong>' }
@@ -131,7 +131,7 @@ define([	'src/MultiPanel',
 		var index = 0,
 			position = -1;
 
-		$.each(checkboxControlSchema, function (key, value) {
+		$.each(toolbarButtonSchema, function (key, value) {
 			if (key === attributeName) {
 				position = index;
 				return false;
@@ -172,20 +172,22 @@ define([	'src/MultiPanel',
 		return isValid;
 	};
 
-	var checkboxChanged = function (event) {
-		var target = $(event.target),
+	var toolbarButtonClicked = function (event) {
+		var target = $(event.target).closest('a'), //TODO: id?
 			attribute = target.attr('data-attribute'),
 			value,
 			index = indexOfAttribute(attribute, nodeData.attributes),
 			siblingControls = $(event.target).siblings('[data-attribute="' + attribute + '"]');
 		
 		// disable any other buttons for this attribute
-		siblingControls.removeAttr('checked').button('refresh');
+		siblingControls.removeClass('selected');
 
-		if (target.is(':checked')) {
+		target.toggleClass('selected');
+
+		if (target.hasClass('selected')) {
 			value = target.attr('data-value');
 		} else {
-			value = defaultValueForCustomControl(attribute);
+			value = defaultValueForToolbarButton(attribute);
 		}
 
 		nodeData.attributes[index] = {
@@ -195,6 +197,8 @@ define([	'src/MultiPanel',
 		};
 
 		executeCommand("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
+		
+		event.preventDefault();
 	};
 
 	var stripChildren = function (nodeData) {
@@ -216,7 +220,7 @@ define([	'src/MultiPanel',
 			if ($("#nodeAttribute" + index).length > 0) {
 				value = $("#nodeAttribute" + index).val();
 			} else {
-			debug.assert(index in multiInputs);
+				debug.assert(index in multiInputs);
 				value = multiInputs[index].val();
 			}
 
@@ -249,9 +253,9 @@ define([	'src/MultiPanel',
 		return 'nodeAttribute' + index;
 	};
 
-	var defaultValueForCustomControl = function (attributeName) {
+	var defaultValueForToolbarButton = function (attributeName) {
 		var defaultValue;
-		$.each(checkboxControlSchema[attributeName], function (value, control) {
+		$.each(toolbarButtonSchema[attributeName], function (value, control) {
 			if (control === 'default') {
 				defaultValue = value;
 				return false;
@@ -262,31 +266,31 @@ define([	'src/MultiPanel',
 
 	// TODO: Use buttons in the style of the +/- add/delete node ones
 	var createButton = function (attributeName, cslSchemaAttribute, index, attribute) {
-		debug.assert(typeof defaultValueForCustomControl(attributeName) !== "undefined");
+		debug.assert(typeof defaultValueForToolbarButton(attributeName) !== "undefined");
 
-		$.each(checkboxControlSchema[attributeName], function (attributeValue, control) {
-			var button, buttonLabel, checkboxControlId;
-			checkboxControlId = "checkboxControl" + checkboxControlIndex;
+		$.each(toolbarButtonSchema[attributeName], function (attributeValue, control) {
+			var button, buttonLabel;
 
 			if (control !== 'default') {
-				buttonLabel = $('<label for="' + checkboxControlId + '">' + control.text + '</label>');
-				button = $('<input type="checkbox" id="' + checkboxControlId + '" data-attribute="' +
-					attributeName + '" data-value="' + attributeValue + '" />');
+				button = $('<a/>')
+					.attr('href', '#')
+					.attr('data-attribute', attributeName)
+					.attr('data-value', attributeValue)
+					.addClass('toolbarButton')
+					.html(control.text);
 
 				if (cslSchemaAttribute.documentation !== "") {
 					button.attr("title", cslSchemaAttribute.documentation);
 				}
 
-				checkboxControls.push({
+				toolbarButtons.push({
 					position : positionInSchema(attributeName),
-					control : button,
-					label : buttonLabel
+					control : button
 				});
 
 				if (attribute.value === attributeValue) {
-					button.attr('checked', 'checked');
+					button.addClass('selected');
 				}
-				checkboxControlIndex++;
 			}
 		});
 	};
@@ -339,7 +343,7 @@ define([	'src/MultiPanel',
 
 		newAttributes.push(attribute);
 
-		if (typeof checkboxControlSchema[attributeName] !== "undefined") {
+		if (typeof toolbarButtonSchema[attributeName] !== "undefined") {
 			createButton(attributeName, schemaAttribute, index, attribute);
 			return;
 		}
@@ -380,7 +384,7 @@ define([	'src/MultiPanel',
 						dropdownValues.push("false");
 						break;
 					case "integer":
-						for (intValue = 0; intValue < 20; intValue++) {							
+						for (intValue = 0; intValue < 20; intValue++) {
 							dropdownValues.push(intValue);
 						}
 						break;
@@ -396,7 +400,7 @@ define([	'src/MultiPanel',
 					}
 					break;
 				default:
-				debug.assert(false, "attribute value type not recognised");
+					debug.assert(false, "attribute value type not recognised");
 				}
 			}
 		}
@@ -613,10 +617,12 @@ define([	'src/MultiPanel',
 		panel = _panel;
 		nodeData = _nodeData;
 
+		console.log("setup panel");
+
 		// remove child nodes
 		panel.children().remove();
 
-		toolbar = $('<div class="propertyToolbar"></div>');
+		toolbar = $('<div class="toolbar"></div>');
 		panel.append(toolbar);
 
 		// TODO: data validation
@@ -631,12 +637,12 @@ define([	'src/MultiPanel',
 			// no validation
 		}
 
-		checkboxControls = [];
+		toolbarButtons = [];
 		newAttributes = [];
 		multiInputs = {};
 		schemaChoiceIndexes = [];
 
-		checkboxControlIndex = 0;
+		toolbarButtonIndex = 0;
 
 		choicePanel = null;
 
@@ -699,20 +705,13 @@ define([	'src/MultiPanel',
 			attributeEditors[attributeName] = createAttributeEditor(attributeName, schemaAttribute, attrIndex);
 		});
 
-		checkboxControls.sort(function (a, b) {
+		toolbarButtons.sort(function (a, b) {
 			return a.position - b.position;
 		});
 
-		$.each(checkboxControls, function (i, control) {
+		$.each(toolbarButtons, function (i, control) {
 			if (control.hasOwnProperty('control')) {
 				toolbar.append(control.control);
-				toolbar.append(control.label);
-				
-				control.control.button();
-
-				if (typeof control.control.attr("title") !== "undefined") {
-					control.control.button('widget').attr("title", control.control.attr("title"));
-				}
 			}
 		});
 
@@ -744,7 +743,7 @@ define([	'src/MultiPanel',
 			onChangeTimeout = setTimeout(function () { nodeChanged(); }, 10);
 		});
 
-		toolbar.find('input[id^=checkboxControl]').on('change', checkboxChanged);
+		toolbar.find('a.toolbarButton').on('click', toolbarButtonClicked);
 
 		setupChoiceTabs();
 	};

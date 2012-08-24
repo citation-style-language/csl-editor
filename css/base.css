@@ -121,6 +121,7 @@ div.panel {
 }
 
 .toolbar {
+	display: inline-block;
 	z-index: 3;
 	padding: 0;
 	border: 1px solid #A5A5A5;
@@ -137,15 +138,23 @@ div.panel {
 	font-weight: bold;
 	font-size: 14px;
 	line-height: 22px;
-	padding: 0;
-	width: 25px;
+	padding-left: 3px;
+	padding-right: 3px;
+	min-width: 17px;
 	text-align: center;
 	color: #333;
 	text-decoration: none;
-}
-
-.toolbar a {
 	border-right: 1px solid #d4d5d7;
+}
+.toolbar a sup, sub {
+	vertical-align: baseline;
+	position: relative;
+}
+.toolbar a sup {
+	top: -0.35em;
+}
+.toolbar a sub {
+   top: 0.35em;
 }
 
 .toolbar a.selected {
