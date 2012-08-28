@@ -229,12 +229,10 @@ define([	'src/uiConfig',
 
 			parentMacros = parentMacros || [];
 
-			console.log("adding macro " + macroName);
 			if (parentMacros.indexOf(macroName) === -1) {
 				parentMacros.push(macroName);
 			} else {
 				jsTreeData.attr["data-error"] = "Infinite loop";
-				console.log("infinite recursion detected");
 				return;
 			}
 
