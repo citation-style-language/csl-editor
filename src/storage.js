@@ -111,10 +111,6 @@ define(['src/debug'], function (debug) {
 			outOfSyncCallback = callback;
 		};
 
-		finalAPI.simpleStorage = function () {
-			return simpleStorage;
-		};
-
 		return finalAPI;
 	};
 
