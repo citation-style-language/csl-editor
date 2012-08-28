@@ -44,23 +44,28 @@ define(function () {
 
 	var stripComments = function (xml) {
 		return xml.replace(/<!--[\s\S]*?-->/g, "");
-	}
+	};
 
-	var cleanInput = function (input) {
-		var supportedTags = [ 'b', 'i', 'u', 'sup', 'sub' ],
-			invisibleTags = [ 'p', 'span', 'div', 'second-field-align' ]; // we want the contents of these but not the actual tags
+	var cleanInput = function (input, allowCharacters) {
+		var supportedTags = [ 'b', 'i', 'u', 'sup', 'sub' ];
+
+		// we want the contents of these but not the actual tags
+		var invisibleTags = [ 'p', 'span', 'div', 'second-field-align', 'table', 'tr', 'td', 'tbody' ]; 
 
 		input = stripComments(input);
 		input = stripUnsupportedTagsAndContents(input, supportedTags.concat(invisibleTags));
 		input = stripUnsupportedTags(input, supportedTags);
 		input = stripAttributesFromTags(input, supportedTags);
-		input = input.replace(/&nbsp;/g, " ");
-		input = input.replace("\n", "");
-		input = input.replace(/&amp;/g, "&#38;");
-		input = input.replace(/&lt;/g, "&#60;");
-		input = input.replace(/&gt;/g, "&#62;");
-		input = input.replace(/&quot;/g, "&#34;");
-		input = $.trim(input);
+		
+		if (!allowCharacters) {
+			input = input.replace(/&nbsp;/g, " ");
+			input = input.replace("\n", "");
+			input = input.replace(/&amp;/g, "&#38;");
+			input = input.replace(/&lt;/g, "&#60;");
+			input = input.replace(/&gt;/g, "&#62;");
+			input = input.replace(/&quot;/g, "&#34;");
+			input = $.trim(input);
+		}
 
 		return input;
 	};

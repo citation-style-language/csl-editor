@@ -35,11 +35,16 @@ define(
 
 		this.editor.mouseup(changed);
 		this.editor.keyup(changed);
+		this.editor.bind("drop", changed);
 	};
 
 	CSLEDIT_RichTextEditor.prototype.value = function (newValue) {
 		if (typeof(newValue) === "undefined") {
-			return CSLEDIT_xmlUtility.cleanInput(this.editor.html());
+			var cleaned = CSLEDIT_xmlUtility.cleanInput(this.editor.html(), true);
+			if (cleaned !== this.editor.html()) {
+				this.editor.html(cleaned);
+			}
+			return cleaned;
 		} else {
 			this.editor.html(CSLEDIT_xmlUtility.cleanInput(newValue));
 		}
