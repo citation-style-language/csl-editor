@@ -57,7 +57,7 @@ define(function () {
 		input = stripUnsupportedTags(input, supportedTags);
 		input = stripAttributesFromTags(input, supportedTags);
 		
-		if (!allowCharacters) {
+		if (typeof(allowCharacters) === "undefined" || !allowCharacters) {
 			input = input.replace(/&nbsp;/g, " ");
 			input = input.replace("\n", "");
 			input = input.replace(/&amp;/g, "&#38;");

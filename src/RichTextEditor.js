@@ -44,7 +44,7 @@ define(
 			if (cleaned !== this.editor.html()) {
 				this.editor.html(cleaned);
 			}
-			return cleaned;
+			return CSLEDIT_xmlUtility.cleanInput(cleaned);
 		} else {
 			this.editor.html(CSLEDIT_xmlUtility.cleanInput(newValue));
 		}
