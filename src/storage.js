@@ -65,7 +65,9 @@ define(['src/debug'], function (debug) {
 					simpleValue = simpleStorageAPI.getItem(key);
 					localValue = localStorageAPI.getItem(key);
 
-					if (simpleValue !== null && simpleValue !== localValue) {
+					if (simpleValue === null) {
+						simpleStorageAPI.setItem(key, localValue);
+					} else if (simpleValue !== localValue) {
 						outOfSync();
 					}
 
@@ -107,6 +109,10 @@ define(['src/debug'], function (debug) {
 
 		finalAPI.onDataInconsistency = function (callback) {
 			outOfSyncCallback = callback;
+		};
+
+		finalAPI.simpleStorage = function () {
+			return simpleStorage;
 		};
 
 		return finalAPI;
