@@ -327,6 +327,10 @@ li[cslid][macrolink="true"] {
 	/* style macrolink here */
 }
 
+li[cslid][data-error] a {
+	border:1px solid #ff2222; padding:0 2px 0 1px; box-shadow: none; border-radius: 3px;
+}
+
 button.icon {
 	background-position: left center;
 	background-repeat: no-repeat;
