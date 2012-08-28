@@ -132,6 +132,49 @@ define(['src/debug'], function (debug) {
 		}
 	};
 
+	var cslIdFromLineNumber = function (cslCode, lineNumber) {
+		var nodesFound = 0,
+			metaTags = /<\?.*\?>/g,
+			singleTags = /<[^<]+\/>/g,
+			closingTags = /<\/[^<]+>/g,
+			openingTags = /<[^<]+>/g,
+			result = null;
+
+		$.each(cslCode.split("\n"), function (lineIndex, line) {
+			line = line.replace(metaTags, "");
+
+			var match = line.match(singleTags);
+			var numTags = 0;
+			
+			// assume no comments
+			debug.assert(!(/<!--/.test(line)));
+
+			if (match !== null) {
+				numTags += match.length;
+			}
+
+			line = line.replace(singleTags, "");
+			line = line.replace(closingTags, "");
+
+			match = line.match(openingTags);
+			if (match !== null) {
+				numTags += match.length;
+			}
+
+			nodesFound += numTags;
+
+			if (lineIndex + 1 === lineNumber) {
+				if (numTags > 0) {
+					result = nodesFound - 1;
+					console.log("found error in node " + result + " (line " + lineNumber + ")");
+				}
+				return false;
+			}
+		});
+
+		return result;
+	};
+
 	// public:
 	return {
 		isCslValid : function (xmlData) {
@@ -149,10 +192,10 @@ define(['src/debug'], function (debug) {
 				xmlDoc = parser.parseFromString(xmlData, "application/xml"),
 				errors;
 			errors = xmlDoc.getElementsByTagName('parsererror');
-		debug.assertEqual(errors.length, 0, "xml parser error");
+			debug.assertEqual(errors.length, 0, "xml parser error");
 
 			var styleNode = xmlDoc.childNodes[0];
-		debug.assertEqual(styleNode.localName, "style", "Invalid style - no style node");
+			debug.assertEqual(styleNode.localName, "style", "Invalid style - no style node");
 
 			var jsonData = jsonNodeFromXml(styleNode, { index: 0 });
 		
@@ -163,8 +206,8 @@ define(['src/debug'], function (debug) {
 			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n',
 				lines,
 				lineIndex;
-			
-			cslXml += xmlNodeFromJson(jsonData, 0, fullClosingTags);
+
+			cslXml += xmlNodeFromJson(jsonData, 0, fullClosingTags, 1);
 
 			if (typeof(comment) === "string") {
 				lines = cslXml.split("\n");
@@ -178,6 +221,8 @@ define(['src/debug'], function (debug) {
 			return cslXml;
 		},
 
-		updateCslIds : updateCslIds
+		updateCslIds : updateCslIds,
+
+		cslIdFromLineNumber : cslIdFromLineNumber
 	};
 });

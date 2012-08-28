@@ -62,6 +62,9 @@ requirejs.config({
 		},
 		'external/codemirror': {
 			exports: 'CodeMirror'
+		},
+		'external/csl-validator': {
+			exports: 'validate'
 		}
 	}
 });

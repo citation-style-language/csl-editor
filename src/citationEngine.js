@@ -5,6 +5,7 @@ define([	'src/storage',
 			'src/dataInstance',
 			'src/exampleCitations',
 			'src/diff',
+			'src/validator',
 			'src/debug',
 			'external/citeproc/citeproc',
 			'src/citeprocLoadSys'
@@ -15,6 +16,7 @@ define([	'src/storage',
 			CSLEDIT_data,
 			CSLEDIT_exampleCitations,
 			CSLEDIT_diff,
+			CSLEDIT_validator,
 			debug,
 			CSL,
 			citeprocSys
@@ -51,11 +53,26 @@ define([	'src/storage',
 			hangingindent,
 			has_bibliography,
 			index,
-			enumerateCitations;
+			enumerateCitations,
+			validateResult;
+
+		result = { "statusMessage": "", "formattedCitations": [], "formattedBibliography": [] };
+
+		debug.time("validate");
+		validateResult = CSLEDIT_validator.validate(style);
+		debug.timeEnd("validate");
+		$('li[cslid][data-error=invalid]').removeAttr('data-error');
+		if (!validateResult.success) {
+			debug.log("Aborting: CSL not valid: " + validateResult.error);
+			result.statusMessage = validateResult.error;
+			result.cslId = validateResult.cslId;
+			debug.log("error in node " + validateResult.cslId);
+			$('li[cslid=' + validateResult.cslId + ']').attr('data-error', "invalid");
+			return result;
+		}
 
 		citeprocSys.setJsonDocuments(documents);
 
-		result = { "statusMessage": "", "formattedCitations": [], "formattedBibliography": [] };
 		result.statusMessage = "";
 		if (style !== previousStyle) {
 			try
@@ -121,6 +138,7 @@ define([	'src/storage',
 		try
 		{
 			bibliography = citeproc.makeBibliography(makeBibliographyArgument);
+
 		}
 		catch (err)
 		{
@@ -133,7 +151,9 @@ define([	'src/storage',
 
 		if (has_bibliography)
 		{
-			hangingindent = (bibliography[0].hangingindent != 0 && "undefined" !== typeof(bibliography[0].hangingindent));
+			hangingindent =
+				(bibliography[0].hangingindent != 0 && "undefined" !== typeof(bibliography[0].hangingindent));
+			debug.log("bib errors: " + JSON.stringify(bibliography[0].bibliography_errors));
 			bibliography = bibliography[1];
 		}
 		else
