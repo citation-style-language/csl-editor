@@ -227,12 +227,18 @@ define([	'src/uiConfig',
 				index,
 				treeElements;
 
-			parentMacros = parentMacros || [];
+			if (typeof(parentMacros) === "undefined") {
+			   parentMacros = [];
+			} else {
+				parentMacros = JSON.parse(JSON.stringify(parentMacros));
+			}
 
 			if (parentMacros.indexOf(macroName) === -1) {
+				debug.assertEqual(macroName, new CSLEDIT_CslNode(cslNode).getAttr("macro"));
 				parentMacros.push(macroName);
 			} else {
 				CSLEDIT_notificationBar.showMessage("Infinite loop detected in macro: " + macroName);
+				debug.log("infinite loop macro parent: " + JSON.stringify(parentMacros));
 				jsTreeData.attr["data-error"] = "Infinite loop";
 				return;
 			}
