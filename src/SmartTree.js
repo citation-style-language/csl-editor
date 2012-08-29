@@ -5,6 +5,7 @@ define([	'src/uiConfig',
 			'src/options',
 			'src/dataInstance',
 			'src/urlUtils',
+			'src/notificationBar',
 			'src/debug',
 			'jquery.jstree-patched',
 			'jquery.hotkeys'
@@ -14,6 +15,7 @@ define([	'src/uiConfig',
 			CSLEDIT_options,
 			CSLEDIT_data,
 			CSLEDIT_urlUtils,
+			CSLEDIT_notificationBar,
 			debug,
 			jstree
 		) {
@@ -218,8 +220,6 @@ define([	'src/uiConfig',
 			return jsTreeData;
 		};
 
-		var numMacrosAdded = 0;
-
 		var addMacro = function (jsTreeData, cslNode, macroName, parentMacros) {
 			var macroNodes,
 				macroNode,
@@ -232,6 +232,7 @@ define([	'src/uiConfig',
 			if (parentMacros.indexOf(macroName) === -1) {
 				parentMacros.push(macroName);
 			} else {
+				CSLEDIT_notificationBar.showMessage("Infinite loop detected in macro: " + macroName);
 				jsTreeData.attr["data-error"] = "Infinite loop";
 				return;
 			}
@@ -401,7 +402,9 @@ define([	'src/uiConfig',
 				macroName,
 				jsTreeData = {children: [], attr: [], data: ""},
 				removeChildren = false,
-				addNewChildren = false;
+				updateNode = false;
+
+			console.log("macroLinksUpdateNode in " + JSON.stringify(nodePaths));
 
 			if (amendedNode.name !== "text") {
 				return;
@@ -413,10 +416,10 @@ define([	'src/uiConfig',
 			} else if (amendedNode.name === "text") {
 				addMacro(jsTreeData, amendedNode, macroName);
 				removeChildren = true;
-				addNewChildren = true;
+				updateNode = true;
 			}
 
-			if (removeChildren || addNewChildren) {
+			if (removeChildren || updateNode) {
 				treeElement.find('[cslid=' + amendedNode.cslId + ']').each(function () {
 					var $this = $(this);
 					if (removeChildren) {
@@ -424,7 +427,15 @@ define([	'src/uiConfig',
 							treeElement.jstree('remove', $(this));
 						});
 					}
-					if (addNewChildren) {
+					if (updateNode) {
+						console.log("updating node in " + JSON.stringify(nodePaths));
+						// update attributes
+						if ("data-error" in jsTreeData.attr) {
+							$this.attr("data-error", jsTreeData.attr["data-error"]);
+						} else {
+							$this.removeAttr("data-error");
+						}
+
 						$.each(jsTreeData.children, function (i, child) {
 							createSubTree($this, i, child);
 						});
@@ -616,8 +627,10 @@ define([	'src/uiConfig',
 			nodes.each(function () {
 				treeElement.jstree('rename_node', $(this), CSLEDIT_uiConfig.displayNameFromNode(amendedNode));
 			});
+
+			console.log("amendNode in " + JSON.stringify(nodePaths) + " : " + thisRangeIndex);
 			
-			if (thisRangeIndex === -1) {
+			if (nodes.length === 0) {
 				return;
 			}
 

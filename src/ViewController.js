@@ -28,7 +28,7 @@ define(
 			debug,
 			jquery_scrollTo
 		) {
-	return function CSLEDIT_ViewController ( 
+	return function CSLEDIT_ViewController( 
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
 		syntaxHighlighter) {
 	
@@ -157,10 +157,10 @@ define(
 				});
 				views.push(heading);
 
-				tree = CSLEDIT_SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
+				tree = new CSLEDIT_SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
 					{
 						enableMacroLinks : value.macroLinks,
-					 	leafNodes : value.leafNodes
+						leafNodes : value.leafNodes
 					});
 
 				// Use this for debugging if you're not sure the view accurately reflects the data
@@ -243,7 +243,12 @@ define(
 				});
 
 				selectedTree = selectedView;
-				selectedNodeId = selectedView.selectedNode();
+				selectedNodeId = parseInt(selectedView.selectedNode(), 10);
+
+				if (/"/.test(selectedView.selectedNode())) {
+					debug.log("WARNING!!!!! view: " + JSON.stringify(Object.keys(selectedView)) +
+							" returned cslId with quotes");
+				}
 		
 				selectedNodeChanged();
 			};
@@ -340,7 +345,10 @@ define(
 				) {
 			var treeNode,
 				headingNode;
-			
+
+			// ensure it's a number
+			id = parseInt(id, 10);
+
 			if (id === -1) {
 				selectedNodeId = id;
 				selectedNodeChanged(missingNodePath);
