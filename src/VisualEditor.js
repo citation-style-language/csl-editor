@@ -405,6 +405,8 @@ define(
 		var init = function () {
 			var showingDataChangePrompt = false;
 
+			CSLEDIT_notificationBar.init(editorElement.find('#notificationBar'));
+
 			// set function which gets called if inconsistencies
 			// are found between the localStorage data (shared between tabs) and this session
 			// data
@@ -502,9 +504,9 @@ define(
 						CSLEDIT_storage.setItem("CSLEDIT_geometry.topPaneWidth", paneState.size);
 					}
 				}
-			});			
-
-			CSLEDIT_notificationBar.init(editorElement.find('#notificationBar'));
+			});
+			// undo layout setting a fixed width
+			editorElement.find('#bottomRightContainer').css('width', '');
 		};
 
 		// returns true to continue, false to cancel
