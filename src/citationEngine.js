@@ -60,14 +60,20 @@ define([	'src/storage',
 
 		debug.time("validate");
 		validateResult = CSLEDIT_validator.validate(style);
+
+		if (!validateResult.success && /^csl-terms.rnc/.test(validateResult.error)) {
+			// TODO: figure out why this hack is needed
+			validateResult = CSLEDIT_validator.validate(style);
+		}
+
 		debug.timeEnd("validate");
-		$('li[cslid][data-error=invalid]').removeAttr('data-error');
+		$('li[cslid][data-invalid]').removeAttr('data-invalid');
 		if (!validateResult.success) {
 			debug.log("Aborting: CSL not valid: " + validateResult.error);
 			result.statusMessage = validateResult.error;
 			result.cslId = validateResult.cslId;
 			debug.log("error in node " + validateResult.cslId);
-			$('li[cslid=' + validateResult.cslId + ']').attr('data-error', "invalid");
+			$('li[cslid=' + validateResult.cslId + ']').attr('data-invalid', "invalid");
 			return result;
 		}
 
