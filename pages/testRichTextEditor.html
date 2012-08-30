@@ -3,18 +3,16 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
-		<title>CSL Not so rich text editor</title>
+		<title>Rich text editor interactive test</title>
 
-		<link rel="stylesheet" href="css/base.css?bust=$GIT_COMMIT" />
-		<link rel="stylesheet" href="css/searchByExample.css?bust=$GIT_COMMIT" />
-		<link rel="stylesheet" href="css/searchResults.css?bust=$GIT_COMMIT" />
+		<link rel="stylesheet" href="../css/base.css?bust=$GIT_COMMIT" />
 
-		<script type="text/javascript" src="external/require-jquery.js"></script>
+		<script type="text/javascript" src="../external/require-jquery.js"></script>
 		<script>
 			"use strict";
 
 			require.config({
-				baseUrl: ".",
+				baseUrl: "..",
 				urlArgs : "bust=$GIT_COMMIT"
 			});
 			requirejs(['src/config'], function (config) {
@@ -36,10 +34,9 @@
 		</script>
 	</head>
 	<body>
-		<h1>Not rich text editor</h1>
+		<h1>The (not so) rich text editor</h1>
 		<div id=myRichTextEditor>
-			bunch of text<br/>
-			hello, <b>this is bold</b>
+			try editing this text. <b>this is bold</b>
 		</div>
 
 		<h2>Contents</h2>

@@ -246,7 +246,6 @@ define(
 
 			table = $("<table/>");
 
-			debug.log("user input = " + userInput);
 			if ("editor" in jsonDocument) {
 				var editor;
 				editor = personString(jsonDocument["editor"]);
