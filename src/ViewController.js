@@ -107,6 +107,7 @@ define(
 				if (selectedNode() === -1) {
 					selectNode(CSLEDIT_data.getNodesFromPath('style/info')[0].cslId);
 				}
+				propagateErrors();
 				callbacks.formatCitations();
 				callbacks.viewInitialised();
 			}
@@ -431,6 +432,16 @@ define(
 			});
 		};
 
+		var propagateErrors = function () {
+			// propagate data-error to parent elements
+			treeView.find('li.errorParent').removeClass('errorParent');
+			treeView.find('li[data-error]').each(function (i, element) {
+				var parents = $(element).parents('li');
+				console.log("adding error to " + parents.length + " parents");
+				parents.addClass('errorParent');
+			});
+		};
+
 		// public:
 		return {
 			init : init,
@@ -452,7 +463,9 @@ define(
 
 			collapseAll : collapseAll,
 
+			// TODO: rename formatCitations to updateFinished
 			formatCitations : function () {
+				propagateErrors();
 				callbacks.formatCitations();
 			},
 				

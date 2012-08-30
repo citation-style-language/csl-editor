@@ -328,7 +328,8 @@ li[cslid][macrolink="true"] {
 }
 
 li[cslid][data-error] a,
-li[cslid][data-invalid] a {
+li[cslid][data-invalid] a,
+li[cslid].errorParent > a {
 	border:1px solid #ff2222; padding:0 2px 0 1px; box-shadow: none; border-radius: 3px;
 }
 
