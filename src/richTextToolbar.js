@@ -119,6 +119,9 @@ define(
 			x = mouseX - toolbarWidth / 2 - cX;
 		}
 
+		x = Math.min(cWidth - toolbarWidth - 2, x);
+		x = Math.max(0, x);
+
 		toolbarElement.css({
 			"display" : "inline-block",
 			"top" : y
@@ -148,9 +151,6 @@ define(
 
 	// Attach to an element
 	var attachTo = function (container, editor, callback) {
-/*		editor.focus(function () {
-			checkSelection(container, callback);
-		});*/
 		editor.mousedown(function () {
 			mouseupCallback = function () {
 				checkSelection(container, callback, true);
@@ -158,6 +158,12 @@ define(
 		});
 		editor.keyup(function () {
 			checkSelection(container, callback);
+		});
+
+		editor.blur(function () {
+			if (!clicking) {
+				hideToolbar();
+			}
 		});
 	};
 
