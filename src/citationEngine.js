@@ -2,7 +2,6 @@
 
 define([	'src/storage',
 			'src/options',
-			'src/dataInstance',
 			'src/exampleCitations',
 			'src/diff',
 			'src/debug',
@@ -12,7 +11,6 @@ define([	'src/storage',
 		function (
 			CSLEDIT_storage,
 			CSLEDIT_options,
-			CSLEDIT_data,
 			CSLEDIT_exampleCitations,
 			CSLEDIT_diff,
 			debug,
@@ -152,11 +150,11 @@ define([	'src/storage',
 	};
 
 	var runCiteprocAndDisplayOutput = function (
-			statusOut, exampleOut, citationsOut, bibliographyOut, callback) {
+			data, statusOut, exampleOut, citationsOut, bibliographyOut, callback) {
 
 		debug.time("runCiteprocAndDisplayOutput");
 
-		var style = CSLEDIT_data.getCslCode(),
+		var style = data.getCslCode(),
 			inLineCitations = "",
 			citations = [],
 			formattedResult,
@@ -169,9 +167,9 @@ define([	'src/storage',
 			bibliographyDiffs,
 			diffFormattedCitation,
 			diffFormattedBibliography,
-			cslData = CSLEDIT_data.get(),
-			citationNode = CSLEDIT_data.getNodesFromPath("style/citation/layout", cslData),
-			bibliographyNode = CSLEDIT_data.getNodesFromPath("style/bibliography/layout", cslData);
+			cslData = data.get(),
+			citationNode = data.getNodesFromPath("style/citation/layout", cslData),
+			bibliographyNode = data.getNodesFromPath("style/bibliography/layout", cslData);
 
 		statusOut.html("<i>Re-formatting citations...</i>");
 	

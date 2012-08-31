@@ -61,6 +61,7 @@ define([	'src/citationEngine',
 						$("#formattedBibliography").html("");
 					} else {
 						CSLEDIT_citationEngine.runCiteprocAndDisplayOutput(
+							CSLEDIT_data,
 							$("#statusMessage"), $("#exampleOutput"),
 							$("#formattedCitations"), $("#formattedBibliography"));
 					}

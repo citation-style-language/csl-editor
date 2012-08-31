@@ -65,6 +65,16 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 		defaultStyleURL : function () {
 			return localURLFromZoteroId(defaultStyleId)
 		},
-		generateStyleId : generateStyleId
+		generateStyleId : generateStyleId,
+		fetchRepoStyle: function (styleId, success, error) {
+			var url = localURLFromZoteroId(styleId);
+
+			$.ajax({
+				url: url,
+				dataType: "text",
+				success: success,
+				error: error
+			});
+		}
 	};
 });
