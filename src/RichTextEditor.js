@@ -36,6 +36,36 @@ define(
 		this.editor.mouseup(changed);
 		this.editor.keyup(changed);
 		this.editor.bind("drop", changed);
+
+		this.editor.bind("paste", function (e) {
+			var clone = that.editor.clone();
+
+			containerElement.css({
+				overflow: "hidden",
+				height: containerElement.height()
+			});
+			containerElement.append(clone);
+			that.editor.css({
+				"position": "absolute",
+				"left": "-1000px",
+				"width": "500px"
+			});
+
+			setTimeout(function () {
+				changed();
+				clone.remove();
+				that.editor.css({
+					"position" : "",
+					"left" : 0,
+					"width" : ""
+				});
+				containerElement.css({
+					overflow: "",
+					height: ""
+				});
+				containerElement.append(that.editor);
+			}, 1);
+		});
 	};
 
 	CSLEDIT_RichTextEditor.prototype.value = function (newValue) {
