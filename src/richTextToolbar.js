@@ -131,6 +131,8 @@ define(
 		currentCallback = callback;
 		container.prepend(toolbarElement);
 		toolbarElement.css("visibility", "visible");
+
+		updateButtonStates();
 	};
 
 	var checkSelection = function (container, callback, forceMouseX) {
@@ -146,9 +148,9 @@ define(
 
 	// Attach to an element
 	var attachTo = function (container, editor, callback) {
-		editor.focus(function () {
+/*		editor.focus(function () {
 			checkSelection(container, callback);
-		});
+		});*/
 		editor.mousedown(function () {
 			mouseupCallback = function () {
 				checkSelection(container, callback, true);
