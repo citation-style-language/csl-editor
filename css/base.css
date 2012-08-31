@@ -158,10 +158,6 @@ div.panel {
 }
 
 .toolbar a.selected {
-/*	border-style: solid;
-	border-width: 2px;
-	border-color: blue;*/
-
 	background: #bbbbbb;
 }
 
