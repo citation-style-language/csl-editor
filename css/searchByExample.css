@@ -158,10 +158,6 @@ span.match {
 	height: 0px;
 	width: 0px;
 }
-#userCitation .toolbar,
-#userBibliography .toolbar {
-	right: 0;
-}
 #userCitation .editor,
 #userBibliography .editor {
 	background-color: white;

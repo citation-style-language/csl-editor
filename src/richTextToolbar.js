@@ -15,6 +15,11 @@ define(
 	var buttons = [];
 	var currentCallback = null;
 
+	var mouseX = 0;
+	var mouseY = 0;
+
+	var mouseupCallback = null;
+
 	$(document).ready(function () {
 		toolbarElement = $('<div class="toolbar richText">');
 
@@ -63,6 +68,18 @@ define(
 			"overflow" : "hidden",
 			"position" : "absolute"
 		});
+		
+		$(document).mousemove(function (e) {
+			mouseX = e.pageX;
+			mouseY = e.pageY;
+		});
+
+		$(document).mouseup(function () {
+			if (mouseupCallback !== null) {
+				mouseupCallback();
+				mouseupCallback = null;
+			}
+		});
 	});
 
 	var updateButtonStates = function () {
@@ -81,23 +98,64 @@ define(
 		currentCallback = null;
 	};
 
+	var showToolbar = function (container, callback, forceMouseX) {
+		var cX = container.offset().left;
+		var cWidth = container.width();
+		var cY = container.offset().top;
+		var cHeight = container.height();
+		var toolbarWidth = toolbarElement.width();
+
+		if (toolbarWidth === 0) {
+			toolbarWidth = 127;
+		}
+
+		// default position
+		var x = (cWidth - toolbarWidth) / 2;
+		var y = cHeight;
+
+		if (forceMouseX === true ||
+				(mouseX >= cX && mouseX <= cX + cWidth &&
+				mouseY >= cY && mouseY <= cY + cHeight)) {
+			x = mouseX - toolbarWidth / 2 - cX;
+		}
+
+		toolbarElement.css({
+			"display" : "inline-block",
+			"top" : y
+		});
+
+		if (x !== null) {
+			toolbarElement.css("left", x);
+		}
+
+		currentCallback = callback;
+		container.prepend(toolbarElement);
+		toolbarElement.css("visibility", "visible");
+	};
+
+	var checkSelection = function (container, callback, forceMouseX) {
+		var selection = window.getSelection();
+
+		if (selection.anchorNode !== selection.focusNode ||
+				selection.anchorOffset !== selection.focusOffset) {
+			showToolbar(container, callback, forceMouseX);
+		} else {
+			hideToolbar();
+		}
+	};
+
 	// Attach to an element
 	var attachTo = function (container, editor, callback) {
 		editor.focus(function () {
-			toolbarElement.css({
-				"display" : "inline-block",
-				"top" : -35
-			});
-
-			currentCallback = callback;
-			container.prepend(toolbarElement);
-			toolbarElement.css("visibility", "visible");
+			checkSelection(container, callback);
 		});
-
-		editor.blur(function () {
-			if (!clicking) {
-				hideToolbar();
-			}
+		editor.mousedown(function () {
+			mouseupCallback = function () {
+				checkSelection(container, callback, true);
+			};
+		});
+		editor.keyup(function () {
+			checkSelection(container, callback);
 		});
 	};
 
