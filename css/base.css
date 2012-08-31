@@ -146,7 +146,8 @@ div.panel {
 	text-decoration: none;
 	border-right: 1px solid #d4d5d7;
 }
-.toolbar a sup, sub {
+.toolbar a sup,
+.toolbar a sub {
 	vertical-align: baseline;
 	position: relative;
 }
