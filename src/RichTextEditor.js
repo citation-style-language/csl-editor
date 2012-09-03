@@ -28,17 +28,10 @@ define(
 			}
 		};
 
-		this.editor.append(containerElement.html());
-		containerElement.html("");
-		containerElement.append(this.editor);
-		CSLEDIT_richTextToolbar.attachTo(containerElement, this.editor, changed);
-
-		this.editor.mouseup(changed);
-		this.editor.keyup(changed);
-		this.editor.bind("drop", changed);
-
-		this.editor.bind("paste", function (e) {
-			var clone = that.editor.clone();
+		var paste = function () {
+			var oldSelectionNode = window.getSelection().anchorNode,
+				oldSelectionOffset = window.getSelection().anchorOffset,				
+				clone = that.editor.clone();
 
 			containerElement.css({
 				overflow: "hidden",
@@ -64,8 +57,26 @@ define(
 					height: ""
 				});
 				containerElement.append(that.editor);
+				setTimeout(function () {
+					var range = document.createRange();
+					range.selectNodeContents(that.editor[0]);
+					range.collapse(false);
+					var selection = window.getSelection();
+					selection.removeAllRanges();
+					selection.addRange(range);
+				}, 1);
 			}, 1);
-		});
+		};
+
+		this.editor.append(containerElement.html());
+		containerElement.html("");
+		containerElement.append(this.editor);
+		CSLEDIT_richTextToolbar.attachTo(containerElement, this.editor, changed);
+
+		this.editor.mouseup(changed);
+		this.editor.keyup(changed);
+		this.editor.bind("drop", paste);
+		this.editor.bind("paste", paste);
 	};
 
 	CSLEDIT_RichTextEditor.prototype.value = function (newValue) {
