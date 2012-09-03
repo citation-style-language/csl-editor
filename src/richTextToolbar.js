@@ -108,19 +108,19 @@ define(
 		var toolbarWidth = toolbarElement.width();
 
 		if (toolbarWidth === 0) {
-			toolbarWidth = 127;
+			toolbarWidth = 161;
 		}
 
 		// default position
-		var x = (cWidth - toolbarWidth) / 2;
+		var x = cWidth / 2 - toolbarWidth * 0.5;
 
 		if (forceMouseX === true ||
 				(mouseX >= cX && mouseX <= cX + cWidth &&
 				mouseY >= cY && mouseY <= cY + cHeight)) {
-			x = mouseX - toolbarWidth / 2 - cX;
+			x = mouseX - toolbarWidth * 0.1 - cX;
 		}
 
-		x = Math.min(cWidth - toolbarWidth - 2, x);
+		x = Math.min(cWidth - toolbarWidth - 8, x);
 		x = Math.max(0, x);
 
 		toolbarElement.css({
