@@ -17,7 +17,6 @@ define(
 
 		if (containerElement.css("position") !== "absolute" &&
 				containerElement.css("position") !== "relative") {
-			console.log("Setting position to relative");
 			containerElement.css("position", "relative");
 		}
 		
@@ -83,7 +82,18 @@ define(
 		if (typeof(newValue) === "undefined") {
 			var cleaned = CSLEDIT_xmlUtility.cleanInput(this.editor.html(), true);
 			if (cleaned !== this.editor.html()) {
-				this.editor.html(cleaned);
+				document.execCommand("undo");
+				var range = document.createRange();
+				range.selectNodeContents(this.editor[0]);
+				var selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(range);
+				if (cleaned === "") {
+					// becuase inserting "" with insertHTML fails on firefox
+					document.execCommand("delete");
+				} else {
+					document.execCommand("insertHTML", false, cleaned);
+				}
 			}
 			return CSLEDIT_xmlUtility.cleanInput(cleaned);
 		} else {
