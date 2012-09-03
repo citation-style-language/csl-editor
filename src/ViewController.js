@@ -28,7 +28,7 @@ define(
 			debug,
 			jquery_scrollTo
 		) {
-	return function CSLEDIT_ViewController ( 
+	return function CSLEDIT_ViewController( 
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
 		syntaxHighlighter) {
 	
@@ -107,6 +107,7 @@ define(
 				if (selectedNode() === -1) {
 					selectNode(CSLEDIT_data.getNodesFromPath('style/info')[0].cslId);
 				}
+				propagateErrors();
 				callbacks.formatCitations();
 				callbacks.viewInitialised();
 			}
@@ -157,10 +158,10 @@ define(
 				});
 				views.push(heading);
 
-				tree = CSLEDIT_SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
+				tree = new CSLEDIT_SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
 					{
 						enableMacroLinks : value.macroLinks,
-					 	leafNodes : value.leafNodes
+						leafNodes : value.leafNodes
 					});
 
 				// Use this for debugging if you're not sure the view accurately reflects the data
@@ -243,7 +244,12 @@ define(
 				});
 
 				selectedTree = selectedView;
-				selectedNodeId = selectedView.selectedNode();
+				selectedNodeId = parseInt(selectedView.selectedNode(), 10);
+
+				if (/"/.test(selectedView.selectedNode())) {
+					debug.log("WARNING!!!!! view: " + JSON.stringify(Object.keys(selectedView)) +
+							" returned cslId with quotes");
+				}
 		
 				selectedNodeChanged();
 			};
@@ -340,7 +346,10 @@ define(
 				) {
 			var treeNode,
 				headingNode;
-			
+
+			// ensure it's a number
+			id = parseInt(id, 10);
+
 			if (id === -1) {
 				selectedNodeId = id;
 				selectedNodeChanged(missingNodePath);
@@ -423,6 +432,16 @@ define(
 			});
 		};
 
+		var propagateErrors = function () {
+			// propagate data-error to parent elements
+			treeView.find('li.errorParent').removeClass('errorParent');
+			treeView.find('li[data-error]').each(function (i, element) {
+				var parents = $(element).parents('li');
+				console.log("adding error to " + parents.length + " parents");
+				parents.addClass('errorParent');
+			});
+		};
+
 		// public:
 		return {
 			init : init,
@@ -444,7 +463,9 @@ define(
 
 			collapseAll : collapseAll,
 
+			// TODO: rename formatCitations to updateFinished
 			formatCitations : function () {
+				propagateErrors();
 				callbacks.formatCitations();
 			},
 				

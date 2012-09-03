@@ -403,20 +403,23 @@ define(
 		};
 
 		var init = function () {
-			var reloadingPage = false;
+			var showingDataChangePrompt = false;
+
+			CSLEDIT_notificationBar.init(editorElement.find('#notificationBar'));
 
 			// set function which gets called if inconsistencies
 			// are found between the localStorage data (shared between tabs) and this session
 			// data
 			CSLEDIT_storage.onDataInconsistency(function () {
+				showingDataChangePrompt = true;
 				if (confirm("Your style has changed in a different tab.\n" +
 						"Do you want to load the new version into this tab?")) {
 					// reload page
-					reloadingPage = true;
 					window.location.reload();
 				} else {
 					// use existing data
 					CSLEDIT_storage.recreateLocalStorage();
+					showingDataChangePrompt = false;
 				}
 			});
 
@@ -424,7 +427,7 @@ define(
 			// to detect changes in different tabs
 			debug.log("window length = " + $(window).length);
 			$(window).focus(function () {
-				if (!reloadingPage) {
+				if (!showingDataChangePrompt) {
 					CSLEDIT_data.get();
 				}
 			});
@@ -501,9 +504,9 @@ define(
 						CSLEDIT_storage.setItem("CSLEDIT_geometry.topPaneWidth", paneState.size);
 					}
 				}
-			});			
-
-			CSLEDIT_notificationBar.init(editorElement.find('#notificationBar'));
+			});
+			// undo layout setting a fixed width
+			editorElement.find('#bottomRightContainer').css('width', '');
 		};
 
 		// returns true to continue, false to cancel

@@ -246,7 +246,6 @@ define(
 
 			table = $("<table/>");
 
-			debug.log("user input = " + userInput);
 			if ("editor" in jsonDocument) {
 				var editor;
 				editor = personString(jsonDocument["editor"]);
@@ -431,7 +430,7 @@ define(
 			updateExample(0, true);
 
 			$('#nextExample').click(function () {
-				updateExample(exampleIndex - 1);	
+				updateExample(exampleIndex - 1);
 			});
 			$('#prevExample').click(function () {
 				updateExample(exampleIndex + 1);

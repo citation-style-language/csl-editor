@@ -5,6 +5,7 @@ define([	'src/uiConfig',
 			'src/options',
 			'src/dataInstance',
 			'src/urlUtils',
+			'src/notificationBar',
 			'src/debug',
 			'jquery.jstree-patched',
 			'jquery.hotkeys'
@@ -14,6 +15,7 @@ define([	'src/uiConfig',
 			CSLEDIT_options,
 			CSLEDIT_data,
 			CSLEDIT_urlUtils,
+			CSLEDIT_notificationBar,
 			debug,
 			jstree
 		) {
@@ -64,11 +66,11 @@ define([	'src/uiConfig',
 						cslId;
 
 					cslId = parseInt($this.attr('cslid'), 10);
-				debug.assertEqual(CSLEDIT_data.getNode(cslId, cslData).name, $this.attr('rel'));
+					debug.assertEqual(CSLEDIT_data.getNode(cslId, cslData).name, $this.attr('rel'));
 				});
 
 				// Can't have non-macrolink nodes as children of a text node
-			debug.assertEqual(treeElement.find('li[cslid][rel=text] li[macrolink!=true]').length, 0);
+				debug.assertEqual(treeElement.find('li[cslid][rel=text] li[macrolink!=true]').length, 0);
 				debug.timeEnd("verifyTree");
 			}
 		};
@@ -84,7 +86,7 @@ define([	'src/uiConfig',
 				$.each(ranges, function (index, range) {
 					range.rootNode = treeElement.children('ul').children(
 						'li[cslid=' + range.first + ']');
-				debug.assertEqual(range.rootNode.length, 1);
+					debug.assertEqual(range.rootNode.length, 1);
 				});
 				callbacks.loaded();
 
@@ -165,12 +167,12 @@ define([	'src/uiConfig',
 			return jsTreeData;
 		};
 
-		var jsTreeDataFromCslData_inner = function (cslData, lastCslId, macroLink) {
+		var jsTreeDataFromCslData_inner = function (cslData, lastCslId, macroLink, parentMacros) {
 			var index,
 				children = [],
 				cslNodes = [],
-				thisCslData,
-				macro;
+				thisCslNode,
+				rel;
 
 			if (typeof cslData.cslId === "undefined") {
 				cslData.cslId = -1;
@@ -184,7 +186,7 @@ define([	'src/uiConfig',
 			if (!pathContainsLeafNode(cslData.name)) {
 				for (index = 0; index < cslData.children.length; index++) {
 					children.push(jsTreeDataFromCslData_inner(
-						cslData.children[index], lastCslId, macroLink));
+						cslData.children[index], lastCslId, macroLink, parentMacros));
 				}
 			}
 
@@ -197,26 +199,49 @@ define([	'src/uiConfig',
 				children : children
 			};
 
+			if (cslData.name === "text") {
+				thisCslNode = new CSLEDIT_CslNode(cslData);
+				if (thisCslNode.hasAttr("macro")) {
+					jsTreeData.attr["data-mode"] = "macro";
+				}
+			}
+
 			if (typeof macroLink !== "undefined") {
 				jsTreeData.attr.macrolink = macroLink;
 			}
 
 			if (options && options.enableMacroLinks) {
 				// Add 'symlink' to Macro
-				macro = new CSLEDIT_CslNode(cslData).getAttr("macro");
-				if (cslData.name === "text" && macro !== "") {
-					addMacro(jsTreeData, cslData, macro);
+				if (cslData.name === "text" && jsTreeData.attr["data-mode"] === "macro") {
+					addMacro(jsTreeData, cslData, thisCslNode.getAttr("macro"), parentMacros);
 				}
 			}
 
 			return jsTreeData;
 		};
 
-		var addMacro = function (jsTreeData, cslNode, macroName) {
+		var addMacro = function (jsTreeData, cslNode, macroName, parentMacros) {
 			var macroNodes,
 				macroNode,
 				lastCslId,
-				index;
+				index,
+				treeElements;
+
+			if (typeof(parentMacros) === "undefined") {
+			   parentMacros = [];
+			} else {
+				parentMacros = JSON.parse(JSON.stringify(parentMacros));
+			}
+
+			if (parentMacros.indexOf(macroName) === -1) {
+				debug.assertEqual(macroName, new CSLEDIT_CslNode(cslNode).getAttr("macro"));
+				parentMacros.push(macroName);
+			} else {
+				CSLEDIT_notificationBar.showMessage("Infinite loop detected in macro: " + macroName);
+				debug.log("infinite loop macro parent: " + JSON.stringify(parentMacros));
+				jsTreeData.attr["data-error"] = "Infinite loop";
+				return;
+			}
 
 			// delete any existing macroLinks
 			for (index = 0; index < macroLinks.length; index++) {
@@ -245,7 +270,8 @@ define([	'src/uiConfig',
 			
 			// add the macro's children to this node
 			$.each(macroNode.children, function (i, childNode) {
-				jsTreeData.children.push(jsTreeDataFromCslData_inner(childNode, lastCslId, true));
+				jsTreeData.children.push(
+					jsTreeDataFromCslData_inner(childNode, lastCslId, true, parentMacros));
 			});
 
 			macroLinks.push({
@@ -326,10 +352,9 @@ define([	'src/uiConfig',
 				if (macroLink.first === parentId) {
 					parentNodes = parentNodes.add(
 						treeElement.find('li[cslid=' + macroLink.instanceCslId + ']'));
-				debug.assert(parentNodes.length > 0);
+					debug.assert(parentNodes.length > 0);
 				}
 			});
-
 			
 			parentNodes.each(function () {
 				createSubTree($(this), position,
@@ -383,7 +408,9 @@ define([	'src/uiConfig',
 				macroName,
 				jsTreeData = {children: [], attr: [], data: ""},
 				removeChildren = false,
-				addNewChildren = false;
+				updateNode = false;
+
+			console.log("macroLinksUpdateNode in " + JSON.stringify(nodePaths));
 
 			if (amendedNode.name !== "text") {
 				return;
@@ -395,10 +422,10 @@ define([	'src/uiConfig',
 			} else if (amendedNode.name === "text") {
 				addMacro(jsTreeData, amendedNode, macroName);
 				removeChildren = true;
-				addNewChildren = true;
+				updateNode = true;
 			}
 
-			if (removeChildren || addNewChildren) {
+			if (removeChildren || updateNode) {
 				treeElement.find('[cslid=' + amendedNode.cslId + ']').each(function () {
 					var $this = $(this);
 					if (removeChildren) {
@@ -406,7 +433,15 @@ define([	'src/uiConfig',
 							treeElement.jstree('remove', $(this));
 						});
 					}
-					if (addNewChildren) {
+					if (updateNode) {
+						console.log("updating node in " + JSON.stringify(nodePaths));
+						// update attributes
+						if ("data-error" in jsTreeData.attr) {
+							$this.attr("data-error", jsTreeData.attr["data-error"]);
+						} else {
+							$this.removeAttr("data-error");
+						}
+
 						$.each(jsTreeData.children, function (i, child) {
 							createSubTree($this, i, child);
 						});
@@ -470,7 +505,7 @@ define([	'src/uiConfig',
 			
 			if (!pathContainsLeafNode(CSLEDIT_data.getNodePath(newNode.cslId))) {
 				parentNode = treeElement.find('li[cslid="' + parentId + '"][macrolink!="true"]');
-			debug.assertEqual(parentNode.length, 1);
+				debug.assertEqual(parentNode.length, 1);
 				createSubTree(parentNode, position, jsTreeDataFromCslData_inner(newNode, [id]));
 				macroLinksUpdateNode(newNode.cslId, newNode);
 			}
@@ -505,7 +540,7 @@ define([	'src/uiConfig',
 				range.rootNode.attr("cslid", parseInt(range.rootNode.attr("cslid"), 10) + amount);
 				range.rootNode.find('li[cslid][macroLink!="true"]').each(function () {
 					cslId = parseInt($(this).attr("cslid"), 10);
-				debug.assert(cslId <= range.last);
+					debug.assert(cslId <= range.last);
 					if (cslId >= range.first) {
 						$(this).attr("cslid", cslId + amount);
 					}
@@ -516,7 +551,7 @@ define([	'src/uiConfig',
 			} else if (range.last >= fromId) {
 				range.rootNode.find('li[cslid][macroLink!="true"]').each(function () {
 					cslId = parseInt($(this).attr("cslid"), 10);
-				debug.assert(cslId <= range.last);
+					debug.assert(cslId <= range.last);
 					if (cslId >= fromId) {
 						$(this).attr("cslid", cslId + amount);
 					}
@@ -598,8 +633,10 @@ define([	'src/uiConfig',
 			nodes.each(function () {
 				treeElement.jstree('rename_node', $(this), CSLEDIT_uiConfig.displayNameFromNode(amendedNode));
 			});
+
+			console.log("amendNode in " + JSON.stringify(nodePaths) + " : " + thisRangeIndex);
 			
-			if (thisRangeIndex === -1) {
+			if (nodes.length === 0) {
 				return;
 			}
 
