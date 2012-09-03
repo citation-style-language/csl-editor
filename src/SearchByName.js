@@ -128,7 +128,6 @@ define(
 		};
 
 		var init = function () {
-
 			// delayed search after typing
 			$("#styleNameQuery").on("input", function () {
 				clearTimeout(nameSearchTimeout);
@@ -147,6 +146,11 @@ define(
 
 			$("#styleNameQuery").focus();
 		
+			var initialQuery = CSLEDIT_options.get('initialSearchQuery');
+			if (typeof(initialQuery) !== "undefined") {
+				$('#styleNameQuery').val(initialQuery);
+			}
+
 			searchForStyleName();
 		};
 	};
