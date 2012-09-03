@@ -16,7 +16,8 @@ define(
 	var currentCallback = null;
 
 	$(document).ready(function () {
-		toolbarElement = $('<div class="toolbar richText">');
+		toolbarElement = $('<div class="toolbar richText has-arrow">');
+		toolbarElement.append('<span class="pointer">');
 
 		var addButton = function (style, title, innerHTML) {
 			var button = $('<a>')
@@ -32,8 +33,9 @@ define(
 		addButton("bold", "Bold", "<b>B</b>");
 		addButton("italic", "Italic", "<i>I</i>");
 		addButton("underline", "Underline", "<u>U</u>");
-		addButton("superscript", "Superscript", "<sup>sup</sup>");
-		addButton("subscript", "Subscript", "<sub>sub</sub>");
+		addButton("superscript", "Superscript", "x<sup>s</sup>");
+		addButton("subscript", "Subscript", "x<sub>s</sub>");
+		addButton("clear", "Clear", "&nbsp;clear&nbsp;");
 
 		toolbarElement.find('a').mousedown(function () {
 			clicking = true;
@@ -60,7 +62,7 @@ define(
 
 		toolbarElement.css({
 			"display" : "inline-block",
-			"overflow" : "hidden",
+			"overflow" : "visible",
 			"position" : "absolute"
 		});
 	});
@@ -86,7 +88,7 @@ define(
 		editor.focus(function () {
 			toolbarElement.css({
 				"display" : "inline-block",
-				"top" : -35
+				"bottom" : -25
 			});
 
 			currentCallback = callback;

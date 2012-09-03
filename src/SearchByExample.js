@@ -199,7 +199,7 @@ define(
 				result = "";
 
 			var getTagged = function () {
-				return "<span class=match>" + string.substring(from, to + 1) + "</span>";
+				return "<mark>" + string.substring(from, to + 1) + "</mark>";
 			};
 
 			$.each(string, function (i, char) {

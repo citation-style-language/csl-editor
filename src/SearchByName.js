@@ -128,11 +128,6 @@ define(
 		};
 
 		var init = function () {
-			// add icon
-			$('button#searchButton').css({
-				'background-image' :
-					"url(" + CSLEDIT_urlUtils.getResourceUrl('external/famfamfam-icons/magnifier.png') + ')'
-			});
 
 			// delayed search after typing
 			$("#styleNameQuery").on("input", function () {

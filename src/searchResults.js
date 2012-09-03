@@ -86,7 +86,7 @@ define(
 			featuredStyleText = '';
 			if (CSLEDIT_exampleData.topStyles.indexOf(style.styleId) !== -1) {
 				featuredStyleClass = ' class="featuredStyle" ';
-				featuredStyleText = '<span class="featuredStyle">Popular Style</span>';
+				featuredStyleText = '<span class="featuredStyle">Popular</span>';
 			}
 
 			outputList.push(
@@ -100,10 +100,9 @@ define(
 				'<tr><td nowrap="nowrap"><span class="faint">Bibliography</span></td>' +
 				'<td class=match>' +
 				bibliography + '</td>' + bibliographyCloseness + "</tr>" +
-				'<tr><td></td><td>' + 
-				'<button class="editStyle" styleURL="' + style.styleId + '">Edit style</button>' +
-				//'<button class="editStyle" styleURL="' + style.styleId + '">View CSL</button>' +
-				//'<button class="editStyle" styleURL="' + style.styleId + '">Use this style</button></td></tr>' +
+				'<tr><td><button class="editStyle" styleURL="' + style.styleId + '">Install</button></td><td>' +
+				'<button class="editStyle" styleURL="' + style.styleId + '">Edit</button>' +
+				'<button class="editStyle" styleURL="' + style.styleId + '">View code</button></td></tr>' +
 				'</table>');
 		}
 		

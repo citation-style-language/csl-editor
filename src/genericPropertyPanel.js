@@ -47,8 +47,8 @@ define([	'src/MultiPanel',
 			},
 			'vertical-align' : {
 				'baseline' : 'default',
-				'sup' : { text : '<sup>sup</sup>' },
-				'sub' : { text : '<sub>sub</sub>' }
+				'sup' : { text : 'x<sup>s</sup>' },
+				'sub' : { text : 'x<sub>s</sub>' }
 			},
 			'quotes' : {
 				'false' : 'default',
