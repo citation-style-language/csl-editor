@@ -31,7 +31,7 @@ define(
 				.attr('title', title)
 				.append(innerHTML);
 
-			buttons.push(button)
+			buttons.push(button);
 			toolbarElement.append(button);
 		};
 
@@ -113,7 +113,6 @@ define(
 
 		// default position
 		var x = (cWidth - toolbarWidth) / 2;
-		var y = cHeight;
 
 		if (forceMouseX === true ||
 				(mouseX >= cX && mouseX <= cX + cWidth &&
@@ -126,7 +125,7 @@ define(
 
 		toolbarElement.css({
 			"display" : "inline-block",
-			"top" : y
+			"bottom" : -25
 		});
 
 		if (x !== null) {
@@ -161,16 +160,8 @@ define(
 			mouseupCallback = function () {
 				checkSelection(container, callback, true);
 			};
-		editor.focus(function () {
-			toolbarElement.css({
-				"display" : "inline-block",
-				"bottom" : -25
-			});
-
-			currentCallback = callback;
-			container.prepend(toolbarElement);
-			toolbarElement.css("visibility", "visible");
 		});
+		
 		editor.keyup(function () {
 			checkSelection(container, callback);
 		});
