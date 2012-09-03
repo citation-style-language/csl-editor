@@ -172,10 +172,6 @@ mark {
 	height: 0px;
 	width: 0px;
 }
-#userCitation .toolbar,
-#userBibliography .toolbar {
-	left: 0;
-}
 #userCitation .editor,
 #userBibliography .editor {
 	background-color: white;
