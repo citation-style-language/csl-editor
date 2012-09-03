@@ -40,7 +40,7 @@ define(
 		addButton("underline", "Underline", "<u>U</u>");
 		addButton("superscript", "Superscript", "x<sup>s</sup>");
 		addButton("subscript", "Subscript", "x<sub>s</sub>");
-		addButton("clear", "Clear", "&nbsp;clear&nbsp;");
+		addButton("removeFormat", "Clear", "&nbsp;clear&nbsp;");
 
 		toolbarElement.find('a').mousedown(function () {
 			clicking = true;
