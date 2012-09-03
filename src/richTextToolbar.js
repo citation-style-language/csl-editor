@@ -135,17 +135,21 @@ define(
 		container.prepend(toolbarElement);
 		toolbarElement.css("visibility", "visible");
 
-		updateButtonStates();
 	};
 
 	var checkSelection = function (container, callback, forceMouseX) {
 		var selection = window.getSelection();
 
+		updateButtonStates();
 		if (selection.anchorNode !== selection.focusNode ||
 				selection.anchorOffset !== selection.focusOffset) {
 			showToolbar(container, callback, forceMouseX);
 		} else {
-			hideToolbar();
+			if (toolbarElement.find("a.selected").length > 0) {
+				showToolbar(container, callback, forceMouseX);
+			} else {
+				hideToolbar();
+			}
 		}
 	};
 
