@@ -449,7 +449,10 @@ define(
 					citationEditor1,
 					citationEditor2;
 				
-				syntaxHighlighter = new CSLEDIT_SyntaxHighlighter(editorElement);
+				syntaxHighlighter = new CSLEDIT_SyntaxHighlighter(
+					editorElement.find('#titlebar, #nodePathView, #exampleOutput'),
+					editorElement.find('#treeEditor')
+				);
 
 				// TODO: remove this global
 				window.CSLEDIT_viewController = new CSLEDIT_ViewController(

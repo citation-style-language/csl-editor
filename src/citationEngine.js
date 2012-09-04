@@ -160,10 +160,10 @@ define([	'src/storage',
 			inLineCitations = "",
 			citations = [],
 			formattedResult,
-			citationTagStart = "<p>",
-			citationTagEnd = "</p>",
-			bibliographyTagStart = "<p>",
-			bibliographyTagEnd = "</p>",
+			citationTagStart = "",
+			citationTagEnd = "",
+			bibliographyTagStart = "",
+			bibliographyTagEnd = "",
 			startTime,
 			citationDiffs,
 			bibliographyDiffs,
@@ -186,14 +186,27 @@ define([	'src/storage',
 
 		// add syntax highlighting at highest level
 		if (citationNode.length > 0) {
-			citationTagStart = '<p><span cslid="' + citationNode[0].cslId + '">';
-			citationTagEnd = '</span></p>';
+			citationTagStart = '<div cslid="' + citationNode[0].cslId + '">';
+			citationTagEnd = '</div>';
 		}
 		if (bibliographyNode.length > 0) {
-			bibliographyTagStart = '<p><span cslid="' + bibliographyNode[0].cslId + '">';
-			bibliographyTagEnd = '</span></p>';
+			bibliographyTagStart = '<div cslid="' + bibliographyNode[0].cslId + '">';
+			bibliographyTagEnd = '</div>';
 		}
-
+/*
+		// convert div tags to span tags
+		// because we can't have divs within a span
+		$.each(formattedResult.formattedCitations, function (i, citation) {
+			formattedResult.formattedCitations[i] = citation
+				.replace(/<div/g, "<span")
+				.replace(/<\/div>/g, "</span>");
+		});
+		$.each(formattedResult.formattedBibliography, function (i, bibliographyEntry) {
+			formattedResult.formattedBibliography[i] = bibliographyEntry
+				.replace(/<div/g, "<span")
+				.replace(/<\/div>/g, "</span>");
+		});
+*/
 		oldFormattedCitation = newFormattedCitation;
 		newFormattedCitation = citationTagStart;
 		newFormattedCitation += formattedResult.formattedCitations.join(
