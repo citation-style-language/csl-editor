@@ -8,10 +8,9 @@ define(
 			CSLEDIT_data,
 			CSLEDIT_uiConfig
 		) {
-	var CSLEDIT_NodePathView = function (element, callbacks, syntaxHighlighter) {
+	var CSLEDIT_NodePathView = function (element, callbacks) {
 		this.element = 	element;
 		this.callbacks = callbacks;
-		this.syntaxHighlighter = syntaxHighlighter;
 	};
 
 	CSLEDIT_NodePathView.prototype.nodeMissing = function (missingNodePath) {
@@ -46,7 +45,6 @@ define(
 			
 			that.callbacks.selectNodeFromPath(thisNodePath);
 		});
-		this.element.find('span[cslid]').hover(this.syntaxHighlighter.hover, this.syntaxHighlighter.unhover);
 	};
 	return CSLEDIT_NodePathView;
 });

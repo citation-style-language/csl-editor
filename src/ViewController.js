@@ -32,18 +32,18 @@ define(
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
 		syntaxHighlighter) {
 	
-		// smartTrees display a subset of the proper CSL tree
+		// smartTrees display a subset of the CSL tree
 		// and allow transformations of the data
-		//
-		// name : visible name
-		// nodeData : displayed in property panel
-		// children : displayed in tree view as children
 		var smartTreeSchema = [
 				{
 					id : "info",
 					name : "Style Info",
-					headingNodePath : "",
-					nodePaths : ["style/info", "style"/*, "style/locale"*/],
+					headingNodePath : "style",
+					headingNodePossibleChildren : {
+						"locale" : "optional"
+					},
+					headingNodeShowPropertyPanel : false,
+					nodePaths : ["style/info", "style", "style/locale"],
 					macroLinks : false,
 					leafNodes : ["info", "style"]
 				},
@@ -157,6 +157,7 @@ define(
 					selectNode : selectNodeInView(heading)
 				});
 				views.push(heading);
+				syntaxHighlighter.addHighlightableElements(heading.element);
 
 				tree = new CSLEDIT_SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
 					{
@@ -179,7 +180,8 @@ define(
 
 			nodePathView = new CSLEDIT_NodePathView(nodePathElement, {
 				selectNodeFromPath : selectNodeFromPath
-			}, syntaxHighlighter);
+			});
+			syntaxHighlighter.addHighlightableElements(nodePathElement);
 		};
 		
 		var selectedNodeChanged = function () {

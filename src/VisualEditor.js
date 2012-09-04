@@ -475,6 +475,7 @@ define(
 				}
 
 				createTreeView();
+
 			});
 
 			setupTreeEditorToolbar();

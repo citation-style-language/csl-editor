@@ -1,7 +1,7 @@
 "use strict";
 
 define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
-	return function (highlightableContainers, treeView) {
+	return function (highlightableElements, treeView) {
 		var selectedCslId = -1,
 			hoveredNodeStack = [],
 			highlightedCss,
@@ -21,7 +21,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 				attribute += "." + className;
 			}
 
-			return highlightableContainers.find('div' + attribute + ', ' + 'span' + attribute);
+			return highlightableElements.find('div' + attribute + ', ' + 'span' + attribute);
 		};
 
 		var selectedNodeChanged = function (newSelectedCslId) {
@@ -283,13 +283,18 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 				spansAndDivs(CSLEDIT_viewController.selectedNode()).addClass('selected');
 			}
 		};
+		
+		var addHighlightableElements = function (newElements) {
+			highlightableElements = highlightableElements.add(newElements);
+		}
 
 		return {
 			selectedNodeChanged : selectedNodeChanged,
 			setupSyntaxHighlighting : setupSyntaxHighlighting,
 			hover : hover,
 			unhover : unhover,
-			reverseSelectNode : reverseSelectNode
+			reverseSelectNode : reverseSelectNode,
+			addHighlightableElements : addHighlightableElements
 		};
 	};
 });
