@@ -446,8 +446,6 @@ define(
 				});
 				$('#alternateSearchLabel').css('display', 'inline');
 			}
-			
-			search();
 		};
 	};
 
