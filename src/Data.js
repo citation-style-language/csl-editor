@@ -362,22 +362,23 @@ define([	'src/uiConfig', // TODO: remove this dependency
 		var getNodesFromPath_inner = function (path, nodeData, result) {
 			var index,
 				rootNode,
-				regExp;
+				regExp,
+				newPath;
 
 			if (path.length === 0) {
 				result.push(nodeData);
 				return;
 			}
 
-			rootNode = path.splice(0, 1);
-			debug.assertEqual(rootNode.length, 1);
+			rootNode = path[0];
+			newPath = path.slice(1, path.length);
 
 			// convert '*' wildcard to regexp equivalent
-			regExp = new RegExp("^" + rootNode[0].replace("*", ".*") + "$");
+			regExp = new RegExp("^" + rootNode.replace("*", ".*") + "$");
 
 			for (index = 0; index < nodeData.children.length; index++) {
 				if (regExp.test(nodeData.children[index].name)) {
-					getNodesFromPath_inner(path, nodeData.children[index], result);
+					getNodesFromPath_inner(newPath, nodeData.children[index], result);
 				}
 			}
 		};
