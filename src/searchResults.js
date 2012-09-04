@@ -63,8 +63,14 @@ define(
 				masterStyleSuffix = '';
 			}
 
-			citation = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedCitations[0];
-			bibliography = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography;
+			citation = CSLEDIT_cslStyles
+				.exampleCitations()
+				.exampleCitationsFromMasterId[style.masterId][exampleIndex]
+				.formattedCitations[0];
+			bibliography = CSLEDIT_cslStyles
+				.exampleCitations()
+				.exampleCitationsFromMasterId[style.masterId][exampleIndex]
+				.formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&
 					style.userCitation !== "" &&
@@ -100,9 +106,9 @@ define(
 				'<tr><td nowrap="nowrap"><span class="faint">Bibliography</span></td>' +
 				'<td class=match>' +
 				bibliography + '</td>' + bibliographyCloseness + "</tr>" +
-				'<tr><td><button class="editStyle" styleURL="' + style.styleId + '">Install</button></td><td>' +
-				'<button class="editStyle" styleURL="' + style.styleId + '">Edit</button>' +
-				'<button class="editStyle" styleURL="' + style.styleId + '">View code</button></td></tr>' +
+				'<tr><td><button class="installStyle" data-styleId="' + style.styleId + '">Install</button></td><td>' +
+				'<button class="editStyle" data-styleId="' + style.styleId + '">Edit</button>' +
+				'<button class="viewCode" data-styleId="' + style.styleId + '">View code</button></td></tr>' +
 				'</table>');
 		}
 		
@@ -120,10 +126,19 @@ define(
 			});
 		} 
 
-		$("button.editStyle").click(function (event) {
-			var styleURL = $(event.target).attr("styleURL");
-			CSLEDIT_options.get("editStyle_func")(styleURL);
-		});
+		var setupButtonHandler = function (button, func) {
+			if (typeof(func) === "undefined") {
+				button.css("display", "none");
+			} else {
+				button.click(function (event) {
+					func($(event.target).attr("data-styleId"));
+				});
+			}
+		};
+
+		setupButtonHandler($('button.installStyle'), CSLEDIT_options.get('installStyle_func'));
+		setupButtonHandler($('button.editStyle'), CSLEDIT_options.get('editStyle_func'));
+		setupButtonHandler($('button.viewCode'), CSLEDIT_options.get('viewCode_func'));
 	};
 
 	return {
