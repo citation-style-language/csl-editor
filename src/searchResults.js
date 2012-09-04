@@ -97,7 +97,8 @@ define(
 
 			outputList.push(
 				'<table' + featuredStyleClass + '>' +
-				'<tr><td colspan=3>' + featuredStyleText + '<a class="style-title" href="' + style.styleId + '">' +
+				'<tr><td colspan=3>' + featuredStyleText + '<a class="style-title" href="' + 
+					CSLEDIT_cslStyles.localURLFromZoteroId(style.styleId) + '">' +
 				CSLEDIT_cslStyles.styles().styleTitleFromId[style.styleId] + "</a>" +
 				masterStyleSuffix + '</td></tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
