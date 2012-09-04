@@ -502,7 +502,6 @@ define([	'src/uiConfig',
 			}
 			range = ranges[thisRangeIndex];
 
-			
 			if (!pathContainsLeafNode(CSLEDIT_data.getNodePath(newNode.cslId))) {
 				parentNode = treeElement.find('li[cslid="' + parentId + '"][macrolink!="true"]');
 				debug.assertEqual(parentNode.length, 1);
