@@ -7,7 +7,6 @@ Play with the reference implementation here: [Citation Style Editor](http://stev
 # To use
 
 1. Follow instructions to set up the reference implementation here: [Demo Site Repo](https://github.com/citation-style-editor/csl-editor-demo-site).
-
 2. See the [wiki](https://github.com/citation-style-editor/csl-editor/wiki) for further documentation.
 
 # Attributions 
