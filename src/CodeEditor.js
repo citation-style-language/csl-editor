@@ -47,7 +47,8 @@ define([	'src/citationEngine',
 
 		var init = function () {
 			var codeMirrorScroll,
-				codeMirrorContainer;
+				codeMirrorContainer,
+				userCallback = CSLEDIT_options.get("onChange");
 
 			CodeMirror.defaults.onChange = function()
 			{
@@ -63,6 +64,10 @@ define([	'src/citationEngine',
 						CSLEDIT_citationEngine.runCiteprocAndDisplayOutput(
 							$("#statusMessage"), $("#exampleOutput"),
 							$("#formattedCitations"), $("#formattedBibliography"));
+					}
+
+					if (typeof(userCallback) !== "undefined") {
+						userCallback(editor.getValue());
 					}
 				}, 500);
 			};
