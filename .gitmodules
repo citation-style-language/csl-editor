@@ -13,6 +13,3 @@
 [submodule "external/locales"]
 	path = external/locales
 	url = git://github.com/citation-style-language/locales.git
-[submodule "docs"]
-	path = docs
-	url = https://github.com/citation-style-editor/csl-editor.wiki.git
