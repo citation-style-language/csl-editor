@@ -1,23 +1,25 @@
 "use strict";
 
-define([	'src/storage',
-			'src/options',
+// Uses citeproc-js to generate example citaitons
+
+define([	'src/options',
 			'src/dataInstance',
 			'src/exampleCitations',
 			'src/diff',
 			'src/debug',
 			'external/citeproc/citeproc',
-			'src/citeprocLoadSys'
+			'src/citeprocLoadSys',
+			'jquery'
 		],
 		function (
-			CSLEDIT_storage,
 			CSLEDIT_options,
 			CSLEDIT_data,
 			CSLEDIT_exampleCitations,
 			CSLEDIT_diff,
 			debug,
 			CSL,
-			citeprocSys
+			citeprocSys,
+			$
 		) {
 	var oldFormattedCitation = "",
 		newFormattedCitation = "",
@@ -33,7 +35,7 @@ define([	'src/storage',
 
 		// creating new string because of bug where some html from generateExampleCitations.js
 		// was type object instead of string and didn't have the replace() function
-		var stripped = new String(html);
+		var stripped = html.toString();
 		stripped = stripped.replace(stripRegExp, "");
 		return stripped;
 	};
@@ -42,15 +44,10 @@ define([	'src/storage',
 		var bibliography,
 			result,
 			citations,
-			cluster,
 			inLineCitations,
 			inLineCitationArray,
-			i,
 			pos,
 			makeBibliographyArgument,
-			hangingindent,
-			has_bibliography,
-			index,
 			enumerateCitations;
 
 		citeprocSys.setJsonDocuments(documents);
@@ -58,14 +55,12 @@ define([	'src/storage',
 		result = { "statusMessage": "", "formattedCitations": [], "formattedBibliography": [] };
 		result.statusMessage = "";
 		if (style !== previousStyle) {
-			try
-			{
+			try {
 				citeproc = new CSL.Engine(citeprocSys, style);
 				citeproc.opt.development_extensions.csl_reverse_lookup_support = true;
 				previousStyle = style;
 			}
-			catch (err)
-			{
+			catch (err) {
 				result.statusMessage = "Citeproc initialisation exception: " + err;
 				return result;
 			}
@@ -76,21 +71,17 @@ define([	'src/storage',
 		inLineCitations = "";
 		inLineCitationArray = [];
 		
-		for (cluster = 0; cluster < citationClusters.length; cluster++)
-		{
-			try
-			{
-				citations = citeproc.appendCitationCluster(citationClusters[cluster], false);
+		$.each(citationClusters, function (clusterIndex, cluster) {
+			try {
+				citations = citeproc.appendCitationCluster(cluster, false);
 			}
-			catch (err)
-			{
+			catch (err) {
 				result.statusMessage = "Citeproc exception: " + err;
 				return result;
 			}
 			
-			for (i = 0; i < citations.length; i++)
-			{
-				pos = citations[i][0];
+			$.each(citations, function (i, citation) {
+				pos = citation[0];
 				
 				if (inLineCitations !== "")
 				{
@@ -98,16 +89,16 @@ define([	'src/storage',
 				}
 				
 				if (taggedOutput !== true) {
-					citations[i][1] = stripTags(citations[i][1], "span");
+					citation[1] = stripTags(citation[1], "span");
 				}
 
-				inLineCitations += citations[i][1];
+				inLineCitations += citation[1];
 
-				if (citations[i][1] !== "") {
-					inLineCitationArray.push(citations[i][1]);
+				if (citation[1] !== "") {
+					inLineCitationArray.push(citation[1]);
 				}
-			}
-		}
+			});
+		});
 		result.formattedCitations = inLineCitationArray;
 		
 		enumerateCitations = true;
@@ -118,39 +109,46 @@ define([	'src/storage',
 			makeBibliographyArgument = "citation-number";
 		}
 		
-		try
-		{
+		try {
 			bibliography = citeproc.makeBibliography(makeBibliographyArgument);
 		}
-		catch (err)
-		{
+		catch (err) {
 			result.statusMessage = "Citeproc exception: " + err;
 			return result;
 		}
 
-		hangingindent = false;
-		has_bibliography = (bibliography !== false);
-
-		if (has_bibliography)
-		{
-			hangingindent = (bibliography[0].hangingindent != 0 && "undefined" !== typeof(bibliography[0].hangingindent));
+		if (bibliography !== false) {
+			if ("hangingindent" in bibliography[0]) {
+				result.hangingIndent = bibliography[0].hangingindent;
+			}
 			bibliography = bibliography[1];
 		}
-		else
-		{
+		else {
 			bibliography = [[(citations[0][1])]];
 		}
 
 		if (taggedOutput !== true) {
-			for (index = 0; index < bibliography.length; index++) {
-				bibliography[index] = stripTags(bibliography[index], "span");
-			}
+			$.each(bibliography, function (i, entry) {
+				bibliography[i] = stripTags(entry, "span");
+			});
 		}
 
 		result.formattedBibliography = bibliography;
 		return result;
 	};
 
+	// This function formats the current style in CSLEDIT_data and populates
+	// the given elements with the output
+	//
+	// Note on diffs:
+	//   There is currently unused code to show a diff for a second after each change.
+	//   This can be enabled by adding 'showDiffOnChange' to the CSLEDIT_options via the
+	//   CSLEDIT_VisualEditor or CSLEDIT_CodeEditor contructors.
+	//
+	//   It hasn't worked so well since adding the reverse lookup <span cslid=??> tags to
+	//   the citeproc output.
+	//
+	//   Could be good to fix for use in the Code Editor, but not so essential for the Visual Editor.
 	var runCiteprocAndDisplayOutput = function (
 			statusOut, exampleOut, citationsOut, bibliographyOut, callback) {
 
@@ -193,20 +191,7 @@ define([	'src/storage',
 			bibliographyTagStart = '<div cslid="' + bibliographyNode[0].cslId + '">';
 			bibliographyTagEnd = '</div>';
 		}
-/*
-		// convert div tags to span tags
-		// because we can't have divs within a span
-		$.each(formattedResult.formattedCitations, function (i, citation) {
-			formattedResult.formattedCitations[i] = citation
-				.replace(/<div/g, "<span")
-				.replace(/<\/div>/g, "</span>");
-		});
-		$.each(formattedResult.formattedBibliography, function (i, bibliographyEntry) {
-			formattedResult.formattedBibliography[i] = bibliographyEntry
-				.replace(/<div/g, "<span")
-				.replace(/<\/div>/g, "</span>");
-		});
-*/
+
 		oldFormattedCitation = newFormattedCitation;
 		newFormattedCitation = citationTagStart;
 		newFormattedCitation += formattedResult.formattedCitations.join(
@@ -219,11 +204,11 @@ define([	'src/storage',
 			bibliographyTagEnd + bibliographyTagStart);
 		newFormattedBibliography += bibliographyTagEnd;
 
-		if (newFormattedBibliography.indexOf("<second-field-align>") > -1) {
+		// TODO: read the value from the current style instead of this hard coded 1em padding
+		if ("hangingIndent" in formattedResult) {
 			exampleOut.css({
-				// TODO: don't change the whole output panel CSS, just the relevant lines
-				"padding-left" : "3em",
-				"text-indent" : "-2em"
+				"padding-left" : (1 + formattedResult.hangingIndent) + "em",
+				"text-indent" : "-" + formattedResult.hangingIndent + "em"
 			});
 		} else {
 			exampleOut.css({
@@ -254,7 +239,7 @@ define([	'src/storage',
 				callback();
 			}
 		} else {
-			if (CSLEDIT_storage.getItem('CSLEDIT_options.visualEditorDiffs') === "true") {
+			if (CSLEDIT_options.get('showDiffOnChange') === true) {
 				// display the diff
 				citationsOut.html(diffFormattedCitation);
 				bibliographyOut.html(diffFormattedBibliography);
