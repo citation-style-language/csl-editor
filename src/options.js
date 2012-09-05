@@ -18,7 +18,7 @@ define(
 			CSLEDIT_urlUtils,
 			getUrlPlugin
 		) {
-	var userOptions = {};
+	var options = {};
 	var defaultOptions = {
 			loadCSLFunc : function () {
 				alert("load CSL function not implemented");
@@ -56,8 +56,8 @@ define(
 	};
 
 	var get = function (key) {
-		if (userOptions.hasOwnProperty(key)) {
-			return userOptions[key];
+		if (options.hasOwnProperty(key)) {
+			return options[key];
 		} else {
 			return defaultOptions[key];
 		}
@@ -67,8 +67,8 @@ define(
 
 	return {
 		get : get,
-		setUserOptions : function (_userOptions) {
-			userOptions = _userOptions;
+		setOptions : function (_options) {
+			options = _options;
 			createExtraDefaults();
 		}
 	};

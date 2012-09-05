@@ -46,7 +46,7 @@ define(
 			formChangedTimeout,
 			exampleCitationsFromMasterId = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId;
 
-		CSLEDIT_options.setUserOptions(userOptions);
+		CSLEDIT_options.setOptions(userOptions);
 		mainContainer = $(mainContainer);
 		$.ajax({
 			url: CSLEDIT_urlUtils.getResourceUrl("html/searchByExample.html"),

@@ -1,5 +1,8 @@
 "use strict";
 
+// On construction, this creates a Visual Editor within the given editorElement
+// using the given configurationOptions
+//
 define(
 		[	'src/controller',
 			'src/ViewController',
@@ -42,14 +45,14 @@ define(
 			jquery_hoverIntent,
 			jquery_layout
 		) {
-	return function VisualEditor(editorElement, userOptions) {
+	return function VisualEditor(editorElement, configurationOptions) {
 		var editTimeout,
 			styleURL,
 			syntaxHighlighter,
 			nodePathView;
 
 		$(document).ready(function () {
-			CSLEDIT_options.setUserOptions(userOptions);
+			CSLEDIT_options.setOptions(configurationOptions);
 			editorElement = $(editorElement);
 
 			$.ajax({
