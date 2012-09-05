@@ -1,6 +1,6 @@
 "use strict";
 
-/* Uses CSLEDIT_storage to store current csl data object
+/* Uses CSLEDIT_storage to store the current csl style
  *
  * Supports the following actions:
  * - New style
