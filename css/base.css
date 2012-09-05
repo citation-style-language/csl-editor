@@ -157,6 +157,10 @@ div.panel {
 	margin-bottom: 7px;
 }
 
+#statusMessage {
+	color: #cc1111;
+}
+
 .toolbar {
 	position: relative;
 	display: inline-block;
