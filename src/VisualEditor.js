@@ -205,6 +205,13 @@ define(
 						delete possibleElements["else"];
 					}
 				});
+
+				// if doesn't yet contain 'if' node, only allow adding that
+				if ("if" in possibleElements) {
+					console.log('only "if" allowed');
+					delete possibleElements["else-if"];
+					delete possibleElements["else"];
+				}
 			}
 
 			$.each(possibleElements, function (element) {
