@@ -692,7 +692,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				if (typeof CSLEDIT_options.get("initialCslCode") !== "undefined") {
 					result = setCslCode(CSLEDIT_options.get("initialCslCode"));
 					if (result.hasOwnProperty('error')) {
-						alert(result.error);
+						alert(result.error.message);
 					} else {
 						if (typeof callback !== "undefined") {
 							callback();
