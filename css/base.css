@@ -152,6 +152,10 @@ div.panel {
 .csl-right-inline {
 	margin-left: 35px;
 }
+.inline-csl-entry,
+.csl-entry {
+	margin-bottom: 7px;
+}
 
 .toolbar {
 	position: relative;

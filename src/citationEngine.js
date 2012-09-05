@@ -186,7 +186,7 @@ define([	'src/storage',
 
 		// add syntax highlighting at highest level
 		if (citationNode.length > 0) {
-			citationTagStart = '<div cslid="' + citationNode[0].cslId + '">';
+			citationTagStart = '<div class="inline-csl-entry" cslid="' + citationNode[0].cslId + '">';
 			citationTagEnd = '</div>';
 		}
 		if (bibliographyNode.length > 0) {
