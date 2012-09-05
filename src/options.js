@@ -1,12 +1,29 @@
 "use strict";
 
-define(['jquery', 'src/exampleData', 'src/urlUtils', 'src/getUrl'], function ($, CSLEDIT_exampleData, CSLEDIT_urlUtils, getUrlPlugin) {
+// Stores customisation options, typically set via contructor functions
+//
+// Provides default options for some things
+//
+// These options are not expected to change while the tool is
+// running, for these kind of options use src/storage.js
+
+define(
+		[	'jquery',
+			'src/exampleData',
+			'src/urlUtils',
+			'src/getUrl'
+		], function (
+			$,
+			CSLEDIT_exampleData,
+			CSLEDIT_urlUtils,
+			getUrlPlugin
+		) {
 	var userOptions = {};
 	var defaultOptions = {
 			loadCSLFunc : function () {
 				alert("load CSL function not implemented");
 			},
-			saveCSLFunc : function (cslCode) {			
+			saveCSLFunc : function (cslCode) {
 				window.location.href =
 					"data:application/xml;charset=utf-8," +
 					encodeURIComponent(cslCode);
