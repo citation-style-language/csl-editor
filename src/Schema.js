@@ -381,7 +381,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 				if (!(element in propertiesA.elements) || propertiesA.elements[element] === "") {
 					propertiesA.elements[element] = propertiesB.elements[element];
 				} else {
-					// propertiesA.elements[element] !== "", so keep it
+					// propertiesA.elements[element] is not empty, so keep it
 				}
 			});
 			attributesMerge(propertiesA.attributes, propertiesB.attributes);

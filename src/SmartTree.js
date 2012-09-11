@@ -337,7 +337,6 @@ define([	'src/uiConfig',
 			// Shift references to the macro definition
 			macroLinksShiftCslIds(id, nodesAdded);
 
-			// TODO: check if new node is a macro instance
 			parentNodes = treeElement.find('li[cslid=' + parentId + '][macrolink="true"]');
 
 			// shift references to the instance cslIds

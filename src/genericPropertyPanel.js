@@ -173,7 +173,7 @@ define([	'src/MultiPanel',
 	};
 
 	var toolbarButtonClicked = function (event) {
-		var target = $(event.target).closest('a'), //TODO: id?
+		var target = $(event.target).closest('a'),
 			attribute = target.attr('data-attribute'),
 			value,
 			index = indexOfAttribute(attribute, nodeData.attributes),
@@ -224,7 +224,6 @@ define([	'src/MultiPanel',
 				value = multiInputs[index].val();
 			}
 
-			// TODO: check choice attributes here too
 			if (schemaAttributes.hasOwnProperty(key) &&
 					schemaAttributes[key].alwaysOutput === true) {
 				enabled = true;
@@ -264,7 +263,6 @@ define([	'src/MultiPanel',
 		return defaultValue;
 	};
 
-	// TODO: Use buttons in the style of the +/- add/delete node ones
 	var createButton = function (attributeName, cslSchemaAttribute, index, attribute) {
 		debug.assert(typeof defaultValueForToolbarButton(attributeName) !== "undefined");
 
@@ -389,10 +387,7 @@ define([	'src/MultiPanel',
 						}
 						break;
 					case "language":
-						/*
-						dropdownValues.push("English");
-						dropdownValues.push("etc... ");
-						dropdownValues.push("(TODO: find proper list");*/
+						// TODO: restrict input to language codes
 						break;
 					default:
 						debug.log("WARNING: data type not recognised: " + 

@@ -128,17 +128,6 @@ define(
 
 		referencePanel.find('input').each(function (index) {
 			if ($(this).is(':checked')) {
-				//citationItem = {id:"ITEM-" + (index + 1)};
-				/* TODO: additional options
-				additionalOptions = CSLEDIT_exampleData.additionalOptions[index];
-				if (typeof additionalOptions !== "undefined") {
-					// add options to citationItem
-					$.each (additionalOptions.options, function (key, value) {
-						citationItem[key] = value;
-					});
-				}
-				*/
-				//citationItems.push(citationItem);
 				checked.push(index);
 			}
 		});
