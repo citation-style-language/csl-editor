@@ -1,5 +1,11 @@
 "use strict";
 
+// A property panel that for editing *any* arbitrary CSL node
+//
+// setupPanel() presents all the information within the CSL node, except it's children
+//
+// It uses the lists in CSLEDIT_uiConfig.attributeGroups to group attributes into fieldsets
+
 define([	'src/MultiPanel',
 			'src/MultiComboBox',
 			'src/uiConfig',
@@ -657,9 +663,14 @@ define([	'src/MultiPanel',
 				$.each(choice.attributes, function (attributeName, attribute) {
 					var editor;
 					if (!addedToTab) {
-						// exception for date-part node
+						// exceptions for some nodes
+						// TODO: put these in uiConfig, or better yet, embed in schema somehow
 						if (nodeData.name === "date-part") {
 							choicePanel.addPanel(attribute.values[attribute.values.length - 1].value);
+						} else if (nodeData.name === "term") {
+							// Warning: this depends on the order in the schema which may change in future
+							choicePanel.addPanel(
+								["normal", "ordinals", "long ordinals", "gender assignable"][choiceIndex]);
 						} else {
 							choicePanel.addPanel(attributeName);
 						}
