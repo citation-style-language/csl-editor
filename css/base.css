@@ -156,6 +156,10 @@ div.panel {
 	text-indent: 0;
 }
 
+.csl-entry-container {
+	margin-bottom: 5px;
+}
+
 #statusMessage {
 	color: #cc1111;
 }

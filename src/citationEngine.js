@@ -185,12 +185,12 @@ define([	'src/options',
 		// add syntax highlighting at highest level
 		if (citationNode.length > 0) {
 			// wrap in outer div since the .inline-csl-entry one is an inline-block
-			citationTagStart = '<div><div class="inline-csl-entry" cslid="' + citationNode[0].cslId + '">';
+			citationTagStart = '<div class="csl-entry-container"><div class="inline-csl-entry" cslid="' + citationNode[0].cslId + '">';
 			citationTagEnd = '</div></div>';
 		}
 		if (bibliographyNode.length > 0) {
-			bibliographyTagStart = '<div class="bibliography-csl-entry" cslid="' + bibliographyNode[0].cslId + '">';
-			bibliographyTagEnd = '</div>';
+			bibliographyTagStart = '<div class="csl-entry-container"><div class="bibliography-csl-entry" cslid="' + bibliographyNode[0].cslId + '">';
+			bibliographyTagEnd = '</div></div>';
 		}
 
 		oldFormattedCitation = newFormattedCitation;
