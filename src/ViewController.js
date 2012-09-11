@@ -38,13 +38,13 @@ define(
 				{
 					id : "info",
 					name : "Style Info",
-					headingNodePath : "style",
 					// TODO: Fix src/SmartTree so that the locale node can be added.
 					//       At present there's a bug where adding a locale node doesn't
 					//       put it in the tree because it's a child of the "style" node, and
 					//       therefore part of that range.
 					//       (note - not an issue for 'style/info' since the bug only affects
 					//       nodes added during a session, and 'style/info' is a required node)
+					//headingNodePath : "style",
 					//headingNodePossibleChildren : {
 					//	"locale" : "one"
 					//},
