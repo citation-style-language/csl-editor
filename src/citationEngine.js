@@ -247,23 +247,22 @@ define([	'src/options',
 				// display the real result
 				citationsOut.html(newFormattedCitation);
 				bibliographyOut.html(newFormattedBibliography);
-
-				if ("hangingIndent" in formattedResult) {
-					exampleOut.find('.bibliography-csl-entry').css({
-						"padding-left" : formattedResult.hangingIndent + "em",
-						"text-indent" : "-" + formattedResult.hangingIndent + "em"
-					});
-				} else {
-					exampleOut.find('.bibliography-csl-entry').css({
-						"padding-left" : "0",
-						"text-indent" : "0"
-					});
-				}
-
 				if (typeof callback !== "undefined") {
 					callback();
 				}
 			}
+		}
+
+		if ("hangingIndent" in formattedResult) {
+			exampleOut.find('.bibliography-csl-entry').css({
+				"padding-left" : formattedResult.hangingIndent + "em",
+				"text-indent" : "-" + formattedResult.hangingIndent + "em"
+			});
+		} else {
+			exampleOut.find('.bibliography-csl-entry').css({
+				"padding-left" : "0",
+				"text-indent" : "0"
+			});
 		}
 		
 		debug.timeEnd("runCiteprocAndDisplayOutput");
