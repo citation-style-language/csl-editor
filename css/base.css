@@ -119,12 +119,6 @@ div.panel {
 	border-radius: 3px;
 }
 
-#exampleOutput p {
-	margin-top: 0;
-	margin-bottom: 0.5em;
-	line-height: 1.4em;
-}
-
 #exampleOutput h3 {
 	margin: 0;
 	margin-bottom: 1em;
@@ -154,7 +148,8 @@ div.panel {
 }
 .inline-csl-entry,
 .csl-entry {
-	margin-bottom: 7px;
+	margin: 0px;
+	line-height: 1.4em;
 }
 
 #statusMessage {
