@@ -593,7 +593,8 @@ define([	'src/MultiPanel',
 
 		// only display fieldsets with non-empty tables
 		$.each(fieldsets, function (i, fieldset) {
-			if (fieldset.find('tr').length > 0 || fieldset.find('input').length > 0) {
+			if (fieldset.find('tr').length > 0 || fieldset.find('input').length > 0 ||
+					fieldset.find('.toolbar').length > 0) {
 				panel.append(fieldset);
 			}
 		});
@@ -623,7 +624,6 @@ define([	'src/MultiPanel',
 		panel.children().remove();
 
 		toolbar = $('<div class="toolbar"></div>');
-		panel.append(toolbar);
 
 		// TODO: data validation
 		switch (dataType) {
