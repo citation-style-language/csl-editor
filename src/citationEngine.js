@@ -184,11 +184,12 @@ define([	'src/options',
 
 		// add syntax highlighting at highest level
 		if (citationNode.length > 0) {
-			citationTagStart = '<div class="inline-csl-entry" cslid="' + citationNode[0].cslId + '">';
-			citationTagEnd = '</div>';
+			// wrap in outer div since the .inline-csl-entry one is an inline-block
+			citationTagStart = '<div><div class="inline-csl-entry" cslid="' + citationNode[0].cslId + '">';
+			citationTagEnd = '</div></div>';
 		}
 		if (bibliographyNode.length > 0) {
-			bibliographyTagStart = '<div cslid="' + bibliographyNode[0].cslId + '">';
+			bibliographyTagStart = '<div class="bibliography-csl-entry" cslid="' + bibliographyNode[0].cslId + '">';
 			bibliographyTagEnd = '</div>';
 		}
 
@@ -203,19 +204,6 @@ define([	'src/options',
 		newFormattedBibliography += formattedResult.formattedBibliography.join(
 			bibliographyTagEnd + bibliographyTagStart);
 		newFormattedBibliography += bibliographyTagEnd;
-
-		// TODO: read the value from the current style instead of this hard coded 1em padding
-		if ("hangingIndent" in formattedResult) {
-			exampleOut.css({
-				"padding-left" : (1 + formattedResult.hangingIndent) + "em",
-				"text-indent" : "-" + formattedResult.hangingIndent + "em"
-			});
-		} else {
-			exampleOut.css({
-				"padding-left" : "1em",
-				"text-indent" : "0"
-			});
-		}
 
 		// lazy instantiation of diff_match_patch
 		if (dmp === null) {
@@ -259,6 +247,19 @@ define([	'src/options',
 				// display the real result
 				citationsOut.html(newFormattedCitation);
 				bibliographyOut.html(newFormattedBibliography);
+
+				if ("hangingIndent" in formattedResult) {
+					exampleOut.find('.bibliography-csl-entry').css({
+						"padding-left" : formattedResult.hangingIndent + "em",
+						"text-indent" : "-" + formattedResult.hangingIndent + "em"
+					});
+				} else {
+					exampleOut.find('.bibliography-csl-entry').css({
+						"padding-left" : "0",
+						"text-indent" : "0"
+					});
+				}
+
 				if (typeof callback !== "undefined") {
 					callback();
 				}

@@ -147,9 +147,13 @@ div.panel {
 	margin-left: 35px;
 }
 .inline-csl-entry,
-.csl-entry {
+.bibliography-csl-entry {
+	display: inline-block;
 	margin: 0px;
 	line-height: 1.4em;
+
+	padding-left: 0;
+	text-indent: 0;
 }
 
 #statusMessage {
