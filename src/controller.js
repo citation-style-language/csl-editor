@@ -3,7 +3,7 @@
 // Sends commands to the data module, and maintains the command history used by
 // the undo function
 //
-// ** Any action which affects the data should go through the controller **
+// ** Any action which affects CSLEDIT_data should go through the controller **
 // 
 define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 	var commands = [

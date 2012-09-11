@@ -1,5 +1,30 @@
 "use strict";
 
+// A CSLEDIT_SmartTree does the following
+//
+// - Presents a tree to the user representing a subset of the CSL tree in CSLEDIT_data
+//     - Uses jsTree plugin to draw the tree
+//
+// - Allows the user to perform the following actions:
+//     - Drag and drop
+//     - Delete node (pressing delete on keyboard)
+//
+// - Implements macroLinks
+//     - These make each macro instance node behave link a symlink to the
+//       corresponding macro definition
+//     - Supports nested macros within macros work for any depth
+//     - Infinite loops are detected and the offending node is given a
+//       data-error="Infinite Loop" attribute
+//
+// - Allows incremental changes to the tree based on following commands:
+//     - addNode
+//     - deleteNode
+//     - amendNode
+//
+// - Warning: The code to perform the incremental changes is quite complicated,
+//            especially since the addition of the macro-links feature, and any
+//            changes here should be accompanied by unit tests
+
 define([	'src/uiConfig',
 			'src/CslNode',
 			'src/options',
