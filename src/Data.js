@@ -224,7 +224,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				set(cslData);
 				if (getNodesFromPath('style/info/updated').length === 0) {
 					debug.log("creating required updated node");
-					addNode(getNodesFromPath('style/info')[0].cslId, "last",
+					_addNode(getNodesFromPath('style/info')[0].cslId, "last",
 							new CSLEDIT_CslNode("updated", [], [], -1), true);
 				}
 				cslData = get();
@@ -451,8 +451,20 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			}
 			return id;
 		};
+		
+		var addNode = function (id, position, newNode) {
+			var newCslId = _addNode(id, position, newNode),
+				inverse;
+			emit("formatCitations");
 
-		var addNode = function (id, position, newNode, suppressViewUpdate /*optional*/) {
+			// return the inverse command for undo functionality
+			return {
+				command : "deleteNode",
+				args : [ newCslId ]
+			};
+		};
+
+		var _addNode = function (id, position, newNode, suppressViewUpdate /*optional*/) {
 			var nodeInfo,
 				positionIndex,
 				nodesAdded,
@@ -493,13 +505,13 @@ define([	'src/uiConfig', // TODO: remove this dependency
 					// change parent id from macro instances to macro definitions
 					id = macroDefinitionIdFromInstanceId(id);
 
-					return addNode(id, 0, newNode, suppressViewUpdate);
+					return _addNode(id, 0, newNode, suppressViewUpdate);
 				case "inside":
 				case "last":
 					// change parent id from macro instances to macro definitions
 					id = macroDefinitionIdFromInstanceId(id);
 					
-					return addNode(id, getNode(id).children.length, newNode, suppressViewUpdate);
+					return _addNode(id, getNode(id).children.length, newNode, suppressViewUpdate);
 				case "before":
 				case "after":
 					debug.assert(id !== 0);
@@ -508,15 +520,61 @@ define([	'src/uiConfig', // TODO: remove this dependency
 					if (position === "after") {
 						positionIndex++;
 					}
-					return addNode(nodeInfo.parent.cslId, positionIndex, newNode, suppressViewUpdate);
+					return _addNode(nodeInfo.parent.cslId, positionIndex, newNode, suppressViewUpdate);
 				case "default":
 					debug.assert(false, "position: " + position + " not recognised");
 				}
 			}
 			return newNode.cslId;
 		};
-
+		
 		var deleteNode = function (id) {
+			var deletedNode,
+				nodeAndParent = getNodeAndParent(id),
+				parentNode,
+				position,
+				nodePath = getNodePath(id),
+				error;
+
+			// can't delete required nodes
+			$.each(requiredNodes, function (i, requiredNodePath) {
+				if (nodePath === requiredNodePath) {
+					error = {
+						type: "requiredNode",
+						message: "Cannot delete required node: " + nodePath
+					};
+					return false;
+				}
+			});
+
+			// can't delete the updated node
+			// (this isn't in requiredNodes because it's OK to load a style without it)
+			if (nodePath === "style/info/updated") {
+				error = {
+					type: "requiredNode",
+					message: "Cannot delete required node: " + nodePath
+				};
+			}
+
+			if (error) {
+				return { error : error };
+			}
+
+			parentNode = nodeAndParent.parent.cslId;
+			position = indexOfChild(nodeAndParent.node, nodeAndParent.parent);
+
+			deletedNode = _deleteNode(id);
+
+			emit("formatCitations");
+
+			// return the inverse command for undo functionality
+			return {
+				command : "addNode",
+				args : [ parentNode, position, deletedNode ]
+			};
+		};
+
+		var _deleteNode = function (id) {
 			var iter = new CSLEDIT_Iterator(get()),
 				index,
 				node,
@@ -584,144 +642,96 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			};
 		};
 
+		var moveNode = function (fromId, toId, position) {
+			var deletedNode, fromNode,
+				inverseFromCslId,
+				inverseToNodeAndParent = getNodeAndParent(fromId),
+				inverseToCslId,
+				inverseToPosition;
+
+			callbacksEnabled = false;
+
+			inverseToCslId = inverseToNodeAndParent.parent.cslId;
+			inverseToPosition = indexOfChild(inverseToNodeAndParent.node, inverseToNodeAndParent.parent);
+
+			deletedNode = _deleteNode(fromId);
+
+			debug.log("deletedNode = " + deletedNode.cslId);
+			if (toId > fromId) {
+				toId -= numNodes(deletedNode);
+			}
+
+			inverseFromCslId = _addNode(toId, position, deletedNode);
+			if (inverseToCslId > inverseFromCslId) {
+				inverseToCslId += numNodes(deletedNode);
+			}
+
+			callbacksEnabled = true;
+
+			emit("formatCitations");
+			// return inverse command
+			return {
+				command : "moveNode",
+				args : [inverseFromCslId, inverseToCslId, inverseToPosition]
+			};
+		};
+
+		var initPageStyle = function (callback) {
+			var cslData, styleURL, result;
+			cslData = get(); 
+			
+			// try loading style specified in options
+			if (typeof CSLEDIT_options.get("initialCslCode") !== "undefined") {
+				result = setCslCode(CSLEDIT_options.get("initialCslCode"));
+				if (result.hasOwnProperty('error')) {
+					alert(result.error.message);
+				} else {
+					if (typeof callback !== "undefined") {
+						callback();
+					}
+					return;
+				}
+			}
+			
+			if (cslData === null || cslData === "") {
+				styleURL = CSLEDIT_cslStyles.defaultStyleURL();
+				$.get(styleURL, {}, function (cslCode) {
+					var result;
+					cslCode = cslCode.replace(/<!--.*?-->/g, "");
+					result = setCslCode(cslCode);
+					if (result.hasOwnProperty('error')) {
+						alert(result.error);
+					}
+					if (typeof callback !== "undefined") {
+						callback();
+					}
+				}, "text");
+			} else {
+				if (typeof callback !== "undefined") {
+					callback();
+				}
+			}
+		};
+
 		return {
 			setCslCode : setCslCode,
 			getCslCode : getCslCode,
 			get : get,
-			addNode : function (id, position, newNode) {
-				var newCslId = addNode(id, position, newNode),
-					inverse;
-				emit("formatCitations");
-
-				// return the inverse command for undo functionality
-				return {
-					command : "deleteNode",
-					args : [ newCslId ]
-				};
-			},
-			deleteNode : function (id) {
-				var deletedNode,
-					nodeAndParent = getNodeAndParent(id),
-					parentNode,
-					position,
-					nodePath = getNodePath(id),
-					error;
-
-				// can't delete required nodes
-				$.each(requiredNodes, function (i, requiredNodePath) {
-					if (nodePath === requiredNodePath) {
-						error = {
-							type: "requiredNode",
-							message: "Cannot delete required node: " + nodePath
-						};
-						return false;
-					}
-				});
-
-				// can't delete the updated node
-				// (this isn't in requiredNodes because it's OK to load a style without it)
-				if (nodePath === "style/info/updated") {
-					error = {
-						type: "requiredNode",
-						message: "Cannot delete required node: " + nodePath
-					};
-				}
-
-				if (error) {
-					return { error : error };
-				}
-
-				parentNode = nodeAndParent.parent.cslId;
-				position = indexOfChild(nodeAndParent.node, nodeAndParent.parent);
-
-				deletedNode = deleteNode(id);
-
-				emit("formatCitations");
-
-				// return the inverse command for undo functionality
-				return {
-					command : "addNode",
-					args : [ parentNode, position, deletedNode ]
-				};
-			},
+			addNode : addNode,
+			deleteNode : deleteNode,
 			amendNode : amendNode,
-			moveNode : function (fromId, toId, position) {
-				var deletedNode, fromNode,
-					inverseFromCslId,
-					inverseToNodeAndParent = getNodeAndParent(fromId),
-					inverseToCslId,
-					inverseToPosition;
-
-				callbacksEnabled = false;
-
-				inverseToCslId = inverseToNodeAndParent.parent.cslId;
-				inverseToPosition = indexOfChild(inverseToNodeAndParent.node, inverseToNodeAndParent.parent);
-
-				deletedNode = deleteNode(fromId);
-
-				debug.log("deletedNode = " + deletedNode.cslId);
-				if (toId > fromId) {
-					toId -= numNodes(deletedNode);
-				}
-
-				inverseFromCslId = addNode(toId, position, deletedNode);
-				if (inverseToCslId > inverseFromCslId) {
-					inverseToCslId += numNodes(deletedNode);
-				}
-
-				callbacksEnabled = true;
-
-				emit("formatCitations");
-				// return inverse command
-				return {
-					command : "moveNode",
-					args : [inverseFromCslId, inverseToCslId, inverseToPosition]
-				};
-			},
+			moveNode : moveNode,
 			getNode : getNode,
 			getNodeAndParent : getNodeAndParent,
 			getNodeStack : getNodeStack,
 			getNodePath : getNodePath,
 			getFirstCslId : getFirstCslId,
 
-			initPageStyle : function (callback) {
-				var cslData, styleURL, result;
-				cslData = get(); 
-				
-				// try loading style specified in options
-				if (typeof CSLEDIT_options.get("initialCslCode") !== "undefined") {
-					result = setCslCode(CSLEDIT_options.get("initialCslCode"));
-					if (result.hasOwnProperty('error')) {
-						alert(result.error.message);
-					} else {
-						if (typeof callback !== "undefined") {
-							callback();
-						}
-						return;
-					}
-				}
-				
-				if (cslData === null || cslData === "") {
-					styleURL = CSLEDIT_cslStyles.defaultStyleURL();
-					$.get(styleURL, {}, function (cslCode) {
-						var result;
-						cslCode = cslCode.replace(/<!--.*?-->/g, "");
-						result = setCslCode(cslCode);
-						if (result.hasOwnProperty('error')) {
-							alert(result.error);
-						}
-						if (typeof callback !== "undefined") {
-							callback();
-						}
-					}, "text");
-				} else {
-					if (typeof callback !== "undefined") {
-						callback();
-					}
-				}
-			},
+			initPageStyle : initPageStyle,
 			numNodes : numNodes,
-			numCslNodes : function () { return numNodes(get()); },
+			numCslNodes : function () {
+				return numNodes(get());
+			},
 			clearViewControllers : function () {
 				viewControllers = [];
 			},
