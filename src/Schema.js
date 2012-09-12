@@ -6,8 +6,11 @@
 // It generates properties for each element type:
 //
 // - data type if applicable (e.g. text, anyURI)
+//
 // - list of attributes, and thier possible values
+//
 // - list of child elements
+// 
 // - list of mutually exclusive choices that the node can be in, each choice
 //   contains it's own list of attributes
 // 

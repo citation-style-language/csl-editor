@@ -1,11 +1,8 @@
 "use strict";
 
-// This creates a CSL code editor
+// This creates a CSL code editor with real time preview
 //
-// It uses CodeMirror to provide the code editing view.
-//
-// This is less developed than the Visual CSL Editor since was felt to
-// be less useful.
+// It uses CodeMirror to provide the code editing view
 
 define([	'src/citationEngine',
 			'src/options',
