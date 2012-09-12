@@ -1,5 +1,7 @@
 "use strict";
 
+// Custom property panel for 'choose/if' and 'choose/else-if' nodes
+
 define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 	var CSLEDIT_ConditionalPropertyPanel = function (element, node, executeCommand) {
 		var that = this;

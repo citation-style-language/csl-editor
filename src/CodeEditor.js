@@ -1,5 +1,12 @@
 "use strict";
 
+// This creates a CSL code editor
+//
+// It uses CodeMirror to provide the code editing view.
+//
+// This has had less development than the Visual CSL Editor since it was felt to
+// be less useful, and will probably be either dropped or hidden from most users.
+
 define([	'src/citationEngine',
 			'src/options',
 			'src/dataInstance',
@@ -17,7 +24,12 @@ define([	'src/citationEngine',
 			CodeMirrorXmlMode,
 			jquery_layout
 		) {
-	var CSLEDIT_codeEditor = function (containerElement, userOptions) {
+	// Creates a CSL Code Editor within containerElement
+	var CSLEDIT_codeEditor = function (
+			containerElement,     // the selector or jQuery element to create the editor within
+			configurationOptions  // see https://github.com/citation-style-editor/csl-editor/wiki/Code-Editor
+			                      // for available options
+			) {
 		var codeTimeout,
 			editor,
 			diffTimeout,
@@ -30,7 +42,7 @@ define([	'src/citationEngine',
 
 		containerElement = $(containerElement);
 
-		CSLEDIT_options.setOptions(userOptions);
+		CSLEDIT_options.setOptions(configurationOptions);
 
 		$.ajax({
 			url: CSLEDIT_urlUtils.getResourceUrl("html/codeEditor.html"),

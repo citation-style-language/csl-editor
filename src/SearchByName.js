@@ -1,5 +1,7 @@
 "use strict";
 
+// Sets up a Search by Name page
+
 define(
 		[	'src/options',
 			'src/exampleData',
@@ -14,7 +16,12 @@ define(
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils
 		) {
-	var CSLEDIT_SearchByName = function (mainContainer, userOptions) {
+	// Creates a Search by Name tool within mainContainer
+	var CSLEDIT_SearchByName = function (
+			mainContainer, // the selector or jQuery element to create the search tool within
+			userOptions    // see https://github.com/citation-style-editor/csl-editor/wiki/Search-By-Name
+			               // for full list of options
+			) {
 		var nameSearchTimeout,
 			previousQuery;
 
@@ -32,7 +39,6 @@ define(
 			cache : false
 		});
 
-		// --- Functions for style name search ---
 		var searchForStyleName = function () {
 			var searchQuery = $("#styleNameQuery").val(),
 				searchQueryLower = searchQuery.toLowerCase(),

@@ -1,8 +1,7 @@
 "use strict";
 
-/* provides a way to edit space-delimited list of stings,
- * each of which must be one of the supplied values
- */
+// Allows provides a way to edit space-delimited list of stings,
+// each of which must be one of the supplied values
 
 define(['src/debug'], function (debug) {
 	var CSLEDIT_MultiComboBox = function (element, possibleValues, onChange, unique) {

@@ -1,8 +1,7 @@
 "use strict";
 
-// On construction, this creates a Visual Editor within the given editorElement
-// using the given configurationOptions
-//
+// Creates a Visual CSL Editor
+
 define(
 		[	'src/controller',
 			'src/ViewController',
@@ -45,7 +44,12 @@ define(
 			jquery_hoverIntent,
 			jquery_layout
 		) {
-	return function VisualEditor(editorElement, configurationOptions) {
+	// Sets up a Visual Editor within editorElement
+	var CSLEDIT_VisualEditor = function (
+			editorElement,       // the selector or jQuery element to create the editor within
+			configurationOptions // see https://github.com/citation-style-editor/csl-editor/wiki/Visual-Editor
+								 // for a full list of options
+			) {
 		var editTimeout,
 			styleURL,
 			syntaxHighlighter,
@@ -613,5 +617,7 @@ define(
 			conformStyleToRepoConventions : conformStyleToRepoConventions
 		};
 	};
+
+	return CSLEDIT_VisualEditor;
 });
 

@@ -1,5 +1,7 @@
 "use strict";
 
+// Creates a Search by Example page
+
 define(
 		[	'src/options',
 			'src/exampleData',
@@ -28,7 +30,11 @@ define(
 			XRegExp,
 			jquery_ui
 		) {
-	var CSLEDIT_SearchByExample = function (mainContainer, userOptions) {
+	// Creates a Search by Example page within mainContainer
+	var CSLEDIT_SearchByExample = function (
+			mainContainer,       // the selector or jQuery element to create the search tool within
+			configurationOptions // see https://github.com/citation-style-editor/csl-editor/wiki/Search-By-Example for full list of options
+			) {
 		var nameSearchTimeout,
 			styleFormatSearchTimeout,
 			exampleIndex = -1,
@@ -46,7 +52,7 @@ define(
 			formChangedTimeout,
 			exampleCitationsFromMasterId = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId;
 
-		CSLEDIT_options.setOptions(userOptions);
+		CSLEDIT_options.setOptions(configurationOptions);
 		mainContainer = $(mainContainer);
 		$.ajax({
 			url: CSLEDIT_urlUtils.getResourceUrl("html/searchByExample.html"),

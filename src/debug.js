@@ -1,5 +1,10 @@
 "use strict";
 
+// debug provides:
+//
+// 1. Logging which won't crash on browsers that don't support 'console'
+// 2. Assertions
+
 define(function () {
 	var log, time, timeEnd;
 
@@ -41,16 +46,6 @@ define(function () {
 			}
 		}
 	};
-
-	// puts a module in global window object, handy for debugging
-	if (typeof(window) !== "undefined") {
-		window.CSLEDIT_expose = function (moduleName, varName) {
-			varName = varName || 'CSLEDIT_' + moduleName;
-			require(['src/' + moduleName], function (module) {
-				window[varName] = module;
-			});
-		};
-	}
 
 	return {
 		assert : assert,
