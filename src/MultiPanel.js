@@ -17,12 +17,9 @@ define(function () {
 		this.element.append(this.currentContentPanel);
 		this.contentPanels = [];
 
-		// a non-anonymous function allowing this.update to access the correct 'this'
-		this.updateFunction = function () {
+		this.typeSelect.on('change', function () {
 			that.update.apply(that);
-		};
-
-		this.typeSelect.on('change', this.updateFunction);
+		});
 	};
 
 	CSLEDIT_MultiPanel.prototype.onChange = function (callback) {
