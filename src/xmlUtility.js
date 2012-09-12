@@ -1,5 +1,7 @@
 "use strict";
 
+// Miscellaneous functions for manipulating XML (e.g. stripping tags)
+
 define(function () {
 	var stripUnsupportedTagsAndContents = function (html, supportedTags) {
 		var element;

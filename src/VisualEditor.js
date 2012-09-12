@@ -18,7 +18,6 @@ define(
 			'src/dataInstance',
 			'src/cslStyles',
 			'src/urlUtils',
-			'src/browserCheck',
 			'src/debug',
 			'jquery.hoverIntent',
 			'jquery.layout'
@@ -39,7 +38,6 @@ define(
 			CSLEDIT_data,
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils,
-			CSLEDIT_browserCheck,
 			debug,
 			jquery_hoverIntent,
 			jquery_layout

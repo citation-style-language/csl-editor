@@ -1,11 +1,11 @@
 "use strict";
 
-/* Iterates through a tree in depth first order
- *
- * Each node of the tree must contain a children array containing it's child nodes
- * 
- * Can retrieve the parent node of each child in the tree
- */
+// Iterates through a tree in depth first order
+//
+// Each node of the tree must contain a children array containing it's child nodes
+// 
+// Can retrieve the parent node of each child in the tree
+
 define(['src/debug'], function (debug) {
 	var CSLEDIT_Iterator = function (rootNode) {
 		debug.assert(this instanceof CSLEDIT_Iterator);

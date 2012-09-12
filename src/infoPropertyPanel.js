@@ -1,5 +1,9 @@
 "use strict";
 
+// A custom property panel for the 'style/info' node
+//
+// This could do with a redesign, and there's a long standing minor bug #129
+
 define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
 	var panel, infoNode, inputTimeout, executeCommand;
 

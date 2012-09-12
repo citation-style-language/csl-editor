@@ -146,7 +146,7 @@ define(
 						}
 
 						// give tiny boost to top popular styles
-						if (CSLEDIT_exampleData.topStyles.indexOf(styleId) !== -1) {
+						if (CSLEDIT_cslStyles.topStyles.indexOf(styleId) !== -1) {
 							thisMatchQuality += 0.1;
 						}
 

@@ -1,5 +1,11 @@
 "use strict";
 
+// Implements:
+//
+// - Syntax highlighting when hovering over a) the tree view and b) the example output
+//
+// - Reverse selecting of the relevant CSL node when clicking on the example output
+
 define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
 	return function (highlightableElements, treeView) {
 		var selectedCslId = -1,

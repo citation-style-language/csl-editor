@@ -3,6 +3,7 @@
 // debug provides:
 //
 // 1. Logging which won't crash on browsers that don't support 'console'
+//
 // 2. Assertions
 
 define(function () {

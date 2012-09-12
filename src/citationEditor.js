@@ -1,5 +1,7 @@
 "use strict";
 
+// A dialog allowing the user to customise the in-line citations
+
 define(
 		[	'src/exampleCitations',
 			'src/exampleData',

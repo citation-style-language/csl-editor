@@ -1,5 +1,9 @@
 "use strict";
 
+// A rich text toolbar with bold, italic, etc. buttons
+//
+// The functions are implemented using document.execCommand()
+
 define(
 		[	'src/urlUtils',
 			'src/debug'

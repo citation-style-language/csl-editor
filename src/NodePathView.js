@@ -1,5 +1,7 @@
 "use strict";
 
+// The breadcrumb UI used in the Visual Editor
+
 define(
 		[	'src/dataInstance',
 			'src/uiConfig'

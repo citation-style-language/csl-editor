@@ -1,7 +1,7 @@
 "use strict";
 
 // This creates a fieldset which can be switched between different pages of
-// content using the typeSelect <select> control.
+// content using the typeSelect control.
 
 define(function () {
 	var CSLEDIT_MultiPanel = function (id) {

@@ -18,6 +18,7 @@ define(
 			'src/CslNode',
 			'src/Iterator',
 			'src/dataInstance',
+			'src/uiConfig',
 			'external/mustache',
 			'src/debug',
 			'jquery.scrollTo'
@@ -32,6 +33,7 @@ define(
 			CSLEDIT_CslNode,
 			CSLEDIT_Iterator,
 			CSLEDIT_data,
+			CSLEDIT_uiConfig,
 			Mustache,
 			debug,
 			jquery_scrollTo
@@ -40,71 +42,7 @@ define(
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
 		syntaxHighlighter) {
 	
-		// smartTrees display a subset of the CSL tree
-		// and allow transformations of the data
-		var smartTreeSchema = [
-				{
-					id : "info",
-					name : "Style Info",
-					// TODO: Fix src/SmartTree so that the locale node can be added.
-					//       At present there's a bug where adding a locale node doesn't
-					//       put it in the tree because it's a child of the "style" node, and
-					//       therefore part of that range.
-					//       (note - not an issue for 'style/info' since the bug only affects
-					//       nodes added during a session, and 'style/info' is a required node)
-					//headingNodePath : "style",
-					//headingNodePossibleChildren : {
-					//	"locale" : "one"
-					//},
-					//headingNodeShowPropertyPanel : false,
-					nodePaths : ["style/info", "style", /* "style/locale" */],
-					macroLinks : false,
-					leafNodes : ["info", "style"]
-				},
-				{
-					id : "citations",
-					name : "Inline Citations",
-					headingNodePath : "style/citation",
-					headingNodePossibleChildren : {
-						"layout" : "one",
-						"sort" : "one"
-					},
-					nodePaths : ["style/citation/layout", "style/citation/sort"],
-					//leafNodes : ["sort"],
-					macroLinks : true
-				},
-				{
-					id : "bibliography",
-					name : "Bibliography",
-					headingNodePath : "style/bibliography",
-					headingNodePossibleChildren : {
-						"layout" : "one",
-						"sort" : "one"
-					},
-					nodePaths : ["style/bibliography/layout", "style/bibliography/sort"],
-					//leafNodes : ["sort"],
-					macroLinks : true
-				},
-				{
-					id : "macro",
-					name : "Macros",
-					headingNodePath : "style",
-					headingNodePossibleChildren : {
-						"macro" : "zeroOrMore"
-					},
-					headingNodeShowPropertyPanel : false,
-					nodePaths : ["style/macro"],
-					macroLinks : true,
-				},
-				{
-					id : "locale",
-					name : "Advanced",
-					headingNodePath : "",
-					macroLinks : false,
-					nodePaths : ["style"]
-				}
-			],
-			views = [],
+		var views = [],
 			treesLoaded,
 			treesToLoad,
 			callbacks,
@@ -152,7 +90,7 @@ define(
 			callbacks = _callbacks;
 
 			treeView.html('');
-			$.each(smartTreeSchema, function (index, value) {
+			$.each(CSLEDIT_uiConfig.smartTreeSchema, function (index, value) {
 				row = $('');
 				row = $('<div id="%1"><div class="heading"/><div class="tree"/></div>'.replace(
 					'%1', value.id));
@@ -160,7 +98,7 @@ define(
 				treeView.append($('<div class=spacer></div>'));
 			});
 
-			$.each(smartTreeSchema, function (index, value) {
+			$.each(CSLEDIT_uiConfig.smartTreeSchema, function (index, value) {
 				var tree, heading;
 				treesToLoad++;
 				

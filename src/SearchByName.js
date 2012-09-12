@@ -4,14 +4,12 @@
 
 define(
 		[	'src/options',
-			'src/exampleData',
 			'src/searchResults',
 			'src/cslStyles',
 			'src/urlUtils'
 		],
 		function (
 			CSLEDIT_options,
-			CSLEDIT_exampleData,
 			CSLEDIT_searchResults,
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils
@@ -53,7 +51,7 @@ define(
 
 			if (searchQuery.length === 0) {
 				$("#message").html("<h2>Popular Styles</h2>");
-				$.each(CSLEDIT_exampleData.topStyles, function (i, styleId) {
+				$.each(CSLEDIT_cslStyles.topStyles, function (i, styleId) {
 					result.push({
 						styleId : styleId,
 						masterId : CSLEDIT_cslStyles.styles().masterIdFromId[styleId]
@@ -93,7 +91,7 @@ define(
 						result.push({
 								styleId : styleId,
 								masterId : masterId,
-								popular : CSLEDIT_exampleData.topStyles.indexOf(styleId)
+								popular : CSLEDIT_cslStyles.topStyles.indexOf(styleId)
 							});
 					}
 				}

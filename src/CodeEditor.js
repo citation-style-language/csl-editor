@@ -4,8 +4,8 @@
 //
 // It uses CodeMirror to provide the code editing view.
 //
-// This has had less development than the Visual CSL Editor since it was felt to
-// be less useful, and will probably be either dropped or hidden from most users.
+// This is less developed than the Visual CSL Editor since was felt to
+// be less useful.
 
 define([	'src/citationEngine',
 			'src/options',

@@ -3,6 +3,8 @@
 /*global diff_match_patch:true, DIFF_INSERT:true, DIFF_DELETE:true, DIFF_EQUAL:true */
 /*jshint newcap:false */
 
+// This wraps the diff-match-patch library to provide diffs and edit distances
+
 define(['external/diff-match-patch/diff_match_patch'], function (diff_match_patch) {
 	var dmp = new diff_match_patch();
 

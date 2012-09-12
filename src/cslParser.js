@@ -1,5 +1,11 @@
 "use strict";
 
+// This converts between the following two formats:
+//
+// 1. A *.csl text file.
+//
+// 2. A JSON object as used by get() and set() in src/Data
+
 define(['src/debug'], function (debug) {
 	// Private functions:
 	var jsonNodeFromXml = function (node, nodeIndex) {

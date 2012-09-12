@@ -1,5 +1,7 @@
 "use strict";
 
+// A basic rich text editor using a contenteditable div
+
 define(
 		[	'src/richTextToolbar',
 			'src/xmlUtility'

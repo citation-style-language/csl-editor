@@ -1,8 +1,11 @@
 "use strict";
 
+// Displays a list of CSL styles, optionally including the quality of the match
+//
+// Used in the Search by Name and Search by Example pages
+
 define(
 		[	'src/options',
-			'src/exampleData',
 			'src/diff',
 			'src/cslStyles',
 			'src/xmlUtility',
@@ -10,7 +13,6 @@ define(
 		],
 		function (
 			CSLEDIT_options,
-			CSLEDIT_exampleData,
 			CSLEDIT_diff,
 			CSLEDIT_cslStyles,
 			CSLEDIT_xmlUtility,
@@ -90,7 +92,7 @@ define(
 
 			featuredStyleClass = '';
 			featuredStyleText = '';
-			if (CSLEDIT_exampleData.topStyles.indexOf(style.styleId) !== -1) {
+			if (CSLEDIT_cslStyles.topStyles.indexOf(style.styleId) !== -1) {
 				featuredStyleClass = ' class="featuredStyle" ';
 				featuredStyleText = '<span class="featuredStyle">Popular</span>';
 			}

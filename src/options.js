@@ -1,11 +1,11 @@
 "use strict";
 
-// Stores customisation options, typically set via contructor functions
+// Stores customisation options, typically set via contructor functions (e.g. CSLEDIT_VisualEditor())
 //
 // Provides default options for some things
 //
-// These options are not expected to change while the tool is
-// running, for these kind of options use src/storage.js
+// These options are expected to stay constant during a session. For options
+// that change during a session use src/storage.js
 
 define(
 		[	'jquery',
