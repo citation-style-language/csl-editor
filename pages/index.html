@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="../css/base.css?bust=$GIT_COMMIT" />
+	<link rel="stylesheet" type="text/css" href="../css/base.css?bust=$GIT_COMMIT" />
+	<style>
+		body {
+			margin : 10px;
+		}
+	</style>
 </head>
 <body>
 
 <h1>Test and example pages for cslEditorLib</h1>
 
+<h2>Source code documentation</h2>
+Basic dynamically generated documentation of each JS module.
+<ul>
+<li><a href="sourceDocumentation.html">Source Documentation</a></li>
+</ul>
+
+<h2>Settings page</h2>
+Allows inspection and resetting of the current localStorage, and specifying a new CSL schema.
+<ul>
+<li><a href="settings.html">Settings</a></li>
+</ul>
+
 <h2>Automated Tests</h2>
 <ul>
 <li><a href="unitTests.html">Unit Tests</a></li>
-<li><a href="integrationTests.html">Integration Tests</a> These don't really test for anything except crashes</li>
+<li><a href="integrationTests.html">Integration Tests</a> These grind through a lot of data but only test for crashes and assert fails</li>
 </ul>
 
 <h2>Interactive Tests</h2>
@@ -18,7 +35,7 @@
 <li><a href="testRichTextEditor.html">Rich text editor</a></li>
 </ul>
 
-<h2>Bare-bones pages</h2>
+<h2>Bare-bones example pages</h2>
 <p>Examples showing the minimum CSS and scripts needed to create the main pages. These lack much of the functionality of the <a href=https://github.com/citation-style-editor/csl-editor-demo-site>reference implementation</a>.</p>
 <ul>
 <li><a href="exampleSearchByName.html">Search by Name</a></li>
