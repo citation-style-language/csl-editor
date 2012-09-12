@@ -1,14 +1,8 @@
 "use strict";
 
-<<<<<<< HEAD
-define([	'src/storage',
-			'src/options',
-=======
 // Uses citeproc-js to generate example citaitons
 
 define([	'src/options',
-			'src/dataInstance',
->>>>>>> master
 			'src/exampleCitations',
 			'src/diff',
 			'src/debug',

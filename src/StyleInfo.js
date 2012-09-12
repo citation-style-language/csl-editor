@@ -24,7 +24,7 @@ define(
 
 		var data = new CSLEDIT_Data("CSLEDIT_styleInfoData");
 
-		CSLEDIT_cslStyles.fetchRepoStyle(styleURL, function (style) {
+		CSLEDIT_cslStyles.fetchCslCode(styleURL, function (style) {
 			styleInfoElement.append("Style code: ");
 			data.setCslCode(style);
 
