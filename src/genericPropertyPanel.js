@@ -70,7 +70,8 @@ define([	'src/MultiPanel',
 		schemaChoiceIndexes,
 		schemaAttributes,
 		executeCommand,
-		fieldsets;
+		fieldsets,
+		selectedChoice;
 
 	var addCustomClasses = function (element, attributeName) {
 		var classes = CSLEDIT_uiConfig.attributeClasses[attributeName];
@@ -219,7 +220,7 @@ define([	'src/MultiPanel',
 	var nodeChanged = function () {
 		// read user data
 		$('[id^="nodeAttributeLabel"]').each(function () {
-			var key, value, index, enabled;
+			var key, value, index, enabled, attributes;
 			index = $(this).attr("id").replace(/^nodeAttributeLabel/, "");
 			key = $(this).html();
 
@@ -230,12 +231,16 @@ define([	'src/MultiPanel',
 				value = multiInputs[index].val();
 			}
 
-			if (schemaAttributes.hasOwnProperty(key) &&
-					schemaAttributes[key].alwaysOutput === true) {
+			if (selectedChoice !== null && key in schemaChoices[selectedChoice].attributes) {
+				attributes = schemaChoices[selectedChoice].attributes;
+			} else {
+				attributes = schemaAttributes;
+			}
+
+			if (attributes.hasOwnProperty(key) && attributes[key].alwaysOutput === true) {
 				enabled = true;
-			} else if (schemaAttributes.hasOwnProperty(key) &&
-					schemaAttributes[key].hasOwnProperty("defaultValue")) {
-				enabled = (value !== schemaAttributes[key].defaultValue);
+			} else if (key in attributes && "defaultValue" in attributes[key]) {
+				enabled = (value !== attributes[key].defaultValue);
 			} else {
 				enabled = nodeData.attributes[index].enabled;
 			}
@@ -474,7 +479,8 @@ define([	'src/MultiPanel',
 
 	var setupChoiceTabs = function () {
 		var possibleSelectedChoices = [], // choices with some attributes enabled
-			definiteSelectedChoices = []; // choices with all attributes enabled
+			definiteSelectedChoice,       // the best choice with all attributes enabled
+			mostMatchingAttributes = 0; // the highest number of matching attributes from all the choices
 
 		if (typeof choicePanel === "undefined" || choicePanel === null) {
 			return;
@@ -485,7 +491,8 @@ define([	'src/MultiPanel',
 			// check against the first attribute in each schemaChoice list to determine 
 			// which mode we are in
 			var definitelySelected = false,
-				possiblySelected = false;
+				possiblySelected = false,
+				numMatchingAttributes = 0;
 			
 			$.each(choice.attributes, function (attributeName, attribute) {
 				definitelySelected = true;
@@ -498,13 +505,14 @@ define([	'src/MultiPanel',
 				
 				$.each(attributeIndexes, function (i, attributeIndex) {
 					if (nodeData.attributes[attributeIndex].enabled &&
-						isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
+							isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
 						thisAttribute = nodeData.attributes[attributeIndex];
 						return false;
 					}
 				});
 
 				if (typeof thisAttribute !== "undefined" && thisAttribute.enabled) {
+					numMatchingAttributes++;
 					possiblySelected = true;
 				} else {
 					definitelySelected = false;
@@ -512,21 +520,19 @@ define([	'src/MultiPanel',
 			});
 
 			if (definitelySelected) {
-				definiteSelectedChoices.push(choiceIndex);
+				if (numMatchingAttributes > mostMatchingAttributes) {
+					mostMatchingAttributes = numMatchingAttributes;
+					definiteSelectedChoice = choiceIndex;
+				}
 			}
 			if (possiblySelected) {
 				possibleSelectedChoices.push(choiceIndex);
 			}
 		});
 
-		if (definiteSelectedChoices.length > 0) {
-			if (definiteSelectedChoices.length > 1) {
-				debug.log("WARNING: not clear which mode the node is in.\n" + 
-					"more than 1 definite selected choice");
-			}
-
-			choicePanel.select(definiteSelectedChoices[0]);
-			enableControlsInTab(definiteSelectedChoices[0]);
+		if (typeof(definiteSelectedChoice) !== "undefined") {
+			choicePanel.select(definiteSelectedChoice);
+			enableControlsInTab(definiteSelectedChoice);
 		} else if (possibleSelectedChoices.length > 0) {
 			if (possibleSelectedChoices.length > 1) {
 				debug.log('WARNING: not clear which mode this node is in');
@@ -553,6 +559,8 @@ define([	'src/MultiPanel',
 				panel.find('#' + inputId(attributeIndex)).val(nodeData.attributes[attributeIndex].value);
 			});
 		});
+
+		selectedChoice = index;
 	};
 
 	var drawFieldsets = function (attributeEditors) {
@@ -618,6 +626,8 @@ define([	'src/MultiPanel',
 
 		panel = _panel;
 		nodeData = _nodeData;
+
+		selectedChoice = null; // will be set to >= 0 if the node contains choices
 
 		console.log("setup panel");
 
