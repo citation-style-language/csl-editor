@@ -51,7 +51,7 @@ define(['src/debug'], function (debug) {
 			if (enabled) {
 				this.attributes.push({
 					key: attr,
-					value: defaultValue, /* TODO: get default value */
+					value: defaultValue,
 					enabled: true
 				});
 				return;

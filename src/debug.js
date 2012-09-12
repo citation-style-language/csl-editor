@@ -3,6 +3,10 @@
 define(function () {
 	var log, time, timeEnd;
 
+	// TODO: Probably best to change to use console.log(), console.time() and console.timeEnd()
+	//       throughout code instead of debug.log(), etc...
+	//       Reason: Using console.log() will show the original line number where it was called
+	//       from in the Chrome console instead of the line number here in debug.js.
 	if (typeof(console) === "undefined" && typeof(window) !== "undefined") {
 		log = function () {};
 		time = function () {};

@@ -289,6 +289,7 @@ ul.dropdown {
 }
 
 /* Highlighting */
+div.selected,
 span.selected {
 	margin: -1px;
 	background-color : #BEEBFF;
@@ -298,7 +299,8 @@ span.selected {
 }
 
 .highlighted,
-.smartTreeHeading .missingNode:hover {
+.smartTreeHeading .missingNode:hover,
+#nodePathView span[cslid]:hover {
 	color : black;
 	cursor : pointer;
 	box-shadow: 0 0 5px 1px rgba(0,136,204,1);

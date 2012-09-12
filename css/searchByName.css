@@ -1,17 +1,30 @@
 #styleNameInput {
+	min-width: 600px;
 	padding: 20px 30px 10px;
 	background: #eeeeee;
 	border-bottom: 1px solid #c3c3c3;
 }
-#styleNameInput input[type=search] {
+
+#styleNameInput input[type=text] {
+	width: 500px;
 	border: 1px solid #999;
 	border-radius: 50px;
-	font-size: 16px;
-	width: 400px;
+	font-size: 14px;
+	font-weight: normal;
+	margin-top: 8px;
+	margin-left: 0px;
+	padding: 0.2em 0.8em;
+	line-height: 19px;
+	-webkit-appearance: none;
 	outline: none;
-	padding: 3px 10px;
-	line-height: 18px;
+	box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
 }
+
+#styleNameInput input[type=text]:focus {
+	box-shadow: 0 0 5px 0px rgba(0,136,204,0.5), inset 0 1px 2px rgba(0,0,0,0.2);
+	border: 1px solid #2f87e0;
+}
+
 #styleNameInput label {
 	font-size: 18px;
 	font-family: Arial, Helvetica;
@@ -32,12 +45,14 @@
 	font-weight: bold;
 	color: #6d8fa2;
 }
+
 #styleFormatInputControls
 {
 	float: left;
 	width: 45%;
 	margin-left: 0px;
 }
+
 .clearDiv
 {
 	clear: both;
@@ -45,12 +60,33 @@
 #userCitation, #userBibliography
 {
 }
+
 button#searchButton {
-	background-position: left center;
-	background-repeat: no-repeat;
-	padding-left: 18px;
-	/* define background-image in javascript since it depends on rootURL */
+	font-size: 14px;
+	font-weight: normal;
+	margin-top: 0;
+	margin-left: 0px;
+	padding: 0.2em 0.8em;
+	line-height: 1.4em;
+
+	color: white;
+	border-radius: 5px;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #006DCC;
+	background: -moz-linear-gradient(top, #08C 0%, #04C 100%);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08C), to(#04C));
+	background-image: -webkit-linear-gradient(top, #08C, #04C);
+	background-image: linear-gradient(to bottom, #08C, #04C);
+	border-width: 1px;
+	border-style: solid;
+	background-repeat: repeat-x;
+	border-color: #04C #04C #002A80;
+
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
+
 #message {
 	padding-left: 250px;
 }

@@ -1,5 +1,11 @@
 "use strict";
 
+// A property panel that for editing *any* arbitrary CSL node
+//
+// setupPanel() presents all the information within the CSL node, except it's children
+//
+// It uses the lists in CSLEDIT_uiConfig.attributeGroups to group attributes into fieldsets
+
 define([	'src/MultiPanel',
 			'src/MultiComboBox',
 			'src/uiConfig',
@@ -47,8 +53,8 @@ define([	'src/MultiPanel',
 			},
 			'vertical-align' : {
 				'baseline' : 'default',
-				'sup' : { text : '<sup>sup</sup>' },
-				'sub' : { text : '<sub>sub</sub>' }
+				'sup' : { text : 'x<sup>s</sup>' },
+				'sub' : { text : 'x<sub>s</sub>' }
 			},
 			'quotes' : {
 				'false' : 'default',
@@ -64,7 +70,8 @@ define([	'src/MultiPanel',
 		schemaChoiceIndexes,
 		schemaAttributes,
 		executeCommand,
-		fieldsets;
+		fieldsets,
+		selectedChoice;
 
 	var addCustomClasses = function (element, attributeName) {
 		var classes = CSLEDIT_uiConfig.attributeClasses[attributeName];
@@ -173,7 +180,7 @@ define([	'src/MultiPanel',
 	};
 
 	var toolbarButtonClicked = function (event) {
-		var target = $(event.target).closest('a'), //TODO: id?
+		var target = $(event.target).closest('a'),
 			attribute = target.attr('data-attribute'),
 			value,
 			index = indexOfAttribute(attribute, nodeData.attributes),
@@ -213,7 +220,7 @@ define([	'src/MultiPanel',
 	var nodeChanged = function () {
 		// read user data
 		$('[id^="nodeAttributeLabel"]').each(function () {
-			var key, value, index, enabled;
+			var key, value, index, enabled, attributes;
 			index = $(this).attr("id").replace(/^nodeAttributeLabel/, "");
 			key = $(this).html();
 
@@ -224,13 +231,16 @@ define([	'src/MultiPanel',
 				value = multiInputs[index].val();
 			}
 
-			// TODO: check choice attributes here too
-			if (schemaAttributes.hasOwnProperty(key) &&
-					schemaAttributes[key].alwaysOutput === true) {
+			if (selectedChoice !== null && key in schemaChoices[selectedChoice].attributes) {
+				attributes = schemaChoices[selectedChoice].attributes;
+			} else {
+				attributes = schemaAttributes;
+			}
+
+			if (attributes.hasOwnProperty(key) && attributes[key].alwaysOutput === true) {
 				enabled = true;
-			} else if (schemaAttributes.hasOwnProperty(key) &&
-					schemaAttributes[key].hasOwnProperty("defaultValue")) {
-				enabled = (value !== schemaAttributes[key].defaultValue);
+			} else if (key in attributes && "defaultValue" in attributes[key]) {
+				enabled = (value !== attributes[key].defaultValue);
 			} else {
 				enabled = nodeData.attributes[index].enabled;
 			}
@@ -264,7 +274,6 @@ define([	'src/MultiPanel',
 		return defaultValue;
 	};
 
-	// TODO: Use buttons in the style of the +/- add/delete node ones
 	var createButton = function (attributeName, cslSchemaAttribute, index, attribute) {
 		debug.assert(typeof defaultValueForToolbarButton(attributeName) !== "undefined");
 
@@ -389,10 +398,7 @@ define([	'src/MultiPanel',
 						}
 						break;
 					case "language":
-						/*
-						dropdownValues.push("English");
-						dropdownValues.push("etc... ");
-						dropdownValues.push("(TODO: find proper list");*/
+						// TODO: restrict input to language codes
 						break;
 					default:
 						debug.log("WARNING: data type not recognised: " + 
@@ -473,7 +479,8 @@ define([	'src/MultiPanel',
 
 	var setupChoiceTabs = function () {
 		var possibleSelectedChoices = [], // choices with some attributes enabled
-			definiteSelectedChoices = []; // choices with all attributes enabled
+			definiteSelectedChoice,       // the best choice with all attributes enabled
+			mostMatchingAttributes = 0; // the highest number of matching attributes from all the choices
 
 		if (typeof choicePanel === "undefined" || choicePanel === null) {
 			return;
@@ -484,7 +491,8 @@ define([	'src/MultiPanel',
 			// check against the first attribute in each schemaChoice list to determine 
 			// which mode we are in
 			var definitelySelected = false,
-				possiblySelected = false;
+				possiblySelected = false,
+				numMatchingAttributes = 0;
 			
 			$.each(choice.attributes, function (attributeName, attribute) {
 				definitelySelected = true;
@@ -497,13 +505,14 @@ define([	'src/MultiPanel',
 				
 				$.each(attributeIndexes, function (i, attributeIndex) {
 					if (nodeData.attributes[attributeIndex].enabled &&
-						isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
+							isValidValue(nodeData.attributes[attributeIndex].value, schemaAttribute)) {
 						thisAttribute = nodeData.attributes[attributeIndex];
 						return false;
 					}
 				});
 
 				if (typeof thisAttribute !== "undefined" && thisAttribute.enabled) {
+					numMatchingAttributes++;
 					possiblySelected = true;
 				} else {
 					definitelySelected = false;
@@ -511,21 +520,19 @@ define([	'src/MultiPanel',
 			});
 
 			if (definitelySelected) {
-				definiteSelectedChoices.push(choiceIndex);
+				if (numMatchingAttributes > mostMatchingAttributes) {
+					mostMatchingAttributes = numMatchingAttributes;
+					definiteSelectedChoice = choiceIndex;
+				}
 			}
 			if (possiblySelected) {
 				possibleSelectedChoices.push(choiceIndex);
 			}
 		});
 
-		if (definiteSelectedChoices.length > 0) {
-			if (definiteSelectedChoices.length > 1) {
-				debug.log("WARNING: not clear which mode the node is in.\n" + 
-					"more than 1 definite selected choice");
-			}
-
-			choicePanel.select(definiteSelectedChoices[0]);
-			enableControlsInTab(definiteSelectedChoices[0]);
+		if (typeof(definiteSelectedChoice) !== "undefined") {
+			choicePanel.select(definiteSelectedChoice);
+			enableControlsInTab(definiteSelectedChoice);
 		} else if (possibleSelectedChoices.length > 0) {
 			if (possibleSelectedChoices.length > 1) {
 				debug.log('WARNING: not clear which mode this node is in');
@@ -552,6 +559,8 @@ define([	'src/MultiPanel',
 				panel.find('#' + inputId(attributeIndex)).val(nodeData.attributes[attributeIndex].value);
 			});
 		});
+
+		selectedChoice = index;
 	};
 
 	var drawFieldsets = function (attributeEditors) {
@@ -593,7 +602,8 @@ define([	'src/MultiPanel',
 
 		// only display fieldsets with non-empty tables
 		$.each(fieldsets, function (i, fieldset) {
-			if (fieldset.find('tr').length > 0 || fieldset.find('input').length > 0) {
+			if (fieldset.find('tr').length > 0 || fieldset.find('input').length > 0 ||
+					fieldset.find('.toolbar a').length > 0) {
 				panel.append(fieldset);
 			}
 		});
@@ -617,13 +627,14 @@ define([	'src/MultiPanel',
 		panel = _panel;
 		nodeData = _nodeData;
 
+		selectedChoice = null; // will be set to >= 0 if the node contains choices
+
 		console.log("setup panel");
 
 		// remove child nodes
 		panel.children().remove();
 
 		toolbar = $('<div class="toolbar"></div>');
-		panel.append(toolbar);
 
 		// TODO: data validation
 		switch (dataType) {
@@ -662,9 +673,14 @@ define([	'src/MultiPanel',
 				$.each(choice.attributes, function (attributeName, attribute) {
 					var editor;
 					if (!addedToTab) {
-						// exception for date-part node
+						// exceptions for some nodes
+						// TODO: put these in uiConfig, or better yet, embed in schema somehow
 						if (nodeData.name === "date-part") {
 							choicePanel.addPanel(attribute.values[attribute.values.length - 1].value);
+						} else if (nodeData.name === "term") {
+							// Warning: this depends on the order in the schema which may change in future
+							choicePanel.addPanel(
+								["normal", "ordinals", "long ordinals", "gender assignable"][choiceIndex]);
 						} else {
 							choicePanel.addPanel(attributeName);
 						}

@@ -63,8 +63,14 @@ define(
 				masterStyleSuffix = '';
 			}
 
-			citation = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedCitations[0];
-			bibliography = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId[style.masterId][exampleIndex].formattedBibliography;
+			citation = CSLEDIT_cslStyles
+				.exampleCitations()
+				.exampleCitationsFromMasterId[style.masterId][exampleIndex]
+				.formattedCitations[0];
+			bibliography = CSLEDIT_cslStyles
+				.exampleCitations()
+				.exampleCitationsFromMasterId[style.masterId][exampleIndex]
+				.formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&
 					style.userCitation !== "" &&
@@ -86,12 +92,13 @@ define(
 			featuredStyleText = '';
 			if (CSLEDIT_exampleData.topStyles.indexOf(style.styleId) !== -1) {
 				featuredStyleClass = ' class="featuredStyle" ';
-				featuredStyleText = '<span class="featuredStyle">Popular Style</span>';
+				featuredStyleText = '<span class="featuredStyle">Popular</span>';
 			}
 
 			outputList.push(
 				'<table' + featuredStyleClass + '>' +
-				'<tr><td colspan=3>' + featuredStyleText + '<a class="style-title" href="' + style.styleId + '">' +
+				'<tr><td colspan=3>' + featuredStyleText + '<a class="style-title" href="' + 
+					CSLEDIT_cslStyles.localURLFromZoteroId(style.styleId) + '">' +
 				CSLEDIT_cslStyles.styles().styleTitleFromId[style.styleId] + "</a>" +
 				masterStyleSuffix + '</td></tr>' +
 				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
@@ -100,10 +107,9 @@ define(
 				'<tr><td nowrap="nowrap"><span class="faint">Bibliography</span></td>' +
 				'<td class=match>' +
 				bibliography + '</td>' + bibliographyCloseness + "</tr>" +
-				'<tr><td></td><td>' + 
-				'<button class="editStyle" styleURL="' + style.styleId + '">Edit style</button>' +
-				//'<button class="editStyle" styleURL="' + style.styleId + '">View CSL</button>' +
-				//'<button class="editStyle" styleURL="' + style.styleId + '">Use this style</button></td></tr>' +
+				'<tr><td><button class="installStyle" data-styleId="' + style.styleId + '">Install</button></td><td>' +
+				'<button class="editStyle" data-styleId="' + style.styleId + '">Edit</button>' +
+				'<button class="viewCode" data-styleId="' + style.styleId + '">View code</button></td></tr>' +
 				'</table>');
 		}
 		
@@ -121,10 +127,19 @@ define(
 			});
 		} 
 
-		$("button.editStyle").click(function (event) {
-			var styleURL = $(event.target).attr("styleURL");
-			CSLEDIT_options.get("editStyle_func")(styleURL);
-		});
+		var setupButtonHandler = function (button, func) {
+			if (typeof(func) === "undefined") {
+				button.css("display", "none");
+			} else {
+				button.click(function (event) {
+					func($(event.target).attr("data-styleId"));
+				});
+			}
+		};
+
+		setupButtonHandler($('button.installStyle'), CSLEDIT_options.get('installStyle_func'));
+		setupButtonHandler($('button.editStyle'), CSLEDIT_options.get('editStyle_func'));
+		setupButtonHandler($('button.viewCode'), CSLEDIT_options.get('viewCode_func'));
 	};
 
 	return {

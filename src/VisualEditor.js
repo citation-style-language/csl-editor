@@ -1,5 +1,8 @@
 "use strict";
 
+// On construction, this creates a Visual Editor within the given editorElement
+// using the given configurationOptions
+//
 define(
 		[	'src/controller',
 			'src/ViewController',
@@ -42,14 +45,14 @@ define(
 			jquery_hoverIntent,
 			jquery_layout
 		) {
-	return function VisualEditor(editorElement, userOptions) {
+	return function VisualEditor(editorElement, configurationOptions) {
 		var editTimeout,
 			styleURL,
 			syntaxHighlighter,
 			nodePathView;
 
 		$(document).ready(function () {
-			CSLEDIT_options.setUserOptions(userOptions);
+			CSLEDIT_options.setOptions(configurationOptions);
 			editorElement = $(editorElement);
 
 			$.ajax({
@@ -206,6 +209,13 @@ define(
 						delete possibleElements["else"];
 					}
 				});
+
+				// if doesn't yet contain 'if' node, only allow adding that
+				if ("if" in possibleElements) {
+					console.log('only "if" allowed');
+					delete possibleElements["else-if"];
+					delete possibleElements["else"];
+				}
 			}
 
 			$.each(possibleElements, function (element) {
@@ -450,7 +460,10 @@ define(
 					citationEditor1,
 					citationEditor2;
 				
-				syntaxHighlighter = new CSLEDIT_SyntaxHighlighter(editorElement);
+				syntaxHighlighter = new CSLEDIT_SyntaxHighlighter(
+					editorElement.find('#titlebar, #nodePathView, #exampleOutput'),
+					editorElement.find('#treeEditor')
+				);
 
 				// TODO: remove this global
 				window.CSLEDIT_viewController = new CSLEDIT_ViewController(
@@ -473,6 +486,7 @@ define(
 				}
 
 				createTreeView();
+
 			});
 
 			setupTreeEditorToolbar();

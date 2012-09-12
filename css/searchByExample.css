@@ -2,21 +2,28 @@
 
 #mainContainer {
 	position: relative;
-	min-width: 800px;
+	min-width: 960px;
 }
+
 #mainContainer textarea {
 	width: 100%;
 }
+
 #mainContainer h1 {
 	text-align: center;
 	font-family: sans-serif;
 }
+
 #mainContainer h2 {
-	font-weight: normal;
+	font-weight: 300;
+	margin: 0;
+	padding: 20px 0;
 }
+
 #mainContainer h2 strong {
 	font-weight: bold;
 }
+
 #mainContainer h3 {
 	margin: 2px;
 	font-size: 11px;
@@ -27,38 +34,46 @@
 	padding-top: 1px;
 	padding-bottom: 1px;
 }
+
 #topPane {
-	position: absolute;
-
-	top: 0px;
-	left: 0px;
-	right: 0px;
-
+	padding-bottom: 20px;
+	position: relative;
 	background-color: #EEEEEE;
-
 	border-bottom-style: solid;
 	border-bottom-color: #C3C3C3;
 	border-bottom-width: 1px;
 }
+
 .topPaneHeight {
-	height: 323px;
 }
-#rightColumn {
+
+#rightColumn,
+#resultsPane {
 	position: relative;
-	float: right;
-	width: 60%;
+	margin-left: 394px;
 }
+
 #leftColumn {
 	position: relative;
 	float: left;
-	width: 40%;
+	width: 394px;
+	z-index: 1;
 }
-.padding {
-	position: absolute;
-	left: 10px;
-	right: 10px;
-	top: 10px;
+
+#leftColumn .padding {
+	padding-left: 20px;
 }
+
+#rightColumn .padding {
+	padding-right: 20px;
+	padding-left: 20px;
+}
+
+#resultsPane .padding {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
 
 /* example document */
 #exampleDocumentContainer {
@@ -113,11 +128,10 @@
 	color: #6d8fa2;
 }
 
-span.match {
-	background-color: white;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #DDDDDD;
+mark {
+	box-shadow: 0 0 5px 1px rgba(0,136,204,1);
+	background: #FCF8C9;
+	border-radius: 2px;
 }
 
 /* input controls */
@@ -133,28 +147,28 @@ span.match {
 	position: relative;
 }
 #styleFormatInputControls.citationSelected #userCitation {
-	box-shadow: 0 0 5px 1px rgba(0,136,204,1);
+	box-shadow: 0 0 5px 0px rgba(0,136,204,1);
 }
 #styleFormatInputControls.bibliographySelected #userBibliography {
-	box-shadow: 0 0 5px 1px rgba(0,136,204,1);
+	box-shadow: 0 0 5px 0px rgba(0,136,204,1);
 }
 #styleFormatInputControls.citationSelected #citationContainer .arrow {
 	position: absolute;
 	left: -20px;
-	top: 0;
+	top: 6px;
 	border-color: transparent #CDCBAC;
 	border-style: solid;
-	border-width: 16px 0px 16px 16px;
+	border-width: 8px 0px 8px 12px;
 	height: 0px;
 	width: 0px;
 }
 #styleFormatInputControls.bibliographySelected #bibliographyContainer .arrow {
 	position: absolute;
 	left: -20px;
-	top: 0;
+	top: 6px;
 	border-color: transparent #CDCBAC;
 	border-style: solid;
-	border-width: 16px 0px 16px 16px;
+	border-width: 8px 0px 8px 12px;
 	height: 0px;
 	width: 0px;
 }
@@ -163,17 +177,46 @@ span.match {
 	background-color: white;
 	border-style: solid;
 	border-width: 1px;
-	border-color: #c3c3c3;
+	border-color: #949494;
 
 	outline: 0;
 
 	padding: 6px;
+	box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
 }
+
+.citationSelected #userCitation .editor {
+	border-color: #2F87E0;
+}
+
+.bibliographySelected #userBibliography .editor {
+	border-color: #2F87E0;
+}
+
 button#searchButton {
 	font-size: 14px;
-	font-weight: bold;
-	margin-top: 8px;
+	font-weight: normal;
+	margin-top: 20px;
 	margin-left: 0px;
+	padding: 0 0.8em;
+	line-height: 1.8em !important;
+
+	color: white;
+	border-radius: 5px;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #006DCC;
+	background: -moz-linear-gradient(top, #08C 0%, #04C 100%);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08C), to(#04C));
+	background-image: -webkit-linear-gradient(top, #08C, #04C);
+	background-image: linear-gradient(to bottom, #08C, #04C);
+	border-width: 1px;
+	border-style: solid;
+	background-repeat: repeat-x;
+	border-color: #04C #04C #002A80;
+
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 #alternateSearch,
 #alternateSearchLabel {	

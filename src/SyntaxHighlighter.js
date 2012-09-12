@@ -1,7 +1,7 @@
 "use strict";
 
 define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
-	return function (editorElement) {
+	return function (highlightableElements, treeView) {
 		var selectedCslId = -1,
 			hoveredNodeStack = [],
 			highlightedCss,
@@ -10,14 +10,29 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			highlightedTreeNodes = $(),
 			highlightTimeout;
 
+		var spansAndDivs = function (cslId, className) {
+			var attribute;
+			if (typeof(cslId) === "undefined" || cslId === null) {
+				attribute = "[cslid]";
+			} else {
+				attribute = "[cslid=" + cslId + "]";
+			}
+			if (typeof(className) !== "undefined" && className !== null) {
+				attribute += "." + className;
+			}
+
+			return highlightableElements.find('div' + attribute + ', ' + 'span' + attribute);
+		};
+
 		var selectedNodeChanged = function (newSelectedCslId) {
 			selectedCslId = newSelectedCslId;
 
-			editorElement.find('span[cslid].highlighted').removeClass("highlighted");
-			editorElement.find('span[cslid].selected').removeClass("selected");
+			spansAndDivs(null, 'highlighted').removeClass("highlighted");
+			spansAndDivs(null, 'selected').removeClass("selected");
 
-			editorElement.find('span[cslid="' + selectedCslId + '"]').removeClass("highlighted");
-			editorElement.find('span[cslid="' + selectedCslId + '"]').addClass("selected");
+			spansAndDivs(selectedCslId)
+				.removeClass("highlighted")
+				.addClass("selected");
 		};
 
 		var addToHoveredNodeStack = function (target) {
@@ -63,7 +78,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 
 		var highlightOutput = function (cslId)
 		{
-			var node = editorElement.find('span[cslid="' + cslId + '"]');
+			var node = spansAndDivs(cslId);
 
 			if (node.hasClass("selected"))
 			{
@@ -84,7 +99,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 				// skip the macro definition nodes, jump to the referencing 'text' node instead
 				selectedNode = CSLEDIT_data.getNode(cslId);
 				if (selectedNode.name === "macro") {
-				debug.assert(hoveredNodeStack.length > 1);
+					debug.assert(hoveredNodeStack.length > 1);
 					cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
 				}
 			}
@@ -122,11 +137,11 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 				if (typeof nodeIndex === "undefined") {
 					return;
 				}
-				node = editorElement.find('li[cslid="' + nodeIndex + '"]');
+				node = treeView.find('li[cslid="' + nodeIndex + '"]');
 			}
 
 			depth++;
-		debug.assert(depth < 150, "stack overflow!");
+			debug.assert(depth < 150, "stack overflow!");
 
 			if (node.is('li')) {
 				highlightedNode = node.children('a');
@@ -151,7 +166,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 					instanceNode = new CSLEDIT_CslNode(
 						CSLEDIT_data.getNode(parseInt(nodeStack[nodeStack.length - 2], 10)));
 					if (instanceNode.name === "text" && instanceNode.getAttr("macro") !== "") {
-						unHighlightIfNotDescendentOf(editorElement.find('li[cslid=' + instanceNode.cslId + ']'));
+						unHighlightIfNotDescendentOf(treeView.find('li[cslid=' + instanceNode.cslId + ']'));
 					}
 				}
 				// highlight any remaining nodes in the call stack
@@ -163,9 +178,9 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 		var unHighlightNode = function (nodeIndex, cslidElements) {
 			var	node;
 			if (typeof(cslidElements) === "undefined") {
-				node = editorElement.find('span[cslid="' + nodeIndex + '"]');
+				node = spansAndDivs(nodeIndex);
 			} else {
-				node = cslidElements.filter('span[cslid="' + nodeIndex + '"]');
+				node = cslidElements.filter('[cslid="' + nodeIndex + '"]');
 			}
 
 			if (node.hasClass("selected"))
@@ -177,8 +192,8 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 		};
 
 		var hover = function (event) {
-			var cslidElements = $('span[cslid]'),
-				target = $(event.target).closest("span[cslid]");
+			var cslidElements = spansAndDivs(),
+				target = $(event.target).closest("[cslid]");
 			
 			// remove all
 			removeFromHoveredNodeStack(cslidElements, true);
@@ -187,7 +202,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			addToHoveredNodeStack(target);
 
 			var lastNode = hoveredNodeStack[hoveredNodeStack.length - 1];
-		debug.assertEqual(lastNode, target.attr("cslid"), "applySyntax");
+			debug.assertEqual(lastNode, target.attr("cslid"), "applySyntax");
 
 			if (hoveredNodeStack.length > 0) {
 				highlightNode(hoveredNodeStack.slice());
@@ -195,7 +210,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 		};
 
 		var unhover = function () {
-			var cslidElements = $('span[cslid]');
+			var cslidElements = spansAndDivs();
 
 			removeFromHoveredNodeStack(cslidElements);
 			
@@ -207,18 +222,18 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 		};
 
 		var setupEventHandlers = function () {
-			editorElement.find('span[cslid]').hover(hover, unhover);
+			spansAndDivs().hover(hover, unhover);
 
 			// set up click handling
-			editorElement.find('span[cslid]').click(function (event) {
-				var target = $(event.target).closest("span[cslid]"),
+			spansAndDivs().click(function (event) {
+				var target = $(event.target).closest("[cslid]"),
 					cslId = parseInt(target.attr('cslId'), 10);
 				reverseSelectNode(cslId);
 			});
 
 			// set up hovering over tree nodes
-			editorElement.find('li[cslid] > a').unbind('mouseenter mouseleave');
-			editorElement.find('li[cslid] > a').hover(
+			treeView.find('li[cslid] > a').unbind('mouseenter mouseleave');
+			treeView.find('li[cslid] > a').hover(
 				function (event) {
 					var target = $(event.target).closest("li[cslid]"),
 						cslId = parseInt(target.attr('cslId'), 10);
@@ -230,7 +245,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 					unHighlightNode(cslId);
 				}
 			);
-			editorElement.find('li[cslid] > a').hover(
+			treeView.find('li[cslid] > a').hover(
 				function (event) {
 					var target = $(event.target),
 						liElement = target.closest("li[cslid]"),
@@ -265,17 +280,21 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 
 			// highlight the selected node if there is one
 			if (CSLEDIT_viewController.selectedNode() !== -1) {
-				editorElement.find(
-					'span[cslid=' + CSLEDIT_viewController.selectedNode() + ']').addClass('selected');
+				spansAndDivs(CSLEDIT_viewController.selectedNode()).addClass('selected');
 			}
 		};
+		
+		var addHighlightableElements = function (newElements) {
+			highlightableElements = highlightableElements.add(newElements);
+		}
 
 		return {
 			selectedNodeChanged : selectedNodeChanged,
 			setupSyntaxHighlighting : setupSyntaxHighlighting,
 			hover : hover,
 			unhover : unhover,
-			reverseSelectNode : reverseSelectNode
+			reverseSelectNode : reverseSelectNode,
+			addHighlightableElements : addHighlightableElements
 		};
 	};
 });

@@ -67,6 +67,10 @@ define(function () {
 			input = $.trim(input);
 		}
 
+		if (input[input.length - 1] === " ") {
+			input = $.trim(input) + "&nbsp;";
+		}
+
 		return input;
 	};
 

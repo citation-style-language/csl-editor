@@ -18,7 +18,7 @@ define(
 		var nameSearchTimeout,
 			previousQuery;
 
-		CSLEDIT_options.setUserOptions(userOptions);
+		CSLEDIT_options.setOptions(userOptions);
 		mainContainer = $(mainContainer);
 		$.ajax({
 			url: CSLEDIT_urlUtils.getResourceUrl("html/searchByName.html"),
@@ -128,12 +128,6 @@ define(
 		};
 
 		var init = function () {
-			// add icon
-			$('button#searchButton').css({
-				'background-image' :
-					"url(" + CSLEDIT_urlUtils.getResourceUrl('external/famfamfam-icons/magnifier.png') + ')'
-			});
-
 			// delayed search after typing
 			$("#styleNameQuery").on("input", function () {
 				clearTimeout(nameSearchTimeout);
@@ -152,6 +146,11 @@ define(
 
 			$("#styleNameQuery").focus();
 		
+			var initialQuery = CSLEDIT_options.get('initialSearchQuery');
+			if (typeof(initialQuery) !== "undefined") {
+				$('#styleNameQuery').val(initialQuery);
+			}
+
 			searchForStyleName();
 		};
 	};

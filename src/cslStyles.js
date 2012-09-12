@@ -50,31 +50,42 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 	};
 
 	var localURLFromZoteroId = function (styleId) {
+		var baseUrl = "external/csl-styles/";
+		if (styles().masterIdFromId[styleId] !== styleId) {
+			baseUrl += "dependent/";
+		}
+
 		return CSLEDIT_urlUtils.getResourceUrl(
-			styleId.replace("http://www.zotero.org/styles/", "external/csl-styles/") + ".csl");
+			styleId.replace("http://www.zotero.org/styles/", baseUrl) + ".csl");
+	};
+
+	var fetchCslCode = function (styleId, success, error) {
+		var localURL = localURLFromZoteroId(styleId);
+		
+		$.ajax({
+			url : localURL,
+			dataType : "text",
+			success : success,
+			error : error
+		});
+	};
+
+	var styles = function () {
+		return getJSONData('generated/cslStyles.json');
+	};
+	var exampleCitations = function () {
+		return getJSONData('generated/preGeneratedExampleCitations.json');
 	};
 
 	return {
-		styles : function () {
-			return getJSONData('generated/cslStyles.json');
-		},
-		exampleCitations : function () {
-			return getJSONData('generated/preGeneratedExampleCitations.json');
-		},
+		styles : styles,
+		exampleCitations : exampleCitations,
 		defaultStyleId : defaultStyleId,
 		defaultStyleURL : function () {
 			return localURLFromZoteroId(defaultStyleId)
 		},
 		generateStyleId : generateStyleId,
-		fetchRepoStyle: function (styleId, success, error) {
-			var url = localURLFromZoteroId(styleId);
-
-			$.ajax({
-				url: url,
-				dataType: "text",
-				success: success,
-				error: error
-			});
-		}
+		fetchCslCode : fetchCslCode,
+		localURLFromZoteroId : localURLFromZoteroId
 	};
 });

@@ -1,15 +1,17 @@
 // Responsible for parsing a .rng file
 // The file must be in XML form, not the compact notation (.rnc)
 //
-// (only tested with the csl.rng and it's includes)
+// (only tested with the csl.rng and its includes)
 //
 // It generates properties for each element type:
 //
 // - data type if applicable (e.g. text, anyURI)
 // - list of attributes, and thier possible values
 // - list of child elements
+// - list of mutually exclusive choices that the node can be in, each choice
+//   contains it's own list of attributes
 // 
-// It assumes that an element can be uniquely identified by it's name + parent's name
+// It assumes that an element can be uniquely identified by its name + parent's name
 
 "use strict";
 
@@ -381,7 +383,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 				if (!(element in propertiesA.elements) || propertiesA.elements[element] === "") {
 					propertiesA.elements[element] = propertiesB.elements[element];
 				} else {
-					// propertiesA.elements[element] !== "", so keep it
+					// propertiesA.elements[element] is not empty, so keep it
 				}
 			});
 			attributesMerge(propertiesA.attributes, propertiesB.attributes);

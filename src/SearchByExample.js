@@ -46,7 +46,7 @@ define(
 			formChangedTimeout,
 			exampleCitationsFromMasterId = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId;
 
-		CSLEDIT_options.setUserOptions(userOptions);
+		CSLEDIT_options.setOptions(userOptions);
 		mainContainer = $(mainContainer);
 		$.ajax({
 			url: CSLEDIT_urlUtils.getResourceUrl("html/searchByExample.html"),
@@ -199,7 +199,7 @@ define(
 				result = "";
 
 			var getTagged = function () {
-				return "<span class=match>" + string.substring(from, to + 1) + "</span>";
+				return "<mark>" + string.substring(from, to + 1) + "</mark>";
 			};
 
 			$.each(string, function (i, char) {
@@ -446,8 +446,6 @@ define(
 				});
 				$('#alternateSearchLabel').css('display', 'inline');
 			}
-			
-			search();
 		};
 	};
 

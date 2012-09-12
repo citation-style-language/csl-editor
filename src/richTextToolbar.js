@@ -21,7 +21,8 @@ define(
 	var mouseupCallback = null;
 
 	$(document).ready(function () {
-		toolbarElement = $('<div class="toolbar richText">');
+		toolbarElement = $('<div class="toolbar richText has-arrow">');
+		toolbarElement.append('<span class="pointer">');
 
 		var addButton = function (style, title, innerHTML) {
 			var button = $('<a>')
@@ -30,15 +31,16 @@ define(
 				.attr('title', title)
 				.append(innerHTML);
 
-			buttons.push(button)
+			buttons.push(button);
 			toolbarElement.append(button);
 		};
 
 		addButton("bold", "Bold", "<b>B</b>");
 		addButton("italic", "Italic", "<i>I</i>");
 		addButton("underline", "Underline", "<u>U</u>");
-		addButton("superscript", "Superscript", "<sup>sup</sup>");
-		addButton("subscript", "Subscript", "<sub>sub</sub>");
+		addButton("superscript", "Superscript", "x<sup>s</sup>");
+		addButton("subscript", "Subscript", "x<sub>s</sub>");
+		addButton("removeFormat", "Clear", "&nbsp;clear&nbsp;");
 
 		toolbarElement.find('a').mousedown(function () {
 			clicking = true;
@@ -65,7 +67,7 @@ define(
 
 		toolbarElement.css({
 			"display" : "inline-block",
-			"overflow" : "hidden",
+			"overflow" : "visible",
 			"position" : "absolute"
 		});
 		
@@ -106,25 +108,24 @@ define(
 		var toolbarWidth = toolbarElement.width();
 
 		if (toolbarWidth === 0) {
-			toolbarWidth = 127;
+			toolbarWidth = 161;
 		}
 
 		// default position
-		var x = (cWidth - toolbarWidth) / 2;
-		var y = cHeight;
+		var x = cWidth / 2 - toolbarWidth * 0.5;
 
 		if (forceMouseX === true ||
 				(mouseX >= cX && mouseX <= cX + cWidth &&
 				mouseY >= cY && mouseY <= cY + cHeight)) {
-			x = mouseX - toolbarWidth / 2 - cX;
+			x = mouseX - toolbarWidth * 0.1 - cX;
 		}
 
-		x = Math.min(cWidth - toolbarWidth - 2, x);
+		x = Math.min(cWidth - toolbarWidth - 8, x);
 		x = Math.max(0, x);
 
 		toolbarElement.css({
 			"display" : "inline-block",
-			"top" : y
+			"bottom" : -25
 		});
 
 		if (x !== null) {
@@ -135,17 +136,21 @@ define(
 		container.prepend(toolbarElement);
 		toolbarElement.css("visibility", "visible");
 
-		updateButtonStates();
 	};
 
 	var checkSelection = function (container, callback, forceMouseX) {
 		var selection = window.getSelection();
 
+		updateButtonStates();
 		if (selection.anchorNode !== selection.focusNode ||
 				selection.anchorOffset !== selection.focusOffset) {
 			showToolbar(container, callback, forceMouseX);
 		} else {
-			hideToolbar();
+			if (toolbarElement.find("a.selected").length > 0) {
+				showToolbar(container, callback, forceMouseX);
+			} else {
+				hideToolbar();
+			}
 		}
 	};
 
@@ -156,6 +161,7 @@ define(
 				checkSelection(container, callback, true);
 			};
 		});
+		
 		editor.keyup(function () {
 			checkSelection(container, callback);
 		});

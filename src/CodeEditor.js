@@ -30,7 +30,7 @@ define([	'src/citationEngine',
 
 		containerElement = $(containerElement);
 
-		CSLEDIT_options.setUserOptions(userOptions);
+		CSLEDIT_options.setOptions(userOptions);
 
 		$.ajax({
 			url: CSLEDIT_urlUtils.getResourceUrl("html/codeEditor.html"),
@@ -47,7 +47,8 @@ define([	'src/citationEngine',
 
 		var init = function () {
 			var codeMirrorScroll,
-				codeMirrorContainer;
+				codeMirrorContainer,
+				userCallback = CSLEDIT_options.get("onChange");
 
 			CodeMirror.defaults.onChange = function()
 			{
@@ -64,6 +65,10 @@ define([	'src/citationEngine',
 							CSLEDIT_data,
 							$("#statusMessage"), $("#exampleOutput"),
 							$("#formattedCitations"), $("#formattedBibliography"));
+					}
+
+					if (typeof(userCallback) !== "undefined") {
+						userCallback(editor.getValue());
 					}
 				}, 500);
 			};

@@ -884,9 +884,13 @@ result of "name-as-sort-order" (e.g., ", " in "Doe, John").</a:documentation>
             </choice>
           </attribute>
         </optional>
-        <ref name="affixes"/>
         <ref name="font-formatting"/>
+        <ref name="names.et-al.legacy-attributes"/>
       </element>
+    </define>
+    <define name="names.et-al.legacy-attributes">
+      <a:documentation>Ignored in CSL 1.0.1. Will be disallowed with CSL 1.1.</a:documentation>
+      <ref name="affixes"/>
     </define>
     <define name="names.label">
       <a:documentation>Inherits variable from the parent cs:names element.</a:documentation>

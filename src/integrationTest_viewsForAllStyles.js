@@ -24,7 +24,8 @@ define(
 		var styles = CSLEDIT_testUtils.getStyles(40),
 			fakeDropdownMenuHandler = function () {},
 			fakeSyntaxHighlighter = {
-				selectedNodeChanged : function () {}
+				selectedNodeChanged : function () {},
+				addHighlightableElements : function () {}
 			},
 			updates;
 

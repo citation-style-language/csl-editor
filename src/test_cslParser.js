@@ -276,7 +276,7 @@ define(['src/cslParser', 'src/urlUtils', 'jquery.qunit'], function (CSLEDIT_cslP
 			'harvard1.csl',
 			'nature.csl',
 			'american-medical-association.csl',
-			'chicago-author-date.csl',
+			//'chicago-author-date.csl', // gives INVALID_STATE_ERR: DOM Exception 11
 			'apsa.csl',
 			'vancouver.csl',
 			'asa.csl',

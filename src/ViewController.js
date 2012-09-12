@@ -1,5 +1,13 @@
 "use strict";
 
+// An CSLEDIT_ViewController instance ensures that all the views are notified
+// whenever one of the following functions is called:
+//  
+//   addNode
+//   deleteNode
+//   amendNode
+//   newStyle
+
 define(
 		[	'src/Titlebar',
 			'src/SmartTree',
@@ -32,18 +40,24 @@ define(
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
 		syntaxHighlighter) {
 	
-		// smartTrees display a subset of the proper CSL tree
+		// smartTrees display a subset of the CSL tree
 		// and allow transformations of the data
-		//
-		// name : visible name
-		// nodeData : displayed in property panel
-		// children : displayed in tree view as children
 		var smartTreeSchema = [
 				{
 					id : "info",
 					name : "Style Info",
-					headingNodePath : "",
-					nodePaths : ["style/info", "style"/*, "style/locale"*/],
+					// TODO: Fix src/SmartTree so that the locale node can be added.
+					//       At present there's a bug where adding a locale node doesn't
+					//       put it in the tree because it's a child of the "style" node, and
+					//       therefore part of that range.
+					//       (note - not an issue for 'style/info' since the bug only affects
+					//       nodes added during a session, and 'style/info' is a required node)
+					//headingNodePath : "style",
+					//headingNodePossibleChildren : {
+					//	"locale" : "one"
+					//},
+					//headingNodeShowPropertyPanel : false,
+					nodePaths : ["style/info", "style", /* "style/locale" */],
 					macroLinks : false,
 					leafNodes : ["info", "style"]
 				},
@@ -157,6 +171,7 @@ define(
 					selectNode : selectNodeInView(heading)
 				});
 				views.push(heading);
+				syntaxHighlighter.addHighlightableElements(heading.element);
 
 				tree = new CSLEDIT_SmartTree(treeView.find('#' + value.id + ' .tree'), value.nodePaths, 
 					{
@@ -179,7 +194,8 @@ define(
 
 			nodePathView = new CSLEDIT_NodePathView(nodePathElement, {
 				selectNodeFromPath : selectNodeFromPath
-			}, syntaxHighlighter);
+			});
+			syntaxHighlighter.addHighlightableElements(nodePathElement);
 		};
 		
 		var selectedNodeChanged = function () {
