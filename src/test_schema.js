@@ -86,7 +86,8 @@ define(['src/options', 'src/Schema', 'jquery.qunit'], function (CSLEDIT_options,
 
 	asyncTest("child element quantifiers", function () {
 		CSLEDIT_schema.callWhenReady( function () {
-			// TODO: get quantifiers working properly
+			// TODO: get quantifiers working properly, so we can use them
+			//       to restrict the number of child elements as appropriate
 
 			//equal(CSLEDIT_schema.childElements("layout/choose")['if'], "one");
 			equal(CSLEDIT_schema.childElements("layout/choose")['else-if'], "zeroOrMore");
