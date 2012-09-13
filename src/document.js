@@ -38,6 +38,8 @@ define(
 				// get module description and dependent files
 				var lines = code.split("\n");
 
+				result.lineCount = lines.length;
+
 				var description = [];
 
 				result.dependencies = [];
@@ -154,16 +156,21 @@ define(
 			});
 		});
 
+		var totalLineCount = 0;
+
 		// convert dependencies for use by mustache
 		$.each(jsModules, function (i, module) {
 			$.each(module.dependencies, function (i, dep) {
 				module.dependencies[i] = { name: dep };
 			});
+
+			totalLineCount += module.lineCount;
 		});
 
 		element.html(Mustache.to_html(jsModulesTemplate,
 			{
 				modules : jsModules,
+				totalLineCount : totalLineCount,
 				cleanName : function () {
 					return function (text) {
 						return text.replace('src&#x2F;', '');
