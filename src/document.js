@@ -92,8 +92,6 @@ define(
 		var thisResource = resourceQueue.pop();
 		processedResources = processedResources || [];
 
-		console.log("resource stack = " + JSON.stringify(resourceQueue));
-
 		if (typeof(thisResource) === "undefined") {
 			// finished
 			return;
@@ -102,12 +100,10 @@ define(
 		var thisData = getSourceFileData(thisResource);
 		processedResources.push(thisResource);
 		sourceFiles.push(thisData);
-		console.log("deps  = " + JSON.stringify(thisData.dependencies));
 
 		$.each(thisData.dependencies, function (i, dependency) {
 			if (resourceQueue.indexOf(dependency) === -1 &&
 					processedResources.indexOf(dependency) === -1) {
-				console.log("adding to queue: " + dependency);
 				resourceQueue.push(dependency);
 			}
 		});
