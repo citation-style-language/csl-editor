@@ -54,13 +54,13 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 		return cache[path];
 	};
 
-	// used to generate the ids in the Zotero style repository
+	// used to generate the ids in the CSL style repository
 	var getNormalisedStyleTitle = function (styleTitle) {
 		return styleTitle.
 			replace(/&/g, "and").
 			replace(/\([A-Z]*\)/g, ""). // remove upper case text (acronyms) in parentheses
-			replace(/[\(\)\[\]]/g, ""). // remove any unmatches parentheses ,'\.
-			replace(/[,'\.]/g, ""). // remove other chars
+			replace(/[\(\)\[\]]/g, ""). // remove other parentheses
+			replace(/[,'\.]/g, "").     // remove other chars
 			replace(/[\\\/:"*?<>\| ]+/g, "-").
 			replace(/--+/g, "-").
 			replace(/-$/, "").
@@ -115,6 +115,7 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 		},
 		generateStyleId : generateStyleId,
 		fetchCslCode : fetchCslCode,
-		localURLFromZoteroId : localURLFromZoteroId
+		localURLFromZoteroId : localURLFromZoteroId,
+		topStyles : topStyles
 	};
 });
