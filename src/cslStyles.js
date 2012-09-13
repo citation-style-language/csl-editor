@@ -58,7 +58,7 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 	var getNormalisedStyleTitle = function (styleTitle) {
 		return styleTitle.
 			replace(/&/g, "and").
-			replace(/\(.*\)/g, ""). // remove everything in parentheses
+			replace(/\([A-Z]*\)/g, ""). // remove upper case text (acronyms) in parentheses
 			replace(/[\(\)\[\]]/g, ""). // remove any unmatches parentheses ,'\.
 			replace(/[,'\.]/g, ""). // remove other chars
 			replace(/[\\\/:"*?<>\| ]+/g, "-").
