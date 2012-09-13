@@ -18,42 +18,54 @@
 
 	<script type="text/javascript" src="../external/require-jquery.js"></script>
 	<script>
+		"use strict";
+
 		require.config({
 			baseUrl: "..",
 			urlArgs : "bust=$GIT_COMMIT"
 		});
-		requirejs(['src/config'], function (config) {
-			requirejs(['src/document'], function (CSLEDIT_document) {
 
-				var generate = function () {
-					var resources = [];
-
-					$('input').each( function (i, checkbox) {
-						var $this = $(checkbox);
-						if ($this.is(':checked')) {
-							resources.push('src/' + $this.attr("data-resource"));
-						}
-					});
-
-					CSLEDIT_document.generate(resources, '#documentation');
-				};
+		console.log("hello");
+		$(document).ready(function() {
+			if ("$GIT_COMMIT".length === 40) {
+				console.log("unsupported!");
 				
-				$(document).ready(function () {
-					$('input').change(generate);
+				$('#documentation').html(
+					'<p><strong>This page only works with the checked out repository, not the deployed version of the site.</strong></p>' +
+				  	'<p><strong>Check out this repo to get the site running locally: <a href="https://github.com/citation-style-editor/csl-editor-demo-site">https://github.com/citation-style-editor/csl-editor-demo-site</a></strong></p>'
+				);
+			} else {
+				requirejs(['src/config'], function (config) {
+					requirejs(['src/document'], function (CSLEDIT_document) {
+						var generate = function () {
+							var resources = [];
 
-					generate();
+							$('input').each( function (i, checkbox) {
+								var $this = $(checkbox);
+								if ($this.is(':checked')) {
+									resources.push('src/' + $this.attr("data-resource"));
+								}
+							});
 
-					var hash = window.location.hash;
-					window.location.hash = "";
-					window.location.hash = hash;
+							CSLEDIT_document.generate(resources, '#documentation');
+						};
+						
+						$('input').change(generate);
+
+						generate();
+
+						var hash = window.location.hash;
+						window.location.hash = "";
+						window.location.hash = hash;
+					});
 				});
-			});
+			}
 		});
 	</script>
 </head>
 <body>
 	<h1>CSL Editor Library - Source code documentation</h1>
-	<em>This documentation is dynamically generated in your browser!</em>
+	<em>Dynamically generated from the current source code</em>
 
 	<h2>Pages to include</h2>
 	<input type="checkbox" id="searchByNameCheckbox" checked="checked" data-resource="SearchByName" />

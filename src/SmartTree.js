@@ -16,14 +16,14 @@
 //     - Infinite loops are detected and the offending node is given a
 //       data-error="Infinite Loop" attribute
 //
-// - Allows incremental changes to the tree based on following commands:
+// - Allows incremental changes to the tree:
+//   (_The code here is quite complicated,
+//     especially since the addition of the macro-links, so any
+//     changes should be accompanied by unit tests_)
 //     - addNode
 //     - deleteNode
 //     - amendNode
-//
-// - Warning: The code to perform the incremental changes is quite complicated,
-//            especially since the addition of the macro-links feature, and any
-//            changes here should be accompanied by unit tests
+// 
 
 define([	'src/uiConfig',
 			'src/CslNode',

@@ -14,6 +14,8 @@ requirejs.config({
 		'external/codemirrorXmlMode' : 'external/codemirror2/mode/xml/xml',
 		
 		'external/xregexp' : 'external/xregexp/xregexp-with-unicode-base-min',
+
+		'external/markdown' : 'external/pagedown/Markdown.Converter'
 	},
 	shim: {
 		'jquery.ui': {
@@ -62,6 +64,9 @@ requirejs.config({
 		},
 		'external/codemirror': {
 			exports: 'CodeMirror'
+		},
+		'external/markdown': {
+			exports: 'Markdown'
 		}
 	}
 });

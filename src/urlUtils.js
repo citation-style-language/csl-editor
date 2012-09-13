@@ -1,6 +1,6 @@
 "use strict";
 
-// Miscallaneous functions to deal with URLs
+// Miscellaneous functions to deal with URLs
 
 define(['src/getUrl'], function (getUrlPlugin) {
 	// from https://gist.github.com/1771618

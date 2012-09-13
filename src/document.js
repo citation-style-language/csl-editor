@@ -4,11 +4,19 @@
 //
 // Very basic at the moment:
 // - walks the dependency graph of a list of given resources
-// - for each resource, extracts the module description, which is the comment 
-//   before the define() statement
-//
+// - for each resource it extracts the module description, which is the comment 
+//   before the define() statement, and displays it using markdown
 
-define(['src/urlUtils'], function (CSLEDIT_urlUtils) {
+define(
+		[	'src/urlUtils',
+			'external/markdown'
+		],
+		function (
+			CSLEDIT_urlUtils,
+			Markdown
+		) {
+
+	var markdown = new Markdown.Converter();
 
 	// returns a JSON object with documentation of the code at @param resource
 	var getSourceFileData = function (resource) {
@@ -34,7 +42,7 @@ define(['src/urlUtils'], function (CSLEDIT_urlUtils) {
 
 				// assume any comments starting at char 0 are the description
 				$.each(lines, function (i, line) {
-					var match = /^\/\/(.*)/.exec(line);
+					var match = /^\/\/\s?(.*)/.exec(line);
 
 					if (match !== null) {
 						description.push(match[1]);
@@ -55,7 +63,7 @@ define(['src/urlUtils'], function (CSLEDIT_urlUtils) {
 					}
 				});
 
-				result.description = description.join("\n").split("\n\n");
+				result.description = description.join("\n");
 
 				result.url = resourceUrl;
 			},
@@ -125,11 +133,10 @@ define(['src/urlUtils'], function (CSLEDIT_urlUtils) {
 			element.append('<h3><a name="' + sourceFile.name + '" href="#' + sourceFile.name + '">' + cleanName(sourceFile.name) + '</a></h3>');
 			var moduleInfo = $('<div/>').addClass("moduleInfo");
 
-			if (sourceFile.description.length === 0 ||
-					sourceFile.description.length === 1 && sourceFile.description[0] === "") {
+			if (sourceFile.description.length === 0) {
 				moduleInfo.append('<p><strong>No documentation!</strong></p>');
 			} else {
-				moduleInfo.append('<p>' + sourceFile.description.join("</p><p>") + '</p>');
+				moduleInfo.append(markdown.makeHtml(sourceFile.description));
 			}
 
 			var depList = [];

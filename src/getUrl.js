@@ -3,11 +3,9 @@
 //
 // e.g. to use:
 //
-// require(['src/getUrl!images/elephant.png'], function (elephantUrl) {
-//
-//     // do something with elephantUrl
-//
-// });
+//     require(['src/getUrl!images/elephant.png'], function (elephantUrl) {
+//         // do something with elephantUrl
+//     });
 
 define({
     load: function (name, req, load, config) {

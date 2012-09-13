@@ -1,16 +1,14 @@
 // Responsible for parsing a .rng file
 // The file must be in XML form, not the compact notation (.rnc)
 //
-// (only tested with the csl.rng and its includes)
+// _It's only been tested with the CSL schema
+// (version 1.0.1 and to a lesser extent the MLZ variant)_
 //
 // It generates properties for each element type:
 //
 // - data type if applicable (e.g. text, anyURI)
-//
 // - list of attributes, and thier possible values
-//
 // - list of child elements
-// 
 // - list of mutually exclusive choices that the node can be in, each choice
 //   contains it's own list of attributes
 // 
