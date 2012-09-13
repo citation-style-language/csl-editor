@@ -9,14 +9,18 @@
 
 define(
 		[	'src/urlUtils',
+			'external/mustache',
 			'external/markdown'
 		],
 		function (
 			CSLEDIT_urlUtils,
+			Mustache,
 			Markdown
 		) {
 
 	var markdown = new Markdown.Converter();
+	
+	var jsModulesTemplate;
 
 	// returns a JSON object with documentation of the code at @param resource
 	var getSourceFileData = function (resource) {
@@ -57,14 +61,20 @@ define(
 						}
 					} else {
 						withinDependencySection = true;
-						$.each(dependents, function (i, dependency) {						
-							result.dependencies.push(dependency.replace(/'/g, ""));
+						$.each(dependents, function (i, dependency) {
+							var name = dependency.replace(/'/g, "");
+							result.dependencies.push(name);
+							result.hasDependencies = true;
 						});
 					}
 				});
 
-				result.description = description.join("\n");
-
+				description = description.join("\n");
+				if (description.length === 0) {
+					result.error = "No documentation!";
+				} else {
+					result.descriptionHtml = markdown.makeHtml(description);
+				}
 				result.url = resourceUrl;
 			},
 			error: function () {
@@ -88,11 +98,8 @@ define(
 		}
 
 		var thisData = getSourceFileData(thisResource);
-
 		processedResources.push(thisResource);
-
 		sourceFiles.push(thisData);
-
 		console.log("deps  = " + JSON.stringify(thisData.dependencies));
 
 		$.each(thisData.dependencies, function (i, dependency) {
@@ -106,19 +113,26 @@ define(
 		populatePageData(resourceQueue, sourceFiles, processedResources);
 	};
 
-	var cleanName = function (name) {
-		return name.replace('src/', '');
-	};
-
 	var generate = function (resources, element) {
 		element = $(element);
 
-		element.html("");
+		if (typeof(jsModulesTemplate) === "undefined") {
+			$.ajax({
+				url : CSLEDIT_urlUtils.getResourceUrl('html/jsModules.mustache'),
+				success : function (data) {
+					jsModulesTemplate = data;
+				},
+				error : function () {
+					console.log("Couldn't fetch resource");
+				},
+				async : false
+			});
+		}
 
-		var sourceFiles = [];
-		populatePageData(resources, sourceFiles);
+		var jsModules = [];
+		populatePageData(resources, jsModules);
 
-		sourceFiles.sort(function (a, b) {
+		jsModules.sort(function (a, b) {
 			if (a.name < b.name) {
 				return -1;
 			} else if (a.name > b.name) {
@@ -128,39 +142,35 @@ define(
 			}
 		});
 
-		// draw page
-		$.each(sourceFiles, function (i, sourceFile) {
-			element.append('<h3><a name="' + sourceFile.name + '" href="#' + sourceFile.name + '">' + cleanName(sourceFile.name) + '</a></h3>');
-			var moduleInfo = $('<div/>').addClass("moduleInfo");
-
-			if (sourceFile.description.length === 0) {
-				moduleInfo.append('<p><strong>No documentation!</strong></p>');
-			} else {
-				moduleInfo.append(markdown.makeHtml(sourceFile.description));
-			}
-
-			var depList = [];
-			$.each(sourceFile.dependencies, function (i, dep) {
-				depList.push('<a href="#' + dep + '">' + cleanName(dep) + '</a>');
-			});
-			if (depList.length > 0) {
-				moduleInfo.append('<p><strong>dependencies: </strong>' + depList.join(", ") + '</p>');
-			}
-
-			var usedBy = [];
-			$.each(sourceFiles, function (i, sourceFile2) {
-				if (sourceFile2.dependencies.indexOf(sourceFile.name) !== -1) {
-					usedBy.push('<a href="#' + sourceFile2.name + '">' + cleanName(sourceFile2.name) + '</a>');
+		$.each(jsModules, function (i, module) {
+			// calculate dependents
+			module.dependents = [];
+			console.log("checking deps of " + module.name);
+			$.each(jsModules, function (i, innerModule) {
+				if (innerModule.dependencies.indexOf(module.name) !== -1) {
+					module.dependents.push({ name: innerModule.name });
+					module.hasDependents = true;
 				}
 			});
-			if (usedBy.length > 0) {
-				moduleInfo.append('<p><strong>used by: </strong>' + usedBy.join(", ") + '</p>');
-			}
-
-			moduleInfo.append('<p><a href="' + sourceFile.url + '">View Code</a></p>');
-
-			element.append(moduleInfo);
 		});
+
+		// convert dependencies for use by mustache
+		$.each(jsModules, function (i, module) {
+			$.each(module.dependencies, function (i, dep) {
+				module.dependencies[i] = { name: dep };
+			});
+		});
+
+		element.html(Mustache.to_html(jsModulesTemplate,
+			{
+				modules : jsModules,
+				cleanName : function () {
+					return function (text) {
+						return text.replace('src&#x2F;', '');
+					};
+				}
+			}
+		));
 	};
 
 	return {
