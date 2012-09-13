@@ -25,11 +25,8 @@
 			urlArgs : "bust=$GIT_COMMIT"
 		});
 
-		console.log("hello");
 		$(document).ready(function() {
 			if ("$GIT_COMMIT".length === 40) {
-				console.log("unsupported!");
-				
 				$('#documentation').html(
 					'<p><strong>This page only works with the checked out repository, not the deployed version of the site.</strong></p>' +
 				  	'<p><strong>Check out this repo to get the site running locally: <a href="https://github.com/citation-style-editor/csl-editor-demo-site">https://github.com/citation-style-editor/csl-editor-demo-site</a></strong></p>'
