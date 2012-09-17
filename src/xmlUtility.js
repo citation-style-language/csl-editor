@@ -76,12 +76,24 @@ define(function () {
 		return input;
 	};
 
+	var htmlEscape = function (text) {
+		var escaped = text;
+
+		escaped = escaped.replace(/&/g, "&amp;");
+		escaped = escaped.replace(/</g, "&lt;");
+		escaped = escaped.replace(/>/g, "&gt;");
+		escaped = escaped.replace(/"/g, "&quot;");
+
+		return escaped;
+	};
+
 	return {
 		stripUnsupportedTagsAndContents : stripUnsupportedTagsAndContents,
 		stripUnsupportedTags : stripUnsupportedTags,
 		stripAttributesFromTags : stripAttributesFromTags,
 		stripComments : stripComments,
-		cleanInput : cleanInput
+		cleanInput : cleanInput,
+		htmlEscape : htmlEscape
 	};	
 });
 

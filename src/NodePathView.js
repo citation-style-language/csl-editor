@@ -4,11 +4,13 @@
 
 define(
 		[	'src/dataInstance',
-			'src/uiConfig'
+			'src/uiConfig',
+			'src/xmlUtility'
 		],
 		function (
 			CSLEDIT_data,
-			CSLEDIT_uiConfig
+			CSLEDIT_uiConfig,
+			CSLEDIT_xmlUtility
 		) {
 	var CSLEDIT_NodePathView = function (element, callbacks) {
 		this.element = 	element;
@@ -27,7 +29,7 @@ define(
 		$.each(nodePath, function (i, cslId) {
 			var node = CSLEDIT_data.getNode(cslId, cslData);
 			nodesHtml.push('<span cslid="' + node.cslId + '">' +
-				CSLEDIT_uiConfig.displayNameFromNode(node) + '</span>');
+				CSLEDIT_xmlUtility.htmlEscape(CSLEDIT_uiConfig.displayNameFromNode(node)) + '</span>');
 		});
 
 		this.element.html(nodesHtml.join(" > "));

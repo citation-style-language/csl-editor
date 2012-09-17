@@ -3,7 +3,17 @@
 // Uses a NodeWatcher to monitor the style/info/title node for changes
 // and updates the titlebar
 
-define(['src/NodeWatcher', 'src/dataInstance', 'src/debug'], function (CSLEDIT_NodeWatcher, CSLEDIT_data, debug) {
+define(
+		[	'src/NodeWatcher',
+			'src/dataInstance',
+			'src/xmlUtility',
+			'src/debug'
+		], function (
+			CSLEDIT_NodeWatcher,
+			CSLEDIT_data,
+			CSLEDIT_xmlUtility,
+			debug
+		) {
 	var CSLEDIT_Titlebar = function (element) {
 		var that = this;
 
@@ -32,7 +42,8 @@ define(['src/NodeWatcher', 'src/dataInstance', 'src/debug'], function (CSLEDIT_N
 		} else {
 			title = nodeData.textValue;
 		}
-		this.element.find('span[cslid]').html(title).attr('cslid', nodeData.cslId);
+		console.log("title = " + title);
+		this.element.find('span[cslid]').html(CSLEDIT_xmlUtility.htmlEscape(title)).attr('cslid', nodeData.cslId);
 
 		debug.log("updated title to " + this.element.html());
 	};

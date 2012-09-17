@@ -5,7 +5,7 @@
 // 1. A *.csl text file.
 // 2. A JSON object as used by get() and set() in src/Data
 
-define(['src/debug'], function (debug) {
+define(['src/xmlUtility', 'src/debug'], function (CSLEDIT_xmlUtility, debug) {
 	// Private functions:
 	var jsonNodeFromXml = function (node, nodeIndex) {
 		var children = [],
@@ -62,17 +62,6 @@ define(['src/debug'], function (debug) {
 		return thisNodeData;
 	};
 
-	var htmlEscape = function (text) {
-		var escaped = text;
-
-		escaped = escaped.replace(/&/g, "&amp;");
-		escaped = escaped.replace(/</g, "&lt;");
-		escaped = escaped.replace(/>/g, "&gt;");
-		escaped = escaped.replace(/"/g, "&quot;");
-
-		return escaped;
-	};
-
 	var generateIndent = function (indentAmount) {
 		var index,
 			result = "";
@@ -94,8 +83,8 @@ define(['src/debug'], function (debug) {
 					// TODO: the key probably shouldn't have characters needing escaping anyway,
 					//       should not allow to input them in the first place
 					attributesString += " " + 
-						htmlEscape(jsonData.attributes[index].key) + '="' + 
-						htmlEscape(jsonData.attributes[index].value) + '"';
+						CSLEDIT_xmlUtility.htmlEscape(jsonData.attributes[index].key) + '="' + 
+						CSLEDIT_xmlUtility.htmlEscape(jsonData.attributes[index].value) + '"';
 				}
 			}
 		}
@@ -103,7 +92,8 @@ define(['src/debug'], function (debug) {
 
 		if (typeof jsonData.textValue !== "undefined") {
 			xmlString += "<" + jsonData.name + attributesString + ">";
-			xmlString += htmlEscape(jsonData.textValue) + "</" + htmlEscape(jsonData.name) + ">\n";
+			xmlString += CSLEDIT_xmlUtility.htmlEscape(jsonData.textValue) + "</" +
+				CSLEDIT_xmlUtility.htmlEscape(jsonData.name) + ">\n";
 		} else {
 			xmlString += "<" + jsonData.name + attributesString;
 			innerString = "";
@@ -113,7 +103,7 @@ define(['src/debug'], function (debug) {
 				}
 			}
 			if (innerString !== "") {
-				xmlString += ">\n" + innerString + generateIndent(indent) + "</" + htmlEscape(jsonData.name) + ">\n";
+				xmlString += ">\n" + innerString + generateIndent(indent) + "</" + CSLEDIT_xmlUtility.htmlEscape(jsonData.name) + ">\n";
 			} else if (fullClosingTags) {
 				xmlString += "></" + jsonData.name + ">\n";
 			} else {
@@ -153,11 +143,12 @@ define(['src/debug'], function (debug) {
 			var parser = new DOMParser(),
 				xmlDoc = parser.parseFromString(xmlData, "application/xml"),
 				errors;
+
 			errors = xmlDoc.getElementsByTagName('parsererror');
-		debug.assertEqual(errors.length, 0, "xml parser error");
+			debug.assertEqual(errors.length, 0, "xml parser error");
 
 			var styleNode = xmlDoc.childNodes[0];
-		debug.assertEqual(styleNode.localName, "style", "Invalid style - no style node");
+			debug.assertEqual(styleNode.localName, "style", "Invalid style - no style node");
 
 			var jsonData = jsonNodeFromXml(styleNode, { index: 0 });
 		
