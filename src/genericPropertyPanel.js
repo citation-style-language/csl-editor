@@ -631,8 +631,6 @@ define([	'src/MultiPanel',
 
 		selectedChoice = null; // will be set to >= 0 if the node contains choices
 
-		console.log("setup panel");
-
 		// remove child nodes
 		panel.children().remove();
 

@@ -17,6 +17,7 @@
 "use strict";
 
 define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, CSLEDIT_storage, debug) {
+	// Create a schema with the given schema options
 	var CSLEDIT_Schema = function (
 			schemaOptions /* used to apply modifications appropriate to Visual Editor */ ) {
 		var mainSchemaData,
@@ -747,45 +748,66 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 		}
 
 		return {
+			// All the 'element' arguments below must be a string in the following format
+			//
+			//     $PARENT_NAME/$NODE_NAME
+			//
+			// e.g. 'root/style', 'style/info', 'info/title'
+			
+ 			// Return the attributes of the given element, where element is a
+			// string containing the node and it's parent
 			attributes : function (element) {
 				return nodeProperties[element].attributes;
 			},
+
+			// Returns an object containing a member for each of the possible child elements:
+			// - key   - child element name. e.g. 'text', 'date', 'date-part'
+			// - value - the quantifier (WARNING: ignore this for now since it's broken)
 			childElements : function (element) {
 				return nodeProperties[element].elements;
 			},
+
+			// For child-less nodes, this returns the type of the data that is stored within them
+			// e.g. style/info/title is a "text" node
+			//      style/info/contributor/uri is a "anyURI" node
 			elementDataType : function (element) {
 				var node = nodeProperties[element];
 
 				if (nodeProperties[element].textNode) {
 					return "text";
 				}
-			debug.assert(node.attributeValues.length < 2);
+				debug.assert(node.attributeValues.length < 2);
 				if (node.attributeValues.length === 0 || node.attributeValues[0].type !== "data") {
 					return null;
 				} else {
 					return node.attributeValues[0].value;
 				}
 			},
+
+			// Returns the possible mutually exclusive modes the node can be in
 			choices : function (element) {
 				return nodeProperties[element].choices;
 			},
+
+			// Returns the documentation (if any) for this node in the schema
 			documentation : function (element) {
 				return nodeProperties[element].documentation;
 			},
+
+			// Returns all the nodeProperties, usefull for debugging
 			allData : function () {
 				return nodeProperties;
 			},
+
+			// Calls newCallback as soon as the schema is initialised,
+			// or immediately if it's already been initialised
 			callWhenReady : function (newCallback) {
 				if (initialised) {
 					newCallback();
 				} else {
 					callback = newCallback;
 				}
-			},
-			quantity : function (element) {
-				return nodeProperties[element].quantity;
-			},
-			_nodeProperties : nodeProperties // for debugging
+			}
 		};
 	};
 

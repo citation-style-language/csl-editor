@@ -9,6 +9,7 @@ define(
 			CSLEDIT_richTextToolbar,
 			CSLEDIT_xmlUtility
 		) {
+	// Create a RichTextEditor within the given containerElement
 	var CSLEDIT_RichTextEditor = function (containerElement, onChange) {
 		var that = this;
 
@@ -80,6 +81,7 @@ define(
 		this.editor.bind("paste", paste);
 	};
 
+	// Get/set the string represented by the rich text editor
 	CSLEDIT_RichTextEditor.prototype.value = function (newValue) {
 		if (typeof(newValue) === "undefined") {
 			var cleaned = CSLEDIT_xmlUtility.cleanInput(this.editor.html(), true);

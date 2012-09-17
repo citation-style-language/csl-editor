@@ -4,6 +4,7 @@
 // content using the typeSelect control.
 
 define(function () {
+	// Creates a MultiPanel
 	var CSLEDIT_MultiPanel = function (id) {
 		var that = this;
 
@@ -22,10 +23,13 @@ define(function () {
 		});
 	};
 
+	// Sets the callback which is called every time the user switches
+	// to a different panel
 	CSLEDIT_MultiPanel.prototype.onChange = function (callback) {
 		this.onChangeCallback = callback;
 	};
 
+	// Add a new panel with the given name
 	CSLEDIT_MultiPanel.prototype.addPanel = function (name) {
 		var that = this,
 			newPanel;
@@ -37,6 +41,8 @@ define(function () {
 		this.currentContentPanel.append(newPanel);
 	};
 
+	// Display the appropriate panel given the current state of
+	// the this.typeSelect dropdown
 	CSLEDIT_MultiPanel.prototype.update = function () {
 		var that = this,
 			selectedIndex = this.typeSelect.find('option').index(
@@ -56,9 +62,11 @@ define(function () {
 		}
 	};
 
+	// Select the panel with the given index
 	CSLEDIT_MultiPanel.prototype.select = function (index) {
 		this.typeSelect.val(this.typeSelect.find('option').eq(index).html());
 		this.update();
 	};
+
 	return CSLEDIT_MultiPanel;
 });

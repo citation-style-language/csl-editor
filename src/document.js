@@ -9,11 +9,13 @@
 
 define(
 		[	'src/urlUtils',
+			'src/debug',
 			'external/mustache',
 			'external/markdown'
 		],
 		function (
 			CSLEDIT_urlUtils,
+			debug,
 			Mustache,
 			Markdown
 		) {
@@ -51,7 +53,14 @@ define(
 					var match = /^\/\/\s?(.*)/.exec(line);
 
 					if (match !== null) {
-						description.push(match[1]);
+						// markdown headings
+						var thisDescriptionLine = match[1];
+
+						if (thisDescriptionLine.length > 0 && thisDescriptionLine[0] === "#") {
+							thisDescriptionLine = '##' + thisDescriptionLine;
+						}
+
+						description.push(thisDescriptionLine);
 					}
 
 					var dependents = line.match(/'src\/[a-zA-Z0-9]*'/g);
@@ -121,7 +130,7 @@ define(
 					jsModulesTemplate = data;
 				},
 				error : function () {
-					console.log("Couldn't fetch resource");
+					debug.log("Couldn't fetch resource");
 				},
 				async : false
 			});
@@ -143,7 +152,6 @@ define(
 		$.each(jsModules, function (i, module) {
 			// calculate dependents
 			module.dependents = [];
-			console.log("checking deps of " + module.name);
 			$.each(jsModules, function (i, innerModule) {
 				if (innerModule.dependencies.indexOf(module.name) !== -1) {
 					module.dependents.push({ name: innerModule.name });

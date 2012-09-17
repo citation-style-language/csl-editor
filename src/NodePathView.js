@@ -12,15 +12,18 @@ define(
 			CSLEDIT_uiConfig,
 			CSLEDIT_xmlUtility
 		) {
+	// Create a NodePathView in the given jQuery element
 	var CSLEDIT_NodePathView = function (element, callbacks) {
-		this.element = 	element;
+		this.element = element;
 		this.callbacks = callbacks;
 	};
 
+	// Display the given missingNodePath which doesn't actually exist in the current CSL style
 	CSLEDIT_NodePathView.prototype.nodeMissing = function (missingNodePath) {
 		this.element.html(missingNodePath.replace(/\//g, " > "));
 	};
 
+	// Display the given nodePath
 	CSLEDIT_NodePathView.prototype.selectNode = function (nodePath) {
 		var that = this,
 			nodesHtml = [],

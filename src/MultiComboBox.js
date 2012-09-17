@@ -4,6 +4,7 @@
 // each of which must be one of the supplied values
 
 define(['src/debug'], function (debug) {
+	// Constructs a MultiComboBox
 	var CSLEDIT_MultiComboBox = function (element, possibleValues, onChange, unique) {
 		this._element = element;
 		this._values = [];
@@ -17,14 +18,18 @@ define(['src/debug'], function (debug) {
 		this._refresh(true);
 	};
 
+	// Returns the jQuery element this MultiComboBox is drawn within
 	CSLEDIT_MultiComboBox.prototype.getElement = function () {
 		return this._element;
 	};
 
+	// Set the tooltip for this MultiComboBox
 	CSLEDIT_MultiComboBox.prototype.setTooltip = function (tooltip) {
 		this._element.attr("title", tooltip);
 	};
 
+	// Get or set the value of this MultiComboBox depending on whether the
+	// val argument is present
 	CSLEDIT_MultiComboBox.prototype.val = function (val, suppressOnChange) {
 		if (typeof val === "undefined") {
 			this._readValues();

@@ -153,8 +153,8 @@ define(
 		fakeViewController.addView(citationTree);
 		fakeViewController.addView(bibliographyTree);
 
-		citationTree.setVerifyAllChanges(true);
-		bibliographyTree.setVerifyAllChanges(true);
+		citationTree._setVerifyAllChanges(true);
+		bibliographyTree._setVerifyAllChanges(true);
 
 		citationTree.setCallbacks({
 			loaded : function () {
@@ -312,9 +312,9 @@ define(
 			// add a node within the macro before text
 			// NOTE: parent node 9 is not displayed in the smartTree,
 			// but the smartTree still needs to update the instance
-			equal(citationTree.getRanges()[0].last, 8);
+			equal(citationTree._getRanges()[0].last, 8);
 			CSLEDIT_data.addNode(9, 0, new CSLEDIT_CslNode("nodewithin",[],[],10));
-			equal(citationTree.getRanges()[0].last, 8, "range size not changed");
+			equal(citationTree._getRanges()[0].last, 8, "range size not changed");
 			equal(treeElement.find('li[cslid=8][macrolink!="true"]').attr("rel"), "text");
 			equal(treeElement.find('li[cslid=8]').find(
 				'li[cslid=10]').attr("rel"), "nodewithin", "add within macro");
@@ -387,8 +387,8 @@ define(
 			CSLEDIT_data.deleteNode(6);
 			equal(treeElement.find('li[cslid=6]').length, 0, "delete node in macro");
 			equal(styleTreeElement.find('li[cslid=6]').attr("rel"), "macro");
-			equal(citationTree.getMacroLinks().length, 0);
-			equal(styleTree.getMacroLinks().length, 0, "no macro links in style tree");
+			equal(citationTree._getMacroLinks().length, 0);
+			equal(styleTree._getMacroLinks().length, 0, "no macro links in style tree");
 
 			start();
 		};
@@ -403,11 +403,11 @@ define(
 
 		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
-		styleTree.setVerifyAllChanges(true);
+		styleTree._setVerifyAllChanges(true);
 		
 		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
-		citationTree.setVerifyAllChanges(true);
+		citationTree._setVerifyAllChanges(true);
 		
 		fakeViewController.addView(citationTree);
 		fakeViewController.addView(styleTree);
@@ -469,10 +469,10 @@ define(
 			var newNode = new CSLEDIT_CslNode("text");
 			newNode.setAttr("macro", "macro1");
 
-			equal(citationTree.getRanges()[0].last, 10);
+			equal(citationTree._getRanges()[0].last, 10);
 			CSLEDIT_data.addNode(10, "after", newNode);
 			
-			equal(citationTree.getRanges()[0].last, 11);
+			equal(citationTree._getRanges()[0].last, 11);
 
 			equal(styleTreeElement.find('li[cslid=11]').attr('rel'), "text");
 			equal(styleTreeElement.find('li[cslid=11]').
@@ -550,11 +550,11 @@ define(
 
 		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
-		styleTree.setVerifyAllChanges(true);
+		styleTree._setVerifyAllChanges(true);
 		
 		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
-		citationTree.setVerifyAllChanges(true);
+		citationTree._setVerifyAllChanges(true);
 		
 		fakeViewController.addView(citationTree);
 		fakeViewController.addView(styleTree);
@@ -601,14 +601,14 @@ define(
 			equal(styleTreeElement.find('li[cslid=9]').find(
 				'li[cslid=4][macrolink=true]').attr("rel"), "text");
 			
-			equal(styleTree.getMacroLinks().length, 1, "check macro links");
+			equal(styleTree._getMacroLinks().length, 1, "check macro links");
 
 			description = "add reference to macro2 within macro1";
 			newNode = new CSLEDIT_CslNode("text");
 			newNode.setAttr("macro", "macro2");
 			CSLEDIT_data.addNode(3, 0, newNode);
 			
-			equal(styleTree.getMacroLinks().length, 2, "check macro links");
+			equal(styleTree._getMacroLinks().length, 2, "check macro links");
 			
 			equal(styleTreeElement.find('li[cslid=3]').
 				find('li[cslid=4][macrolink!=true]').attr("rel"), "text", description);
@@ -649,7 +649,7 @@ define(
 			description = "add to within macro 2 by the instance in macro 1";
 			CSLEDIT_data.addNode(4, "last", new CSLEDIT_CslNode("newnode"));
 
-			equal(styleTree.getMacroLinks().length, 2, "check macro links");
+			equal(styleTree._getMacroLinks().length, 2, "check macro links");
 			
 			description = "node 5 is a normal text node and shouldn't have children (after)";
 			equal(styleTreeElement.
@@ -710,11 +710,11 @@ define(
 
 		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
-		styleTree.setVerifyAllChanges(true);
+		styleTree._setVerifyAllChanges(true);
 		
 		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
-		citationTree.setVerifyAllChanges(true);
+		citationTree._setVerifyAllChanges(true);
 		
 		fakeViewController.addView(citationTree);
 		fakeViewController.addView(styleTree);
@@ -761,7 +761,7 @@ define(
 														find('li[cslid=4][macrolink=true]').attr("rel"), "label");
 			equal(styleTreeElement.find('li[cslid=11]').attr("rel"), "text", "macro3 instance");
 			
-			equal(styleTree.getMacroLinks().length, 3, "check macro links");
+			equal(styleTree._getMacroLinks().length, 3, "check macro links");
 
 
 			//CSLEDIT_data.moveNode(6, 11, 0);
@@ -769,7 +769,7 @@ define(
 			CSLEDIT_data.addNode(10, 0, new CSLEDIT_CslNode(
 				"text", [{key:"macro", value:"macro1", enabled: "true"}]));
 			
-			equal(styleTree.getMacroLinks().length, 3, "check macro links");
+			equal(styleTree._getMacroLinks().length, 3, "check macro links");
 			
 			description = "macro 2 and 3 instances stay where they are";
 			equal(styleTreeElement.find('li[cslid=10]').attr("rel"), "text", "macro2 instance");
@@ -810,11 +810,11 @@ define(
 
 		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
-		styleTree.setVerifyAllChanges(true);
+		styleTree._setVerifyAllChanges(true);
 		
 		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
-		citationTree.setVerifyAllChanges(true);
+		citationTree._setVerifyAllChanges(true);
 		
 		fakeViewController.addView(citationTree);
 		fakeViewController.addView(styleTree);
@@ -893,11 +893,11 @@ define(
 
 		styleTree = CSLEDIT_SmartTree(styleTreeElement, ["style"], {enableMacroLinks: true, data: CSLEDIT_data});
 		styleTree.setCallbacks({ loaded : treeLoaded });
-		styleTree.setVerifyAllChanges(true);
+		styleTree._setVerifyAllChanges(true);
 		
 		citationTree = CSLEDIT_SmartTree(treeElement, ["style/citation"], {enableMacroLinks: true, data: CSLEDIT_data});
 		citationTree.setCallbacks({ loaded : treeLoaded });
-		citationTree.setVerifyAllChanges(true);
+		citationTree._setVerifyAllChanges(true);
 		
 		fakeViewController.addView(citationTree);
 		fakeViewController.addView(styleTree);

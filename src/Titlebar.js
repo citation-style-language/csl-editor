@@ -14,6 +14,7 @@ define(
 			CSLEDIT_xmlUtility,
 			debug
 		) {
+	// Creates a titlebar within the given jQuery element
 	var CSLEDIT_Titlebar = function (element) {
 		var that = this;
 
@@ -21,7 +22,7 @@ define(
 		this.element.html('<h3><span cslid="-1"/></h3>').css({cursor: "default"});
 
 		this.nodeWatcher = new CSLEDIT_NodeWatcher("style/info/title", CSLEDIT_data, function (nodeData) {
-			that.updateTitle(nodeData);
+			that._updateTitle(nodeData);
 		});
 		
 		this.addNode = function (id, position, nodeData, numNodes) {
@@ -35,17 +36,14 @@ define(
 		};
 	};
 
-	CSLEDIT_Titlebar.prototype.updateTitle = function (nodeData) {
+	CSLEDIT_Titlebar.prototype._updateTitle = function (nodeData) {
 		var title;
 		if (nodeData === null) {
 			title = "No title";
 		} else {
 			title = nodeData.textValue;
 		}
-		console.log("title = " + title);
 		this.element.find('span[cslid]').html(CSLEDIT_xmlUtility.htmlEscape(title)).attr('cslid', nodeData.cslId);
-
-		debug.log("updated title to " + this.element.html());
 	};
 
 	return CSLEDIT_Titlebar;

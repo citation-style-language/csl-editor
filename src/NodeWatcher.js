@@ -6,40 +6,32 @@
 // It's not OK if > 1 node exists at nodePath
 
 define(['src/debug'], function (debug) {
-	var CSLEDIT_NodeWatcher = function (nodePath, cslData, onChange) {
+	// Creates a NodeWatcher watching the given nodePath using the given
+	// dataInstance
+	// 
+	// - nodePath     - a '/' separated string containing the full path of the node to watch
+	//                  e.g. 'style/citation/layout'
+	// - dataInstance - the instance of CSLEDIT_Data to watch
+	// - onChange     - this function will be called after every change to the watched node
+	var CSLEDIT_NodeWatcher = function (nodePath, dataInstance, onChange) {
 		var that = this;
 		
 		this.nodeData = null;
 
 		this.nodePath = nodePath;
-		this.cslData = cslData;
+		this.dataInstance = dataInstance;
 		this.onChange = onChange;
 
-		this.updateNodeData();
-		this.nodeUpdated();
+		this._updateNodeData();
+		this._nodeUpdated();
 	};
 
-	CSLEDIT_NodeWatcher.prototype.nodeUpdated = function () {
+	// Calls the onChange callback
+	CSLEDIT_NodeWatcher.prototype._nodeUpdated = function () {
 		this.onChange(this.nodeData);
 	};
 
-	CSLEDIT_NodeWatcher.prototype.getSelectedNodePath = function () {
-		var splitNodePath = this.nodePath.split("/"),
-			nodePath = [],
-			cslIdPath = [],
-			nodes;
-
-		while (splitNodePath.length > 0) {
-			nodePath.push(splitNodePath.splice(0, 1));
-			nodes = this.cslData.getNodesFromPath(nodePath.join("/"));
-			debug.assertEqual(nodes.length, 1);
-			cslIdPath.push(nodes[0].cslId);
-		}
-
-		return cslIdPath;
-	};
-
-	CSLEDIT_NodeWatcher.prototype.updateNodeData = function () {
+	CSLEDIT_NodeWatcher.prototype._updateNodeData = function () {
 		var nodes;
 
 		this.nodeData = null;
@@ -48,26 +40,28 @@ define(['src/debug'], function (debug) {
 			return;
 		}
 
-		nodes = this.cslData.getNodesFromPath(this.nodePath);
+		nodes = this.dataInstance.getNodesFromPath(this.nodePath);
 
 		if (nodes.length > 0) {
 			this.nodeData = nodes[0];
 		}
 	};
 
+	// Respond to an addNode event
 	CSLEDIT_NodeWatcher.prototype.addNode = function (id, position, node, numAdded) {
 		if (this.nodeData !== null) {
 			if (node.cslId <= this.nodeData.cslId) {
 				// shift the nodeData forward
 				this.nodeData.cslId += numAdded;
-				this.nodeUpdated();
+				this._nodeUpdated();
 			}
 		} else {
-			this.updateNodeData();
-			this.nodeUpdated();
+			this._updateNodeData();
+			this._nodeUpdated();
 		}
 	};
 
+	// Respond to a deleteNode event
 	CSLEDIT_NodeWatcher.prototype.deleteNode = function (id, numDeleted) {
 		if (this.nodeData === null) {
 			return;
@@ -75,17 +69,18 @@ define(['src/debug'], function (debug) {
 
 		if (this.nodeData.cslId >= id && this.nodeData.cslId < id + numDeleted) {
 			// this node has been deleted
-			this.updateNodeData();
-			this.nodeUpdated();
+			this._updateNodeData();
+			this._nodeUpdated();
 			return;
 		}
 
 		if (this.nodeData.cslId >= id + numDeleted) {
 			this.nodeData.cslId -= numDeleted;
-			this.nodeUpdated();
+			this._nodeUpdated();
 		}
 	};
 
+	// Respond to an amendNode event
 	CSLEDIT_NodeWatcher.prototype.amendNode = function (id, amendedNode) {
 		if (this.nodeData === null) {
 			return;
@@ -93,7 +88,7 @@ define(['src/debug'], function (debug) {
 
 		if (id === this.nodeData.cslId) {
 			this.nodeData = amendedNode;
-			this.nodeUpdated();
+			this._nodeUpdated();
 		}
 	};
 

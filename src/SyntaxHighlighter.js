@@ -32,6 +32,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			return highlightableElements.find('div' + attribute + ', ' + 'span' + attribute);
 		};
 
+		// Called after every time the selected node changes
 		var selectedNodeChanged = function (newSelectedCslId) {
 			selectedCslId = newSelectedCslId;
 
@@ -43,8 +44,9 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 				.addClass("selected");
 		};
 
+		// build stack starting at the innermost node (the last in the hoveredNodeStack list)
+		// and successively prepending the outer nodes to the start of the list with unshift()
 		var addToHoveredNodeStack = function (target) {
-			// build stack 'backwards' from the inner node outwards
 			var parentNode;
 			
 			if (typeof target.attr("cslid") !== "undefined") {
@@ -57,20 +59,24 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
-		var removeFromHoveredNodeStack = function (cslidElements, removeAll) {
-			// pop one node, or all nodes, from hoveredNodeStack
+		// Pop one node from the hoveredNodeStack
+		// Or, if removeAll is true, empty the hoveredNodeStack
+		//
+		// Un-highlight all popped nodes which are found within the cslIdElements jQuery selection
+		var removeFromHoveredNodeStack = function (cslIdElements, removeAll /* optional */) {
 			var poppedNode;
 
 			if (hoveredNodeStack.length > 0) {
 				poppedNode = hoveredNodeStack.pop();
-				unHighlightNode(poppedNode, cslidElements);
+				unHighlightNode(poppedNode, cslIdElements);
 
 				if (removeAll) {
-					removeFromHoveredNodeStack(cslidElements, removeAll);
+					removeFromHoveredNodeStack(cslIdElements, removeAll);
 				}
 			}
 		};
 
+		// Add highlighting to the top node in the nodeStack
 		var highlightNode = function (nodeStack) {
 			var cslId = nodeStack[nodeStack.length - 1];
 
@@ -84,6 +90,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}, 100);
 		};
 
+		// Add highlighting to the cslId node
 		var highlightOutput = function (cslId)
 		{
 			var node = spansAndDivs(cslId);
@@ -127,6 +134,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Un-highlight all tree nodes
 		var unHighlightTree = function () {
 			var node;
 
@@ -134,6 +142,8 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			highlightedTreeNodes.children('a').removeClass("highlighted");
 		};
 
+		// Un-highlight any tree node which isn't a descendent of the
+		// instanceNode jQuery element
 		var unHighlightIfNotDescendentOf = function (instanceNode) {
 			var index, nodes;
 
@@ -193,12 +203,13 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
-		var unHighlightNode = function (nodeIndex, cslidElements) {
+		// Un-highlight the node with the given cslId
+		var unHighlightNode = function (cslId, cslIdElements) {
 			var	node;
-			if (typeof(cslidElements) === "undefined") {
-				node = spansAndDivs(nodeIndex);
+			if (typeof(cslIdElements) === "undefined") {
+				node = spansAndDivs(cslId);
 			} else {
-				node = cslidElements.filter('[cslid="' + nodeIndex + '"]');
+				node = cslIdElements.filter('[cslid="' + cslId + '"]');
 			}
 
 			if (node.hasClass("selected"))
@@ -209,12 +220,13 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Respond to hover event in the example output spans
 		var hover = function (event) {
-			var cslidElements = spansAndDivs(),
+			var cslIdElements = spansAndDivs(),
 				target = $(event.target).closest("[cslid]");
 			
 			// remove all
-			removeFromHoveredNodeStack(cslidElements, true);
+			removeFromHoveredNodeStack(cslIdElements, true);
 
 			// populate hovered node stack
 			addToHoveredNodeStack(target);
@@ -227,10 +239,11 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Respond to unhover event in the example output spans
 		var unhover = function () {
-			var cslidElements = spansAndDivs();
+			var cslIdElements = spansAndDivs();
 
-			removeFromHoveredNodeStack(cslidElements);
+			removeFromHoveredNodeStack(cslIdElements);
 			
 			if (hoveredNodeStack.length > 0) {
 				highlightNode(hoveredNodeStack.slice());
@@ -239,6 +252,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Setup event handlers for
+		// - Hovering over example output
+		// - Clicking example output
+		// - Hovering over tree view
 		var setupEventHandlers = function () {
 			spansAndDivs().hover(hover, unhover);
 
@@ -284,12 +301,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 				},
 				function (event) { /* no-op */ }
 			);
-
 		};
 
+		// Setup event handlers and other initialisation
 		var setupSyntaxHighlighting = function () {
-			var numCslNodes = CSLEDIT_data.numCslNodes();
-
 			// clear the hovered node stack
 			hoveredNodeStack.length = 0;
 			selectedCslId = -1;
@@ -302,6 +317,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 		
+		// Add elements to the jQuery selection of elements to apply syntax highlighting
+		//
+		// The elements must contain span[cslid] and/or div[cslid] descendent elements
+		// for this to work
 		var addHighlightableElements = function (newElements) {
 			highlightableElements = highlightableElements.add(newElements);
 		}

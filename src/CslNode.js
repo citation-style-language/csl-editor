@@ -1,7 +1,20 @@
 "use strict";
 
-// Wraps csl node objects as returned by CSLEDIT_data.getNode() and provides
-// helpful functions to access it's attributes
+// Wraps CSL node JSON objects and provides helpful functions to access thier attributes
+//
+// # CSL node JSON schema
+//
+// The CSL node JSON as used throughout the code has the following
+// members, and is one-to-one map of the XML tree in the corresponding *.csl file:
+//
+// - name       - string, name of the XML node e.g. 'text', 'macro', 'layout', 'style'
+// - textValue  - string, text contents of a childless XML node. e.g. the 'style/info/title' node
+// - attributes - list, each element corresponds to an XML attribute and has the following members:
+//     - key     - string
+//     - value   - string
+//     - enabled - boolean (optional, default is true), should the attribute be used in the output CSL
+// - children   - list of child nodes, all of which follow this schema
+// - cslId      - the zero-based index of this node within the whole tree, when traversed depth first
 
 define(['src/debug'], function (debug) {
 	// CSLEDIT_CslNode constructor
@@ -27,7 +40,7 @@ define(['src/debug'], function (debug) {
 		debug.assert(this instanceof CSLEDIT_CslNode);
 
 		if (nameOrNode.hasOwnProperty("name")) {
-			this.copy(nameOrNode);
+			this._copy(nameOrNode);
 			return;
 		}
 
@@ -42,7 +55,7 @@ define(['src/debug'], function (debug) {
 	};
 
 	// Creates a shallow copy of source
-	CSLEDIT_CslNode.prototype.copy = function (source) {
+	CSLEDIT_CslNode.prototype._copy = function (source) {
 		this.name = source.name;
 		this.attributes = source.attributes;
 		this.children = source.children;
@@ -50,29 +63,40 @@ define(['src/debug'], function (debug) {
 		this.cslId = source.cslId;
 	};
 
-	CSLEDIT_CslNode.prototype.setAttr = function (attr, value) {
+	// Set the given attribute to the given value
+	CSLEDIT_CslNode.prototype.setAttr = function (attributeName, value) {
 		var index;
 
-		index = this._indexOfAttr(attr);
+		index = this._indexOfAttr(attributeName);
 
 		if (index === -1) {
-			this.attributes.push({key: attr, value: value, enabled: true});
+			this.attributes.push({key: attributeName, value: value, enabled: true});
 		} else {
 			this.attributes[index].value = value;
 			this.attributes[index].enabled = true;
 		}
 	};
 
-	CSLEDIT_CslNode.prototype.setAttrEnabled = function (attr, enabled, defaultValue) {
+	// Enable the given attribute
+	//
+	// The reason to store the enabled state is so that the editor can remember the previous
+	// value after the user either:
+	//
+	// 1. Clicks 'Disable'
+	// 2. Changes the mode (CSLEDIT_schema.choices) of the node to one where a previously enabled
+	//    attribute is no longer present
+	//
+	// In both these cases, the user can now change their mind and have the old attribute retained
+	CSLEDIT_CslNode.prototype.setAttrEnabled = function (attributeName, enabled, defaultValue) {
 		var index;
 
 		defaultValue = defaultValue || "";
 
-		index = this._indexOfAttr(attr);
+		index = this._indexOfAttr(attributeName);
 		if (index === -1) {
 			if (enabled) {
 				this.attributes.push({
-					key: attr,
+					key: attributeName,
 					value: defaultValue,
 					enabled: true
 				});
@@ -85,15 +109,17 @@ define(['src/debug'], function (debug) {
 		this.attributes[index].enabled = enabled;
 	};
 
-	CSLEDIT_CslNode.prototype.hasAttr = function (attr) {
-		var index = this._indexOfAttr(attr);
+	// Is the attribute with the given name present
+	CSLEDIT_CslNode.prototype.hasAttr = function (attributeName) {
+		var index = this._indexOfAttr(attributeName);
 		return index !== -1 && this.attributes[index].enabled;
 	};
 
-	CSLEDIT_CslNode.prototype.getAttr = function (attr) {
+	// Gets the attribute with the given attribute name
+	CSLEDIT_CslNode.prototype.getAttr = function (attributeName) {
 		var index;
 
-		index = this._indexOfAttr(attr);
+		index = this._indexOfAttr(attributeName);
 
 		if (index === -1 ||
 				(this.attributes[index].hasOwnProperty('enabled') && !this.attributes[index].enabled)) {
@@ -104,10 +130,10 @@ define(['src/debug'], function (debug) {
 	};
 
 	// private function, returns -1 if can't find the attribute
-	CSLEDIT_CslNode.prototype._indexOfAttr = function (attrName) {
+	CSLEDIT_CslNode.prototype._indexOfAttr = function (attributeName) {
 		var index = -1;
 		$.each(this.attributes, function (i, attr) {
-			if (attr.key === attrName) {
+			if (attr.key === attributeName) {
 				index = i;
 				return false;
 			}

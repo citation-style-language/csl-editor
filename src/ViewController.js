@@ -118,7 +118,7 @@ define(
 					});
 
 				// Use this for debugging if you're not sure the view accurately reflects the data
-				//tree.setVerifyAllChanges(true);
+				//tree._setVerifyAllChanges(true);
 				tree.setCallbacks({
 					loaded : treeLoaded,
 					selectNode : selectNodeInView(tree),
@@ -293,8 +293,9 @@ define(
 			selectedNodeChanged();
 		};
 
+		// Select the given cslId node from within the given highlighted nodes
 		var selectNode = function (
-				id,
+				cslId,
 				highlightedNodes,
 				missingNodePath // optional: if selection represents a missing node
 				) {
@@ -302,26 +303,26 @@ define(
 				headingNode;
 
 			// ensure it's a number
-			id = parseInt(id, 10);
+			cslId = parseInt(cslId, 10);
 
-			if (id === -1) {
-				selectedNodeId = id;
+			if (cslId === -1) {
+				selectedNodeId = cslId;
 				selectedNodeChanged(missingNodePath);
 				return;
 			}
 
-			headingNode = treeView.find('span[cslid=' + id + ']');
+			headingNode = treeView.find('span[cslid=' + cslId + ']');
 
 			if (typeof(highlightedNodes) === "undefined") {
-				treeNode = treeView.find('li[cslid=' + id + '] > a');
+				treeNode = treeView.find('li[cslid=' + cslId + '] > a');
 			} else {
-				treeNode = highlightedNodes.filter('li[cslid=' + id + ']').children('a');
+				treeNode = highlightedNodes.filter('li[cslid=' + cslId + ']').children('a');
 			}
 
 			if (headingNode.length === 0 && treeNode.length > 0) {
 				clickNode(treeNode.first());
 			} else {
-				selectedNodeId = id;
+				selectedNodeId = cslId;
 				selectedNodeChanged();
 			}
 		};
@@ -391,7 +392,6 @@ define(
 			treeView.find('li.errorParent').removeClass('errorParent');
 			treeView.find('li[data-error]').each(function (i, element) {
 				var parents = $(element).parents('li');
-				console.log("adding error to " + parents.length + " parents");
 				parents.addClass('errorParent');
 			});
 		};
