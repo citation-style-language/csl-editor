@@ -60,10 +60,18 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				"rights"
 			];
 
+		// This returns a JSON object representing the whole CSL tree
+		// exactly as it's stored in local storage
+		//
+		// Each node of the tree contains the same member variables as CSLEDIT_CslNode
 		var get = function () {
 			return CSLEDIT_storage.getItemJson(CSL_DATA);
 		};
 
+		// This sets the JSON object representing the whole CSL tree
+		// as it's stored in local storage
+		//
+		// Each node of the tree contains the same member variables as CSLEDIT_CslNode
 		var set = function (cslData) {
 			var updatedNode,
 				iter,

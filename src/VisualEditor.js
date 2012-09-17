@@ -525,11 +525,11 @@ define(
 			editorElement.find('#bottomRightContainer').css('width', '');
 		};
 
+		// checks that the style conforms to repository conventions and
+		// prompts the user to change it if it doesn't
+		//
 		// returns true to continue, false to cancel
 		var conformStyleToRepoConventions = function () {
-			// checks that the style conforms to repository conventions and
-			// prompts the user to change it if it doesn't
-			
 			var generatedStyleId,
 				links,
 				selfLinkNode,

@@ -2,7 +2,13 @@
 
 // Hard-coded configuration data used to populate the UI
 
-define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
+define(
+		[	'src/CslNode',
+			'src/debug'
+		], function (
+			CSLEDIT_CslNode,
+			debug
+		) {
 	var CSLEDIT_uiConfig = {};
 
 	// This allows customising the tree view on the left
