@@ -11,6 +11,7 @@ define([	'src/MultiPanel',
 			'src/uiConfig',
 			'src/CslNode',
 			'src/dataInstance',
+			'src/xmlUtility',
 			'src/debug',
 			'jquery.ui'
 		], function (
@@ -19,6 +20,7 @@ define([	'src/MultiPanel',
 			CSLEDIT_uiConfig,
 			CSLEDIT_CslNode,
 			CSLEDIT_data,
+			CSLEDIT_xmlUtility,
 			debug,
 			jquery_ui
 		) {
@@ -366,7 +368,7 @@ define([	'src/MultiPanel',
 			$.each(CSLEDIT_data.getNodesFromPath("style/macro"), function (i, node) {
 				var cslNode = new CSLEDIT_CslNode(node);
 				if (cslNode.hasAttr("name")) {
-					dropdownValues.push(cslNode.getAttr("name"));
+					dropdownValues.push(CSLEDIT_xmlUtility.htmlEscape(cslNode.getAttr("name")));
 				}
 			});
 		}
