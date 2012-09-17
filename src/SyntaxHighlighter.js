@@ -16,6 +16,8 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			highlightedTreeNodes = $(),
 			highlightTimeout;
 
+		// Returns all spans and divs with the given cslId, and optionally
+		// with the given className
 		var spansAndDivs = function (cslId, className) {
 			var attribute;
 			if (typeof(cslId) === "undefined" || cslId === null) {
@@ -94,6 +96,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Selects the node which the user is currently hovered over
+		//
+		// (called reverseSelect because it maps from the output representation to the 
+		// node in the original CSL tree)
 		var reverseSelectNode = function (clickedCslId) {
 			var index,
 				cslId = parseInt(hoveredNodeStack[hoveredNodeStack.length - 1], 10),
@@ -102,11 +108,17 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			if (hoveredNodeStack.length === 0) {
 				cslId = clickedCslId;
 			} else {
-				// skip the macro definition nodes, jump to the referencing 'text' node instead
 				selectedNode = CSLEDIT_data.getNode(cslId);
 				if (selectedNode.name === "macro") {
-					debug.assert(hoveredNodeStack.length > 1);
-					cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
+					if (hoveredNodeStack.length > 1) {
+						// Skip the macro definition nodes, jump to the referencing 'text' node instead
+						cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
+					} else {
+						// The macro node is the outermost one, this happens in the
+						// NodePathView when selecting a Macro definition within the
+						// 'Macros' tree
+						cslId = clickedCslId;
+					}
 				}
 			}
 
