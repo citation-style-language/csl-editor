@@ -59,9 +59,6 @@ define(
 				styleEntry.parentStyleTitle = CSLEDIT_cslStyles.styles().styleTitleFromId[style.masterId];
 			}
 
-			// TODO: may want to sanitise styleEntry.citation and styleEntry.bibliography
-			//       to remove any <script> tags since this will get written straight to
-			//       the DOM
 			styleEntry.citation = CSLEDIT_cslStyles
 				.exampleCitations()
 				.exampleCitationsFromMasterId[style.masterId][exampleIndex]
