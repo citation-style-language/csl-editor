@@ -26,6 +26,8 @@ Play with the reference implementation here: [Citation Style Editor](http://stev
 - [jQuery UI Layout Plugin](http://layout.jquery-dev.net)
 - [jQuery hoverIntent Plugin](http://cherne.net/brian/resources/jquery.hoverIntent.html)
 - [jQuery scrollTo Plugin](http://demos.flesler.com/jquery/scrollTo/)
-- [require.js](http://requirejs.org/)
+- [RequireJS](http://requirejs.org/)
+- [mustache](http://mustache.github.com/) (used to generate HTML from templates)
+- [pagedown](http://code.google.com/p/pagedown/) (used to generate source code docmentation)
 
 
