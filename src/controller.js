@@ -18,6 +18,10 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 		undoCommandHistory = [],
 		cslData;
 
+	// Sets the CSL_Data instance to:
+	//
+	// - issue commands to
+	// - get information about the current CSL style
 	var setCslData = function (_cslData) {
 		$.each(commands, function (index, command) {
 			debug.assertEqual(typeof _cslData[command], "function", "cslData must contain: " + command);
@@ -80,18 +84,27 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 		}
 	};
 
+	// Perform the inverse of the previous command
+	//
+	// Check that commandHistory() is not empty before calling this
 	var undo = function () {
 		var command = commandHistory.pop();
 
 		_exec(command.inverse.command, command.inverse.args, undoCommandHistory);
 	};
 
+	// Perform the inverse of the previous undo action
+	//
+	// Check that undoCommandHistory() is not empty before calling this
 	var redo = function () {
 		var command = undoCommandHistory.pop();
 
 		_exec(command.inverse.command, command.inverse.args, commandHistory);
 	};
 
+	// Issue the given command with the given arguments to the CSLEDIT_Data instance
+	//
+	// If silent is not true, it will display an error dialog
 	var exec = function (command, args, silent /* optional, default is false */) {
 		var result;
 

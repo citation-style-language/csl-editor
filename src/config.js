@@ -1,5 +1,10 @@
+// Sets configuration options for RequireJS
+//
+// Note: the 'baseURL' option must be specified in the calling page,
+//       since that is what it's relative to
+
 requirejs.config({
-	// we don't know where the page is so we must rely on it for a base url
+	// Aliases for some of the external paths
 	paths: {
 		'jquery.ui' : 'external/jquery-ui-1.8.22.custom.min',
 		'jquery.hotkeys' : 'external/jstree/_lib/jquery.hotkeys',
@@ -17,6 +22,9 @@ requirejs.config({
 
 		'external/markdown' : 'external/pagedown/Markdown.Converter'
 	},
+
+	// For dependencies which don't use RequireJS, this says what they depend on,
+	// and which (if any) global variable they export
 	shim: {
 		'jquery.ui': {
 			deps : ['jquery']

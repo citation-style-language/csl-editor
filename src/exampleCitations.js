@@ -204,7 +204,7 @@ define(
 
 	var update = function () {
 		if (!suppressUpdate && typeof(CSLEDIT_viewController) !== "undefined") {
-			CSLEDIT_viewController.styleChanged("formatCitations");
+			CSLEDIT_viewController.styleChanged("updateFinished");
 		}
 	};
 

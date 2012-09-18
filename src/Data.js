@@ -504,7 +504,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 		var addNode = function (cslId, position, newNode) {
 			var newCslId = _addNode(cslId, position, newNode),
 				inverse;
-			emit("formatCitations");
+			emit("updateFinished");
 
 			// return the inverse command for undo functionality
 			return {
@@ -615,7 +615,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 
 			deletedNode = _deleteNode(cslId);
 
-			emit("formatCitations");
+			emit("updateFinished");
 
 			// return the inverse command for undo functionality
 			return {
@@ -687,7 +687,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			debug.assert(typeof node !== "undefined");
 			set(cslData);
 			emit("amendNode", [cslId, node]);
-			emit("formatCitations");
+			emit("updateFinished");
 			// return inverse command
 			return {
 				command : "amendNode",
@@ -725,7 +725,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 
 			callbacksEnabled = true;
 
-			emit("formatCitations");
+			emit("updateFinished");
 			// return inverse command
 			return {
 				command : "moveNode",

@@ -139,6 +139,9 @@ define(
 		CSLEDIT_exampleCitations.setReferenceIndexesForCitation(citation, checked);
 	};
 
+	// Presents a dialog allowing customisation of the given inline citation
+	//
+	// - _citation - the integer index of the citation to edit
 	var editCitation = function (_citation) {
 		citation = _citation;
 		updateReferenceList();

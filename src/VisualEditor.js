@@ -478,7 +478,7 @@ define(
 				if (typeof userOnChangeCallback === "function") {
 					CSLEDIT_data.addViewController({
 						styleChanged : function (command) {
-							if (command === "formatCitations") {
+							if (command === "updateFinished") {
 								userOnChangeCallback();
 							}
 						}
@@ -486,7 +486,6 @@ define(
 				}
 
 				createTreeView();
-
 			});
 
 			setupTreeEditorToolbar();
@@ -524,10 +523,10 @@ define(
 			editorElement.find('#bottomRightContainer').css('width', '');
 		};
 
-		// checks that the style conforms to repository conventions and
-		// prompts the user to change it if it doesn't
+		// Called when saving a style. It Checks that the style conforms to repository
+		// conventions and prompts the user to change it if it doesn't
 		//
-		// returns true to continue, false to cancel
+		// Returns true to continue saving, false to cancel
 		var conformStyleToRepoConventions = function () {
 			var generatedStyleId,
 				links,
@@ -584,30 +583,47 @@ define(
 			return true;
 		};
 
+		// Sets a new CSL style from the given cslCode string
+		var setCslCode = function (cslCode) {
+			return CSLEDIT_controller.exec('setCslCode', [cslCode]);
+		};
+	
+		// Returns the current CSL style code as a string
+		var getCslCode = function () {
+			return CSLEDIT_data.getCslCode();
+		};
+
+		// Returns the current style name
 		var getStyleName = function () {
 			var styleNameNode = CSLEDIT_data.getNodesFromPath('style/info/title')[0];
 			return styleNameNode.textValue;
 		};
 
+		// Returns the current style ID
 		var getStyleId = function () {
 			var styleIdNode = CSLEDIT_data.getNodesFromPath('style/info/id')[0];
 			return styleIdNode.textValue;
 		};
-			
+		
+		// Sets the ID for the current style
 		var setStyleId = function (styleId) {
 			var styleIdNode = CSLEDIT_data.getNodesFromPath('style/info/id')[0];
 			styleIdNode.textValue = styleId;
 			CSLEDIT_controller.exec('amendNode', [styleIdNode.cslId, styleIdNode]);
 		};
 
-		// public API
+		// Public API
+		//
+		// Note: these are currently more of a set of convenience functions than a complete API
+		//
+		// There is nothing stopping you using the 'proper' internal API and this is the recommended
+		// method at the moment.
+		//
+		// See https://github.com/citation-style-editor/csl-editor/wiki/Visual-Editor for some
+		// examples
 		return {
-			setCslCode : function (cslCode) {
-				return CSLEDIT_controller.exec('setCslCode', [cslCode]);
-			},
-			getCslCode : function () {
-				return CSLEDIT_data.getCslCode();
-			},
+			setCslCode : setCslCode,
+			getCslCode : getCslCode,
 			getStyleName : getStyleName,
 			getStyleId : getStyleId,
 			setStyleId : setStyleId,

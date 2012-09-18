@@ -675,7 +675,7 @@ define([	'src/uiConfig',
 			verifyTree();
 		};
 
-		// Returns a list of the currently selected node stack,
+		// Returns a list of the currently selected node stack cslIds,
 		// or an empty list if no node in this tree is selected
 		var getSelectedNodePath = function () {
 			var selectedNodes = [],

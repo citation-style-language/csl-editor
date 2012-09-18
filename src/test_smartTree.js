@@ -233,7 +233,7 @@ define(
 			styleChanged : function (command, args) {
 
 				debug.log("Fake view exec: " + command + ": " + JSON.stringify(args));
-				if (command === "formatCitations") {
+				if (command === "updateFinished") {
 					return;
 				}
 		

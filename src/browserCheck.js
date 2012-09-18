@@ -7,6 +7,7 @@
 //       the version.
 
 define({
+	// Returns true if the browser is compatible with the editor, false otherwise
 	isCompatible : function () {
 		return $.browser.webkit || $.browser.mozilla || $.browser.chrome;
 	}
