@@ -92,7 +92,7 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 		return "http://www.zotero.org/styles/" + getNormalisedStyleTitle(styleTitle);
 	};
 
-	// 
+	// Returns the URL of the style with the given styleId on this server
 	var localURLFromZoteroId = function (styleId) {
 		var baseUrl = "external/csl-styles/";
 		if (styles().masterIdFromId[styleId] !== styleId) {

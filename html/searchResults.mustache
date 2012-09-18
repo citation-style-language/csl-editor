@@ -1,0 +1,45 @@
+{{#numStyles}}
+<p>Displaying {{numStyles}} results:</p>
+{{/numStyles}}
+{{^numStyles}}
+<p>No results found</p>
+{{/numStyles}}
+
+{{#styles}}
+<p>
+<table{{#featuredStyle}} class=featuredStyle {{/featuredStyle}}>
+	<tr>
+		<td colspan=3>
+			<span class=featuredStyle>Popular</span>
+			<a class="style-title" href="{{localURL}}">{{styleTitle}}</a>
+			{{#parentStyleId}}
+				(same as <a href="{{parentStyleURL}}">{{parentStyleTitle}}</a>
+			{{/parentStyleId}}
+		</td>
+	</tr>
+	<tr>
+		<td nowrap="nowrap"><span class="faint">Inline citation</span></td>
+		<td class=match>{{{citation}}}</td>
+		{{#citationCloseness}}
+		<td class="closeness match">{{citationCloseness}}</td>
+		{{/citationCloseness}}
+	</tr>
+	<tr>
+		<td nowrap="nowrap"><span class="faint">Bibliography</span></td>
+		<td class=match>{{{bibliography}}}</td>
+		{{#bibliographyCloseness}}
+		<td class="closeness match">{{bibliographyCloseness}}</td>
+		{{/bibliographyCloseness}}
+	</tr>
+	<tr>
+		<td>
+			<button class="installStyle" data-styleId="{{styleId}}">Install</button>
+		</td>
+		<td>
+			<button class="editStyle" data-styleId="{{styleId}}">Edit</button>
+			<button class="viewCode" data-styleId="{{styleId}}">View code</button>
+		</td>
+	</tr>
+</table>
+</p>
+{{/styles}}
