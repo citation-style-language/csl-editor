@@ -1,8 +1,8 @@
-## Licence Info
+# Licence Info
 
 CSL Editor is under MIT License.
 
-## External Dependencies
+# External Dependencies
 
 Here is a list of the projects in external/, checks if their license is compatible with MIT and some
 information about the projects.
@@ -11,7 +11,7 @@ Where possible or convenient, the external projects are included as git submodul
 
 * citeproc: ok
    - License: Common Public Attribution License Version 1.0 (CPAL). (Which requires attribution)
-   - Compatible with MIT: yes (Linking from code with a different license is allowed).
+   - Compatible with MIT: yes (Linking from code with a different license is allowed)
 
 * codemirror2: ok
    - License: MIT
