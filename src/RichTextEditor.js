@@ -13,7 +13,7 @@ define(
 	var CSLEDIT_RichTextEditor = function (containerElement, onChange) {
 		var that = this;
 
-		this.editor = $('<div>')
+		this.editor = $('<div/>')
 			.attr('contenteditable', 'true')
 			.addClass('editor')
 			.css("cursor", "text");

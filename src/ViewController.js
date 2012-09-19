@@ -100,7 +100,7 @@ define(
 				row = $('<div id="%1"><div class="heading"/><div class="tree"/></div>'.replace(
 					'%1', value.id));
 				row.appendTo(treeView);
-				treeView.append($('<div class=spacer></div>'));
+				treeView.append($('<div class=spacer />'));
 			});
 
 			$.each(CSLEDIT_uiConfig.smartTreeSchema, function (index, value) {
@@ -159,7 +159,7 @@ define(
 			if (selectedView !== null &&
 					selectedNode() === -1 && "getMissingNodePath" in selectedView) {
 				propertyPanelElement.html(Mustache.to_html(
-					'<h3>The {{missingNode}} node doesn\'t exist</h3>' + 
+					'<h3>The {{missingNode}} node doesn\'t exist</h3>' +
 					'<p>Use the "+" Add Node button at the top left to add it.</p>',
 					{ missingNode : selectedView.getMissingNodePath() }
 				));

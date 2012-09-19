@@ -18,6 +18,7 @@ define(
 			'src/dataInstance',
 			'src/cslStyles',
 			'src/urlUtils',
+			'src/mustache',
 			'src/debug',
 			'jquery.hoverIntent',
 			'jquery.layout'
@@ -38,6 +39,7 @@ define(
 			CSLEDIT_data,
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils,
+			CSLEDIT_mustache,
 			debug,
 			jquery_hoverIntent,
 			jquery_layout
@@ -151,27 +153,27 @@ define(
 			window.location.href = reloadURL + "?styleURL=" + newURL;
 		};
 
+		// TODO: refactor - move this to it's own module
 		var showAddNodeDialog = function () {
-			var dialogDiv = $('<div id="addNodeDialog"></div>'),
-				node = CSLEDIT_data.getNode(CSLEDIT_viewController.selectedNode()),
+			var node = CSLEDIT_data.getNode(CSLEDIT_viewController.selectedNode()),
 				translatedCslId,
 				translatedNodeInfo,
 				translatedParentName,
 				possibleElements,
 				element,
-				table = $('<table></table>'),
-				possibleElementsExist = false;
+				possibleElementsExist = false,
+				dialogDiv,
+				mustacheData = {};
 
 			if (node === null) {
 				alert("Please select a node in to create within first");
 				return;
 			}
 
-			dialogDiv.attr('title', 'Add node within ' + CSLEDIT_uiConfig.displayNameFromNode(node));
+			mustacheData.parentDisplayName = CSLEDIT_uiConfig.displayNameFromNode(node);
 
-			// populate with possible child elements based on schema
-			
-			// in case the user is selecting a macro instance:
+			// If the user is selecting a macro instance, add a node within
+			// the corresponding macro definition
 			translatedCslId = CSLEDIT_data.macroDefinitionIdFromInstanceId(node.cslId);
 			translatedNodeInfo = CSLEDIT_data.getNodeAndParent(translatedCslId);
 		
@@ -181,6 +183,7 @@ define(
 				translatedParentName = translatedNodeInfo.parent.name;
 			}
 
+			// populate with possible child elements based on schema
 			possibleElements = CSLEDIT_viewController.selectedViewProperty("possibleChildren");
 			if (possibleElements === null) {
 				possibleElements = {};
@@ -218,34 +221,24 @@ define(
 				}
 			}
 
+			mustacheData.childNodes = [];
 			$.each(possibleElements, function (element) {
-				var img = '<td></td>',
-					nodeIcon = CSLEDIT_uiConfig.nodeIcons[element],
-					documentation = CSLEDIT_schema.documentation(
-						translatedNodeInfo.node.name + "/" + element),
-					row,
-					displayName;
+				var documentation,
+					nodeData = {
+						nodeName: element,
+						displayName: CSLEDIT_uiConfig.displayNameFromNode(new CSLEDIT_CslNode(element))
+					};
 
-				if (typeof nodeIcon !== "undefined") {
-					img = '<td><img src="' + CSLEDIT_urlUtils.getResourceUrl(nodeIcon) + '"></img></td>';
+				if (element in CSLEDIT_uiConfig.nodeIcons) {
+					nodeData.imageUrl =
+						CSLEDIT_urlUtils.getResourceUrl(CSLEDIT_uiConfig.nodeIcons[element]);
 				}
 
-				displayName = 
-					CSLEDIT_uiConfig.displayNameFromNode(new CSLEDIT_CslNode(element));
-
-				debug.log("display name = " + displayName);
-
-				row = $('<tr>' + img + '<td><button class="addNodeType" data-nodeName="' +
-					element + '">' + 
-					displayName + 
-					'</button></td></tr>');
-
+				documentation = CSLEDIT_schema.documentation(translatedNodeInfo.node.name + "/" + element);
 				if (typeof(documentation) !== "undefined") {
-					row.append('<td>' + documentation + '</td>');
+					nodeData.documentation = documentation;
 				}
-
-				table.append(row);
-
+				mustacheData.childNodes.push(nodeData);
 				possibleElementsExist = true;
 			});
 
@@ -254,8 +247,7 @@ define(
 				return;
 			}
 
-			dialogDiv.append(table);
-
+			dialogDiv = $(CSLEDIT_mustache.toHtml('addNodeDialog', mustacheData));
 			dialogDiv.find('button.addNodeType').on('click', function (event) {
 				var target = $(event.target),
 					nodeName = target.attr('data-nodeName'),

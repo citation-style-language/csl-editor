@@ -43,7 +43,7 @@ define(
 		} else {
 			title = nodeData.textValue;
 		}
-		this.element.find('span[cslid]').html(CSLEDIT_xmlUtility.htmlEscape(title)).attr('cslid', nodeData.cslId);
+		this.element.find('span[cslid]').text(title).attr('cslid', nodeData.cslId);
 	};
 
 	return CSLEDIT_Titlebar;
