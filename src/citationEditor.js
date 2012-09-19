@@ -75,24 +75,25 @@ define(
 				select;
 
 			input = $('<input/>', {
-				type : "checkbox",
-				id : "citationEditorReference" + i
-			});
+					type : "checkbox",
+					id : "citationEditorReference" + i
+				});
 			label1 = $('<label/>', {
-				for : "citationEditorReference" + i
-			}).append('<strong>' + reference.type + '</strong>');
+					for : "citationEditorReference" + i
+				}).append($('<strong/>').text(reference.type));
 			label2 = $('<label/>', {
-				for : "citationEditorReference" + i
-			}).append(reference.title);
+					for : "citationEditorReference" + i
+				}).text(reference.title);
 			select = $('<select/>');
 			$.each(CSLEDIT_exampleData.additionalOptions, function (i, option) {
-				select.append('<option>' + option.description + '</option>');
+				select.append($('<option/>').text(option.description));
 			});
-			var desc;
-			desc = CSLEDIT_exampleData.additionalOptions[
+
+			var description;
+			description = CSLEDIT_exampleData.additionalOptions[
 				CSLEDIT_exampleCitations.getOption(citation, i)].description;
-			debug.log(desc);
-			select.val(desc);
+			debug.log(description);
+			select.val(description);
 
 			row.append($('<td/>').append(input));
 			row.append($('<td/>').append(label1));

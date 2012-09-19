@@ -41,10 +41,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 	var nameNodes = ["author", "contributor"];
 
 	var attributeEditorRow = function (item, node, schemaAttributes) {
-		var thisRow = $('<div></div>');
+		var thisRow = $('<div/>');
 		$.each(schemaAttributes, function (name) {
 			var input, attributeValue;
-			thisRow.append(' <label>' + name + '</label> ');
+			thisRow.append(' ').append($('<label/>').text(name));
 
 			attributeValue = new CSLEDIT_CslNode(node).getAttr(name);
 
@@ -94,7 +94,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 
 			thisNode = new CSLEDIT_CslNode(nodeName);
 			if (!isNaN(cslId)) {
-				thisNode.copy(CSLEDIT_data.getNode(cslId));
+				thisNode = new CSLEDIT_CslNode(CSLEDIT_data.getNode(cslId));
 			}
 
 			if (type === "textValue") {
@@ -148,7 +148,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 	var nameEditorRow = function (item, cslNode) {
 		var thisRow, children, input, cslChildren;
 	   
-		thisRow = $('<div></div>');
+		thisRow = $('<div/>');
 		children = CSLEDIT_schema.childElements("info/author");
 
 		cslChildren = {};
@@ -159,7 +159,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 		$.each(children, function (child, unused) {
 			var value = "";
 
-			thisRow.append(' <label>' + child + '</label> ');
+			thisRow.append(' ').append($('<label/>').text(child)).append(' ');
 
 			if (child in cslChildren) {
 				value = cslChildren[child].textValue;
@@ -186,7 +186,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 	// It's assumed that infoNode will always refer to the correct node
 	// while the panel is visible
 	var setupPanel = function (_panel, _executeCommand) {
-		var simpleTextNodesTable = $('<table>');
+		var simpleTextNodesTable = $('<table/>');
 		
 		panel = _panel;
 		executeCommand = _executeCommand;
@@ -219,24 +219,24 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 					});
 				});
 
-				panel.append('<h4>' + pluralise(item.name) + '</h4>');
-				table = $("<table></table>");
+				panel.append($('<h4/>').text(pluralise(item.name)));
+				table = $("<table/>");
 				$.each(nodes, function (i, node) {
 					thisRow = editorRow(item, node, schemaAttributes);
 
 					// convert 1st thisRow into table title
 					if (typeof titleRow === "undefined") {
-						titleRow = $('<tr></tr>');
+						titleRow = $('<tr/>');
 						thisRow.find('label').each(function () {
-							titleRow.append($('<td></td>').append($(this)));
+							titleRow.append($('<td/>').append($(this)));
 						});
 						table.append(titleRow);
 					}
 					
 					// convert thisRow into table row
-					inputRow = $('<tr></tr>');
+					inputRow = $('<tr/>');
 					thisRow.find('input').each(function () {
-						inputRow.append($('<td></td>').append($(this)));
+						inputRow.append($('<td/>').append($(this)));
 					});
 
 					deleteButton = $('<button>Delete</button>');
@@ -245,13 +245,13 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 						setupPanel(panel, executeCommand);
 					});
 
-					inputRow.append($('<td></td>').append(deleteButton));
+					inputRow.append($('<td/>').append(deleteButton));
 					table.append(inputRow);
 				});
 
 				panel.append(table);
 				
-				addButton = $('<button>Add ' + item.name + '</button>');
+				addButton = $('<button/>').text('Add ' + item.name);
 				panel.append(addButton);
 
 				addButton.on('click', function () {
@@ -268,9 +268,9 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 
 				panel.append(thisRow);
 
-				simpleTextNodesTable.append($('<tr>')
-					.append($('<td>').append(thisRow.children('label')))
-					.append($('<td>').append(thisRow.children('input'))));
+				simpleTextNodesTable.append($('<tr/>')
+					.append($('<td/>').append(thisRow.children('label')))
+					.append($('<td/>').append(thisRow.children('input'))));
 			}
 		});
 

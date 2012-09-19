@@ -196,7 +196,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 
 		// create subOptionControl
 		if (that.mainOptions[mainOption].length > 1) {
-			subOptionControl = $('<select class="subOptionSelect"></select>').attr('data-index', i);
+			subOptionControl = $('<select class="subOptionSelect" />').attr('data-index', i);
 			$.each(that.mainOptions[mainOption], function (i, properties) {
 				subOptionControl.append($('<option/>').text(properties.subOption));
 				if (condition.attribute === properties.attribute) {
@@ -443,8 +443,8 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		
 		this.element.children().remove();
 
-		this.element.append($('<p/>')
-			.append(this.node.name + ' ')
+		this.element.append($('<p/>').text(this.node.name)
+			.append(' ')
 			.append(this.matchSelect)
 			.append(' of the following conditions are met'));
 
@@ -460,7 +460,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 			row.append($('<td class="mainOption" />').append(that.mainOptionControls[i]));
 			row.append($('<td/>').append(valueControl));
 
-			row.append($('<td></td>').append(that.subOptionControls[i]));
+			row.append($('<td/>').append(that.subOptionControls[i]));
 			if (i === that.valueControls.length - 1) {
 				row.append($('<td/>'));
 			} else {
@@ -475,7 +475,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 			if (i === that.valueControls.length - 1) {
 				row.append('<td class="add"><button class="addValue">+</button></td>');
 			} else {
-				row.append('<td class="add"></td>');
+				row.append('<td class="add" />');
 			}
 
 			table.append(row);

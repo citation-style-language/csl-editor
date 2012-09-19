@@ -13,7 +13,8 @@ define([	'src/MultiPanel',
 			'src/dataInstance',
 			'src/xmlUtility',
 			'src/debug',
-			'jquery.ui'
+			'jquery.ui',
+			'external/mustache'
 		], function (
 			CSLEDIT_MultiPanel,
 			CSLEDIT_MultiComboBox,
@@ -22,7 +23,8 @@ define([	'src/MultiPanel',
 			CSLEDIT_data,
 			CSLEDIT_xmlUtility,
 			debug,
-			jquery_ui
+			jquery_ui,
+			Mustache
 		) {
 	var onChangeTimeout,
 		multiInputs,
@@ -35,36 +37,36 @@ define([	'src/MultiPanel',
 		toolbarButtonSchema = {
 			'font-weight' : {
 				'normal' : 'default',
-				'bold' : { text : '<strong>B</strong>' }
+				'bold' : { html : '<strong>B</strong>' }
 				// 'light' not supported
 			},
 			'font-style' : {
-				'italic' : { text : '<i>I</i>' },
+				'italic' : { html : '<i>I</i>' },
 				'normal' : 'default'
 				// "oblique" not supported
 			},
 			'text-decoration' : {
 				'none' : 'default',
-				'underline' : { text : '<u>U</u>' }
+				'underline' : { html : '<u>U</u>' }
 			},
 			'font-variant' : {
 				'small-caps' : {
-					text : '<span style="font-variant: small-caps;">Small Caps</span>'
+					html : '<span style="font-variant: small-caps;">Small Caps</span>'
 				},
 				'normal' : 'default'
 			},
 			'vertical-align' : {
 				'baseline' : 'default',
-				'sup' : { text : 'x<sup>s</sup>' },
-				'sub' : { text : 'x<sub>s</sub>' }
+				'sup' : { html : 'x<sup>s</sup>' },
+				'sub' : { html : 'x<sub>s</sub>' }
 			},
 			'quotes' : {
 				'false' : 'default',
-				'true' : { text : '&#8220;&#8221;' }
+				'true' : { html : '&#8220;&#8221;' }
 			},
 			'strip-periods' : {
 				'false' : 'default',
-				'true' : { text : 'Strip Periods' }
+				'true' : { html : 'Strip Periods' }
 			}
 		},
 		choicePanel,
@@ -85,10 +87,10 @@ define([	'src/MultiPanel',
 	var inputAttributeRow = function (index, attributeName, schemaAttribute, enabled) {
 		var row, textInput;
 
-		row = $('<tr></tr>');
-		row.append($('<td align="right"></td>').append(label(index, attributeName)));
+		row = $('<tr/>');
+		row.append($('<td align="right" />').append(label(index, attributeName)));
 
-		textInput = $('<input class="propertyInput"></input>');
+		textInput = $('<input class="propertyInput" />');
 		textInput.attr('id', inputId(index));
 		addCustomClasses(textInput, attributeName);
 
@@ -100,13 +102,13 @@ define([	'src/MultiPanel',
 			textInput.attr('disabled', true);
 		}
 
-		row.append($('<td></td>').append(textInput));
+		row.append($('<td/>').append(textInput));
 
 		return row;
 	};
 
 	var label = function (index, attribute) {
-		var element = $('<label class="propertyLabel"></label>');
+		var element = $('<label class="propertyLabel" />');
 		element.attr('for', inputId(index));
 		element.attr('id', labelId(index));
 		element.html(attribute);
@@ -288,7 +290,7 @@ define([	'src/MultiPanel',
 					.attr('data-attribute', attributeName)
 					.attr('data-value', attributeValue)
 					.addClass('toolbarButton')
-					.html(control.text);
+					.html(control.html);
 
 				if (cslSchemaAttribute.documentation !== "") {
 					button.attr("title", cslSchemaAttribute.documentation);
@@ -368,7 +370,7 @@ define([	'src/MultiPanel',
 			$.each(CSLEDIT_data.getNodesFromPath("style/macro"), function (i, node) {
 				var cslNode = new CSLEDIT_CslNode(node);
 				if (cslNode.hasAttr("name")) {
-					dropdownValues.push(CSLEDIT_xmlUtility.htmlEscape(cslNode.getAttr("name")));
+					dropdownValues.push(cslNode.getAttr("name"));
 				}
 			});
 		}
@@ -418,13 +420,13 @@ define([	'src/MultiPanel',
 			thisRow = $('<tr/>');
 			thisRow.append($('<td align="right"/>').append(label(index, attributeName)));
 			thisRow.append($('<td/>').append(
-				'<label id="nodeAttribute' + index + '">' + dropdownValues[0] + '</label>'));
+				$('<label/>').attr('id', "nodeAttribute" + index).text(dropdownValues[0])));
 		} else if (dropdownValues.length > 1) {
-			thisRow = $('<tr></tr>');
-			thisRow.append($('<td align="right"></td>').append(label(index, attributeName)));
+			thisRow = $('<tr/>');
+			thisRow.append($('<td align="right" />').append(label(index, attributeName)));
 			if (schemaAttribute.list) {
 				multiInput = new CSLEDIT_MultiComboBox(
-						$('<td class="input"></td>'), dropdownValues, function () {nodeChanged(); });
+						$('<td class="input" />'), dropdownValues, function () {nodeChanged(); });
 				multiInput.val(attribute.value, true);
 				
 				if (!attribute.enabled && !schemaAttribute.hasOwnProperty("defaultValue")) {
@@ -435,19 +437,20 @@ define([	'src/MultiPanel',
 			} else {
 				thisRow.append((function () {
 					var select, cell;
-					select = $('<select id="' + inputId(index) + '" class="propertySelect" attr="' + 
-						index + '"></select>');
+					select = $('<select class="propertySelect" />')
+						.attr('id', inputId(index))
+						.attr('attr', index);
 					addCustomClasses(select, attributeName);
 					
 					$.each(dropdownValues, function (i, value) {
-						var option = $("<option>" + value + "</option>");
+						var option = $($("<option/>").text(value));
 						if (value in dropdownDocumentation) {
 							option.attr("title", dropdownDocumentation[value]);
 						}
 						select.append(option);
 					});
 
-					cell = $('<td class="input"></td>').append(select);
+					cell = $('<td class="input" />').append(select);
 					if (!attribute.enabled && !schemaAttribute.hasOwnProperty("defaultValue")) {
 						cell.attr('disabled', true);
 					}
@@ -462,13 +465,13 @@ define([	'src/MultiPanel',
 		var toggleButton;
 
 		if (!schemaAttribute.hasOwnProperty("defaultValue")) {
-			toggleButton = $('<button class="toggleAttrButton" attrIndex="' + index + '"></button>');
+			toggleButton = $('<button class="toggleAttrButton" />').attr('attrIndex', index);
 			if (attribute.enabled) {
-				toggleButton.html('Disable');
+				toggleButton.text('Disable');
 			} else {
-				toggleButton.html('Enable');
+				toggleButton.text('Enable');
 			}
-			thisRow.append($('<td></td>').append(toggleButton));
+			thisRow.append($('<td/>').append(toggleButton));
 		}
 		thisRow.find("#" + inputId(index)).val(attribute.value);
 			
@@ -569,15 +572,15 @@ define([	'src/MultiPanel',
 		var groupTables = {},
 			fieldsets = [],
 			miscTable = $('<table/>'),
-			miscFieldset = $('<fieldset class="float"><legend>' +
-				CSLEDIT_uiConfig.displayNameFromNode(nodeData) +
-				'</legend></fieldset>');
+			miscFieldset = $('<fieldset class="float" />').append(
+				$('<legend/>').text(CSLEDIT_uiConfig.displayNameFromNode(nodeData)));
 
 		$.each(CSLEDIT_uiConfig.attributeGroups, function (name, attributes) {
 			var fieldset;
 
 			groupTables[name] = $('<table/>');
-			fieldset = $('<fieldset class="float"><legend>' + name + '</legend></fieldset>');
+			fieldset = $('<fieldset class="float" />').append(
+				$('<legend/>').text(name));
 
 			if (attributes.indexOf("fontFormattingControls") !== -1) {
 				fieldset.append(toolbar);
@@ -634,7 +637,7 @@ define([	'src/MultiPanel',
 		// remove child nodes
 		panel.children().remove();
 
-		toolbar = $('<div class="toolbar"></div>');
+		toolbar = $('<div class="toolbar" />');
 
 		// TODO: data validation
 		switch (dataType) {
@@ -704,12 +707,14 @@ define([	'src/MultiPanel',
 			});
 		}
 
-		table = $('<table></table>');
+		table = $('<table/>');
 		// create value editor (if a text or data element)
 		if (dataType !== null) {
-			$('<tr><td align="right"><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
-				dataType + ' value</label></td>' + 
-				'<td class="input"><input id="textNodeInput" class="propertyInput"></input></td></tr>'
+			$(Mustache.to_html(
+				'<tr><td align="right"><label for="textNodeInput" id="textNodeInputLabel" class="propertyLabel">' +
+				'{{dataType}} value</label></td>' + 
+				'<td class="input"><input id="textNodeInput" class="propertyInput"></input></td></tr>',
+				{ dataType : dataType })
 			).appendTo(panel);
 		
 			$("#textNodeInput").val(nodeData.textValue);
