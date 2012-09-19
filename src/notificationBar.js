@@ -18,7 +18,7 @@ define(function () {
 			var percentage;
 
 			element.css({'display' : 'none'});
-			messageElement.html(message);
+			messageElement.text(message);
 
 			percentage = Math.round(50 * 
 				(element.parent().width() - element.width()) / element.parent().width());
