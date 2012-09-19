@@ -39,9 +39,6 @@ Where possible or convenient, the external projects are included as git submodul
 * jquery: ok
    - MIT License
 
-* json: ok
-   - License: Public Domain.
-
 * jstree: ok
    - License: MIT and GPL licenses
 
