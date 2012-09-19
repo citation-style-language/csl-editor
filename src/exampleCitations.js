@@ -1,6 +1,10 @@
 "use strict";
 
-// use this instead of accessing CSLEDIT_exampleData
+// Allows getting and setting
+//
+// - metadata for the example references
+// - example inline citations (citation clusters as citeproc-js calls them)
+
 define(
 		[	'jquery',
 			'src/storage',
