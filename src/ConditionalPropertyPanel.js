@@ -16,9 +16,9 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		this.conditions = []; // the 'model' for this view
 
 		// any / none / all selector
-		this.matchSelect = $('<select></select>');
+		this.matchSelect = $('<select/>');
 		$.each(CSLEDIT_schema.attributes('choose/if').match.values, function (i, value) {
-			that.matchSelect.append('<option>' + value.value + '</option>');
+			that.matchSelect.append($('<option>').text(value.value));
 		});
 
 		// generate mainOptions from the schema
@@ -92,7 +92,6 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 					}
 				});
 
-				debug.log("removing selected values from " + that.valueControls.length);
 				// remove currently selected values from other controls options
 				$.each(that.valueControls, function (i, valueControl) {
 					if (that.conditions[i].attribute === attribute.key) {
@@ -101,11 +100,9 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 						// remove all except current val
 						$this.find('option[value!="' + $this.val() + '"]').remove();
 
-						//debug.log("adding available options: " + availableOptions.length);
-
 						// add back the other available options
 						$.each(availableValues, function (i, option) {
-							$this.append('<option>' + option + '</option>');
+							$this.append($('<option/>').text(option));
 						});
 					}
 				});
@@ -162,7 +159,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 					possibleValues.push(possibleValue.value);
 				}
 			});
-		};
+		}
 
 		return possibleValues;
 	};
@@ -189,10 +186,9 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 			subOptionControl;
 
 		// create mainOption
-		mainOptionControl = $('<select class="mainOptionSelect"></select>');
-		mainOptionControl.attr('data-index', i);
+		mainOptionControl = $('<select class="mainOptionSelect" />').attr('data-index', i);
 		$.each(that.mainOptions, function (mainOption, properties) {
-			mainOptionControl.append('<option>' + mainOption + '</option>');
+			mainOptionControl.append($('<option/>').text(mainOption));
 		});
 		mainOption = that._attributeUI[condition.attribute].mainOption;
 		mainOptionControl.val(mainOption);
@@ -200,16 +196,15 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 
 		// create subOptionControl
 		if (that.mainOptions[mainOption].length > 1) {
-			subOptionControl = $('<select class="subOptionSelect"></select>');
-			subOptionControl.attr('data-index', i);
+			subOptionControl = $('<select class="subOptionSelect"></select>').attr('data-index', i);
 			$.each(that.mainOptions[mainOption], function (i, properties) {
-				subOptionControl.append($('<option>' + properties.subOption + '</option>'));
+				subOptionControl.append($('<option/>').text(properties.subOption));
 				if (condition.attribute === properties.attribute) {
 					subOptionControl.val(properties.subOption);
 				}
 			});
 		} else {
-			subOptionControl = $('<span></span>');
+			subOptionControl = $('<span/>');
 			$.each(that.mainOptions[mainOption], function (i, properties) {
 				subOptionControl.append(properties.subOption);
 			});
@@ -218,11 +213,10 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		
 		// create value control
 		if (that._possibleValues(condition.attribute).length > 1) {
-			valueControl = $('<select class="valueSelect"></select>');
-			valueControl.attr('data-index', i);
+			valueControl = $('<select class="valueSelect" />').attr('data-index', i);
 		
 			$.each(that._possibleValues(condition.attribute), function (i, possibleValue) {
-				valueControl.append('<option>' + possibleValue + '</option>');
+				valueControl.append($('<option/>').text(possibleValue));
 			});
 			valueControl.val(condition.value);
 		} else {
@@ -449,10 +443,10 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		
 		this.element.children().remove();
 
-		this.element.append($('<p></p>').
-				append(this.node.name + ' ').
-				append(this.matchSelect).
-				append(' of the following conditions are met'));
+		this.element.append($('<p/>')
+			.append(this.node.name + ' ')
+			.append(this.matchSelect)
+			.append(' of the following conditions are met'));
 
 		if (matchValue === "all") {
 			valueSeparator = '<span class="weak">and</span>';
@@ -461,21 +455,21 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		}
 
 		$.each(this.valueControls, function (i, valueControl) {
-			var row = $('<tr></tr>');
+			var row = $('<tr/>');
 
-			row.append($('<td class="mainOption"></td>').append(that.mainOptionControls[i]));
-			row.append($('<td></td>').append(valueControl));
+			row.append($('<td class="mainOption" />').append(that.mainOptionControls[i]));
+			row.append($('<td/>').append(valueControl));
 
 			row.append($('<td></td>').append(that.subOptionControls[i]));
 			if (i === that.valueControls.length - 1) {
 				row.append($('<td/>'));
 			} else {
-				row.append($('<td>' + valueSeparator + '</td>'));
+				row.append($('<td/>').html(valueSeparator));
 			}
 
 			row.append('<td class="delete"><button class="deleteValue">-</button></td>');
 			if (that.valueControls.length === 1) {
-				row.find('button.deleteValue').css({visibility:"hidden"});
+				row.find('button.deleteValue').css({visibility: "hidden"});
 			}
 
 			if (i === that.valueControls.length - 1) {

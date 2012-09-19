@@ -12,6 +12,7 @@ define(
 			'src/cslStyles',
 			'src/urlUtils',
 			'src/RichTextEditor',
+			'src/mustache',
 			'src/debug',
 			'external/xregexp',
 			'jquery.ui'
@@ -26,6 +27,7 @@ define(
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils,
 			CSLEDIT_RichTextEditor,
+			CSLEDIT_mustache,
 			debug,
 			XRegExp,
 			jquery_ui
@@ -105,10 +107,7 @@ define(
 				exampleCitation,
 				formattedCitation,
 				thisMatchQuality,
-				cleanFormattedBibliography,
-				row = function (title, value) {
-					return "<tr><td><span class=faint>" + title + "</span></td><td>" + value + "</td></tr>";
-				};
+				cleanFormattedBibliography;
 
 			debug.time("searchForStyle");
 
@@ -205,7 +204,7 @@ define(
 				result = "";
 
 			var getTagged = function () {
-				return "<mark>" + string.substring(from, to + 1) + "</mark>";
+				return $('<mark/>)').text(string.substring(from, to + 1))[0].outerHTML;
 			};
 
 			$.each(string, function (i, char) {
@@ -239,25 +238,17 @@ define(
 
 		var formatExampleDocument = function (userInput) {
 			var jsonDocument = CSLEDIT_exampleData.jsonDocumentList[exampleIndex],
-				table,
-				rows = [],
 				fieldsNotToPartialMatch = ["abstract"],
 				userWords,
-				elideLimit = 500;
+				elideLimit = 500,
+				outputData = {};
 			
 			if (typeof(userInput) !== "undefined") {
 				userWords = userInput.toLowerCase().split(XRegExp('\\P{L}', 'g'));
 				userWords.sort(function (a, b) { return b.length - a.length; });
 			}
 
-			table = $("<table/>");
-
-			if ("editor" in jsonDocument) {
-				var editor;
-				editor = personString(jsonDocument["editor"]);
-				debug.log("editor = " + editor);
-			}
-
+			outputData.fields = [];
 			$.each(jsonDocument, function (key, value) {
 				var order = CSLEDIT_uiConfig.fieldOrder.indexOf(key),
 					valueString,
@@ -315,21 +306,16 @@ define(
 			
 				valueString = tagMatches(valueString, matchingChars);
 
-				rows.push({
-					html : "<tr><td><span class=fieldTitle>" + CSLEDIT_uiConfig.capitaliseFirstLetter(key) +
-						"</span></td><td><span class=fieldValue>" + valueString + "</span></td></td>",
-					order : order
+				outputData.fields.push({
+					key: CSLEDIT_uiConfig.capitaliseFirstLetter(key),
+					value: valueString,
+					order: order
 				});
 			});
 
-			rows.sort(function (a, b) {return a.order - b.order; });
+			outputData.fields.sort(function (a, b) {return a.order - b.order; });
 
-			$.each(rows, function (i, row) {
-				table.append(row.html);
-			});
-
-			$("#exampleDocument").children().remove();
-			$("#exampleDocument").append(table);
+			$("#exampleDocument").html(CSLEDIT_mustache.toHtml("exampleMetadata", outputData));
 		};
 
 		var hasChanged = function () {

@@ -18,15 +18,12 @@ define(
 	var templateCache = {};
 
 	var toHtml = function (templateName, data) {
-		var template;
-		if (templateName in templateCache) {
-			template = templateCache[template];
-		} else {
+		if (!(templateName in templateCache)) {
 			$.ajax({
 				url : CSLEDIT_urlUtils.getResourceUrl("html/" + templateName + ".mustache"),
 				dataType : "text",
 				success : function (data) {
-					template = data;
+					templateCache[templateName] = data;
 				},
 				error : function () {
 					debug.assert(false, "Couldn't fetch mustache template: " + templateName);
@@ -35,7 +32,7 @@ define(
 			});
 		}
 
-		return Mustache.to_html(template, data);
+		return Mustache.to_html(templateCache[templateName], data);
 	};
 
 	return {

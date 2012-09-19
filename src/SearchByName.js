@@ -44,7 +44,6 @@ define(
 				styleId,
 				styleName,
 				masterId,
-				masterStyleName,
 				index;
 
 			$("#message").html("");
@@ -82,12 +81,6 @@ define(
 					if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
 						styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
 						masterId = CSLEDIT_cslStyles.styles().masterIdFromId[styleId];
-						if (masterId !== styleId) {
-							masterStyleName = ' (same as <a href="' + masterId + '">' +
-								CSLEDIT_cslStyles.styles().styleTitleFromId[masterId] + '</a>)';
-						} else {
-							masterStyleName = "";
-						}
 						result.push({
 								styleId : styleId,
 								masterId : masterId,

@@ -8,7 +8,7 @@ define(function () {
 	var CSLEDIT_MultiPanel = function (id) {
 		var that = this;
 
-		this.element = $('<fieldset class="multiPanel" id="' + id + '"></fieldset>');
+		this.element = $('<fieldset class="multiPanel"/>').attr('id', id);
 		this.typeLegend = $('<legend class="typeLegend">Type:</legend>');
 		this.typeSelect = $('<select class="typeSelect"/>');
 		this.typeLegend.append(this.typeSelect);
@@ -34,7 +34,7 @@ define(function () {
 		var that = this,
 			newPanel;
 
-		this.typeSelect.append($('<option>' + name + '</option>'));
+		this.typeSelect.append($('<option/>').text(name));
 
 		newPanel = $('<div/>').css({display: "none"});
 		this.contentPanels.push(newPanel);

@@ -7,6 +7,8 @@
 // 1. re-ordering the sort keys can cause crash
 // 2. no ascending/descending option for the sort keys
 //
+// Additionally, the HTML generation should not use string concatenation
+//
 // Currently there's some help text being displayed in src/propertyPanel.js instead,
 // because otherwise the node contains no controls
 
