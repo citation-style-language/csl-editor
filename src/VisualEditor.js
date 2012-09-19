@@ -324,7 +324,7 @@ define(
 					editorElement.find('#treeEditor')
 				);
 
-				// TODO: remove this global
+				// TODO: refactor - remove this global
 				window.CSLEDIT_viewController = new CSLEDIT_ViewController(
 					editorElement.find("#treeEditor"),
 					editorElement.find("#titlebar"),
