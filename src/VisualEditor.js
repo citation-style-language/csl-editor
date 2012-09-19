@@ -202,7 +202,7 @@ define(
 			if (typeof(name) === "undefined" || name === "") {
 				element.parent('li').remove();
 			} else {
-				element.html(name);
+				element.text(name);
 				element.click(onClick);
 			}
 		};
