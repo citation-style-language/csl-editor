@@ -9,21 +9,19 @@
 
 define(
 		[	'src/urlUtils',
+			'src/mustache',
 			'src/debug',
-			'external/mustache',
 			'external/markdown'
 		],
 		function (
 			CSLEDIT_urlUtils,
+			CSLEDIT_mustache,
 			debug,
-			Mustache,
 			Markdown
 		) {
 
 	var markdown = new Markdown.Converter();
 	
-	var jsModulesTemplate;
-
 	// returns a JSON object with documentation of the code at @param resource
 	var getSourceFileData = function (resource) {
 		var resourceUrl = CSLEDIT_urlUtils.getResourceUrl(resource),
@@ -123,19 +121,6 @@ define(
 	var generate = function (resources, element) {
 		element = $(element);
 
-		if (typeof(jsModulesTemplate) === "undefined") {
-			$.ajax({
-				url : CSLEDIT_urlUtils.getResourceUrl('html/jsModules.mustache'),
-				success : function (data) {
-					jsModulesTemplate = data;
-				},
-				error : function () {
-					debug.log("Couldn't fetch resource");
-				},
-				async : false
-			});
-		}
-
 		var jsModules = [];
 		populatePageData(resources, jsModules);
 
@@ -171,7 +156,7 @@ define(
 			totalLineCount += module.lineCount;
 		});
 
-		element.html(Mustache.to_html(jsModulesTemplate,
+		element.html(CSLEDIT_mustache.toHtml('jsModules',
 			{
 				modules : jsModules,
 				totalLineCount : totalLineCount,
