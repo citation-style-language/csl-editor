@@ -54,14 +54,8 @@ Where possible or convenient, the external projects are included as git submodul
 * require-jquery: ok
    - License: MIT or new BSD License
 
-* rhino: ok
-   - License: MPL 1.1 / GPL 2.0
-
 * r.js: ok
    - License: MIT or new BSD License
-
-* stacktrace:
-   - License: Domain Public
 
 * trang: ok
    - License: trang/copyright.txt says to keep the notice
