@@ -1,5 +1,7 @@
 "use strict";
 
+// Miscellaneous functions to deal with URLs
+
 define(['src/getUrl'], function (getUrlPlugin) {
 	// from https://gist.github.com/1771618
 	var getUrlVar = function (key) {
@@ -13,6 +15,7 @@ define(['src/getUrl'], function (getUrlPlugin) {
 				replace(/&/, "?"); // replace first & with ?
 	};
 
+	// Gets the absolute URL for a relative path using requireJS
 	var getResourceUrl = function (resourcePath, data) {
 		var url;
 		require(['src/getUrl!' + resourcePath], function (newUrl) {

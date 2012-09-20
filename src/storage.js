@@ -1,10 +1,16 @@
 "use strict";
 
+// Provides persistent key/value storage if localStorage is available,
+// otherwise falls back to a simple session based storage
+//
+// Triggers a callback when getItem() is called if the localStorage value has been
+// changed since the last time it was read during this session
+
 define(['src/debug'], function (debug) {
 	var CSLEDIT_Storage = function (useLocalStorageIfAvailable) {
-		// Use localStorage for persistance if available, otherwise use a simple
-		// session based dictionary
-		var simpleStorage = {},
+		var simpleStorage = {}, // duplicates the data in localStorage to use to verify that the
+		                        // localStorage hasn't been changed in another tab, or acts as
+								// the only storage if localStorage isn't available
 			simpleStorageAPI,
 			localStorageAPI,
 			finalAPI,

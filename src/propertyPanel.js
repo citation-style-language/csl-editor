@@ -1,18 +1,22 @@
 "use strict";
 
+// Creates property panels, chooses which property panel module to use for each node
+
 define(
 		[	'src/genericPropertyPanel',
 			'src/ConditionalPropertyPanel',
 			'src/infoPropertyPanel',
 			'src/sortPropertyPanel',
-			'src/controller'
+			'src/controller',
+			'src/mustache'
 		],
 		function (
 			CSLEDIT_genericPropertyPanel,
 			CSLEDIT_ConditionalPropertyPanel,
 			CSLEDIT_infoPropertyPanel,
 			CSLEDIT_sortPropertyPanel,
-			CSLEDIT_controller
+			CSLEDIT_controller,
+			CSLEDIT_mustache
 		) {
 	var suppressUpdates = false; // used to prevent panel updates triggered the panel itself
 
@@ -35,12 +39,7 @@ define(
 		// show appropriate property panel
 		switch (node.name) {
 		case "sort":
-			propertyPanelElement.children().remove();
-			propertyPanelElement.append(
-				"<p>This node allows you to sort your references depending on their " +
-				"metadata.</p>" +
-				'<p>Create new sort keys using the "+" add node button at the top left.</p>'
-				);
+			propertyPanelElement.html(CSLEDIT_mustache.toHtml("sortPropertyPanel"));
 
 		/* TODO: Re-enable sort property panel if:
 		 *         1. bug is fixed where re-ordering the sort keys causes crash
@@ -57,19 +56,7 @@ define(
 			new CSLEDIT_ConditionalPropertyPanel(propertyPanelElement, node, executeCommand);
 			break;
 		case "choose":
-			propertyPanelElement.children().remove();
-			propertyPanelElement.append(
-				"<p>This node allows you to customise the formatting " +
-				"depending on the properties of the reference being cited.</p>" +
-				"<p>e.g. To show the volume number <em>only</em> " +
-				"if the document type is article-journal:</p>" +
-				'<ol>' +
-				'<li>1. Use the "+" add node button at the top left to add an "if" node</li>' +
-				'<li>2. Edit the "if" node to say "The document type is article-journal"</li>' +
-				'<li>3. Within the "if" node, add a "number" node and set it\'s ' +
-				'variable to "volume"</li>' +
-				'</ol>'
-				);
+			propertyPanelElement.html(CSLEDIT_mustache.toHtml("choosePropertyPanel"));
 			break;
 		default:
 			dataType = CSLEDIT_schema.elementDataType(elementString);

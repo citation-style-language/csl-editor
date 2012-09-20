@@ -1,31 +1,35 @@
 "use strict";
 
-/* provides a way to edit space-delimited list of stings,
- * each of which must be one of the supplied values
- */
+// Allows provides a way to edit space-delimited list of stings,
+// each of which must be one of the supplied values
 
 define(['src/debug'], function (debug) {
+	// Constructs a MultiComboBox
 	var CSLEDIT_MultiComboBox = function (element, possibleValues, onChange, unique) {
+		var that = this;
 		this._element = element;
 		this._values = [];
 		this._onChange = onChange;
 		this._unique = unique;
+		this._possibleValues = possibleValues;
 
 		debug.assert(possibleValues.length > 0);
-		this._selectHtml = '<select><option>' +	possibleValues.join('</option><option>') +
-			'</option></select>';
-
+		
 		this._refresh(true);
 	};
 
+	// Returns the jQuery element this MultiComboBox is drawn within
 	CSLEDIT_MultiComboBox.prototype.getElement = function () {
 		return this._element;
 	};
 
+	// Set the tooltip for this MultiComboBox
 	CSLEDIT_MultiComboBox.prototype.setTooltip = function (tooltip) {
 		this._element.attr("title", tooltip);
 	};
 
+	// Get or set the value of this MultiComboBox depending on whether the
+	// val argument is present
 	CSLEDIT_MultiComboBox.prototype.val = function (val, suppressOnChange) {
 		if (typeof val === "undefined") {
 			this._readValues();
@@ -54,17 +58,21 @@ define(['src/debug'], function (debug) {
 
 	CSLEDIT_MultiComboBox.prototype._refresh = function (suppressOnChange) {
 		var that = this,
-			table = $('<table></table>'),
+			table = $('<table/>'),
 			addButton;
 
 		this._element.html('');
 		
 		$.each(this._values, function (i, value) {
-			var row = $('<tr></tr>'),
-				select = $(that._selectHtml).css({"margin-right": 0}),
-				deleteButton = $('<button class="delete" data-index="' + i +
-					'"> - </button>').css({"margin-left": 0});
+			var row = $('<tr/>'),
+				select = $('<select/>').css({"margin-right": 0}),
+				deleteButton = $('<button class="delete"> - </button>')
+					.attr("data-index", i)
+					.css({"margin-left": 0});
 
+			$.each(that._possibleValues, function (i, possibleValue) {
+				select.append($('<option/>').text(possibleValue));
+			});
 			select.val(value);
 
 			row.append($('<td></td>').append(select));
@@ -73,7 +81,7 @@ define(['src/debug'], function (debug) {
 		});
 
 		addButton = $('<button class="add">+</button>');
-		table.append($('<tr></tr>').append($('<td></td>').append(addButton)));
+		table.append($('<tr/>').append($('<td/>').append(addButton)));
 
 		this._element.append(table);
 

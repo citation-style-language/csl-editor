@@ -1,0 +1,17 @@
+<div id="addNodeDialog" title="Add node within {{parentDisplayName}}">
+	<table>
+		{{#childNodes}}
+		<tr>
+			<td>
+				{{#imageUrl}}
+				<img src="{{imageUrl}}"/>
+				{{/imageUrl}}
+			</td>
+			<td><button class="addNodeType" data-nodeName="{{nodeName}}">{{displayName}}</button></td>
+			{{#documentation}}
+			<td>{{documentation}}</td>
+			{{/documentation}}
+		</tr>
+		{{/childNodes}}
+	</table>
+</div>

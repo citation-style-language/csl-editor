@@ -1,13 +1,11 @@
 "use strict";
 
-// On construction, this creates a Visual Editor within the given editorElement
-// using the given configurationOptions
-//
+// Creates a Visual CSL Editor
+
 define(
 		[	'src/controller',
 			'src/ViewController',
 			'src/notificationBar',
-			'src/uiConfig',
 			'src/SyntaxHighlighter',
 			'src/citationEditor',
 			'src/Schema',
@@ -19,7 +17,7 @@ define(
 			'src/dataInstance',
 			'src/cslStyles',
 			'src/urlUtils',
-			'src/browserCheck',
+			'src/addNodeDialog',
 			'src/debug',
 			'jquery.hoverIntent',
 			'jquery.layout'
@@ -28,7 +26,6 @@ define(
 			CSLEDIT_controller,
 			CSLEDIT_ViewController,
 			CSLEDIT_notificationBar,
-			CSLEDIT_uiConfig,
 			CSLEDIT_SyntaxHighlighter,
 			CSLEDIT_citationEditor,
 			CSLEDIT_Schema,
@@ -40,12 +37,17 @@ define(
 			CSLEDIT_data,
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils,
-			CSLEDIT_browserCheck,
+			CSLEDIT_addNodeDialog,
 			debug,
 			jquery_hoverIntent,
 			jquery_layout
 		) {
-	return function VisualEditor(editorElement, configurationOptions) {
+	// Sets up a Visual Editor within editorElement
+	var CSLEDIT_VisualEditor = function (
+			editorElement,       // the selector or jQuery element to create the editor within
+			configurationOptions // see https://github.com/citation-style-editor/csl-editor/wiki/Visual-Editor
+								 // for a full list of options
+			) {
 		var editTimeout,
 			styleURL,
 			syntaxHighlighter,
@@ -150,148 +152,6 @@ define(
 			window.location.href = reloadURL + "?styleURL=" + newURL;
 		};
 
-		var showAddNodeDialog = function () {
-			var dialogDiv = $('<div id="addNodeDialog"></div>'),
-				node = CSLEDIT_data.getNode(CSLEDIT_viewController.selectedNode()),
-				translatedCslId,
-				translatedNodeInfo,
-				translatedParentName,
-				possibleElements,
-				element,
-				table = $('<table></table>'),
-				possibleElementsExist = false;
-
-			if (node === null) {
-				alert("Please select a node in to create within first");
-				return;
-			}
-
-			dialogDiv.attr('title', 'Add node within ' + CSLEDIT_uiConfig.displayNameFromNode(node));
-
-			// populate with possible child elements based on schema
-			
-			// in case the user is selecting a macro instance:
-			translatedCslId = CSLEDIT_data.macroDefinitionIdFromInstanceId(node.cslId);
-			translatedNodeInfo = CSLEDIT_data.getNodeAndParent(translatedCslId);
-		
-			if (translatedNodeInfo.parent === null) {
-				translatedParentName = "root";
-			} else {
-				translatedParentName = translatedNodeInfo.parent.name;
-			}
-
-			possibleElements = CSLEDIT_viewController.selectedViewProperty("possibleChildren");
-			if (possibleElements === null) {
-				possibleElements = {};
-
-				$.each(CSLEDIT_schema.childElements(translatedParentName + "/" + translatedNodeInfo.node.name),
-					function (element, quantifier) {
-						possibleElements[element] = quantifier;
-					}
-				);
-			}
-
-			// hard-coded constraint for 'choose' node
-			// TODO: generalise this to more nodes, using the schema if not too difficult
-			if (translatedNodeInfo.node.name === "choose") {
-				// better order than schema:
-				possibleElements = {
-					"if" : "one",
-					"else-if" : "zeroOrMore",
-					"else" : "optional"
-				};
-
-				// only allowed one 'if' and one 'else' node
-				$.each(translatedNodeInfo.node.children, function (i, childNode) {
-					if (childNode.name === "if" && "if" in possibleElements) {
-						delete possibleElements["if"];
-					} else if (childNode.name === "else" && "else" in possibleElements) {
-						delete possibleElements["else"];
-					}
-				});
-
-				// if doesn't yet contain 'if' node, only allow adding that
-				if ("if" in possibleElements) {
-					console.log('only "if" allowed');
-					delete possibleElements["else-if"];
-					delete possibleElements["else"];
-				}
-			}
-
-			$.each(possibleElements, function (element) {
-				var img = '<td></td>',
-					nodeIcon = CSLEDIT_uiConfig.nodeIcons[element],
-					documentation = CSLEDIT_schema.documentation(
-						translatedNodeInfo.node.name + "/" + element),
-					row,
-					displayName;
-
-				if (typeof nodeIcon !== "undefined") {
-					img = '<td><img src="' + CSLEDIT_urlUtils.getResourceUrl(nodeIcon) + '"></img></td>';
-				}
-
-				displayName = 
-					CSLEDIT_uiConfig.displayNameFromNode(new CSLEDIT_CslNode(element));
-
-				debug.log("display name = " + displayName);
-
-				row = $('<tr>' + img + '<td><button class="addNodeType" data-nodeName="' +
-					element + '">' + 
-					displayName + 
-					'</button></td></tr>');
-
-				if (typeof(documentation) !== "undefined") {
-					row.append('<td>' + documentation + '</td>');
-				}
-
-				table.append(row);
-
-				possibleElementsExist = true;
-			});
-
-			if (!possibleElementsExist) {
-				alert("You can't create nodes within " + CSLEDIT_uiConfig.displayNameFromNode(node) + ".");
-				return;
-			}
-
-			dialogDiv.append(table);
-
-			dialogDiv.find('button.addNodeType').on('click', function (event) {
-				var target = $(event.target),
-					nodeName = target.attr('data-nodeName'),
-					position,
-					children = CSLEDIT_data.getNode(CSLEDIT_viewController.selectedNode()).children;
-
-				dialogDiv.dialog('destroy');
-
-				position = "last";
-				// override position for certain nodes
-				// TODO: generalise
-				if (nodeName === 'if') {
-					position = "first";
-				} else if (nodeName === 'else-if' && children[children.length - 1].name === "else") {
-					position = children.length - 1;
-				} else if (nodeName === 'macro') {
-					position = "last";
-					// put it before the citation node:
-					$.each(children, function (i, child) {
-						if (child.name === "citation") {
-							position = i;
-							return false;
-						}
-					});
-				}
-
-				CSLEDIT_controller.exec("addNode", [
-					CSLEDIT_viewController.selectedNode(), position, { name : nodeName, attributes : []}
-				]);
-			});
-			dialogDiv.dialog({
-				modal : true,
-				width : "650px"
-			});
-		};
-
 		var addMissingNode = function (missingNodePath) {
 			var rootPath,
 				nodeName,
@@ -324,7 +184,7 @@ define(
 				if (CSLEDIT_viewController.selectedNode() === -1) {
 					addMissingNode(CSLEDIT_viewController.selectedMissingNodePath());
 				} else {
-					showAddNodeDialog();
+					CSLEDIT_addNodeDialog.show();
 				}
 				e.preventDefault();
 			});
@@ -343,7 +203,7 @@ define(
 			if (typeof(name) === "undefined" || name === "") {
 				element.parent('li').remove();
 			} else {
-				element.html(name);
+				element.text(name);
 				element.click(onClick);
 			}
 		};
@@ -465,7 +325,7 @@ define(
 					editorElement.find('#treeEditor')
 				);
 
-				// TODO: remove this global
+				// TODO: refactor - remove this global
 				window.CSLEDIT_viewController = new CSLEDIT_ViewController(
 					editorElement.find("#treeEditor"),
 					editorElement.find("#titlebar"),
@@ -478,7 +338,7 @@ define(
 				if (typeof userOnChangeCallback === "function") {
 					CSLEDIT_data.addViewController({
 						styleChanged : function (command) {
-							if (command === "formatCitations") {
+							if (command === "updateFinished") {
 								userOnChangeCallback();
 							}
 						}
@@ -486,7 +346,6 @@ define(
 				}
 
 				createTreeView();
-
 			});
 
 			setupTreeEditorToolbar();
@@ -524,11 +383,11 @@ define(
 			editorElement.find('#bottomRightContainer').css('width', '');
 		};
 
-		// returns true to continue, false to cancel
+		// Called when saving a style. It Checks that the style conforms to repository
+		// conventions and prompts the user to change it if it doesn't
+		//
+		// Returns true to continue saving, false to cancel
 		var conformStyleToRepoConventions = function () {
-			// checks that the style conforms to repository conventions and
-			// prompts the user to change it if it doesn't
-			
 			var generatedStyleId,
 				links,
 				selfLinkNode,
@@ -584,35 +443,54 @@ define(
 			return true;
 		};
 
+		// Sets a new CSL style from the given cslCode string
+		var setCslCode = function (cslCode) {
+			return CSLEDIT_controller.exec('setCslCode', [cslCode]);
+		};
+	
+		// Returns the current CSL style code as a string
+		var getCslCode = function () {
+			return CSLEDIT_data.getCslCode();
+		};
+
+		// Returns the current style name
 		var getStyleName = function () {
 			var styleNameNode = CSLEDIT_data.getNodesFromPath('style/info/title')[0];
 			return styleNameNode.textValue;
 		};
 
+		// Returns the current style ID
 		var getStyleId = function () {
 			var styleIdNode = CSLEDIT_data.getNodesFromPath('style/info/id')[0];
 			return styleIdNode.textValue;
 		};
-			
+		
+		// Sets the ID for the current style
 		var setStyleId = function (styleId) {
 			var styleIdNode = CSLEDIT_data.getNodesFromPath('style/info/id')[0];
 			styleIdNode.textValue = styleId;
 			CSLEDIT_controller.exec('amendNode', [styleIdNode.cslId, styleIdNode]);
 		};
 
-		// public API
+		// Public API
+		//
+		// Note: these are currently more of a set of convenience functions than a complete API
+		//
+		// There is nothing stopping you using the 'proper' internal API and this is the recommended
+		// method at the moment.
+		//
+		// See https://github.com/citation-style-editor/csl-editor/wiki/Visual-Editor for some
+		// examples
 		return {
-			setCslCode : function (cslCode) {
-				return CSLEDIT_controller.exec('setCslCode', [cslCode]);
-			},
-			getCslCode : function () {
-				return CSLEDIT_data.getCslCode();
-			},
+			setCslCode : setCslCode,
+			getCslCode : getCslCode,
 			getStyleName : getStyleName,
 			getStyleId : getStyleId,
 			setStyleId : setStyleId,
 			conformStyleToRepoConventions : conformStyleToRepoConventions
 		};
 	};
+
+	return CSLEDIT_VisualEditor;
 });
 

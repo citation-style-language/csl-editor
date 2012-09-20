@@ -1,5 +1,13 @@
 "use strict";
 
+// Creates the Sys object required by citeproc-js
+// 
+// Provides citeproc with:
+//
+// - Metadata for all the JSON references used in the citation clusters
+// - Locale data
+// - Abbreviation data
+
 define([	'src/urlUtils',
 			'src/debug'
 		],
@@ -8,12 +16,15 @@ define([	'src/urlUtils',
 			debug
 		) {
 
+	// Sys constructor
 	var Sys = function () {
 		this.locale = {}; // lazily fetched from server
 		this.abbreviations = {}; // no journal abbreviations at the moment
 								// see demo/loadabbres.js in citeproc-js repo for an example
 	};
 
+	// Fetches and returns the locale for the given language,
+	// or falls back to "en-US" if not available
 	Sys.prototype.retrieveLocale = function (lang) {
 		var that = this,
 			locale = this.locale[lang],
@@ -44,18 +55,22 @@ define([	'src/urlUtils',
 		return locale;
 	};
 
+	// Set the list of abbreviations
 	Sys.prototype.setAbbreviations = function (abbreviations) {
 		this.abbreviations = abbreviations;
 	};
 
+	// Set the list of JSON documents (all the references used in the citation clusters)
 	Sys.prototype.setJsonDocuments = function (jsonDocuments) {
 		this.jsonDocuments = jsonDocuments;
 	};
 
-	Sys.prototype.retrieveItem = function (id) {
-		return this.jsonDocuments[id];
+	// Returns the JSON document at the given index
+	Sys.prototype.retrieveItem = function (index) {
+		return this.jsonDocuments[index];
 	};
 
+	// Returns the appropriate abbreviation
 	Sys.prototype.getAbbreviations = function (name, vartype) {
 		return this.abbreviations[name][vartype];
 	};

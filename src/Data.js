@@ -1,15 +1,15 @@
 "use strict";
 
-/* Uses CSLEDIT_storage to store the current csl style
- *
- * Supports the following actions:
- * - New style
- * - Load from CSL XML
- * - Add node
- * - Delete node
- * - Amend node
- * - Move node
- */
+// Uses CSLEDIT_storage to store the current csl style
+//
+// Supports the following actions:
+// 
+// - New style
+// - Load from CSL XML
+// - Add node
+// - Delete node
+// - Amend node
+// - Move node
 
 define([	'src/uiConfig', // TODO: remove this dependency
 			'src/CslNode',
@@ -60,10 +60,18 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				"rights"
 			];
 
+		// This returns a JSON object representing the whole CSL tree
+		// exactly as it's stored in local storage
+		//
+		// Each node of the tree contains the same member variables as CSLEDIT_CslNode
 		var get = function () {
 			return CSLEDIT_storage.getItemJson(CSL_DATA);
 		};
 
+		// This sets the JSON object representing the whole CSL tree
+		// as it's stored in local storage
+		//
+		// Each node of the tree contains the same member variables as CSLEDIT_CslNode
 		var set = function (cslData) {
 			var updatedNode,
 				iter,
@@ -168,6 +176,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			return styleInfoNode;
 		};
 
+		// Sets the current CSL style from the given string containing XML
 		var setCslCode = function (cslCode) {
 			var cslData,
 				error;
@@ -237,6 +246,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			return {};
 		};
 
+		// Returns a string with the CSL style in XML format ready for output
 		var getCslCode = function (comment /* optional */) {
 			var cslData = get();
 			reorderStyleInfoNode(cslData);
@@ -244,7 +254,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			return CSLEDIT_cslParser.cslCodeFromCslData(cslData, comment);
 		};
 
-		var spliceNode = function (id, position, nodesToDelete, newNode) {
+		var spliceNode = function (cslId, position, nodesToDelete, newNode) {
 			var iter,
 				cslData,
 				index,
@@ -262,7 +272,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			while (iter.hasNext()) {
 				node = iter.next();
 				
-				if (index === id) {
+				if (index === cslId) {
 					debug.assertEqual(node.cslId, index);
 					debug.assert(position + nodesToDelete <= node.children.length);
 
@@ -289,14 +299,18 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			return index - nodesBefore; // difference in number of nodes
 		};
 
-		var getNodeAndParent = function (id) {
+		// Returns an object containing:
+		//
+		// node - the CSL node with the given cslId,
+		// parent - it's parent
+		var getNodeAndParent = function (cslId) {
 			var iter = new CSLEDIT_Iterator(get()),
 				node;
 
 			while (iter.hasNext()) {
 				node = iter.next();
 
-				if (node.cslId === id) {
+				if (node.cslId === cslId) {
 					return {
 						node : node,
 						parent : iter.parent()
@@ -308,7 +322,11 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			return { node : null, parent : null };
 		};
 
-		var getNodeStack = function (id) {
+		// Returns a list containing the node at cslId, and all it's parents
+		//
+		// The first element will be the root 'style' node
+		// The last element will be the node with the given cslId
+		var getNodeStack = function (cslId) {
 			var iter = new CSLEDIT_Iterator(get()),
 				nodeStack,
 				node;
@@ -316,30 +334,37 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			while (iter.hasNext()) {
 				node = iter.next();
 
-				if (node.cslId === id) {
+				if (node.cslId === cslId) {
 					return iter.stack();
 				}
 			}
 		};
 
-		var getNodePath = function (id) {
+		// Returns a list of node names correspoding to the current node stack
+		// (see getNodeStack())
+		var getNodePath = function (cslId) {
 			var nodeNames = [];
-			$.each(getNodeStack(id), function (i, node) {
+			$.each(getNodeStack(cslId), function (i, node) {
 				nodeNames.push(node.name);
 			});
 			return nodeNames.join('/');
 		};
 
-		var getNode = function (id, cslData /* optional */) {
+		// Returns CSL node JSON of the node with the given cslId
+		var getNode = function (cslId, cslData /* optional */) {
 			if (typeof cslData !== "undefined") {
-				return getNodeAndParent(id, cslData).node;
+				return getNodeAndParent(cslId, cslData).node;
 			} else {
-				return getNodeAndParent(id).node;
+				return getNodeAndParent(cslId).node;
 			}
 		};
 
-		// Returns all matching nodes or
+		// Returns all matching nodes with the given path or
 		// null if it couldn't find a match
+		//
+		// path is a '/' delimited string of the node stack you are searching for.
+		//
+		// e.g. 'style/citation/layout'
 		var getNodesFromPath = function (path, cslData /* optional */) {
 			var splitPath = path.split("/"),
 				rootNode,
@@ -383,6 +408,8 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			}
 		};
 
+		// Returns the cslId of the first node within the given cslData tree
+		// with the name nodeName
 		var getFirstCslId = function (cslData, nodeName) {
 			var index,
 				result;
@@ -401,8 +428,12 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			return -1;
 		};
 		
-		var numNodes = function (tree) {
-			var iter = new CSLEDIT_Iterator(tree),
+		// Returns the number of nodes in the given CSL node tree
+		var numNodes = function (cslNode) {
+			// use the whole tree if none specified
+			cslNode = cslNode || get();
+
+			var iter = new CSLEDIT_Iterator(cslNode),
 				index = 0;
 
 			while (iter.hasNext()) {
@@ -419,6 +450,8 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			});
 		};
 		
+		// Get the index of the given childNode within the given parentNode
+		// or -1 if childNode is not a child of parentNode
 		var indexOfChild = function (childNode, parentNode) {
 			var index;
 			for (index = 0; index < parentNode.children.length; index++) {
@@ -429,10 +462,12 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			return -1;
 		};
 		
-		// if 'id' is a macro instance, returns the corresponding macro definition
-		// if not, returns 'id' 
-		var macroDefinitionIdFromInstanceId = function (id) {
-			var node = new CSLEDIT_CslNode(getNode(id)),
+		// If the node 'cslId' is a macro instance, return the cslId of the 
+		// corresponding macro definition
+		//
+		// Else, return 'cslId'
+		var macroDefinitionIdFromInstanceId = function (cslId) {
+			var node = new CSLEDIT_CslNode(getNode(cslId)),
 				macroName,
 				macroNodes,
 				macroNode;
@@ -444,18 +479,32 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				$.each(macroNodes, function (i, macroNode) {
 					var thisMacroNode = new CSLEDIT_CslNode(macroNode);
 					if (thisMacroNode.getAttr("name") === macroName) {
-						id = thisMacroNode.cslId;
+						cslId = thisMacroNode.cslId;
 						return false;
 					}
 				});
 			}
-			return id;
+			return cslId;
 		};
 		
-		var addNode = function (id, position, newNode) {
-			var newCslId = _addNode(id, position, newNode),
+		// Adds a CSL node
+		//
+		// cslId - The existing CSL node cslId to create within or next to
+		// position - Where to place the new node relative to the exitsing one.
+		//            Can be one of the following positions:
+		// 
+		//   - integer  - the child index within the existing node
+		//   - "first"  - the first child of the existing node
+		//   - "last"   - the last child of the existing node
+		//   - "inside" - same as "last"
+		//   - "before" - the sibling before the existing node
+		//   - "after"  - the sibling after the existing node
+		//
+		// newNode - the new CSL node to add (follows the CSL node JSON described in src/CslNode.js)
+		var addNode = function (cslId, position, newNode) {
+			var newCslId = _addNode(cslId, position, newNode),
 				inverse;
-			emit("formatCitations");
+			emit("updateFinished");
 
 			// return the inverse command for undo functionality
 			return {
@@ -464,7 +513,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			};
 		};
 
-		var _addNode = function (id, position, newNode, suppressViewUpdate /*optional*/) {
+		var _addNode = function (cslId, position, newNode, suppressViewUpdate /*optional*/) {
 			var nodeInfo,
 				positionIndex,
 				nodesAdded,
@@ -492,30 +541,30 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			}
 
 			if (typeof position === "number") {
-				// change parent id from macro instances to macro definitions
-				id = macroDefinitionIdFromInstanceId(id);
+				// change parent cslId from macro instances to macro definitions
+				cslId = macroDefinitionIdFromInstanceId(cslId);
 
-				nodesAdded = spliceNode(id, position, 0, newNode);
+				nodesAdded = spliceNode(cslId, position, 0, newNode);
 				if (!suppressViewUpdate) {
-					emit("addNode", [id, position, newNode, nodesAdded]);
+					emit("addNode", [cslId, position, newNode, nodesAdded]);
 				}
 			} else {
 				switch (position) {
 				case "first":
-					// change parent id from macro instances to macro definitions
-					id = macroDefinitionIdFromInstanceId(id);
+					// change parent cslId from macro instances to macro definitions
+					cslId = macroDefinitionIdFromInstanceId(cslId);
 
-					return _addNode(id, 0, newNode, suppressViewUpdate);
+					return _addNode(cslId, 0, newNode, suppressViewUpdate);
 				case "inside":
 				case "last":
-					// change parent id from macro instances to macro definitions
-					id = macroDefinitionIdFromInstanceId(id);
+					// change parent cslId from macro instances to macro definitions
+					cslId = macroDefinitionIdFromInstanceId(cslId);
 					
-					return _addNode(id, getNode(id).children.length, newNode, suppressViewUpdate);
+					return _addNode(cslId, getNode(cslId).children.length, newNode, suppressViewUpdate);
 				case "before":
 				case "after":
-					debug.assert(id !== 0);
-					nodeInfo = getNodeAndParent(id);
+					debug.assert(cslId !== 0);
+					nodeInfo = getNodeAndParent(cslId);
 					positionIndex = indexOfChild(nodeInfo.node, nodeInfo.parent);
 					if (position === "after") {
 						positionIndex++;
@@ -528,12 +577,13 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			return newNode.cslId;
 		};
 		
-		var deleteNode = function (id) {
+		// Deletes the CSL node with the given cslId
+		var deleteNode = function (cslId) {
 			var deletedNode,
-				nodeAndParent = getNodeAndParent(id),
+				nodeAndParent = getNodeAndParent(cslId),
 				parentNode,
 				position,
-				nodePath = getNodePath(id),
+				nodePath = getNodePath(cslId),
 				error;
 
 			// can't delete required nodes
@@ -563,9 +613,9 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			parentNode = nodeAndParent.parent.cslId;
 			position = indexOfChild(nodeAndParent.node, nodeAndParent.parent);
 
-			deletedNode = _deleteNode(id);
+			deletedNode = _deleteNode(cslId);
 
-			emit("formatCitations");
+			emit("updateFinished");
 
 			// return the inverse command for undo functionality
 			return {
@@ -574,20 +624,20 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			};
 		};
 
-		var _deleteNode = function (id) {
+		var _deleteNode = function (cslId) {
 			var iter = new CSLEDIT_Iterator(get()),
 				index,
 				node,
 				parentNode,
 				nodesDeleted;
 
-			debug.assert(id !== 0); // can't delete the style node
+			debug.assert(cslId !== 0); // can't delete the style node
 
 			index = 0;
 			while (iter.hasNext()) {
 				node = iter.next();
 
-				if (index === id) {
+				if (index === cslId) {
 					parentNode = iter.parent();
 					break;
 				}
@@ -596,15 +646,18 @@ define([	'src/uiConfig', // TODO: remove this dependency
 
 			debug.assert(typeof parentNode !== "undefined");
 			nodesDeleted = -spliceNode(parentNode.cslId, indexOfChild(node, parentNode), 1);
-			debug.assertEqual(node.cslId, id);
+			debug.assertEqual(node.cslId, cslId);
 			
-			emit("deleteNode", [id, nodesDeleted]);
+			emit("deleteNode", [cslId, nodesDeleted]);
 			
 			return node;
 		};
 
-		var amendNode = function (id, amendedNode) {
-			// replace everything of the original node except the children and the cslId
+		// Replaces the CSL node at the given cslId, with the given ammendedNode
+		//
+		// Note: This leaves the list of children intact, so that the whole ammendedNode
+		//       sub-tree doesn't need to be passed
+		var amendNode = function (cslId, amendedNode) {
 			var cslData = get(),
 				iter,
 				node,
@@ -617,8 +670,8 @@ define([	'src/uiConfig', // TODO: remove this dependency
 
 			while (iter.hasNext()) {
 				node = iter.next();
-				if (index === id) {
-					debug.assertEqual(node.cslId, id);
+				if (index === cslId) {
+					debug.assertEqual(node.cslId, cslId);
 					
 					oldNode = new CSLEDIT_CslNode(node.name, node.attributes, [], node.cslId);
 					oldNode.textValue = node.textValue;
@@ -633,19 +686,23 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			}
 			debug.assert(typeof node !== "undefined");
 			set(cslData);
-			emit("amendNode", [id, node]);
-			emit("formatCitations");
+			emit("amendNode", [cslId, node]);
+			emit("updateFinished");
 			// return inverse command
 			return {
 				command : "amendNode",
-				args : [id, oldNode]
+				args : [cslId, oldNode]
 			};
 		};
 
-		var moveNode = function (fromId, toId, position) {
+		// This deletes the node with the given fromCslId, and adds it near the toCslId
+		// at the given position.
+		//
+		// position accepts the same values as addNode()
+		var moveNode = function (fromCslId, toCslId, position) {
 			var deletedNode, fromNode,
 				inverseFromCslId,
-				inverseToNodeAndParent = getNodeAndParent(fromId),
+				inverseToNodeAndParent = getNodeAndParent(fromCslId),
 				inverseToCslId,
 				inverseToPosition;
 
@@ -654,21 +711,21 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			inverseToCslId = inverseToNodeAndParent.parent.cslId;
 			inverseToPosition = indexOfChild(inverseToNodeAndParent.node, inverseToNodeAndParent.parent);
 
-			deletedNode = _deleteNode(fromId);
+			deletedNode = _deleteNode(fromCslId);
 
 			debug.log("deletedNode = " + deletedNode.cslId);
-			if (toId > fromId) {
-				toId -= numNodes(deletedNode);
+			if (toCslId > fromCslId) {
+				toCslId -= numNodes(deletedNode);
 			}
 
-			inverseFromCslId = _addNode(toId, position, deletedNode);
+			inverseFromCslId = _addNode(toCslId, position, deletedNode);
 			if (inverseToCslId > inverseFromCslId) {
 				inverseToCslId += numNodes(deletedNode);
 			}
 
 			callbacksEnabled = true;
 
-			emit("formatCitations");
+			emit("updateFinished");
 			// return inverse command
 			return {
 				command : "moveNode",
@@ -676,11 +733,19 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			};
 		};
 
+		// Tries in the following order to initialise the CSL style, if one fails
+		// try the next
+		//
+		// - Get the one specified in CSLEDIT_options("initialCslCode")
+		// - Get the one in CSLEDIT_storage.getItem("CSLEDIT.data")
+		// - Get the default style specified in CSLEDIT_cslStyles.defaultStyleURL()
+		//
+		// Then call the given callback function
 		var initPageStyle = function (callback) {
 			var cslData, styleURL, result;
 			cslData = get(); 
 			
-			// try loading style specified in options
+			// First try loading the style specified in options
 			if (typeof CSLEDIT_options.get("initialCslCode") !== "undefined") {
 				result = setCslCode(CSLEDIT_options.get("initialCslCode"));
 				if (result.hasOwnProperty('error')) {
@@ -693,6 +758,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				}
 			}
 			
+			// Next try the 
 			if (cslData === null || cslData === "") {
 				styleURL = CSLEDIT_cslStyles.defaultStyleURL();
 				$.get(styleURL, {}, function (cslCode) {
@@ -713,14 +779,30 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			}
 		};
 
+		// remove all view controllers
+		var clearViewControllers = function () {
+			viewControllers = [];
+		};
+
+		// add a view controller which will get notified by calling the relevant
+		// function (addNode, deleteNode, etc...) whenever the CSL style is changed
+		var addViewController = function (viewController) {
+			viewControllers.push(viewController);
+		};
+
 		return {
+			// Write functions (if CSLEDIT_controller is being used on this page,
+			//                  use the equivalent CSLEDIT_controller commands
+			//                  instead of these)
 			setCslCode : setCslCode,
-			getCslCode : getCslCode,
-			get : get,
 			addNode : addNode,
 			deleteNode : deleteNode,
 			amendNode : amendNode,
 			moveNode : moveNode,
+
+			// Read-only functions (safe to use anywhere)
+			getCslCode : getCslCode,
+			get : get,
 			getNode : getNode,
 			getNodeAndParent : getNodeAndParent,
 			getNodeStack : getNodeStack,
@@ -729,15 +811,8 @@ define([	'src/uiConfig', // TODO: remove this dependency
 
 			initPageStyle : initPageStyle,
 			numNodes : numNodes,
-			numCslNodes : function () {
-				return numNodes(get());
-			},
-			clearViewControllers : function () {
-				viewControllers = [];
-			},
-			addViewController : function (_viewController) {
-				viewControllers.push(_viewController);
-			},
+			clearViewControllers : clearViewControllers,
+			addViewController : addViewController,
 			getNodesFromPath : getNodesFromPath,
 			indexOfChild : indexOfChild,
 			macroDefinitionIdFromInstanceId : macroDefinitionIdFromInstanceId

@@ -1,8 +1,17 @@
 "use strict";
 
-define(['src/debug'], function (debug) {
-	// Private functions:
-	var jsonNodeFromXml = function (node, nodeIndex) {
+// This converts between the following two formats:
+//
+// 1. A *.csl text file.
+// 2. A JSON object as used by get() and set() in src/Data
+
+define(['src/xmlUtility', 'src/debug'], function (CSLEDIT_xmlUtility, debug) {
+
+	// Recursively generates and returns a CSL style JSON node, converted from the given xmlNode
+	//
+	// nodeIndex.index is the depth-first traversal position of CSL node
+	// it must start at 0, and it will be returned with nodeIndex.index = number of nodes - 1
+	var jsonNodeFromXml = function (xmlNode, nodeIndex) {
 		var children = [],
 			index,
 			jsonData,
@@ -13,12 +22,12 @@ define(['src/debug'], function (debug) {
 
 		TEXT_NODE = 3;
 		
-		for (index = 0; index < node.childNodes.length; index++) {
-			childNode = node.childNodes[index];
+		for (index = 0; index < xmlNode.childNodes.length; index++) {
+			childNode = xmlNode.childNodes[index];
 
 			if (childNode.localName !== null) {
 				nodeIndex.index++;
-				children.push(jsonNodeFromXml(node.childNodes[index], nodeIndex));
+				children.push(jsonNodeFromXml(xmlNode.childNodes[index], nodeIndex));
 			} else {
 				if (childNode.nodeType === TEXT_NODE && typeof childNode.data !== "undefined" && 
 						childNode.data.trim() !== "") {
@@ -32,19 +41,19 @@ define(['src/debug'], function (debug) {
 		var attributesList = [];
 		var thisNodeData;
 		
-		if (node.attributes !== null && node.attributes.length > 0) {
-			for (index = 0; index < node.attributes.length; index++) {
+		if (xmlNode.attributes !== null && xmlNode.attributes.length > 0) {
+			for (index = 0; index < xmlNode.attributes.length; index++) {
 				attributesList.push(
 					{
-						key : node.attributes.item(index).nodeName,
-						value : node.attributes.item(index).nodeValue,
+						key : xmlNode.attributes.item(index).nodeName,
+						value : xmlNode.attributes.item(index).nodeValue,
 						enabled : true
 					});
 			}
 		}
 
 		thisNodeData = {
-				name : node.localName,
+				name : xmlNode.localName,
 				attributes : attributesList,
 				cslId : thisNodeIndex,
 				children : children
@@ -57,17 +66,6 @@ define(['src/debug'], function (debug) {
 		return thisNodeData;
 	};
 
-	var htmlEscape = function (text) {
-		var escaped = text;
-
-		escaped = escaped.replace(/&/g, "&amp;");
-		escaped = escaped.replace(/</g, "&lt;");
-		escaped = escaped.replace(/>/g, "&gt;");
-		escaped = escaped.replace(/"/g, "&quot;");
-
-		return escaped;
-	};
-
 	var generateIndent = function (indentAmount) {
 		var index,
 			result = "";
@@ -77,6 +75,7 @@ define(['src/debug'], function (debug) {
 		return result;
 	};
 
+	// Recursively generates and returns an XML string from the given jsonData
 	var xmlNodeFromJson = function (jsonData, indent, fullClosingTags) {
 		var attributesString = "",
 			xmlString,
@@ -89,8 +88,8 @@ define(['src/debug'], function (debug) {
 					// TODO: the key probably shouldn't have characters needing escaping anyway,
 					//       should not allow to input them in the first place
 					attributesString += " " + 
-						htmlEscape(jsonData.attributes[index].key) + '="' + 
-						htmlEscape(jsonData.attributes[index].value) + '"';
+						CSLEDIT_xmlUtility.htmlEscape(jsonData.attributes[index].key) + '="' + 
+						CSLEDIT_xmlUtility.htmlEscape(jsonData.attributes[index].value) + '"';
 				}
 			}
 		}
@@ -98,7 +97,8 @@ define(['src/debug'], function (debug) {
 
 		if (typeof jsonData.textValue !== "undefined") {
 			xmlString += "<" + jsonData.name + attributesString + ">";
-			xmlString += htmlEscape(jsonData.textValue) + "</" + htmlEscape(jsonData.name) + ">\n";
+			xmlString += CSLEDIT_xmlUtility.htmlEscape(jsonData.textValue) + "</" +
+				CSLEDIT_xmlUtility.htmlEscape(jsonData.name) + ">\n";
 		} else {
 			xmlString += "<" + jsonData.name + attributesString;
 			innerString = "";
@@ -108,7 +108,7 @@ define(['src/debug'], function (debug) {
 				}
 			}
 			if (innerString !== "") {
-				xmlString += ">\n" + innerString + generateIndent(indent) + "</" + htmlEscape(jsonData.name) + ">\n";
+				xmlString += ">\n" + innerString + generateIndent(indent) + "</" + CSLEDIT_xmlUtility.htmlEscape(jsonData.name) + ">\n";
 			} else if (fullClosingTags) {
 				xmlString += "></" + jsonData.name + ">\n";
 			} else {
@@ -119,65 +119,50 @@ define(['src/debug'], function (debug) {
 		return xmlString;
 	};
 	
-	var updateCslIds = function (jsonData, cslId) {
-		var childIndex;
+	// Returns a JSON representation of the CSL 'style' node in the given xmlData string
+	var cslDataFromCslCode = function (xmlData) {
+		var parser = new DOMParser(),
+			xmlDoc = parser.parseFromString(xmlData, "application/xml"),
+			errors;
 
-		jsonData.metadata["cslId"] = cslId.index;
-		cslId.index++;
-		if (jsonData.children) {
-			for (childIndex = 0; childIndex < jsonData.children.length; childIndex++)
-			{
-				updateCslIds(jsonData.children[childIndex], cslId);
-			}
+		errors = xmlDoc.getElementsByTagName('parsererror');
+		debug.assertEqual(errors.length, 0, "xml parser error");
+
+		var styleNode = xmlDoc.childNodes[0];
+		debug.assertEqual(styleNode.localName, "style", "Invalid style - no style node");
+
+		var jsonData = jsonNodeFromXml(styleNode, { index: 0 });
+	
+		return jsonData;
+	};
+
+	// Returns a CSL style code string
+	//
+	// - jsonData        - the CSL 'style' node JSON representation
+	// - comment         - an optional comment string to insert after the 'style' element
+	// - fullClosingTags - use separate closing tags (e.g. <link></link> instead of <link/>)
+	var cslCodeFromCslData = function (jsonData, comment /* optional */, fullClosingTags /* optional */) {
+		var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n',
+			lines,
+			lineIndex;
+		
+		cslXml += xmlNodeFromJson(jsonData, 0, fullClosingTags);
+
+		if (typeof(comment) === "string") {
+			lines = cslXml.split("\n");
+
+			// comment needs to go on line no. 3, after the style node
+			lines.splice(2, 0, "<!-- " + comment + " -->");
+
+			cslXml = lines.join("\n");
 		}
+		
+		return cslXml;
 	};
 
 	// public:
 	return {
-		isCslValid : function (xmlData) {
-			var parser = new DOMParser();
-			var xmlDoc = parser.parseFromString(xmlData, "application/xml");
-
-			var styleNode = xmlDoc.childNodes[0];
-			return styleNode.localName === "style";
-		},
-
-		// nodeIndex.index is the depth-first traversal position of CSL node
-		// it must start at 0, and it will be returned with nodeIndex.index = number of nodes - 1
-		cslDataFromCslCode : function (xmlData) {
-			var parser = new DOMParser(),
-				xmlDoc = parser.parseFromString(xmlData, "application/xml"),
-				errors;
-			errors = xmlDoc.getElementsByTagName('parsererror');
-		debug.assertEqual(errors.length, 0, "xml parser error");
-
-			var styleNode = xmlDoc.childNodes[0];
-		debug.assertEqual(styleNode.localName, "style", "Invalid style - no style node");
-
-			var jsonData = jsonNodeFromXml(styleNode, { index: 0 });
-		
-			return jsonData;
-		},
-
-		cslCodeFromCslData : function (jsonData, comment /* optional */, fullClosingTags /* optional */) {
-			var cslXml = '<?xml version="1.0" encoding="utf-8"?>\n',
-				lines,
-				lineIndex;
-			
-			cslXml += xmlNodeFromJson(jsonData, 0, fullClosingTags);
-
-			if (typeof(comment) === "string") {
-				lines = cslXml.split("\n");
-
-				// comment needs to go on line no. 3, after the style node
-				lines.splice(2, 0, "<!-- " + comment + " -->");
-
-				cslXml = lines.join("\n");
-			}
-			
-			return cslXml;
-		},
-
-		updateCslIds : updateCslIds
+		cslDataFromCslCode : cslDataFromCslCode,
+		cslCodeFromCslData : cslCodeFromCslData
 	};
 });

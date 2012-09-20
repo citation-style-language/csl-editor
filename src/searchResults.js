@@ -1,19 +1,23 @@
 "use strict";
 
+// Displays a list of CSL styles, optionally including the quality of the match
+//
+// Used in the Search by Name and Search by Example pages
+
 define(
 		[	'src/options',
-			'src/exampleData',
 			'src/diff',
 			'src/cslStyles',
 			'src/xmlUtility',
+			'src/mustache',
 			'src/debug'
 		],
 		function (
 			CSLEDIT_options,
-			CSLEDIT_exampleData,
 			CSLEDIT_diff,
 			CSLEDIT_cslStyles,
 			CSLEDIT_xmlUtility,
+			CSLEDIT_mustache,
 			debug
 		) {	
 	var outputNode;
@@ -28,23 +32,14 @@ define(
 			closeness = matchQuality + "% match";
 		}
 
-		return '<td class="closeness match">' + closeness + '</td>';
+		return closeness;
 	};
 
 	var displaySearchResults = function (styles, _outputNode, exampleIndex /* optional */) {
 		var index,
-			outputList = [],
-			masterStyleSuffix = "",
 			style,
-			citation,
-			bibliography,
-			citationCloseness = "",
-			bibliographyCloseness = "",
-			citationDiff,
-			bibliographyDiff,
-			featuredStyleClass,
-			featuredStyleText,
-			resultsLimit = 30;
+			resultsLimit = 30,
+			outputData = {}; // for mustache
 
 		outputNode = outputNode || _outputNode;
 		
@@ -52,80 +47,62 @@ define(
 
 		exampleIndex = exampleIndex || 0;
 
+		outputData.styles = [];
 		for (index = 0; index < Math.min(styles.length, resultsLimit); index++)
 		{
+			var styleEntry = {};
+
 			style = styles[index];
 			if (style.masterId !== style.styleId)
 			{
-				masterStyleSuffix = ' (same as <a href="' + style.masterId + '">' +
-					CSLEDIT_cslStyles.styles().styleTitleFromId[style.masterId] + '</a>)';
-			} else {
-				masterStyleSuffix = '';
+				styleEntry.parentStyleURL = CSLEDIT_cslStyles.localURLFromZoteroId(style.masterId);
+				styleEntry.parentStyleTitle = CSLEDIT_cslStyles.styles().styleTitleFromId[style.masterId];
 			}
 
-			citation = CSLEDIT_cslStyles
+			styleEntry.citation = CSLEDIT_cslStyles
 				.exampleCitations()
 				.exampleCitationsFromMasterId[style.masterId][exampleIndex]
 				.formattedCitations[0];
-			bibliography = CSLEDIT_cslStyles
+			styleEntry.bibliography = CSLEDIT_cslStyles
 				.exampleCitations()
 				.exampleCitationsFromMasterId[style.masterId][exampleIndex]
 				.formattedBibliography;
 			
 			if (typeof style.userCitation !== "undefined" &&
 					style.userCitation !== "" &&
-					citation !== "") {
-				citationDiff = CSLEDIT_diff.prettyHtmlDiff(style.userCitation, citation);
-				citationCloseness = closenessString(style.userCitation, citation);
+					styleEntry.citation !== "") {
+				styleEntry.citationDiff = CSLEDIT_diff.prettyHtmlDiff(style.userCitation, styleEntry.citation);
+				styleEntry.citationCloseness = closenessString(style.userCitation, styleEntry.citation);
 			}
 
 			if (typeof style.userBibliography !== "undefined" &&
 					style.userBibliography !== "" &&
-					bibliography !== "") {
-				bibliographyDiff =
-					CSLEDIT_diff.prettyHtmlDiff(style.userBibliography, CSLEDIT_xmlUtility.cleanInput(bibliography));
-				bibliographyCloseness = closenessString(
-						style.userBibliography, CSLEDIT_xmlUtility.cleanInput(bibliography));
+					styleEntry.bibliography !== "") {
+				styleEntry.bibliographyDiff =
+					CSLEDIT_diff.prettyHtmlDiff(
+							style.userBibliography,
+							CSLEDIT_xmlUtility.cleanInput(styleEntry.bibliography));
+				styleEntry.bibliographyCloseness = closenessString(
+						style.userBibliography,
+						CSLEDIT_xmlUtility.cleanInput(styleEntry.bibliography));
 			}
 
-			featuredStyleClass = '';
-			featuredStyleText = '';
-			if (CSLEDIT_exampleData.topStyles.indexOf(style.styleId) !== -1) {
-				featuredStyleClass = ' class="featuredStyle" ';
-				featuredStyleText = '<span class="featuredStyle">Popular</span>';
+			if (CSLEDIT_cslStyles.topStyles.indexOf(style.styleId) !== -1) {
+				styleEntry.featuredStyle = true;
 			}
 
-			outputList.push(
-				'<table' + featuredStyleClass + '>' +
-				'<tr><td colspan=3>' + featuredStyleText + '<a class="style-title" href="' + 
-					CSLEDIT_cslStyles.localURLFromZoteroId(style.styleId) + '">' +
-				CSLEDIT_cslStyles.styles().styleTitleFromId[style.styleId] + "</a>" +
-				masterStyleSuffix + '</td></tr>' +
-				'<tr><td nowrap="nowrap"><span class="faint">Inline citation</span></td>' +
-				'<td class=match>' +
-				citation + '</td>' + citationCloseness + '</tr>' +
-				'<tr><td nowrap="nowrap"><span class="faint">Bibliography</span></td>' +
-				'<td class=match>' +
-				bibliography + '</td>' + bibliographyCloseness + "</tr>" +
-				'<tr><td><button class="installStyle" data-styleId="' + style.styleId + '">Install</button></td><td>' +
-				'<button class="editStyle" data-styleId="' + style.styleId + '">Edit</button>' +
-				'<button class="viewCode" data-styleId="' + style.styleId + '">View code</button></td></tr>' +
-				'</table>');
+			styleEntry.styleTitle = CSLEDIT_cslStyles.styles().styleTitleFromId[style.styleId];
+			styleEntry.localURL = CSLEDIT_cslStyles.localURLFromZoteroId(style.styleId);
+			styleEntry.styleId = style.styleId;
+
+			outputData.styles.push(styleEntry);
 		}
 		
-		if (outputList.length === 0) {
-			outputNode.append('<p>No results found</p>');
-		} else {
-			if (outputList.length === 0 && searchQuery.length === 0) {
-				outputNode.append('<p>Popular styles:</p>');
-			} else {
-				outputNode.append('<p>Displaying ' + outputList.length + ' results:</p>');
-			}
-			
-			$.each(outputList, function (i, entry) {
-				outputNode.append(entry + "<p/>");
-			});
+		if (outputData.styles.length > 0) {
+			outputData.numStyles = outputData.styles.length;
 		} 
+
+		outputNode.html(CSLEDIT_mustache.toHtml('searchResults', outputData));
 
 		var setupButtonHandler = function (button, func) {
 			if (typeof(func) === "undefined") {

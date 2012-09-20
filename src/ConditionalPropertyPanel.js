@@ -1,6 +1,10 @@
 "use strict";
 
+// Custom property panel for 'choose/if' and 'choose/else-if' nodes
+
 define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
+
+	// Creates a conditional propery panel in the given element
 	var CSLEDIT_ConditionalPropertyPanel = function (element, node, executeCommand) {
 		var that = this;
 
@@ -12,14 +16,14 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		this.conditions = []; // the 'model' for this view
 
 		// any / none / all selector
-		this.matchSelect = $('<select></select>');
+		this.matchSelect = $('<select/>');
 		$.each(CSLEDIT_schema.attributes('choose/if').match.values, function (i, value) {
-			that.matchSelect.append('<option>' + value.value + '</option>');
+			that.matchSelect.append($('<option>').text(value.value));
 		});
 
 		// generate mainOptions from the schema
 		this.mainOptions = {};
-		$.each(this.attributeUI, function (attribute, ui) {
+		$.each(this._attributeUI, function (attribute, ui) {
 			var mainOptionProperties = that.mainOptions[ui.mainOption] || [];
 			
 			mainOptionProperties.push({
@@ -29,10 +33,10 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 			that.mainOptions[ui.mainOption] = mainOptionProperties;
 		});
 
-		this.setup();
+		this._setup();
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.attributeValue = function (attribute) {
+	CSLEDIT_ConditionalPropertyPanel.prototype._attributeValue = function (attribute) {
 		var that = this,
 			values = [];
 
@@ -45,17 +49,17 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		return values.join(" ");
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.removeDuplicateOptions = function () {
+	CSLEDIT_ConditionalPropertyPanel.prototype._removeDuplicateOptions = function () {
 		var that = this;
 
 		$.each(that.node.attributes, function (attrIndex, attribute) {
-			var selectedValues = that.attributeValue(attribute.key).split(" "),
+			var selectedValues = that._attributeValue(attribute.key).split(" "),
 				processedValues = [],
 				availableValues;
 
 			if (attribute.key !== "match") {
 				// remove currently selcted values from availableValues
-				availableValues = that.possibleValues(attribute.key);
+				availableValues = that._possibleValues(attribute.key);
 				$.each(selectedValues, function (i, value) {
 					var index = availableValues.indexOf(value);
 					if (index !== -1) {
@@ -75,7 +79,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 								// no more available values, set processedValues and setup again
 								that.node.setAttr(attribute.key, processedValues.join(" "));
 								that.executeCommand('amendNode', [that.node.cslId, that.node]);
-								that.setup();
+								that._setup();
 								return;
 							} else {
 								// give it a new value
@@ -88,7 +92,6 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 					}
 				});
 
-				debug.log("removing selected values from " + that.valueControls.length);
 				// remove currently selected values from other controls options
 				$.each(that.valueControls, function (i, valueControl) {
 					if (that.conditions[i].attribute === attribute.key) {
@@ -97,11 +100,9 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 						// remove all except current val
 						$this.find('option[value!="' + $this.val() + '"]').remove();
 
-						//debug.log("adding available options: " + availableOptions.length);
-
 						// add back the other available options
 						$.each(availableValues, function (i, option) {
-							$this.append('<option>' + option + '</option>');
+							$this.append($('<option/>').text(option));
 						});
 					}
 				});
@@ -109,7 +110,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		});
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.attributeUI = {
+	CSLEDIT_ConditionalPropertyPanel.prototype._attributeUI = {
 		"type" : {
 			mainOption: "The document type is"
 		},
@@ -137,7 +138,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		}	
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.possibleValues = function (attribute) {
+	CSLEDIT_ConditionalPropertyPanel.prototype._possibleValues = function (attribute) {
 		// get possible values from schema
 		var possibleValues = [];
 		$.each(CSLEDIT_schema.choices("choose/if"), function (i, choice) {
@@ -158,17 +159,17 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 					possibleValues.push(possibleValue.value);
 				}
 			});
-		};
+		}
 
 		return possibleValues;
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.availableValues = function (attribute) {
-		var availableValues = this.possibleValues(attribute),
-			selectedValues = this.attributeValue();
+	CSLEDIT_ConditionalPropertyPanel.prototype._availableValues = function (attribute) {
+		var availableValues = this._possibleValues(attribute),
+			selectedValues = this._attributeValue();
 
 		// remove currently selcted values from availableValues
-		$.each(this.attributeValue(attribute).split(" "), function (i, value) {
+		$.each(this._attributeValue(attribute).split(" "), function (i, value) {
 			var index = availableValues.indexOf(value);
 			if (index !== -1) {
 				availableValues.splice(index, 1);
@@ -177,7 +178,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		return availableValues;
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.createConditionControls = function (i, condition) {
+	CSLEDIT_ConditionalPropertyPanel.prototype._createConditionControls = function (i, condition) {
 		var that = this,
 			mainOption,
 			mainOptionControl,
@@ -185,27 +186,25 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 			subOptionControl;
 
 		// create mainOption
-		mainOptionControl = $('<select class="mainOptionSelect"></select>');
-		mainOptionControl.attr('data-index', i);
+		mainOptionControl = $('<select class="mainOptionSelect" />').attr('data-index', i);
 		$.each(that.mainOptions, function (mainOption, properties) {
-			mainOptionControl.append('<option>' + mainOption + '</option>');
+			mainOptionControl.append($('<option/>').text(mainOption));
 		});
-		mainOption = that.attributeUI[condition.attribute].mainOption;
+		mainOption = that._attributeUI[condition.attribute].mainOption;
 		mainOptionControl.val(mainOption);
 		that.mainOptionControls[i] = mainOptionControl;
 
 		// create subOptionControl
 		if (that.mainOptions[mainOption].length > 1) {
-			subOptionControl = $('<select class="subOptionSelect"></select>');
-			subOptionControl.attr('data-index', i);
+			subOptionControl = $('<select class="subOptionSelect" />').attr('data-index', i);
 			$.each(that.mainOptions[mainOption], function (i, properties) {
-				subOptionControl.append($('<option>' + properties.subOption + '</option>'));
+				subOptionControl.append($('<option/>').text(properties.subOption));
 				if (condition.attribute === properties.attribute) {
 					subOptionControl.val(properties.subOption);
 				}
 			});
 		} else {
-			subOptionControl = $('<span></span>');
+			subOptionControl = $('<span/>');
 			$.each(that.mainOptions[mainOption], function (i, properties) {
 				subOptionControl.append(properties.subOption);
 			});
@@ -213,12 +212,11 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		that.subOptionControls[i] = subOptionControl;
 		
 		// create value control
-		if (that.possibleValues(condition.attribute).length > 1) {
-			valueControl = $('<select class="valueSelect"></select>');
-			valueControl.attr('data-index', i);
+		if (that._possibleValues(condition.attribute).length > 1) {
+			valueControl = $('<select class="valueSelect" />').attr('data-index', i);
 		
-			$.each(that.possibleValues(condition.attribute), function (i, possibleValue) {
-				valueControl.append('<option>' + possibleValue + '</option>');
+			$.each(that._possibleValues(condition.attribute), function (i, possibleValue) {
+				valueControl.append($('<option/>').text(possibleValue));
 			});
 			valueControl.val(condition.value);
 		} else {
@@ -229,7 +227,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 	};
 
 	// for adding or amending
-	CSLEDIT_ConditionalPropertyPanel.prototype.setCondition = function (index, newCondition) {
+	CSLEDIT_ConditionalPropertyPanel.prototype._setCondition = function (index, newCondition) {
 		var that = this,
 			oldCondition = that.conditions[index],
 			value;
@@ -238,12 +236,12 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		that.conditions[index] = newCondition;	
 
 		// update view
-		that.createConditionControls(index, newCondition);
-		that.refresh();
+		that._createConditionControls(index, newCondition);
+		that._refresh();
 
 		if (typeof(oldCondition) !== "undefined") {
 			// update old attribute value
-			value = that.attributeValue(oldCondition.attribute);
+			value = that._attributeValue(oldCondition.attribute);
 			if (value === "") {
 				that.node.setAttrEnabled(oldCondition.attribute, false);
 			} else {
@@ -252,11 +250,11 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		}
 
 		// update new attribute value
-		that.node.setAttr(newCondition.attribute, that.attributeValue(newCondition.attribute));
+		that.node.setAttr(newCondition.attribute, that._attributeValue(newCondition.attribute));
 		that.executeCommand('amendNode', [that.node.cslId, that.node]);
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.removeCondition = function (index) {
+	CSLEDIT_ConditionalPropertyPanel.prototype._removeCondition = function (index) {
 		var that = this,
 			attribute = that.conditions[index].attribute,
 			i;
@@ -270,21 +268,21 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		that.valueControls.length = that.conditions.length;
 
 		for (i = index; i < that.conditions.length; i++) {
-			that.createConditionControls(i, that.conditions[i]);
+			that._createConditionControls(i, that.conditions[i]);
 		}
 
-		that.refresh();
+		that._refresh();
 
 		// update value
-		if (that.attributeValue(attribute) === "") {
+		if (that._attributeValue(attribute) === "") {
 			that.node.setAttrEnabled(attribute, false);
 		} else {
-			that.node.setAttr(attribute, that.attributeValue(attribute));
+			that.node.setAttr(attribute, that._attributeValue(attribute));
 		}
 		that.executeCommand('amendNode', [that.node.cslId, that.node]);
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.setupEventHandlers = function () {
+	CSLEDIT_ConditionalPropertyPanel.prototype._setupEventHandlers = function () {
 		var that = this;
 
 		// event handlers
@@ -296,12 +294,12 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 				newCondition = {};
 
 			newCondition.attribute = attribute;
-			newCondition.value = that.availableValues(attribute)[0];
+			newCondition.value = that._availableValues(attribute)[0];
 			if (typeof(newCondition.value) === "undefined") {
 				alert("No more available values for this condition type");
 				return;
 			}
-			that.setCondition(index, newCondition);
+			that._setCondition(index, newCondition);
 		});
 
 		this.element.find('select.subOptionSelect').on('change', function () {
@@ -325,17 +323,17 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 
 			newCondition.attribute = attribute;
 
-			if (that.availableValues(attribute).indexOf(oldValue) !== -1) {
+			if (that._availableValues(attribute).indexOf(oldValue) !== -1) {
 				newCondition.value = oldValue;
 			} else {
-				newCondition.value = that.availableValues(attribute)[0];
+				newCondition.value = that._availableValues(attribute)[0];
 			}
 
 			if (typeof(newCondition.value) === "undefined") {
 				alert("No more available values for this condition type");
 				return;
 			}
-			that.setCondition(index, newCondition);
+			that._setCondition(index, newCondition);
 		});
 
 		this.element.find('select.valueSelect').on('change', function () {
@@ -346,14 +344,14 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 			newCondition.attribute = that.conditions[index].attribute;
 			newCondition.value = $this.val();
 
-			that.setCondition(index, newCondition);
+			that._setCondition(index, newCondition);
 		});
 
 		this.element.find('button.addValue').on('click', function () {
 			var newCondition = {};
 
-			$.each(that.attributeUI, function (attribute) {
-				var values = that.availableValues(attribute);
+			$.each(that._attributeUI, function (attribute) {
+				var values = that._availableValues(attribute);
 
 				if (values.length > 0) {
 					newCondition.attribute = attribute;
@@ -367,13 +365,13 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 				return;
 			}
 
-			that.setCondition(that.conditions.length, newCondition);
+			that._setCondition(that.conditions.length, newCondition);
 		});
 
 		this.element.find('button.deleteValue').on('click', function (event) {
 			var index = that.element.find('button.deleteValue').index(event.target);
 
-			that.removeCondition(index);
+			that._removeCondition(index);
 		});
 		
 		this.matchSelect.on('change', function () {
@@ -382,11 +380,11 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 			that.executeCommand('amendNode', [that.node.cslId, that.node]);
 
 			// update view
-			that.refresh();
+			that._refresh();
 		});
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.setup = function () {
+	CSLEDIT_ConditionalPropertyPanel.prototype._setup = function () {
 		var that = this;
 
 		this.conditions = [];
@@ -415,7 +413,7 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 			this.node.setAttr("type", "article");
 			this.node.setAttr("match", "any");
 			that.executeCommand('amendNode', [this.node.cslId, this.node]);
-			this.setup();
+			this._setup();
 			return;
 		}
 
@@ -423,19 +421,19 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		this.valueControls = [];
 		this.subOptionControls = [];
 		$.each(that.conditions, function (i, condition) {
-			that.createConditionControls(i, condition);
+			that._createConditionControls(i, condition);
 		});
 
-		this.refresh();
+		this._refresh();
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.refresh = function () {
-		this.drawControls();
-		this.removeDuplicateOptions();
-		this.setupEventHandlers();
+	CSLEDIT_ConditionalPropertyPanel.prototype._refresh = function () {
+		this._drawControls();
+		this._removeDuplicateOptions();
+		this._setupEventHandlers();
 	};
 
-	CSLEDIT_ConditionalPropertyPanel.prototype.drawControls = function () {
+	CSLEDIT_ConditionalPropertyPanel.prototype._drawControls = function () {
 		var that = this,
 			table = $('<table class="conditional"><col class="c1" /><col class="c2" />' + 
 					'<col class="c3" /><col class="c4" /><col class="c5" /></table>'),
@@ -445,10 +443,10 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		
 		this.element.children().remove();
 
-		this.element.append($('<p></p>').
-				append(this.node.name + ' ').
-				append(this.matchSelect).
-				append(' of the following conditions are met'));
+		this.element.append($('<p/>').text(this.node.name)
+			.append(' ')
+			.append(this.matchSelect)
+			.append(' of the following conditions are met'));
 
 		if (matchValue === "all") {
 			valueSeparator = '<span class="weak">and</span>';
@@ -457,27 +455,27 @@ define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
 		}
 
 		$.each(this.valueControls, function (i, valueControl) {
-			var row = $('<tr></tr>');
+			var row = $('<tr/>');
 
-			row.append($('<td class="mainOption"></td>').append(that.mainOptionControls[i]));
-			row.append($('<td></td>').append(valueControl));
+			row.append($('<td class="mainOption" />').append(that.mainOptionControls[i]));
+			row.append($('<td/>').append(valueControl));
 
-			row.append($('<td></td>').append(that.subOptionControls[i]));
+			row.append($('<td/>').append(that.subOptionControls[i]));
 			if (i === that.valueControls.length - 1) {
 				row.append($('<td/>'));
 			} else {
-				row.append($('<td>' + valueSeparator + '</td>'));
+				row.append($('<td/>').html(valueSeparator));
 			}
 
 			row.append('<td class="delete"><button class="deleteValue">-</button></td>');
 			if (that.valueControls.length === 1) {
-				row.find('button.deleteValue').css({visibility:"hidden"});
+				row.find('button.deleteValue').css({visibility: "hidden"});
 			}
 
 			if (i === that.valueControls.length - 1) {
 				row.append('<td class="add"><button class="addValue">+</button></td>');
 			} else {
-				row.append('<td class="add"></td>');
+				row.append('<td class="add" />');
 			}
 
 			table.append(row);

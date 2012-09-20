@@ -6,8 +6,8 @@ define([	'src/options',
 			'src/exampleCitations',
 			'src/diff',
 			'src/debug',
-			'external/citeproc/citeproc',
 			'src/citeprocLoadSys',
+			'external/citeproc/citeproc',
 			'jquery'
 		],
 		function (
@@ -15,8 +15,8 @@ define([	'src/options',
 			CSLEDIT_exampleCitations,
 			CSLEDIT_diff,
 			debug,
-			CSL,
 			citeprocSys,
+			CSL,
 			$
 		) {
 	var oldFormattedCitation = "",
@@ -28,8 +28,11 @@ define([	'src/options',
 		previousStyle = "", // to skip initializing citeproc when using the same style
 		citeproc;
 
-	var stripTags = function (html, tag) {
-		var stripRegExp = new RegExp("<" + tag + ".*?>|</\\s*" + tag + "\\s*?>", "g");
+	// Remove the tags with the given tagName from the given html and return the result
+	//
+	// The contents of the removed tags are retained
+	var stripTags = function (html, tagName) {
+		var stripRegExp = new RegExp("<" + tagName + ".*?>|</\\s*" + tagName + "\\s*?>", "g");
 
 		// creating new string because of bug where some html from generateExampleCitations.js
 		// was type object instead of string and didn't have the replace() function
@@ -38,6 +41,17 @@ define([	'src/options',
 		return stripped;
 	};
 
+	// Formats the given citationClusters, containing the given documents, in the given
+	// style
+	//
+	// If taggedOutput is true, the output will contain <span cslid=???> tags which maps
+	// to the input CSL node responsible for each part of the output
+	//
+	// Returns a result containing the following properties:
+	//
+	// - statusMessage - used for errors, if everything went well, this will be an empty string
+	// - formattedCitations - a list of formatted inline citation strings
+	// - formattedBibliography - the formatted bibliography string
 	var formatCitations = function (style, documents, citationClusters, taggedOutput) {
 		var bibliography,
 			result,
@@ -183,11 +197,15 @@ define([	'src/options',
 		// add syntax highlighting at highest level
 		if (citationNode.length > 0) {
 			// wrap in outer div since the .inline-csl-entry one is an inline-block
-			citationTagStart = '<div class="csl-entry-container"><div class="inline-csl-entry" cslid="' + citationNode[0].cslId + '">';
+			citationTagStart = 
+				'<div class="csl-entry-container">' +
+				'<div class="inline-csl-entry" cslid="' + citationNode[0].cslId + '">';
 			citationTagEnd = '</div></div>';
 		}
 		if (bibliographyNode.length > 0) {
-			bibliographyTagStart = '<div class="csl-entry-container"><div class="bibliography-csl-entry" cslid="' + bibliographyNode[0].cslId + '">';
+			bibliographyTagStart =
+				'<div class="csl-entry-container">' +
+				'<div class="bibliography-csl-entry" cslid="' + bibliographyNode[0].cslId + '">';
 			bibliographyTagEnd = '</div></div>';
 		}
 
@@ -266,7 +284,7 @@ define([	'src/options',
 		debug.timeEnd("runCiteprocAndDisplayOutput");
 	};
 
-	// Return public members:
+	// Public members:
 	return {
 		formatCitations : formatCitations,
 		runCiteprocAndDisplayOutput : runCiteprocAndDisplayOutput

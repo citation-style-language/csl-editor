@@ -3,7 +3,18 @@
 // Uses a NodeWatcher to monitor the style/info/title node for changes
 // and updates the titlebar
 
-define(['src/NodeWatcher', 'src/dataInstance', 'src/debug'], function (CSLEDIT_NodeWatcher, CSLEDIT_data, debug) {
+define(
+		[	'src/NodeWatcher',
+			'src/dataInstance',
+			'src/xmlUtility',
+			'src/debug'
+		], function (
+			CSLEDIT_NodeWatcher,
+			CSLEDIT_data,
+			CSLEDIT_xmlUtility,
+			debug
+		) {
+	// Creates a titlebar within the given jQuery element
 	var CSLEDIT_Titlebar = function (element) {
 		var that = this;
 
@@ -11,7 +22,7 @@ define(['src/NodeWatcher', 'src/dataInstance', 'src/debug'], function (CSLEDIT_N
 		this.element.html('<h3><span cslid="-1"/></h3>').css({cursor: "default"});
 
 		this.nodeWatcher = new CSLEDIT_NodeWatcher("style/info/title", CSLEDIT_data, function (nodeData) {
-			that.updateTitle(nodeData);
+			that._updateTitle(nodeData);
 		});
 		
 		this.addNode = function (id, position, nodeData, numNodes) {
@@ -25,16 +36,14 @@ define(['src/NodeWatcher', 'src/dataInstance', 'src/debug'], function (CSLEDIT_N
 		};
 	};
 
-	CSLEDIT_Titlebar.prototype.updateTitle = function (nodeData) {
+	CSLEDIT_Titlebar.prototype._updateTitle = function (nodeData) {
 		var title;
 		if (nodeData === null) {
 			title = "No title";
 		} else {
 			title = nodeData.textValue;
 		}
-		this.element.find('span[cslid]').html(title).attr('cslid', nodeData.cslId);
-
-		debug.log("updated title to " + this.element.html());
+		this.element.find('span[cslid]').text(title).attr('cslid', nodeData.cslId);
 	};
 
 	return CSLEDIT_Titlebar;

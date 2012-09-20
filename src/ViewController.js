@@ -18,6 +18,7 @@ define(
 			'src/CslNode',
 			'src/Iterator',
 			'src/dataInstance',
+			'src/uiConfig',
 			'external/mustache',
 			'src/debug',
 			'jquery.scrollTo'
@@ -32,88 +33,28 @@ define(
 			CSLEDIT_CslNode,
 			CSLEDIT_Iterator,
 			CSLEDIT_data,
+			CSLEDIT_uiConfig,
 			Mustache,
 			debug,
 			jquery_scrollTo
 		) {
-	return function CSLEDIT_ViewController( 
+	// Creates a ViewController responsible for adding and maintaining the content
+	// in all the given jQuery elements
+	var CSLEDIT_ViewController = function ( 
 		treeView, titlebarElement, propertyPanelElement, nodePathElement,
 		syntaxHighlighter) {
 	
-		// smartTrees display a subset of the CSL tree
-		// and allow transformations of the data
-		var smartTreeSchema = [
-				{
-					id : "info",
-					name : "Style Info",
-					// TODO: Fix src/SmartTree so that the locale node can be added.
-					//       At present there's a bug where adding a locale node doesn't
-					//       put it in the tree because it's a child of the "style" node, and
-					//       therefore part of that range.
-					//       (note - not an issue for 'style/info' since the bug only affects
-					//       nodes added during a session, and 'style/info' is a required node)
-					//headingNodePath : "style",
-					//headingNodePossibleChildren : {
-					//	"locale" : "one"
-					//},
-					//headingNodeShowPropertyPanel : false,
-					nodePaths : ["style/info", "style", /* "style/locale" */],
-					macroLinks : false,
-					leafNodes : ["info", "style"]
-				},
-				{
-					id : "citations",
-					name : "Inline Citations",
-					headingNodePath : "style/citation",
-					headingNodePossibleChildren : {
-						"layout" : "one",
-						"sort" : "one"
-					},
-					nodePaths : ["style/citation/layout", "style/citation/sort"],
-					//leafNodes : ["sort"],
-					macroLinks : true
-				},
-				{
-					id : "bibliography",
-					name : "Bibliography",
-					headingNodePath : "style/bibliography",
-					headingNodePossibleChildren : {
-						"layout" : "one",
-						"sort" : "one"
-					},
-					nodePaths : ["style/bibliography/layout", "style/bibliography/sort"],
-					//leafNodes : ["sort"],
-					macroLinks : true
-				},
-				{
-					id : "macro",
-					name : "Macros",
-					headingNodePath : "style",
-					headingNodePossibleChildren : {
-						"macro" : "zeroOrMore"
-					},
-					headingNodeShowPropertyPanel : false,
-					nodePaths : ["style/macro"],
-					macroLinks : true,
-				},
-				{
-					id : "locale",
-					name : "Advanced",
-					headingNodePath : "",
-					macroLinks : false,
-					nodePaths : ["style"]
-				}
-			],
-			views = [],
+		var views = [],
 			treesLoaded,
 			treesToLoad,
 			callbacks,
-			selectedTree = null,
+			selectedView = null,
 			selectedNodeId = -1,
 			recentlyEditedMacro = -1,
 			nodePathView,
 			suppressSelectNode = false;
 
+		// Called every time one of the jsTrees have finished loading
 		var treeLoaded = function () {
 			treesLoaded++;
 
@@ -127,10 +68,12 @@ define(
 			}
 		};
 
-		var newStyle = function () {
-			init(CSLEDIT_data.get(), callbacks);
-		};
-
+		// Sets up all the views, including:
+		//
+		// - SmartTree views
+		// - SmartTreeHeading views
+		// - TitleBar
+		// - NodePathView
 		var init = function (cslData, _callbacks) {
 			var eventName,
 				jsTreeData,
@@ -152,15 +95,15 @@ define(
 			callbacks = _callbacks;
 
 			treeView.html('');
-			$.each(smartTreeSchema, function (index, value) {
+			$.each(CSLEDIT_uiConfig.smartTreeSchema, function (index, value) {
 				row = $('');
 				row = $('<div id="%1"><div class="heading"/><div class="tree"/></div>'.replace(
 					'%1', value.id));
 				row.appendTo(treeView);
-				treeView.append($('<div class=spacer></div>'));
+				treeView.append($('<div class=spacer />'));
 			});
 
-			$.each(smartTreeSchema, function (index, value) {
+			$.each(CSLEDIT_uiConfig.smartTreeSchema, function (index, value) {
 				var tree, heading;
 				treesToLoad++;
 				
@@ -180,7 +123,7 @@ define(
 					});
 
 				// Use this for debugging if you're not sure the view accurately reflects the data
-				//tree.setVerifyAllChanges(true);
+				//tree._setVerifyAllChanges(true);
 				tree.setCallbacks({
 					loaded : treeLoaded,
 					selectNode : selectNodeInView(tree),
@@ -198,6 +141,7 @@ define(
 			syntaxHighlighter.addHighlightableElements(nodePathElement);
 		};
 		
+		// Called after selecting a node
 		var selectedNodeChanged = function () {
 			var nodeAndParent,
 				node,
@@ -212,14 +156,14 @@ define(
 				translatedNodeInfo,
 				translatedParentName;
 
-			if (selectedTree !== null &&
-					selectedNode() === -1 && "getMissingNodePath" in selectedTree) {
+			if (selectedView !== null &&
+					selectedNode() === -1 && "getMissingNodePath" in selectedView) {
 				propertyPanelElement.html(Mustache.to_html(
-					'<h3>The {{missingNode}} node doesn\'t exist</h3>' + 
+					'<h3>The {{missingNode}} node doesn\'t exist</h3>' +
 					'<p>Use the "+" Add Node button at the top left to add it.</p>',
-					{ missingNode : selectedTree.getMissingNodePath() }
+					{ missingNode : selectedView.getMissingNodePath() }
 				));
-				nodePathView.nodeMissing(selectedTree.getMissingNodePath());
+				nodePathView.nodeMissing(selectedView.getMissingNodePath());
 				syntaxHighlighter.selectedNodeChanged(selectedNode());		
 				return;
 			}
@@ -248,22 +192,23 @@ define(
 			syntaxHighlighter.selectedNodeChanged(node.cslId);		
 		};
 
-		var selectNodeInView = function (selectedView) {
+		// Returns a function to select a node in the given view
+		var selectNodeInView = function (thisView) {
 			return function (event, ui) {
 				// deselect nodes in other views
 				$.each(views, function (i, view) {
-					if (view !== selectedView) {
+					if (view !== thisView) {
 						if ("deselectAll" in view) {
 							view.deselectAll();
 						}
 					}
 				});
 
-				selectedTree = selectedView;
-				selectedNodeId = parseInt(selectedView.selectedNode(), 10);
+				selectedView = thisView;
+				selectedNodeId = parseInt(thisView.selectedNode(), 10);
 
-				if (/"/.test(selectedView.selectedNode())) {
-					debug.log("WARNING!!!!! view: " + JSON.stringify(Object.keys(selectedView)) +
+				if (/"/.test(thisView.selectedNode())) {
+					debug.log("WARNING!!!!! view: " + JSON.stringify(Object.keys(thisView)) +
 							" returned cslId with quotes");
 				}
 		
@@ -271,12 +216,14 @@ define(
 			};
 		};
 
+		// Returns a list of the currently selected node stack cslIds,
+		// or "no selected tree" if no view is currently selected
 		var getSelectedNodePath = function () {
-			if (selectedTree === null) {
+			if (selectedView === null) {
 				return "no selected tree";
 			}
 
-			return selectedTree.getSelectedNodePath();
+			return selectedView.getSelectedNodePath();
 		};
 
 		var macroEditNotification = function (id) {
@@ -316,10 +263,13 @@ define(
 			}
 		};
 
+		// If suppress is true, an addNode event won't change the selection
+		// If suppress is false, an addNode event select the newly added node
 		var setSuppressSelectNode = function (suppress) {
 			suppressSelectNode = suppress;
 		};
 
+		// Responds to an addNode event
 		var addNode = function (id, position, newNode, nodesAdded) {
 			macroEditNotification(id);	
 			$.each(views, function (i, view) {
@@ -332,6 +282,7 @@ define(
 			}
 		};
 
+		// Responds to a deleteNode event
 		var deleteNode = function (id, nodesDeleted) {
 			propertyPanelElement.html('');
 			nodePathView.selectNode([]);
@@ -344,6 +295,7 @@ define(
 			});
 		};
 
+		// Responds to an amendNode event
 		var amendNode = function (id, amendedNode) {
 			macroEditNotification(id);
 			$.each(views, function (i, view) {
@@ -355,8 +307,21 @@ define(
 			selectedNodeChanged();
 		};
 
+		// Responds to an updateFinished event
+		var updateFinished = function () {
+			propagateErrors();
+			callbacks.formatCitations();
+		};
+
+		// Responds to the newStyle event,
+		// Uses the nuclear option and re-builds everything
+		var newStyle = function () {
+			init(CSLEDIT_data.get(), callbacks);
+		};
+
+		// Select the given cslId node from within the given highlighted nodes
 		var selectNode = function (
-				id,
+				cslId,
 				highlightedNodes,
 				missingNodePath // optional: if selection represents a missing node
 				) {
@@ -364,30 +329,32 @@ define(
 				headingNode;
 
 			// ensure it's a number
-			id = parseInt(id, 10);
+			cslId = parseInt(cslId, 10);
 
-			if (id === -1) {
-				selectedNodeId = id;
+			if (cslId === -1) {
+				selectedNodeId = cslId;
 				selectedNodeChanged(missingNodePath);
 				return;
 			}
 
-			headingNode = treeView.find('span[cslid=' + id + ']');
+			headingNode = treeView.find('span[cslid=' + cslId + ']');
 
 			if (typeof(highlightedNodes) === "undefined") {
-				treeNode = treeView.find('li[cslid=' + id + '] > a');
+				treeNode = treeView.find('li[cslid=' + cslId + '] > a');
 			} else {
-				treeNode = highlightedNodes.filter('li[cslid=' + id + ']').children('a');
+				treeNode = highlightedNodes.filter('li[cslid=' + cslId + ']').children('a');
 			}
 
 			if (headingNode.length === 0 && treeNode.length > 0) {
 				clickNode(treeNode.first());
 			} else {
-				selectedNodeId = id;
+				selectedNodeId = cslId;
 				selectedNodeChanged();
 			}
 		};
 
+		// Selects the first occurance of the given nodePath
+		// within the tree view
 		var selectNodeFromPath = function (nodePath) {
 			var treeNode = treeView,
 				cslId;
@@ -412,34 +379,41 @@ define(
 			});
 		};
 
+		// Returns the cslId of the currently selected node
 		var selectedNode = function () {
 			return selectedNodeId;
 		};
 
+		// Returns the given member variable of the currently selected view,
+		// or null if it doesn't exist
 		var selectedViewProperty = function (property) {
-			if (selectedTree === null) {
+			if (selectedView === null) {
 				return null;
 			}
-			if (property in selectedTree) {
-				return selectedTree[property];
+			if (property in selectedView) {
+				return selectedView[property];
 			}
 			return null;
 		};
 
-		var expandNode = function (id) {
+		// Expand the node with the given cslId if it exists in a tree view
+		var expandNode = function (cslId) {
 			$.each(views, function (i, view) {
 				if ('expandNode' in view) {
-					view.expandNode(id);
+					view.expandNode(cslId);
 				}
 			});
 		};
 
+		// Will execute the CSLEDIT_ViewController member function with name 'command'
+		// and pass it the given arguments
 		var styleChanged = function (command, args) {
 			args = args || [];
 			debug.log("executing view update: " + command + "(" + args.join(", ") + ")");
 			this[command].apply(null, args);
 		};
 		
+		// Collapses all collapsable views
 		var collapseAll = function () {
 			$.each(views, function (i, view) {
 				if ('collapseAll' in view) {
@@ -448,14 +422,27 @@ define(
 			});
 		};
 
+		// For tree 'li' elements nodes with attr 'data-error',
+		// add an errorParent class to all 'li' parents
 		var propagateErrors = function () {
 			// propagate data-error to parent elements
 			treeView.find('li.errorParent').removeClass('errorParent');
 			treeView.find('li[data-error]').each(function (i, element) {
 				var parents = $(element).parents('li');
-				console.log("adding error to " + parents.length + " parents");
 				parents.addClass('errorParent');
 			});
+		};
+
+		// Returns the node path ('/' separated list of node names) of a node
+		// which is currently selected in the view, but doesn't exist in the
+		// current CSL style
+		//
+		// (e.g. after clicking on the "Bibliography" SmartTreeHeading for a style
+		// without a bibliography)
+		var selectedMissingNodePath = function () {
+			if (selectedView !== null && "getMissingNodePath" in selectedView) {
+				return selectedView.getMissingNodePath();
+			}
 		};
 
 		// public:
@@ -466,24 +453,14 @@ define(
 			deleteNode : deleteNode,
 			amendNode : amendNode,
 			newStyle : newStyle,
+			updateFinished : updateFinished,
 
 			selectNode : selectNode,
 			selectedNode : selectedNode,
-			selectedMissingNodePath : function () {
-				if (selectedTree !== null && "getMissingNodePath" in selectedTree) {
-					return selectedTree.getMissingNodePath();
-				}
-			},
+			selectedMissingNodePath : selectedMissingNodePath,
 
 			expandNode : expandNode,
-
 			collapseAll : collapseAll,
-
-			// TODO: rename formatCitations to updateFinished
-			formatCitations : function () {
-				propagateErrors();
-				callbacks.formatCitations();
-			},
 				
 			styleChanged : styleChanged,
 			getSelectedNodePath : getSelectedNodePath,
@@ -492,5 +469,7 @@ define(
 			selectedViewProperty : selectedViewProperty
 		};
 	};
+
+	return CSLEDIT_ViewController;
 });
 

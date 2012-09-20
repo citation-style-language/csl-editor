@@ -24,10 +24,10 @@ define(
 		this.showPropertyPanel = showPropertyPanel;
 
 		if (typeof(nodePath) === "undefined" || nodePath === "") {
-			this.updateHtml(false);
+			this._updateHtml(false);
 		} else {
 			this.nodeWatcher = new CSLEDIT_NodeWatcher(nodePath, CSLEDIT_data, function (nodeData) {
-				that.updateHtml(true, nodeData);
+				that._updateHtml(true, nodeData);
 			});
 
 			this.addNode = function (id, position, nodeData, numNodes) {
@@ -51,11 +51,12 @@ define(
 		}
 	};
 
+	// Deselect this SmartTreeHeading
 	CSLEDIT_SmartTreeHeading.prototype.deselectAll = function () {
 		this.element.find('span').removeClass('selected');
 	};
 
-	CSLEDIT_SmartTreeHeading.prototype.updateHtml = function (dynamicNode, nodeData) {
+	CSLEDIT_SmartTreeHeading.prototype._updateHtml = function (dynamicNode, nodeData) {
 		var that = this,
 			cslidAttribute,
 			span;
@@ -80,6 +81,7 @@ define(
 		this.callbacks = callbacks;
 	};
 
+	// Returns the cslId of the node associated with this SmartTreeHeading
 	CSLEDIT_SmartTreeHeading.prototype.selectedNode = function () {
 		if (this.nodeWatcher.nodeData !== null) {
 			return this.nodeWatcher.nodeData.cslId;
@@ -88,11 +90,17 @@ define(
 		}
 	};
 
+	// Only call if this SmartTreeHeading is associated with a node path
+	// not currently in the CSL tree
+	//
+	// Returns the full node path as a '/' separated string
 	CSLEDIT_SmartTreeHeading.prototype.getMissingNodePath = function () {
 		debug.assertEqual(this.nodeWatcher.nodeData, null);
 		return this.nodeWatcher.nodePath;
-	};		
+	};
 
+	// Returns a list of cslIds representing the path/stack associated with this
+	// SmartTreeHeading
 	CSLEDIT_SmartTreeHeading.prototype.getSelectedNodePath = function () {
 		var splitNodePath = this.nodeWatcher.nodePath.split("/"),
 			nodePath = [],

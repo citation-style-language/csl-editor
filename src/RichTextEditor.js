@@ -1,5 +1,7 @@
 "use strict";
 
+// A basic rich text editor using a contenteditable div
+
 define(
 		[	'src/richTextToolbar',
 			'src/xmlUtility'
@@ -7,10 +9,11 @@ define(
 			CSLEDIT_richTextToolbar,
 			CSLEDIT_xmlUtility
 		) {
+	// Create a RichTextEditor within the given containerElement
 	var CSLEDIT_RichTextEditor = function (containerElement, onChange) {
 		var that = this;
 
-		this.editor = $('<div>')
+		this.editor = $('<div/>')
 			.attr('contenteditable', 'true')
 			.addClass('editor')
 			.css("cursor", "text");
@@ -78,6 +81,7 @@ define(
 		this.editor.bind("paste", paste);
 	};
 
+	// Get/set the string represented by the rich text editor
 	CSLEDIT_RichTextEditor.prototype.value = function (newValue) {
 		if (typeof(newValue) === "undefined") {
 			var cleaned = CSLEDIT_xmlUtility.cleanInput(this.editor.html(), true);

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+
+	<title>Source code documentation</title>
+
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.22/themes/ui-lightness/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="../css/base.css?bust=$GIT_COMMIT" />
+	<style>
+		body {
+			margin: 10px;
+		}
+		.moduleInfo {
+			padding-left: 20px;
+		}
+	</style>
+
+	<script type="text/javascript" src="../external/require-jquery.js"></script>
+	<script>
+		"use strict";
+
+		require.config({
+			baseUrl: "..",
+			urlArgs : "bust=$GIT_COMMIT"
+		});
+
+		$(document).ready(function() {
+			if ("$GIT_COMMIT".length === 40) {
+				$('#documentation').html(
+					'<p><strong>This page only works with the checked out repository, not the deployed version of the site.</strong></p>' +
+				  	'<p><strong>Check out this repo to get the site running locally: <a href="https://github.com/citation-style-editor/csl-editor-demo-site">https://github.com/citation-style-editor/csl-editor-demo-site</a></strong></p>'
+				);
+			} else {
+				requirejs(['src/config'], function (config) {
+					requirejs(['src/document'], function (CSLEDIT_document) {
+						var generate = function () {
+							var resources = [];
+
+							$('input').each( function (i, checkbox) {
+								var $this = $(checkbox);
+								if ($this.is(':checked')) {
+									resources.push('src/' + $this.attr("data-resource"));
+								}
+							});
+
+							CSLEDIT_document.generate(resources, '#documentation');
+						};
+						
+						$('input').change(generate);
+
+						generate();
+
+						var hash = window.location.hash;
+						window.location.hash = "";
+						window.location.hash = hash;
+					});
+				});
+			}
+		});
+	</script>
+</head>
+<body>
+	<h1>CSL Editor Library - Source code documentation</h1>
+	<em>Dynamically generated from the current source code</em>
+
+	<h2>Pages to include</h2>
+	<input type="checkbox" id="searchByNameCheckbox" checked="checked" data-resource="SearchByName" />
+	<label for="searchByNameCheckbox">Search by Name</label>
+	<input type="checkbox" id="searchByValueCheckbox" checked="checked" data-resource="SearchByExample" />
+	<label for="searchByValueCheckbox">Search by Example</label>
+	<input type="checkbox" id="visualEditorCheckbox" checked="checked" data-resource="VisualEditor" />
+	<label for="visualEditorCheckbox">Visual Editor</label>
+	<input type="checkbox" id="codeEditorCheckbox" checked="checked" data-resource="CodeEditor" />
+	<label for="codeEditorCheckbox">Code Editor</label>
+
+	<h2>Modules</h2>
+	<div id="documentation">
+	</div>
+</body>
+</html>

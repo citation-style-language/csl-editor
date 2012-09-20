@@ -1,5 +1,9 @@
 "use strict";
 
+// This creates a CSL code editor with real time preview
+//
+// It uses CodeMirror to provide the code editing view
+
 define([	'src/citationEngine',
 			'src/options',
 			'src/dataInstance',
@@ -17,7 +21,12 @@ define([	'src/citationEngine',
 			CodeMirrorXmlMode,
 			jquery_layout
 		) {
-	var CSLEDIT_codeEditor = function (containerElement, userOptions) {
+	// Creates a CSL Code Editor within containerElement
+	var CSLEDIT_codeEditor = function (
+			containerElement,     // the selector or jQuery element to create the editor within
+			configurationOptions  // see https://github.com/citation-style-editor/csl-editor/wiki/Code-Editor
+			                      // for available options
+			) {
 		var codeTimeout,
 			editor,
 			diffTimeout,
@@ -30,7 +39,7 @@ define([	'src/citationEngine',
 
 		containerElement = $(containerElement);
 
-		CSLEDIT_options.setOptions(userOptions);
+		CSLEDIT_options.setOptions(configurationOptions);
 
 		$.ajax({
 			url: CSLEDIT_urlUtils.getResourceUrl("html/codeEditor.html"),
@@ -57,7 +66,7 @@ define([	'src/citationEngine',
 					var result = CSLEDIT_data.setCslCode(editor.getValue());
 
 					if ("error" in result) {
-						$("#statusMessage").html(result.error);
+						$("#statusMessage").text(result.error);
 						$("#formattedCitations").html("");
 						$("#formattedBibliography").html("");
 					} else {

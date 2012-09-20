@@ -1,7 +1,6 @@
 "use strict";
 
-/* Options for modifying the Schema for use in the CSL Editor
- */
+// Options for altering the output of src/Schema for use in the CSL Editor
 
 define({
 	defaultDefaultAttribute : {

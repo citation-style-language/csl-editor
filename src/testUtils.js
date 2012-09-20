@@ -1,12 +1,12 @@
 "use strict";
 
 define(
-		[	'src/exampleData',
+		[	'src/cslStyles',
 			'src/urlUtils',
 			'src/debug'
 		],
 		function (
-			CSLEDIT_exampleData,
+			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils,
 			debug
 		) {
@@ -20,7 +20,7 @@ define(
 	CSLEDIT_testUtils.getStyles = function (maxNumberOfStyles) {
 		var styles = {};
 
-		$.each(CSLEDIT_exampleData.topStyles, function (i, style) {
+		$.each(CSLEDIT_cslStyles.topStyles, function (i, style) {
 			var url = CSLEDIT_urlUtils.getResourceUrl('external/csl-styles/' +
 					style.replace(/^.*\//, "") + ".csl"),
 				cslCode;

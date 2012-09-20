@@ -18,7 +18,6 @@ Play with the reference implementation here: [Citation Style Editor](http://stev
 - [diff\_match\_patch](http://code.google.com/p/google-diff-match-patch/) (for calculating edit distances in Search by Example)
 - [Trang](http://www.thaiopensource.com/relaxng/trang.html) (for converting schema files from .rnc to .rng)
 - [node.js](http://node.js.org) (for javascript run in the build process)
-- [Rhino](http://www.mozilla.org/rhino/) (for javascript run in the build process)</li>
 - [FamFamFam Silk icons](http://www.famfamfam.com/lab/icons/silk/)
 - [Fugue icons](http://p.yusukekamiyamane.com/)
 - [jQuery](http://jquery.com/)
@@ -26,6 +25,9 @@ Play with the reference implementation here: [Citation Style Editor](http://stev
 - [jQuery UI Layout Plugin](http://layout.jquery-dev.net)
 - [jQuery hoverIntent Plugin](http://cherne.net/brian/resources/jquery.hoverIntent.html)
 - [jQuery scrollTo Plugin](http://demos.flesler.com/jquery/scrollTo/)
-- [require.js](http://requirejs.org/)
-
+- [QUnit](http://qunitjs.com/) (javascript unit testing framework)
+- [RequireJS](http://requirejs.org/) (javascript module loader)
+- [mustache](http://mustache.github.com/) (used to generate HTML from templates)
+- [pagedown](http://code.google.com/p/pagedown/) (used to generate source code docmentation)
+- [XRegExp](http://xregexp.com/) (for unicode letter matching in the Search by Example page)
 

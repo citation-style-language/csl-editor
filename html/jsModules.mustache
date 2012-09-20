@@ -1,0 +1,26 @@
+<!-- To display the list of javascript modules and their documenation -->
+
+{{#modules}}
+	<h3><a name="{{name}}" href="#{{name}}" >{{#cleanName}}{{name}}{{/cleanName}}</a></h3>
+	<div class="moduleInfo">
+		{{#error}}<p><strong>{{/error}}{{error}}{{#error}}</strong></p>{{/error}}
+		{{{descriptionHtml}}}
+		{{#hasDependencies}}
+			<p><strong>uses: </strong>
+			{{#dependencies}}
+			<a href="#{{name}}">{{#cleanName}}{{name}}{{/cleanName}}</a>
+			{{/dependencies}}
+			</p>
+		{{/hasDependencies}}
+		{{#hasDependents}}
+			<p><strong>used by: </strong>
+			{{#dependents}}
+			<a href="#{{name}}">{{#cleanName}}{{name}}{{/cleanName}}</a>
+			{{/dependents}}
+			</p>
+		{{/hasDependents}}
+		<p><a href="{{url}}">View Code</a> ({{lineCount}} lines)</p>
+	</div>
+{{/modules}}
+	
+<p>Total line count: {{totalLineCount}}</p>

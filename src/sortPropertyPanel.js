@@ -1,5 +1,17 @@
 "use strict";
 
+// A custom property panel for the 'sort' node and its child 'key' nodes
+//
+// NOTE: This is currently disabled due to two bugs
+//
+// 1. re-ordering the sort keys can cause crash
+// 2. no ascending/descending option for the sort keys
+//
+// Additionally, the HTML generation should not use string concatenation
+//
+// Currently there's some help text being displayed in src/propertyPanel.js instead,
+// because otherwise the node contains no controls
+
 define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
 	var onChangeTimeout, setupPanel, list, nodeData, panel, executeCommand,
 		namesAttributeNames = [

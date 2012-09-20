@@ -1,20 +1,25 @@
 "use strict";
 
+// Sets up a Search by Name page
+
 define(
 		[	'src/options',
-			'src/exampleData',
 			'src/searchResults',
 			'src/cslStyles',
 			'src/urlUtils'
 		],
 		function (
 			CSLEDIT_options,
-			CSLEDIT_exampleData,
 			CSLEDIT_searchResults,
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils
 		) {
-	var CSLEDIT_SearchByName = function (mainContainer, userOptions) {
+	// Creates a Search by Name tool within mainContainer
+	var CSLEDIT_SearchByName = function (
+			mainContainer, // the selector or jQuery element to create the search tool within
+			userOptions    // see https://github.com/citation-style-editor/csl-editor/wiki/Search-By-Name
+			               // for full list of options
+			) {
 		var nameSearchTimeout,
 			previousQuery;
 
@@ -32,7 +37,6 @@ define(
 			cache : false
 		});
 
-		// --- Functions for style name search ---
 		var searchForStyleName = function () {
 			var searchQuery = $("#styleNameQuery").val(),
 				searchQueryLower = searchQuery.toLowerCase(),
@@ -40,14 +44,13 @@ define(
 				styleId,
 				styleName,
 				masterId,
-				masterStyleName,
 				index;
 
 			$("#message").html("");
 
 			if (searchQuery.length === 0) {
 				$("#message").html("<h2>Popular Styles</h2>");
-				$.each(CSLEDIT_exampleData.topStyles, function (i, styleId) {
+				$.each(CSLEDIT_cslStyles.topStyles, function (i, styleId) {
 					result.push({
 						styleId : styleId,
 						masterId : CSLEDIT_cslStyles.styles().masterIdFromId[styleId]
@@ -78,16 +81,10 @@ define(
 					if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
 						styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
 						masterId = CSLEDIT_cslStyles.styles().masterIdFromId[styleId];
-						if (masterId !== styleId) {
-							masterStyleName = ' (same as <a href="' + masterId + '">' +
-								CSLEDIT_cslStyles.styles().styleTitleFromId[masterId] + '</a>)';
-						} else {
-							masterStyleName = "";
-						}
 						result.push({
 								styleId : styleId,
 								masterId : masterId,
-								popular : CSLEDIT_exampleData.topStyles.indexOf(styleId)
+								popular : CSLEDIT_cslStyles.topStyles.indexOf(styleId)
 							});
 					}
 				}

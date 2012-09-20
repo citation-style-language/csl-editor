@@ -1,5 +1,11 @@
 "use strict";
 
+// Implements:
+//
+// - Syntax highlighting when hovering over a) the tree view and b) the example output
+//
+// - Reverse selecting of the relevant CSL node when clicking on the example output
+
 define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
 	return function (highlightableElements, treeView) {
 		var selectedCslId = -1,
@@ -10,6 +16,8 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			highlightedTreeNodes = $(),
 			highlightTimeout;
 
+		// Returns all spans and divs with the given cslId, and optionally
+		// with the given className
 		var spansAndDivs = function (cslId, className) {
 			var attribute;
 			if (typeof(cslId) === "undefined" || cslId === null) {
@@ -24,6 +32,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			return highlightableElements.find('div' + attribute + ', ' + 'span' + attribute);
 		};
 
+		// Called after every time the selected node changes
 		var selectedNodeChanged = function (newSelectedCslId) {
 			selectedCslId = newSelectedCslId;
 
@@ -35,8 +44,9 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 				.addClass("selected");
 		};
 
+		// build stack starting at the innermost node (the last in the hoveredNodeStack list)
+		// and successively prepending the outer nodes to the start of the list with unshift()
 		var addToHoveredNodeStack = function (target) {
-			// build stack 'backwards' from the inner node outwards
 			var parentNode;
 			
 			if (typeof target.attr("cslid") !== "undefined") {
@@ -49,20 +59,24 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
-		var removeFromHoveredNodeStack = function (cslidElements, removeAll) {
-			// pop one node, or all nodes, from hoveredNodeStack
+		// Pop one node from the hoveredNodeStack
+		// Or, if removeAll is true, empty the hoveredNodeStack
+		//
+		// Un-highlight all popped nodes which are found within the cslIdElements jQuery selection
+		var removeFromHoveredNodeStack = function (cslIdElements, removeAll /* optional */) {
 			var poppedNode;
 
 			if (hoveredNodeStack.length > 0) {
 				poppedNode = hoveredNodeStack.pop();
-				unHighlightNode(poppedNode, cslidElements);
+				unHighlightNode(poppedNode, cslIdElements);
 
 				if (removeAll) {
-					removeFromHoveredNodeStack(cslidElements, removeAll);
+					removeFromHoveredNodeStack(cslIdElements, removeAll);
 				}
 			}
 		};
 
+		// Add highlighting to the top node in the nodeStack
 		var highlightNode = function (nodeStack) {
 			var cslId = nodeStack[nodeStack.length - 1];
 
@@ -76,6 +90,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}, 100);
 		};
 
+		// Add highlighting to the cslId node
 		var highlightOutput = function (cslId)
 		{
 			var node = spansAndDivs(cslId);
@@ -88,6 +103,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Selects the node which the user is currently hovered over
+		//
+		// (called reverseSelect because it maps from the output representation to the 
+		// node in the original CSL tree)
 		var reverseSelectNode = function (clickedCslId) {
 			var index,
 				cslId = parseInt(hoveredNodeStack[hoveredNodeStack.length - 1], 10),
@@ -96,11 +115,17 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			if (hoveredNodeStack.length === 0) {
 				cslId = clickedCslId;
 			} else {
-				// skip the macro definition nodes, jump to the referencing 'text' node instead
 				selectedNode = CSLEDIT_data.getNode(cslId);
 				if (selectedNode.name === "macro") {
-					debug.assert(hoveredNodeStack.length > 1);
-					cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
+					if (hoveredNodeStack.length > 1) {
+						// Skip the macro definition nodes, jump to the referencing 'text' node instead
+						cslId = hoveredNodeStack[hoveredNodeStack.length - 2];
+					} else {
+						// The macro node is the outermost one, this happens in the
+						// NodePathView when selecting a Macro definition within the
+						// 'Macros' tree
+						cslId = clickedCslId;
+					}
 				}
 			}
 
@@ -109,6 +134,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Un-highlight all tree nodes
 		var unHighlightTree = function () {
 			var node;
 
@@ -116,6 +142,8 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			highlightedTreeNodes.children('a').removeClass("highlighted");
 		};
 
+		// Un-highlight any tree node which isn't a descendent of the
+		// instanceNode jQuery element
 		var unHighlightIfNotDescendentOf = function (instanceNode) {
 			var index, nodes;
 
@@ -175,12 +203,13 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
-		var unHighlightNode = function (nodeIndex, cslidElements) {
+		// Un-highlight the node with the given cslId
+		var unHighlightNode = function (cslId, cslIdElements) {
 			var	node;
-			if (typeof(cslidElements) === "undefined") {
-				node = spansAndDivs(nodeIndex);
+			if (typeof(cslIdElements) === "undefined") {
+				node = spansAndDivs(cslId);
 			} else {
-				node = cslidElements.filter('[cslid="' + nodeIndex + '"]');
+				node = cslIdElements.filter('[cslid="' + cslId + '"]');
 			}
 
 			if (node.hasClass("selected"))
@@ -191,12 +220,13 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Respond to hover event in the example output spans
 		var hover = function (event) {
-			var cslidElements = spansAndDivs(),
+			var cslIdElements = spansAndDivs(),
 				target = $(event.target).closest("[cslid]");
 			
 			// remove all
-			removeFromHoveredNodeStack(cslidElements, true);
+			removeFromHoveredNodeStack(cslIdElements, true);
 
 			// populate hovered node stack
 			addToHoveredNodeStack(target);
@@ -209,10 +239,11 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Respond to unhover event in the example output spans
 		var unhover = function () {
-			var cslidElements = spansAndDivs();
+			var cslIdElements = spansAndDivs();
 
-			removeFromHoveredNodeStack(cslidElements);
+			removeFromHoveredNodeStack(cslIdElements);
 			
 			if (hoveredNodeStack.length > 0) {
 				highlightNode(hoveredNodeStack.slice());
@@ -221,6 +252,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 
+		// Setup event handlers for
+		// - Hovering over example output
+		// - Clicking example output
+		// - Hovering over tree view
 		var setupEventHandlers = function () {
 			spansAndDivs().hover(hover, unhover);
 
@@ -266,12 +301,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 				},
 				function (event) { /* no-op */ }
 			);
-
 		};
 
+		// Setup event handlers and other initialisation
 		var setupSyntaxHighlighting = function () {
-			var numCslNodes = CSLEDIT_data.numCslNodes();
-
 			// clear the hovered node stack
 			hoveredNodeStack.length = 0;
 			selectedCslId = -1;
@@ -284,6 +317,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 			}
 		};
 		
+		// Add elements to the jQuery selection of elements to apply syntax highlighting
+		//
+		// The elements must contain span[cslid] and/or div[cslid] descendent elements
+		// for this to work
 		var addHighlightableElements = function (newElements) {
 			highlightableElements = highlightableElements.add(newElements);
 		}

@@ -1,7 +1,79 @@
 "use strict";
 
-define(['src/CslNode', 'src/debug'], function (CSLEDIT_CslNode, debug) {
+// Hard-coded configuration data used to populate the UI
+
+define(
+		[	'src/CslNode',
+			'src/debug'
+		], function (
+			CSLEDIT_CslNode,
+			debug
+		) {
 	var CSLEDIT_uiConfig = {};
+
+	// This allows customising the tree view on the left
+	CSLEDIT_uiConfig.smartTreeSchema = [
+		{
+			id : "info",
+			name : "Style Info",
+			// TODO: Fix src/SmartTree so that the locale node can be added.
+			//       At present there's a bug where adding a locale node doesn't
+			//       put it in the tree because it's a child of the "style" node, and
+			//       therefore part of that range.
+			//       (note - not an issue for 'style/info' since the bug only affects
+			//       nodes added during a session, and 'style/info' is a required node)
+			//headingNodePath : "style",
+			//headingNodePossibleChildren : {
+			//	"locale" : "one"
+			//},
+			//headingNodeShowPropertyPanel : false,
+			nodePaths : ["style/info", "style", /* "style/locale" */],
+			macroLinks : false,
+			leafNodes : ["info", "style"]
+		},
+		{
+			id : "citations",
+			name : "Inline Citations",
+			headingNodePath : "style/citation",
+			headingNodePossibleChildren : {
+				"layout" : "one",
+				"sort" : "one"
+			},
+			nodePaths : ["style/citation/layout", "style/citation/sort"],
+			//leafNodes : ["sort"],
+			macroLinks : true
+		},
+		{
+			id : "bibliography",
+			name : "Bibliography",
+			headingNodePath : "style/bibliography",
+			headingNodePossibleChildren : {
+				"layout" : "one",
+				"sort" : "one"
+			},
+			nodePaths : ["style/bibliography/layout", "style/bibliography/sort"],
+			//leafNodes : ["sort"],
+			macroLinks : true
+		},
+		{
+			id : "macro",
+			name : "Macros",
+			headingNodePath : "style",
+			headingNodePossibleChildren : {
+				"macro" : "zeroOrMore"
+			},
+			headingNodeShowPropertyPanel : false,
+			nodePaths : ["style/macro"],
+			macroLinks : true,
+		},
+		{
+			id : "locale",
+			name : "Advanced",
+			headingNodePath : "",
+			macroLinks : false,
+			nodePaths : ["style"]
+		}
+	];
 
 	// if creating an empty node, populate with these attributes
 	CSLEDIT_uiConfig.defaultAttributes = {

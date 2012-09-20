@@ -1,5 +1,7 @@
 "use strict";
 
+// A slide-down notification bar with a "Dismiss" button
+
 define(function () {
 	var element, messageElement;
 
@@ -16,7 +18,7 @@ define(function () {
 			var percentage;
 
 			element.css({'display' : 'none'});
-			messageElement.html(message);
+			messageElement.text(message);
 
 			percentage = Math.round(50 * 
 				(element.parent().width() - element.width()) / element.parent().width());

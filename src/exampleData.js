@@ -1,34 +1,9 @@
 "use strict";
 
+// Hard-coded data for the example citations
+
 define(function () {
 	var CSLEDIT_exampleData = {};
-
-	CSLEDIT_exampleData.topStyles = [
-		'http://www.zotero.org/styles/apa',
-		'http://www.zotero.org/styles/ieee',
-		'http://www.zotero.org/styles/harvard1',
-		'http://www.zotero.org/styles/nature',
-		'http://www.zotero.org/styles/american-medical-association', /* manually updated from styles/ama */
-		'http://www.zotero.org/styles/chicago-author-date',
-		'http://www.zotero.org/styles/apsa',
-		'http://www.zotero.org/styles/vancouver',
-		'http://www.zotero.org/styles/asa',
-		'http://www.zotero.org/styles/mla',
-		'http://www.zotero.org/styles/mhra',
-		'http://www.zotero.org/styles/chicago-fullnote-bibliography',
-		'http://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas', /* manually updated from styles/abnt */
-		'http://www.zotero.org/styles/chicago-note-bibliography',
-		'http://www.zotero.org/styles/national-library-of-medicine', /* manually updated from styles/nlm */
-		'http://www.zotero.org/styles/american-chemical-society',
-		'http://www.zotero.org/styles/cell',
-		'http://www.zotero.org/styles/science',
-		'http://www.zotero.org/styles/elsevier-with-titles',
-		'http://www.zotero.org/styles/ecology',
-		'http://www.zotero.org/styles/elsevier-harvard',
-		'http://www.zotero.org/styles/royal-society-of-chemistry',
-		'http://www.zotero.org/styles/journal-of-the-american-chemical-society',
-		'http://www.zotero.org/styles/pnas'
-	];
 
 	CSLEDIT_exampleData.citationsItems = [
 		{

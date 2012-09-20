@@ -1,0 +1,65 @@
+# Licence Info
+
+CSL Editor is under MIT License.
+
+# External Dependencies
+
+Here is a list of the projects in external/, checks if their license is compatible with MIT and some
+information about the projects.
+
+Where possible or convenient, the external projects are included as git submodules.
+
+* citeproc: ok
+   - License: Common Public Attribution License Version 1.0 (CPAL). (Which requires attribution)
+   - Compatible with MIT: yes (Linking from code with a different license is allowed)
+
+* codemirror2: ok
+   - License: MIT
+
+* csl-schema: ok
+   - License: Creative Commons BY-SA license
+   - http://wiki.creativecommons.org/Version_3#MIT
+
+* csl-styles: ok
+   - License: Creative Commons BY-SA license
+   - http://wiki.creativecommons.org/Version_3#MIT
+
+* locales: ok
+   - License: Creative Commons BY-SA license
+
+* diff-match-patch: ok
+   - License: Apache License 2.0
+
+* fumfamfam-icons: ok
+   - http://www.famfamfam.com/about/
+
+* fugue-icons: ok
+   - License: Creative Commons Attribution 3.0 License
+
+* jquery: ok
+   - MIT License
+
+* jstree: ok
+   - License: MIT and GPL licenses
+
+* mustache.js: ok
+   - License: MIT
+
+* pagedown: ok
+   - License: MIT
+
+* qunit: ok
+   - License: MIT
+
+* require-jquery: ok
+   - License: MIT or new BSD License
+
+* r.js: ok
+   - License: MIT or new BSD License
+
+* trang: ok
+   - License: trang/copyright.txt says to keep the notice
+
+* xregexp: ok
+   - License: MIT License
+

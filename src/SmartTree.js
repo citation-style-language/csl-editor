@@ -16,14 +16,14 @@
 //     - Infinite loops are detected and the offending node is given a
 //       data-error="Infinite Loop" attribute
 //
-// - Allows incremental changes to the tree based on following commands:
+// - Allows incremental changes to the tree:
+//   (_The code here is quite complicated,
+//     especially since the addition of the macro-links, so any
+//     changes should be accompanied by unit tests_)
 //     - addNode
 //     - deleteNode
 //     - amendNode
-//
-// - Warning: The code to perform the incremental changes is quite complicated,
-//            especially since the addition of the macro-links feature, and any
-//            changes here should be accompanied by unit tests
+// 
 
 define([	'src/uiConfig',
 			'src/CslNode',
@@ -44,6 +44,9 @@ define([	'src/uiConfig',
 			debug,
 			jstree
 		) {
+	// Creates a SmartTree object
+	//
+	// Note: need to also call setCallbacks() and createTree() to create a working smartTree
 	var CSLEDIT_SmartTree = function (treeElement, nodePaths, options) {
 		var ranges,
 			macroLinks, // like symlinks for macros
@@ -61,6 +64,7 @@ define([	'src/uiConfig',
 			leafNodes = options.leafNodes;
 		}
 
+		// Set the callbacks to be used after certain actions
 		var setCallbacks = function (_callbacks) {
 			callbacks = _callbacks;
 		};
@@ -100,6 +104,7 @@ define([	'src/uiConfig',
 			}
 		};
 		
+		// Create the tree view using the jstree jQuery plugin
 		var createTree = function () {
 			var jsTreeData,
 				nodeTypes;
@@ -306,17 +311,19 @@ define([	'src/uiConfig',
 			});
 		};
 
+		// Return the cslId of the selected node
 		var selectedNode = function () {
 			var selected,
-				cslid;
+				cslId;
 
 			selected = treeElement.jstree('get_selected'),
-			cslid = parseInt(selected.attr("cslid"), 10);
-			return cslid;
+			cslId = parseInt(selected.attr("cslid"), 10);
+			return cslId;
 		};
 
-		var expandNode = function (id) {
-			treeElement.jstree("open_node", 'li[cslid=' + id + ']');
+		// Expands the jsTree node associated with the given cslId
+		var expandNode = function (cslId) {
+			treeElement.jstree("open_node", 'li[cslid=' + cslId + ']');
 		};
 
 		var rangeIndex = function (id) {
@@ -434,8 +441,6 @@ define([	'src/uiConfig',
 				removeChildren = false,
 				updateNode = false;
 
-			console.log("macroLinksUpdateNode in " + JSON.stringify(nodePaths));
-
 			if (amendedNode.name !== "text") {
 				return;
 			}
@@ -458,7 +463,6 @@ define([	'src/uiConfig',
 						});
 					}
 					if (updateNode) {
-						console.log("updating node in " + JSON.stringify(nodePaths));
 						// update attributes
 						if ("data-error" in jsTreeData.attr) {
 							$this.attr("data-error", jsTreeData.attr["data-error"]);
@@ -474,6 +478,7 @@ define([	'src/uiConfig',
 			}
 		};
 
+		// Responds to an addNode event
 		var addNode = function (parentId, position, newNode, nodesAdded) {
 			var id,	parentNode,	thisRangeIndex,	currentCslId, range,
 				matchingCslNodes, newTreeNode;
@@ -600,6 +605,7 @@ define([	'src/uiConfig',
 			});
 		};
 
+		// Responds to a deleteNode event
 		var deleteNode = function (id, nodesDeleted) {
 			var node,
 				thisRangeIndex,
@@ -649,6 +655,7 @@ define([	'src/uiConfig',
 			verifyTree();
 		};
 
+		// Responds to an amendNode event
 		var amendNode = function (id, amendedNode) {
 			var thisRangeIndex = rangeIndex(id),
 				nodes = treeElement.find('li[cslid="' + id + '"]');
@@ -657,8 +664,6 @@ define([	'src/uiConfig',
 				treeElement.jstree('rename_node', $(this), CSLEDIT_uiConfig.displayNameFromNode(amendedNode));
 			});
 
-			console.log("amendNode in " + JSON.stringify(nodePaths) + " : " + thisRangeIndex);
-			
 			if (nodes.length === 0) {
 				return;
 			}
@@ -670,6 +675,8 @@ define([	'src/uiConfig',
 			verifyTree();
 		};
 
+		// Returns a list of the currently selected node stack cslIds,
+		// or an empty list if no node in this tree is selected
 		var getSelectedNodePath = function () {
 			var selectedNodes = [],
 				treeNode,
@@ -688,35 +695,44 @@ define([	'src/uiConfig',
 			return selectedNodes;
 		};
 
+		// Deselect any selected nodes
+		var deselectAll = function () {
+			treeElement.jstree("deselect_all");
+		};
+
+		// Collapse all expanded nodes in this tree
+		var collapseAll = function () {
+			treeElement.jstree("close_all");
+		};
+
 		return {
 			createTree : createTree,
-			deselectAll : function () {
-				treeElement.jstree("deselect_all");
-			},
+			deselectAll : deselectAll,
 			selectedNode : selectedNode,
 			expandNode : expandNode,
 			addNode : addNode,
 			deleteNode : deleteNode,
 			amendNode : amendNode,
 
-			shiftCslIds : shiftCslIds,
-
 			setCallbacks : setCallbacks,
 
-			setVerifyAllChanges : function (verify) {
+			collapseAll : collapseAll,
+
+			getSelectedNodePath : getSelectedNodePath,
+
+			// Verifies every node in this tree against
+			// the CSLEDIT_data tree after every change
+			// (used in the unit tests, or for debugging)
+			_setVerifyAllChanges : function (verify) {
 				verifyAllChanges = verify;
 			},
 
-			getRanges : function () {
+			// Used for testing & debugging
+			_getRanges : function () {
 				return ranges;
 			},
-			getMacroLinks : function () {
+			_getMacroLinks : function () {
 				return macroLinks;
-			},
-			getSelectedNodePath : getSelectedNodePath,
-
-			collapseAll : function () {
-				treeElement.jstree("close_all");
 			}
 		};
 	};
