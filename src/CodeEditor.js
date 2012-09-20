@@ -72,7 +72,7 @@ define([	'src/citationEngine',
 					} else {
 						CSLEDIT_citationEngine.runCiteprocAndDisplayOutput(
 							CSLEDIT_data,
-							$("#statusMessage"), $("#exampleOutput"),
+							$("#statusMessage"),
 							$("#formattedCitations"), $("#formattedBibliography"));
 					}
 

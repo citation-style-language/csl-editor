@@ -177,7 +177,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 		};
 
 		// Sets the current CSL style from the given string containing XML
-		var setCslCode = function (cslCode) {
+		var setCslCode = function (cslCode, allowDependentStyle /* optional */) {
 			var cslData,
 				error;
 			
@@ -190,19 +190,21 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				}};
 			}
 
-			// check if this is a dependent style:
-			$.each(getNodesFromPath('style/info/link', cslData), function (i, node) {
-				var linkNode = new CSLEDIT_CslNode(node);
-				if (linkNode.getAttr("rel") === "independent-parent") {
-					error = {
-						type: "dependentStyle",
-						parentURL: linkNode.getAttr("href"),
-						message: "Editing of dependent styles not yet supported.\n\n" + 
-							"Please find and edit this master style instead:\n\n" +
-							linkNode.getAttr("href")
-					};
-				}
-			});
+			if (!allowDependentStyle) {
+				// check if this is a dependent style:
+				$.each(getNodesFromPath('style/info/link', cslData), function (i, node) {
+					var linkNode = new CSLEDIT_CslNode(node);
+					if (linkNode.getAttr("rel") === "independent-parent") {
+						error = {
+							type: "dependentStyle",
+							parentURL: linkNode.getAttr("href"),
+							message: "Editing of dependent styles not yet supported.\n\n" + 
+								"Please find and edit this master style instead:\n\n" +
+								linkNode.getAttr("href")
+						};
+					}
+				});
+			}
 
 			// check it contains required nodes
 			if (typeof error === "undefined") {

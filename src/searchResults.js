@@ -10,6 +10,7 @@ define(
 			'src/cslStyles',
 			'src/xmlUtility',
 			'src/mustache',
+			'src/styleActionButtons',
 			'src/debug'
 		],
 		function (
@@ -18,6 +19,7 @@ define(
 			CSLEDIT_cslStyles,
 			CSLEDIT_xmlUtility,
 			CSLEDIT_mustache,
+			CSLEDIT_styleActionButtons,
 			debug
 		) {	
 	var outputNode;
@@ -55,7 +57,10 @@ define(
 			style = styles[index];
 			if (style.masterId !== style.styleId)
 			{
+				styleEntry.parentStyleId = style.masterId;
 				styleEntry.parentStyleURL = CSLEDIT_cslStyles.localURLFromZoteroId(style.masterId);
+				styleEntry.parentStyleInfoURL = CSLEDIT_options.get("styleInfoURL") + "?styleId=" +
+					encodeURIComponent(style.masterId);
 				styleEntry.parentStyleTitle = CSLEDIT_cslStyles.styles().styleTitleFromId[style.masterId];
 			}
 
@@ -93,6 +98,8 @@ define(
 
 			styleEntry.styleTitle = CSLEDIT_cslStyles.styles().styleTitleFromId[style.styleId];
 			styleEntry.localURL = CSLEDIT_cslStyles.localURLFromZoteroId(style.styleId);
+			styleEntry.styleInfoURL = CSLEDIT_options.get("styleInfoURL") + "?styleId=" +
+				encodeURIComponent(style.styleId);
 			styleEntry.styleId = style.styleId;
 
 			outputData.styles.push(styleEntry);
@@ -104,19 +111,7 @@ define(
 
 		outputNode.html(CSLEDIT_mustache.toHtml('searchResults', outputData));
 
-		var setupButtonHandler = function (button, func) {
-			if (typeof(func) === "undefined") {
-				button.css("display", "none");
-			} else {
-				button.click(function (event) {
-					func($(event.target).attr("data-styleId"));
-				});
-			}
-		};
-
-		setupButtonHandler($('button.installStyle'), CSLEDIT_options.get('installStyle_func'));
-		setupButtonHandler($('button.editStyle'), CSLEDIT_options.get('editStyle_func'));
-		setupButtonHandler($('button.viewCode'), CSLEDIT_options.get('viewCode_func'));
+		CSLEDIT_styleActionButtons.setup(outputNode);
 	};
 
 	return {

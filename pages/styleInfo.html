@@ -10,18 +10,8 @@
 	<title>Style Info</title>
 
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.22/themes/ui-lightness/jquery-ui.css">
-	<link rel="stylesheet" type="text/css" href="../external/jstree/themes/default/style.css" />
 	<link rel="stylesheet" type="text/css" href="../css/base.css?bust=$GIT_COMMIT" />
-
-	<style>
-		#visualEditorContainer {
-			position: absolute;
-			top: 0px;
-			bottom: 0px;
-			left: 0px;
-			right: 0px;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="../css/styleInfo.css?bust=$GIT_COMMIT" />
 
 	<script type="text/javascript" src="../external/require-jquery.js"></script>
 	<script>
@@ -40,8 +30,7 @@
 							CSLEDIT_cslStyles
 						) {
 					var styleInfo = new CSLEDIT_StyleInfo(
-						$('#styleInfoContainer'),
-						CSLEDIT_urlUtils.getUrlVar("styleURL"));
+						$('#styleInfoContainer'), CSLEDIT_urlUtils.getUrlVar("styleId"), {});
 				});
 			});
 		});

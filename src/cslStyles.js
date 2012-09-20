@@ -38,6 +38,7 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 
 	var getJSONData = function (path) {
 		var url;
+
 		if (!(path in cache)) {
 			url = CSLEDIT_urlUtils.getResourceUrl(path);
 			$.ajax({
@@ -103,14 +104,19 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 			styleId.replace("http://www.zotero.org/styles/", baseUrl) + ".csl");
 	};
 
-	var fetchCslCode = function (styleId, success, error) {
+	var fetchCslCode = function (styleId, success, error, async /* optional */) {
 		var localURL = localURLFromZoteroId(styleId);
+
+		if (typeof(async) === "undefined") {
+			async = true;
+		}
 
 		$.ajax({
 			url : localURL,
 			dataType : "text",
 			success : success,
-			error : error
+			error : error,
+			async : async
 		});
 	};
 

@@ -11,9 +11,9 @@
 	<tr>
 		<td colspan=3>
 			<span class=featuredStyle>Popular</span>
-			<a class="style-title" href="{{localURL}}">{{styleTitle}}</a>
+			<a class="style-title" href="{{styleInfoURL}}">{{styleTitle}}</a>
 			{{#parentStyleId}}
-				(same as <a href="{{parentStyleURL}}">{{parentStyleTitle}}</a>
+				(same as <a href="{{parentStyleInfoURL}}">{{parentStyleTitle}}</a>)
 			{{/parentStyleId}}
 		</td>
 	</tr>
@@ -37,7 +37,7 @@
 		</td>
 		<td>
 			<button class="editStyle" data-styleId="{{styleId}}">Edit</button>
-			<button class="viewCode" data-styleId="{{styleId}}">View code</button>
+			<button class="viewCode" data-styleId="{{styleId}}">View style</button>
 		</td>
 	</tr>
 </table>

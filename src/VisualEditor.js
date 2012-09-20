@@ -140,7 +140,7 @@ define(
 		var formatExampleCitations = function () {
 			CSLEDIT_citationEngine.runCiteprocAndDisplayOutput(
 				CSLEDIT_data,
-				editorElement.find("#statusMessage"), editorElement.find("#exampleOutput"),
+				editorElement.find("#statusMessage"),
 				editorElement.find("#formattedCitations"), editorElement.find("#formattedBibliography"),
 				syntaxHighlighter.setupSyntaxHighlighting);
 		};

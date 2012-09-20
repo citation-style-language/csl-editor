@@ -1,0 +1,112 @@
+{{#styleFetchFailed}}
+{{^styleId}}No Style ID given{{/styleId}}
+{{#styleId}}Style not found: {{styleId}}{{/styleId}}
+{{/styleFetchFailed}}
+
+{{#style}}
+{{#error}}
+<h2>Error loading style</h2>
+<p>Type: {{type}}</p>
+<p>Message: {{message}}</p>
+{{error}}
+{{/error}}
+
+{{^error}}
+<h1>{{title}}
+{{#parentId}}
+<br /><small>(same as <a href={{parentStyleInfoURL}}>{{parentTitle}}</a>)</small>
+{{/parentId}}
+</h1>
+
+<table>
+	{{#title}}
+	<tr><td>title</td><td>{{title}}</td></tr>
+	{{/title}}
+	{{#id}}
+	<tr><td>ID</td><td><a href={{id}}>{{id}}</a></td></tr>
+	{{/id}}
+	{{#summary}}
+	<tr><td>summary</td><td>{{summary}}</td></tr>
+	{{/summary}}
+	{{#rights}}
+	<tr><td>rights</td><td>{{rights}}</td></tr>
+	{{/rights}}
+	{{#updated}}
+	<tr><td>updated</td><td>{{updated}}</td></tr>
+	{{/updated}}
+	{{#issn}}
+	<tr><td>issn</td><td>{{issn}}</td></tr>
+	{{/issn}}
+	{{#eissn}}
+	<tr><td>eissn</td><td>{{eissn}}</td></tr>
+	{{/eissn}}
+
+	{{#link}}
+	<tr><td>link {{#rel}}({{rel}}){{/rel}}</td><td><a href={{href}}>{{href}}</a></td></tr>
+	{{/link}}
+
+	{{#author}}
+	<tr>
+		<td>author</td>
+		<td>{{name}} {{#email}}(<a href="mailto:{{email}}">{{email}}</a>){{/email}}
+			{{#uri}}<a href={{uri}}>{{uri}}</a>{{/uri}}
+		</td>
+	</tr>
+	{{/author}}
+
+	{{#contributor}}
+	<tr>
+		<td>contributor</td>
+		<td>
+			{{name}} {{#email}}(<a href="mailto:{{email}}">{{email}}</a>){{/email}}
+			{{#uri}}<a href={{uri}}>{{uri}}</a>{{/uri}}
+		</td>
+	</tr>
+	{{/contributor}}
+	
+	{{#category}}
+	{{#citation-format}} 
+	<tr>
+		<td>citation-format</td>
+		<td>{{citation-format}}</td>
+	</tr>
+	{{/citation-format}}
+	{{#field}} 
+	<tr>
+		<td>field</td>
+		<td>{{field}}</td>
+	</tr>
+	{{/field}}
+	{{/category}}
+</table>
+
+<p>
+<button class=installStyle data-styleId="{{id}}">Install Style</button>
+<button class=editStyle data-styleId="{{id}}">Edit Style</button>
+</p>
+
+{{#exampleOutput}}
+<h2>Example Output</h2>
+{{#statusMessage}}
+<strong>Error: </strong>{{statusMessage}}
+{{/statusMessage}}
+
+<h3>Inline citations</h3>
+{{{citations}}}
+
+<h3>Bibliography</h3>
+{{{bibliography}}}
+{{/exampleOutput}}
+
+{{#hasDependents}}
+<h2>Dependent Styles</h2>
+{{#dependents}}{{^first}}, {{/first}}<a href={{styleInfoURL}}>{{title}}</a>{{/dependents}}
+{{/hasDependents}}
+
+{{#code}}
+<h2>CSL code</h2>
+<pre class=code>{{code}}</pre>
+{{/code}}
+
+{{/error}}
+{{/style}}

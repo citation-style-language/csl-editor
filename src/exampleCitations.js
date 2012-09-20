@@ -19,7 +19,7 @@ define(
 		) {
 	var suppressUpdate = false;
 
-	var newCitation = function (citationIndex) {
+	var newCluster = function (citationIndex) {
 		return {
 			citationId: "CITATION-" + citationIndex,
 			citationItems: [],
@@ -35,7 +35,7 @@ define(
 			// create empty reference lists for each citation
 			citations = [];
 			$.each(CSLEDIT_options.get("exampleCitations"), function (citation) {
-				citations.push(newCitation(citation));
+				citations.push(newCluster(citation));
 			});
 			setCitations(citations);
 
@@ -112,10 +112,12 @@ define(
 		return option;
 	};
 
-	var getCiteprocReferences = function () {
+	var getCiteprocReferences = function (references /* optional */) {
 		var citeprocReferences = {};
 
-		$.each(getReferences(), function (i, reference) {
+		references = references || getReferences();
+
+		$.each(references, function (i, reference) {
 			var itemString = "ITEM-" + (i + 1);
 			reference.id = itemString;
 			citeprocReferences[itemString] = reference;
@@ -173,7 +175,7 @@ define(
 	var setReferenceIndexesForCitation = function (citationIndex, references) {
 		var citations = getCitations();
 		
-		citations[citationIndex] = citations[citationIndex] || newCitation(citationIndex);
+		citations[citationIndex] = citations[citationIndex] || newCluster(citationIndex);
 		citations[citationIndex].citationItems = [];
 
 		$.each(references, function (i, referenceIndex) {
@@ -212,6 +214,19 @@ define(
 		}
 	};
 
+	// static function
+	var createCitationCluster = function (referenceIndexList) {
+		var cluster = newCluster();
+		
+		$.each(referenceIndexList, function (i, referenceIndex) {
+			cluster.citationItems.push({
+				id : "ITEM-" + (referenceIndex + 1)
+			});
+		});
+
+		return cluster;
+	};
+
 	return {
 		getCitations : getCitations,
 		setCitations : setCitations,
@@ -237,6 +252,8 @@ define(
 			CSLEDIT_storage.removeItem("CSLEDIT_exampleReferences");
 			CSLEDIT_storage.removeItem("CSLEDIT_exampleCitationOptions");
 			update();
-		}
+		},
+
+		createCitationCluster : createCitationCluster
 	};
 });

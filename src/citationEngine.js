@@ -162,7 +162,8 @@ define([	'src/options',
 	//
 	//   Could be good to fix for use in the Code Editor, but not so essential for the Visual Editor.
 	var runCiteprocAndDisplayOutput = function (
-			data, statusOut, exampleOut, citationsOut, bibliographyOut, callback) {
+			data, statusOut, citationsOut, bibliographyOut, callback,
+			exampleReferences, exampleCitations) {
 
 		debug.time("runCiteprocAndDisplayOutput");
 
@@ -187,8 +188,10 @@ define([	'src/options',
 	
 		debug.time("formatCitations");
 
-		formattedResult = formatCitations(
-			style, CSLEDIT_exampleCitations.getCiteprocReferences(), CSLEDIT_exampleCitations.getCitations(), true);
+		exampleReferences = exampleReferences || CSLEDIT_exampleCitations.getCiteprocReferences();
+		exampleCitations = exampleCitations || CSLEDIT_exampleCitations.getCitations();
+
+		formattedResult = formatCitations(style, exampleReferences, exampleCitations, true);
 		
 		debug.timeEnd("formatCitations");
 
@@ -270,12 +273,12 @@ define([	'src/options',
 		}
 
 		if ("hangingIndent" in formattedResult) {
-			exampleOut.find('.bibliography-csl-entry').css({
+			bibliographyOut.find('.bibliography-csl-entry').css({
 				"padding-left" : formattedResult.hangingIndent + "em",
 				"text-indent" : "-" + formattedResult.hangingIndent + "em"
 			});
 		} else {
-			exampleOut.find('.bibliography-csl-entry').css({
+			bibliographyOut.find('.bibliography-csl-entry').css({
 				"padding-left" : "0",
 				"text-indent" : "0"
 			});
