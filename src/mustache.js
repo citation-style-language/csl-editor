@@ -6,7 +6,7 @@
 define(
 		[	'src/urlUtils',
 			'src/debug',
-			'external/Mustache'
+			'external/mustache'
 		],
 		function (
 			CSLEDIT_urlUtils,
