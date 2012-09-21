@@ -91,7 +91,7 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 
 	// Perform the inverse of the previous command
 	//
-	// Check that commandHistory() is not empty before calling this
+	// Check that commandHistory is not empty before calling this
 	var undo = function () {
 		var command = commandHistory.pop();
 
@@ -100,7 +100,7 @@ define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 
 	// Perform the inverse of the previous undo action
 	//
-	// Check that undoCommandHistory() is not empty before calling this
+	// Check that undoCommandHistory is not empty before calling this
 	var redo = function () {
 		var command = undoCommandHistory.pop();
 
