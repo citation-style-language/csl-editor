@@ -204,7 +204,7 @@ define(
 				result = "";
 
 			var getTagged = function () {
-				return $('<mark/>)').text(string.substring(from, to + 1))[0].outerHTML;
+				return $('<div/>').append($('<mark/>)').text(string.substring(from, to + 1))).html();
 			};
 
 			$.each(string, function (i, char) {
