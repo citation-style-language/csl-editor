@@ -5,6 +5,19 @@
 //
 // Triggers a callback when getItem() is called if the localStorage value has been
 // changed since the last time it was read during this session
+//
+// The following functions work just like the localStorage equivalents:
+//
+// - getItem
+// - setItem
+// - removeItem
+// - clear
+//
+// Additionally:
+// 
+// - onDataInconsistency - this allows setting a callback function which gets
+//                         called whenever an inconsistency between persistent
+//                         and session storage is detected
 
 define(['src/debug'], function (debug) {
 	var CSLEDIT_Storage = function (useLocalStorageIfAvailable) {

@@ -9,6 +9,8 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 	// or if the settings are reset
 	defaultStyleId = 'http://www.zotero.org/styles/apa';
 
+	// A list of popular styles obtained from some Mendeley data provided
+	// by Carles Pina
 	var topStyles = [
 		'http://www.zotero.org/styles/apa',
 		'http://www.zotero.org/styles/ieee',
@@ -104,6 +106,7 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 			styleId.replace("http://www.zotero.org/styles/", baseUrl) + ".csl");
 	};
 
+	// This fetches the CSL code for the given styleId
 	var fetchCslCode = function (styleId, success, error, async /* optional */) {
 		var localURL = localURLFromZoteroId(styleId);
 

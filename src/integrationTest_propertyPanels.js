@@ -5,7 +5,8 @@ define([	'src/Schema',
 			'src/propertyPanel',
 			'src/schemaOptions',
 			'src/testUtils',
-			'src/dataInstance'
+			'src/dataInstance',
+			'jquery.qunit'
 		],
 		function (
 			CSLEDIT_Schema,
@@ -13,7 +14,8 @@ define([	'src/Schema',
 			CSLEDIT_propertyPanel,
 			CSLEDIT_schemaOptions,
 			CSLEDIT_testUtils,
-			CSLEDIT_data
+			CSLEDIT_data,
+			jquery_qunit
 		) {
 	module("Property panels for all nodes in top styles", {
 		setup : function () {

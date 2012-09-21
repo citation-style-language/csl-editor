@@ -6,7 +6,7 @@
 //       (The reason is that data.js and Data.js are the same filename on Windows)
 
 define(['src/Data'], function (CSLEDIT_Data) {
-	// global instance
+	// Returns the global instance of CSLEDIT_Data
 	return CSLEDIT_Data("CSLEDIT.cslData", [
 		"style",
 		"style/info",

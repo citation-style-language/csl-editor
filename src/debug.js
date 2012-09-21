@@ -22,7 +22,9 @@ define(function () {
 		timeEnd = function (message) { console.timeEnd(message); };
 	}
 
-	var assertEqual = function (actual, expected, place) {
+	// Throws an error if actual !== expected and puts the current call stack
+	// into the error description
+	var assertEqual = function (actual, expected) {
 		if (actual !== expected) {
 			try {
 				throw new Error("Assert fail: " + actual + " !== " + expected);
@@ -34,7 +36,9 @@ define(function () {
 		}
 	};
 
-	var assert = function (assertion, place) {
+	// Throws an error if !assertation and puts the current call stack
+	// into the error description
+	var assert = function (assertion) {
 		var err;
 		if (!assertion) {
 			try {

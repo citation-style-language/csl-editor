@@ -3,16 +3,21 @@
 // Options for altering the output of src/Schema for use in the CSL Editor
 
 define({
+	// If no default value is specified in the schema, use this
 	defaultDefaultAttribute : {
 		documentation: "No value",
 		type: "novalue",
 		value: ""
 	},
+	
+	// All documentation strings are passed through this filter
 	documentationFilter : function (documentation) {
 		return documentation
 			.replace(/\n/g, " ")
 			.replace(/The font-formatting attributes are based on those of CSS and XSL-FO\./g, "");
 	},
+
+	// Do some processing of nodeProperties after CSLEDIT_Schema has generated it
 	processNodeProperties : function (nodeProperties) {
 		// add an xmlns attribute to the style node
 		nodeProperties["root/style"].attributes["xmlns"] = {

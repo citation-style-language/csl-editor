@@ -117,7 +117,8 @@ define(
 
 					if (exampleCitation !== null && exampleCitation.statusMessage === "") {
 						formattedCitation = exampleCitation.formattedCitations[0];
-						cleanFormattedBibliography = CSLEDIT_xmlUtility.cleanInput(exampleCitation.formattedBibliography);
+						cleanFormattedBibliography =
+							CSLEDIT_xmlUtility.cleanInput(exampleCitation.formattedBibliography);
 
 						if (userCitation !== "") {
 							citationMatchQuality = CSLEDIT_diff.matchQuality(

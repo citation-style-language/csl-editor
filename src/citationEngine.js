@@ -44,8 +44,8 @@ define([	'src/options',
 	// Formats the given citationClusters, containing the given documents, in the given
 	// style
 	//
-	// If taggedOutput is true, the output will contain <span cslid=???> tags which maps
-	// to the input CSL node responsible for each part of the output
+	// If taggedOutput is true, the output will contain <span cslid=???> tags where the cslid
+	// attribute points to the input CSL node responsible for that part of the output
 	//
 	// Returns a result containing the following properties:
 	//

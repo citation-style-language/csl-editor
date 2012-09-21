@@ -5,6 +5,14 @@
 // setupPanel() presents all the information within the CSL node, except it's children
 //
 // It uses the lists in CSLEDIT_uiConfig.attributeGroups to group attributes into fieldsets
+//
+// If the node contains choices (I use 'choices' and 'modes' interchangably) then a
+// CSLEDIT_MultiPanel is created which allows switching between them and contains all
+// the attribute editors specific to the current mode.
+//
+// Note: Some of HTML here may be nice to generate using mustache, but the dynamic nature
+//       makes it difficult to do unless it's refactored to redraw the entire panel
+//       whenever the HTML needs changing.
 
 define([	'src/MultiPanel',
 			'src/MultiComboBox',
@@ -619,6 +627,16 @@ define([	'src/MultiPanel',
 		}
 	};
 
+	// Sets up a generic property panel
+	//
+	// - _panel - the jQuery element to create the panel within
+	// - _nodeData - the CSL node to create the panel for
+	// - dataType - the data type of this CSL node, e.g. "text" if it contains text.
+	//              (all CSL nodes that contain child nodes have dataType null)
+	// - _schemaAttributes - map of attributes for this CSL node
+	// - _schemaChoices - list of choices (mutually exclusive modes) that the node can
+	//                    be in, each choice has a list of attributes
+	// - _executeCommand - the function to call to issue commands (e.g. CSLEDIT_controller.exec)
 	var setupPanel = function (_panel, _nodeData, dataType, _schemaAttributes, _schemaChoices,
 			_executeCommand) {
 		var table,

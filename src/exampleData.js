@@ -5,25 +5,7 @@
 define(function () {
 	var CSLEDIT_exampleData = {};
 
-	CSLEDIT_exampleData.citationsItems = [
-		{
-			"citationId": "CITATION-1",
-			"citationItems": [{id:"ITEM-1"}],
-			"properties": {
-				"noteIndex": 0
-			},
-			"schema": "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
-		},
-		{
-			"citationId": "CITATION-2",
-			"citationItems": [{id:"ITEM-12"}],
-			"properties": {
-				"noteIndex": 0
-			},
-			"schema": "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
-		}
-	];
-
+	// Possible options to apply to each reference in each inline citation
 	CSLEDIT_exampleData.additionalOptions = [
 		{
 			"description" : "Normal citation",
@@ -57,18 +39,8 @@ define(function () {
 		}
 	];
 
-	CSLEDIT_exampleData.getJsonDocuments = function () {
-		var jsonDocuments = {};
-
-		$.each(CSLEDIT_exampleData.jsonDocumentList, function (i, jsonDocument) {
-			var itemString = "ITEM-" + (i + 1);
-			jsonDocument.id = itemString;
-			jsonDocuments[itemString] = jsonDocument;
-		});
-
-		return jsonDocuments;
-	};
-
+	// Hard coded default list of csl-data.json references used
+	// in the editor and search pages
 	CSLEDIT_exampleData.jsonDocumentList = [
 		{
 			"ISBN": "0813931029",

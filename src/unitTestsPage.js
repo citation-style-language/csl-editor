@@ -1,3 +1,7 @@
+"use strict";
+
+// Loads the 
+
 define(
 		[	'src/test_storage',
 			'src/test_schema',

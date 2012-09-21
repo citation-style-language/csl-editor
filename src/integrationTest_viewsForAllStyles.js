@@ -7,7 +7,8 @@ define(
 			'src/Schema',
 			'src/schemaOptions',
 			'src/dataInstance',
-			'src/ViewController'
+			'src/ViewController',
+			'jquery.qunit'
 		],
 		function (
 			CSLEDIT_testUtils,
@@ -16,7 +17,8 @@ define(
 			CSLEDIT_Schema,
 			CSLEDIT_schemaOptions,
 			CSLEDIT_data,
-			CSLEDIT_ViewController
+			CSLEDIT_ViewController,
+			jquery_qunit
 		) {
 	module("Create view for all nodes in top styles");
 

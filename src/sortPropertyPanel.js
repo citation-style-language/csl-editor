@@ -177,6 +177,11 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 		executeCommand('deleteNode', [cslId]);
 	};
 
+	// Set up the sort property panel
+	//
+	// - _panel          - the jQuery element to create the panel within
+	// - _nodeData       - the CSL node to create the panel for
+	// - _executeCommand - the execute command function (e.g. CSLEDIT_controller.exec)
 	setupPanel = function (_panel, _nodeData, _executeCommand) {
 		var table, macros, variables, index, addKeyButton, sortKeyHtml;
 

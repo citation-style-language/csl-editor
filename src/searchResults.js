@@ -37,6 +37,11 @@ define(
 		return closeness;
 	};
 
+	// Displays the given search results
+	//
+	// - styles       - the search result data
+	// - _outputNode  - the jQuery element to draw the search results within
+	// - exampleIndex - the index of the example reference to use for the example citation
 	var displaySearchResults = function (styles, _outputNode, exampleIndex /* optional */) {
 		var index,
 			style,

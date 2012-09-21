@@ -118,6 +118,8 @@ define(
 		populatePageData(resourceQueue, sourceFiles, processedResources);
 	};
 
+	// Generates dependency graphs for all the given resources and displays
+	// information about each module in the given jQuery element
 	var generate = function (resources, element) {
 		element = $(element);
 

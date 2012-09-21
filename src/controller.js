@@ -1,11 +1,16 @@
 "use strict";
 
-// Sends commands to the data module, and maintains the command history used by
-// the undo function
+// Sends commands to the CSLEDIT_Data, and maintains the command history used by
+// the undo function.
+//
+// The CSLEDIT_controller allows you to issue commands which alter the current
+// CSL style, to do this you use the CSLEDIT_controller.exec() function, passing 
+// the name of the CSLEDIT_Data function you want to call as argument 1, and the
+// list of arguments to that CSLEDIT_Data function as argument 2. The list of 
+// functions it's intended to execute are defined below in 'commands'.
 //
 // **If the controller is being used, any action which affects CSLEDIT_data
 //   needs to be done using the controller**
-// 
 define(['src/dataInstance', 'src/debug'], function (CSLEDIT_data, debug) {
 	var commands = [
 			"addNode",

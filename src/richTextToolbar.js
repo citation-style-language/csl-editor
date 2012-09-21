@@ -88,6 +88,8 @@ define(
 		});
 	});
 
+	// Update the toggle state of each of the toolbar buttons
+	// based on the text within the current selection
 	var updateButtonStates = function () {
 		debug.assert("queryCommandState" in document, "queryCommandState not available");
 		$.each(buttons, function (i, button) {
@@ -158,7 +160,14 @@ define(
 		}
 	};
 
-	// Attach to an element
+	// Set up event handlers on a contenteditable element so that the toolbar
+	// will pop up when required
+	//
+	// - container - a jQuery element which contains the 'editor'
+	//               contenteditable div as a child
+	// - editor    - the contenteditable div
+	// - callback  - a function to call whenever the contents of
+	//               'editor' are changed by document.execCommand()
 	var attachTo = function (container, editor, callback) {
 		editor.mousedown(function () {
 			mouseupCallback = function () {

@@ -3,15 +3,21 @@
 // Miscellaneous functions for manipulating XML (e.g. stripping tags)
 
 define(function () {
-	var stripUnsupportedTagsAndContents = function (html, supportedTags) {
+	// Returns the given xml, but with all elements *not* within the
+	// supportedTags list removed
+	//
+	// This removes both the tags and the contents within
+	var stripUnsupportedTagsAndContents = function (xml, supportedTags) {
 		var element;
 
-		element = $("<all>" + html + "</all>");		
+		element = $("<all>" + xml + "</all>");		
 		element.find("*").not(supportedTags.join(", ")).remove();
 
-		return element.html();
+		return element.xml();
 	};
 
+	// Returns the given xml, but with all tags *not* within the
+	// supportedTags list removed, the contents of the tags are kept
 	var stripUnsupportedTags = function (xml, supportedTags) {
 		var regExpText = "</?(?:" + supportedTags.join("|") + ")[^<>]*>|(</?[^<>]*>)",
 			stripUnsupportedTags,
@@ -36,6 +42,8 @@ define(function () {
 		return xml;
 	};
 
+	// Remove all attributes from all the matching tags within the given xml
+	// and return the result
 	var stripAttributesFromTags = function (xml, tags) {
 		var regExp = new RegExp("<(" + tags.join("|") + ")[^<>]*>", "g");
 
@@ -44,10 +52,12 @@ define(function () {
 		return xml;
 	};
 
+	// Strip all single line comments from the given xml and return the result
 	var stripComments = function (xml) {
 		return xml.replace(/<!--[\s\S]*?-->/g, "");
 	};
 
+	// Remove certain tags from the given input and return the result
 	var cleanInput = function (input, allowCharacters) {
 		var supportedTags = [ 'b', 'i', 'u', 'sup', 'sub' ];
 
@@ -76,6 +86,7 @@ define(function () {
 		return input;
 	};
 
+	// Escape characters within text for html and return the result
 	var htmlEscape = function (text) {
 		var escaped = text;
 

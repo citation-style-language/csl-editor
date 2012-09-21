@@ -1,5 +1,7 @@
 "use strict";
 
+// Helper functions for use within unit tests
+
 define(
 		[	'src/cslStyles',
 			'src/urlUtils',

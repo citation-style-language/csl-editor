@@ -28,6 +28,12 @@ define(
 		suppressUpdates = false;
 	};
 
+	// Creates the appropriate property panel, based on the given CSL node
+	//
+	// - propertyPanelElement - the jQuery element to create the panel within
+	// - node                 - the CSL node to create the panel for
+	// - elementString        - the string identifier for the CSL node used to look
+	//                          it up on CSLEDIT_schema
 	var setup = function (propertyPanelElement, node, elementString) {
 		var dataType,
 			schemaAttributes;
@@ -41,12 +47,12 @@ define(
 		case "sort":
 			propertyPanelElement.html(CSLEDIT_mustache.toHtml("sortPropertyPanel"));
 
-		/* TODO: Re-enable sort property panel if:
-		 *         1. bug is fixed where re-ordering the sort keys causes crash
-		 *         2. ascending/descending option is added for each sort key
-		 *
-			CSLEDIT_sortPropertyPanel.setupPanel(propertyPanelElement, node, executeCommand);
-		*/
+			/* TODO: Re-enable sort property panel if:
+			 *         1. bug is fixed where re-ordering the sort keys causes crash
+			 *         2. ascending/descending option is added for each sort key
+			 *
+				CSLEDIT_sortPropertyPanel.setupPanel(propertyPanelElement, node, executeCommand);
+			*/
 			break;
 		case "info":
 			CSLEDIT_infoPropertyPanel.setupPanel(propertyPanelElement, executeCommand);

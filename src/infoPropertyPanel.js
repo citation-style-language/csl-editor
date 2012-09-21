@@ -2,8 +2,9 @@
 
 // A custom property panel for the 'style/info' node
 //
-// This could do with a redesign, and there's a long standing minor bug #129
-// migrating to use mustache for HTML generation could help first
+// This could do with a redesign (see long standing minor bug #129)
+//
+// Migrating to use mustache for most of the HTML generation may help
 
 define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
 	var panel, infoNode, inputTimeout, executeCommand;
@@ -183,8 +184,10 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 		}
 	};
 
-	// It's assumed that infoNode will always refer to the correct node
-	// while the panel is visible
+	// Set up a property panel for the style/info node
+	//
+	// - _panel - the jQuery element to create the panel within
+	// - _executeCommand - the function to call to issue commands (e.g. CSLEDIT_controller.exec)
 	var setupPanel = function (_panel, _executeCommand) {
 		var simpleTextNodesTable = $('<table/>');
 		

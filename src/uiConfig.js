@@ -11,7 +11,7 @@ define(
 		) {
 	var CSLEDIT_uiConfig = {};
 
-	// This allows customising the tree view on the left
+	// Defines the contents of the Visual Editor tree view
 	CSLEDIT_uiConfig.smartTreeSchema = [
 		{
 			id : "info",
@@ -75,7 +75,7 @@ define(
 		}
 	];
 
-	// if creating an empty node, populate with these attributes
+	// If creating an empty node, populate with these attributes
 	CSLEDIT_uiConfig.defaultAttributes = {
 		"text" : {
 			"value" : ""
@@ -101,7 +101,7 @@ define(
 		}
 	};
 
-	// if creating an empty node, populate with these children
+	// If creating an empty node, populate with these children
 	CSLEDIT_uiConfig.defaultChildren = {
 		"bibliography" : [
 			{
@@ -112,6 +112,7 @@ define(
 		]
 	};
 
+	// Defines the different fieldsets within the genericPropertyPanel
 	CSLEDIT_uiConfig.attributeGroups = {
 		"Text formatting" : [
 			"fontFormattingControls",
@@ -125,7 +126,7 @@ define(
 		]
 	};
 
-	// for displaying the example metadata in Search by Example page
+	// For displaying the example metadata in Search by Example page
 	CSLEDIT_uiConfig.fieldOrder = [
 		"type",
 		"title",
@@ -142,13 +143,13 @@ define(
 		"publisher"
 	];
 
-	// add classes to the <input> or <select> elements for various attributes
+	// Add classes to the <input> or <select> elements for various attributes
 	CSLEDIT_uiConfig.attributeClasses = {
 		"delimiter" : "short",
 		"display" : "exampleClass1 exampleClass2"
 	};
 
-	// for jstree
+	// The icons to use in the Visual Editor tree view
 	CSLEDIT_uiConfig.nodeIcons = {
 		"default" : "external/famfamfam-icons/bullet_black.png",
 		"text" : "external/famfamfam-icons/style.png",
@@ -165,10 +166,13 @@ define(
 		"group" : "external/famfamfam-icons/page_white_stack.png"
 	};
 
+	// Returns the given string with the first letter capitalised
 	CSLEDIT_uiConfig.capitaliseFirstLetter = function (string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	};
 
+	// Returns the display name to use to represent the given node
+	// in the UI
 	CSLEDIT_uiConfig.displayNameFromNode = function (node) {
 		if (node.name in CSLEDIT_uiConfig.displayNames) {
 			return CSLEDIT_uiConfig.displayNames[node.name](node);
@@ -227,6 +231,7 @@ define(
 		return displayName;
 	};
 
+	// A map of node names to the function used to generate its display name
 	CSLEDIT_uiConfig.displayNames = {
 		"macro" : function (node) {
 			return "Macro: " + new CSLEDIT_CslNode(node).getAttr("name");

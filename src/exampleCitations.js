@@ -4,7 +4,6 @@
 //
 // - metadata for the example references
 // - example inline citations (citation clusters as citeproc-js calls them)
-
 define(
 		[	'jquery',
 			'src/storage',
@@ -19,6 +18,7 @@ define(
 		) {
 	var suppressUpdate = false;
 
+	// Returns a new empty citation cluster
 	var newCluster = function (citationIndex) {
 		return {
 			citationId: "CITATION-" + citationIndex,
@@ -28,6 +28,7 @@ define(
 		};
 	};
 
+	// Returns a list of citation clusters as used by citeproc
 	var getCitations = function () {
 		var citations;
 		if (CSLEDIT_storage.getItemJson('CSLEDIT_exampleCitations') === null) {
@@ -46,18 +47,42 @@ define(
 		}
 		return CSLEDIT_storage.getItemJson('CSLEDIT_exampleCitations');
 	};
+
+	// Set the list of citation clusters, each cluster should be in the
+	// form required by the citeproc-js appendCitationCluster() function
 	var setCitations = function (citations) {
 		applyCitationOptions(citations, getCitationOptions());
 		CSLEDIT_storage.setItem('CSLEDIT_exampleCitations', JSON.stringify(citations));
 		update();
 	};
 	
+	// Gets the index of any options for each reference in each inline citation.
+	//
+	// e.g.
+	//     {
+	//         "0":  // inline citation 0
+	//             {
+	//                 "0": 1,  // reference 0 has option 1
+	//                 "1": 0,  // reference 1 has option 0
+	//                 "5": 2   // reference 5 has option 2
+	//             }
+	//     }
+	//
+	// If a reference is not included in the return object,
+	// it's assumed it is option 0, which is a normal citation
+	// with no additional options.
+	//
+	// The options are defined in CSLEDIT_exampleData.additionalOptions
 	var getCitationOptions = function () {
 		if (CSLEDIT_storage.getItemJson('CSLEDIT_exampleCitationOptions') === null) {
 			return {};
 		}
 		return CSLEDIT_storage.getItemJson('CSLEDIT_exampleCitationOptions');
 	};
+
+	// This sets the citationOptions
+	//
+	// citationOptions is the same format as the getCitationOptions() return value
 	var setCitationOptions = function (citationOptions) {
 		var citations = getCitations();
 		CSLEDIT_storage.setItem('CSLEDIT_exampleCitationOptions', JSON.stringify(citationOptions));
@@ -86,6 +111,10 @@ define(
 		});
 	};
 
+	// Sets the option for the given reference in the given inline citation
+	//
+	// option is the index of the citation option to apply, see
+	// CSLEDIT_exampleData.additionalOptions for a definition of these options
 	var setOption = function (citation, reference, option) {
 		var options = getCitationOptions();
 		if (option >= CSLEDIT_exampleData.additionalOptions.length) {
@@ -96,6 +125,9 @@ define(
 		setCitationOptions(options);
 	};
 
+	// Returns the index of the option for the given reference in the given inline citation
+	//
+	// See CSLEDIT_exampleData.additionalOptions for definitions of these options
 	var getOption = function (citation, reference) {
 		var options = getCitationOptions(),
 			option;
@@ -112,6 +144,13 @@ define(
 		return option;
 	};
 
+	// Returns an object containing metadata for all the references
+	// ready to pass to citeproc
+	//
+	// Very similar to getReferences but returns an object with keys
+	// in the form "ITEM-1", "ITEM-2", etc. instead of a list, and
+	// each item in the list is given a corresponding id value,
+	// e.g. "ITEM-2"
 	var getCiteprocReferences = function (references /* optional */) {
 		var citeprocReferences = {};
 
@@ -126,12 +165,20 @@ define(
 		return citeprocReferences;
 	};		
 
+	// Returns a list of csl-data.json references
 	var getReferences = function () {
+		// TODO: At the moment, if CSLEDIT_exampleData.jsonDocumentList is updated between
+		//       releases, it will only get used in the Visual Editor if the user resets all
+		//       citations in the citation editor dialog, or clears their localSettings.
+		//       Should be fixed.
 		if (CSLEDIT_storage.getItemJson('CSLEDIT_exampleReferences') === null) {
 			setReferences(CSLEDIT_options.get('exampleReferences'));
 		}
 		return CSLEDIT_storage.getItemJson('CSLEDIT_exampleReferences');
 	};
+
+	// Set the list of csl-data.json references, used to
+	// build up the inline citation clusters
 	var setReferences = function (referenceList) {
 		CSLEDIT_storage.setItem('CSLEDIT_exampleReferences', JSON.stringify(referenceList));
 
@@ -157,6 +204,7 @@ define(
 		setReferenceIndexesForCitation(citationIndex, newReferenceList);
 	};
 
+	// Returns the list of reference indexes using in the given citation
 	var getReferenceIndexesForCitation = function (citationIndex) {
 		var indexes = [],
 			citations = getCitations();
@@ -171,7 +219,13 @@ define(
 
 		return indexes;
 	};
-
+	
+	// Sets the list of reference indexes used in the given citation.
+	//
+	// e.g. This will set citation 1 (the 2nd citation) to use references 2 and 4
+	//      (reference index 2 corresponds to "ITEM-3" and index 4 to "ITEM-5")
+	//
+	//      setReferenceIndexesForCitation(1, [2, 4]);
 	var setReferenceIndexesForCitation = function (citationIndex, references) {
 		var citations = getCitations();
 		
@@ -187,6 +241,8 @@ define(
 		setCitations(citations);
 	};
 	
+	// Append the given csl-data.json reference to the list of references,
+	// and optionally append it to the given inline citation
 	var addReference = function (referenceData, citationToAddTo /* optional */ ) {
 		var references = getReferences(),
 			citations;
@@ -202,12 +258,8 @@ define(
 		}
 	};
 
-	var setJsonDocumentList = function (jsonDocumentList) {
-		CSLEDIT_exampleData.jsonDocumentList = jsonDocumentList;
-
-		update();
-	};
-
+	// Trigger a CSLEDIT_viewController updateFinished event,
+	// which will re-generate the citations
 	var update = function () {
 		if (!suppressUpdate && typeof(CSLEDIT_viewController) !== "undefined") {
 			CSLEDIT_viewController.styleChanged("updateFinished");
@@ -227,12 +279,17 @@ define(
 		return cluster;
 	};
 
+	// Remove any customization of the example citations and use the hard-coded
+	// ones instead
+	var resetToDefault = function () {
+		CSLEDIT_storage.removeItem("CSLEDIT_exampleCitations");
+		CSLEDIT_storage.removeItem("CSLEDIT_exampleReferences");
+		CSLEDIT_storage.removeItem("CSLEDIT_exampleCitationOptions");
+		update();
+	};
+
 	return {
 		getCitations : getCitations,
-		setCitations : setCitations,
-
-		getCitationOptions : getCitationOptions,
-		setCitationOptions : setCitationOptions,
 
 		getOption : getOption,
 		setOption : setOption,
@@ -247,12 +304,7 @@ define(
 
 		addReference : addReference,
 
-		resetToDefault : function () {
-			CSLEDIT_storage.removeItem("CSLEDIT_exampleCitations");
-			CSLEDIT_storage.removeItem("CSLEDIT_exampleReferences");
-			CSLEDIT_storage.removeItem("CSLEDIT_exampleCitationOptions");
-			update();
-		},
+		resetToDefault : resetToDefault,
 
 		createCitationCluster : createCitationCluster
 	};
