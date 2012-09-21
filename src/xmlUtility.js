@@ -7,13 +7,13 @@ define(function () {
 	// supportedTags list removed
 	//
 	// This removes both the tags and the contents within
-	var stripUnsupportedTagsAndContents = function (xml, supportedTags) {
+	var stripUnsupportedTagsAndContents = function (html, supportedTags) {
 		var element;
 
-		element = $("<all>" + xml + "</all>");		
+		element = $("<div/>").html(html);
 		element.find("*").not(supportedTags.join(", ")).remove();
 
-		return element.xml();
+		return element.html();
 	};
 
 	// Returns the given xml, but with all tags *not* within the
