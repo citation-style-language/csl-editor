@@ -17,7 +17,7 @@ define(['external/diff-match-patch/diff_match_patch'], function (diff_match_patc
 	/**
 	 * Modified version of the diff-match-patch function which
 	 * doesn't escape the original HTML tags
-	 * (There's a risk now of mangling the tags, but it's a risk I'm willing to take)
+	 * (There's a risk now of mangling the tags)
 	 *  
 	 * Convert a diff array into a pretty HTML report.
 	 * @param {!Array.<!diff_match_patch.Diff>} diffs Array of diff tuples.
@@ -50,69 +50,37 @@ define(['external/diff-match-patch/diff_match_patch'], function (diff_match_patc
 		return html.join('');
 	};
 
+	// Returns a pretty formatted HTML diff of the given strings
 	var prettyHtmlDiff = function (oldString, newString) {
 		var diffs = dmp.diff_main(oldString, newString);
 		dmp.diff_cleanupSemantic(diffs);
 		return prettyHtml(diffs);
 	};
 
-	var customEditDistance = function (oldString, newString) {
+	// Returns the edit distance between the given strings
+	var editDistance = function (oldString, newString) {
 		var diffs;
 		diffs = dmp.diff_main(oldString, newString);
 		return dmp.diff_levenshtein(diffs);
 	};
 
-	// human friendly value from 0 to 100 to use as a match percentage
+	// Human friendly value from 0 to 100 to use as a match percentage
+	//
+	// Based on the edit distance between oldString and newString
+	//
+	// 0 means no characters match
+	// 100 means all characters match
 	var matchQuality = function (oldString, newString) {
-		var editDistance = customEditDistance(oldString, newString),
-			matchQuality = Math.max(0, Math.floor(100 * (1.0 - editDistance /
+		var thisEditDistance = editDistance(oldString, newString),
+			matchQuality = Math.max(0, Math.floor(100 * (1.0 - thisEditDistance /
 				Math.max(oldString.length, newString.length))));
 
 		return matchQuality;
 	};
 
-	/**
-	 * Like levenshtein but gives much more weight to deletions.
-	 * 
-	 * Generally when searching you want everything you've typed to appear
-	 * in the results.
-	 *
-	 * Note: no longer using this
-	 */
-	var weightedLevenshtein = function (diffs) {
-		var levenshtein = 0;
-		var insertions = 0;
-		var deletions = 0;
-
-		var deletionWeight = 5;
-
-		for (var x = 0; x < diffs.length; x++) {
-			var op = diffs[x][0];
-			var data = diffs[x][1];
-			switch (op) {
-			case DIFF_INSERT:
-				insertions += data.length;
-				break;
-			case DIFF_DELETE:
-				deletions += data.length;
-				break;
-			case DIFF_EQUAL:
-				// A deletion and an insertion is one substitution.
-				levenshtein += Math.max(insertions, deletions * deletionWeight);
-				insertions = 0;
-				deletions = 0;
-				break;
-			}
-		}
-		levenshtein += Math.max(insertions, deletions * deletionWeight);
-		return levenshtein;
-	};
-
 	return {
 		prettyHtml : prettyHtml,
 		prettyHtmlDiff : prettyHtmlDiff,
-		customEditDistance : customEditDistance,
-		matchQuality : matchQuality,
-		weightedLevenshtein : weightedLevenshtein
+		matchQuality : matchQuality
 	};
 });
