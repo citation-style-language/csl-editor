@@ -35,7 +35,8 @@ define(
 	// Creates a Search by Example page within mainContainer
 	var CSLEDIT_SearchByExample = function (
 			mainContainer,       // the selector or jQuery element to create the search tool within
-			configurationOptions // see https://github.com/citation-style-editor/csl-editor/wiki/Search-By-Example for full list of options
+			configurationOptions // see full list of options at
+			                     // https://github.com/citation-style-editor/csl-editor/wiki/Search-By-Example
 			) {
 		var nameSearchTimeout,
 			styleFormatSearchTimeout,
