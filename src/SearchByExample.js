@@ -53,7 +53,8 @@ define(
 			oldCitation = "",
 			oldBibliography = "",
 			formChangedTimeout,
-			exampleCitationsFromMasterId = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId;
+			exampleCitationsFromMasterId = CSLEDIT_cslStyles.exampleCitations().exampleCitationsFromMasterId,
+			referencesToSearch = [];
 
 		CSLEDIT_options.setOptions(configurationOptions);
 		mainContainer = $(mainContainer);
@@ -91,15 +92,66 @@ define(
 
 		// used to display HTML tags for debugging
 		var escapeHTML = function (string) {
-			return $('<pre>').text(string).html();
+			return $('<pre/>').text(string).html();
+		};
+
+		var calculateMatchQualities = function (referenceIndex, matchQualities /* optional */) {
+			var userCitation = userCitations[referenceIndex],
+				userBibliography = userBibliographies[referenceIndex];
+
+			matchQualities = matchQualities || {};
+
+			$.each(exampleCitationsFromMasterId, function (styleId, exampleCitations) {
+				var exampleCitation = exampleCitations[referenceIndex];
+
+				if (exampleCitation !== null && exampleCitation.statusMessage === "") {
+					var formattedCitation = exampleCitation.formattedCitations[0];
+					var cleanFormattedBibliography =
+						CSLEDIT_xmlUtility.cleanInput(exampleCitation.formattedBibliography);
+
+					var citationMatchQuality = 0;
+					if (userCitation !== "") {
+						citationMatchQuality = CSLEDIT_diff.matchQuality(
+							userCitation, formattedCitation);
+					}
+
+					var bibliographyMatchQuality = 0;
+					if (userBibliography !== "") {
+						bibliographyMatchQuality = CSLEDIT_diff.matchQuality(
+							userBibliography, cleanFormattedBibliography);
+					}
+
+					var thisMatchQuality = 0;
+					if (perCharacterOrdering()) {
+						thisMatchQuality += citationMatchQuality *
+							Math.max(userCitation.length, formattedCitation.length);
+						thisMatchQuality += bibliographyMatchQuality *
+							Math.max(userBibliography.length, cleanFormattedBibliography.length);
+					}
+					else {
+						thisMatchQuality += citationMatchQuality;
+						thisMatchQuality += bibliographyMatchQuality;
+					}
+
+					// give tiny boost to top popular styles
+					if (CSLEDIT_cslStyles.topStyles.indexOf(styleId) !== -1) {
+						thisMatchQuality += 0.1;
+					}
+
+					if (thisMatchQuality > tolerance)
+					{
+						if (styleId in matchQualities) {
+							matchQualities[styleId] += thisMatchQuality;
+						} else {
+							matchQualities[styleId] = thisMatchQuality;
+						}
+					}
+				}
+			});
 		};
 
 		var searchForStyle = function () {
-			var bestMatchQuality = 999,
-				bestMatchIndex = -1,
-				userCitation = citationEditor.value(),
-				userBibliography = bibliographyEditor.value(),
-				result = [],
+			var result = [],
 				matchQualities = [],
 				citationMatchQuality,
 				bibliographyMatchQuality,
@@ -110,73 +162,45 @@ define(
 				thisMatchQuality,
 				cleanFormattedBibliography;
 
+			userCitations[exampleIndex] = citationEditor.value();
+			userBibliographies[exampleIndex] = bibliographyEditor.value();
+
 			debug.time("searchForStyle");
 
-			for (styleId in exampleCitationsFromMasterId) {
-				if (exampleCitationsFromMasterId.hasOwnProperty(styleId)) {
-					exampleCitation = exampleCitationsFromMasterId[styleId][exampleIndex];
-
-					if (exampleCitation !== null && exampleCitation.statusMessage === "") {
-						formattedCitation = exampleCitation.formattedCitations[0];
-						cleanFormattedBibliography =
-							CSLEDIT_xmlUtility.cleanInput(exampleCitation.formattedBibliography);
-
-						if (userCitation !== "") {
-							citationMatchQuality = CSLEDIT_diff.matchQuality(
-								userCitation, formattedCitation);
-						} else {
-							citationMatchQuality = 0;
-						}
-						if (userBibliography !== "") {
-							bibliographyMatchQuality = CSLEDIT_diff.matchQuality(
-								userBibliography, cleanFormattedBibliography);
-						} else {
-							bibliographyMatchQuality = 0;
-						}
-
-						thisMatchQuality = 0;
-						if (perCharacterOrdering()) {
-							thisMatchQuality += citationMatchQuality * 
-								Math.max(userCitation.length, formattedCitation.length);
-							thisMatchQuality += bibliographyMatchQuality *
-								Math.max(userBibliography.length, cleanFormattedBibliography.length);
-						}
-						else {
-							thisMatchQuality += citationMatchQuality;
-							thisMatchQuality += bibliographyMatchQuality;
-						}
-
-						// give tiny boost to top popular styles
-						if (CSLEDIT_cslStyles.topStyles.indexOf(styleId) !== -1) {
-							thisMatchQuality += 0.1;
-						}
-
-						if (thisMatchQuality > tolerance)
-						{
-							matchQualities[index++] = {
-								matchQuality : thisMatchQuality,
-								styleId : styleId
-							};
-						}
-
-						if (thisMatchQuality > bestMatchQuality) {
-							bestMatchQuality = thisMatchQuality;
-						}
-					}
-				}
+			if (!advancedMode()) {
+				referencesToSearch = [];
+				referencesToSearch[exampleIndex] = true;
 			}
-			matchQualities.sort(function (a, b) {return b.matchQuality - a.matchQuality; });
+
+			matchQualities = {};
+			// search all relevant citations
+			$.each(referencesToSearch, function (referenceIndex, toSearch) {
+				if (toSearch === true) {
+					console.log("searching based on reference " + referenceIndex);
+					calculateMatchQualities(referenceIndex, matchQualities);
+				}
+			});
+
+			var matchQualityList = [];
+			$.each(matchQualities, function (styleId, matchQuality) {
+				matchQualityList.push({
+					styleId : styleId,
+					matchQuality : matchQuality / referencesToSearch.length
+				});
+			});
+
+			matchQualityList.sort(function (a, b) {return b.matchQuality - a.matchQuality; });
 
 			// top results
-			for (index = 0; index < matchQualities.length; index++) {
+			$.each(matchQualityList, function (i, matchQuality) {
 				result.push({
-					styleId : matchQualities[index].styleId,
-					masterId : matchQualities[index].styleId,
-					userCitation : userCitation,
-					userBibliography : userBibliography,
-					matchQuality : Math.min(1, matchQualities[index].matchQuality)
+					styleId : matchQuality.styleId,
+					masterId : matchQuality.styleId,
+					userCitation : citationEditor.value(),
+					userBibliography : bibliographyEditor.value(),
+					matchQuality : Math.min(1, matchQuality.matchQuality)
 				});
-			}
+			});
 			
 			CSLEDIT_searchResults.displaySearchResults(result, $("#searchResults"), exampleIndex);
 			debug.timeEnd("searchForStyle");
@@ -318,6 +342,14 @@ define(
 			outputData.fields.sort(function (a, b) {return a.order - b.order; });
 
 			$("#exampleDocument").html(CSLEDIT_mustache.toHtml("exampleMetadata", outputData));
+
+			if (advancedMode()) {
+				if (referencesToSearch[exampleIndex] === true) {
+					$('#includeReference').prop("checked", true);
+				} else {
+					$('#includeReference').prop("checked", false);
+				}
+			}
 		};
 
 		var hasChanged = function () {
@@ -383,6 +415,12 @@ define(
 			}
 		};
 
+		// Use advanced mode, with extra controls for power users
+		// Accessible via ?advanced=true query string
+		var advancedMode = function () {
+			return CSLEDIT_urlUtils.getUrlVar("advanced") === "true";
+		};
+
 		var init = function () {
 			inputControlsElement = $('#styleFormatInputControls');
 
@@ -432,13 +470,22 @@ define(
 
 			setSelectedControl("citation");
 
-			if (CSLEDIT_urlUtils.getUrlVar("advanced") === "true") {
-				$('#alternateSearch').css("display", "inline").click(function () {
+			if (advancedMode()) {
+				$('#alternateSearch').click(function () {
 					oldCitation = "";
 					oldBibliography = "";
 					formChanged();
 				});
-				$('#alternateSearchLabel').css('display', 'inline');
+
+				$('#includeReference').click(function () {
+					if ($(this).is(':checked')) {
+						referencesToSearch[exampleIndex] = true;
+					} else {
+						referencesToSearch[exampleIndex] = false;
+					}
+				});
+
+				$('#advancedControls').css('display', 'inline');
 			}
 		};
 	};

@@ -290,6 +290,7 @@ define(
 
 	return {
 		getCitations : getCitations,
+		setCitations : setCitations,
 
 		getOption : getOption,
 		setOption : setOption,

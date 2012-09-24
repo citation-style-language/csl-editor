@@ -143,7 +143,7 @@ requirejs(
 					citationId: "CITATION-1",
 					citationItems: [],
 					properties: {noteIndex: 0},
-					schema: "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"			
+					schema: "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
 				}]);
 
 				exampleCitations.exampleCitationsFromMasterId[styleId] = [];
