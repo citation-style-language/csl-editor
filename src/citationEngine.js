@@ -89,7 +89,7 @@ define([	'src/options',
 			}
 			catch (err) {
 				result.statusMessage = "Citeproc exception: " + err;
-				return result;
+				return false;
 			}
 			
 			$.each(citations, function (i, citation) {
@@ -111,6 +111,9 @@ define([	'src/options',
 				}
 			});
 		});
+		if (result.statusMessage !== "") {
+			return result;
+		}
 		result.formattedCitations = inLineCitationArray;
 		
 		enumerateCitations = true;
