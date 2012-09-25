@@ -232,9 +232,13 @@ define([	'src/MultiPanel',
 	var nodeChanged = function () {
 		// read user data
 		$('[id^="nodeAttributeLabel"]').each(function () {
-			var key, value, index, enabled, attributes;
-			index = $(this).attr("id").replace(/^nodeAttributeLabel/, "");
-			key = $(this).html();
+			var $this = $(this), key, value, index, enabled, attributes;
+			index = $this.attr("id").replace(/^nodeAttributeLabel/, "");
+			key = $this.html();
+
+			if (!$this.is(":visible")) {
+				return true;
+			}
 
 			if ($("#nodeAttribute" + index).length > 0) {
 				value = $("#nodeAttribute" + index).val();
