@@ -166,8 +166,10 @@ define([	'src/uiConfig',
 				"hotkeys" : {
 					"del" : callbacks.deleteNode,
 					"f2" : false
-				}
-				
+				},
+				"theme" : {
+					url : CSLEDIT_urlUtils.getResourceUrl("external/jstree/themes/default/style.css")
+				}				
 			});
 		};
 		
