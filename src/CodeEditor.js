@@ -66,7 +66,11 @@ define([	'src/citationEngine',
 					var result = CSLEDIT_data.setCslCode(editor.getValue());
 
 					if ("error" in result) {
-						$("#statusMessage").text(result.error);
+						if ("message" in result.error) {
+							$("#statusMessage").text(result.error.message);
+						} else {
+							$("#statusMessage").text(JSON.stringify(result.error));
+						}
 						$("#formattedCitations").html("");
 						$("#formattedBibliography").html("");
 					} else {
