@@ -191,42 +191,19 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			}
 
 			if (!allowDependentStyle) {
-				var result;
 				// check if this is a dependent style:
 				$.each(getNodesFromPath('style/info/link', cslData), function (i, node) {
 					var linkNode = new CSLEDIT_CslNode(node);
 					if (linkNode.getAttr("rel") === "independent-parent") {
-						var styleId = linkNode.getAttr("href");
-						var styleURL = CSLEDIT_cslStyles.localURLFromZoteroId(styleId);
-						
-						// Try fetching the parent style
-						CSLEDIT_cslStyles.fetchCslCode(
-							styleURL,
-							function (cslCode) {
-								alert("Editing of dependent styles is not supported.\n\n" +
-									"The following parent style will be used instead:\n\n" +
-									styleId);
-								result = setCslCode(cslCode, allowDependentStyle);
-							},
-							function () {
-								result = {
-									error : {
-										type: "dependentStyle",
-										parentURL: linkNode.getAttr("href"),
-										message: "Editing of dependent styles is not supported.\n\n" + 
-											"Please find and edit this parent style instead:\n\n" +
-											styleId
-									}
-								};
-							},
-							false
-						);
+						error = {
+							type: "dependentStyle",
+							parentURL: linkNode.getAttr("href"),
+							message: "Editing of dependent styles not yet supported.\n\n" + 
+								"Please find and edit this master style instead:\n\n" +
+								linkNode.getAttr("href")
+						};
 					}
 				});
-
-				if (typeof(result) !== "undefined") {
-					return result;
-				}
 			}
 
 			// check it contains required nodes
@@ -783,6 +760,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				}
 			}
 			
+			// Next try the 
 			if (cslData === null || cslData === "") {
 				styleURL = CSLEDIT_cslStyles.defaultStyleURL();
 				$.get(styleURL, {}, function (cslCode) {
