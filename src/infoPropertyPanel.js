@@ -275,7 +275,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/options', 'src/debug'], function
 				var description = '';
 
 				if (typeof(configuration) !== 'undefined' && typeof(configuration[item.node]) !== 'undefined') {
-					description = configuration[item.node].description;
+					description = $('<div/>').html(configuration[item.node].description);
 					
 					if (configuration[item.node].readonly) {
 						thisRow.children('input').attr('readonly','readonly');
@@ -283,7 +283,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/options', 'src/debug'], function
 				}
 				simpleTextNodesTable.append($('<tr/>')
 					.append($('<td/>').append(thisRow.children('label')))
-					.append($('<td/>').append(thisRow.children('input')).append(document.createTextNode(description))));
+					.append($('<td/>').append(thisRow.children('input')).append(description)));
 			}
 		});
 
