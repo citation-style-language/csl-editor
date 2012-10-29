@@ -224,6 +224,12 @@ define(
 					CSLEDIT_controller.exec('setCslCode', [csl]);
 				}
 			});
+			setCustomMenuItem(dropdown.filter('#menuSaveCslAs'), CSLEDIT_options.get('saveCSLAsName'), function () {
+				var csl = CSLEDIT_options.get('saveCSLAsFunc')();
+				if (csl !== null && typeof csl !== "undefined") {
+					CSLEDIT_controller.exec('setCslCode', [csl]);
+				}
+			});
 			setCustomMenuItem(dropdown.filter('#menuSaveCsl'), CSLEDIT_options.get('saveCSLName'), function () {
 				CSLEDIT_options.get('saveCSLFunc')(CSLEDIT_data.getCslCode());
 			});
