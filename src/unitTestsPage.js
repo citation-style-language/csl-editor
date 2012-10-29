@@ -1,6 +1,6 @@
 "use strict";
 
-// Loads the 
+// Loads all the unit tests
 
 define(
 		[	'src/test_storage',
