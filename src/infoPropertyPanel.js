@@ -6,7 +6,7 @@
 //
 // Migrating to use mustache for most of the HTML generation may help
 
-define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, debug) {
+define(['src/CslNode', 'src/dataInstance', 'src/options', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, CSLEDIT_options, debug) {
 	var panel, infoNode, inputTimeout, executeCommand;
 
 	var layout = [
@@ -271,9 +271,19 @@ define(['src/CslNode', 'src/dataInstance', 'src/debug'], function (CSLEDIT_CslNo
 
 				panel.append(thisRow);
 
+				var configuration = CSLEDIT_options.get('propertyPanelOptions');
+				var description = '';
+
+				if (typeof(configuration) !== 'undefined' && typeof(configuration[item.node]) !== 'undefined') {
+					description = configuration[item.node].description;
+					
+					if (configuration[item.node].readonly) {
+						thisRow.children('input').attr('readonly','readonly');
+					}
+				}
 				simpleTextNodesTable.append($('<tr/>')
 					.append($('<td/>').append(thisRow.children('label')))
-					.append($('<td/>').append(thisRow.children('input'))));
+					.append($('<td/>').append(thisRow.children('input')).append(document.createTextNode(description))));
 			}
 		});
 
