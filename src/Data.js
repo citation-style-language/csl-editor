@@ -46,8 +46,10 @@ define([	'src/uiConfig', // TODO: remove this dependency
 			//       implementation.
 			styleInfoOrder = [
 				"title",
+				"title-short",
 				"id",
 				'link rel="self"',
+				'link rel="independent-parent"',
 				'link rel="template"',
 				'link rel="documentation"',
 				"author",
@@ -55,7 +57,10 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				"category citation-format",
 				"category field",
 				"issn",
+				"eissn",
+				"issnl",
 				"summary",
+				"published",
 				"updated",
 				"rights"
 			];
