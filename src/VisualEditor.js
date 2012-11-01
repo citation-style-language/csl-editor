@@ -265,18 +265,36 @@ define(
 					CSLEDIT_controller.redo();
 				}
 			});
-
-			var helpMenu = editorElement.find('#helpMenuUl');
-			var helpLinks = CSLEDIT_options.get('helpLinks');
-
-
-			$.each(helpLinks, function(index, link) {
-				helpMenu.append(($('<li/>').append($('<a/>')
-						.attr('href', link.link)
-						.attr('target','_blank')
-						.text(link.label))));
-			});
 			
+			var helpLinks = CSLEDIT_options.get('helpLinks');
+			if (helpLinks.length != 0) {
+				var visualEditorMenu = editorElement.find('#visualEditorMenu');
+
+				visualEditorMenu.append($('<li/>').attr('id','helpMenuMain'));
+				
+				var helpMenuMain = editorElement.find('#helpMenuMain');
+				var helpMenuLink = $('<a/>')
+					.attr('id','helpMenu')
+					.text('Help').
+					append($('<span>').
+						attr('class','disclosure').
+						html('&#9662;'));
+
+				helpMenuMain.append(helpMenuLink);
+
+				helpMenuMain.append($('<ul/>')
+						.attr('id','helpMenuUl')
+						.attr('class','sub_menu'));
+
+				var helpMenu = editorElement.find('#helpMenuUl');
+				$.each(helpLinks, function(index, link) {
+					helpMenu.append(($('<li/>').append($('<a/>')
+							.attr('href', link.link)
+							.attr('target','_blank')
+							.text(link.label))));
+				});
+			}
+
 			editorElement.find('#menuEditCitation1').click(function () {
 				CSLEDIT_citationEditor.editCitation(0);
 			});
