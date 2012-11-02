@@ -212,28 +212,22 @@ define(
 			var dropdown = $(selector),
 				loadCsl;
 
-			setCustomMenuItem(dropdown.filter('#menuLoadCsl'), CSLEDIT_options.get('loadCSLName'), function () {
-				var csl = CSLEDIT_options.get('loadCSLFunc')();
-				if (csl !== null && typeof csl !== "undefined") {
-					CSLEDIT_controller.exec('setCslCode', [csl]);
+			// Adds the options from the settings into the Style menu
+			var styleMenu = CSLEDIT_options.get('styleMenu');
+			var styleMenuUl = editorElement.find('#styleMenuUl');
+			console.log(styleMenu);
+			$.each(styleMenu, function(index, styleOption) {
+				var menuOption = $('<li/>').append($('<a/>')
+						.text(styleOption.label));
+
+				if (typeof styleOption.name != 'undefined') {
+					menuOption.attr('id',styleOption.name);
 				}
-			});
-			setCustomMenuItem(dropdown.filter('#menuLoadStyleFromUrl'), CSLEDIT_options.get('loadStyleFromUrlName'), function () {
-				var csl = CSLEDIT_options.get('loadStyleFromUrlFunc')();
-				if (csl !== null && typeof csl !== "undefined") {
-					CSLEDIT_controller.exec('setCslCode', [csl]);
-				}
-			});
-			setCustomMenuItem(dropdown.filter('#menuSaveCslAs'), CSLEDIT_options.get('saveCSLAsName'), function () {
-				var csl = CSLEDIT_options.get('saveCSLAsFunc')();
-				if (csl !== null && typeof csl !== "undefined") {
-					CSLEDIT_controller.exec('setCslCode', [csl]);
-				}
-			});
-			setCustomMenuItem(dropdown.filter('#menuSaveCsl'), CSLEDIT_options.get('saveCSLName'), function () {
-				CSLEDIT_options.get('saveCSLFunc')(CSLEDIT_data.getCslCode());
+				menuOption.click(styleOption.func);
+				styleMenuUl.append(menuOption);
 			});
 
+			// If menuNewStyle id exists: will create a new style
 			editorElement.find('#menuNewStyle').click(function () {
 				// fetch the URL
 				$.ajax({
@@ -266,6 +260,8 @@ define(
 				}
 			});
 			
+			// Creates the Help menu if this menu exists. Populates
+			// with links
 			var helpLinks = CSLEDIT_options.get('helpLinks');
 			if (helpLinks.length != 0) {
 				var visualEditorMenu = editorElement.find('#visualEditorMenu');
