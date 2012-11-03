@@ -263,7 +263,7 @@ define(
 			// Creates the Help menu if this menu exists. Populates
 			// with links
 			var helpLinks = CSLEDIT_options.get('helpLinks');
-			if (helpLinks.length != 0) {
+			if (typeof helpLinks !== 'undefined' && helpLinks.length != 0) {
 				var visualEditorMenu = editorElement.find('#visualEditorMenu');
 
 				visualEditorMenu.append($('<li/>').attr('id','helpMenuMain'));
