@@ -84,7 +84,7 @@ define(['src/debug'], function (debug) {
 					simpleValue = simpleStorageAPI.getItem(key);
 					localValue = localStorageAPI.getItem(key);
 
-					if (simpleValue === null) {
+					if (simpleValue === null && localValue !== null) {
 						simpleStorageAPI.setItem(key, localValue);
 					} else if (simpleValue !== localValue) {
 						outOfSync();
