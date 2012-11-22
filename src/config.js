@@ -7,7 +7,7 @@ requirejs.config({
 	// Aliases for some of the external paths
 	paths: {
 		'jquery.ui' : 'external/jquery-ui-1.9.1.custom.min',
-		'jquery.hotkeys' : 'external/jstree/_lib/jquery.hotkeys',
+		'jquery.hotkeys' : 'external/jquery.hotkeys',
 		'jquery.jstree-patched' : 'external/jstree/jquery.jstree-patch1',
 		'jquery.layout' : 'external/jquery.layout-1.3.0.rc30.7.min',
 		'jquery.hoverIntent' : 'external/jquery.hoverIntent.minified',
