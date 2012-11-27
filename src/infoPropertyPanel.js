@@ -12,7 +12,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/options', 'src/debug'], function
 	var layout = [
 		{ name : "Title", node : "title" },
 		{ name : "Title (short)", node : "title-short" },
-		{ name : "Id", node : "id" },
+		{ name : "ID", node : "id" },
 		{ name : "Summary", node : "summary" },
 		{ name : "Rights", node : "rights" },
 		{ name : "Published", node : "published" },
