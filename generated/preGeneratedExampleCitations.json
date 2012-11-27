@@ -2350,7 +2350,7 @@
 				"formattedCitations": [
 					"(Accadia et al. 2012)"
 				],
-				"formattedBibliography": "<div class=\"csl-block\">Accadia, T, F Acernese, M Alshourbagy, et al.</div>\n<div class=\"csl-indent\">2012 Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> 7(03): P03012–P03012. doi:10.1088/1748-0221/7/03/P03012.</div>"
+				"formattedBibliography": "<div class=\"csl-block\">Accadia, T, F Acernese, M Alshourbagy, P Amico, F Antonucci, et al.</div>\n<div class=\"csl-indent\">2012 Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> 7(03): P03012–P03012.</div>"
 			},
 			{
 				"statusMessage": "",
@@ -2378,40 +2378,40 @@
 				"formattedCitations": [
 					"(Einstein 1905)"
 				],
-				"formattedBibliography": "<div class=\"csl-block\">Einstein, Albert</div>\n<div class=\"csl-indent\">1905 On the electrodynamics of moving bodies. <i>Annalen der Physik</i> 17(4): 1–26. doi:10.1088/0143-0807/27/4/007. http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf.</div>"
+				"formattedBibliography": "<div class=\"csl-block\">Einstein, Albert</div>\n<div class=\"csl-indent\">1905 On the electrodynamics of moving bodies. <i>Annalen der Physik</i> 17(4): 1–26.</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"(Watson and Crick 1953)"
 				],
-				"formattedBibliography": "<div class=\"csl-block\">Watson, James Dewey, and Francis Harry Compton Crick</div>\n<div class=\"csl-indent\">1953 Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i> 171(4356): 737–738. doi:10.1038/171737a0. http://www.ncbi.nlm.nih.gov/pubmed/13054692.</div>"
+				"formattedBibliography": "<div class=\"csl-block\">Watson, James Dewey, and Francis Harry Compton Crick</div>\n<div class=\"csl-indent\">1953 Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i> 171(4356): 737–738.</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"(Ahlquist and Breunig 2009)"
 				],
-				"formattedBibliography": "<div class=\"csl-block\">Ahlquist, John S., and Christian Breunig</div>\n<div class=\"csl-indent\">2009 <i>Country Clustering in Comparative Political Economy</i>. MPIfG Discussion Paper 09-5. Max-Planck Institute for the Study of Societies, Cologne.</div>"
+				"formattedBibliography": "<div class=\"csl-block\">Ahlquist, John S., and Christian Breunig</div>\n<div class=\"csl-indent\">2009 <i>Country Clustering in Comparative Political Economy</i>Unpublished MPIfG Discussion Paper 09-5. Max-Planck Institute for the Study of Societies, Cologne.</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"(Mares 2001)"
 				],
-				"formattedBibliography": "<div class=\"csl-block\">Mares, Isabela</div>\n<div class=\"csl-indent\">2001 Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>, edited by Peter A Hall and David Soskice, 184–213. Oxford University Press, New York.</div>"
+				"formattedBibliography": "<div class=\"csl-block\">Mares, Isabela</div>\n<div class=\"csl-indent\">2001 Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>, edited by Peter A Hall and David Soskice, pp. 184–213. Oxford University Press, New York.</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"(Campbell and Pedersen 2007)"
 				],
-				"formattedBibliography": "<div class=\"csl-block\">Campbell, John L., and Ove K. Pedersen</div>\n<div class=\"csl-indent\">2007 The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i> 40(3): 307–332. doi:10.1177/0010414006286542. http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract.</div>"
+				"formattedBibliography": "<div class=\"csl-block\">Campbell, John L., and Ove K. Pedersen</div>\n<div class=\"csl-indent\">2007 The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i> 40(3): 307–332.</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Hancké, Rhodes, and Thatcher 2007)"
+					"(Hancké et al. 2007)"
 				],
 				"formattedBibliography": "<div class=\"csl-block\">Hancké, Bob, Martin Rhodes, and Mark Thatcher (editors).</div>\n<div class=\"csl-indent\">2007 <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>. Oxford University Press, Oxford and New York.</div>"
 			}
@@ -6086,7 +6086,7 @@
 				"formattedCitations": [
 					"(McInnis &#38; Nelson 2011)"
 				],
-				"formattedBibliography": "McInnis, M.D. &amp; Nelson, L.P. (2011): Shaping the Body Politic: Art and Political Formation in Early America. – 313 pp. (University of Virginia Press).",
+				"formattedBibliography": "McInnis, M.D. &amp; Nelson, L.P. (2011): Shaping the Body Politic: Art and Political Formation in Early America. – 313 pp.  (University of Virginia Press).",
 				"hangingIndent": 2
 			},
 			{
@@ -6094,7 +6094,7 @@
 				"formattedCitations": [
 					"(Dunnett &#38; Kingsbury 2008)"
 				],
-				"formattedBibliography": "Dunnett, N. &amp; Kingsbury, N. (2008): Planting green roofs and living walls. – In: – p. 328. (Timber Press).",
+				"formattedBibliography": "Dunnett, N. &amp; Kingsbury, N. (2008): Planting green roofs and living walls. – In: – p. 328, (Timber Press).",
 				"hangingIndent": 2
 			},
 			{
@@ -6102,7 +6102,7 @@
 				"formattedCitations": [
 					"(Foderaro 2012)"
 				],
-				"formattedBibliography": "Foderaro, L.W. (2012): Rooftop Greenhouse Will Boost City Farming - NYTimes.com. – <i>New York Times</i>: A20. New York.",
+				"formattedBibliography": "Foderaro, L.W. (2012): Rooftop Greenhouse Will Boost City Farming - NYTimes.com. – <i>New York Times</i>: A20 New York.",
 				"hangingIndent": 2
 			},
 			{
@@ -6110,7 +6110,7 @@
 				"formattedCitations": [
 					"(Accadia et al. 2012)"
 				],
-				"formattedBibliography": "Accadia, T., Acernese, F., Alshourbagy, M., Amico, P., Antonucci, F., et al. (2012): Virgo: a laser interferometer to detect gravitational waves. – <i>Journal of Instrumentation</i>, <b>7</b>/03: P03012–P03012.",
+				"formattedBibliography": "Accadia, T., Acernese, F., Alshourbagy, M., Amico, P., Antonucci, F., et al. (2012): Virgo: a laser interferometer to detect gravitational waves. – <i>Journal of Instrumentation</i>, <b>7</b>/03: P03012–P03012. doi: 10.1088/1748-0221/7/03/P03012.",
 				"hangingIndent": 2
 			},
 			{
@@ -6118,7 +6118,7 @@
 				"formattedCitations": [
 					"(Borges 1999)"
 				],
-				"formattedBibliography": "Borges, J.L. (1999): Selected non-fictions. – In: – p. 559. New York (Viking).",
+				"formattedBibliography": "Borges, J.L. (1999): Selected non-fictions. – In: – p. 559, New York (Viking).",
 				"hangingIndent": 2
 			},
 			{
@@ -6126,7 +6126,7 @@
 				"formattedCitations": [
 					"(Isaacson 2011)"
 				],
-				"formattedBibliography": "Isaacson, W. (2011): Steve Jobs. – In: – p. 656. (Simon &amp; Schuster).",
+				"formattedBibliography": "Isaacson, W. (2011): Steve Jobs. – In: – p. 656, (Simon &amp; Schuster).",
 				"hangingIndent": 2
 			},
 			{
@@ -6142,7 +6142,7 @@
 				"formattedCitations": [
 					"(Einstein 1905)"
 				],
-				"formattedBibliography": "Einstein, A. (1905): On the electrodynamics of moving bodies. – <i>Annalen der Physik</i>, <b>17</b>/4: 1–26. (Dover Publications).",
+				"formattedBibliography": "Einstein, A. (1905): On the electrodynamics of moving bodies. – <i>Annalen der Physik</i>, <b>17</b>/4: 1–26 (Dover Publications). doi: 10.1088/0143-0807/27/4/007.",
 				"hangingIndent": 2
 			},
 			{
@@ -6150,7 +6150,7 @@
 				"formattedCitations": [
 					"(Watson &#38; Crick 1953)"
 				],
-				"formattedBibliography": "Watson, J.D. &amp; Crick, F.H.C. (1953): Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. – <i>Nature</i>, <b>171</b>/4356: 737–738. (Am Med Assoc).",
+				"formattedBibliography": "Watson, J.D. &amp; Crick, F.H.C. (1953): Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. – <i>Nature</i>, <b>171</b>/4356: 737–738 (Am Med Assoc). doi: 10.1038/171737a0.",
 				"hangingIndent": 2
 			},
 			{
@@ -6158,7 +6158,7 @@
 				"formattedCitations": [
 					"(Ahlquist &#38; Breunig 2009)"
 				],
-				"formattedBibliography": "Ahlquist, J.S. &amp; Breunig, C. (2009): Country Clustering in Comparative Political Economy. – In: – p. 32. MPIfG Discussion Paper 09-5, Cologne (Max-Planck Institute for the Study of Societies).",
+				"formattedBibliography": "Ahlquist, J.S. &amp; Breunig, C. (2009): Country Clustering in Comparative Political Economy. – In: – p. 32, MPIfG Discussion Paper 09-5: Cologne (Max-Planck Institute for the Study of Societies).",
 				"hangingIndent": 2
 			},
 			{
@@ -6166,7 +6166,7 @@
 				"formattedCitations": [
 					"(Mares 2001)"
 				],
-				"formattedBibliography": "Mares, I. (2001): Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? – In: Hall, P.A. &amp; Soskice, D. (eds): Varieties of Capitalism. The Institutional Foundations of Comparative Advantage.&nbsp; – pp. 184–213. New York (Oxford University Press).",
+				"formattedBibliography": "Mares, I. (2001): Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? – In: Hall, P.A. &amp; Soskice, D. (eds): Varieties of Capitalism. The Institutional Foundations of Comparative Advantage.&nbsp; – pp. 184–213, New York (Oxford University Press).",
 				"hangingIndent": 2
 			},
 			{
@@ -6174,7 +6174,7 @@
 				"formattedCitations": [
 					"(Campbell &#38; Pedersen 2007)"
 				],
-				"formattedBibliography": "Campbell, J.L. &amp; Pedersen, O.K. (2007): The Varieties of Capitalism and Hybrid Success. – <i>Comparative Political Studies</i>, <b>40</b>/3: 307–332.",
+				"formattedBibliography": "Campbell, J.L. &amp; Pedersen, O.K. (2007): The Varieties of Capitalism and Hybrid Success. – <i>Comparative Political Studies</i>, <b>40</b>/3: 307–332. doi: 10.1177/0010414006286542.",
 				"hangingIndent": 2
 			},
 			{
@@ -6182,7 +6182,7 @@
 				"formattedCitations": [
 					"(Hancké et al. 2007)"
 				],
-				"formattedBibliography": "Hancké, B., Rhodes, M. &amp; Thatcher, M. (eds) (2007): Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. – . Oxford and New York (Oxford University Press).",
+				"formattedBibliography": "Hancké, B., Rhodes, M. &amp; Thatcher, M. (eds) (2007): Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. – Oxford and New York (Oxford University Press).",
 				"hangingIndent": 2
 			}
 		],
@@ -8696,14 +8696,14 @@
 				"formattedCitations": [
 					"(EINSTEIN, 1905)"
 				],
-				"formattedBibliography": "EINSTEIN, ALBERT. On the electrodynamics of moving bodies. <i>Annalen der Physik</i>, v. 17, n. 4, p. 1-26, 1905Disponível em: &lt;http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf&gt;."
+				"formattedBibliography": "EINSTEIN, ALBERT. On the electrodynamics of moving bodies. <i>Annalen der Physik</i>, v. 17, n. 4, p. 1-26, 1905. Disponível em: &lt;http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf&gt;."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"(WATSON; CRICK, 1953)"
 				],
-				"formattedBibliography": "WATSON, JAMES DEWEY; CRICK, FRANCIS HARRY COMPTON. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i>, v. 171, n. 4356, p. 737-738, 1953Disponível em: &lt;http://www.ncbi.nlm.nih.gov/pubmed/13054692&gt;."
+				"formattedBibliography": "WATSON, JAMES DEWEY; CRICK, FRANCIS HARRY COMPTON. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i>, v. 171, n. 4356, p. 737-738, 1953. Disponível em: &lt;http://www.ncbi.nlm.nih.gov/pubmed/13054692&gt;."
 			},
 			{
 				"statusMessage": "",
@@ -8724,7 +8724,7 @@
 				"formattedCitations": [
 					"(CAMPBELL; PEDERSEN, 2007)"
 				],
-				"formattedBibliography": "CAMPBELL, JOHN L.; PEDERSEN, OVE K. The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i>, v. 40, n. 3, p. 307-332, 1 mar. 2007Disponível em: &lt;http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract&gt;. Acesso em: 26 jul. 2010."
+				"formattedBibliography": "CAMPBELL, JOHN L.; PEDERSEN, OVE K. The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i>, v. 40, n. 3, p. 307-332, 1 mar. 2007. Disponível em: &lt;http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract&gt;. Acesso em: 26 jul. 2010."
 			},
 			{
 				"statusMessage": "",
@@ -8789,14 +8789,14 @@
 				"formattedCitations": [
 					"(EINSTEIN, 1905)"
 				],
-				"formattedBibliography": "EINSTEIN, A. On the electrodynamics of moving bodies. <i>Annalen der Physik</i>, v. 17, n. 4, p. 1-26, 1905Disponível em: &lt;http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf&gt;."
+				"formattedBibliography": "EINSTEIN, A. On the electrodynamics of moving bodies. <i>Annalen der Physik</i>, v. 17, n. 4, p. 1-26, 1905. Disponível em: &lt;http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf&gt;."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"(WATSON; CRICK, 1953)"
 				],
-				"formattedBibliography": "WATSON, J. D.; CRICK, F. H. C. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i>, v. 171, n. 4356, p. 737-738, 1953Disponível em: &lt;http://www.ncbi.nlm.nih.gov/pubmed/13054692&gt;."
+				"formattedBibliography": "WATSON, J. D.; CRICK, F. H. C. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i>, v. 171, n. 4356, p. 737-738, 1953. Disponível em: &lt;http://www.ncbi.nlm.nih.gov/pubmed/13054692&gt;."
 			},
 			{
 				"statusMessage": "",
@@ -8817,7 +8817,7 @@
 				"formattedCitations": [
 					"(CAMPBELL; PEDERSEN, 2007)"
 				],
-				"formattedBibliography": "CAMPBELL, J. L.; PEDERSEN, O. K. The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i>, v. 40, n. 3, p. 307-332, 1 mar. 2007Disponível em: &lt;http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract&gt;. Acesso em: 26 jul. 2010."
+				"formattedBibliography": "CAMPBELL, J. L.; PEDERSEN, O. K. The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i>, v. 40, n. 3, p. 307-332, 1 mar. 2007. Disponível em: &lt;http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract&gt;. Acesso em: 26 jul. 2010."
 			},
 			{
 				"statusMessage": "",
@@ -8924,91 +8924,91 @@
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(MCINNIS; NELSON, 2011)"
+					"(McInnis e Nelson, 2011)"
 				],
-				"formattedBibliography": "MCINNIS, M. D.; NELSON, L. P. <b>Shaping the Body Politic: Art and Political Formation in Early America</b>. [S.l.] University of Virginia Press, 2011."
+				"formattedBibliography": "MCINNIS, M. D.; NELSON, L. P. <b>Shaping the Body Politic: Art and Political Formation in Early America</b>. [s.l.] University of Virginia Press, 2011."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(DUNNETT; KINGSBURY, 2008)"
+					"(Dunnett e Kingsbury, 2008)"
 				],
-				"formattedBibliography": "DUNNETT, N.; KINGSBURY, N. <b>Planting green roofs and living walls</b>. [S.l.] Timber Press, 2008. p. 328"
+				"formattedBibliography": "DUNNETT, N.; KINGSBURY, N. <b>Planting green roofs and living walls</b>. [s.l.] Timber Press, 2008. p. 328"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(FODERARO, 2012)"
+					"(Foderaro, 2012)"
 				],
 				"formattedBibliography": "FODERARO, L. W. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. <b>New York Times</b>, p. A20, 6 abr. 2012."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(ACCADIA et al., 2012)"
+					"(Accadia <i>et al.</i>, 2012)"
 				],
-				"formattedBibliography": "ACCADIA, T. et al. Virgo: a laser interferometer to detect gravitational waves. <b>Journal of Instrumentation</b>, v. 7, n. 03, p. P03012-P03012, 29 mar. 2012."
+				"formattedBibliography": "ACCADIA, T. <i>et al.</i> Virgo: a laser interferometer to detect gravitational waves. <b>Journal of Instrumentation</b>, v. 7, n. 03, p. P03012-P03012, 29 mar. 2012."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(BORGES, 1999)"
+					"(Borges, 1999)"
 				],
 				"formattedBibliography": "BORGES, J. L. <b>Selected non-fictions</b>. Traducao Esther Allen; Suzanne Jill Levine; Eliot Weinberger. New York: Viking, 1999. p. 559"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(ISAACSON, 2011)"
+					"(Isaacson, 2011)"
 				],
-				"formattedBibliography": "ISAACSON, W. <b>Steve Jobs</b>. [S.l.] Simon &amp; Schuster, 2011. p. 656"
+				"formattedBibliography": "ISAACSON, W. <b>Steve Jobs</b>. [s.l.] Simon &amp; Schuster, 2011. p. 656"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(VAN DAN ELZEN, 2011)"
+					"(Dan Elzen, Van, 2011)"
 				],
-				"formattedBibliography": "VAN DAN ELZEN, H. <b>Yo-yo having a modifiable string gap</b>, 2011."
+				"formattedBibliography": "DAN ELZEN, H. VAN. <b>Yo-yo having a modifiable string gap</b>, 2011."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(EINSTEIN, 1905)"
+					"(Einstein, 1905)"
 				],
 				"formattedBibliography": "EINSTEIN, A. On the electrodynamics of moving bodies. <b>Annalen der Physik</b>, v. 17, n. 4, p. 1-26, 1905."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(WATSON; CRICK, 1953)"
+					"(Watson e Crick, 1953)"
 				],
 				"formattedBibliography": "WATSON, J. D.; CRICK, F. H. C. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <b>Nature</b>, v. 171, n. 4356, p. 737-738, 1953."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(AHLQUIST; BREUNIG, 2009)"
+					"(Ahlquist e Breunig, 2009)"
 				],
 				"formattedBibliography": "AHLQUIST, J. S.; BREUNIG, C. <b>Country Clustering in Comparative Political Economy</b>. Cologne: Max-Planck Institute for the Study of Societies, 2009."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(MARES, 2001)"
+					"(Mares, 2001)"
 				],
-				"formattedBibliography": "MARES, I. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In: HALL, P. A.; SOSKICE, D. (Eds.). <b>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</b>. New York: Oxford University Press, 2001. p. 184-213."
+				"formattedBibliography": "MARES, I. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? <i>In</i>: HALL, P. A.; SOSKICE, D. (Eds.). <b>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</b>. New York: Oxford University Press, 2001. p. 184-213."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(CAMPBELL; PEDERSEN, 2007)"
+					"(Campbell e Pedersen, 2007)"
 				],
 				"formattedBibliography": "CAMPBELL, J. L.; PEDERSEN, O. K. The Varieties of Capitalism and Hybrid Success. <b>Comparative Political Studies</b>, v. 40, n. 3, p. 307-332, 1 mar. 2007."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(HANCKÉ; RHODES; THATCHER, 2007)"
+					"(Hancké, Rhodes e Thatcher, 2007)"
 				],
 				"formattedBibliography": "HANCKÉ, B.; RHODES, M.; THATCHER, M. (EDS.). <b>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</b>. Oxford and New York: Oxford University Press, 2007."
 			}
@@ -12358,7 +12358,7 @@
 				"formattedCitations": [
 					"<sup>1</sup>"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Accadia T, Acernese F, Alshourbagy M, Amico P, Antonucci F, Aoudia S, <i>et al.</i> Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> 2012;<b>7</b>:P03012–P03012.</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Accadia T, Acernese F, Alshourbagy M, <i>et al.</i> Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> 2012;<b>7</b>:P03012–P03012.</div>"
 			},
 			{
 				"statusMessage": "",
@@ -13882,6 +13882,99 @@
 				],
 				"formattedBibliography": "2007. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford and New York: Oxford University Press.",
 				"hangingIndent": 2
+			}
+		],
+		"http://www.zotero.org/styles/byzantina-symmeikta": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. M. D. McInnis - L. P. Nelson, Shaping the Body Politic: Art and Political Formation in Early America, 2011, ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. N. Dunnett - N. Kingsbury, Planting green roofs and living walls, 2008, 328."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. L. W. Foderaro, Rooftop Greenhouse Will Boost City Farming - NYTimes.com, <i>New York Times</i> New York 2012, A20."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. T. Accadia - F. Acernese - M. Alshourbagy - P. Amico - F. Antonucci - S. Aoudia - N. Arnaud - C. Arnault - K. G. Arun - P. Astone - S. Avino - D. Babusci - G. Ballardin - F. Barone - G. Barrand - L. Barsotti - M. Barsuglia - A. Basti - T. S. Bauer - F. Beauville - M. Bebronne - M. Bejger - M. G. Beker - F. Bellachia - A. Belletoile - J. L. Beney - M. Bernardini - S. Bigotta - R. Bilhaut - S. Birindelli - M. Bitossi - M. A. Bizouard - M. Blom - C. Boccara - D. Boget - F. Bondu - L. Bonelli - R. Bonnand - V. Boschi - L. Bosi - T. Bouedo - B. Bouhou - A. Bozzi - L. Bracci - S. Braccini - C. Bradaschia - M. Branchesi - T. Briant - A. Brillet - V. Brisson - L. Brocco - T. Bulik - H. J. Bulten - D. Buskulic - C. Buy - G. Cagnoli - G. Calamai - E. Calloni - E. Campagna - B. Canuel - F. Carbognani - L. Carbone - F. Cavalier - R. Cavalieri - R. Cecchi - G. Cella - E. Cesarini - E. Chassande-Mottin - S. Chatterji - R. Chiche - A. Chincarini - A. Chiummo - N. Christensen - A. C. Clapson - F. Cleva - E. Coccia - P.-F. Cohadon - C. N. Colacino - J. Colas - A. Colla - M. Colombini - G. Conforto - A. Corsi - S. Cortese - F. Cottone - J.-P. Coulon - E. Cuoco - S. D’Antonio - G. Daguin - A. Dari - V. Dattilo - P. Y. David - M. Davier - R. Day - G. Debreczeni - G. D. Carolis - M. Dehamme - R. D. Fabbro - W. D. Pozzo - M. del Prete - L. Derome - R. D. Rosa - R. DeSalvo - M. Dialinas - L. D. Fiore - A. D. Lieto - M. D. P. Emilio - A. D. Virgilio - A. Dietz - M. Doets - P. Dominici - A. Dominjon - M. Drago - C. Drezen - B. Dujardin - B. Dulach - C. Eder - A. Eleuteri - D. Enard - M. Evans - L. Fabbroni - V. Fafone - H. Fang - I. Ferrante - F. Fidecaro - I. Fiori - R. Flaminio - D. Forest - L. A. Forte - J.-D. Fournier - L. Fournier - J. Franc - O. Francois - S. Frasca - F. Frasconi - A. Freise - A. Gaddi - M. Galimberti - L. Gammaitoni - P. Ganau - C. Garnier - F. Garufi - M. E. Gáspár - G. Gemme - E. Genin - A. Gennai - G. Gennaro - L. Giacobone - A. Giazotto - G. Giordano - L. Giordano - C. Girard - R. Gouaty - A. Grado - M. Granata - V. Granata - X. Grave - C. Greverie - H. Groenstege - G. M. Guidi - S. Hamdani - J.-F. Hayau - S. Hebri - A. Heidmann - H. Heitmann - P. Hello - G. Hemming - E. Hennes - R. Hermel - P. Heusse - L. Holloway - D. Huet - M. Iannarelli - P. Jaranowski - D. Jehanno - L. Journet - S. Karkar - T. Ketel - H. Voet - J. Kovalik - I. Kowalska - S. Kreckelbergh - A. Krolak - J. C. Lacotte - B. Lagrange - P. L. Penna - M. Laval - J. C. L. Marec - N. Leroy - N. Letendre - T. G. F. Li - B. Lieunard - N. Liguori - O. Lodygensky - B. Lopez - M. Lorenzini - V. Loriette - G. Losurdo - M. Loupias - J. M. Mackowski - T. Maiani - E. Majorana - C. Magazzù - I. Maksimovic - V. Malvezzi - N. Man - S. Mancini - B. Mansoux - M. Mantovani - F. Marchesoni - F. Marion - P. Marin - J. Marque - F. Martelli - A. Masserot - L. Massonnet - G. Matone - L. Matone - M. Mazzoni - F. Menzinger - C. Michel - L. Milano - Y. Minenkov - S. Mitra - M. Mohan - J.-L. Montorio - R. Morand - F. Moreau - J. Moreau - N. Morgado - A. Morgia - S. Mosca - V. Moscatelli - B. Mours - P. Mugnier - F.-A. Mul - L. Naticchioni - I. Neri - F. Nocera - E. Pacaud - G. Pagliaroli - A. Pai - L. Palladino - C. Palomba - F. Paoletti - R. Paoletti - A. Paoli - S. Pardi - G. Parguez - M. Parisi - A. Pasqualetti - R. Passaquieti - D. Passuello - M. Perciballi - B. Perniola - G. Persichetti - S. Petit - M. Pichot - F. Piergiovanni - M. Pietka - R. Pignard - L. Pinard - R. Poggiani - P. Popolizio - T. Pradier - M. Prato - G. A. Prodi - M. Punturo - P. Puppo - K. Qipiani - O. Rabaste - D. S. Rabeling - I. Rácz - F. Raffaelli - P. Rapagnani - S. Rapisarda - V. Re - A. Reboux - T. Regimbau - V. Reita - A. Remilleux - F. Ricci - I. Ricciardi - F. Richard - M. Ripepe - F. Robinet - A. Rocchi - L. Rolland - R. Romano - D. Rosińska - P. Roudier - P. Ruggi - G. Russo - L. Salconi - V. Sannibale - B. Sassolas - D. Sentenac - S. Solimeno - R. Sottile - L. Sperandio - R. Stanga - R. Sturani - B. Swinkels - M. Tacca - R. Taddei - L. Taffarello - M. Tarallo - S. Tissot - A. Toncelli - M. Tonelli - O. Torre - E. Tournefier - F. Travasso - C. Tremola - E. Turri - G. Vajente - J. F. J. van den Brand - C. V. D. Broeck - S. van der Putten - M. Vasuth - M. Vavoulidis - G. Vedovato - D. Verkindt - F. Vetrano - O. Véziant - A. Viceré - J.-Y. Vinet - S. Vilalte - S. Vitale - H. Vocca - R. L. Ward - M. Was - K. Yamamoto - M. Yvert - J.-P. Zendri - Z. Zhang, Virgo: a laser interferometer to detect gravitational waves, <i>Journal of Instrumentation</i> 7 (2012) P03012–P03012."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. J. L. Borges, Selected non-fictions, ed E. Weinberger New York 1999, 559."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. W. Isaacson, Steve Jobs, 2011, 656."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. H. Van Dan Elzen, Yo-yo having a modifiable string gap, 2011, ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. A. Einstein, On the electrodynamics of moving bodies, <i>Annalen der Physik</i> 17 (1905) 1–26."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. J. D. Watson - F. H. C. Crick, Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid, <i>Nature</i> 171 (1953) 737–738."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. J. S. Ahlquist - C. Breunig, Country Clustering in Comparative Political Economy, Cologne (2009) 32."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. I. Mares, Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?, in <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>, ed P. A. Hall - D. Soskice New York 2001, 184–213."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. J. L. Campbell - O. K. Pedersen, The Varieties of Capitalism and Hybrid Success, <i>Comparative Political Studies</i> 40 (2007) 307–332."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1.Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy, ed B. Hancké - M. Rhodes - M. Thatcher Oxford and New York 2007, ."
 			}
 		],
 		"http://www.zotero.org/styles/canadian-journal-of-fisheries-and-aquatic-sciences": [
@@ -18621,6 +18714,112 @@
 				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford and New York: Oxford University Press; 2007. </div>"
 			}
 		],
+		"http://www.zotero.org/styles/cuadernos-filologia-clasica": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(McInnis and Nelson 2011)"
+				],
+				"formattedBibliography": "McInnis, Maurie Dee, and Louis P. Nelson (2011), <i>Shaping the Body Politic: Art and Political Formation in Early America</i>. University of Virginia Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Dunnett and Kingsbury 2008)"
+				],
+				"formattedBibliography": "Dunnett, Nigel, and Noël Kingsbury (2008), <i>Planting Green Roofs and Living Walls</i>. Timber Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Foderaro 2012)"
+				],
+				"formattedBibliography": "Foderaro, Lisa W. (2012), “Rooftop Greenhouse Will Boost City Farming - NYTimes.com,” <i>New York Times</i>, April 6.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Accadia et al. 2012)"
+				],
+				"formattedBibliography": "Accadia, T, F Acernese, M Alshourbagy, P Amico, F Antonucci, S Aoudia, N Arnaud, et al. (2012), “Virgo: a Laser Interferometer to Detect Gravitational Waves,” <i>Journal of Instrumentation</i> 7 (03) (March 29): P03012–P03012. doi:10.1088/1748-0221/7/03/P03012.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Borges 1999)"
+				],
+				"formattedBibliography": "Borges, Jorge Luis (1999), <i>Selected Non-fictions</i>. Ed. Eliot Weinberger. Trans. Esther Allen, Suzanne Jill Levine, and Eliot Weinberger. New York. Viking.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Isaacson 2011)"
+				],
+				"formattedBibliography": "Isaacson, Walter (2011), <i>Steve Jobs</i>. Simon &amp; Schuster.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Van Dan Elzen 2011)"
+				],
+				"formattedBibliography": "Van Dan Elzen, Hans (2011), “Yo-yo Having a Modifiable String Gap.”",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Einstein 1905)"
+				],
+				"formattedBibliography": "Einstein, Albert (1905), “On the Electrodynamics of Moving Bodies,” <i>Annalen Der Physik</i> 17 (4): 1–26. doi:10.1088/0143-0807/27/4/007. http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Watson and Crick 1953)"
+				],
+				"formattedBibliography": "Watson, James Dewey, and Francis Harry Compton Crick (1953), “Molecular Structure of Nucleic Acids; a Structure for Deoxyribose Nucleic Acid,” <i>Nature</i> 171 (4356): 737–738. doi:10.1038/171737a0. http://www.ncbi.nlm.nih.gov/pubmed/13054692.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Ahlquist and Breunig 2009)"
+				],
+				"formattedBibliography": "Ahlquist, John S., and Christian Breunig (2009), <i>Country Clustering in Comparative Political Economy</i>. MPIfG Discussion Paper 09-5. Cologne. Max-Planck Institute for the Study of Societies.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Mares 2001)"
+				],
+				"formattedBibliography": "Mares, Isabela (2001), “Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?,” In <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>, ed. Peter A Hall and David Soskice, 184–213. New York. Oxford University Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Campbell and Pedersen 2007)"
+				],
+				"formattedBibliography": "Campbell, John L., and Ove K. Pedersen (2007), “The Varieties of Capitalism and Hybrid Success,” <i>Comparative Political Studies</i> 40 (3) (March 1): 307–332. doi:10.1177/0010414006286542. http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Hancké, Rhodes, and Thatcher 2007)"
+				],
+				"formattedBibliography": "Hancké, Bob, Martin Rhodes, and Mark Thatcher, eds. (2007), <i>Beyond Varieties of Capitalism: Conflict, Contradiction, and Complementarities in the European Economy</i>. Oxford and New York. Oxford University Press.",
+				"hangingIndent": 2
+			}
+		],
 		"http://www.zotero.org/styles/culture-medicine-and-psychiatry": [
 			{
 				"statusMessage": "",
@@ -19986,6 +20185,112 @@
 					"(1)"
 				],
 				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Hancké B, Rhodes M, Thatcher M, editors. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford and New York: Oxford University Press; 2007. </div>"
+			}
+		],
+		"http://www.zotero.org/styles/ear-and-hearing": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(McInnis &#38; Nelson 2011)"
+				],
+				"formattedBibliography": "McInnis, M.D., Nelson, L.P. (2011). <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Dunnett &#38; Kingsbury 2008)"
+				],
+				"formattedBibliography": "Dunnett, N., Kingsbury, N. (2008). <i>Planting green roofs and living walls</i>, Timber Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Foderaro 2012)"
+				],
+				"formattedBibliography": "Foderaro, L.W. (2012). Rooftop Greenhouse Will Boost City Farming - NYTimes.com. <i>New York Times</i>, A20.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Accadia et al. 2012)"
+				],
+				"formattedBibliography": "Accadia, T., Acernese, F., Alshourbagy, M., et al. (2012). Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i>, 7, P03012–P03012.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Borges 1999)"
+				],
+				"formattedBibliography": "Borges, J.L. (1999). <i>Selected non-fictions</i> E. Weinberger, ed., New York: Viking.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Isaacson 2011)"
+				],
+				"formattedBibliography": "Isaacson, W. (2011). <i>Steve Jobs</i>, Simon &amp; Schuster.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Van Dan Elzen 2011)"
+				],
+				"formattedBibliography": "Van Dan Elzen, H. (2011). Yo-yo having a modifiable string gap.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Einstein 1905)"
+				],
+				"formattedBibliography": "Einstein, A. (1905). On the electrodynamics of moving bodies. <i>Annalen der Physik</i>, 17, 1–26. Available at: http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Watson &#38; Crick 1953)"
+				],
+				"formattedBibliography": "Watson, J.D., Crick, F.H.C. (1953). Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i>, 171, 737–738. Available at: http://www.ncbi.nlm.nih.gov/pubmed/13054692.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Ahlquist &#38; Breunig 2009)"
+				],
+				"formattedBibliography": "Ahlquist, J.S., Breunig, C. (2009). <i>Country Clustering in Comparative Political Economy</i>, Cologne: Max-Planck Institute for the Study of Societies.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Mares 2001)"
+				],
+				"formattedBibliography": "Mares, I. (2001). Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In P. A. Hall &amp; D. Soskice, eds. <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>. (<i>pp. 184–213</i>). New York: Oxford University Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Campbell &#38; Pedersen 2007)"
+				],
+				"formattedBibliography": "Campbell, J.L., Pedersen, O.K. (2007). The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i>, 40, 307–332. Available at: http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract [Accessed July 26, 2010].",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Hancké et al. 2007)"
+				],
+				"formattedBibliography": "Hancké, B., Rhodes, M., Thatcher, M. eds. (2007). <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford and New York: Oxford University Press.",
+				"hangingIndent": 2
 			}
 		],
 		"http://www.zotero.org/styles/early-medieval-europe": [
@@ -22077,7 +22382,7 @@
 				"formattedCitations": [
 					"(Mares 2001)"
 				],
-				"formattedBibliography": "<b>Mares, I.</b> <b>2001</b>. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? <i>In</i> Hall, P.A., Soskice, D. (eds.), Varieties of Capitalism. The Institutional Foundations of Comparative Advantage. Oxford University Press, New York, pp. 184–213.",
+				"formattedBibliography": "<b>Mares, I.</b> <b>2001</b>. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?, pp. 184–213. <i>In</i> Hall, P.A., Soskice, D. (eds.), Varieties of Capitalism. The Institutional Foundations of Comparative Advantage. Oxford University Press, New York.",
 				"hangingIndent": 2
 			},
 			{
@@ -24550,6 +24855,112 @@
 					"(Hancké et al. 2007)"
 				],
 				"formattedBibliography": "Hancké, B., M. Rhodes and M. Thatcher (eds). 2007. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford University Press, Oxford and New York."
+			}
+		],
+		"http://www.zotero.org/styles/evolutionary-ecology": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(McInnis and Nelson 2011)"
+				],
+				"formattedBibliography": "McInnis MD, Nelson LP (2011) Shaping the Body Politic: Art and Political Formation in Early America. University of Virginia Press",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Dunnett and Kingsbury 2008)"
+				],
+				"formattedBibliography": "Dunnett N, Kingsbury N (2008) Planting green roofs and living walls. Timber Press",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Foderaro 2012)"
+				],
+				"formattedBibliography": "Foderaro LW (2012) Rooftop Greenhouse Will Boost City Farming - NYTimes.com. New York Times:A20",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Accadia et al. 2012)"
+				],
+				"formattedBibliography": "Accadia T, Acernese F, Alshourbagy M, Amico P, Antonucci F, et al. (2012) Virgo: a laser interferometer to detect gravitational waves. Journal of Instrumentation 7:P03012–P03012. doi:10.1088/1748-0221/7/03/P03012",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Borges 1999)"
+				],
+				"formattedBibliography": "Borges JL (1999) Selected non-fictions (E Weinberger, Ed., E Allen, SJ Levine, and E Weinberger, Trans.). Viking, New York",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Isaacson 2011)"
+				],
+				"formattedBibliography": "Isaacson W (2011) Steve Jobs. Simon &amp; Schuster",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Van Dan Elzen 2011)"
+				],
+				"formattedBibliography": "Van Dan Elzen H (2011) Yo-yo having a modifiable string gap.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Einstein 1905)"
+				],
+				"formattedBibliography": "Einstein A (1905) On the electrodynamics of moving bodies. Annalen der Physik 17:1–26. doi:10.1088/0143-0807/27/4/007",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Watson and Crick 1953)"
+				],
+				"formattedBibliography": "Watson JD, Crick FHC (1953) Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. Nature 171:737–738. doi:10.1038/171737a0",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Ahlquist and Breunig 2009)"
+				],
+				"formattedBibliography": "Ahlquist JS, Breunig C (2009) Country Clustering in Comparative Political Economy. Max-Planck Institute for the Study of Societies, Cologne",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Mares 2001)"
+				],
+				"formattedBibliography": "Mares I (2001) Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In: Hall PA, Soskice D (eds) Varieties of Capitalism. The Institutional Foundations of Comparative Advantage. Oxford University Press, New York, pp 184–213",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Campbell and Pedersen 2007)"
+				],
+				"formattedBibliography": "Campbell JL, Pedersen OK (2007) The Varieties of Capitalism and Hybrid Success. Comparative Political Studies 40:307–332. doi:10.1177/0010414006286542",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Hancké et al. 2007)"
+				],
+				"formattedBibliography": "Hancké B, Rhodes M, Thatcher M (Eds) (2007) Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford University Press, Oxford and New York",
+				"hangingIndent": 2
 			}
 		],
 		"http://www.zotero.org/styles/experimental-eye-research": [
@@ -28041,6 +28452,112 @@
 				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Hancké B, Rhodes M, Thatcher M (Eds.) (2007) Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford University Press, Oxford and New York</div>"
 			}
 		],
+		"http://www.zotero.org/styles/hamburg-school-of-food-science": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>MCINNIS und NELSON</b>, 2011)"
+				],
+				"formattedBibliography": "McInnis, M. D., Nelson, L. P.: Shaping the Body Politic: Art and Political Formation in Early America, University of Virginia Press, 2011.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>DUNNETT und KINGSBURY</b>, 2008)"
+				],
+				"formattedBibliography": "Dunnett, N., Kingsbury, N.: Planting green roofs and living walls, Timber Press, 2008.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>FODERARO</b>, 2012)"
+				],
+				"formattedBibliography": "Foderaro, L. W.: Rooftop Greenhouse Will Boost City Farming - NYTimes.com, New York Times, A20 (2012).",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>ACCADIA et al.</b>, 2012)"
+				],
+				"formattedBibliography": "Accadia, T., Acernese, F., Alshourbagy, M., Amico, P., Antonucci, F., et al.: Virgo: a laser interferometer to detect gravitational waves, Journal of Instrumentation, 7, P03012–P03012 (2012).",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>BORGES</b>, 1999)"
+				],
+				"formattedBibliography": "Borges, J. L.: Selected non-fictions, Viking, New York 1999.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>ISAACSON</b>, 2011)"
+				],
+				"formattedBibliography": "Isaacson, W.: Steve Jobs, Simon &amp; Schuster, 2011.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>VAN DAN ELZEN</b>, 2011)"
+				],
+				"formattedBibliography": "Van Dan Elzen, H.: Yo-yo having a modifiable string gap.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>EINSTEIN</b>, 1905)"
+				],
+				"formattedBibliography": "Einstein, A.: On the electrodynamics of moving bodies, Annalen der Physik, 17, 1–26 (1905).",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>WATSON und CRICK</b>, 1953)"
+				],
+				"formattedBibliography": "Watson, J. D., Crick, F. H. C.: Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid, Nature, 171, 737–738 (1953).",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>AHLQUIST und BREUNIG</b>, 2009)"
+				],
+				"formattedBibliography": "Ahlquist, J. S., Breunig, C.: Country Clustering in Comparative Political Economy (MPIfG Discussion Paper 09-5), Max-Planck Institute for the Study of Societies, Cologne 2009.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>MARES</b>, 2001)"
+				],
+				"formattedBibliography": "Mares, I.: Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In: Hall, P.A., Soskice, D.: Varieties of Capitalism. The Institutional Foundations of Comparative Advantage. Oxford University Press, New York 2001.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>CAMPBELL und PEDERSEN</b>, 2007)"
+				],
+				"formattedBibliography": "Campbell, J. L., Pedersen, O. K.: The Varieties of Capitalism and Hybrid Success, Comparative Political Studies, 40, 307–332 (2007).",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(<b>HANCKÉ et al.</b>, 2007)"
+				],
+				"formattedBibliography": "Hancké, B., Rhodes, M., Thatcher, M.: Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy, Oxford University Press, Oxford and New York 2007.",
+				"hangingIndent": 2
+			}
+		],
 		"http://www.zotero.org/styles/hand": [
 			{
 				"statusMessage": "",
@@ -29473,6 +29990,112 @@
 				"hangingIndent": 2
 			}
 		],
+		"http://www.zotero.org/styles/harvard-university-of-abertay-dundee": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(McInnis and Nelson 2011)"
+				],
+				"formattedBibliography": "McInnis, MD and Nelson, LP 2011, Shaping the Body Politic: Art and Political Formation in Early America, University of Virginia Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Dunnett and Kingsbury 2008, p. 328)"
+				],
+				"formattedBibliography": "Dunnett, N and Kingsbury, N 2008, Planting green roofs and living walls, Timber Press, p. 328.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Foderaro 2012, p. A20)"
+				],
+				"formattedBibliography": "Foderaro, LW 2012, Rooftop Greenhouse Will Boost City Farming - NYTimes.com, <i>New York Times</i>, 6 April, New York, p. A20.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Accadia et al. 2012, p. P03012–P03012)"
+				],
+				"formattedBibliography": "Accadia, T, Acernese, F, Alshourbagy, M, Amico, P, Antonucci, F, Aoudia, S, et al. 2012, Virgo: a laser interferometer to detect gravitational waves, <i>Journal of Instrumentation</i>, 7, (03), pp. P03012–P03012.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Borges 1999, p. 559)"
+				],
+				"formattedBibliography": "Borges, JL 1999, Selected non-fictions, E Weinberger (ed.),, Viking, New York, p. 559.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Isaacson 2011, p. 656)"
+				],
+				"formattedBibliography": "Isaacson, W 2011, Steve Jobs, Simon &amp; Schuster, p. 656.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Van Dan Elzen 2011)"
+				],
+				"formattedBibliography": "Van Dan Elzen, H 2011, Yo-yo having a modifiable string gap.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Einstein 1905, p. 1–26)"
+				],
+				"formattedBibliography": "Einstein, A 1905, On the electrodynamics of moving bodies, <i>Annalen der Physik</i>, 17, (4), Dover Publications, pp. 1–26, viewed &lt;http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf&gt;.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Watson and Crick 1953, p. 737–738)"
+				],
+				"formattedBibliography": "Watson, JD and Crick, FHC 1953, Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid, <i>Nature</i>, 171, (4356), Am Med Assoc, pp. 737–738, viewed &lt;http://www.ncbi.nlm.nih.gov/pubmed/13054692&gt;.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Ahlquist and Breunig 2009, p. 32)"
+				],
+				"formattedBibliography": "Ahlquist, JS and Breunig, C 2009, Country Clustering in Comparative Political Economy, MPIfG Discussion Paper 09-5, Max-Planck Institute for the Study of Societies, Cologne, p. 32.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Mares 2001, p. 184–213)"
+				],
+				"formattedBibliography": "Mares, I 2001, Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?, in PA Hall &amp; D Soskice (eds), <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>, Oxford University Press, New York, pp. 184–213.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Campbell and Pedersen 2007, p. 307–332)"
+				],
+				"formattedBibliography": "Campbell, JL and Pedersen, OK 2007, The Varieties of Capitalism and Hybrid Success, <i>Comparative Political Studies</i>, 40, (3), pp. 307–332, viewed 26 July, 2010, &lt;http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract&gt;.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Hancké, Rhodes and Thatcher 2007)"
+				],
+				"formattedBibliography": "Hancké, B, Rhodes, M and Thatcher, M (eds) 2007, Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy, Oxford University Press, Oxford and New York.",
+				"hangingIndent": 2
+			}
+		],
 		"http://www.zotero.org/styles/harvard-university-of-birmingham": [
 			{
 				"statusMessage": "",
@@ -29493,7 +30116,7 @@
 				"formattedCitations": [
 					"(Foderaro, 2012)"
 				],
-				"formattedBibliography": "Foderaro, L.W. (2012) Rooftop Greenhouse Will Boost City Farming - NYTimes.com. <b>New York Times</b>, 6 April: p. A20"
+				"formattedBibliography": "Foderaro, L.W. (2012) Rooftop Greenhouse Will Boost City Farming - NYTimes.com. <b>New York Times</b>, 6 April, p. A20"
 			},
 			{
 				"statusMessage": "",
@@ -29549,7 +30172,7 @@
 				"formattedCitations": [
 					"(Mares, 2001)"
 				],
-				"formattedBibliography": "Mares, I. (2001) “Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?” In Hall, P.A. and Soskice, D. (eds.). <b>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</b>. New York: Oxford University Press. pp. 184–213"
+				"formattedBibliography": "Mares, I. (2001) “Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?” In Hall, P.A. and Soskice, D. (eds.) <b>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</b>. New York: Oxford University Press. pp. 184–213"
 			},
 			{
 				"statusMessage": "",
@@ -29769,91 +30392,91 @@
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(McInnis and Nelson 2011)"
+					"(McInnis and Nelson, 2011)"
 				],
 				"formattedBibliography": "McInnis, M.D., Nelson, L.P. (2011) <i>Shaping the Body Politic: Art and Political Formation in Early America</i>. University of Virginia Press."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Dunnett and Kingsbury 2008)"
+					"(Dunnett and Kingsbury, 2008)"
 				],
 				"formattedBibliography": "Dunnett, N., Kingsbury, N. (2008) <i>Planting green roofs and living walls</i>. Timber Press."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Foderaro 2012)"
+					"(Foderaro, 2012)"
 				],
 				"formattedBibliography": "Foderaro, L.W. (2012) Rooftop Greenhouse Will Boost City Farming - NYTimes.com. <i>New York Times</i>, A20."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Accadia et al. 2012)"
+					"(Accadia <i>et al.</i>, 2012)"
 				],
-				"formattedBibliography": "Accadia, T., Acernese, F., Alshourbagy, M., Amico, P., Antonucci, F., Aoudia, S., Arnaud, N., Arnault, C., Arun, K.G., Astone, P., Avino, S., Babusci, D., Ballardin, G., Barone, F., Barrand, G., Barsotti, L., Barsuglia, M., Basti, A., Bauer, T.S., Beauville, F., et al. (2012) Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i>. <b>7</b>(03), P03012–P03012."
+				"formattedBibliography": "Accadia, T., Acernese, F., Alshourbagy, M., Amico, P., Antonucci, F., <i>et al.</i> (2012) Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i>. <b>7</b>(03), P03012–P03012."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Borges 1999)"
+					"(Borges, 1999)"
 				],
 				"formattedBibliography": "Borges, J.L. (1999) <i>Selected non-fictions</i>. E. Weinberger, ed. New York: Viking."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Isaacson 2011)"
+					"(Isaacson, 2011)"
 				],
 				"formattedBibliography": "Isaacson, W. (2011) <i>Steve Jobs</i>. Simon &amp; Schuster."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Van Dan Elzen 2011)"
+					"(Van Dan Elzen, 2011)"
 				],
 				"formattedBibliography": "Van Dan Elzen, H. (2011) Yo-yo having a modifiable string gap."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Einstein 1905)"
+					"(Einstein, 1905)"
 				],
-				"formattedBibliography": "Einstein, A. (1905) On the electrodynamics of moving bodies. <i>Annalen der Physik</i>. <b>17</b>(4), 1–26. [online]. Available from: http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf."
+				"formattedBibliography": "Einstein, A. (1905) On the electrodynamics of moving bodies. <i>Annalen der Physik</i>. <b>17</b>(4), 1–26."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Watson and Crick 1953)"
+					"(Watson and Crick, 1953)"
 				],
-				"formattedBibliography": "Watson, J.D., Crick, F.H.C. (1953) Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i>. <b>171</b>(4356), 737–738. [online]. Available from: http://www.ncbi.nlm.nih.gov/pubmed/13054692."
+				"formattedBibliography": "Watson, J.D., Crick, F.H.C. (1953) Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i>. <b>171</b>(4356), 737–738."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Ahlquist and Breunig 2009)"
+					"(Ahlquist and Breunig, 2009)"
 				],
 				"formattedBibliography": "Ahlquist, J.S., Breunig, C. (2009) <i>Country Clustering in Comparative Political Economy</i>. Cologne: Max-Planck Institute for the Study of Societies."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Mares 2001)"
+					"(Mares, 2001)"
 				],
 				"formattedBibliography": "Mares, I. (2001) Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In P. A. Hall &amp; D. Soskice, eds. <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>. New York: Oxford University Press, pp. 184–213."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Campbell and Pedersen 2007)"
+					"(Campbell and Pedersen, 2007)"
 				],
-				"formattedBibliography": "Campbell, J.L., Pedersen, O.K. (2007) The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i>. <b>40</b>(3), 307–332. [online]. Available from: http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract [Accessed July 26, 2010]."
+				"formattedBibliography": "Campbell, J.L., Pedersen, O.K. (2007) The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i>. <b>40</b>(3), 307–332."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Hancké et al. 2007)"
+					"(Hancké <i>et al.</i>, 2007)"
 				],
 				"formattedBibliography": "Hancké, B., Rhodes, M., Thatcher, M. eds. (2007) <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>. Oxford and New York: Oxford University Press."
 			}
@@ -32562,6 +33185,99 @@
 					"[1]"
 				],
 				"formattedBibliography": "<div class=\"csl-left-margin\">[1]</div><div class=\"csl-right-inline\"> B. Hancké, M. Rhodes, and M. Thatcher, Eds., <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>. Oxford and New York: Oxford University Press, 2007.</div>"
+			}
+		],
+		"http://www.zotero.org/styles/iica-catie": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(McInnis and Nelson 2011)"
+				],
+				"formattedBibliography": "McInnis, MD; Nelson, LP. 2011. Shaping the Body Politic: Art and Political Formation in Early America. s.l., University of Virginia Press, 313 p. ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Dunnett and Kingsbury 2008)"
+				],
+				"formattedBibliography": "Dunnett, N; Kingsbury, N. 2008. Planting green roofs and living walls. s.l., Timber Press, p.328. ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Foderaro 2012)"
+				],
+				"formattedBibliography": "Foderaro, LW. 2012. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. New York Times, New York, Apr. 6:A20."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Accadia et al. 2012)"
+				],
+				"formattedBibliography": "Accadia, T; Acernese, F; Alshourbagy, M; Amico, P; Antonucci, F; et al. 2012. Virgo: a laser interferometer to detect gravitational waves. Journal of Instrumentation 7(03): P03012–P03012. ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Borges 1999)"
+				],
+				"formattedBibliography": "Borges, JL. 1999. Selected non-fictions. Trans. E Allen; SJ Levine; E Weinberger. Ed. E Weinberger. New York, Viking, p.559. ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Isaacson 2011)"
+				],
+				"formattedBibliography": "Isaacson, W. 2011. Steve Jobs. s.l., Simon &amp; Schuster, p.656. ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Van Dan Elzen 2011)"
+				],
+				"formattedBibliography": "Van Dan Elzen, H. (2011) \"Yo-yo having a modifiable string gap\"."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Einstein 1905)"
+				],
+				"formattedBibliography": "Einstein, A. 1905. On the electrodynamics of moving bodies. Annalen der Physik 17(4): 1–26. ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Watson and Crick 1953)"
+				],
+				"formattedBibliography": "Watson, JD; Crick, FHC. 1953. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. Nature 171(4356): 737–738. ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Ahlquist and Breunig 2009)"
+				],
+				"formattedBibliography": "Country Clustering in Comparative Political Economy (2009, Cologne). 2009. Ed. Ahlquist, JS; Breunig, C. Cologne, Max-Planck Institute for the Study of Societies. 32 p."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Mares 2001)"
+				],
+				"formattedBibliography": "Mares, I. 2001. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? Varieties of Capitalism. The Institutional Foundations of Comparative Advantage. New York, Oxford University Press, p.184–213. ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Campbell and Pedersen 2007)"
+				],
+				"formattedBibliography": "Campbell, JL; Pedersen, OK. 2007. The Varieties of Capitalism and Hybrid Success. Comparative Political Studies 40(3): 307–332. ."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy 2007)"
+				],
+				"formattedBibliography": "Hancké, B; Rhodes, M; Thatcher, M. eds. 2007. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford and New York, Oxford University Press."
 			}
 		],
 		"http://www.zotero.org/styles/immunological-reviews": [
@@ -36678,6 +37394,99 @@
 				"formattedBibliography": "<div class=\"csl-left-margin\">[1]</div><div class=\"csl-right-inline\"> Hancké B, Rhodes M, Thatcher M, eds. (2007) <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford University Press, Oxford and New York.</div>"
 			}
 		],
+		"http://www.zotero.org/styles/journal-of-antimicrobial-chemotherapy": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. McInnis MD, Nelson LP. <i>Shaping the Body Politic: Art and Political Formation in Early America</i>. University of Virginia Press; 2011."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Dunnett N, Kingsbury N. <i>Planting green roofs and living walls</i>. Timber Press; 2008:328."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Foderaro LW. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. <i>New York Times</i> 2012: A20."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Accadia T, Acernese F, Alshourbagy M, <i>et al.</i> Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> 2012; <b>7</b>: P03012–P03012."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Borges JL. <i>Selected non-fictions</i>. (Weinberger E, ed.). New York: Viking; 1999:559."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Isaacson W. <i>Steve Jobs</i>. Simon &amp; Schuster; 2011:656."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Van Dan Elzen H. Yo-yo having a modifiable string gap. 2011."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Einstein A. On the electrodynamics of moving bodies. <i>Annalen der Physik</i> 1905; <b>17</b>: 1–26. Available at: http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Watson JD, Crick FHC. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i> 1953; <b>171</b>: 737–8. Available at: http://www.ncbi.nlm.nih.gov/pubmed/13054692."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Ahlquist JS, Breunig C. <i>Country Clustering in Comparative Political Economy</i>. Cologne: Max-Planck Institute for the Study of Societies; 2009:32."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Mares I. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In: Hall PA, Soskice D, eds. <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>. New York: Oxford University Press, 2001; 184–213."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Campbell JL, Pedersen OK. The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i> 2007; <b>40</b>: 307–32. Available at: http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract. Accessed July 26, 2010."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "1. Hancké B, Rhodes M, Thatcher M eds. <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>. Oxford and New York: Oxford University Press; 2007."
+			}
+		],
 		"http://www.zotero.org/styles/journal-of-applied-animal-science": [
 			{
 				"statusMessage": "",
@@ -37485,6 +38294,99 @@
 				],
 				"formattedBibliography": "HANCKÉ, B., RHODES, M., and THATCHER, M. (Eds.). 2007. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford University Press, Oxford and New York.",
 				"hangingIndent": 2
+			}
+		],
+		"http://www.zotero.org/styles/journal-of-chemistry-and-chemical-engineering": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] McInnis, M. D. and Nelson, L. P. Shaping the Body Politic: Art and Political Formation in Early America. University of Virginia Press: 2011."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Dunnett, N. and Kingsbury, N. Planting green roofs and living walls. Timber Press: 2008."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Foderaro, L.W. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. <i>New York Times</i>. , A20. (2012)."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Accadia, T., Acernese, F., Alshourbagy, M., Amico, P., Antonucci, F., Aoudia, S., Arnaud, N., Arnault, C., Arun, K. G., Astone, P., Avino, S., Babusci, D., Ballardin, G., Barone, F., Barrand, G., Barsotti, L., Barsuglia, M., Basti, A., Bauer, T. S., Beauville, F., Bebronne, M., Bejger, M., Beker, M. G., Bellachia, F., Belletoile, A., Beney, J. L., Bernardini, M., Bigotta, S., Bilhaut, R., Birindelli, S., Bitossi, M., Bizouard, M. A., Blom, M., Boccara, C., Boget, D., Bondu, F., Bonelli, L., Bonnand, R., Boschi, V., Bosi, L., Bouedo, T., Bouhou, B., Bozzi, A., Bracci, L., Braccini, S., Bradaschia, C., Branchesi, M., Briant, T., Brillet, A., Brisson, V., Brocco, L., Bulik, T., Bulten, H. J., Buskulic, D., Buy, C., Cagnoli, G., Calamai, G., Calloni, E., Campagna, E., Canuel, B., Carbognani, F., Carbone, L., Cavalier, F., Cavalieri, R., Cecchi, R., Cella, G., Cesarini, E., Chassande-Mottin, E., Chatterji, S., Chiche, R., Chincarini, A., Chiummo, A., Christensen, N., Clapson, A. C., Cleva, F., Coccia, E., Cohadon, P.-F., Colacino, C. N., Colas, J., Colla, A., Colombini, M., Conforto, G., Corsi, A., Cortese, S., Cottone, F., Coulon, J.-P., Cuoco, E., D’Antonio, S., Daguin, G., Dari, A., Dattilo, V., David, P. Y., Davier, M., Day, R., Debreczeni, G., Carolis, G. D., Dehamme, M., Fabbro, R. D., Pozzo, W. D., Prete, M. del, Derome, L., Rosa, R. D., DeSalvo, R., Dialinas, M., Fiore, L. D., Lieto, A. D., Emilio, M. D. P., Virgilio, A. D., Dietz, A., Doets, M., Dominici, P., Dominjon, A., Drago, M., Drezen, C., Dujardin, B., Dulach, B., Eder, C., Eleuteri, A., Enard, D., Evans, M., Fabbroni, L., Fafone, V., Fang, H., Ferrante, I., Fidecaro, F., Fiori, I., Flaminio, R., Forest, D., Forte, L. A., Fournier, J.-D., Fournier, L., Franc, J., Francois, O., Frasca, S., Frasconi, F., Freise, A., Gaddi, A., Galimberti, M., Gammaitoni, L., Ganau, P., Garnier, C., Garufi, F., Gáspár, M. E., Gemme, G., Genin, E., Gennai, A., Gennaro, G., Giacobone, L., Giazotto, A., Giordano, G., Giordano, L., Girard, C., Gouaty, R., Grado, A., Granata, M., Granata, V., Grave, X., Greverie, C., Groenstege, H., Guidi, G. M., Hamdani, S., Hayau, J.-F., Hebri, S., Heidmann, A., Heitmann, H., Hello, P., Hemming, G., Hennes, E., Hermel, R., Heusse, P., Holloway, L., Huet, D., Iannarelli, M., Jaranowski, P., Jehanno, D., Journet, L., Karkar, S., Ketel, T., Voet, H., Kovalik, J., Kowalska, I., Kreckelbergh, S., Krolak, A., Lacotte, J. C., Lagrange, B., Penna, P. L., Laval, M., Marec, J. C. L., Leroy, N., Letendre, N., Li, T. G. F., Lieunard, B., Liguori, N., Lodygensky, O., Lopez, B., Lorenzini, M., Loriette, V., Losurdo, G., Loupias, M., Mackowski, J. M., Maiani, T., Majorana, E., Magazzù, C., Maksimovic, I., Malvezzi, V., Man, N., Mancini, S., Mansoux, B., Mantovani, M., Marchesoni, F., Marion, F., Marin, P., Marque, J., Martelli, F., Masserot, A., Massonnet, L., Matone, G., Matone, L., Mazzoni, M., Menzinger, F., Michel, C., Milano, L., Minenkov, Y., Mitra, S., Mohan, M., Montorio, J.-L., Morand, R., Moreau, F., Moreau, J., Morgado, N., Morgia, A., Mosca, S., Moscatelli, V., Mours, B., Mugnier, P., Mul, F.-A., Naticchioni, L., Neri, I., Nocera, F., Pacaud, E., Pagliaroli, G., Pai, A., Palladino, L., Palomba, C., Paoletti, F., Paoletti, R., Paoli, A., Pardi, S., Parguez, G., Parisi, M., Pasqualetti, A., Passaquieti, R., Passuello, D., Perciballi, M., Perniola, B., Persichetti, G., Petit, S., Pichot, M., Piergiovanni, F., Pietka, M., Pignard, R., Pinard, L., Poggiani, R., Popolizio, P., Pradier, T., Prato, M., Prodi, G. A., Punturo, M., Puppo, P., Qipiani, K., Rabaste, O., Rabeling, D. S., Rácz, I., Raffaelli, F., Rapagnani, P., Rapisarda, S., Re, V., Reboux, A., Regimbau, T., Reita, V., Remilleux, A., Ricci, F., Ricciardi, I., Richard, F., Ripepe, M., Robinet, F., Rocchi, A., Rolland, L., Romano, R., Rosińska, D., Roudier, P., Ruggi, P., Russo, G., Salconi, L., Sannibale, V., Sassolas, B., Sentenac, D., Solimeno, S., Sottile, R., Sperandio, L., Stanga, R., Sturani, R., Swinkels, B., Tacca, M., Taddei, R., Taffarello, L., Tarallo, M., Tissot, S., Toncelli, A., Tonelli, M., Torre, O., Tournefier, E., Travasso, F., Tremola, C., Turri, E., Vajente, G., Brand, J. F. J. van den, Broeck, C. V. D., Putten, S. van der, Vasuth, M., Vavoulidis, M., Vedovato, G., Verkindt, D., Vetrano, F., Véziant, O., Viceré, A., Vinet, J.-Y., Vilalte, S., Vitale, S., Vocca, H., Ward, R. L., Was, M., Yamamoto, K., Yvert, M., Zendri, J.-P., and Zhang, Z. Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> <b>2012</b>,, 7,&nbsp; P03012–P03012."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Borges, J. L. Selected non-fictions. Viking: New York 1999."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Isaacson, W. Steve Jobs. Simon &amp; Schuster: 2011."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Dan Elzen, H. Van Yo-yo having a modifiable string gap. (2011)."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Einstein, A. On the electrodynamics of moving bodies. <i>Annalen der Physik</i> <b>1905</b>,, 17,&nbsp; 1–26."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Watson, J. D. and Crick, F. H. C. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i> <b>1953</b>,, 171,&nbsp; 737–738."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Ahlquist, J.S. and Breunig, C. Country Clustering in Comparative Political Economy. 32. (2009)."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Mares, I. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? <i>In</i> <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>; Hall, P. A.Soskice, D., Eds.; Oxford University Press: New York, 2001; pp. 184–213."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Campbell, J. L. and Pedersen, O. K. The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i> <b>2007</b>,, 40,&nbsp; 307–332."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[1]"
+				],
+				"formattedBibliography": "[1] Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford University Press: Oxford and New York 2007."
 			}
 		],
 		"http://www.zotero.org/styles/journal-of-clinical-endocrinology-and-metabolism": [
@@ -40048,6 +40950,99 @@
 				"hangingIndent": 2
 			}
 		],
+		"http://www.zotero.org/styles/journal-of-medical-genetics": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">McInnis MD, Nelson LP. <i>Shaping the Body Politic: Art and Political Formation in Early America</i>. University of Virginia Press 2011. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Dunnett N, Kingsbury N. <i>Planting green roofs and living walls</i>. Timber Press 2008. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Foderaro LW. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. New York Times. 2012;:A20.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Accadia T, Acernese F, Alshourbagy M, Amico P, Antonucci F, Aoudia S, Arnaud N, Arnault C, Arun KG, Astone P, Avino S, Babusci D, Ballardin G, Barone F, Barrand G, Barsotti L, Barsuglia M, Basti A, Bauer TS, Beauville F, Bebronne M, Bejger M, Beker MG, Bellachia F, Belletoile A, Beney JL, Bernardini M, Bigotta S, Bilhaut R, Birindelli S, Bitossi M, Bizouard MA, Blom M, Boccara C, Boget D, Bondu F, Bonelli L, Bonnand R, Boschi V, Bosi L, Bouedo T, Bouhou B, Bozzi A, Bracci L, Braccini S, Bradaschia C, Branchesi M, Briant T, Brillet A, Brisson V, Brocco L, Bulik T, Bulten HJ, Buskulic D, Buy C, Cagnoli G, Calamai G, Calloni E, Campagna E, Canuel B, Carbognani F, Carbone L, Cavalier F, Cavalieri R, Cecchi R, Cella G, Cesarini E, Chassande-Mottin E, Chatterji S, Chiche R, Chincarini A, Chiummo A, Christensen N, Clapson AC, Cleva F, Coccia E, Cohadon P-F, Colacino CN, Colas J, Colla A, Colombini M, Conforto G, Corsi A, Cortese S, Cottone F, Coulon J-P, Cuoco E, D’Antonio S, Daguin G, Dari A, Dattilo V, David PY, Davier M, Day R, Debreczeni G, Carolis GD, Dehamme M, Fabbro RD, Pozzo WD, Prete M del, Derome L, Rosa RD, DeSalvo R, Dialinas M, Fiore LD, Lieto AD, Emilio MDP, Virgilio AD, Dietz A, Doets M, Dominici P, Dominjon A, Drago M, Drezen C, Dujardin B, Dulach B, Eder C, Eleuteri A, Enard D, Evans M, Fabbroni L, Fafone V, Fang H, Ferrante I, Fidecaro F, Fiori I, Flaminio R, Forest D, Forte LA, Fournier J-D, Fournier L, Franc J, Francois O, Frasca S, Frasconi F, Freise A, Gaddi A, Galimberti M, Gammaitoni L, Ganau P, Garnier C, Garufi F, Gáspár ME, Gemme G, Genin E, Gennai A, Gennaro G, Giacobone L, Giazotto A, Giordano G, Giordano L, Girard C, Gouaty R, Grado A, Granata M, Granata V, Grave X, Greverie C, Groenstege H, Guidi GM, Hamdani S, Hayau J-F, Hebri S, Heidmann A, Heitmann H, Hello P, Hemming G, Hennes E, Hermel R, Heusse P, Holloway L, Huet D, Iannarelli M, Jaranowski P, Jehanno D, Journet L, Karkar S, Ketel T, Voet H, Kovalik J, Kowalska I, Kreckelbergh S, Krolak A, Lacotte JC, Lagrange B, Penna PL, Laval M, Marec JCL, Leroy N, Letendre N, Li TGF, Lieunard B, Liguori N, Lodygensky O, Lopez B, Lorenzini M, Loriette V, Losurdo G, Loupias M, Mackowski JM, Maiani T, Majorana E, Magazzù C, Maksimovic I, Malvezzi V, Man N, Mancini S, Mansoux B, Mantovani M, Marchesoni F, Marion F, Marin P, Marque J, Martelli F, Masserot A, Massonnet L, Matone G, Matone L, Mazzoni M, Menzinger F, Michel C, Milano L, Minenkov Y, Mitra S, Mohan M, Montorio J-L, Morand R, Moreau F, Moreau J, Morgado N, Morgia A, Mosca S, Moscatelli V, Mours B, Mugnier P, Mul F-A, Naticchioni L, Neri I, Nocera F, Pacaud E, Pagliaroli G, Pai A, Palladino L, Palomba C, Paoletti F, Paoletti R, Paoli A, Pardi S, Parguez G, Parisi M, Pasqualetti A, Passaquieti R, Passuello D, Perciballi M, Perniola B, Persichetti G, Petit S, Pichot M, Piergiovanni F, Pietka M, Pignard R, Pinard L, Poggiani R, Popolizio P, Pradier T, Prato M, Prodi GA, Punturo M, Puppo P, Qipiani K, Rabaste O, Rabeling DS, Rácz I, Raffaelli F, Rapagnani P, Rapisarda S, Re V, Reboux A, Regimbau T, Reita V, Remilleux A, Ricci F, Ricciardi I, Richard F, Ripepe M, Robinet F, Rocchi A, Rolland L, Romano R, Rosińska D, Roudier P, Ruggi P, Russo G, Salconi L, Sannibale V, Sassolas B, Sentenac D, Solimeno S, Sottile R, Sperandio L, Stanga R, Sturani R, Swinkels B, Tacca M, Taddei R, Taffarello L, Tarallo M, Tissot S, Toncelli A, Tonelli M, Torre O, Tournefier E, Travasso F, Tremola C, Turri E, Vajente G, Brand JFJ van den, Broeck CVD, Putten S van der, Vasuth M, Vavoulidis M, Vedovato G, Verkindt D, Vetrano F, Véziant O, Viceré A, Vinet J-Y, Vilalte S, Vitale S, Vocca H, Ward RL, Was M, Yamamoto K, Yvert M, Zendri J-P, Zhang Z. Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> 2012;<b>7</b>:P03012–P03012.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Borges JL. <i>Selected non-fictions</i>. New York: : Viking 1999. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Isaacson W. <i>Steve Jobs</i>. Simon &amp; Schuster 2011. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Van Dan Elzen H. Yo-yo having a modifiable string gap. 2011.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Einstein A. On the electrodynamics of moving bodies. <i>Annalen der Physik</i> 1905;<b>17</b>:1–26.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Watson JD, Crick FHC. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i> 1953;<b>171</b>:737–8.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Ahlquist JS, Breunig C. Country Clustering in Comparative Political Economy. Cologne: : Max-Planck Institute for the Study of Societies 2009. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Mares I. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In: Hall PA, Soskice D, eds. <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>. New York: : Oxford University Press 2001. 184–213.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Campbell JL, Pedersen OK. The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i> 2007;<b>40</b>:307–32.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Hancké B, Rhodes M, Thatcher M, editors. <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>. Oxford and New York: : Oxford University Press 2007. </div>"
+			}
+		],
 		"http://www.zotero.org/styles/journal-of-molecular-biology": [
 			{
 				"statusMessage": "",
@@ -40524,6 +41519,99 @@
 					"<sup>1</sup>"
 				],
 				"formattedBibliography": "1. Hancké B, Rhodes M, Thatcher M eds.: <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>. Oxford and New York: Oxford University Press; 2007."
+			}
+		],
+		"http://www.zotero.org/styles/journal-of-orthopaedic-research": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">McInnis MD, Nelson LP. 2011. Shaping the Body Politic: Art and Political Formation in Early America. University of Virginia Press; 313 p.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Dunnett N, Kingsbury N. 2008. Planting green roofs and living walls. Timber Press.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Foderaro LW. 2012. Rooftop Greenhouse Will Boost City Farming - NYTimes.com.New York Times :A20.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Accadia T, Acernese F, Alshourbagy M, et al. 2012. Virgo: a laser interferometer to detect gravitational waves.Journal of Instrumentation 7(03):P03012–P03012.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Borges JL. 1999. Selected non-fictions. New York: Viking.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Isaacson W. 2011. Steve Jobs. Simon &amp; Schuster.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Van Dan Elzen H. 2011. Yo-yo having a modifiable string gap.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Einstein A. 1905. On the electrodynamics of moving bodies [Internet].Annalen der Physik 17(4):1–26Available from: http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Watson JD, Crick FHC. 1953. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid [Internet].Nature 171(4356):737–738Available from: http://www.ncbi.nlm.nih.gov/pubmed/13054692.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Ahlquist JS, Breunig C. 2009. Country Clustering in Comparative Political Economy. Cologne: Max-Planck Institute for the Study of Societies.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Mares I. 2001. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In: Hall PA, Soskice D, editors. Varieties of Capitalism. The Institutional Foundations of Comparative Advantage. New York: Oxford University Press; p 184–213.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Campbell JL, Pedersen OK. 2007. The Varieties of Capitalism and Hybrid Success [Internet].Comparative Political Studies 40(3):307–332[cited 2010 Jul 26] Available from: http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Hancké B, Rhodes M, Thatcher M, editors. 2007. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford and New York: Oxford University Press.</div>"
 			}
 		],
 		"http://www.zotero.org/styles/journal-of-orthopaedic-trauma": [
@@ -42369,6 +43457,99 @@
 				],
 				"formattedBibliography": "Hancké, B., M. Rhodes, and M. Thatcher (Editors)., 2007. Beyond Varieties of Capitalism: Conflict, Contradiction, and Complementarities in the European Economy. Oxford University Press, Oxford and New York.",
 				"hangingIndent": 2
+			}
+		],
+		"http://www.zotero.org/styles/journal-of-the-brazilian-chemical-society": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">McInnis, M. D.; Nelson, L. P. <i>Shaping the Body Politic: Art and Political Formation in Early America</i>; University of Virginia Press, 2011.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Dunnett, N.; Kingsbury, N. <i>Planting green roofs and living walls</i>; Timber Press, 2008; p. 328.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Foderaro, L. W. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. <i>New York Times</i> <b>2012</b>, A20.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Accadia, T.; Acernese, F.; Alshourbagy, M.; Amico, P.; Antonucci, F.; Aoudia, S.; Arnaud, N.; Arnault, C.; Arun, K. G.; Astone, P.; Avino, S.; Babusci, D.; Ballardin, G.; Barone, F.; Barrand, G.; Barsotti, L.; Barsuglia, M.; Basti, A.; Bauer, T. S.; Beauville, F.; Bebronne, M.; Bejger, M.; Beker, M. G.; Bellachia, F.; Belletoile, A.; Beney, J. L.; Bernardini, M.; Bigotta, S.; Bilhaut, R.; Birindelli, S.; Bitossi, M.; Bizouard, M. A.; Blom, M.; Boccara, C.; Boget, D.; Bondu, F.; Bonelli, L.; Bonnand, R.; Boschi, V.; Bosi, L.; Bouedo, T.; Bouhou, B.; Bozzi, A.; Bracci, L.; Braccini, S.; Bradaschia, C.; Branchesi, M.; Briant, T.; Brillet, A.; Brisson, V.; Brocco, L.; Bulik, T.; Bulten, H. J.; Buskulic, D.; Buy, C.; Cagnoli, G.; Calamai, G.; Calloni, E.; Campagna, E.; Canuel, B.; Carbognani, F.; Carbone, L.; Cavalier, F.; Cavalieri, R.; Cecchi, R.; Cella, G.; Cesarini, E.; Chassande-Mottin, E.; Chatterji, S.; Chiche, R.; Chincarini, A.; Chiummo, A.; Christensen, N.; Clapson, A. C.; Cleva, F.; Coccia, E.; Cohadon, P.-F.; Colacino, C. N.; Colas, J.; Colla, A.; Colombini, M.; Conforto, G.; Corsi, A.; Cortese, S.; Cottone, F.; Coulon, J.-P.; Cuoco, E.; D’Antonio, S.; Daguin, G.; Dari, A.; Dattilo, V.; David, P. Y.; Davier, M.; Day, R.; Debreczeni, G.; Carolis, G. D.; Dehamme, M.; Fabbro, R. D.; Pozzo, W. D.; Prete, M. del; Derome, L.; Rosa, R. D.; DeSalvo, R.; Dialinas, M.; Fiore, L. D.; Lieto, A. D.; Emilio, M. D. P.; Virgilio, A. D.; Dietz, A.; Doets, M.; Dominici, P.; Dominjon, A.; Drago, M.; Drezen, C.; Dujardin, B.; Dulach, B.; Eder, C.; Eleuteri, A.; Enard, D.; Evans, M.; Fabbroni, L.; Fafone, V.; Fang, H.; Ferrante, I.; Fidecaro, F.; Fiori, I.; Flaminio, R.; Forest, D.; Forte, L. A.; Fournier, J.-D.; Fournier, L.; Franc, J.; Francois, O.; Frasca, S.; Frasconi, F.; Freise, A.; Gaddi, A.; Galimberti, M.; Gammaitoni, L.; Ganau, P.; Garnier, C.; Garufi, F.; Gáspár, M. E.; Gemme, G.; Genin, E.; Gennai, A.; Gennaro, G.; Giacobone, L.; Giazotto, A.; Giordano, G.; Giordano, L.; Girard, C.; Gouaty, R.; Grado, A.; Granata, M.; Granata, V.; Grave, X.; Greverie, C.; Groenstege, H.; Guidi, G. M.; Hamdani, S.; Hayau, J.-F.; Hebri, S.; Heidmann, A.; Heitmann, H.; Hello, P.; Hemming, G.; Hennes, E.; Hermel, R.; Heusse, P.; Holloway, L.; Huet, D.; Iannarelli, M.; Jaranowski, P.; Jehanno, D.; Journet, L.; Karkar, S.; Ketel, T.; Voet, H.; Kovalik, J.; Kowalska, I.; Kreckelbergh, S.; Krolak, A.; Lacotte, J. C.; Lagrange, B.; Penna, P. L.; Laval, M.; Marec, J. C. L.; Leroy, N.; Letendre, N.; Li, T. G. F.; Lieunard, B.; Liguori, N.; Lodygensky, O.; Lopez, B.; Lorenzini, M.; Loriette, V.; Losurdo, G.; Loupias, M.; Mackowski, J. M.; Maiani, T.; Majorana, E.; Magazzù, C.; Maksimovic, I.; Malvezzi, V.; Man, N.; Mancini, S.; Mansoux, B.; Mantovani, M.; Marchesoni, F.; Marion, F.; Marin, P.; Marque, J.; Martelli, F.; Masserot, A.; Massonnet, L.; Matone, G.; Matone, L.; Mazzoni, M.; Menzinger, F.; Michel, C.; Milano, L.; Minenkov, Y.; Mitra, S.; Mohan, M.; Montorio, J.-L.; Morand, R.; Moreau, F.; Moreau, J.; Morgado, N.; Morgia, A.; Mosca, S.; Moscatelli, V.; Mours, B.; Mugnier, P.; Mul, F.-A.; Naticchioni, L.; Neri, I.; Nocera, F.; Pacaud, E.; Pagliaroli, G.; Pai, A.; Palladino, L.; Palomba, C.; Paoletti, F.; Paoletti, R.; Paoli, A.; Pardi, S.; Parguez, G.; Parisi, M.; Pasqualetti, A.; Passaquieti, R.; Passuello, D.; Perciballi, M.; Perniola, B.; Persichetti, G.; Petit, S.; Pichot, M.; Piergiovanni, F.; Pietka, M.; Pignard, R.; Pinard, L.; Poggiani, R.; Popolizio, P.; Pradier, T.; Prato, M.; Prodi, G. A.; Punturo, M.; Puppo, P.; Qipiani, K.; Rabaste, O.; Rabeling, D. S.; Rácz, I.; Raffaelli, F.; Rapagnani, P.; Rapisarda, S.; Re, V.; Reboux, A.; Regimbau, T.; Reita, V.; Remilleux, A.; Ricci, F.; Ricciardi, I.; Richard, F.; Ripepe, M.; Robinet, F.; Rocchi, A.; Rolland, L.; Romano, R.; Rosińska, D.; Roudier, P.; Ruggi, P.; Russo, G.; Salconi, L.; Sannibale, V.; Sassolas, B.; Sentenac, D.; Solimeno, S.; Sottile, R.; Sperandio, L.; Stanga, R.; Sturani, R.; Swinkels, B.; Tacca, M.; Taddei, R.; Taffarello, L.; Tarallo, M.; Tissot, S.; Toncelli, A.; Tonelli, M.; Torre, O.; Tournefier, E.; Travasso, F.; Tremola, C.; Turri, E.; Vajente, G.; Brand, J. F. J. van den; Broeck, C. V. D.; Putten, S. van der; Vasuth, M.; Vavoulidis, M.; Vedovato, G.; Verkindt, D.; Vetrano, F.; Véziant, O.; Viceré, A.; Vinet, J.-Y.; Vilalte, S.; Vitale, S.; Vocca, H.; Ward, R. L.; Was, M.; Yamamoto, K.; Yvert, M.; Zendri, J.-P.; Zhang, Z. <i>Journal of Instrumentation</i> <b>2012</b>, 7, P03012.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Borges, J. L. <i>Selected non-fictions</i>; Weinberger, E., Ed.; Viking: New York, 1999; p. 559.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Isaacson, W. <i>Steve Jobs</i>; Simon &amp; Schuster, 2011; p. 656.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Van Dan Elzen, H. Yo-yo having a modifiable string gap <b>2011</b>.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Einstein, A. <i>Annalen der Physik</i> <b>1905</b>, 17, 1.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Watson, J. D.; Crick, F. H. C. <i>Nature</i> <b>1953</b>, 171, 737.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Ahlquist, J. S.; Breunig, C. <i>Country Clustering in Comparative Political Economy</i>; Max-Planck Institute for the Study of Societies: Cologne, 2009; p. 32.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Mares, I. In <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>; Hall, P. A.; Soskice, D., Eds.; Oxford University Press: New York, 2001; pp. 184–213.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Campbell, J. L.; Pedersen, O. K. <i>Comparative Political Studies</i> <b>2007</b>, 40, 307.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>1</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\"><i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>; Hancké, B.; Rhodes, M.; Thatcher, M., Eds.; Oxford University Press: Oxford and New York, 2007.</div>"
 			}
 		],
 		"http://www.zotero.org/styles/journal-of-the-electrochemical-society": [
@@ -48852,7 +50033,7 @@
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Hancké, Rhodes, and Thatcher 2007)"
+					"(Hancké et al. 2007)"
 				],
 				"formattedBibliography": "Hancké B, Rhodes M, Thatcher M eds. 2007. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford and New York: Oxford University Press",
 				"hangingIndent": 2
@@ -50229,91 +51410,91 @@
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. McInnis, M. D. and Nelson, L. P. “<b>Shaping the Body Politic: Art and Political Formation in Early America</b>” (2011):"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Dunnett, N. and Kingsbury, N. “<b>Planting Green Roofs and Living Walls</b>” (2008): 328."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Foderaro, L. W. “<b>Rooftop Greenhouse Will Boost City Farming - NYTimes.com</b>” <i>New York Times</i> (2012): A20."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Accadia, T., Acernese, F., Alshourbagy, M., Amico, P., Antonucci, F., Aoudia, S., Arnaud, N., Arnault, C., Arun, K. G., Astone, P., Avino, S., Babusci, D., Ballardin, G., Barone, F., Barrand, G., Barsotti, L., Barsuglia, M., Basti, A., Bauer, T. S., Beauville, F., Bebronne, M., Bejger, M., Beker, M. G., Bellachia, F., Belletoile, A., Beney, J. L., Bernardini, M., Bigotta, S., Bilhaut, R., Birindelli, S., Bitossi, M., Bizouard, M. A., Blom, M., Boccara, C., Boget, D., Bondu, F., Bonelli, L., Bonnand, R., Boschi, V., Bosi, L., Bouedo, T., Bouhou, B., Bozzi, A., Bracci, L., Braccini, S., Bradaschia, C., Branchesi, M., Briant, T., Brillet, A., Brisson, V., Brocco, L., Bulik, T., Bulten, H. J., Buskulic, D., Buy, C., Cagnoli, G., Calamai, G., Calloni, E., Campagna, E., Canuel, B., Carbognani, F., Carbone, L., Cavalier, F., Cavalieri, R., Cecchi, R., Cella, G., Cesarini, E., Chassande-Mottin, E., Chatterji, S., Chiche, R., Chincarini, A., Chiummo, A., Christensen, N., Clapson, A. C., Cleva, F., Coccia, E., Cohadon, P.-F., Colacino, C. N., Colas, J., Colla, A., Colombini, M., Conforto, G., Corsi, A., Cortese, S., Cottone, F., Coulon, J.-P., Cuoco, E., D’Antonio, S., Daguin, G., Dari, A., Dattilo, V., David, P. Y., Davier, M., Day, R., Debreczeni, G., Carolis, G. D., Dehamme, M., Fabbro, R. D., Pozzo, W. D., Prete, M. del, Derome, L., Rosa, R. D., DeSalvo, R., Dialinas, M., Fiore, L. D., Lieto, A. D., Emilio, M. D. P., Virgilio, A. D., Dietz, A., Doets, M., Dominici, P., Dominjon, A., Drago, M., Drezen, C., Dujardin, B., Dulach, B., Eder, C., Eleuteri, A., Enard, D., Evans, M., Fabbroni, L., Fafone, V., Fang, H., Ferrante, I., Fidecaro, F., Fiori, I., Flaminio, R., Forest, D., Forte, L. A., Fournier, J.-D., Fournier, L., Franc, J., Francois, O., Frasca, S., Frasconi, F., Freise, A., Gaddi, A., Galimberti, M., Gammaitoni, L., Ganau, P., Garnier, C., Garufi, F., Gáspár, M. E., Gemme, G., Genin, E., Gennai, A., Gennaro, G., Giacobone, L., Giazotto, A., Giordano, G., Giordano, L., Girard, C., Gouaty, R., Grado, A., Granata, M., Granata, V., Grave, X., Greverie, C., Groenstege, H., Guidi, G. M., Hamdani, S., Hayau, J.-F., Hebri, S., Heidmann, A., Heitmann, H., Hello, P., Hemming, G., Hennes, E., Hermel, R., Heusse, P., Holloway, L., Huet, D., Iannarelli, M., Jaranowski, P., Jehanno, D., Journet, L., Karkar, S., Ketel, T., Voet, H., Kovalik, J., Kowalska, I., Kreckelbergh, S., Krolak, A., Lacotte, J. C., Lagrange, B., Penna, P. L., Laval, M., Marec, J. C. L., Leroy, N., Letendre, N., Li, T. G. F., Lieunard, B., Liguori, N., Lodygensky, O., Lopez, B., Lorenzini, M., Loriette, V., Losurdo, G., Loupias, M., Mackowski, J. M., Maiani, T., Majorana, E., Magazzù, C., Maksimovic, I., Malvezzi, V., Man, N., Mancini, S., Mansoux, B., Mantovani, M., Marchesoni, F., Marion, F., Marin, P., Marque, J., Martelli, F., Masserot, A., Massonnet, L., Matone, G., Matone, L., Mazzoni, M., Menzinger, F., Michel, C., Milano, L., Minenkov, Y., Mitra, S., Mohan, M., Montorio, J.-L., Morand, R., Moreau, F., Moreau, J., Morgado, N., Morgia, A., Mosca, S., Moscatelli, V., Mours, B., Mugnier, P., Mul, F.-A., Naticchioni, L., Neri, I., Nocera, F., Pacaud, E., Pagliaroli, G., Pai, A., Palladino, L., Palomba, C., Paoletti, F., Paoletti, R., Paoli, A., Pardi, S., Parguez, G., Parisi, M., Pasqualetti, A., Passaquieti, R., Passuello, D., Perciballi, M., Perniola, B., Persichetti, G., Petit, S., Pichot, M., Piergiovanni, F., Pietka, M., Pignard, R., Pinard, L., Poggiani, R., Popolizio, P., Pradier, T., Prato, M., Prodi, G. A., Punturo, M., Puppo, P., Qipiani, K., Rabaste, O., Rabeling, D. S., Rácz, I., Raffaelli, F., Rapagnani, P., Rapisarda, S., Re, V., Reboux, A., Regimbau, T., Reita, V., Remilleux, A., Ricci, F., Ricciardi, I., Richard, F., Ripepe, M., Robinet, F., Rocchi, A., Rolland, L., Romano, R., Rosińska, D., Roudier, P., Ruggi, P., Russo, G., Salconi, L., Sannibale, V., Sassolas, B., Sentenac, D., Solimeno, S., Sottile, R., Sperandio, L., Stanga, R., Sturani, R., Swinkels, B., Tacca, M., Taddei, R., Taffarello, L., Tarallo, M., Tissot, S., Toncelli, A., Tonelli, M., Torre, O., Tournefier, E., Travasso, F., Tremola, C., Turri, E., Vajente, G., Brand, J. F. J. van den, Broeck, C. V. D., Putten, S. van der, Vasuth, M., Vavoulidis, M., Vedovato, G., Verkindt, D., Vetrano, F., Véziant, O., Viceré, A., Vinet, J.-Y., Vilalte, S., Vitale, S., Vocca, H., Ward, R. L., Was, M., Yamamoto, K., Yvert, M., Zendri, J.-P., and Zhang, Z. “<b>Virgo: a Laser Interferometer to Detect Gravitational Waves</b>” <i>Journal of Instrumentation</i> 7, no. 03 (2012): P03012–P03012. doi:10.1088/1748-0221/7/03/P03012,"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Borges, J. L. “<b>Selected Non-fictions</b>” (1999): 559."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Isaacson, W. “<b>Steve Jobs</b>” (2011): 656."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Dan Elzen, H. Van. “<b>Yo-yo Having a Modifiable String Gap</b>” (2011):"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Einstein, A. “<b>On the Electrodynamics of Moving Bodies</b>” <i>Annalen der Physik</i> 17, no. 4 (1905): 1–26. doi:10.1088/0143-0807/27/4/007, Available at http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Watson, J. D. and Crick, F. H. C. “<b>Molecular Structure of Nucleic Acids; a Structure for Deoxyribose Nucleic Acid</b>” <i>Nature</i> 171, no. 4356 (1953): 737–738. doi:10.1038/171737a0, Available at http://www.ncbi.nlm.nih.gov/pubmed/13054692"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Ahlquist, J. S. and Breunig, C. “<b>Country Clustering in Comparative Political Economy</b>” (2009): 32."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Mares, I. “<b>Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?</b>” <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i> (2001): 184–213."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. Campbell, J. L. and Pedersen, O. K. “<b>The Varieties of Capitalism and Hybrid Success</b>” <i>Comparative Political Studies</i> 40, no. 3 (2007): 307–332. doi:10.1177/0010414006286542, Available at http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"[1] "
+					"[1]"
 				],
 				"formattedBibliography": "1. “<b>Beyond Varieties of Capitalism: Conflict, Contradiction, and Complementarities in the European Economy</b>” (2007):"
 			}
@@ -50531,7 +51712,7 @@
 				"formattedCitations": [
 					"<sup>1</sup>"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Accadia, T. <i>et al.</i> Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> <b>7</b>, P03012–P03012 (2012).</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Accadia, T. <i>et al.</i> Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> <b>7, </b>P03012–P03012 (2012).</div>"
 			},
 			{
 				"statusMessage": "",
@@ -50559,14 +51740,14 @@
 				"formattedCitations": [
 					"<sup>1</sup>"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Einstein, A. On the electrodynamics of moving bodies. <i>Annalen der Physik</i> <b>17</b>, 1–26 (1905).</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Einstein, A. On the electrodynamics of moving bodies. <i>Annalen der Physik</i> <b>17, </b>1–26 (1905).</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"<sup>1</sup>"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Watson, J. D. &amp; Crick, F. H. C. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i> <b>171</b>, 737–738 (1953).</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Watson, J. D. &amp; Crick, F. H. C. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i> <b>171, </b>737–738 (1953).</div>"
 			},
 			{
 				"statusMessage": "",
@@ -50587,7 +51768,7 @@
 				"formattedCitations": [
 					"<sup>1</sup>"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Campbell, J. L. &amp; Pedersen, O. K. The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i> <b>40</b>, 307–332 (2007).</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1.</div><div class=\"csl-right-inline\">Campbell, J. L. &amp; Pedersen, O. K. The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i> <b>40, </b>307–332 (2007).</div>"
 			},
 			{
 				"statusMessage": "",
@@ -50701,6 +51882,99 @@
 				],
 				"formattedBibliography": "Hancké B, Rhodes M &amp; Thatcher M (Eds.), 2007. <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>. Oxford and New York: Oxford University Press.",
 				"hangingIndent": 2
+			}
+		],
+		"http://www.zotero.org/styles/neurology-india": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">McInnis MD, Nelson LP. Shaping the Body Politic: Art and Political Formation in Early America. University of Virginia Press; 2011. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Dunnett N, Kingsbury N. Planting green roofs and living walls. Timber Press; 2008. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Foderaro LW. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. New York Times2012;:A20. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Accadia T, Acernese F, Alshourbagy M, Amico P, Antonucci F, Aoudia S, et al. Virgo: a laser interferometer to detect gravitational waves. Journal of Instrumentation 2012;7:P03012–P03012. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Borges JL. Selected non-fictions. New York: Viking; 1999. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Isaacson W. Steve Jobs. Simon &amp; Schuster; 2011. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Van Dan Elzen H. Yo-yo having a modifiable string gap. 2011;</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Einstein A. On the electrodynamics of moving bodies. Annalen der Physik [Internet] 1905;17:1–26. Available from: http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Watson JD, Crick FHC. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. Nature [Internet] 1953;171:737–8. Available from: http://www.ncbi.nlm.nih.gov/pubmed/13054692</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Ahlquist JS, Breunig C. Country Clustering in Comparative Political Economy. Cologne: Max-Planck Institute for the Study of Societies; 2009. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Mares I. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In: Hall PA, Soskice D, editors. Varieties of Capitalism. The Institutional Foundations of Comparative Advantage. New York: Oxford University Press; 2001.  page 184–213.</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Campbell JL, Pedersen OK. The Varieties of Capitalism and Hybrid Success. Comparative Political Studies [Internet] 2007 [cited 2010 Jul 26];40:307–32. Available from: http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"<sup>[1]</sup>"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Hancké B, Rhodes M, Thatcher M, editors. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford and New York: Oxford University Press; 2007. </div>"
 			}
 		],
 		"http://www.zotero.org/styles/neurology": [
@@ -54588,6 +55862,99 @@
 					"<sup>[1]</sup>"
 				],
 				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Hancké B, Rhodes M, Thatcher M, editors. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford and New York: Oxford University Press; 2007</div>"
+			}
+		],
+		"http://www.zotero.org/styles/philosophia-scientiae": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[McInnis and Nelson 2011]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">McInnis, M. D., and L. P. Nelson</div>\n2011&nbsp;    <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Dunnett and Kingsbury 2008]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Dunnett, N., and N. Kingsbury</div>\n2008&nbsp;    <i>Planting green roofs and living walls</i>, Timber Press."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Foderaro 2012]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Foderaro, L. W.</div>\n2012&nbsp;    Rooftop Greenhouse Will Boost City Farming - NYTimes.com, <i>New York Times</i>,, April 6."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Accadia et al. 2012]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Accadia, T., F. Acernese, M. Alshourbagy, P. Amico, F. Antonucci, S. Aoudia, N. Arnaud, et al.</div>\n2012&nbsp;    Virgo: a laser interferometer to detect gravitational waves, <i>Journal of Instrumentation</i>, 7 (03) (March 29), P03012–P03012. doi:10.1088/1748-0221/7/03/P03012."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Borges 1999]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Borges, J. L.</div>\n1999&nbsp;    <i>Selected non-fictions</i>,. Ed. E. Weinberger. Trans. E. Allen, S. J. Levine, and E. Weinberger New York: Viking."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Isaacson 2011]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Isaacson, W.</div>\n2011&nbsp;    <i>Steve Jobs</i>, Simon &amp; Schuster, October 24."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Van Dan Elzen 2011]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Van Dan Elzen, H.</div>\n2011&nbsp;    Yo-yo having a modifiable string gap."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Einstein 1905]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Einstein, A.</div>\n1905&nbsp;    On the electrodynamics of moving bodies, <i>Annalen der Physik</i>, 17 (4), 1–26. doi:10.1088/0143-0807/27/4/007."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Watson and Crick 1953]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Watson, J. D., and F. H. C. Crick</div>\n1953&nbsp;    Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid, <i>Nature</i>, 171 (4356), 737–738. doi:10.1038/171737a0."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Ahlquist and Breunig 2009]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Ahlquist, J. S., and C. Breunig</div>\n2009&nbsp;    <i>Country Clustering in Comparative Political Economy</i>,. MPIfG Discussion Paper 09-5 Cologne: Max-Planck Institute for the Study of Societies."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Mares 2001]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Mares, I.</div>\n2001&nbsp;    Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?, in P. A. Hall and D. Soskice (eds.), <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>, New York: Oxford University Press, 184–213."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Campbell and Pedersen 2007]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Campbell, J. L., and O. K. Pedersen</div>\n2007&nbsp;    The Varieties of Capitalism and Hybrid Success, <i>Comparative Political Studies</i>, 40 (3) (March 1), 307–332. doi:10.1177/0010414006286542."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"[Hancké, Rhodes, and Thatcher 2007]"
+				],
+				"formattedBibliography": "<div class=\"csl-block\">Hancké, B., M. Rhodes, and M. Thatcher, ed.</div>\n2007&nbsp;    <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford and New York: Oxford University Press."
 			}
 		],
 		"http://www.zotero.org/styles/plant-biology": [
@@ -60034,7 +61401,7 @@
 				"formattedCitations": [
 					"T. Accadia y otros, “Virgo: a laser interferometer to detect gravitational waves”, <i>Journal of Instrumentation</i>, vol. 7, 03, 2012."
 				],
-				"formattedBibliography": "Accadia, T.; Acernese, F.; Alshourbagy, M.; Amico, P.; Antonucci, F.; Aoudia, S. y otros, “Virgo: a laser interferometer to detect gravitational waves”, <i>Journal of Instrumentation</i>, vol. 7, no. 03, 2012, págs P03012–P03012.",
+				"formattedBibliography": "Accadia, T.; Acernese, F.; Alshourbagy, M.; Amico, P.; Antonucci, F.; Aoudia, S. y otros, “Virgo: a laser interferometer to detect gravitational waves”, <i>Journal of Instrumentation</i>, vol. 7, n.<sup>o</sup> 03, 2012, págs P03012–P03012.",
 				"hangingIndent": 2
 			},
 			{
@@ -60066,7 +61433,7 @@
 				"formattedCitations": [
 					"A. Einstein, “On the electrodynamics of moving bodies”, <i>Annalen der Physik</i>, vol. 17, 4, 1905, Dover Publications, fecha de consulta en http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf."
 				],
-				"formattedBibliography": "Einstein, A., “On the electrodynamics of moving bodies”, <i>Annalen der Physik</i>, vol. 17, no. 4, 1905, Dover Publications, págs 1–26, fecha de consulta en http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf.",
+				"formattedBibliography": "Einstein, A., “On the electrodynamics of moving bodies”, <i>Annalen der Physik</i>, vol. 17, n.<sup>o</sup> 4, 1905, Dover Publications, págs 1–26, fecha de consulta en http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf.",
 				"hangingIndent": 2
 			},
 			{
@@ -60074,7 +61441,7 @@
 				"formattedCitations": [
 					"J. D. Watson; F. H. C. Crick, “Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid”, <i>Nature</i>, vol. 171, 4356, 1953, Am Med Assoc, fecha de consulta en http://www.ncbi.nlm.nih.gov/pubmed/13054692."
 				],
-				"formattedBibliography": "Watson, J. D.; Crick, F. H. C., “Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid”, <i>Nature</i>, vol. 171, no. 4356, 1953, Am Med Assoc, págs 737–738, fecha de consulta en http://www.ncbi.nlm.nih.gov/pubmed/13054692.",
+				"formattedBibliography": "Watson, J. D.; Crick, F. H. C., “Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid”, <i>Nature</i>, vol. 171, n.<sup>o</sup> 4356, 1953, Am Med Assoc, págs 737–738, fecha de consulta en http://www.ncbi.nlm.nih.gov/pubmed/13054692.",
 				"hangingIndent": 2
 			},
 			{
@@ -60098,7 +61465,7 @@
 				"formattedCitations": [
 					"J. L. Campbell; O. K. Pedersen, “The Varieties of Capitalism and Hybrid Success”, <i>Comparative Political Studies</i>, vol. 40, 3, 2007, fecha de consulta 26 julio 2010, en http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract."
 				],
-				"formattedBibliography": "Campbell, J. L.; Pedersen, O. K., “The Varieties of Capitalism and Hybrid Success”, <i>Comparative Political Studies</i>, vol. 40, no. 3, 2007, págs 307–332, fecha de consulta 26 julio 2010, en http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract.",
+				"formattedBibliography": "Campbell, J. L.; Pedersen, O. K., “The Varieties of Capitalism and Hybrid Success”, <i>Comparative Political Studies</i>, vol. 40, n.<sup>o</sup> 3, 2007, págs 307–332, fecha de consulta 26 julio 2010, en http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract.",
 				"hangingIndent": 2
 			},
 			{
@@ -61985,17 +63352,17 @@
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"Maurie Dee McInnis – Louis P. Nelson, <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press2011."
+					"Maurie Dee McInnis – Louis P. Nelson, <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press 2011."
 				],
-				"formattedBibliography": "McInnis, Maurie Dee – Nelson, Louis P., <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press2011.",
+				"formattedBibliography": "McInnis, Maurie Dee – Nelson, Louis P., <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press 2011.",
 				"hangingIndent": 2
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"Nigel Dunnett – Noël Kingsbury, <i>Planting green roofs and living walls</i>, Timber Press2008, 328."
+					"Nigel Dunnett – Noël Kingsbury, <i>Planting green roofs and living walls</i>, Timber Press 2008, 328."
 				],
-				"formattedBibliography": "Dunnett, Nigel – Kingsbury, Noël, <i>Planting green roofs and living walls</i>, Timber Press2008.",
+				"formattedBibliography": "Dunnett, Nigel – Kingsbury, Noël, <i>Planting green roofs and living walls</i>, Timber Press 2008.",
 				"hangingIndent": 2
 			},
 			{
@@ -62017,17 +63384,17 @@
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"Jorge Luis Borges, <i>Selected non-fictions</i>, translated by Esther Allen, Suzanne Jill Levine and Eliot Weinberger, edited by Eliot Weinberger, New York: Viking1999, 559."
+					"Jorge Luis Borges, <i>Selected non-fictions</i>, translated by Esther Allen, Suzanne Jill Levine and Eliot Weinberger, edited by Eliot Weinberger, New York: Viking 1999, 559."
 				],
-				"formattedBibliography": "Borges, Jorge Luis, <i>Selected non-fictions</i>, translated by Esther Allen, Suzanne Jill Levine and Eliot Weinberger, edited by Eliot Weinberger, New York: Viking1999.",
+				"formattedBibliography": "Borges, Jorge Luis, <i>Selected non-fictions</i>, translated by Esther Allen, Suzanne Jill Levine and Eliot Weinberger, edited by Eliot Weinberger, New York: Viking 1999.",
 				"hangingIndent": 2
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"Walter Isaacson, <i>Steve Jobs</i>, Simon &#38; Schuster2011, 656."
+					"Walter Isaacson, <i>Steve Jobs</i>, Simon &#38; Schuster 2011, 656."
 				],
-				"formattedBibliography": "Isaacson, Walter, <i>Steve Jobs</i>, Simon &amp; Schuster2011.",
+				"formattedBibliography": "Isaacson, Walter, <i>Steve Jobs</i>, Simon &amp; Schuster 2011.",
 				"hangingIndent": 2
 			},
 			{
@@ -62057,9 +63424,9 @@
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"John S. Ahlquist – Christian Breunig, <i>Country Clustering in Comparative Political Economy</i>, Cologne: Max-Planck Institute for the Study of Societies2009."
+					"John S. Ahlquist – Christian Breunig, <i>Country Clustering in Comparative Political Economy</i>, Cologne: Max-Planck Institute for the Study of Societies 2009."
 				],
-				"formattedBibliography": "Ahlquist, John S. – Breunig, Christian, <i>Country Clustering in Comparative Political Economy</i>, Cologne: Max-Planck Institute for the Study of Societies2009.",
+				"formattedBibliography": "Ahlquist, John S. – Breunig, Christian, <i>Country Clustering in Comparative Political Economy</i>, Cologne: Max-Planck Institute for the Study of Societies 2009.",
 				"hangingIndent": 2
 			},
 			{
@@ -62081,9 +63448,9 @@
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"Bob Hancké – Martin Rhodes – Mark Thatcher (eds.), <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford and New York: Oxford University Press2007."
+					"Bob Hancké – Martin Rhodes – Mark Thatcher (eds.), <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford and New York: Oxford University Press 2007."
 				],
-				"formattedBibliography": "Hancké, Bob – Rhodes, Martin – Thatcher, Mark (eds.), <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford and New York: Oxford University Press2007.",
+				"formattedBibliography": "Hancké, Bob – Rhodes, Martin – Thatcher, Mark (eds.), <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford and New York: Oxford University Press 2007.",
 				"hangingIndent": 2
 			}
 		],
@@ -62688,93 +64055,199 @@
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(McInnis et al., 2011)"
+					"(McInnis and Nelson 2011)"
 				],
-				"formattedBibliography": "McInnis, M. D., &amp; Nelson, L. P. 2011. <i>Shaping the Body Politic: Art and Political Formation in Early America</i>. University of Virginia Press."
+				"formattedBibliography": "McInnis, M. D., and L. P. Nelson. 2011. Shaping the Body Politic: Art and Political Formation in Early America. University of Virginia Press."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Dunnett et al., 2008)"
+					"(Dunnett and Kingsbury 2008)"
 				],
-				"formattedBibliography": "Dunnett, N., &amp; Kingsbury, N. 2008. <i>Planting green roofs and living walls</i> (p. 328). Timber Press."
+				"formattedBibliography": "Dunnett, N., and N. Kingsbury. 2008. Planting green roofs and living walls (p. 328). Timber Press."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Foderaro, 2012)"
+					"(Foderaro 2012)"
 				],
 				"formattedBibliography": "Foderaro, L. W. 2012. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. New York Times, p. A20. New York."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Accadia et al., 2012)"
+					"(Accadia et al. 2012)"
 				],
-				"formattedBibliography": "Accadia, T., Acernese, F., Alshourbagy, M., Amico, P., Antonucci, F., Aoudia, S., Arnaud, N., et al. 2012. Virgo: a laser interferometer to detect gravitational waves. Journal of Instrumentation 7(03):P03012–P03012."
+				"formattedBibliography": "Accadia, T., F. Acernese, M. Alshourbagy, P. Amico, F. Antonucci, S. Aoudia, N. Arnaud, et al. 2012. Virgo: a laser interferometer to detect gravitational waves. Journal of Instrumentation 7:P03012–P03012."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Borges, 1999)"
+					"(Borges 1999)"
 				],
-				"formattedBibliography": "Borges, J. L. 1999. <i>Selected non-fictions</i>. (E. Allen, S. J. Levine, &amp; E. Weinberger, Trans.) (p. 559). New York: Viking."
+				"formattedBibliography": "Borges, J. L. 1999. Selected non-fictions. (E. Allen, S. J. Levine, &amp; E. Weinberger, trans.) (p. 559). Viking, New York."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Isaacson, 2011)"
+					"(Isaacson 2011)"
 				],
-				"formattedBibliography": "Isaacson, W. 2011. <i>Steve Jobs</i> (p. 656). Simon &amp; Schuster."
+				"formattedBibliography": "Isaacson, W. 2011. Steve Jobs (p. 656). Simon &amp; Schuster."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Van Dan Elzen, 2011)"
+					"(Van Dan Elzen 2011)"
 				],
 				"formattedBibliography": "Van Dan Elzen, H. 2011. Yo-yo having a modifiable string gap."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Einstein, 1905)"
+					"(Einstein 1905)"
 				],
-				"formattedBibliography": "Einstein, A. 1905. On the electrodynamics of moving bodies. Annalen der Physik 17(4):1–26."
+				"formattedBibliography": "Einstein, A. 1905. On the electrodynamics of moving bodies. Annalen der Physik 17:1–26."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Watson et al., 1953)"
+					"(Watson and Crick 1953)"
 				],
-				"formattedBibliography": "Watson, J. D., &amp; Crick, F. H. C. 1953. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. Nature 171(4356):737–738."
+				"formattedBibliography": "Watson, J. D., and F. H. C. Crick. 1953. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. Nature 171:737–738."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Ahlquist et al., 2009)"
+					"(Ahlquist and Breunig 2009)"
 				],
-				"formattedBibliography": "Ahlquist, J. S., &amp; Breunig, C. 2009. <i>Country Clustering in Comparative Political Economy</i> (MPIfG Discussion Paper 09-5) (p. 32). Cologne: Max-Planck Institute for the Study of Societies."
+				"formattedBibliography": "Ahlquist, J. S., and C. Breunig. 2009. <i>Country Clustering in Comparative Political Economy</i> (MPIfG Discussion Paper 09-5) (p. 32). Max-Planck Institute for the Study of Societies, Cologne."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Mares, 2001)"
+					"(Mares 2001)"
 				],
-				"formattedBibliography": "Mares, I. 2001. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In P. A. Hall &amp; D. Soskice (Eds.), Varieties of Capitalism. The Institutional Foundations of Comparative Advantage (pp. 184–213). New York: Oxford University Press."
+				"formattedBibliography": "Mares, I. 2001. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In P. A. Hall &amp; D. Soskice, eds., Varieties of Capitalism. The Institutional Foundations of Comparative Advantage (pp. 184–213). Oxford University Press, New York."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Campbell et al., 2007)"
+					"(Campbell and Pedersen 2007)"
 				],
-				"formattedBibliography": "Campbell, J. L., &amp; Pedersen, O. K. 2007. The Varieties of Capitalism and Hybrid Success. Comparative Political Studies 40(3):307–332."
+				"formattedBibliography": "Campbell, J. L., and O. K. Pedersen. 2007. The Varieties of Capitalism and Hybrid Success. Comparative Political Studies 40:307–332."
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
-					"(Hancké et al., 2007)"
+					"(Hancké et al. 2007)"
 				],
-				"formattedBibliography": "Hancké, B., Rhodes, M., &amp; Thatcher, M. (Eds.). 2007. <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>. Oxford and New York: Oxford University Press."
+				"formattedBibliography": "Hancké, B., M. Rhodes, and M. Thatcher, eds. 2007. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford University Press, Oxford and New York."
+			}
+		],
+		"http://www.zotero.org/styles/the-auk": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(McInnis and Nelson 2011)"
+				],
+				"formattedBibliography": "McInnis, M. D., and L. P. Nelson. 2011. Shaping the Body Politic: Art and Political Formation in Early America. University of Virginia Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Dunnett and Kingsbury 2008)"
+				],
+				"formattedBibliography": "Dunnett, N., and N. Kingsbury. 2008. Planting green roofs and living walls. Page 328 <i>in</i>. Timber Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Foderaro 2012)"
+				],
+				"formattedBibliography": "Foderaro, L. W. 2012. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. New York Times:A20. New York.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Accadia et al. 2012)"
+				],
+				"formattedBibliography": "Accadia, T., F. Acernese, M. Alshourbagy, P. Amico, F. Antonucci, S. Aoudia, N. Arnaud, C. Arnault, K. G. Arun, P. Astone, et al. 2012. Virgo: a laser interferometer to detect gravitational waves. Journal of Instrumentation 7:P03012–P03012.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Borges 1999)"
+				],
+				"formattedBibliography": "Borges, J. L. 1999. Selected non-fictions. Page 559 <i>in</i>. Viking, New York.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Isaacson 2011)"
+				],
+				"formattedBibliography": "Isaacson, W. 2011. Steve Jobs. Page 656 <i>in</i>. Simon &amp; Schuster.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Van Dan Elzen 2011)"
+				],
+				"formattedBibliography": "Van Dan Elzen, H. 2011. Yo-yo having a modifiable string gap.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Einstein 1905)"
+				],
+				"formattedBibliography": "Einstein, A. 1905. On the electrodynamics of moving bodies. Annalen der Physik 17:1–26. Dover Publications.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Watson and Crick 1953)"
+				],
+				"formattedBibliography": "Watson, J. D., and F. H. C. Crick. 1953. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. Nature 171:737–738. Am Med Assoc.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Ahlquist and Breunig 2009)"
+				],
+				"formattedBibliography": "Ahlquist, J. S., and C. Breunig. 2009. Country Clustering in Comparative Political Economy. MPIfG Discussion Paper 09-5, Max-Planck Institute for the Study of Societies, Cologne.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Mares 2001)"
+				],
+				"formattedBibliography": "Mares, I. 2001. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? Pages 184–213 <i>in</i> Varieties of Capitalism. The Institutional Foundations of Comparative Advantage (P. A. Hall and D. Soskice, Eds.). Oxford University Press, New York.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Campbell and Pedersen 2007)"
+				],
+				"formattedBibliography": "Campbell, J. L., and O. K. Pedersen. 2007. The Varieties of Capitalism and Hybrid Success. Comparative Political Studies 40:307–332.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Hancké et al. 2007)"
+				],
+				"formattedBibliography": "Hancké, B., M. Rhodes, and M. Thatcher (eds.). 2007. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford University Press, Oxford and New York.",
+				"hangingIndent": 2
 			}
 		],
 		"http://www.zotero.org/styles/the-british-journal-of-psychiatry": [
@@ -65944,7 +67417,7 @@
 				"formattedCitations": [
 					"<i>(1)</i>"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Mares, I. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In Varieties of Capitalism. The Institutional Foundations of Comparative Advantage (P. A. Hall and D. Soskice, eds.), Oxford University Press, New York, pp. 184–213.</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1. </div><div class=\"csl-right-inline\">Mares, I. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i> (P. A. Hall and D. Soskice, eds.), Oxford University Press, New York, pp. 184–213.</div>"
 			},
 			{
 				"statusMessage": "",
@@ -65967,7 +67440,7 @@
 				"formattedCitations": [
 					"[1]"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">McInnis, M. D. and Nelson, L. P. (2011) <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press.</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">McInnis, M.D. and Nelson, L.P. (2011) <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press.</div>"
 			},
 			{
 				"statusMessage": "",
@@ -65981,21 +67454,21 @@
 				"formattedCitations": [
 					"[1]"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Foderaro, L. W. 06-Apr-(2012) , Rooftop Greenhouse Will Boost City Farming - NYTimes.com. , <i>New York Times</i>, A20</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Foderaro, L.W. 06-Apr-(2012) , Rooftop Greenhouse Will Boost City Farming - NYTimes.com. , <i>New York Times</i>, A20</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"[1]"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Accadia, T. <i>et al.</i> (2012) Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i>. 7, P03012–P03012</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Accadia, T. <i>et al.</i> (2012) Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> 7, P03012–P03012</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"[1]"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Borges, J. L. (1999) <i>Selected non-fictions</i>, Viking.</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Borges, J.L. (1999) <i>Selected non-fictions</i>, Viking.</div>"
 			},
 			{
 				"statusMessage": "",
@@ -66016,21 +67489,21 @@
 				"formattedCitations": [
 					"[1]"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Einstein, A. (1905) On the electrodynamics of moving bodies. <i>Annalen der Physik</i>. 17, 1–26</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Einstein, A. (1905) On the electrodynamics of moving bodies. <i>Annalen der Physik</i> 17, 1–26</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"[1]"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Watson, J. D. and Crick, F. H. C. (1953) Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i>. 171, 737–738</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Watson, J.D. and Crick, F.H.C. (1953) Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i> 171, 737–738</div>"
 			},
 			{
 				"statusMessage": "",
 				"formattedCitations": [
 					"[1]"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Ahlquist, J. S. and Breunig, C. (2009) <i>Country Clustering in Comparative Political Economy</i>, Max-Planck Institute for the Study of Societies.</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Ahlquist, J.S. and Breunig, C. (2009) <i>Country Clustering in Comparative Political Economy</i>, Max-Planck Institute for the Study of Societies.</div>"
 			},
 			{
 				"statusMessage": "",
@@ -66044,7 +67517,7 @@
 				"formattedCitations": [
 					"[1]"
 				],
-				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Campbell, J. L. and Pedersen, O. K. (2007) The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i>. 40, 307–332</div>"
+				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Campbell, J.L. and Pedersen, O.K. (2007) The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i> 40, 307–332</div>"
 			},
 			{
 				"statusMessage": "",
@@ -66052,6 +67525,99 @@
 					"[1]"
 				],
 				"formattedBibliography": "<div class=\"csl-left-margin\">1 </div><div class=\"csl-right-inline\">Hancké, B. <i>et al.</i>, Eds. (2007) <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford University Press.</div>"
+			}
+		],
+		"http://www.zotero.org/styles/triangle": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Maurie Dee McInnis et Louis P. Nelson, <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press, 2011."
+				],
+				"formattedBibliography": "McInnis Maurie Dee et Nelson Louis P., <i>Shaping the Body Politic: Art and Political Formation in Early America</i>, University of Virginia Press, 2011, 313&nbsp;p."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Nigel Dunnett et Noël Kingsbury, <i>Planting green roofs and living walls</i>, Timber Press, 2008."
+				],
+				"formattedBibliography": "Dunnett Nigel et Kingsbury Noël, <i>Planting green roofs and living walls</i>, Timber Press, 2008, 328&nbsp;p."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Lisa W. Foderaro, « Rooftop Greenhouse Will Boost City Farming - NYTimes.com », <i>New York Times</i>, 6 avril 2012, p. A20."
+				],
+				"formattedBibliography": "Foderaro Lisa W., «&nbsp;Rooftop Greenhouse Will Boost City Farming - NYTimes.com&nbsp;», <i>New York Times</i>, 6 avril 2012, p. A20."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"T Accadia, F Acernese, M Alshourbagy, P Amico, F Antonucci, et al., « Virgo: a laser interferometer to detect gravitational waves », <i>Journal of Instrumentation</i>, 29 mars 2012, vol. 7, n<sup>o</sup> 03."
+				],
+				"formattedBibliography": "Accadia T, Acernese F, Alshourbagy M, Amico P, Antonucci F, et al., «&nbsp;Virgo: a laser interferometer to detect gravitational waves&nbsp;», <i>Journal of Instrumentation</i>, 29 mars 2012, vol.&nbsp;7, n<sup>o</sup>&nbsp;03, pp. P03012-P03012, &nbsp;[&nbsp;http://dx.doi.org/10.1088/1748-0221/7/03/P03012&nbsp;],&nbsp;consulté le&nbsp;&nbsp;:&nbsp;."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Jorge Luis Borges, <i>Selected non-fictions</i>,  traduit par Esther Allen, Suzanne Jill Levine et Eliot Weinberger, New York, Viking, 1999."
+				],
+				"formattedBibliography": "Borges Jorge Luis, <i>Selected non-fictions</i>, traduit par Esther Allen, Suzanne Jill Levine et Eliot Weinberger, New York, Viking, 1999, 559&nbsp;p."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Walter Isaacson, <i>Steve Jobs</i>, Simon &#38; Schuster, 2011."
+				],
+				"formattedBibliography": "Isaacson Walter, <i>Steve Jobs</i>, Simon &amp; Schuster, 2011, 656&nbsp;p."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Hans Van Dan Elzen, « Yo-yo having a modifiable string gap »."
+				],
+				"formattedBibliography": "Dan Elzen Hans Van, «&nbsp;Yo-yo having a modifiable string gap&nbsp;»."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Albert Einstein, « On the electrodynamics of moving bodies », <i>Annalen der Physik</i>, 1905, vol. 17, n<sup>o</sup> 4."
+				],
+				"formattedBibliography": "Einstein Albert, «&nbsp;On the electrodynamics of moving bodies&nbsp;», <i>Annalen der Physik</i>, 1905, vol.&nbsp;17, n<sup>o</sup>&nbsp;4, pp. 1-26, &nbsp;[&nbsp;http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf&nbsp;],&nbsp;consulté le&nbsp;:&nbsp;."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"James Dewey Watson et Francis Harry Compton Crick, « Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid », <i>Nature</i>, 1953, vol. 171, n<sup>o</sup> 4356."
+				],
+				"formattedBibliography": "Watson James Dewey et Crick Francis Harry Compton, «&nbsp;Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid&nbsp;», <i>Nature</i>, 1953, vol.&nbsp;171, n<sup>o</sup>&nbsp;4356, pp. 737-738, &nbsp;[&nbsp;http://www.ncbi.nlm.nih.gov/pubmed/13054692&nbsp;],&nbsp;consulté le&nbsp;:&nbsp;."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"John S. Ahlquist et Christian Breunig, <i>Country Clustering in Comparative Political Economy</i> [Rapport], Cologne, Max-Planck Institute for the Study of Societies, 2009."
+				],
+				"formattedBibliography": "Ahlquist John S. et Breunig Christian, <i>Country Clustering in Comparative Political Economy</i>&nbsp;[Rapport], Cologne, Max-Planck Institute for the Study of Societies, 2009, 32&nbsp;p."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Isabela Mares, « Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? », <i>in</i> Peter A Hall et David Soskice (dir.), <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>, New York, Oxford University Press, 2001."
+				],
+				"formattedBibliography": "Mares Isabela, «&nbsp;Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers?&nbsp;», <i>in</i> Peter A Hall et David Soskice&nbsp;(dir.), <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>, New York, Oxford University Press, 2001, pp.&nbsp;184-213."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"John L. Campbell et Ove K. Pedersen, « The Varieties of Capitalism and Hybrid Success », <i>Comparative Political Studies</i>, 1 mars 2007, vol. 40, n<sup>o</sup> 3."
+				],
+				"formattedBibliography": "Campbell John L. et Pedersen Ove K., «&nbsp;The Varieties of Capitalism and Hybrid Success&nbsp;», <i>Comparative Political Studies</i>, 1 mars 2007, vol.&nbsp;40, n<sup>o</sup>&nbsp;3, pp. 307-332, &nbsp;[&nbsp;http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract&nbsp;],&nbsp;consulté le&nbsp;:&nbsp;&nbsp;26 juillet 2010."
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Bob Hancké, Martin Rhodes et Mark Thatcher (dir.), <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford and New York, Oxford University Press, 2007."
+				],
+				"formattedBibliography": "Hancké Bob, Rhodes Martin et Thatcher Mark&nbsp;(dir.), <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>, Oxford and New York, Oxford University Press, 2007."
 			}
 		],
 		"http://www.zotero.org/styles/tu-wien-dissertation": [
@@ -68094,6 +69660,99 @@
 					"(Hancké et al. 2007)"
 				],
 				"formattedBibliography": "Hancké, Bob, Martin Rhodes, and Mark Thatcher, eds. 2007. '<i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>.' Oxford and New York: Oxford University Press."
+			}
+		],
+		"http://www.zotero.org/styles/vancouver-author-date": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(McInnis and Nelson 2011)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">McInnis MD, Nelson LP. Shaping the Body Politic: Art and Political Formation in Early America. </div><div class=\"csl-right-inline\">University of Virginia Press; 2011. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Dunnett and Kingsbury 2008)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Dunnett N, Kingsbury N. Planting green roofs and living walls. </div><div class=\"csl-right-inline\">Timber Press; 2008. page 328. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Foderaro 2012)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Foderaro LW. Rooftop Greenhouse Will Boost City Farming - NYTimes.com. </div><div class=\"csl-right-inline\">New York Times. New York; 2012 Apr 6;A20. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Accadia et al. 2012)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Accadia T, Acernese F, Alshourbagy M, Amico P, Antonucci F, Aoudia S, et al. Virgo: a laser interferometer to detect gravitational waves. </div><div class=\"csl-right-inline\">Journal of Instrumentation. 2012 Mar 29;7(03):P03012–P03012. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Borges 1999)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Borges JL. Selected non-fictions. </div><div class=\"csl-right-inline\">Weinberger E, editor. New York: Viking; 1999. page 559. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Isaacson 2011)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Isaacson W. Steve Jobs. </div><div class=\"csl-right-inline\">Simon &amp; Schuster; 2011. page 656. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Van Dan Elzen 2011)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Van Dan Elzen H. Yo-yo having a modifiable string gap. </div><div class=\"csl-right-inline\">2011. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Einstein 1905)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Einstein A. On the electrodynamics of moving bodies. </div><div class=\"csl-right-inline\">Annalen der Physik [Internet]. Dover Publications; 1905;17(4):1–26. Available from: http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Watson and Crick 1953)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Watson JD, Crick FHC. Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. </div><div class=\"csl-right-inline\">Nature [Internet]. Am Med Assoc; 1953;171(4356):737–8. Available from: http://www.ncbi.nlm.nih.gov/pubmed/13054692</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Ahlquist and Breunig 2009)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Ahlquist JS, Breunig C. Country Clustering in Comparative Political Economy. </div><div class=\"csl-right-inline\">Cologne: Max-Planck Institute for the Study of Societies; 2009 page 32. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Mares 2001)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Mares I. Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? </div><div class=\"csl-right-inline\">In: Hall PA, Soskice D, editors. Varieties of Capitalism. The Institutional Foundations of Comparative Advantage. New York: Oxford University Press; 2001. page 184–213. </div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(Campbell and Pedersen 2007)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Campbell JL, Pedersen OK. The Varieties of Capitalism and Hybrid Success. </div><div class=\"csl-right-inline\">Comparative Political Studies [Internet]. 2007 Mar 1 [cited 2010 Jul 26];40(3):307–32. Available from: http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract</div>"
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"(2007)"
+				],
+				"formattedBibliography": "<div class=\"csl-left-margin\">Hancké B, Rhodes M, Thatcher M, editors. Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. </div><div class=\"csl-right-inline\">Oxford and New York: Oxford University Press; 2007. </div>"
 			}
 		],
 		"http://www.zotero.org/styles/vancouver-brackets-no-et-al": [
@@ -70734,6 +72393,112 @@
 					"(Hancké et al. 2007)"
 				],
 				"formattedBibliography": "Hancké, B., M. Rhodes &amp; M. Thatcher (Hrsg.), 2007: Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy. Oxford and New York: Oxford University Press.",
+				"hangingIndent": 2
+			}
+		],
+		"http://www.zotero.org/styles/zootaxa": [
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"McInnis &#38; Nelson (2011)"
+				],
+				"formattedBibliography": "McInnis, M.D. and Nelson, L.P. (2011) <i>Shaping the Body Politic: Art and Political Formation in Early America</i>. University of Virginia Press.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Dunnett &#38; Kingsbury (2008)"
+				],
+				"formattedBibliography": "Dunnett, N. and Kingsbury, N. (2008) <i>Planting green roofs and living walls</i>. Timber Press, 328 pp.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Foderaro (2012)"
+				],
+				"formattedBibliography": "Foderaro, L.W. (2012) Rooftop Greenhouse Will Boost City Farming - NYTimes.com. <i>New York Times</i>, A20.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Accadia, Acernese, <i>et al.</i> (2012)"
+				],
+				"formattedBibliography": "Accadia, T., Acernese, F., Alshourbagy, M., Amico, P., <i>et al.</i> (2012) Virgo: a laser interferometer to detect gravitational waves. <i>Journal of Instrumentation</i> 7, P03012–P03012.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Borges (1999)"
+				],
+				"formattedBibliography": "Borges, J.L. (1999) <i>Selected non-fictions</i>. E. Weinberger (Ed). Viking, New York, 559 pp.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Isaacson (2011)"
+				],
+				"formattedBibliography": "Isaacson, W. (2011) <i>Steve Jobs</i>. Simon &amp; Schuster, 656 pp.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Van Dan Elzen (2011)"
+				],
+				"formattedBibliography": "Van Dan Elzen, H. (2011) Yo-yo having a modifiable string gap.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Einstein (1905)"
+				],
+				"formattedBibliography": "Einstein, A. (1905) On the electrodynamics of moving bodies. <i>Annalen der Physik</i> 17, 1–26. Available from: http://bavard.fourmilab.ch/etexts/einstein/specrel/specrel.pdf.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Watson &#38; Crick (1953)"
+				],
+				"formattedBibliography": "Watson, J.D. and Crick, F.H.C. (1953) Molecular structure of nucleic acids; a structure for deoxyribose nucleic acid. <i>Nature</i> 171, 737–738. Available from: http://www.ncbi.nlm.nih.gov/pubmed/13054692.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Ahlquist &#38; Breunig (2009)"
+				],
+				"formattedBibliography": "Ahlquist, J.S. and Breunig, C. (2009) <i>Country Clustering in Comparative Political Economy</i>. Max-Planck Institute for the Study of Societies, Cologne. MPIfG Discussion Paper 09-5, 32pp.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Mares (2001)"
+				],
+				"formattedBibliography": "Mares, I. (2001) Firms and the Welfare State: When, Why, and How Does Social Policy Matter to Employers? In: P. A. Hall and D. Soskice (Eds), <i>Varieties of Capitalism. The Institutional Foundations of Comparative Advantage</i>. Oxford University Press, New York, pp. 184–213.",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Campbell &#38; Pedersen (2007)"
+				],
+				"formattedBibliography": "Campbell, J.L. and Pedersen, O.K. (2007) The Varieties of Capitalism and Hybrid Success. <i>Comparative Political Studies</i> 40, 307–332. Available from: http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract (July 26, 2010).",
+				"hangingIndent": 2
+			},
+			{
+				"statusMessage": "",
+				"formattedCitations": [
+					"Hancké, Rhodes, <i>et al.</i> (2007)"
+				],
+				"formattedBibliography": "Hancké, B., Rhodes, M. and Thatcher, M. eds. (2007) <i>Beyond varieties of capitalism: conflict, contradiction, and complementarities in the European economy</i>. Oxford University Press, Oxford and New York.",
 				"hangingIndent": 2
 			}
 		]
