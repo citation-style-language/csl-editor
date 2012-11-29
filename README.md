@@ -2,7 +2,7 @@
 
 A HTML 5 library for searching and editing styles written in the [Citation Style Language](http://citationstyles.org/).
 
-Play with the reference implementation here: [Citation Style Editor](http://steveridout.com/csl/).
+Play with the reference implementation here: [Citation Style Editor](http://editor.citationstyles.org).
 
 ## To use
 
