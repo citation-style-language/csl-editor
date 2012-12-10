@@ -6,7 +6,17 @@
 //
 // Migrating to use mustache for most of the HTML generation may help
 
-define(['src/CslNode', 'src/dataInstance', 'src/options', 'src/debug'], function (CSLEDIT_CslNode, CSLEDIT_data, CSLEDIT_options, debug) {
+define(
+		[	'src/CslNode',
+			'src/dataInstance',
+			'src/options',
+			'src/debug'
+		], function (
+			CSLEDIT_CslNode,
+			CSLEDIT_data,
+			CSLEDIT_options,
+			debug
+		) {
 	var panel, infoNode, inputTimeout, executeCommand;
 
 	var layout = [
@@ -100,8 +110,15 @@ define(['src/CslNode', 'src/dataInstance', 'src/options', 'src/debug'], function
 
 			if (type === "textValue") {
 				thisNode.textValue = $this.val();
+				if (thisNode.textValue === "") {
+					// TODO: deleting in this way redraws the whole panel, losing the
+					//       cursor position, which would be nice to retain.
+					deleteNode(cslId);
+					return;
+				}
 			} else {
-				thisNode.setAttr(type, $this.val()); 
+				thisNode.setAttr(type, $this.val());
+				thisNode.setAttrEnabled(type, $this.val() !== "");
 			}
 
 			if (isNaN(cslId)) {
@@ -184,6 +201,14 @@ define(['src/CslNode', 'src/dataInstance', 'src/options', 'src/debug'], function
 		}
 	};
 
+	// deletes a child node of style/info
+	var deleteNode = function (cslId) {
+		CSLEDIT_viewController.setSuppressSelectNode(true);
+		executeCommand("deleteNode", [cslId]);
+		CSLEDIT_viewController.setSuppressSelectNode(false);
+		CSLEDIT_viewController.selectNode(infoNode.cslId);
+	};
+
 	// Set up a property panel for the style/info node
 	//
 	// - _panel - the jQuery element to create the panel within
@@ -244,8 +269,7 @@ define(['src/CslNode', 'src/dataInstance', 'src/options', 'src/debug'], function
 
 					deleteButton = $('<button>Delete</button>');
 					deleteButton.on('click', function () {
-						executeCommand("deleteNode", [node.cslId]);
-						setupPanel(panel, executeCommand);
+						deleteNode(node.cslId);
 					});
 
 					inputRow.append($('<td/>').append(deleteButton));

@@ -515,9 +515,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 					};
 					if (values.attributeValues.length > 0 &&
 							(values.attributeValues[0].type === "value" ||
-							 (values.attributeValues[0].type === "data" &&
-							  values.attributeValues[0].value === "integer")
-							) &&
+							 values.attributeValues[0].type === "data") &&
 							schemaOptions && 'defaultDefaultAttribute' in schemaOptions) {
 						// add an empty string if no default value is present
 						if (defaultValue === null) {
