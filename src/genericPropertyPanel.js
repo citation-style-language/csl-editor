@@ -215,8 +215,8 @@ define([	'src/MultiPanel',
 			enabled : true
 		};
 
-		executeCommand("amendNode", [nodeData.cslId, stripChildren(nodeData)]);
-		
+		nodeChanged();
+
 		event.preventDefault();
 	};
 
