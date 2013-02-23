@@ -427,7 +427,7 @@ define([	'src/MultiPanel',
 			}
 		}
 
-		if (dropdownValues.length === 1) {
+		if (dropdownValues.length === 1 && dropdownValues[0] !== "") {
 			// if only 1 one value is possible, put it in a label
 			thisRow = $('<tr/>');
 			thisRow.append($('<td align="right"/>').append(label(index, attributeName)));
