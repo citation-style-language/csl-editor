@@ -18,11 +18,11 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 		'http://www.zotero.org/styles/nature',
 		'http://www.zotero.org/styles/american-medical-association', /* manually updated from styles/ama */
 		'http://www.zotero.org/styles/chicago-author-date',
-		'http://www.zotero.org/styles/apsa',
+		'http://www.zotero.org/styles/american-political-science-association',
 		'http://www.zotero.org/styles/vancouver',
-		'http://www.zotero.org/styles/asa',
-		'http://www.zotero.org/styles/mla',
-		'http://www.zotero.org/styles/mhra',
+		'http://www.zotero.org/styles/american-sociological-association',
+		'http://www.zotero.org/styles/modern-language-association',
+		'http://www.zotero.org/styles/modern-humanities-research-association',
 		'http://www.zotero.org/styles/chicago-fullnote-bibliography',
 		'http://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas', /* manually updated from styles/abnt */
 		'http://www.zotero.org/styles/chicago-note-bibliography',
