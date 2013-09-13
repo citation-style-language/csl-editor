@@ -10,7 +10,7 @@
 <table{{#featuredStyle}} class=featuredStyle {{/featuredStyle}}>
 	<tr>
 		<td colspan=3>
-			<span class=featuredStyle>Popular</span>
+			{{#featuredStyle}}<span class=featuredStyle>Popular</span>{{/featuredStyle}}
 			<a class="style-title" href="{{styleInfoURL}}">{{styleTitle}}</a>
 			{{#parentStyleId}}
 				(same as <a href="{{parentStyleInfoURL}}">{{parentStyleTitle}}</a>)
