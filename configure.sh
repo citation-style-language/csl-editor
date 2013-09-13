@@ -4,7 +4,7 @@ mkdir generated
 
 # generate example citations
 cd exampleCitationsGenerator
-./installNodeModules.sh
+npm install
 node generateExampleCitations.js
 cd ..
 

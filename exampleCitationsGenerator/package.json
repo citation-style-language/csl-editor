@@ -1,0 +1,12 @@
+{
+  "name": "cslEditorExampleCitationGenerator",
+  "version": "0.0.1",
+  "private": "true",
+  "dependencies": {
+	  "jsdom": "0.5",
+	  "xmlhttprequest": "*",
+	  "jquery": "*",
+	  "requirejs": "*"
+  }
+}
+
