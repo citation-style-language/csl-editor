@@ -280,8 +280,6 @@ define(['src/cslParser', 'src/urlUtils', 'jquery.qunit'], function (CSLEDIT_cslP
 			'apsa.csl',
 			'vancouver.csl',
 			'asa.csl',
-			'mla.csl',
-			'mhra.csl',
 			//'chicago-fullnote-bibliography.csl', // has an empty <if></if> over two lines
 			//'associacao-brasileira-de-normas-tecnicas.csl',
 			//'chicago-note-bibliography.csl',
