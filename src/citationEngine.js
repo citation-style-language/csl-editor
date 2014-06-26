@@ -68,6 +68,7 @@ define([	'src/options',
 		result.statusMessage = "";
 		if (style !== previousStyle) {
 			try {
+				citeprocSys.csl_reverse_lookup_support = true;
 				citeproc = new CSL.Engine(citeprocSys, style);
 				previousStyle = style;
 			}
