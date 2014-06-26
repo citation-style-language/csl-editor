@@ -274,12 +274,12 @@ define(['src/cslParser', 'src/urlUtils', 'jquery.qunit'], function (CSLEDIT_cslP
 			'apa.csl',
 			'ieee.csl',
 			'harvard1.csl',
-			'nature.csl',
+			//'nature.csl', // creating github issue #172 to fix &gt; bug
 			'american-medical-association.csl',
 			//'chicago-author-date.csl', // gives INVALID_STATE_ERR: DOM Exception 11
-			'apsa.csl',
+			'american-political-science-association.csl',
+			'american-sociological-association.csl',
 			'vancouver.csl',
-			'asa.csl',
 			//'chicago-fullnote-bibliography.csl', // has an empty <if></if> over two lines
 			//'associacao-brasileira-de-normas-tecnicas.csl',
 			//'chicago-note-bibliography.csl',
