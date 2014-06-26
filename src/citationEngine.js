@@ -69,7 +69,6 @@ define([	'src/options',
 		if (style !== previousStyle) {
 			try {
 				citeproc = new CSL.Engine(citeprocSys, style);
-				citeproc.opt.development_extensions.csl_reverse_lookup_support = true;
 				previousStyle = style;
 			}
 			catch (err) {
@@ -84,7 +83,12 @@ define([	'src/options',
 		inLineCitationArray = [];
 		
 		$.each(citationClusters, function (clusterIndex, cluster) {
+			if (cluster.citationItems.length === 0) {
+				return;
+			}
 			try {
+				console.log('cluster:');
+				console.log(cluster);
 				citations = citeproc.appendCitationCluster(cluster, false);
 			}
 			catch (err) {
