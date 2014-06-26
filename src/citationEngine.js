@@ -87,8 +87,6 @@ define([	'src/options',
 				return;
 			}
 			try {
-				console.log('cluster:');
-				console.log(cluster);
 				citations = citeproc.appendCitationCluster(cluster, false);
 			}
 			catch (err) {
