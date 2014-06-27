@@ -1361,7 +1361,8 @@ CSL.Engine.prototype.setStyleAttributes = function () {
     var dummy, attr, key, attributes, attrname;
     dummy = {};
     var cslXml = this.cslXml;
-    if (!this.cslXml.tagName || ("" + this.cslXml.tagName).toLowerCase() !== 'style') {
+	var tagName = this.cslXml.tagName ? ("" + this.cslXml.tagName).toLowerCase() : "";
+    if (tagName !== 'style' && tagName !== 'cslstyle') {
         if (this.cslXml.getElementsByTagName) {
             var cslXml = this.cslXml.getElementsByTagName('style')[0];
         }
