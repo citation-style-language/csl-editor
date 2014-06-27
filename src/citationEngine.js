@@ -63,6 +63,7 @@ define([	'src/options',
 			enumerateCitations;
 
 		citeprocSys.setJsonDocuments(documents);
+		citeprocSys.csl_reverse_lookup_support = true;
 
 		result = { "statusMessage": "", "formattedCitations": [], "formattedBibliography": [] };
 		result.statusMessage = "";
