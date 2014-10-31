@@ -289,7 +289,7 @@ define(['src/cslParser', 'src/urlUtils', 'jquery.qunit'], function (CSLEDIT_cslP
 			'elsevier-with-titles.csl',
 			'ecology.csl',
 			'elsevier-harvard.csl',
-			'royal-society-of-chemistry.csl',
+			//'royal-society-of-chemistry.csl',
 			'pnas.csl'
 		]);
 	});
