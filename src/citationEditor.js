@@ -150,7 +150,8 @@ define(
 		// list references
 		dialog.dialog({
 			title : 'Edit Citation ' + (citation + 1),
-			width : 700
+			width : 700,
+			resizable: false
 		});
 
 		if (!initialised) {
@@ -164,6 +165,11 @@ define(
 		if (dialog.height() > $(window).height() - 50) {
 			dialog.height($(window).height() - 50);
 		}
+
+		// Give the dialog has a fixed height so that it doesn't expand beyond the bottom
+		// of the page when the "Advanced" accoridion is expanded
+		dialog.dialog('option', 'height', dialog.height() + 55);
+
 		if (dialog.offset().top < 80) {
 			dialog.dialog("option", "position", [dialog.offset().left, 80]);
 		}
