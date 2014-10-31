@@ -10,9 +10,9 @@
 //     - Delete node (pressing delete on keyboard)
 //
 // - Implements macroLinks
-//     - These make each macro instance node behave link a symlink to the
+//     - These make each macro instance node behave like a symlink to the
 //       corresponding macro definition
-//     - Supports nested macros within macros work for any depth
+//     - Supports nested macros within macros for any depth
 //     - Infinite loops are detected and the offending node is given a
 //       data-error="Infinite Loop" attribute
 //

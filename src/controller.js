@@ -1,6 +1,6 @@
 "use strict";
 
-// Sends commands to the CSLEDIT_Data, and maintains the command history used by
+// Sends commands to CSLEDIT_Data, and maintains the command history used by
 // the undo function.
 //
 // The CSLEDIT_controller allows you to issue commands which alter the current
