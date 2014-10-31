@@ -125,9 +125,10 @@ define(
 			dialogDiv.dialog('destroy');
 
 			position = "last";
+
 			// override position for certain nodes
 			// TODO: generalise
-			if (nodeName === 'if') {
+			if (nodeName === 'if' || nodeName === 'sort') {
 				position = "first";
 			} else if (nodeName === 'else-if' && children[children.length - 1].name === "else") {
 				position = children.length - 1;
