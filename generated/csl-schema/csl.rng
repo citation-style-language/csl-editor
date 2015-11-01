@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:bibo="http://purl.org/ontology/bibo/" xmlns:sch="http://www.ascc.net/xml/schematron" xmlns:cs="http://purl.org/net/xbiblio/csl" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns:cs="http://purl.org/net/xbiblio/csl" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:sch="http://www.ascc.net/xml/schematron" xmlns:bibo="http://purl.org/ontology/bibo/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- CSL schema metadata -->
   <dc:title>Citation Style Language</dc:title>
   <dc:creator>Bruce D'Arcus</dc:creator>
