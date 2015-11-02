@@ -25,7 +25,9 @@ define(['src/xmlUtility', 'src/debug'], function (CSLEDIT_xmlUtility, debug) {
 		for (index = 0; index < xmlNode.childNodes.length; index++) {
 			childNode = xmlNode.childNodes[index];
 
-			if (childNode.localName !== null) {
+			//to be compatible with all Chrome versions and Firefox versions,
+			//we have to combine both conditions: undefined, null
+			if (childNode.localName !== undefined && childNode.localName !== null) {
 				nodeIndex.index++;
 				children.push(jsonNodeFromXml(xmlNode.childNodes[index], nodeIndex));
 			} else {
