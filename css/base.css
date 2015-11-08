@@ -151,7 +151,7 @@ div.panel {
 	display: inline-block;
 	margin: 0px;
 	line-height: 1.4em;
-
+	width: -moz-available;
 	padding-left: 0;
 	text-indent: 0;
 }
