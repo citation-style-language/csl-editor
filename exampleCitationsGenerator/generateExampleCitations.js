@@ -21,6 +21,14 @@ var requireConfig = {
 	}
 };
 
+var jsdom = require("jsdom").jsdom;
+jsdom.env({
+    html : "<html><body></body></html>",
+    done : function(errs, window) {
+        global.window = window;
+    }
+});
+
 requirejs.config(requireConfig);
 
 // because requirejs shim needs exported globals to be added to 'this'
