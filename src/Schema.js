@@ -11,7 +11,7 @@
 // - list of child elements
 // - list of mutually exclusive choices that the node can be in, each choice
 //   contains it's own list of attributes
-//
+// 
 // It assumes that an element can be uniquely identified by its name + parent's name
 
 "use strict";
@@ -85,7 +85,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 
 			$.each(schemas, function (i, schemaData) {
 				xmlDoc = parser.parseFromString(schemaData, "application/xml");
-
+			
 				// Parse schema
 				parseChildren(xmlDoc);
 			});
@@ -178,7 +178,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 				delete node.refs;
 				return;
 			}
-
+			
 			if (ref.name in defineProperties) {
 				// deep copy so that original define won't change
 				define = new NodeProperties(defineProperties[ref.name]);
@@ -200,7 +200,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 				}
 				joinProperties(node, define);
 				simplifyNode(nodeName, node);
-
+			
 			debug.assert(elementName(nodeName).indexOf("def:") === -1, "define parent");
 
 				if (ref.name in refParents) {
@@ -230,7 +230,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 
 			if (typeof ref === "undefined") {
 				// simplified
-
+				
 				// note, that refs may already be deleted because
 				// it may have been referenced somewhere else
 				if (typeof attributes[attributeName].refs !== "undefined") {
@@ -241,7 +241,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 
 			if (ref.name in defineProperties) {
 				define = defineProperties[ref.name];
-
+				
 				arrayMerge(attributes[attributeName].values,
 					define.attributeValues);
 				arrayMerge(attributes[attributeName].refs,
@@ -310,7 +310,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 			}
 			return false;
 		};
-
+		
 		// merge the two arrays putting result in arrayA
 		var arrayMerge = function (arrayA, arrayB, equalityFunction) {
 			if (typeof arrayB === "undefined") {
@@ -370,7 +370,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 				} else {
 					arrayMerge(attributesA[attribute].values,
 						attributesB[attribute].values, attributeValueEquality);
-
+				
 					arrayMerge(attributesA[attribute].refs,
 						attributesB[attribute].refs);
 				}
@@ -408,7 +408,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 
 			propertiesA.textNode = propertiesA.textNode | propertiesB.textNode;
 			propertiesA.list = propertiesA.list | propertiesB.list;
-
+			
 			if (propertiesA.documentation !== "") {
 				documentation.push(propertiesA.documentation);
 			}
@@ -522,7 +522,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 							defaultValue = {
 								value: schemaOptions.defaultDefaultAttribute.value
 							};
-
+						
 							if (thisNodeProperties.attributes[attributeName].values.length > 0) {
 								thisNodeProperties.attributes[attributeName].values.splice(
 										0, 0, schemaOptions.defaultDefaultAttribute);
@@ -678,7 +678,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 				// create new define
 				var defineName;
 				defineName = node.attributes.item("name").nodeValue;
-
+				
 				elementStack.push("def:" + defineName);
 				defineProperties[defineName] = parseChildren(node);
 				elementStack.pop();
@@ -695,7 +695,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 				if (lastAttributeValue === null) {
 					thisNodeProperties = new NodeProperties();
 					thisNodeProperties.documentation = documentation;
-					return thisNodeProperties;
+					return thisNodeProperties;				
 				} else {
 					lastAttributeValue.documentation = documentation;
 					lastAttributeValue = null;
@@ -705,13 +705,13 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 		};
 
 		// -- initialisation code --
-
+		
 		// schema set in localStorage overrides the URLs
 		readSchemaFromStorage();
 
 		if (typeof(mainSchemaData) === "undefined") {
 			$.ajax({
-				url : mainSchemaURL,
+				url : mainSchemaURL, 
 				success : function (data) {
 					mainSchemaData = data;
 					urlsGot++;
@@ -751,7 +751,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 			//     $PARENT_NAME/$NODE_NAME
 			//
 			// e.g. 'root/style', 'style/info', 'info/title'
-
+			
  			// Return the attributes of the given element, where element is a
 			// string containing the node and it's parent
 			attributes : function (element) {
