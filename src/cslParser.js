@@ -17,9 +17,11 @@ define(['src/xmlUtility', 'src/debug'], function (CSLEDIT_xmlUtility, debug) {
 			jsonData,
 			childNode,
 			textValue,
+			ELEMENT_NODE,
 			TEXT_NODE,
 			thisNodeIndex = nodeIndex.index;
 
+		ELEMENT_NODE = 1;
 		TEXT_NODE = 3;
 		
 		for (index = 0; index < xmlNode.childNodes.length; index++) {
@@ -27,11 +29,11 @@ define(['src/xmlUtility', 'src/debug'], function (CSLEDIT_xmlUtility, debug) {
 
 			//to be compatible with all Chrome versions and Firefox versions,
 			//we have to combine both conditions: undefined, null
-			if (childNode.localName !== undefined && childNode.localName !== null) {
+			if (childNode.nodeType === ELEMENT_NODE) {
 				nodeIndex.index++;
 				children.push(jsonNodeFromXml(xmlNode.childNodes[index], nodeIndex));
 			} else {
-				if (childNode.nodeType === TEXT_NODE && typeof childNode.data !== "undefined" && 
+				if (childNode.nodeType === TEXT_NODE && typeof childNode.data !== "undefined" &&
 						childNode.data.trim() !== "") {
 					textValue = childNode.data;
 				}
@@ -55,7 +57,7 @@ define(['src/xmlUtility', 'src/debug'], function (CSLEDIT_xmlUtility, debug) {
 		}
 
 		thisNodeData = {
-				name : xmlNode.localName,
+				name : xmlNode.nodeName,
 				attributes : attributesList,
 				cslId : thisNodeIndex,
 				children : children
@@ -131,7 +133,7 @@ define(['src/xmlUtility', 'src/debug'], function (CSLEDIT_xmlUtility, debug) {
 		debug.assertEqual(errors.length, 0, "xml parser error");
 
 		var styleNode = xmlDoc.childNodes[0];
-		debug.assertEqual(styleNode.localName, "style", "Invalid style - no style node");
+		debug.assertEqual(styleNode.nodeName, "style", "Invalid style - no style node");
 
 		var jsonData = jsonNodeFromXml(styleNode, { index: 0 });
 	
