@@ -337,7 +337,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 
 			// add child results to the result list
 			$.each(node.childNodes, function (i, childNode) {
-				if (childNode.localName !== null) {
+				if (childNode.nodeName !== '#text') {
 					if (childNode.nodeName in nodeParsers) {
 						childResult = nodeParsers[childNode.nodeName](childNode);
 
@@ -424,7 +424,7 @@ define(['src/options', 'src/storage', 'src/debug'], function (CSLEDIT_options, C
 			var topTwoElements = [],
 				index = elementStack.length - 1;
 
-			while (index >= 0 && topTwoElements.length < 2) {	
+			while (index >= 0 && topTwoElements.length < 2) {
 				topTwoElements.splice(0, 0, elementStack[index]);
 				index--;
 			}
