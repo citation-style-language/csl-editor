@@ -74,19 +74,21 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 		return styleTitle
 			.replace(/&/g, "and")
 			.replace(/\([A-Z]*\)/g, "") // remove upper case text (acronyms) in parentheses
+			.replace(/\([^\(]*\)$/, "")) //remove content between last set of parentheses
+			.replace(/\[[^\[]*\]$/, "")) //remove content between last set of square parentheses
 			.replace(/[\(\)\[\]]/g, "") // remove other parentheses
 			.replace(/[,'\.]/g, "")     // remove other chars
 			.replace(/[\\\/:"*?<>\| ]+/g, "-")
 			.replace(/--+/g, "-")
 			.replace(/-$/, "")
 			.toLowerCase()
-			.replace(/[àáäâ]|Ã£|Ã¡|Ã /g, "a")
-			.replace(/[èéëê]|Ã©|Ã¨/g, "e")
-			.replace(/[ìíïî]/g, "i")
-			.replace(/[òóöô]/g, "o")
-			.replace(/[ùúüû]/g, "u")
-			.replace(/[ñ]/g, "n")
-			.replace(/[ç]|Ã§/g, "c");
+			.replace(/[Ã Ã¡Ã¤Ã¢]|ÃƒÂ£|ÃƒÂ¡|ÃƒÂ /g, "a")
+			.replace(/[Ã¨Ã©Ã«Ãª]|ÃƒÂ©|ÃƒÂ¨/g, "e")
+			.replace(/[Ã¬Ã­Ã¯Ã®]/g, "i")
+			.replace(/[Ã²Ã³Ã¶Ã´]/g, "o")
+			.replace(/[Ã¹ÃºÃ¼Ã»]/g, "u")
+			.replace(/[Ã±]/g, "n")
+			.replace(/[Ã§]|ÃƒÂ§/g, "c");
 	};
 
 	// Returns a style ID based on the given styleTitle that attempts
