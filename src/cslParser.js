@@ -155,8 +155,8 @@ define(['src/xmlUtility', 'src/debug'], function (CSLEDIT_xmlUtility, debug) {
 		if (typeof(comment) === "string") {
 			lines = cslXml.split("\n");
 
-			// comment needs to go on line no. 3, after the style node
-			lines.splice(2, 0, "<!-- " + comment + " -->");
+			// XML comment needs to go on line no. 3, after the XML declaration and style start tag
+			lines.splice(2, 0, "  <!-- " + comment + " -->");
 
 			cslXml = lines.join("\n");
 		}
