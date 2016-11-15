@@ -74,8 +74,8 @@ define(['src/urlUtils', 'src/debug'], function (CSLEDIT_urlUtils, debug) {
 		return styleTitle
 			.replace(/&/g, "and")
 			.replace(/\([A-Z]*\)/g, "") // remove upper case text (acronyms) in parentheses
-			.replace(/\([^\(]*\)$/, "")) //remove content between last set of parentheses
-			.replace(/\[[^\[]*\]$/, "")) //remove content between last set of square parentheses
+			.replace(/\([^\(]*\)$/, "") //remove content between last set of parentheses
+			.replace(/\[[^\[]*\]$/, "") //remove content between last set of square parentheses
 			.replace(/[\(\)\[\]]/g, "") // remove other parentheses
 			.replace(/[,'\.]/g, "")     // remove other chars
 			.replace(/[\\\/:"*?<>\| ]+/g, "-")
