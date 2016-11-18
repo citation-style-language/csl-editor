@@ -5,7 +5,7 @@ mkdir generated
 # generate example citations
 cd exampleCitationsGenerator
 npm install
-node generateExampleCitations.js
+node --max-old-space-size=5120 generateExampleCitations.js #increase to 5gb
 cd ..
 
 mkdir generated/csl-schema
