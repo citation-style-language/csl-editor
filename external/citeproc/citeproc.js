@@ -23,7 +23,7 @@
  *     <http://www.gnu.org/licenses/> respectively.
  */
 var CSL = {
-    PROCESSOR_VERSION: "1.1.145",
+    PROCESSOR_VERSION: "1.1.141",
     CONDITION_LEVEL_TOP: 1,
     CONDITION_LEVEL_BOTTOM: 2,
     PLAIN_HYPHEN_REGEX: /(?:[^\\]-|\u2013)/,
@@ -195,37 +195,6 @@ var CSL = {
         this.classic = {};
         this["container-phrase"] = {};
         this["title-phrase"] = {};
-    },
-    FIELD_CATEGORY_REMAP: {
-        "title": "title",
-        "container-title": "container-title",
-        "collection-title": "collection-title",
-        "number": "number",
-        "place": "place",
-        "archive": "collection-title",
-        "title-short": "title",
-        "genre": "title",
-        "event": "title",
-        "medium": "title",
-		"archive-place": "place",
-		"publisher-place": "place",
-		"event-place": "place",
-		"jurisdiction": "place",
-		"language-name": "place",
-		"language-name-original": "place",
-        "call-number": "number",
-        "chapter-number": "number",
-        "collection-number": "number",
-        "edition": "number",
-        "page": "number",
-        "issue": "number",
-        "locator": "number",
-        "number-of-pages": "number",
-        "number-of-volumes": "number",
-        "volume": "number",
-        "citation-number": "number",
-        "publisher": "institution-part",
-        "authority": "institution-part"
     },
     parseLocator: function(item) {
         if (this.opt.development_extensions.locator_date_and_revision) {
@@ -1784,10 +1753,10 @@ CSL.setupXml = function(xmlObject) {
             parser = new CSL.XmlJSON(xmlObject);
         }
     } else {
-        CSL.error("unable to parse XML input");
+        print("OUCH!");
     }
     if (!parser) {
-        throw "citeproc-js error: unable to parse CSL style or locale object";
+        throw "citeproc-js error: unable to parse style or locale object";
     }
     return parser;
 }
@@ -7784,13 +7753,11 @@ CSL.NameOutput.prototype.init = function (names) {
     this.name = undefined;
     this.institutionpart = {};
     this.state.tmp.group_context.tip.variable_attempt = true;
-    this.labelVariable = this.variables[0];
     if (!this.state.tmp.value.length) {
         return;
     }
 };
-CSL.NameOutput.prototype.reinit = function (names, labelVariable) {
-    this.labelVariable = labelVariable;
+CSL.NameOutput.prototype.reinit = function (names) {
     if (this.state.tmp.can_substitute.value()) {
         this.nameset_offset = 0;
         this.variables = names.variables;
@@ -7944,7 +7911,7 @@ CSL.NameOutput.prototype.outputNames = function () {
 };
 CSL.NameOutput.prototype._applyLabels = function (blob, v) {
     var txt;
-    if (!this.label || !this.label[this.labelVariable]) {
+    if (!this.label || !this.label[v]) {
         return blob;
     }
     var plural = 0;
@@ -7959,24 +7926,24 @@ CSL.NameOutput.prototype._applyLabels = function (blob, v) {
             plural = 1;
         }
     }
-    if (this.label[this.labelVariable].before) {
-        if ("number" === typeof this.label[this.labelVariable].before.strings.plural) {
-            plural = this.label[this.lableVariable].before.strings.plural;
+    if (this.label[v].before) {
+        if ("number" === typeof this.label[v].before.strings.plural) {
+            plural = this.label[v].before.strings.plural;
         }
-        txt = this._buildLabel(v, plural, "before", this.labelVariable);
+        txt = this._buildLabel(v, plural, "before", v);
         this.state.output.openLevel("empty");
-        this.state.output.append(txt, this.label[this.labelVariable].before, true);
+        this.state.output.append(txt, this.label[v].before, true);
         this.state.output.append(blob, "literal", true);
         this.state.output.closeLevel("empty");
         blob = this.state.output.pop();
-    } else if (this.label[this.labelVariable].after) {
-        if ("number" === typeof this.label[this.labelVariable].after.strings.plural) {
-            plural = this.label[this.labelVariable].after.strings.plural;
+    } else if (this.label[v].after) {
+        if ("number" === typeof this.label[v].after.strings.plural) {
+            plural = this.label[v].after.strings.plural;
         }
-        txt = this._buildLabel(v, plural, "after", this.labelVariable);
+        txt = this._buildLabel(v, plural, "after", v);
         this.state.output.openLevel("empty");
         this.state.output.append(blob, "literal", true);
-        this.state.output.append(txt, this.label[this.labelVariable].after, true);
+        this.state.output.append(txt, this.label[v].after, true);
         this.state.tmp.label_blob = this.state.output.pop();
         this.state.output.append(this.state.tmp.label_blob,"literal",true);
         this.state.output.closeLevel("empty");
@@ -9887,9 +9854,11 @@ CSL.Node.names = {
         }
         if (this.tokentype === CSL.SINGLETON) {
             state.build.names_variables.push(this.variables);
+            for (var i = 0, ilen = this.variables.length; i < ilen; i += 1) {
+                state.build.name_label[this.variables[i]] = state.build.name_label[state.build.names_variables.slice(0)[0]];
+            }
             func = function (state, Item, item) {
-                var labelVariable = state.nameOutput.labelVariable;
-                state.nameOutput.reinit(this, labelVariable);
+                state.nameOutput.reinit(this);
             };
             this.execs.push(func);
         }
@@ -10280,7 +10249,7 @@ CSL.Node.text = {
                     func = function (state, Item, item) {
                         var gender = state.opt.gender[Item.type];
                         var term = this.strings.term;
-                        term = state.getTerm(term, form, plural, gender, CSL.TOLERANT, this.default_locale);
+                        term = state.getTerm(term, form, plural, gender, false, this.default_locale);
                         var myterm;
                         if (term !== "") {
                             state.tmp.group_context.tip.term_intended = true;
@@ -12061,19 +12030,37 @@ CSL.Transform = function (state) {
     this.getTextSubField = getTextSubField;
     function abbreviate(state, Item, altvar, basevalue, myabbrev_family, use_field) {
         var value;
+        if (!myabbrev_family) {
+            return basevalue;
+        }
+        var variable = myabbrev_family;
+        var noHints = false;
+        if (["title", "title-short"].indexOf(variable) > -1 && !Item.jurisdiction) {
+            noHints = true;
+        }
+        if (CSL.NUMERIC_VARIABLES.indexOf(myabbrev_family) > -1) {
+            myabbrev_family = "number";
+        }
         if (myabbrev_family === "jurisdiction") {
             if (state.opt.suppressedJurisdictions[Item.jurisdiction]) {
                 return "";
             }
         }
-        myabbrev_family = CSL.FIELD_CATEGORY_REMAP[myabbrev_family];
-        if (!myabbrev_family) {
-            return basevalue;
+        if (["publisher-place", "event-place", "jurisdiction", "archive-place", "language-name", "language-name-original"].indexOf(myabbrev_family) > -1) {
+            myabbrev_family = "place";
         }
-        var variable = myabbrev_family;
+        if (["publisher", "authority"].indexOf(myabbrev_family) > -1) {
+            myabbrev_family = "institution-part";
+        }
+        if (["genre", "event", "medium", "title-short"].indexOf(myabbrev_family) > -1) {
+            myabbrev_family = "title";
+        }
+        if (["archive"].indexOf(myabbrev_family) > -1) {
+            myabbrev_family = "collection-title";
+        }
         value = "";
         if (state.sys.getAbbreviation) {
-            var jurisdiction = state.transform.loadAbbreviation(Item.jurisdiction, myabbrev_family, basevalue, Item.type, true);
+            var jurisdiction = state.transform.loadAbbreviation(Item.jurisdiction, myabbrev_family, basevalue, Item.type, noHints);
             if (state.transform.abbrevs[jurisdiction][myabbrev_family] && basevalue && state.sys.getAbbreviation) {
                 if (state.transform.abbrevs[jurisdiction][myabbrev_family][basevalue]) {
                     value = state.transform.abbrevs[jurisdiction][myabbrev_family][basevalue].replace("{stet}",basevalue);
@@ -12173,7 +12160,7 @@ CSL.Transform = function (state) {
         }
         return ret;
     }
-    function loadAbbreviation(jurisdiction, category, orig, itemType) {
+    function loadAbbreviation(jurisdiction, category, orig, itemType, noHints) {
         var pos, len;
         if (!jurisdiction) {
             jurisdiction = "default";
@@ -12197,16 +12184,14 @@ CSL.Transform = function (state) {
                 if (!state.transform.abbrevs[tryList[i]]) {
                     state.transform.abbrevs[tryList[i]] = new state.sys.AbbreviationSegments();
                 }
-                if (state.transform.abbrevs[tryList[i]][category]) {
-                    if (!state.transform.abbrevs[tryList[i]][category][orig]) {
-                        state.sys.getAbbreviation(state.opt.styleID, state.transform.abbrevs, tryList[i], category, orig, itemType, true);
+                if (!state.transform.abbrevs[tryList[i]][category][orig]) {
+                    state.sys.getAbbreviation(state.opt.styleID, state.transform.abbrevs, tryList[i], category, orig, itemType, noHints);
+                }
+                if (!found && state.transform.abbrevs[tryList[i]][category][orig]) {
+                    if (i < tryList.length) {
+                        state.transform.abbrevs[jurisdiction][category][orig] = state.transform.abbrevs[tryList[i]][category][orig];
                     }
-                    if (!found && state.transform.abbrevs[tryList[i]][category][orig]) {
-                        if (i < tryList.length) {
-                            state.transform.abbrevs[jurisdiction][category][orig] = state.transform.abbrevs[tryList[i]][category][orig];
-                        }
-                        found = true;
-                    }
+                    found = true;
                 }
             }
         }
@@ -12664,7 +12649,7 @@ CSL.Util.fixDateNode = function (parent, pos, node) {
         this.cslXml.deleteNodeByNameAttribute(datexml, 'day');
     } else if ("month-day" === this.cslXml.getAttributeValue(node, "date-parts")) {
         var childNodes = this.cslXml.children(datexml);
-        for (var i=1,ilen=this.cslXml.numberofnodes(childNodes);i<ilen;i++) {
+        for (var i=1,ilen=childNodes.length;i<ilen;i++) {
             if (this.cslXml.getAttributeValue(childNodes[i], 'name') === "year") {
                 this.cslXml.setAttribute(childNodes[i-1], "suffix", "");
                 break;
@@ -13919,13 +13904,11 @@ CSL.Engine.prototype.processNumber = function (node, ItemObject, variable, type)
     }
     if (val && this.sys.getAbbreviation) {
         var jurisdiction = this.transform.loadAbbreviation(ItemObject.jurisdiction, "number", val);
-        if (this.transform.abbrevs[jurisdiction].number) {
-            if (this.transform.abbrevs[jurisdiction].number[val]) {
-                val = this.transform.abbrevs[jurisdiction].number[val];
-            } else {
-                if ("undefined" !== typeof this.transform.abbrevs[jurisdiction].number[val]) {
-                    delete this.transform.abbrevs[jurisdiction].number[val];
-                }
+        if (this.transform.abbrevs[jurisdiction].number[val]) {
+            val = this.transform.abbrevs[jurisdiction].number[val];
+        } else {
+            if ("undefined" !== typeof this.transform.abbrevs[jurisdiction].number[val]) {
+                delete this.transform.abbrevs[jurisdiction].number[val];
             }
         }
     }
