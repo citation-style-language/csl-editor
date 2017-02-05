@@ -141,6 +141,9 @@ define(
 						return false;
 					}
 				});
+			} else if (nodeName === "locale" && children.length > 0 && children[0].name === "info") {
+				// put it after the info node:
+				position = 1;
 			}
 
 			CSLEDIT_controller.exec("addNode", [
