@@ -50,7 +50,7 @@ define(function () {
 		"volume": "40",
 		"issue": "3",
 		"abstract": "The varieties of capitalism literature maintains that advanced capitalist countries whose institutions best fit either the liberal or coordinated market economy types will perform better than countries whose institutions are mixed. This is because hybrids are less likely to yield functionally beneficial institutional complementarities. The authors challenge this assertion. Denmark has performed as well as many purer cases during the 1990s. And Denmark has recently developed a more hybrid form than is generally recognized by (a) increasing the exposure of actors to market forces and (b) decentralizing collective learning and decision making. The institutional complementarities associated with such hybridization have contributed to its success; however, these complementarities are based on institutional heterogeneity rather than homogeneity. This is demonstrated by analyses of three cases: Danish labor markets, vocational training, and industrial policy. The implication of the authors' argument is that the varieties of capitalism theory is logically flawed.",
-		"URL": "http://cps.sagepub.com.turing.library.northwestern.edu/content/40/3/307.abstract",
+		"URL": "http://journals.sagepub.com/doi/abs/10.1177/0010414006286542",
 		"DOI": "10.1177/0010414006286542",
 		"ISSN": "1552-3829",
 		"journalAbbreviation": "Comp. Polit. Stud.",
