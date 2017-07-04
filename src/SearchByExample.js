@@ -462,10 +462,10 @@ define(
 			updateExample(0, true);
 
 			$('#nextExample').click(function () {
-				updateExample(exampleIndex - 1);
+				updateExample(exampleIndex + 1);
 			});
 			$('#prevExample').click(function () {
-				updateExample(exampleIndex + 1);
+				updateExample(exampleIndex - 1);
 			});
 
 			setSelectedControl("citation");
