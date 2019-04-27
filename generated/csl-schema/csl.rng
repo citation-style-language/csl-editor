@@ -6,7 +6,8 @@
   <dc:creator>Simon Kornblith</dc:creator>
   <bibo:editor>Frank Bennett</bibo:editor>
   <bibo:editor>Rintze Zelle</bibo:editor>
-  <dc:rights>Copyright 2007-2012 by Frank Bennett, Bruce D'Arcus, Simon Kornblith, and Rintze Zelle. Permission to freely use, copy and distribute.</dc:rights>
+  <dc:rights>Copyright 2007-2018 Citation Style Language and contributors</dc:rights>
+  <dc:license>MIT license</dc:license>
   <dc:description>RELAX NG compact schema for the Citation Style Language (CSL).</dc:description>
   <!-- Embedded Schematron rules to detect calls to nonexistent macros -->
   <sch:ns uri="http://purl.org/net/xbiblio/csl" prefix="cs"/>
@@ -48,20 +49,18 @@
         <ref name="style.options"/>
         <ref name="version"/>
         <ref name="independent-style.style.info"/>
-        <optional>
-          <interleave>
-            <zeroOrMore>
-              <ref name="style.locale"/>
-            </zeroOrMore>
-            <zeroOrMore>
-              <ref name="style.macro"/>
-            </zeroOrMore>
-            <ref name="style.citation"/>
-            <optional>
-              <ref name="style.bibliography"/>
-            </optional>
-          </interleave>
-        </optional>
+        <interleave>
+          <zeroOrMore>
+            <ref name="style.locale"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="style.macro"/>
+          </zeroOrMore>
+          <ref name="style.citation"/>
+          <optional>
+            <ref name="style.bibliography"/>
+          </optional>
+        </interleave>
       </element>
     </define>
     <define name="dependent-style.style">
@@ -689,9 +688,9 @@ or outside (default) the closing quotation mark.</a:documentation>
               <ref name="names.et-al"/>
             </optional>
           </group>
-          <zeroOrMore>
+          <optional>
             <ref name="names.label"/>
-          </zeroOrMore>
+          </optional>
         </interleave>
         <optional>
           <ref name="names.substitute"/>
