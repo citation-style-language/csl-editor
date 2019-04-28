@@ -74,6 +74,49 @@ define(function () {
 		}
 	},
 	{
+		"type": "article-journal",
+		"title": "The varieties of capitalism and hybrid success",
+		"container-title": "Comparative Political Studies",
+		"page": "307-332",
+		"volume": "40",
+		"issue": "3",
+		"source": "Highwire 2.0",
+		"abstract": "The varieties of capitalism literature maintains that advanced capitalist countries whose institutions best fit either the liberal or coordinated market economy types will perform better than countries whose institutions are mixed. This is because hybrids are less likely to yield functionally beneficial institutional complementarities. The authors challenge this assertion. Denmark has performed as well as many purer cases during the 1990s. And Denmark has recently developed a more hybrid form than is generally recognized by (a) increasing the exposure of actors to market forces and (b) decentralizing collective learning and decision making. The institutional complementarities associated with such hybridization have contributed to its success; however, these complementarities are based on institutional heterogeneity rather than homogeneity. This is demonstrated by analyses of three cases: Danish labor markets, vocational training, and industrial policy. The implication of the authors argument is that the varieties of capitalism theory is logically flawed.",
+		"URL": "https://journals.sagepub.com/doi/abs/10.1177/0010414006286542",
+		"DOI": "10.1177/0010414006286542",
+		"ISSN": "1552-3829",
+		"journalAbbreviation": "Comp. Polit. Stud.",
+		"language": "en-US",
+		"author": [
+			{
+				"family": "Campbell",
+				"given": "John L."
+			},
+			{
+				"family": "Pedersen",
+				"given": "Ove K."
+			}
+		],
+		"issued": {
+			"date-parts": [
+				[
+					"2007",
+					3,
+					1
+				]
+			]
+		},
+		"accessed": {
+			"date-parts": [
+				[
+					"2010",
+					7,
+					26
+				]
+			]
+		}
+	},
+	{
 		"type": "report",
 		"title": "Country clustering in comparative political economy",
 		"publisher": "Max-Planck Institute for the Study of Societies",
@@ -101,27 +144,46 @@ define(function () {
 	},
 	{
 		"type": "book",
-		"title": "Shaping the body politic: Art and political formation in early america",
-		"publisher": "University of Virginia Press",
-		"publisher-place": "Charlottesville, VA",
-		"number-of-pages": "313",
-		"abstract": "Traditional narratives imply that art in early America was severely limited in scope. By contrast, these essays collectively argue that visual arts played a critical role in shaping an early American understanding of the body politic. American artists in the late colonial and early national periods enlisted the arts to explore and exploit their visions of the relationship of the American colonies to the mother country and, later, to give material shape to the ideals of modern republican nationhood. Taking a uniquely broad view of both politics and art, Shaping the Body Politic ranges in topic from national politics to the politics of national identity, and from presidential portraits to the architectures of the ordinary. The book covers subject matter from the 1760s to the 1820s, ranging from Patience Wright's embodiment of late colonial political tension to Thomas Jefferson's designs for the entry hall at Monticello as a museum. Paul Staiti, Maurie McInnis, and Roger Stein offer new readings of canonical presidential images and spaces: Jean-Antoine Houdon's George Washington, Gilbert Stuart's the Lansdowne portrait of Washington, and Thomas Jefferson's Monticello. In essays that engage print and painting, portraiture and landscape, Wendy Bellion, David Steinberg, and John Crowley explore the formation of national identity. The volume's concluding essays, by Susan Rather and Bernard Herman, examine the politics of the everyday. The accompanying eighty-five illustrations and color plates demonstrate the broad range of politically resonant visual material in early America. ContributorsWendy Bellion, University of Delaware * John E. Crowley, Dalhousie University * Bernard L. Herman, University of North Carolina, Chapel Hill * Maurie D. McInnis, University of Virginia * Louis P. Nelson, University of Virginia * Susan Rather, University of Texas, Austin * Paul Staiti, Mount Holyoke College * Roger B. Stein, emeritus, University of Virginia * David Steinberg, Independent Scholar Thomas Jefferson Foundation Distinguished Lecture Series",
-		"ISBN": "0-8139-3102-9",
+		"title": "Steve Jobs",
+		"publisher": "Simon & Schuster",
+		"publisher-place": "New York, NY",
+		"number-of-pages": "630",
+		"ISBN": "978-1-4516-4853-9",
 		"language": "en-US",
 		"author": [
 			{
-				"family": "McInnis",
-				"given": "Maurie Dee"
-			},
-			{
-				"family": "Nelson",
-				"given": "Louis P."
+				"family": "Isaacson",
+				"given": "Walter"
 			}
 		],
 		"issued": {
 			"date-parts": [
 				[
-					"2011"
+					"2011",
+					10,
+					24
+				]
+			]
+		}
+	},
+	{
+		"type": "webpage",
+		"title": "CSL search by example",
+		"container-title": "Citation Style Editor",
+		"URL": "http://editor.citationstyles.org/searchByExample/",
+		"issued": {
+			"date-parts": [
+				[
+					"2012"
+				]
+			]
+		},
+		"accessed": {
+			"date-parts": [
+				[
+					"2012",
+					12,
+					15
 				]
 			]
 		}
@@ -191,49 +253,6 @@ define(function () {
 			"date-parts": [
 				[
 					"1999"
-				]
-			]
-		}
-	},
-	{
-		"type": "article-journal",
-		"title": "The varieties of capitalism and hybrid success",
-		"container-title": "Comparative Political Studies",
-		"page": "307-332",
-		"volume": "40",
-		"issue": "3",
-		"source": "Highwire 2.0",
-		"abstract": "The varieties of capitalism literature maintains that advanced capitalist countries whose institutions best fit either the liberal or coordinated market economy types will perform better than countries whose institutions are mixed. This is because hybrids are less likely to yield functionally beneficial institutional complementarities. The authors challenge this assertion. Denmark has performed as well as many purer cases during the 1990s. And Denmark has recently developed a more hybrid form than is generally recognized by (a) increasing the exposure of actors to market forces and (b) decentralizing collective learning and decision making. The institutional complementarities associated with such hybridization have contributed to its success; however, these complementarities are based on institutional heterogeneity rather than homogeneity. This is demonstrated by analyses of three cases: Danish labor markets, vocational training, and industrial policy. The implication of the authors argument is that the varieties of capitalism theory is logically flawed.",
-		"URL": "https://journals.sagepub.com/doi/abs/10.1177/0010414006286542",
-		"DOI": "10.1177/0010414006286542",
-		"ISSN": "1552-3829",
-		"journalAbbreviation": "Comp. Polit. Stud.",
-		"language": "en-US",
-		"author": [
-			{
-				"family": "Campbell",
-				"given": "John L."
-			},
-			{
-				"family": "Pedersen",
-				"given": "Ove K."
-			}
-		],
-		"issued": {
-			"date-parts": [
-				[
-					"2007",
-					3,
-					1
-				]
-			]
-		},
-		"accessed": {
-			"date-parts": [
-				[
-					"2010",
-					7,
-					26
 				]
 			]
 		}
@@ -324,6 +343,7 @@ define(function () {
 		"type": "article-journal",
 		"title": "A data citation roadmap for scholarly data repositories",
 		"container-title": "Scientific Data",
+		"journalAbbreviation": "Sci. Data",
 		"page": "28",
 		"volume": "6",
 		"issue": "1",
