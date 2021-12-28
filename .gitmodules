@@ -12,4 +12,4 @@
 	url = git://github.com/citation-style-language/locales.git
 [submodule "external/csl-styles"]
 	path = external/csl-styles
-	url = git@github.com:citation-style-language/styles-distribution.git
+	url = git@github.com:citation-style-language/styles.git
