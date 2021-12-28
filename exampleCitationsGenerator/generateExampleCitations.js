@@ -166,7 +166,7 @@ requirejs(
 
 					// merge bibliography to one string
 					citeprocResult.formattedBibliography =
-						citeprocResult.formattedBibliography.join("<br \/>"); 
+						citeprocResult.formattedBibliography.join("<br \/>");
 
 					// clean up citeproc result for display
 					citeprocResult.formattedBibliography =
@@ -225,8 +225,12 @@ requirejs(
 	// output results to .json file:
 	var outputDir;
 	outputDir = "../" + cslServerConfig.dataPath;
-	fs.mkdir(outputDir);
-
+	
+	fs.mkdir(outputDir, { recursive: true }, (error) => {
+          if (error) {console.log("Folder " + outputDir + " already exists")} else {
+            console.log("Created folder " + outputDir);
+          }
+				})
 	var outputToJSFile = function (jsonData, name) {
 		var outputString = JSON.stringify(jsonData, null, "\t");
 
