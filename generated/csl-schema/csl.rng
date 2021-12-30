@@ -1,34 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns:cs="http://purl.org/net/xbiblio/csl" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:sch="http://www.ascc.net/xml/schematron" xmlns:bibo="http://purl.org/ontology/bibo/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns:cs="http://purl.org/net/xbiblio/csl" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:bibo="http://purl.org/ontology/bibo/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- CSL schema metadata -->
   <dc:title>Citation Style Language</dc:title>
   <dc:creator>Bruce D'Arcus</dc:creator>
   <dc:creator>Simon Kornblith</dc:creator>
   <bibo:editor>Frank Bennett</bibo:editor>
   <bibo:editor>Rintze Zelle</bibo:editor>
-  <dc:rights>Copyright 2007-2018 Citation Style Language and contributors</dc:rights>
+  <dc:rights>Copyright 2007-2020 Citation Style Language and contributors</dc:rights>
   <dc:license>MIT license</dc:license>
   <dc:description>RELAX NG compact schema for the Citation Style Language (CSL).</dc:description>
-  <!-- Embedded Schematron rules to detect calls to nonexistent macros -->
-  <sch:ns uri="http://purl.org/net/xbiblio/csl" prefix="cs"/>
-  <sch:pattern name="Non-existing macros">
-    <sch:rule context="//cs:text[@macro]">
-      <sch:assert test="@macro = /cs:style/cs:macro/@name">This macro call has no corresponding macro.</sch:assert>
-    </sch:rule>
-    <sch:rule context="//cs:key[@macro]">
-      <sch:assert test="@macro = /cs:style/cs:macro/@name">This macro call has no corresponding macro.</sch:assert>
-    </sch:rule>
-  </sch:pattern>
-  <include href="csl-terms.rng">
+  <include href="csl-choose.rng">
     <a:documentation>Subparts of the CSL schema</a:documentation>
   </include>
+  <include href="csl-terms.rng"/>
   <include href="csl-types.rng"/>
   <include href="csl-variables.rng"/>
   <include href="csl-categories.rng"/>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:style and cs:locale - Root Elements</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:style and cs:locale - Root Elements</a:documentation>
     <start>
       <choice>
         <ref name="independent-style.style"/>
@@ -68,26 +58,6 @@
         <ref name="style.default-locale"/>
         <ref name="version"/>
         <ref name="dependent-style.style.info"/>
-        <ref name="dependent-style.style.legacy-attributes"/>
-      </element>
-    </define>
-    <define name="locale-file.locale">
-      <element name="cs:locale">
-        <attribute name="xml:lang">
-          <a:documentation>Specify the locale of the locale file.</a:documentation>
-          <data type="language"/>
-        </attribute>
-        <ref name="version"/>
-        <optional>
-          <ref name="locale-file.locale.info"/>
-        </optional>
-        <interleave>
-          <ref name="locale.style-options"/>
-          <oneOrMore>
-            <ref name="locale.date"/>
-          </oneOrMore>
-          <ref name="locale.terms"/>
-        </interleave>
       </element>
     </define>
     <define name="style.default-locale">
@@ -100,27 +70,14 @@
     </define>
     <define name="version">
       <attribute name="version" a:defaultValue="1.0">
-        <a:documentation>Indicate CSL version compatibility ("1.0" for CSL 1.0).</a:documentation>
+        <a:documentation>Indicate CSL version compatibility.</a:documentation>
         <value>1.0</value>
       </attribute>
     </define>
-    <define name="dependent-style.style.legacy-attributes">
-      <a:documentation>Obsolete for dependent styles. Will be disallowed with CSL 1.1.</a:documentation>
-      <optional>
-        <attribute name="class">
-          <choice>
-            <value>in-text</value>
-            <value>note</value>
-          </choice>
-        </attribute>
-      </optional>
-      <ref name="style.options"/>
-    </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:info - Style and Locale File Metadata</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:info - Style and Locale File Metadata</a:documentation>
     <define name="independent-style.style.info">
       <a:documentation>Metadata for independent styles.</a:documentation>
       <element name="cs:info">
@@ -272,8 +229,9 @@ relevant (using the "field" attribute).</a:documentation>
     </define>
     <define name="info.id">
       <element name="cs:id">
-        <a:documentation>Specify the URI to establish the identity of the style. The URI
-should be stable, unique and dereferenceable URI.</a:documentation>
+        <a:documentation>Specify the unique and stable identifier for the style. A URI
+is valid, but new styles should use a UUID to ensure stability
+and uniqueness.</a:documentation>
         <data type="anyURI"/>
       </element>
     </define>
@@ -316,9 +274,6 @@ digit (a numeral digit or roman X), e.g. "1234-1231".</a:documentation>
             <a:documentation>URI of the style from which the current style is derived.</a:documentation>
             <value>documentation</value>
             <a:documentation>URI of style documentation.</a:documentation>
-            <value>independent-parent</value>
-            <a:documentation>Obsolete for independent styles. Will be disallowed with
-CSL 1.1.</a:documentation>
           </choice>
         </attribute>
         <ref name="info-text"/>
@@ -339,9 +294,6 @@ CSL 1.1.</a:documentation>
 processing. Required for dependent styles.</a:documentation>
             <value>documentation</value>
             <a:documentation>URI of style documentation.</a:documentation>
-            <value>template</value>
-            <a:documentation>Obsolete for dependent styles. Will be disallowed with CSL
-1.1.</a:documentation>
           </choice>
         </attribute>
         <ref name="info-text"/>
@@ -395,10 +347,9 @@ processing. Required for dependent styles.</a:documentation>
       <text/>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:locale in Independent Styles</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:locale in Independent Styles</a:documentation>
     <define name="style.locale">
       <element name="cs:locale">
         <a:documentation>Use to (re)define localized terms, dates and options.</a:documentation>
@@ -423,10 +374,9 @@ processing. Required for dependent styles.</a:documentation>
       </element>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:locale Contents - Localization Data</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:locale Contents - Localization Data</a:documentation>
     <define name="locale.style-options">
       <a:documentation>Localized global options are specified as attributes in the
 cs:style-options element. If future versions of CSL include localized
@@ -446,6 +396,25 @@ or outside (default) the closing quotation mark.</a:documentation>
             <data type="boolean"/>
           </attribute>
         </optional>
+      </element>
+    </define>
+    <define name="locale-file.locale">
+      <element name="cs:locale">
+        <attribute name="xml:lang">
+          <a:documentation>Specify the locale of the locale file.</a:documentation>
+          <data type="language"/>
+        </attribute>
+        <ref name="version"/>
+        <optional>
+          <ref name="locale-file.locale.info"/>
+        </optional>
+        <interleave>
+          <ref name="locale.style-options"/>
+          <oneOrMore>
+            <ref name="locale.date"/>
+          </oneOrMore>
+          <ref name="locale.terms"/>
+        </interleave>
       </element>
     </define>
     <define name="locale.date">
@@ -601,10 +570,9 @@ or outside (default) the closing quotation mark.</a:documentation>
       </element>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:macro</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:macro</a:documentation>
     <define name="style.macro">
       <element name="cs:macro">
         <a:documentation>Use to create collections of (reusable) formatting instructions.</a:documentation>
@@ -616,6 +584,10 @@ or outside (default) the closing quotation mark.</a:documentation>
         </oneOrMore>
       </element>
     </define>
+  </div>
+  <!-- ============================================================================== -->
+  <div>
+    <a:documentation>Rendering Elements</a:documentation>
     <define name="rendering-element">
       <choice>
         <ref name="rendering-element.names"/>
@@ -628,10 +600,9 @@ or outside (default) the closing quotation mark.</a:documentation>
       </choice>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:citation and cs:bibliography</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:citation and cs:bibliography</a:documentation>
     <define name="style.citation">
       <element name="cs:citation">
         <a:documentation>Use to describe the formatting of citations.</a:documentation>
@@ -672,10 +643,9 @@ or outside (default) the closing quotation mark.</a:documentation>
       </element>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:names Rendering Element</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:names Rendering Element</a:documentation>
     <define name="rendering-element.names">
       <element name="cs:names">
         <ref name="names.attributes"/>
@@ -873,7 +843,7 @@ result of "name-as-sort-order" (e.g., ", " in "Doe, John").</a:documentation>
     </define>
     <define name="names.et-al">
       <element name="cs:et-al">
-        <a:documentation>Specify the term used for et-al abbreviation and its formatting. </a:documentation>
+        <a:documentation>Specify the term used for et-al abbreviation and its formatting.</a:documentation>
         <optional>
           <attribute name="term" a:defaultValue="et-al">
             <a:documentation>Select the term to use for et-al abbreviation.</a:documentation>
@@ -884,12 +854,7 @@ result of "name-as-sort-order" (e.g., ", " in "Doe, John").</a:documentation>
           </attribute>
         </optional>
         <ref name="font-formatting"/>
-        <ref name="names.et-al.legacy-attributes"/>
       </element>
-    </define>
-    <define name="names.et-al.legacy-attributes">
-      <a:documentation>Ignored in CSL 1.0.1. Will be disallowed with CSL 1.1.</a:documentation>
-      <ref name="affixes"/>
     </define>
     <define name="names.label">
       <a:documentation>Inherits variable from the parent cs:names element.</a:documentation>
@@ -921,10 +886,9 @@ parent cs:names element are empty.</a:documentation>
       </element>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:date Rendering Element</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:date Rendering Element</a:documentation>
     <define name="rendering-element.date">
       <element name="cs:date">
         <attribute name="variable">
@@ -1054,10 +1018,9 @@ delimiter is retrieved from the largest date part ("day", "month" or
       </optional>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:text Rendering Element</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:text Rendering Element</a:documentation>
     <define name="rendering-element.text">
       <element name="cs:text">
         <a:documentation>Use to call macros, render variables, terms, or verbatim text.</a:documentation>
@@ -1096,27 +1059,23 @@ delimiter is retrieved from the largest date part ("day", "month" or
         <attribute name="value">
           <a:documentation>Specify verbatim text.</a:documentation>
         </attribute>
-        <group>
+        <optional>
           <attribute name="variable">
-            <a:documentation>Select a variable.</a:documentation>
             <ref name="variables.standard"/>
           </attribute>
-          <optional>
-            <attribute name="form" a:defaultValue="long">
-              <choice>
-                <value>short</value>
-                <value>long</value>
-              </choice>
-            </attribute>
-          </optional>
-        </group>
+          <attribute name="form" a:defaultValue="long">
+            <choice>
+              <value>short</value>
+              <value>long</value>
+            </choice>
+          </attribute>
+        </optional>
       </choice>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:number Rendering Element</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:number Rendering Element</a:documentation>
     <define name="rendering-element.number">
       <element name="cs:number">
         <a:documentation>Use to render a number variable.</a:documentation>
@@ -1145,10 +1104,9 @@ delimiter is retrieved from the largest date part ("day", "month" or
       </optional>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:label Rendering Element</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:label Rendering Element</a:documentation>
     <define name="rendering-element.label">
       <element name="cs:label">
         <a:documentation>Use to render a term whose pluralization depends on the content of a
@@ -1193,10 +1151,9 @@ variable. E.g., if "page" variable holds a range, the plural label
       <ref name="text-case"/>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:group Rendering Element</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:group Rendering Element</a:documentation>
     <define name="rendering-element.group">
       <element name="cs:group">
         <a:documentation>Use to group rendering elements. Groups are useful for setting a
@@ -1220,10 +1177,9 @@ are empty.</a:documentation>
       </optional>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>Options</xhtml:h2>
-    </a:documentation>
+    <a:documentation>Style Options</a:documentation>
     <define name="style.options">
       <ref name="style.demote-non-dropping-particle"/>
       <ref name="style.initialize-with-hyphen"/>
@@ -1274,10 +1230,12 @@ initialized with ("J-L") or without a hyphen ("JL").</a:documentation>
         <attribute name="page-range-format">
           <a:documentation>Reformat page ranges in the "page" variable.</a:documentation>
           <choice>
-            <value>chicago</value>
             <value>expanded</value>
             <value>minimal</value>
             <value>minimal-two</value>
+            <value>chicago</value>
+            <value>chicago-15</value>
+            <value>chicago-16</value>
           </choice>
         </attribute>
       </optional>
@@ -1473,10 +1431,9 @@ and substitutes for each name.</a:documentation>
       </optional>
     </define>
   </div>
+  <!-- ============================================================================== -->
   <div>
-    <a:documentation>
-      <xhtml:h2>cs:sort - Sorting</xhtml:h2>
-    </a:documentation>
+    <a:documentation>cs:sort - Sorting</a:documentation>
     <define name="sort">
       <element name="cs:sort">
         <a:documentation>Specify how cites and bibliographic entries should be sorted. By
@@ -1530,138 +1487,7 @@ activated. Overrides the values set on the
       </element>
     </define>
   </div>
-  <div>
-    <a:documentation>
-      <xhtml:h2>cs:choose - Conditional Statements</xhtml:h2>
-    </a:documentation>
-    <define name="rendering-element.choose">
-      <element name="cs:choose">
-        <a:documentation>Use to conditionally render rendering elements.</a:documentation>
-        <ref name="choose.if"/>
-        <zeroOrMore>
-          <ref name="choose.else-if"/>
-        </zeroOrMore>
-        <optional>
-          <ref name="choose.else"/>
-        </optional>
-      </element>
-    </define>
-    <define name="choose.if">
-      <element name="cs:if">
-        <oneOrMore>
-          <ref name="condition"/>
-        </oneOrMore>
-        <ref name="match"/>
-        <zeroOrMore>
-          <ref name="rendering-element"/>
-        </zeroOrMore>
-      </element>
-    </define>
-    <define name="choose.else-if">
-      <element name="cs:else-if">
-        <oneOrMore>
-          <ref name="condition"/>
-        </oneOrMore>
-        <ref name="match"/>
-        <zeroOrMore>
-          <ref name="rendering-element"/>
-        </zeroOrMore>
-      </element>
-    </define>
-    <define name="choose.else">
-      <element name="cs:else">
-        <oneOrMore>
-          <ref name="rendering-element"/>
-        </oneOrMore>
-      </element>
-    </define>
-    <define name="condition">
-      <choice>
-        <attribute name="disambiguate" a:defaultValue="true">
-          <a:documentation>If used, the element content is only rendered if it disambiguates two
-otherwise identical citations. This attempt at disambiguation is only
-made after all other disambiguation methods have failed.</a:documentation>
-          <value>true</value>
-        </attribute>
-        <attribute name="is-numeric">
-          <a:documentation>Tests whether the given variables contain numeric text.</a:documentation>
-          <list>
-            <oneOrMore>
-              <ref name="variables"/>
-            </oneOrMore>
-          </list>
-        </attribute>
-        <attribute name="is-uncertain-date">
-          <a:documentation>Tests whether the given date variables contain approximate dates.</a:documentation>
-          <list>
-            <oneOrMore>
-              <ref name="variables.dates"/>
-            </oneOrMore>
-          </list>
-        </attribute>
-        <attribute name="locator">
-          <a:documentation>Tests whether the locator matches the given locator types.</a:documentation>
-          <list>
-            <oneOrMore>
-              <choice>
-                <ref name="terms.locator.testable"/>
-                <value>sub-verbo</value>
-              </choice>
-            </oneOrMore>
-          </list>
-        </attribute>
-        <attribute name="position">
-          <a:documentation>Tests whether the cite position matches the given positions.</a:documentation>
-          <list>
-            <oneOrMore>
-              <choice>
-                <value>first</value>
-                <value>subsequent</value>
-                <value>ibid</value>
-                <value>ibid-with-locator</value>
-                <value>near-note</value>
-              </choice>
-            </oneOrMore>
-          </list>
-        </attribute>
-        <attribute name="type">
-          <a:documentation>Tests whether the item matches the given types.</a:documentation>
-          <list>
-            <oneOrMore>
-              <ref name="item-types"/>
-            </oneOrMore>
-          </list>
-        </attribute>
-        <attribute name="variable">
-          <a:documentation>Tests whether the default ("long") forms of the given variables
-contain non-empty values.</a:documentation>
-          <list>
-            <oneOrMore>
-              <ref name="variables"/>
-            </oneOrMore>
-          </list>
-        </attribute>
-      </choice>
-    </define>
-    <define name="match">
-      <optional>
-        <attribute name="match" a:defaultValue="all">
-          <a:documentation>Set the testing logic.</a:documentation>
-          <choice>
-            <value>all</value>
-            <a:documentation>Element only tests "true" when all conditions test "true" for all
-given test values.</a:documentation>
-            <value>any</value>
-            <a:documentation>Element tests "true" when any condition tests "true" for any given
-test value.</a:documentation>
-            <value>none</value>
-            <a:documentation>Element only tests "true" when none of the conditions test "true"
-for any given test value.</a:documentation>
-          </choice>
-        </attribute>
-      </optional>
-    </define>
-  </div>
+  <!-- ============================================================================== -->
   <div>
     <a:documentation>Formatting attributes.</a:documentation>
     <define name="affixes">
@@ -1777,7 +1603,8 @@ remain in their original case).</a:documentation>
             <value>title</value>
             <a:documentation>Renders text in title case.</a:documentation>
             <value>sentence</value>
-            <a:documentation>Renders text in sentence case.</a:documentation>
+            <a:documentation>Renders text in sentence case.
+Deprecated. Will be removed in CSL 1.1</a:documentation>
           </choice>
         </attribute>
       </optional>

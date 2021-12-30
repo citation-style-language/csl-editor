@@ -11,4 +11,4 @@ cd ..
 mkdir generated/csl-schema
 
 # convert schema from .rnc (Relax NG Compact) to .rng (Relax NG XML)
-java -jar "external/trang/trang.jar" "external/csl-schema/csl.rnc" "generated/csl-schema/csl.rng"
+java -jar "external/trang/trang.jar" "external/csl-schema/schemas/styles/csl.rnc" "generated/csl-schema/csl.rng"
