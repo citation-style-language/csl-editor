@@ -94,6 +94,9 @@
         <value>reviewed-title</value>
         <value>title</value>
         <value>volume-title</value>
+        <!-- Short title forms. Will be removed in CSL 1.1 -->
+        <value>title-short</value>
+        <value>container-title-short</value>
       </choice>
     </define>
     <define name="variables.strings">

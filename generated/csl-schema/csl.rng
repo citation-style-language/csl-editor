@@ -1059,17 +1059,20 @@ delimiter is retrieved from the largest date part ("day", "month" or
         <attribute name="value">
           <a:documentation>Specify verbatim text.</a:documentation>
         </attribute>
-        <optional>
+        <group>
           <attribute name="variable">
+            <a:documentation>Select a variable.</a:documentation>
             <ref name="variables.standard"/>
           </attribute>
-          <attribute name="form" a:defaultValue="long">
-            <choice>
-              <value>short</value>
-              <value>long</value>
-            </choice>
-          </attribute>
-        </optional>
+          <optional>
+            <attribute name="form" a:defaultValue="long">
+              <choice>
+                <value>short</value>
+                <value>long</value>
+              </choice>
+            </attribute>
+          </optional>
+        </group>
       </choice>
     </define>
   </div>
