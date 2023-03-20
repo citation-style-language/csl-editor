@@ -1,6 +1,6 @@
 [submodule "external/codemirror2"]
 	path = external/codemirror2
-	url = http://marijnhaverbeke.nl/git/codemirror
+	url = https://marijnhaverbeke.nl/git/codemirror
 [submodule "external/csl-schema"]
 	path = external/csl-schema
 	url = https://github.com/citation-style-language/schema.git
