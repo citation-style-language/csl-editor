@@ -43,37 +43,6 @@ define(function () {
 	// in the editor and search pages
 	CSLEDIT_exampleData.jsonDocumentList = [
 	{
-		"type": "chapter",
-		"title": "Firms and the welfare state: When, why, and how does social policy matter to employers?",
-		"container-title": "Varieties of capitalism. The institutional foundations of comparative advantage",
-		"publisher": "Oxford University Press",
-		"publisher-place": "New York",
-		"page": "184-213",
-		"author": [
-			{
-				"family": "Mares",
-				"given": "Isabela"
-			}
-		],
-		"editor": [
-			{
-				"family": "Hall",
-				"given": "Peter A."
-			},
-			{
-				"family": "Soskice",
-				"given": "David"
-			}
-		],
-		"issued": {
-			"date-parts": [
-				[
-					"2001"
-				]
-			]
-		}
-	},
-	{
 		"type": "article-journal",
 		"title": "The varieties of capitalism and hybrid success",
 		"container-title": "Comparative Political Studies",
@@ -112,6 +81,37 @@ define(function () {
 					"2010",
 					7,
 					26
+				]
+			]
+		}
+	},
+	{
+		"type": "chapter",
+		"title": "Firms and the welfare state: When, why, and how does social policy matter to employers?",
+		"container-title": "Varieties of capitalism. The institutional foundations of comparative advantage",
+		"publisher": "Oxford University Press",
+		"publisher-place": "New York",
+		"page": "184-213",
+		"author": [
+			{
+				"family": "Mares",
+				"given": "Isabela"
+			}
+		],
+		"editor": [
+			{
+				"family": "Hall",
+				"given": "Peter A."
+			},
+			{
+				"family": "Soskice",
+				"given": "David"
+			}
+		],
+		"issued": {
+			"date-parts": [
+				[
+					"2001"
 				]
 			]
 		}
