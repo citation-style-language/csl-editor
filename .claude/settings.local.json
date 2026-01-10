@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(git submodule:*)",
+      "Bash(du:*)",
+      "Bash(npm install:*)"
+    ]
+  }
+}

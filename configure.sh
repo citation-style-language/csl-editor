@@ -1,14 +1,33 @@
 #!/bin/bash
 
-mkdir generated
+echo "CSL Editor Build Configuration"
+echo "=============================="
+echo ""
 
-# generate example citations
-cd exampleCitationsGenerator
-npm install
-node --max-old-space-size=12288 generateExampleCitations.js #increase to 12gb
-cd ..
+# Ensure we have node_modules installed
+if [ ! -d "node_modules" ]; then
+    echo "Installing dependencies..."
+    npm install
+fi
 
-mkdir generated/csl-schema
+# Create output directories
+echo "Creating output directories..."
+mkdir -p generated/styles
+mkdir -p generated/citations
+mkdir -p generated/csl-schema
 
-# convert schema from .rnc (Relax NG Compact) to .rng (Relax NG XML)
-java -jar "external/trang/trang.jar" "external/csl-schema/schemas/styles/csl.rnc" "generated/csl-schema/csl.rng"
+echo ""
+echo "Running build process..."
+echo ""
+
+# Run the modern build process
+npm run build
+
+echo ""
+echo "=============================="
+echo "Build configuration complete!"
+echo "=============================="
+echo ""
+echo "Note: The new build system generates individual JSON files"
+echo "instead of monolithic files, eliminating memory issues."
+echo ""

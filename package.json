@@ -1,0 +1,41 @@
+{
+  "name": "csl-editor",
+  "version": "2.0.0",
+  "description": "A HTML 5 library for searching and editing styles written in the Citation Style Language",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:styles": "node scripts/generateStyleIndex.js",
+    "build:citations": "node scripts/generateExampleCitations.js",
+    "build:lib": "vite build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "update:submodules": "git submodule update --recursive --remote",
+    "update:citeproc": "curl -o ./external/citeproc/citeproc.js https://raw.githubusercontent.com/Juris-M/citeproc-js/master/citeproc.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/citation-style-editor/csl-editor.git"
+  },
+  "keywords": [
+    "citation",
+    "csl",
+    "editor",
+    "bibliography"
+  ],
+  "author": "CSL Editor Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.4.11",
+    "@vitejs/plugin-legacy": "^5.4.3",
+    "glob": "^11.0.0",
+    "fast-xml-parser": "^4.5.0"
+  },
+  "dependencies": {
+    "jquery": "^3.7.1",
+    "idb-keyval": "^6.2.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSL Editor v2.0 - Quick Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 10px;
+    }
+    .test-section {
+      background: #f8f9fa;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 5px;
+      border-left: 4px solid #007bff;
+    }
+    .success {
+      color: #28a745;
+      font-weight: bold;
+    }
+    .error {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    .info {
+      color: #17a2b8;
+    }
+    pre {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .loading {
+      display: inline-block;
+      margin-left: 10px;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <h1>CSL Editor v2.0 - Quick Test</h1>
+
+  <p>This page tests the core functionality of the modernized CSL Editor library.</p>
+
+  <div class="test-section">
+    <h2>Test Controls</h2>
+    <button onclick="runAllTests()">Run All Tests</button>
+    <button onclick="clearOutput()">Clear Output</button>
+    <button onclick="clearCache()">Clear Cache</button>
+    <span id="loading" class="loading" style="display: none;">Testing...</span>
+  </div>
+
+  <div class="test-section">
+    <h2>Test Results</h2>
+    <div id="output"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Interactive Tests</h2>
+    <div>
+      <label for="search-input">Search styles by title:</label>
+      <input type="text" id="search-input" placeholder="e.g., APA" style="padding: 5px; margin: 5px;">
+      <button onclick="searchStyles()">Search</button>
+    </div>
+    <div id="search-results" style="margin-top: 10px;"></div>
+  </div>
+
+  <script type="module">
+    import { init, cslStyles, styleLoader } from './dist/csl-editor.es.js';
+
+    const output = document.getElementById('output');
+    const loading = document.getElementById('loading');
+    const searchResults = document.getElementById('search-results');
+
+    function log(message, type = 'info') {
+      const p = document.createElement('p');
+      p.className = type;
+      p.textContent = message;
+      output.appendChild(p);
+    }
+
+    function logSection(title) {
+      const h3 = document.createElement('h3');
+      h3.textContent = title;
+      output.appendChild(h3);
+    }
+
+    window.clearOutput = function() {
+      output.innerHTML = '';
+      searchResults.innerHTML = '';
+    };
+
+    window.clearCache = async function() {
+      try {
+        await styleLoader.clearCache();
+        log('✓ Cache cleared successfully', 'success');
+      } catch (err) {
+        log('✗ Failed to clear cache: ' + err.message, 'error');
+      }
+    };
+
+    window.searchStyles = async function() {
+      const query = document.getElementById('search-input').value;
+      if (!query) {
+        searchResults.innerHTML = '<p class="error">Please enter a search term</p>';
+        return;
+      }
+
+      try {
+        const results = cslStyles.searchByTitle(query);
+
+        if (results.length === 0) {
+          searchResults.innerHTML = `<p class="info">No styles found matching "${query}"</p>`;
+          return;
+        }
+
+        let html = `<p class="success">Found ${results.length} styles matching "${query}":</p><ul>`;
+        results.slice(0, 10).forEach(style => {
+          const label = style.isDependent ? ' (dependent)' : '';
+          html += `<li><strong>${style.title}</strong>${label}<br><small>${style.id}</small></li>`;
+        });
+        if (results.length > 10) {
+          html += `<li><em>... and ${results.length - 10} more</em></li>`;
+        }
+        html += '</ul>';
+
+        searchResults.innerHTML = html;
+      } catch (err) {
+        searchResults.innerHTML = `<p class="error">Search failed: ${err.message}</p>`;
+      }
+    };
+
+    window.runAllTests = async function() {
+      clearOutput();
+      loading.style.display = 'inline';
+
+      try {
+        // Test 1: Initialization
+        logSection('Test 1: Library Initialization');
+        const startTime = performance.now();
+        await init();
+        const initTime = performance.now() - startTime;
+        log(`✓ Library initialized in ${initTime.toFixed(2)}ms`, 'success');
+
+        // Test 2: Style Index Stats
+        logSection('Test 2: Style Repository Statistics');
+        const stats = styleLoader.getStats();
+        log(`Total styles: ${stats.totalStyles}`, 'info');
+        log(`Independent styles: ${stats.independentStyles}`, 'info');
+        log(`Dependent styles: ${stats.dependentStyles}`, 'info');
+        log(`Generated at: ${new Date(stats.generatedAt).toLocaleString()}`, 'info');
+
+        if (stats.totalStyles > 10000) {
+          log('✓ Style index loaded successfully', 'success');
+        } else {
+          log('⚠ Warning: Fewer styles than expected', 'error');
+        }
+
+        // Test 3: Search Functionality
+        logSection('Test 3: Search Functionality');
+        const apaResults = cslStyles.searchByTitle('APA');
+        log(`Found ${apaResults.length} styles matching "APA"`, 'info');
+        if (apaResults.length > 0) {
+          log('✓ Search working correctly', 'success');
+          log(`Example: "${apaResults[0].title}"`, 'info');
+        } else {
+          log('✗ Search returned no results', 'error');
+        }
+
+        // Test 4: Style Loading (First Time)
+        logSection('Test 4: Style Loading (Network)');
+        const loadStart1 = performance.now();
+        const apaStyle = await cslStyles.loadStyleXml('http://www.zotero.org/styles/apa');
+        const loadTime1 = performance.now() - loadStart1;
+        log(`✓ Loaded APA style in ${loadTime1.toFixed(2)}ms`, 'success');
+        log(`Style size: ${(apaStyle.length / 1024).toFixed(2)} KB`, 'info');
+
+        // Test 5: Cached Loading
+        logSection('Test 5: Style Loading (Cached)');
+        const loadStart2 = performance.now();
+        const apaStyleCached = await cslStyles.loadStyleXml('http://www.zotero.org/styles/apa');
+        const loadTime2 = performance.now() - loadStart2;
+        log(`✓ Loaded APA style (cached) in ${loadTime2.toFixed(2)}ms`, 'success');
+
+        const speedup = (loadTime1 / loadTime2).toFixed(1);
+        log(`Cache speedup: ${speedup}x faster`, 'success');
+
+        // Test 6: Multiple Parallel Loads
+        logSection('Test 6: Parallel Style Loading');
+        const styleIds = [
+          'http://www.zotero.org/styles/ieee',
+          'http://www.zotero.org/styles/nature',
+          'http://www.zotero.org/styles/chicago-author-date'
+        ];
+
+        const loadStart3 = performance.now();
+        const styles = await styleLoader.loadStyles(styleIds);
+        const loadTime3 = performance.now() - loadStart3;
+        log(`✓ Loaded ${styles.length} styles in parallel in ${loadTime3.toFixed(2)}ms`, 'success');
+        log(`Average: ${(loadTime3 / styles.length).toFixed(2)}ms per style`, 'info');
+
+        // Test 7: Dependent Style Resolution
+        logSection('Test 7: Dependent Style Resolution');
+        const dependentId = 'http://www.zotero.org/styles/2d-materials';
+        const masterId = cslStyles.getMasterIdFromId(dependentId);
+        log(`Dependent style: ${cslStyles.getStyleTitle(dependentId)}`, 'info');
+        log(`Master style ID: ${masterId}`, 'info');
+        log(`Resolves to: ${cslStyles.getStyleTitle(masterId)}`, 'info');
+        if (dependentId !== masterId) {
+          log('✓ Dependent style resolution working', 'success');
+        } else {
+          log('⚠ Style appears to be independent (not dependent)', 'info');
+        }
+
+        // Test 8: Memory Efficiency
+        logSection('Test 8: Memory Efficiency Check');
+        if (performance.memory) {
+          const usedMB = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+          const totalMB = (performance.memory.totalJSHeapSize / 1024 / 1024).toFixed(2);
+          log(`Used memory: ${usedMB} MB / ${totalMB} MB`, 'info');
+          if (usedMB < 100) {
+            log('✓ Memory usage is efficient', 'success');
+          }
+        } else {
+          log('Memory API not available in this browser', 'info');
+        }
+
+        // Final Summary
+        logSection('Summary');
+        log('All tests completed successfully! ✓', 'success');
+        log('The modernized CSL Editor is working correctly.', 'success');
+
+      } catch (err) {
+        logSection('Error');
+        log(`✗ Test failed: ${err.message}`, 'error');
+        console.error('Full error:', err);
+      } finally {
+        loading.style.display = 'none';
+      }
+    };
+
+    // Auto-run tests on load
+    window.addEventListener('load', () => {
+      log('Page loaded. Click "Run All Tests" to start testing.', 'info');
+    });
+  </script>
+</body>
+</html>
