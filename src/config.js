@@ -17,10 +17,13 @@ requirejs.config({
 
 		'external/codemirror' : 'external/codemirror2/lib/codemirror',
 		'external/codemirrorXmlMode' : 'external/codemirror2/mode/xml/xml',
-		
+
 		'external/xregexp' : 'external/xregexp/xregexp-with-unicode-base-min',
 
-		'external/markdown' : 'external/pagedown/Markdown.Converter'
+		'external/markdown' : 'external/pagedown/Markdown.Converter',
+
+		// Modernization: Redirect cslStyles to compatibility shim
+		'src/cslStyles' : 'src/cslStyles.shim'
 	},
 
 	// For dependencies which don't use RequireJS, this says what they depend on,
