@@ -5,7 +5,7 @@
 
 import { get, set, del, clear } from 'idb-keyval';
 
-const CACHE_VERSION = '2.0.0';
+const CACHE_VERSION = '2.0.1';
 const CACHE_KEY_PREFIX = 'csl-style-';
 const INDEX_CACHE_KEY = 'csl-style-index';
 
