@@ -1,10 +1,8 @@
 /**
  * AMD/RequireJS compatibility shim for the modernized cslStyles module
  *
- * This wraps the new ES module API to work with the existing RequireJS-based demo site.
- * The old code expects synchronous AMD modules, but the new code requires async initialization.
- *
- * Strategy: Pre-load and initialize the modern library, then provide synchronous wrappers.
+ * This is a simpler approach: We'll dynamically import the ES module using
+ * a script tag with type="module", then expose it through AMD.
  */
 
 define(['jquery'], function($) {
@@ -14,32 +12,71 @@ define(['jquery'], function($) {
 	var modernCslStyles = null;
 	var modernStyleLoader = null;
 	var initializationPromise = null;
+	var initialized = false;
 
-	// Initialize the modern library
+	// Create a unique global namespace to receive the module
+	var NAMESPACE = '__CSLEditorModern_' + Date.now();
+
+	// Cache for legacy data (loaded on-demand)
+	var exampleCitationsCache = null;
+	var exampleCitationsLoading = false;
+	var stylesDataCache = null;
+
+	// Initialize the modern library by loading the ES module
 	function ensureInitialized() {
 		if (initializationPromise) {
 			return initializationPromise;
 		}
 
 		initializationPromise = new Promise(function(resolve, reject) {
-			// Load the UMD build which is easier to integrate with RequireJS
+			// Create an inline module script that imports the ES module
 			var script = document.createElement('script');
-			script.src = '/cslEditorLib/dist/csl-editor.umd.js';
-			script.onload = function() {
-				// The UMD build exposes CSLEditor globally
-				if (window.CSLEditor) {
-					window.CSLEditor.init().then(function() {
-						modernCslStyles = window.CSLEditor.cslStyles;
-						modernStyleLoader = window.CSLEditor.styleLoader;
-						resolve();
-					}).catch(reject);
+			script.type = 'module';
+			script.textContent = `
+				import { init, cslStyles, styleLoader } from '/cslEditorLib/dist/csl-editor.es.js';
+
+				// Configure paths for demo site
+				styleLoader.setBasePath('/cslEditorLib/');
+
+				// Initialize the library
+				await init();
+
+				// Expose on window using our unique namespace
+				window['${NAMESPACE}'] = {
+					cslStyles: cslStyles,
+					styleLoader: styleLoader
+				};
+
+				// Signal that we're ready
+				window.dispatchEvent(new CustomEvent('csl-editor-ready'));
+			`;
+
+			// Listen for the ready event
+			var handleReady = function() {
+				var lib = window[NAMESPACE];
+				if (lib && lib.cslStyles && lib.styleLoader) {
+					modernCslStyles = lib.cslStyles;
+					modernStyleLoader = lib.styleLoader;
+					initialized = true;
+					resolve();
 				} else {
-					reject(new Error('CSLEditor not found on window'));
+					reject(new Error('Library loaded but structure is wrong'));
 				}
 			};
-			script.onerror = function() {
-				reject(new Error('Failed to load CSL Editor library'));
+
+			var handleError = function(event) {
+				reject(new Error('Failed to load ES module: ' + (event.message || 'Unknown error')));
 			};
+
+			window.addEventListener('csl-editor-ready', handleReady, { once: true });
+			window.addEventListener('error', handleError, { once: true });
+
+			script.onerror = function() {
+				window.removeEventListener('csl-editor-ready', handleReady);
+				window.removeEventListener('error', handleError);
+				reject(new Error('Failed to load ES module script'));
+			};
+
 			document.head.appendChild(script);
 		});
 
@@ -49,7 +86,7 @@ define(['jquery'], function($) {
 	// Start loading immediately
 	var initReady = ensureInitialized();
 
-	// Expose a promise for pages that need to wait for initialization
+	// Expose a shim that provides the old API
 	var module = {
 		// Promise that resolves when the library is ready
 		ready: initReady,
@@ -87,7 +124,7 @@ define(['jquery'], function($) {
 
 		// Synchronous methods (these will work after initialization)
 		getNormalisedStyleTitle: function(styleTitle) {
-			if (!modernCslStyles) {
+			if (!initialized) {
 				console.warn('CSL Editor not yet initialized, returning basic normalization');
 				return styleTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 			}
@@ -95,14 +132,14 @@ define(['jquery'], function($) {
 		},
 
 		generateStyleId: function(styleTitle) {
-			if (!modernCslStyles) {
+			if (!initialized) {
 				return "http://www.zotero.org/styles/" + this.getNormalisedStyleTitle(styleTitle);
 			}
 			return modernCslStyles.generateStyleId(styleTitle);
 		},
 
 		getMasterIdFromId: function(styleId) {
-			if (!modernCslStyles) {
+			if (!initialized) {
 				console.warn('CSL Editor not yet initialized');
 				return styleId;
 			}
@@ -110,7 +147,7 @@ define(['jquery'], function($) {
 		},
 
 		getStyleTitle: function(styleId) {
-			if (!modernCslStyles) {
+			if (!initialized) {
 				console.warn('CSL Editor not yet initialized');
 				return 'Loading...';
 			}
@@ -118,7 +155,7 @@ define(['jquery'], function($) {
 		},
 
 		getAllStyleIds: function() {
-			if (!modernCslStyles) {
+			if (!initialized) {
 				console.warn('CSL Editor not yet initialized');
 				return [];
 			}
@@ -126,7 +163,7 @@ define(['jquery'], function($) {
 		},
 
 		getIndependentStyleIds: function() {
-			if (!modernCslStyles) {
+			if (!initialized) {
 				console.warn('CSL Editor not yet initialized');
 				return [];
 			}
@@ -134,7 +171,7 @@ define(['jquery'], function($) {
 		},
 
 		searchByTitle: function(query) {
-			if (!modernCslStyles) {
+			if (!initialized) {
 				console.warn('CSL Editor not yet initialized');
 				return [];
 			}
@@ -143,13 +180,132 @@ define(['jquery'], function($) {
 
 		// Async method for loading style XML
 		loadStyleXml: function(styleId, callback) {
-			if (!modernCslStyles) {
+			if (!initialized) {
 				initReady.then(function() {
 					modernCslStyles.loadStyleXml(styleId).then(callback);
 				});
 			} else {
 				modernCslStyles.loadStyleXml(styleId).then(callback);
 			}
+		},
+
+		// Legacy API methods for backward compatibility
+
+		// Returns style metadata (cached to avoid rebuilding)
+		styles: function() {
+			if (!initialized) {
+				console.warn('CSL Editor not yet initialized');
+				return { styleTitleFromId: {}, masterIdFromId: {} };
+			}
+
+			// Return cached version if available
+			if (stylesDataCache) {
+				return stylesDataCache;
+			}
+
+			// Build the structure once
+			var styleIds = modernCslStyles.getAllStyleIds();
+			var result = {
+				styleTitleFromId: {},
+				masterIdFromId: {}
+			};
+
+			styleIds.forEach(function(id) {
+				result.styleTitleFromId[id] = modernCslStyles.getStyleTitle(id);
+				result.masterIdFromId[id] = modernCslStyles.getMasterIdFromId(id);
+			});
+
+			// Cache it
+			stylesDataCache = result;
+			return result;
+		},
+
+		// Returns example citations (loads legacy file on-demand)
+		exampleCitations: function() {
+			// If already loaded, return from cache
+			if (exampleCitationsCache) {
+				return exampleCitationsCache;
+			}
+
+			// If currently loading, return empty object and let it load in background
+			if (exampleCitationsLoading) {
+				return { exampleCitationsFromMasterId: {} };
+			}
+
+			// Load the legacy file synchronously (since the old code expects sync)
+			exampleCitationsLoading = true;
+			var data = null;
+
+			$.ajax({
+				url: '/cslEditorLib/generated/preGeneratedExampleCitations.json',
+				dataType: 'json',
+				async: false,  // Synchronous for compatibility
+				success: function(result) {
+					exampleCitationsCache = result;
+					data = result;
+				},
+				error: function() {
+					console.error('Failed to load example citations');
+					exampleCitationsCache = { exampleCitationsFromMasterId: {} };
+					data = exampleCitationsCache;
+				}
+			});
+
+			exampleCitationsLoading = false;
+			return data || { exampleCitationsFromMasterId: {} };
+		},
+
+		// Returns URL to default style
+		defaultStyleURL: function() {
+			return this.localURLFromZoteroId(this.defaultStyleId);
+		},
+
+		// Converts style ID to local URL
+		localURLFromZoteroId: function(styleId) {
+			var baseUrl = "/cslEditorLib/external/csl-styles/";
+
+			// Check if this is a dependent style
+			if (initialized) {
+				var masterId = modernCslStyles.getMasterIdFromId(styleId);
+				if (masterId !== styleId) {
+					baseUrl += "dependent/";
+				}
+			}
+
+			return styleId.replace("http://www.zotero.org/styles/", baseUrl) + ".csl";
+		},
+
+		// Fetches CSL code for given style ID
+		fetchCslCode: function(styleId, success, error, async) {
+			if (typeof async === 'undefined') {
+				async = true;
+			}
+
+			// Check if styleId is already a URL/path (contains .csl)
+			var localURL;
+			if (styleId.indexOf('.csl') !== -1) {
+				// Already a path, use as-is
+				localURL = styleId;
+			} else {
+				// Convert style ID to path
+				localURL = this.localURLFromZoteroId(styleId);
+			}
+
+			console.log('fetchCslCode: Loading style from:', localURL);
+
+			$.ajax({
+				url: localURL,
+				dataType: "text",
+				success: function(data) {
+					console.log('fetchCslCode: Successfully loaded', styleId);
+					if (success) success(data);
+				},
+				error: function(xhr, status, err) {
+					console.error('fetchCslCode: Failed to load', styleId, 'from', localURL, 'Status:', status, 'Error:', err, 'HTTP Status:', xhr.status);
+					if (error) error(xhr, status, err);
+				},
+				async: async
+			});
 		},
 
 		// Direct access to modern modules (for pages that can handle async)

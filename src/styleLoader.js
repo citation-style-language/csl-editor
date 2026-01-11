@@ -8,8 +8,8 @@ import { get, set, del, clear } from 'idb-keyval';
 const CACHE_VERSION = '2.0.0';
 const CACHE_KEY_PREFIX = 'csl-style-';
 const INDEX_CACHE_KEY = 'csl-style-index';
-const STYLES_BASE_URL = './generated/styles/';
-const INDEX_URL = './generated/styleIndex.json';
+const STYLES_BASE_URL = '/cslEditorLib/generated/styles/';
+const INDEX_URL = '/cslEditorLib/generated/styleIndex.json';
 
 class StyleLoader {
   constructor() {
