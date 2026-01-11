@@ -182,7 +182,7 @@ define([	'src/uiConfig', // TODO: remove this dependency
 		};
 
 		// Sets the current CSL style from the given string containing XML
-		var setCslCode = function (cslCode, allowDependentStyle /* optional */) {
+		var setCslCode = function (cslCode, allowDependentStyle, skipLargeStyleWarning /* optional */) {
 			var cslData,
 				error;
 			
@@ -229,6 +229,22 @@ define([	'src/uiConfig', // TODO: remove this dependency
 
 			if (error) {
 				return { error: error };
+			}
+
+			// Performance warning for large styles (unless bypassed)
+			if (!skipLargeStyleWarning && cslCode.length > 150000) {
+				console.warn("Large CSL style detected:", cslCode.length, "bytes");
+				console.warn("Visual Editor may experience performance issues");
+				console.warn("Consider using Code Editor for better performance");
+
+				return { error: {
+					type: "largeStyle",
+					styleSize: cslCode.length,
+					message: "Performance Warning: This style is very large (" +
+						Math.round(cslCode.length / 1024) + "KB).\n\n" +
+						"The Visual Editor may become unresponsive with styles this large.\n\n" +
+						"Recommendation: Use the Code Editor instead for better performance."
+				}};
 			}
 
 			if (updateTime) {
