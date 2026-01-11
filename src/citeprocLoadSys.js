@@ -27,32 +27,36 @@ define([	'src/urlUtils',
 	// or falls back to "en-US" if not available
 	Sys.prototype.retrieveLocale = function (lang) {
 		var that = this,
-			locale = this.locale[lang],
 			localePath;
 
-		if (typeof(locale) === "undefined") {
-			localePath = CSLEDIT_urlUtils.getResourceUrl("external/locales/locales-" + lang + ".xml");
-
-			// try to fetch from server
-			$.ajax({
-				url : localePath,
-				success : function (data) {
-					debug.log("fetched locale data for " + lang);
-					that.locale[lang] = data;
-					locale = data;
-				},
-				error : function (jqXHR, textStatus) {
-					debug.log("ERROR retrieving locale data for " + lang);
-					debug.log("Falling back to en-US");
-
-					locale = that.retrieveLocale("en-US");
-				},
-				dataType : "text",
-				async : false
-			});
+		// Return cached locale if available
+		if (typeof(this.locale[lang]) !== "undefined") {
+			return this.locale[lang];
 		}
-		
-		return locale;
+
+		// Fetch from server
+		localePath = CSLEDIT_urlUtils.getResourceUrl("external/locales/locales-" + lang + ".xml");
+
+		$.ajax({
+			url : localePath,
+			success : function (data) {
+				debug.log("fetched locale data for " + lang);
+				that.locale[lang] = data;
+			},
+			error : function (jqXHR, textStatus) {
+				debug.log("ERROR retrieving locale data for " + lang);
+				debug.log("Falling back to en-US");
+
+				// Only fallback if this isn't already en-US
+				if (lang !== "en-US") {
+					that.locale[lang] = that.retrieveLocale("en-US");
+				}
+			},
+			dataType : "text",
+			async : false
+		});
+
+		return this.locale[lang];
 	};
 
 	// Set the list of abbreviations
