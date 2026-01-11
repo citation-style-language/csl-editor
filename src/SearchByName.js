@@ -142,13 +142,21 @@ define(
 			});
 
 			$("#styleNameQuery").focus();
-		
+
 			var initialQuery = CSLEDIT_options.get('initialSearchQuery');
 			if (typeof(initialQuery) !== "undefined") {
 				$('#styleNameQuery').val(initialQuery);
 			}
 
-			searchForStyleName();
+			// Wait for CSL Editor library to be ready before searching
+			if (CSLEDIT_cslStyles.ready) {
+				CSLEDIT_cslStyles.ready.then(function() {
+					searchForStyleName();
+				});
+			} else {
+				// Fallback for old version without ready promise
+				searchForStyleName();
+			}
 		};
 	};
 

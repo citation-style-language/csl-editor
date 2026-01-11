@@ -262,6 +262,12 @@ define(['jquery'], function($) {
 
 		// Converts style ID to local URL
 		localURLFromZoteroId: function(styleId) {
+			// Handle undefined or null styleId
+			if (!styleId) {
+				console.warn('localURLFromZoteroId called with undefined/null styleId');
+				return "";
+			}
+
 			var baseUrl = "/cslEditorLib/external/csl-styles/";
 
 			// Check if this is a dependent style
