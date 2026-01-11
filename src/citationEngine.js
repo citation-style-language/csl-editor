@@ -70,9 +70,20 @@ define([	'src/options',
 		if (style !== previousStyle) {
 			try {
 				citeproc = new CSL.Engine(citeprocSys, style);
+
+				// Validate citeproc was fully initialized
+				if (!citeproc || !citeproc.fun || typeof citeproc.fun.page_mangler !== 'function') {
+					console.error("Citeproc engine incompletely initialized");
+					console.error("Has fun object:", !!citeproc.fun);
+					console.error("page_mangler type:", typeof (citeproc.fun && citeproc.fun.page_mangler));
+					result.statusMessage = "Citeproc initialization incomplete (large/complex style may have issues)";
+					return result;
+				}
+
 				previousStyle = style;
 			}
 			catch (err) {
+				console.error("Citeproc initialization error:", err);
 				result.statusMessage = "Citeproc initialisation exception: " + err;
 				return result;
 			}
@@ -91,6 +102,9 @@ define([	'src/options',
 				citations = citeproc.appendCitationCluster(cluster, false);
 			}
 			catch (err) {
+				console.error("Citeproc error in appendCitationCluster:", err);
+				console.error("Style size:", style.length, "bytes");
+				console.error("Cluster:", cluster);
 				result.statusMessage = "Citeproc exception: " + err;
 				return false;
 			}

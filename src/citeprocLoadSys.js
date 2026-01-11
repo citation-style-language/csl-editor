@@ -50,13 +50,23 @@ define([	'src/urlUtils',
 				// Only fallback if this isn't already en-US
 				if (lang !== "en-US") {
 					that.locale[lang] = that.retrieveLocale("en-US");
+				} else {
+					// Critical error: can't even load en-US
+					console.error("FATAL: Cannot load en-US locale from " + localePath);
+					that.locale[lang] = null;
 				}
 			},
 			dataType : "text",
 			async : false
 		});
 
-		return this.locale[lang];
+		// Verify we got valid XML data
+		if (this.locale[lang] && typeof this.locale[lang] === 'string' && this.locale[lang].length > 0) {
+			return this.locale[lang];
+		} else {
+			console.error("Invalid locale data for " + lang);
+			return null;
+		}
 	};
 
 	// Set the list of abbreviations
