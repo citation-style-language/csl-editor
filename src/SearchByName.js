@@ -51,9 +51,10 @@ define(
 			if (searchQuery.length === 0) {
 				$("#message").html("<h2>Popular Styles</h2>");
 				$.each(CSLEDIT_cslStyles.topStyles, function (i, styleId) {
+					var masterId = CSLEDIT_cslStyles.styles().masterIdFromId[styleId] || styleId;
 					result.push({
 						styleId : styleId,
-						masterId : CSLEDIT_cslStyles.styles().masterIdFromId[styleId]
+						masterId : masterId
 					});
 				});
 				CSLEDIT_searchResults.displaySearchResults(result, $("#searchResults"));
@@ -80,7 +81,7 @@ define(
 
 					if (styleName.toLowerCase().indexOf(searchQueryLower) > -1 ||
 						styleId.toLowerCase().indexOf(searchQueryLower) > -1) {
-						masterId = CSLEDIT_cslStyles.styles().masterIdFromId[styleId];
+						masterId = CSLEDIT_cslStyles.styles().masterIdFromId[styleId] || styleId;
 						result.push({
 								styleId : styleId,
 								masterId : masterId,

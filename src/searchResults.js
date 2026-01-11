@@ -69,14 +69,18 @@ define(
 				styleEntry.parentStyleTitle = CSLEDIT_cslStyles.styles().styleTitleFromId[style.masterId];
 			}
 
-			styleEntry.citation = CSLEDIT_cslStyles
-				.exampleCitations()
-				.exampleCitationsFromMasterId[style.masterId][exampleIndex]
-				.formattedCitations[0];
-			styleEntry.bibliography = CSLEDIT_cslStyles
-				.exampleCitations()
-				.exampleCitationsFromMasterId[style.masterId][exampleIndex]
-				.formattedBibliography;
+			// Get example citations if available
+			var exampleCitations = CSLEDIT_cslStyles.exampleCitations();
+			var masterExamples = exampleCitations.exampleCitationsFromMasterId[style.masterId];
+
+			if (masterExamples && masterExamples[exampleIndex]) {
+				styleEntry.citation = masterExamples[exampleIndex].formattedCitations[0];
+				styleEntry.bibliography = masterExamples[exampleIndex].formattedBibliography;
+			} else {
+				// No example citation available for this style
+				styleEntry.citation = "";
+				styleEntry.bibliography = "";
+			}
 			
 			if (typeof style.userCitation !== "undefined" &&
 					style.userCitation !== "" &&
