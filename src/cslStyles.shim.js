@@ -29,14 +29,18 @@ define(['jquery'], function($) {
 		}
 
 		initializationPromise = new Promise(function(resolve, reject) {
+			// Determine the base path from the current script location or window.location
+			// For demo sites, the base path should include the baseurl (e.g., /csl-editor-site-beta/)
+			var basePath = window.CSL_EDITOR_BASE_PATH || '';
+
 			// Create an inline module script that imports the ES module
 			var script = document.createElement('script');
 			script.type = 'module';
 			script.textContent = `
-				import { init, cslStyles, styleLoader } from '/cslEditorLib/dist/csl-editor.es.js';
+				import { init, cslStyles, styleLoader } from '${basePath}/cslEditorLib/dist/csl-editor.es.js';
 
 				// Configure paths for demo site
-				styleLoader.setBasePath('/cslEditorLib/');
+				styleLoader.setBasePath('${basePath}/cslEditorLib/');
 
 				// Initialize the library
 				await init();
@@ -235,9 +239,10 @@ define(['jquery'], function($) {
 			// Load the legacy file synchronously (since the old code expects sync)
 			exampleCitationsLoading = true;
 			var data = null;
+			var basePath = window.CSL_EDITOR_BASE_PATH || '';
 
 			$.ajax({
-				url: '/cslEditorLib/generated/preGeneratedExampleCitations.json',
+				url: basePath + '/cslEditorLib/generated/preGeneratedExampleCitations.json',
 				dataType: 'json',
 				async: false,  // Synchronous for compatibility
 				success: function(result) {
