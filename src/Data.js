@@ -231,8 +231,9 @@ define([	'src/uiConfig', // TODO: remove this dependency
 				return { error: error };
 			}
 
-			// Performance warning for large styles (unless bypassed)
-			if (!skipLargeStyleWarning && cslCode.length > 150000) {
+			// Performance warning for large styles (unless bypassed or viewing info only)
+			// Skip warning if allowDependentStyle=true (used for style info pages, not editing)
+			if (!skipLargeStyleWarning && !allowDependentStyle && cslCode.length > 150000) {
 				console.warn("Large CSL style detected:", cslCode.length, "bytes");
 				console.warn("Visual Editor may experience performance issues");
 				console.warn("Consider using Code Editor for better performance");
