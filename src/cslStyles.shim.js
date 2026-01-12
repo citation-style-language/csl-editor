@@ -273,7 +273,8 @@ define(['jquery'], function($) {
 				return "";
 			}
 
-			var baseUrl = "/cslEditorLib/external/csl-styles/";
+			var basePath = window.CSL_EDITOR_BASE_PATH || '';
+			var baseUrl = basePath + "/cslEditorLib/external/csl-styles/";
 
 			// Check if this is a dependent style
 			if (initialized) {
