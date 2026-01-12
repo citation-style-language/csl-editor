@@ -182,10 +182,18 @@ define([	'src/uiConfig', // TODO: remove this dependency
 		};
 
 		// Sets the current CSL style from the given string containing XML
+		//
+		// Performance note: This function performs synchronous XML parsing and tree building.
+		// For large styles (>150KB), this can cause browser freezing. See VISUAL_EDITOR_PERFORMANCE.md
+		// for planned improvements (web workers, virtual scrolling, lazy loading).
+		//
+		// @param cslCode - The CSL XML code as a string
+		// @param allowDependentStyle - If true, allows loading dependent styles (used for style info pages)
+		// @param skipLargeStyleWarning - If true, bypasses the large style warning (when user confirms they want to proceed)
 		var setCslCode = function (cslCode, allowDependentStyle, skipLargeStyleWarning /* optional */) {
 			var cslData,
 				error;
-			
+
 			try {
 				cslData = CSLEDIT_cslParser.cslDataFromCslCode(cslCode);
 			} catch (err) {
