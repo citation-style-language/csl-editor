@@ -107,7 +107,7 @@ define(['jquery'], function($) {
 			'http://www.zotero.org/styles/american-medical-association',
 			'http://www.zotero.org/styles/chicago-author-date',
 			'http://www.zotero.org/styles/american-political-science-association',
-			'http://www.zotero.org/styles/vancouver',
+			'http://www.zotero.org/styles/nlm-citation-sequence',
 			'http://www.zotero.org/styles/american-sociological-association',
 			'http://www.zotero.org/styles/modern-language-association',
 			'http://www.zotero.org/styles/mhra-notes',
@@ -122,7 +122,6 @@ define(['jquery'], function($) {
 			'http://www.zotero.org/styles/ecology',
 			'http://www.zotero.org/styles/elsevier-harvard',
 			'http://www.zotero.org/styles/royal-society-of-chemistry',
-			'http://www.zotero.org/styles/journal-of-the-american-chemical-society',
 			'http://www.zotero.org/styles/pnas'
 		],
 
