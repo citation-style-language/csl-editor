@@ -305,7 +305,9 @@ define(
 					return true;
 				} else if (typeof(userWords) !== "undefined")  {
 					// check for a complete match
-					if (new RegExp(valueString, "i").test(userInput)) {
+					// Escape regex special characters in valueString since it's citation text, not a pattern
+					var escapedValueString = valueString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+					if (new RegExp(escapedValueString, "i").test(userInput)) {
 						// All chars match
 						$.each(valueString, function (i, char) {
 							matchingChars[i] = true;
