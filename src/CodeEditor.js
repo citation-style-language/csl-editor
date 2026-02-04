@@ -148,6 +148,14 @@ define([	'src/citationEngine',
 
 			resizeCodeEditor();
 			setupDropdownMenu();
+
+			// Re-render output when example citations are changed via the citation editor dialog
+			$(document).on('csledit:citationsChanged', function () {
+				CSLEDIT_citationEngine.runCiteprocAndDisplayOutput(
+					CSLEDIT_data,
+					$("#statusMessage"),
+					$("#formattedCitations"), $("#formattedBibliography"));
+			});
 		};
 
 		// Sets a new CSL style from the given cslCode string

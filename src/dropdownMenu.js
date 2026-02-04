@@ -109,9 +109,13 @@ define(['src/options'], function (CSLEDIT_options) {
 			e.stopPropagation();
 		});
 
-		$(document).on('mousedown.dropdownMenu', function () {
+		$(document).on('mousedown.dropdownMenu', function (e) {
 			if (justToggled) {
 				justToggled = false;
+				return;
+			}
+			// Don't close if clicking inside a dropdown submenu
+			if ($(e.target).closest('ul.dropdown').length) {
 				return;
 			}
 			closeAllMenus($container);
