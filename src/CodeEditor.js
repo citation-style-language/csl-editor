@@ -8,9 +8,10 @@ define([	'src/citationEngine',
 			'src/options',
 			'src/dataInstance',
 			'src/urlUtils',
+			'src/dropdownMenu',
+			'src/citationEditor',
 			'external/codemirror',
 			'external/codemirrorXmlMode',
-			'jquery.hoverIntent',
 			'jquery.layout'
 		],
 		function (
@@ -18,9 +19,10 @@ define([	'src/citationEngine',
 			CSLEDIT_options,
 			CSLEDIT_data,
 			CSLEDIT_urlUtils,
+			CSLEDIT_dropdownMenu,
+			CSLEDIT_citationEditor,
 			CodeMirror,
 			CodeMirrorXmlMode,
-			jquery_hoverIntent,
 			jquery_layout
 		) {
 	// Creates a CSL Code Editor within containerElement
@@ -57,29 +59,28 @@ define([	'src/citationEngine',
 		});
 
 		var setupDropdownMenu = function () {
-			var styleMenu = CSLEDIT_options.get('styleMenu');
-			if (typeof styleMenu === 'undefined') {
-				containerElement.find('.dropdown-container').hide();
-				return;
+			CSLEDIT_dropdownMenu.init(containerElement);
+
+			// Wire up Example Citations menu
+			containerElement.find('#menuEditCitation1').click(function () {
+				CSLEDIT_citationEditor.editCitation(0);
+			});
+			containerElement.find('#menuEditCitation2').click(function () {
+				CSLEDIT_citationEditor.editCitation(1);
+			});
+			containerElement.find('#menuEditCitation3').click(function () {
+				CSLEDIT_citationEditor.editCitation(2);
+			});
+
+		};
+
+		var updateTitlebar = function () {
+			var titleNodes = CSLEDIT_data.getNodesFromPath('style/info/title');
+			var title = "No title";
+			if (titleNodes.length > 0 && titleNodes[0].textValue) {
+				title = titleNodes[0].textValue;
 			}
-
-			var styleMenuUl = containerElement.find('#styleMenuUl');
-			$.each(styleMenu, function(index, styleOption) {
-				var menuOption = $('<li/>').append($('<a/>').text(styleOption.label));
-				if (typeof styleOption.name != 'undefined') {
-					menuOption.attr('id', styleOption.name);
-				}
-				menuOption.click(styleOption.func);
-				styleMenuUl.append(menuOption);
-			});
-
-			containerElement.find("ul.dropdown li").hoverIntent(function () {
-				$(this).addClass("hover");
-				$('ul:first', this).css('visibility', 'visible');
-			}, function () {
-				$(this).removeClass("hover");
-				$('ul:first', this).css('visibility', 'hidden');
-			});
+			containerElement.find('#titlebar h3').text(title);
 		};
 
 		var init = function () {
@@ -102,6 +103,7 @@ define([	'src/citationEngine',
 							CSLEDIT_data,
 							$("#statusMessage"),
 							$("#formattedCitations"), $("#formattedBibliography"));
+						updateTitlebar();
 					}
 
 					if (typeof(userCallback) !== "undefined") {
@@ -117,6 +119,7 @@ define([	'src/citationEngine',
 
 			CSLEDIT_data.initPageStyle( function () {
 				editor.setValue(CSLEDIT_data.getCslCode());
+				updateTitlebar();
 			});
 
 			codeMirrorScroll = $('.CodeMirror-scroll');
@@ -152,6 +155,7 @@ define([	'src/citationEngine',
 			var result = CSLEDIT_data.setCslCode(cslCode);
 			if (!("error" in result)) {
 				editor.setValue(CSLEDIT_data.getCslCode());
+				updateTitlebar();
 			}
 			return result;
 		};

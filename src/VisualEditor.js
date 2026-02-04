@@ -18,8 +18,8 @@ define(
 			'src/cslStyles',
 			'src/urlUtils',
 			'src/addNodeDialog',
+			'src/dropdownMenu',
 			'src/debug',
-			'jquery.hoverIntent',
 			'jquery.layout'
 		],
 		function (
@@ -38,8 +38,8 @@ define(
 			CSLEDIT_cslStyles,
 			CSLEDIT_urlUtils,
 			CSLEDIT_addNodeDialog,
+			CSLEDIT_dropdownMenu,
 			debug,
-			jquery_hoverIntent,
 			jquery_layout
 		) {
 	// Sets up a Visual Editor within editorElement
@@ -208,28 +208,43 @@ define(
 			}
 		};
 
-		var setupDropdownMenuHandler = function (selector) {
-			var dropdown = $(selector),
-				loadCsl;
+		var setupDropdownMenuHandler = function () {
+			// Creates the Help menu if this option exists, before initializing
+			// the shared dropdown behavior
+			var helpLinks = CSLEDIT_options.get('helpLinks');
+			if (typeof helpLinks !== 'undefined' && helpLinks.length != 0) {
+				var visualEditorMenu = editorElement.find('#visualEditorMenu');
 
-			// Adds the options from the settings into the Style menu
-			var styleMenu = CSLEDIT_options.get('styleMenu');
-			var styleMenuUl = editorElement.find('#styleMenuUl');
-			console.log(styleMenu);
-			$.each(styleMenu, function(index, styleOption) {
-				var menuOption = $('<li/>').append($('<a/>')
-						.text(styleOption.label));
+				var helpMenuMain = $('<li/>').attr({'id': 'helpMenuMain', 'role': 'none'});
+				var helpMenuLink = $('<a/>')
+					.attr({'id': 'helpMenu', 'role': 'menuitem', 'aria-haspopup': 'true',
+						'aria-expanded': 'false', 'tabindex': '-1'})
+					.text('Help')
+					.append($('<span>').attr({'class': 'disclosure', 'aria-hidden': 'true'}).html('&#9662;'));
 
-				if (typeof styleOption.name != 'undefined') {
-					menuOption.attr('id',styleOption.name);
-				}
-				menuOption.click(styleOption.func);
-				styleMenuUl.append(menuOption);
-			});
+				helpMenuMain.append(helpMenuLink);
+				helpMenuMain.append($('<ul/>')
+						.attr({'id': 'helpMenuUl', 'class': 'sub_menu', 'role': 'menu'}));
+
+				visualEditorMenu.append(helpMenuMain);
+
+				var helpMenu = editorElement.find('#helpMenuUl');
+				$.each(helpLinks, function(index, link) {
+					helpMenu.append($('<li/>').attr('role', 'none').append($('<a/>')
+							.attr({'href': link.link, 'target': '_blank',
+								'role': 'menuitem', 'tabindex': '-1'})
+							.text(link.label)));
+				});
+			}
+
+			// Initialize shared dropdown behavior (style menu population,
+			// hover, click, keyboard, ARIA)
+			CSLEDIT_dropdownMenu.init(editorElement);
+
+			// Visual Editor-specific menu item handlers
 
 			// If menuNewStyle id exists: will create a new style
 			editorElement.find('#menuNewStyle').click(function () {
-				// fetch the URL
 				$.ajax({
 					url : CSLEDIT_urlUtils.getResourceUrl("content/newStyle.csl"),
 					dataType : "text",
@@ -251,7 +266,7 @@ define(
 					CSLEDIT_controller.undo();
 				}
 			});
-			
+
 			editorElement.find('#menuRedo').click(function () {
 				if (CSLEDIT_controller.undoCommandHistory.length === 0) {
 					alert("No commands to redo");
@@ -259,42 +274,11 @@ define(
 					CSLEDIT_controller.redo();
 				}
 			});
-			
-			// Creates the Help menu if this menu exists. Populates
-			// with links
-			var helpLinks = CSLEDIT_options.get('helpLinks');
-			if (typeof helpLinks !== 'undefined' && helpLinks.length != 0) {
-				var visualEditorMenu = editorElement.find('#visualEditorMenu');
-
-				visualEditorMenu.append($('<li/>').attr('id','helpMenuMain'));
-				
-				var helpMenuMain = editorElement.find('#helpMenuMain');
-				var helpMenuLink = $('<a/>')
-					.attr('id','helpMenu')
-					.text('Help').
-					append($('<span>').
-						attr('class','disclosure').
-						html('&#9662;'));
-
-				helpMenuMain.append(helpMenuLink);
-
-				helpMenuMain.append($('<ul/>')
-						.attr('id','helpMenuUl')
-						.attr('class','sub_menu'));
-
-				var helpMenu = editorElement.find('#helpMenuUl');
-				$.each(helpLinks, function(index, link) {
-					helpMenu.append(($('<li/>').append($('<a/>')
-							.attr('href', link.link)
-							.attr('target','_blank')
-							.text(link.label))));
-				});
-			}
 
 			editorElement.find('#menuEditCitation1').click(function () {
 				CSLEDIT_citationEditor.editCitation(0);
 			});
-			
+
 			editorElement.find('#menuEditCitation2').click(function () {
 				CSLEDIT_citationEditor.editCitation(1);
 			});
@@ -334,18 +318,6 @@ define(
 				}
 			});
 
-			$(function () {
-				editorElement.find("ul.dropdown li").hoverIntent(function () {
-					$(this).addClass("hover");
-					$('ul:first', this).css('visibility', 'visible');
-				}, function () {
-					$(this).removeClass("hover");
-					$('ul:first', this).css('visibility', 'hidden');
-				});
-				
-				editorElement.find("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
-			});
-
 			CSLEDIT_data.initPageStyle(function () {
 				var userOnChangeCallback = CSLEDIT_options.get("onChange"),
 					citationEditor1,
@@ -380,7 +352,7 @@ define(
 			});
 
 			setupTreeEditorToolbar();
-			setupDropdownMenuHandler(".dropdown a");
+			setupDropdownMenuHandler();
 
 			editorElement.find('#mainContainer').layout({
 				closable : false,

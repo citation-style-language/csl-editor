@@ -3,18 +3,18 @@
 <div id="mainContainer">
 	<div id="leftContainer" class="ui-layout-west">
 		<div class="dropdown-container">
-			<ul class="dropdown" id="visualEditorMenu">
-				<li>
-					<a id="styleMenu">Style <span class="disclosure">&#9662;</span></a>
-					<ul class="sub_menu" id="styleMenuUl">
-						<!-- Use CSLEDIT_options populate this menu. -->
+			<ul class="dropdown" id="visualEditorMenu" role="menubar">
+				<li role="none">
+					<a id="styleMenu" role="menuitem" aria-haspopup="true" aria-expanded="false" tabindex="0">Style <span class="disclosure" aria-hidden="true">&#9662;</span></a>
+					<ul class="sub_menu" id="styleMenuUl" role="menu">
+						<!-- Populated from styleMenu option -->
 					</ul>
 				</li>
-				<li>
-					<a id="editMenu">Edit <span class="disclosure">&#9662;</span></a>
-					<ul class="sub_menu">
-						<li><a id="menuUndo">Undo</a></li>
-						<li><a id="menuRedo">Redo</a></li>
+				<li role="none">
+					<a id="editMenu" role="menuitem" aria-haspopup="true" aria-expanded="false" tabindex="-1">Edit <span class="disclosure" aria-hidden="true">&#9662;</span></a>
+					<ul class="sub_menu" role="menu">
+						<li role="none"><a id="menuUndo" role="menuitem" tabindex="-1">Undo</a></li>
+						<li role="none"><a id="menuRedo" role="menuitem" tabindex="-1">Redo</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -33,13 +33,13 @@
 				<h3></h3>
 			</div>
 		</div>
-		<ul class="example-citations dropdown">
-			<li>
-				<a id="example-citations">Example citations <span class="disclosure">&#9662;</span></a>
-				<ul class="sub_menu">
-					<li><a id="menuEditCitation1">Citation 1</a></li>
-					<li><a id="menuEditCitation2">Citation 2</a></li>
-					<li><a id="menuEditCitation3">Citation 3</a></li>
+		<ul class="example-citations dropdown" role="menubar">
+			<li role="none">
+				<a id="example-citations" role="menuitem" aria-haspopup="true" aria-expanded="false" tabindex="0">Example citations <span class="disclosure" aria-hidden="true">&#9662;</span></a>
+				<ul class="sub_menu" role="menu">
+					<li role="none"><a id="menuEditCitation1" role="menuitem" tabindex="-1">Citation 1</a></li>
+					<li role="none"><a id="menuEditCitation2" role="menuitem" tabindex="-1">Citation 2</a></li>
+					<li role="none"><a id="menuEditCitation3" role="menuitem" tabindex="-1">Citation 3</a></li>
 				</ul>
 			</li>
 		</ul>

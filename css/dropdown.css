@@ -5,6 +5,12 @@ p                                   { margin: 15px 0; }
 .disclosure {
 	color: #999;
 	margin-left: 3px;
+	vertical-align: middle;
+	font-size: 0.7em;
+	line-height: 1;
+	display: inline-block;
+	position: relative;
+	top: -1px;
 }
 
 .dropdown-container {
@@ -12,35 +18,70 @@ p                                   { margin: 15px 0; }
 }
 
 ul.dropdown a						{ text-decoration: none; }
-ul.dropdown							{ list-style: none; min-height: 36px; border-left: 1px solid #D5D5D5; }
+ul.dropdown							{ list-style: none; min-height: 36px; border-left: 1px solid #D5D5D5; margin: 0; padding: 0; z-index: 30 !important; }
 ul.dropdown ul						{ list-style: none; }
 
-/* 
+/*
 	LEVEL ONE
 */
 ul.dropdown                         { position: relative; }
 ul.dropdown li                      { float: left; zoom: 1; background: #EEE; color: #08C; }
 ul.dropdown a:hover		            {  }
-ul.dropdown li a                    { display: block; padding: 0 12px; line-height: 36px; border-right: 1px solid #D5D5D5; border-left: 1px solid #fff;
+ul.dropdown li a                    { display: block; padding: 4px 12px; line-height: 28px; border-right: 1px solid #D5D5D5; border-left: 1px solid #fff;
 										color: #08C; cursor: pointer }
 ul.dropdown li.hover,
 ul.dropdown li:hover                { background: #d9d9d9; position: relative; }
 ul.dropdown li.hover a              {  }
 
 
-/* 
+/*
 	LEVEL TWO
 */
 ul.dropdown ul 						{ width: 180px; visibility: hidden; position: absolute; top: 100%; z-index: 1000; left: 0; margin: 0; padding: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 ul.dropdown ul li 					{ font-weight: normal; background: #f6f6f6; color: #08C;
 									  border-top: 1px solid #D5D5D5; float: none; }
-									  
+
                                     /* IE 6 & 7 Needs Inline Block */
 ul.dropdown ul li a					{ border-right: none; width: 100%; display: inline-block; }
 
-/* 
+/*
 	LEVEL THREE
 */
 ul.dropdown ul ul 					{ left: 100%; top: 0; }
-ul.dropdown li:hover > ul 			{ visibility: visible; }
 
+/* Submenu visibility controlled by .hover class (managed by JS) */
+ul.dropdown li.hover > ul 			{ visibility: visible; }
+
+/* Unified bar: menus + titlebar + example citations in one row */
+.dropdown-container#titlebarContainer {
+	display: flex;
+	align-items: center;
+}
+
+.dropdown-container#titlebarContainer #titlebar {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+}
+
+.dropdown-container#titlebarContainer #titlebar h3 {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Example citations dropdown (positioned inline in bar) */
+ul.example-citations {
+	border-left: none;
+}
+
+/* Keyboard focus indicators */
+ul.dropdown a:focus-visible {
+	outline: 2px solid #08C;
+	outline-offset: -2px;
+}
+ul.dropdown ul a:focus-visible {
+	background: #e0e0e0;
+	outline: 2px solid #08C;
+	outline-offset: -2px;
+}
