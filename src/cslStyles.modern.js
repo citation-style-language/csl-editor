@@ -21,7 +21,7 @@ const topStyles = [
   'http://www.zotero.org/styles/american-medical-association',
   'http://www.zotero.org/styles/chicago-author-date',
   'http://www.zotero.org/styles/american-political-science-association',
-  'https://www.zotero.org/styles/nlm-citation-sequence',
+  'http://www.zotero.org/styles/nlm-citation-sequence',
   'http://www.zotero.org/styles/american-sociological-association',
   'http://www.zotero.org/styles/modern-language-association',
   'http://www.zotero.org/styles/mhra-notes',
