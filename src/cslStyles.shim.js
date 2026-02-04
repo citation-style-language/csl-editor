@@ -96,15 +96,15 @@ define(['jquery'], function($) {
 		ready: initReady,
 
 		// Default style ID
-		defaultStyleId: 'http://www.zotero.org/styles/apa',
+		defaultStyleId: 'http://www.zotero.org/styles/american-medical-association',
 
 		// Top styles list
 		topStyles: [
+			'http://www.zotero.org/styles/american-medical-association',
 			'http://www.zotero.org/styles/apa',
 			'http://www.zotero.org/styles/ieee',
 			'http://www.zotero.org/styles/harvard-cite-them-right',
 			'http://www.zotero.org/styles/nature',
-			'http://www.zotero.org/styles/american-medical-association',
 			'http://www.zotero.org/styles/chicago-author-date',
 			'http://www.zotero.org/styles/american-political-science-association',
 			'http://www.zotero.org/styles/nlm-citation-sequence',
