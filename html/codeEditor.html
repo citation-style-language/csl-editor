@@ -1,20 +1,32 @@
-<div class="ui-layout-north">
-	<div class="panel">
+<div class="dropdown-container">
+	<ul class="dropdown" id="codeEditorMenu">
+		<li>
+			<a id="styleMenu">Style <span class="disclosure">&#9662;</span></a>
+			<ul class="sub_menu" id="styleMenuUl">
+				<!-- Populated from styleMenu option -->
+			</ul>
+		</li>
+	</ul>
+</div>
+<div id="codeEditorLayout">
+	<div class="ui-layout-north">
+		<div class="panel">
 
-		<div id="exampleOutput">
-			<div id="statusMessage"></div>
+			<div id="exampleOutput">
+				<div id="statusMessage"></div>
 
-			<h3>Formatted Inline Citations</h3>
-			<div id="formattedCitations"></div>
+				<h3>Formatted Inline Citations</h3>
+				<div id="formattedCitations"></div>
 
-			<h3>Formatted Bibliography</h3>
-			<div id="formattedBibliography"></div>
+				<h3>Formatted Bibliography</h3>
+				<div id="formattedBibliography"></div>
+			</div>
 		</div>
 	</div>
-</div>
-<div class="ui-layout-center">
-	<div id="codeMirrorContainer" class="panel">
-		<textarea id="code" name="code">
-		</textarea>
+	<div class="ui-layout-center">
+		<div id="codeMirrorContainer" class="panel">
+			<textarea id="code" name="code">
+			</textarea>
+		</div>
 	</div>
 </div>

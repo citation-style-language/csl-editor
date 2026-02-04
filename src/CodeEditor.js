@@ -10,6 +10,7 @@ define([	'src/citationEngine',
 			'src/urlUtils',
 			'external/codemirror',
 			'external/codemirrorXmlMode',
+			'jquery.hoverIntent',
 			'jquery.layout'
 		],
 		function (
@@ -19,6 +20,7 @@ define([	'src/citationEngine',
 			CSLEDIT_urlUtils,
 			CodeMirror,
 			CodeMirrorXmlMode,
+			jquery_hoverIntent,
 			jquery_layout
 		) {
 	// Creates a CSL Code Editor within containerElement
@@ -53,6 +55,32 @@ define([	'src/citationEngine',
 			cache : false,
 			dataType : "text"
 		});
+
+		var setupDropdownMenu = function () {
+			var styleMenu = CSLEDIT_options.get('styleMenu');
+			if (typeof styleMenu === 'undefined') {
+				containerElement.find('.dropdown-container').hide();
+				return;
+			}
+
+			var styleMenuUl = containerElement.find('#styleMenuUl');
+			$.each(styleMenu, function(index, styleOption) {
+				var menuOption = $('<li/>').append($('<a/>').text(styleOption.label));
+				if (typeof styleOption.name != 'undefined') {
+					menuOption.attr('id', styleOption.name);
+				}
+				menuOption.click(styleOption.func);
+				styleMenuUl.append(menuOption);
+			});
+
+			containerElement.find("ul.dropdown li").hoverIntent(function () {
+				$(this).addClass("hover");
+				$('ul:first', this).css('visibility', 'visible');
+			}, function () {
+				$(this).removeClass("hover");
+				$('ul:first', this).css('visibility', 'hidden');
+			});
+		};
 
 		var init = function () {
 			var codeMirrorScroll,
@@ -101,14 +129,52 @@ define([	'src/citationEngine',
 				});
 			};
 
-			containerElement.layout({
+			var layoutContainer = containerElement.find('#codeEditorLayout');
+			layoutContainer.css({
+				position: 'absolute',
+				top: '36px',
+				bottom: '0',
+				left: '0',
+				right: '0'
+			});
+			layoutContainer.layout({
 				north__size : 300,
 				livePaneResizing : true,
 				onresize : resizeCodeEditor
 			});
 
 			resizeCodeEditor();
-		}
+			setupDropdownMenu();
+		};
+
+		// Sets a new CSL style from the given cslCode string
+		var setCslCode = function (cslCode) {
+			var result = CSLEDIT_data.setCslCode(cslCode);
+			if (!("error" in result)) {
+				editor.setValue(CSLEDIT_data.getCslCode());
+			}
+			return result;
+		};
+
+		// Returns the current CSL style code as a string
+		var getCslCode = function () {
+			return editor.getValue();
+		};
+
+		// Returns the current style ID
+		var getStyleId = function () {
+			var styleIdNode = CSLEDIT_data.getNodesFromPath('style/info/id');
+			if (styleIdNode.length > 0) {
+				return styleIdNode[0].textValue;
+			}
+			return "";
+		};
+
+		return {
+			setCslCode : setCslCode,
+			getCslCode : getCslCode,
+			getStyleId : getStyleId
+		};
 	};
 
 	return CSLEDIT_codeEditor;
