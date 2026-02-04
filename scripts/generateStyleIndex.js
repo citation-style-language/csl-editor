@@ -112,7 +112,12 @@ async function processStyleFile(filePath) {
 async function generateStyleIndex() {
   console.log('Starting style index generation...\n');
 
-  // Ensure output directory exists
+  // Clean and recreate output directory to remove stale files from deleted styles
+  try {
+    await fs.rm(OUTPUT_DIR, { recursive: true });
+  } catch (err) {
+    // Directory may not exist yet
+  }
   await ensureDir(OUTPUT_DIR);
   await ensureDir(path.dirname(INDEX_FILE));
 

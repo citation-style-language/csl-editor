@@ -114,7 +114,6 @@ define(['jquery'], function($) {
 			'http://www.zotero.org/styles/chicago-shortened-notes-bibliography',
 			'http://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas',
 			'http://www.zotero.org/styles/chicago-notes-bibliography',
-			'http://www.zotero.org/styles/national-library-of-medicine',
 			'http://www.zotero.org/styles/american-chemical-society',
 			'http://www.zotero.org/styles/cell',
 			'http://www.zotero.org/styles/science',
