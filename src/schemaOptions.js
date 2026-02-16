@@ -31,6 +31,19 @@ define({
 			}],
 			alwaysOutput : true
 		};
+		
+		// put xmlns attribute first
+		var tempStyleAttributes = JSON.parse(JSON.stringify(nodeProperties["root/style"].attributes));
+		for (var styleAttribute in nodeProperties["root/style"].attributes){
+			if (nodeProperties["root/style"].attributes.hasOwnProperty(styleAttribute) && styleAttribute !== "xmlns"){
+				delete nodeProperties["root/style"].attributes[styleAttribute];
+			}
+		}
+		for (styleAttribute in tempStyleAttributes){
+			if (tempStyleAttributes.hasOwnProperty(styleAttribute) && styleAttribute !== "xmlns"){
+				nodeProperties["root/style"].attributes[styleAttribute] = tempStyleAttributes[styleAttribute];
+			}
+		}
 
 		nodeProperties["root/style"].attributes["version"].alwaysOutput = true;
 
